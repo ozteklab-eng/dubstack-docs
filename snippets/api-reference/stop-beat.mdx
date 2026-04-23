@@ -1,0 +1,22 @@
+---
+title: "Stop beat playback"
+openapi: "POST /beats/{id}/stop"
+method: "POST"
+path: "/beats/{id}/stop"
+specName: "api-reference"
+operationId: "stopBeat"
+description: "Stops the current playback session for a beat pattern and returns session statistics including total play time and loop count."
+---
+
+Stops the current playback session for a beat pattern and returns session statistics including total play time and loop count.
+
+> `POST /beats/{id}/stop`
+
+### Parameters
+- `id` (path, string, required) · Beat pattern ID to stop · example: `boom-bap`
+
+### Responses
+- `200` Playback stopped successfully. Returns session statistics.
+- `404` No active playback session found for this beat.
+
+<PlaygroundEmbed specName="api-reference" method="POST" path="/beats/{id}/stop" operationId="stopBeat" />
