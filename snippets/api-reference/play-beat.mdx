@@ -1,0 +1,22 @@
+---
+title: "Play a beat pattern"
+openapi: "POST /beats/{id}/play"
+method: "POST"
+path: "/beats/{id}/play"
+specName: "api-reference"
+operationId: "playBeat"
+description: "Returns playback metadata for a beat pattern including timing data. Audio synthesis occurs client-side in the sequencer visualizer."
+---
+
+Returns playback metadata for a beat pattern including timing data. Audio synthesis occurs client-side in the sequencer visualizer.
+
+> `POST /beats/{id}/play`
+
+### Parameters
+- `id` (path, string, required) · Beat pattern ID to play · example: `trap`
+
+### Responses
+- `200` Playback metadata with track data and timing.
+- `404` Beat pattern not found.
+
+<PlaygroundEmbed specName="api-reference" method="POST" path="/beats/{id}/play" operationId="playBeat" />
