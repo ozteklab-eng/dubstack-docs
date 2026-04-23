@@ -1,0 +1,2465 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "BeatBox API",
+    "description": "A drum machine sandbox API for creating and exploring beat patterns. Ships with the DubStack starter template to demonstrate interactive API playground features including the drum sequencer visualizer.",
+    "version": "1.0.0",
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://beatbox.dubstack.ai",
+      "description": "Production sandbox"
+    }
+  ],
+  "security": [
+    {
+      "serviceJwt": []
+    },
+    {
+      "serviceToken": []
+    }
+  ],
+  "paths": {
+    "/beats": {
+      "get": {
+        "summary": "List beat patterns",
+        "description": "Returns all pre-seeded demo beat patterns. Each pattern includes BPM, kit selection, and track data with 16-step sequences for each instrument.",
+        "operationId": "listBeats",
+        "tags": ["Beats"],
+        "parameters": [
+          {
+            "name": "genre",
+            "in": "query",
+            "required": false,
+            "description": "Filter beats by music genre tag",
+            "schema": {
+              "type": "string",
+              "enum": ["hip-hop", "electro", "pop", "trap", "rock", "jazz", "disco", "latin"]
+            },
+            "example": "hip-hop"
+          },
+          {
+            "name": "kit",
+            "in": "query",
+            "required": false,
+            "description": "Filter beats by drum kit ID",
+            "schema": {
+              "type": "string",
+              "enum": ["tr-808", "acoustic", "linndrum", "cr-78"]
+            },
+            "example": "tr-808"
+          },
+          {
+            "name": "bpm_min",
+            "in": "query",
+            "required": false,
+            "description": "Minimum BPM filter (inclusive)",
+            "schema": {
+              "type": "integer",
+              "minimum": 40,
+              "maximum": 300
+            },
+            "example": 80
+          },
+          {
+            "name": "bpm_max",
+            "in": "query",
+            "required": false,
+            "description": "Maximum BPM filter (inclusive)",
+            "schema": {
+              "type": "integer",
+              "minimum": 40,
+              "maximum": 300
+            },
+            "example": 140
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "Maximum number of results to return",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 10
+            },
+            "example": 10
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "description": "Number of results to skip for pagination",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            },
+            "example": 0
+          }
+        ],
+        "x-dubstack-preview": {
+          "type": "drum-sequencer",
+          "dataPath": "$.beats[0].tracks",
+          "metaPaths": {
+            "bpm": "$.beats[0].bpm",
+            "kit": "$.beats[0].kit",
+            "name": "$.beats[0].name"
+          },
+          "clientRender": true,
+          "fallback": "json"
+        },
+        "responses": {
+          "200": {
+            "description": "List of beat patterns.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "beats": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Beat"
+                      }
+                    },
+                    "total": {
+                      "type": "integer",
+                      "description": "Total number of available patterns"
+                    }
+                  }
+                },
+                "example": {
+                  "beats": [
+                    {
+                      "id": "boom-bap",
+                      "name": "Boom Bap",
+                      "bpm": 90,
+                      "kit": "tr-808",
+                      "time_signature": "4/4",
+                      "steps": 16,
+                      "tracks": {
+                        "kick": [1,0,0,0,1,0,0,0,1,0,0,1,0,0,1,0],
+                        "snare": [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+                        "hihat": [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                        "clap": [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0]
+                      },
+                      "duration_ms": 2666
+                    },
+                    {
+                      "id": "dembow",
+                      "name": "Dembow",
+                      "bpm": 96,
+                      "kit": "acoustic",
+                      "time_signature": "4/4",
+                      "steps": 16,
+                      "tracks": {
+                        "kick": [1,0,0,1,0,0,1,0,1,0,0,1,0,0,1,0],
+                        "snare": [0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0],
+                        "hihat": [1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,0],
+                        "clap": [0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0]
+                      },
+                      "duration_ms": 2500
+                    }
+                  ],
+                  "total": 5
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a beat pattern",
+        "description": "Creates a custom beat pattern and stores it in the current session. Each session can hold up to 10 custom beats. Custom beats are prefixed with `custom-` and persist until the session expires or is explicitly cleared via DELETE /sessions/me. Use DELETE /beats/{id} to remove individual custom beats.",
+        "operationId": "createBeat",
+        "tags": ["Beats"],
+        "x-dubstack-preview": {
+          "type": "drum-sequencer",
+          "dataPath": "$.tracks",
+          "metaPaths": {
+            "bpm": "$.bpm",
+            "kit": "$.kit",
+            "name": "$.name"
+          },
+          "clientRender": true,
+          "fallback": "json"
+        },
+        "requestBody": {
+          "required": true,
+          "description": "Beat pattern to create. Each track must contain exactly 16 steps where 1 = hit and 0 = silence.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewBeat"
+              },
+              "example": {
+                "name": "My Custom Beat",
+                "bpm": 120,
+                "kit": "tr-808",
+                "tracks": {
+                  "kick": [1,0,0,0,1,0,0,0,1,0,0,1,0,0,1,0],
+                  "snare": [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+                  "hihat": [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+                }
+              },
+              "examples": {
+                "boomBap90": {
+                  "summary": "Boom bap groove (90 BPM)",
+                  "value": {
+                    "name": "Boom Bap Variant",
+                    "bpm": 90,
+                    "kit": "tr-808",
+                    "tracks": {
+                      "kick": [1,0,0,0,1,0,0,0,1,0,0,1,0,0,1,0],
+                      "snare": [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+                      "hihat": [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+                    }
+                  }
+                },
+                "trap140": {
+                  "summary": "Trap pattern (140 BPM)",
+                  "value": {
+                    "name": "Trap Variant",
+                    "bpm": 140,
+                    "kit": "electronic",
+                    "tracks": {
+                      "kick": [1,0,0,1,0,0,1,0,1,0,0,1,0,0,1,0],
+                      "snare": [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+                      "hihat": [1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,1]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Beat pattern created successfully (ephemeral).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Beat"
+                },
+                "example": {
+                  "id": "custom-my-custom-beat",
+                  "name": "My Custom Beat",
+                  "bpm": 120,
+                  "kit": "tr-808",
+                  "time_signature": "4/4",
+                  "steps": 16,
+                  "tracks": {
+                    "kick": [1,0,0,0,1,0,0,0,1,0,0,1,0,0,1,0],
+                    "snare": [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+                    "hihat": [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+                  },
+                  "duration_ms": 2000
+                },
+                "examples": {
+                  "createdBeat": {
+                    "summary": "Created beat response",
+                    "value": {
+                      "id": "custom-trap-variant",
+                      "name": "Trap Variant",
+                      "bpm": 140,
+                      "kit": "electronic",
+                      "time_signature": "4/4",
+                      "steps": 16,
+                      "tracks": {
+                        "kick": [1,0,0,1,0,0,1,0,1,0,0,1,0,0,1,0],
+                        "snare": [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+                        "hihat": [1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,1]
+                      },
+                      "duration_ms": 1714
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid beat pattern.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "validation_error",
+                  "message": "Track \"kick\" must have exactly 16 steps (got 8)"
+                },
+                "examples": {
+                  "invalidTrackLength": {
+                    "summary": "Track array has wrong length",
+                    "value": {
+                      "error": "validation_error",
+                      "message": "Track \"kick\" must have exactly 16 steps (got 8)"
+                    }
+                  },
+                  "invalidKit": {
+                    "summary": "Unsupported kit id",
+                    "value": {
+                      "error": "validation_error",
+                      "message": "kit must be one of: tr-808, acoustic, electronic"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/beats/{id}": {
+      "get": {
+        "summary": "Get a beat pattern",
+        "description": "Returns a specific pre-seeded demo beat pattern by ID.",
+        "operationId": "getBeat",
+        "tags": ["Beats"],
+        "x-dubstack-preview": {
+          "type": "drum-sequencer",
+          "dataPath": "$.tracks",
+          "metaPaths": {
+            "bpm": "$.bpm",
+            "kit": "$.kit",
+            "name": "$.name"
+          },
+          "clientRender": true,
+          "fallback": "json"
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Beat pattern ID",
+            "schema": {
+              "type": "string",
+              "enum": ["classic-rock", "boom-bap", "four-on-floor", "trap", "dembow"]
+            },
+            "example": "dembow"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Beat pattern found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Beat"
+                },
+                "example": {
+                  "id": "dembow",
+                  "name": "Dembow",
+                  "bpm": 96,
+                  "kit": "acoustic",
+                  "time_signature": "4/4",
+                  "steps": 16,
+                  "tracks": {
+                    "kick": [1,0,0,1,0,0,1,0,1,0,0,1,0,0,1,0],
+                    "snare": [0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0],
+                    "hihat": [1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,0],
+                    "clap": [0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0]
+                  },
+                  "duration_ms": 2500
+                },
+                "examples": {
+                  "dembow": {
+                    "summary": "Dembow groove",
+                    "value": {
+                      "id": "dembow",
+                      "name": "Dembow",
+                      "bpm": 96,
+                      "kit": "acoustic",
+                      "time_signature": "4/4",
+                      "steps": 16,
+                      "tracks": {
+                        "kick": [1,0,0,1,0,0,1,0,1,0,0,1,0,0,1,0],
+                        "snare": [0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0],
+                        "hihat": [1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,0],
+                        "clap": [0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0]
+                      },
+                      "duration_ms": 2500
+                    }
+                  },
+                  "classicRock": {
+                    "summary": "Classic rock groove",
+                    "value": {
+                      "id": "classic-rock",
+                      "name": "Classic Rock",
+                      "bpm": 110,
+                      "kit": "acoustic",
+                      "time_signature": "4/4",
+                      "steps": 16,
+                      "tracks": {
+                        "kick": [1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0],
+                        "snare": [0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0],
+                        "hihat": [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+                      },
+                      "duration_ms": 2181
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Beat pattern not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "not_found",
+                  "message": "Beat with id \"latin-jazz\" not found"
+                },
+                "examples": {
+                  "unknownBeatId": {
+                    "summary": "Unknown beat id",
+                    "value": {
+                      "error": "not_found",
+                      "message": "Beat with id \"latin-jazz\" not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a custom beat",
+        "description": "Deletes a custom beat pattern from the current session. Only session-created beats (prefixed with `custom-`) can be deleted. Pre-seeded demo beats (boom-bap, trap, etc.) return 403 Forbidden. All custom beats are automatically deleted when the session expires or on logout.",
+        "operationId": "deleteBeat",
+        "tags": ["Beats"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Beat pattern ID to delete. Must be a custom beat (custom-* prefix).",
+            "schema": {
+              "type": "string"
+            },
+            "example": "custom-my-custom-beat"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Custom beat deleted from session.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "deleted_id": {
+                      "type": "string",
+                      "description": "ID of the deleted beat"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Confirmation message"
+                    },
+                    "session_beats_remaining": {
+                      "type": "integer",
+                      "description": "Number of custom beats still in the session"
+                    }
+                  }
+                },
+                "example": {
+                  "deleted_id": "custom-my-custom-beat",
+                  "message": "Beat \"My Custom Beat\" deleted from session",
+                  "session_beats_remaining": 2
+                },
+                "examples": {
+                  "deletedBeat": {
+                    "summary": "Successfully deleted custom beat",
+                    "value": {
+                      "deleted_id": "custom-my-custom-beat",
+                      "message": "Beat \"My Custom Beat\" deleted from session",
+                      "session_beats_remaining": 2
+                    }
+                  },
+                  "lastBeatDeleted": {
+                    "summary": "Last custom beat deleted, session empty",
+                    "value": {
+                      "deleted_id": "custom-trap-variant",
+                      "message": "Beat \"Trap Variant\" deleted from session",
+                      "session_beats_remaining": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Cannot delete pre-seeded demo beats. Only custom beats (custom-* prefix) can be deleted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "forbidden",
+                  "message": "Cannot delete pre-seeded beat \"boom-bap\". Only custom beats can be deleted."
+                },
+                "examples": {
+                  "cannotDeletePreseeded": {
+                    "summary": "Tried to delete a demo beat",
+                    "value": {
+                      "error": "forbidden",
+                      "message": "Cannot delete pre-seeded beat \"boom-bap\". Only custom beats can be deleted."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Beat not found in current session.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "not_found",
+                  "message": "Beat with id \"custom-old-beat\" not found in current session"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/beats/{id}/play": {
+      "post": {
+        "summary": "Play a beat pattern",
+        "description": "Returns playback metadata for a beat pattern including timing data. Audio synthesis occurs client-side in the sequencer visualizer.",
+        "operationId": "playBeat",
+        "tags": ["Beats"],
+        "x-dubstack-preview": {
+          "type": "drum-sequencer",
+          "dataPath": "$.tracks",
+          "metaPaths": {
+            "bpm": "$.bpm",
+            "kit": "$.kit",
+            "name": "$.name"
+          },
+          "clientRender": true,
+          "fallback": "json"
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Beat pattern ID to play",
+            "schema": {
+              "type": "string",
+              "enum": ["classic-rock", "boom-bap", "four-on-floor", "trap", "dembow"]
+            },
+            "example": "trap"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Playback metadata with track data and timing.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "beat_id": { "type": "string" },
+                    "name": { "type": "string" },
+                    "bpm": { "type": "integer" },
+                    "kit": { "type": "string" },
+                    "tracks": { "$ref": "#/components/schemas/Tracks" },
+                    "playback": {
+                      "type": "object",
+                      "properties": {
+                        "duration_ms": {
+                          "type": "integer",
+                          "description": "Total duration of one loop in milliseconds"
+                        },
+                        "step_duration_ms": {
+                          "type": "integer",
+                          "description": "Duration of each step in milliseconds"
+                        },
+                        "total_steps": {
+                          "type": "integer",
+                          "description": "Number of steps per loop (always 16)"
+                        },
+                        "loop": {
+                          "type": "boolean",
+                          "description": "Whether playback should loop"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "beat_id": "trap",
+                  "name": "Trap",
+                  "bpm": 140,
+                  "kit": "electronic",
+                  "tracks": {
+                    "kick": [1,0,0,1,0,0,1,0,1,0,0,1,0,0,1,0],
+                    "snare": [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+                    "hihat": [1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,1],
+                    "perc": [0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1]
+                  },
+                  "playback": {
+                    "duration_ms": 1714,
+                    "step_duration_ms": 107,
+                    "total_steps": 16,
+                    "loop": true
+                  }
+                },
+                "examples": {
+                  "trapPlayback": {
+                    "summary": "Trap playback metadata",
+                    "value": {
+                      "beat_id": "trap",
+                      "name": "Trap",
+                      "bpm": 140,
+                      "kit": "electronic",
+                      "tracks": {
+                        "kick": [1,0,0,1,0,0,1,0,1,0,0,1,0,0,1,0],
+                        "snare": [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+                        "hihat": [1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,1],
+                        "perc": [0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1]
+                      },
+                      "playback": {
+                        "duration_ms": 1714,
+                        "step_duration_ms": 107,
+                        "total_steps": 16,
+                        "loop": true
+                      }
+                    }
+                  },
+                  "fourOnFloorPlayback": {
+                    "summary": "Four-on-floor playback metadata",
+                    "value": {
+                      "beat_id": "four-on-floor",
+                      "name": "Four on Floor",
+                      "bpm": 128,
+                      "kit": "electronic",
+                      "tracks": {
+                        "kick": [1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0],
+                        "snare": [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+                        "hihat": [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1]
+                      },
+                      "playback": {
+                        "duration_ms": 1875,
+                        "step_duration_ms": 117,
+                        "total_steps": 16,
+                        "loop": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Beat pattern not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "not_found",
+                  "message": "Beat with id \"old-school\" not found"
+                },
+                "examples": {
+                  "unknownBeatId": {
+                    "summary": "Unknown beat id",
+                    "value": {
+                      "error": "not_found",
+                      "message": "Beat with id \"old-school\" not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/kits": {
+      "get": {
+        "summary": "List drum kits",
+        "description": "Returns all available drum kits with rich metadata for visual preview rendering. Each kit includes brand, year, genre tags, accent color, and detailed sound information.",
+        "operationId": "listKits",
+        "tags": ["Kits"],
+        "x-dubstack-preview": {
+          "type": "drum-kit-gallery",
+          "dataPath": "$",
+          "metaPaths": {
+            "title": "$.name",
+            "subtitle": "$.brand"
+          },
+          "clientRender": true,
+          "fallback": "json"
+        },
+        "responses": {
+          "200": {
+            "description": "Array of available drum kits with rich metadata.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Kit"
+                  }
+                },
+                "example": [
+                  {
+                    "id": "tr-808",
+                    "name": "TR-808",
+                    "brand": "Roland",
+                    "year": 1980,
+                    "description": "The legendary Roland TR-808 Rhythm Composer. Iconic analog drum machine that defined hip-hop, electro, and modern pop.",
+                    "genreTags": ["hip-hop", "electro", "pop", "trap"],
+                    "accentColor": "#3b82f6",
+                    "sounds": [
+                      { "id": "kick", "label": "Kick", "character": "deep boomy sub", "sampleHint": "808-kick.wav" },
+                      { "id": "snare", "label": "Snare", "character": "snappy crack", "sampleHint": "808-snare.wav" },
+                      { "id": "hihat", "label": "Hi-Hat", "character": "crisp metallic", "sampleHint": "808-hihat.wav" },
+                      { "id": "clap", "label": "Clap", "character": "layered clap", "sampleHint": "808-clap.wav" },
+                      { "id": "tom", "label": "Tom", "character": "pitched analog", "sampleHint": "808-tom.wav" },
+                      { "id": "cowbell", "label": "Cowbell", "character": "classic cowbell", "sampleHint": "808-cowbell.wav" },
+                      { "id": "rimshot", "label": "Rimshot", "character": "sharp rim", "sampleHint": "808-rimshot.wav" },
+                      { "id": "conga", "label": "Conga", "character": "warm conga", "sampleHint": "808-conga.wav" }
+                    ]
+                  },
+                  {
+                    "id": "acoustic",
+                    "name": "Acoustic Studio Kit",
+                    "brand": "DubStack",
+                    "year": 2024,
+                    "description": "Premium acoustic drum kit with studio-quality samples. Natural warmth for rock, jazz, and pop productions.",
+                    "genreTags": ["rock", "jazz", "pop", "country"],
+                    "accentColor": "#f59e0b",
+                    "sounds": [
+                      { "id": "kick", "label": "Kick", "character": "punchy attack", "sampleHint": "acoustic-kick.wav" },
+                      { "id": "snare", "label": "Snare", "character": "crisp crack", "sampleHint": "acoustic-snare.wav" },
+                      { "id": "hihat", "label": "Hi-Hat", "character": "bright shimmer", "sampleHint": "acoustic-hihat.wav" },
+                      { "id": "ride", "label": "Ride", "character": "bell clarity", "sampleHint": "acoustic-ride.wav" },
+                      { "id": "crash", "label": "Crash", "character": "explosive wash", "sampleHint": "acoustic-crash.wav" },
+                      { "id": "rack-tom", "label": "Rack Tom", "character": "resonant mid", "sampleHint": "acoustic-racktom.wav" },
+                      { "id": "floor-tom", "label": "Floor Tom", "character": "deep thud", "sampleHint": "acoustic-floortom.wav" },
+                      { "id": "shaker", "label": "Shaker", "character": "subtle groove", "sampleHint": "acoustic-shaker.wav" }
+                    ]
+                  },
+                  {
+                    "id": "linndrum",
+                    "name": "LinnDrum LM-2",
+                    "brand": "Linn Electronics",
+                    "year": 1982,
+                    "description": "The LinnDrum LM-2 - the first drum machine with digitally sampled sounds. Defined the sound of 80s new wave and synthpop.",
+                    "genreTags": ["new-wave", "synthpop", "80s", "funk"],
+                    "accentColor": "#8b5cf6",
+                    "sounds": [
+                      { "id": "kick", "label": "Kick", "character": "tight punch", "sampleHint": "linn-kick.wav" },
+                      { "id": "snare", "label": "Snare", "character": "gated snap", "sampleHint": "linn-snare.wav" },
+                      { "id": "hihat", "label": "Hi-Hat", "character": "crisp closed", "sampleHint": "linn-hihat.wav" },
+                      { "id": "clap", "label": "Clap", "character": "compressed clap", "sampleHint": "linn-clap.wav" },
+                      { "id": "tom-hi", "label": "Tom High", "character": "melodic high", "sampleHint": "linn-tom-hi.wav" },
+                      { "id": "tom-mid", "label": "Tom Mid", "character": "melodic mid", "sampleHint": "linn-tom-mid.wav" },
+                      { "id": "tom-lo", "label": "Tom Low", "character": "melodic low", "sampleHint": "linn-tom-lo.wav" },
+                      { "id": "cabasa", "label": "Cabasa", "character": "rhythmic shake", "sampleHint": "linn-cabasa.wav" }
+                    ]
+                  },
+                  {
+                    "id": "cr-78",
+                    "name": "CR-78",
+                    "brand": "Roland",
+                    "year": 1978,
+                    "description": "The Roland CR-78 CompuRhythm - one of the first programmable drum machines. Warm analog tones that shaped disco and new wave.",
+                    "genreTags": ["disco", "new-wave", "synth", "experimental"],
+                    "accentColor": "#ef4444",
+                    "sounds": [
+                      { "id": "kick", "label": "Bass Drum", "character": "round thump", "sampleHint": "cr78-kick.wav" },
+                      { "id": "snare", "label": "Snare", "character": "brushed snap", "sampleHint": "cr78-snare.wav" },
+                      { "id": "hihat", "label": "Hi-Hat", "character": "soft tick", "sampleHint": "cr78-hihat.wav" },
+                      { "id": "metal", "label": "Metal Beat", "character": "metallic ring", "sampleHint": "cr78-metal.wav" },
+                      { "id": "tamb", "label": "Tambourine", "character": "jingle accent", "sampleHint": "cr78-tamb.wav" },
+                      { "id": "guiro", "label": "Guiro", "character": "scraped rhythm", "sampleHint": "cr78-guiro.wav" },
+                      { "id": "bongo-hi", "label": "Bongo High", "character": "bright slap", "sampleHint": "cr78-bongo-hi.wav" },
+                      { "id": "bongo-lo", "label": "Bongo Low", "character": "warm tone", "sampleHint": "cr78-bongo-lo.wav" }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/kits/{id}": {
+      "get": {
+        "summary": "Get a drum kit",
+        "description": "Returns a specific drum kit with its full sound definitions and control parameters for tuning and decay adjustments.",
+        "operationId": "getKit",
+        "tags": ["Kits"],
+        "x-dubstack-preview": {
+          "type": "drum-kit-gallery",
+          "dataPath": "$",
+          "metaPaths": {
+            "title": "$.name",
+            "subtitle": "$.brand"
+          },
+          "clientRender": true,
+          "fallback": "json"
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Kit ID",
+            "schema": {
+              "type": "string",
+              "enum": ["tr-808", "acoustic", "linndrum", "cr-78"]
+            },
+            "example": "tr-808"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Drum kit found with full details and controls.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KitDetail"
+                },
+                "example": {
+                  "id": "tr-808",
+                  "name": "TR-808",
+                  "brand": "Roland",
+                  "year": 1980,
+                  "description": "The legendary Roland TR-808 Rhythm Composer. Iconic analog drum machine that defined hip-hop, electro, and modern pop.",
+                  "genreTags": ["hip-hop", "electro", "pop", "trap"],
+                  "accentColor": "#3b82f6",
+                  "sounds": [
+                    { "id": "kick", "label": "Kick", "character": "deep boomy sub", "sampleHint": "808-kick.wav" },
+                    { "id": "snare", "label": "Snare", "character": "snappy crack", "sampleHint": "808-snare.wav" },
+                    { "id": "hihat", "label": "Hi-Hat", "character": "crisp metallic", "sampleHint": "808-hihat.wav" },
+                    { "id": "clap", "label": "Clap", "character": "layered clap", "sampleHint": "808-clap.wav" },
+                    { "id": "tom", "label": "Tom", "character": "pitched analog", "sampleHint": "808-tom.wav" },
+                    { "id": "cowbell", "label": "Cowbell", "character": "classic cowbell", "sampleHint": "808-cowbell.wav" },
+                    { "id": "rimshot", "label": "Rimshot", "character": "sharp rim", "sampleHint": "808-rimshot.wav" },
+                    { "id": "conga", "label": "Conga", "character": "warm conga", "sampleHint": "808-conga.wav" }
+                  ],
+                  "controls": {
+                    "tuneRange": { "min": -12, "max": 12, "default": 0 },
+                    "decayRange": { "min": 0, "max": 100, "default": 40 }
+                  }
+                },
+                "examples": {
+                  "tr808": {
+                    "summary": "TR-808 drum machine",
+                    "value": {
+                      "id": "tr-808",
+                      "name": "TR-808",
+                      "brand": "Roland",
+                      "year": 1980,
+                      "description": "The legendary Roland TR-808 Rhythm Composer. Iconic analog drum machine that defined hip-hop, electro, and modern pop.",
+                      "genreTags": ["hip-hop", "electro", "pop", "trap"],
+                      "accentColor": "#3b82f6",
+                      "sounds": [
+                        { "id": "kick", "label": "Kick", "character": "deep boomy sub", "sampleHint": "808-kick.wav" },
+                        { "id": "snare", "label": "Snare", "character": "snappy crack", "sampleHint": "808-snare.wav" },
+                        { "id": "hihat", "label": "Hi-Hat", "character": "crisp metallic", "sampleHint": "808-hihat.wav" },
+                        { "id": "clap", "label": "Clap", "character": "layered clap", "sampleHint": "808-clap.wav" }
+                      ],
+                      "controls": {
+                        "tuneRange": { "min": -12, "max": 12, "default": 0 },
+                        "decayRange": { "min": 0, "max": 100, "default": 40 }
+                      }
+                    }
+                  },
+                  "linndrum": {
+                    "summary": "LinnDrum LM-2",
+                    "value": {
+                      "id": "linndrum",
+                      "name": "LinnDrum LM-2",
+                      "brand": "Linn Electronics",
+                      "year": 1982,
+                      "description": "The LinnDrum LM-2 - the first drum machine with digitally sampled sounds. Defined the sound of 80s new wave and synthpop.",
+                      "genreTags": ["new-wave", "synthpop", "80s", "funk"],
+                      "accentColor": "#8b5cf6",
+                      "sounds": [
+                        { "id": "kick", "label": "Kick", "character": "tight punch", "sampleHint": "linn-kick.wav" },
+                        { "id": "snare", "label": "Snare", "character": "gated snap", "sampleHint": "linn-snare.wav" },
+                        { "id": "hihat", "label": "Hi-Hat", "character": "crisp closed", "sampleHint": "linn-hihat.wav" },
+                        { "id": "clap", "label": "Clap", "character": "compressed clap", "sampleHint": "linn-clap.wav" }
+                      ],
+                      "controls": {
+                        "tuneRange": { "min": -12, "max": 12, "default": 0 },
+                        "decayRange": { "min": 0, "max": 100, "default": 40 }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Kit not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "not_found",
+                  "message": "Kit with id \"mpc-2000\" not found"
+                },
+                "examples": {
+                  "unknownKitId": {
+                    "summary": "Unknown kit id",
+                    "value": {
+                      "error": "not_found",
+                      "message": "Kit with id \"mpc-2000\" not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/kits/{id}/sounds": {
+      "get": {
+        "summary": "List sounds in a kit",
+        "description": "Returns all available sounds/instruments in a specific drum kit with character descriptions and sample hints.",
+        "operationId": "getKitSounds",
+        "tags": ["Kits"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Kit ID",
+            "schema": {
+              "type": "string",
+              "enum": ["tr-808", "acoustic", "linndrum", "cr-78"]
+            },
+            "example": "acoustic"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Kit sounds listed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "kit_id": { "type": "string" },
+                    "kit_name": { "type": "string" },
+                    "sounds": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Sound"
+                      }
+                    },
+                    "total": { "type": "integer" }
+                  }
+                },
+                "example": {
+                  "kit_id": "acoustic",
+                  "kit_name": "Acoustic Studio Kit",
+                  "sounds": [
+                    { "id": "kick", "label": "Kick", "character": "punchy attack", "sampleHint": "acoustic-kick.wav" },
+                    { "id": "snare", "label": "Snare", "character": "crisp crack", "sampleHint": "acoustic-snare.wav" },
+                    { "id": "hihat", "label": "Hi-Hat", "character": "bright shimmer", "sampleHint": "acoustic-hihat.wav" },
+                    { "id": "ride", "label": "Ride", "character": "bell clarity", "sampleHint": "acoustic-ride.wav" }
+                  ],
+                  "total": 8
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Kit not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "not_found",
+                  "message": "Kit with id \"mpc-2000\" not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/beats/{id}/stop": {
+      "post": {
+        "summary": "Stop beat playback",
+        "description": "Stops the current playback session for a beat pattern and returns session statistics including total play time and loop count.",
+        "operationId": "stopBeat",
+        "tags": ["Playback"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Beat pattern ID to stop",
+            "schema": {
+              "type": "string",
+              "enum": ["classic-rock", "boom-bap", "four-on-floor", "trap", "dembow"]
+            },
+            "example": "boom-bap"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Playback stopped successfully. Returns session statistics.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlaybackSession"
+                },
+                "example": {
+                  "beat_id": "boom-bap",
+                  "status": "stopped",
+                  "played_loops": 4,
+                  "total_duration_ms": 10664,
+                  "stopped_at_step": 12
+                },
+                "examples": {
+                  "stoppedAfterFourLoops": {
+                    "summary": "Stopped after 4 full loops",
+                    "value": {
+                      "beat_id": "boom-bap",
+                      "status": "stopped",
+                      "played_loops": 4,
+                      "total_duration_ms": 10664,
+                      "stopped_at_step": 12
+                    }
+                  },
+                  "stoppedMidLoop": {
+                    "summary": "Stopped mid-loop on step 7",
+                    "value": {
+                      "beat_id": "trap",
+                      "status": "stopped",
+                      "played_loops": 1,
+                      "total_duration_ms": 1200,
+                      "stopped_at_step": 7
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No active playback session found for this beat.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "no_active_session",
+                  "message": "No active playback session for beat \"boom-bap\""
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/beats/{id}/volume": {
+      "put": {
+        "summary": "Set playback volume",
+        "description": "Adjusts the master volume level for a beat's playback session. Supports optional fade transition for smooth volume changes. Volume is a float from 0.0 (silent) to 1.0 (full). Demonstrates number, integer, and boolean parameter types.",
+        "operationId": "setVolume",
+        "tags": ["Playback"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Beat pattern ID",
+            "schema": {
+              "type": "string"
+            },
+            "example": "trap"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Volume configuration with optional fade and mute controls.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VolumeConfig"
+              },
+              "example": {
+                "level": 0.75,
+                "fade_ms": 500,
+                "mute": false
+              },
+              "examples": {
+                "smoothFade": {
+                  "summary": "Smooth fade to 75%",
+                  "value": {
+                    "level": 0.75,
+                    "fade_ms": 500,
+                    "mute": false
+                  }
+                },
+                "instantMute": {
+                  "summary": "Instant mute (preserves level for unmute)",
+                  "value": {
+                    "level": 0.75,
+                    "fade_ms": 0,
+                    "mute": true
+                  }
+                },
+                "fullVolume": {
+                  "summary": "Full volume, no fade",
+                  "value": {
+                    "level": 1.0,
+                    "fade_ms": 0,
+                    "mute": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Volume updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "beat_id": { "type": "string" },
+                    "volume": {
+                      "type": "number",
+                      "description": "Current volume level"
+                    },
+                    "muted": {
+                      "type": "boolean",
+                      "description": "Whether output is muted"
+                    },
+                    "fade_applied": {
+                      "type": "boolean",
+                      "description": "Whether a fade transition was applied"
+                    }
+                  }
+                },
+                "example": {
+                  "beat_id": "trap",
+                  "volume": 0.75,
+                  "muted": false,
+                  "fade_applied": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid volume configuration.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "validation_error",
+                  "message": "level must be between 0.0 and 1.0 (got 1.5)"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/beats/{id}/tempo": {
+      "put": {
+        "summary": "Change playback tempo",
+        "description": "Adjusts the BPM (beats per minute) for an active beat session. Supports gradual tempo ramping over a configurable number of bars for smooth transitions between tempos.",
+        "operationId": "setTempo",
+        "tags": ["Playback"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Beat pattern ID",
+            "schema": {
+              "type": "string"
+            },
+            "example": "four-on-floor"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Tempo configuration with optional ramp transition.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TempoConfig"
+              },
+              "example": {
+                "bpm": 135,
+                "ramp": true,
+                "ramp_bars": 4
+              },
+              "examples": {
+                "gradualRamp": {
+                  "summary": "Gradually ramp to 135 BPM over 4 bars",
+                  "value": {
+                    "bpm": 135,
+                    "ramp": true,
+                    "ramp_bars": 4
+                  }
+                },
+                "instantChange": {
+                  "summary": "Instant tempo change to 90 BPM",
+                  "value": {
+                    "bpm": 90,
+                    "ramp": false,
+                    "ramp_bars": 1
+                  }
+                },
+                "doubletime": {
+                  "summary": "Double-time transition over 2 bars",
+                  "value": {
+                    "bpm": 256,
+                    "ramp": true,
+                    "ramp_bars": 2
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tempo changed. Returns updated timing calculations.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "beat_id": { "type": "string" },
+                    "previous_bpm": { "type": "integer", "description": "BPM before the change" },
+                    "new_bpm": { "type": "integer", "description": "New target BPM" },
+                    "step_duration_ms": { "type": "number", "description": "Duration of each step at new BPM" },
+                    "loop_duration_ms": { "type": "number", "description": "Duration of one full loop at new BPM" },
+                    "ramping": { "type": "boolean", "description": "Whether tempo is currently ramping" },
+                    "ramp_duration_ms": { "type": "integer", "description": "Total ramp transition time in ms" }
+                  }
+                },
+                "example": {
+                  "beat_id": "four-on-floor",
+                  "previous_bpm": 128,
+                  "new_bpm": 135,
+                  "step_duration_ms": 111.1,
+                  "loop_duration_ms": 1777.8,
+                  "ramping": true,
+                  "ramp_duration_ms": 7111
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid tempo configuration.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "validation_error",
+                  "message": "bpm must be between 40 and 300 (got 500)"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/beats/{id}/export": {
+      "post": {
+        "summary": "Export a beat pattern",
+        "description": "Exports a beat pattern in the specified format. Supports MIDI (for DAW import), WAV (audio bounce), JSON (raw data), and stems (individual track files). Optionally select specific tracks to include. Demonstrates string enum, boolean, and array of strings parameter types.",
+        "operationId": "exportBeat",
+        "tags": ["Beats"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Beat pattern ID to export",
+            "schema": {
+              "type": "string",
+              "enum": ["classic-rock", "boom-bap", "four-on-floor", "trap", "dembow"]
+            },
+            "example": "classic-rock"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Export configuration with format selection, track filtering, and output options.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExportConfig"
+              },
+              "example": {
+                "format": "midi",
+                "tracks": ["kick", "snare", "hihat"],
+                "include_metadata": true,
+                "normalize": false,
+                "filename": "classic-rock-beat"
+              },
+              "examples": {
+                "midiExport": {
+                  "summary": "Export selected tracks as MIDI",
+                  "value": {
+                    "format": "midi",
+                    "tracks": ["kick", "snare", "hihat"],
+                    "include_metadata": true,
+                    "normalize": false,
+                    "filename": "classic-rock-beat"
+                  }
+                },
+                "wavBounce": {
+                  "summary": "Bounce all tracks to WAV",
+                  "value": {
+                    "format": "wav",
+                    "include_metadata": true,
+                    "normalize": true,
+                    "filename": "trap-bounce"
+                  }
+                },
+                "stemExport": {
+                  "summary": "Export individual stems",
+                  "value": {
+                    "format": "stems",
+                    "tracks": ["kick", "snare"],
+                    "include_metadata": false,
+                    "normalize": true,
+                    "filename": "boom-bap-stems"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Export generated successfully. Returns download link with expiry.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "beat_id": { "type": "string" },
+                    "format": { "type": "string" },
+                    "tracks_exported": {
+                      "type": "array",
+                      "items": { "type": "string" },
+                      "description": "List of track names included in export"
+                    },
+                    "file_size_bytes": { "type": "integer", "description": "Export file size in bytes" },
+                    "download_url": { "type": "string", "format": "uri", "description": "Temporary download URL" },
+                    "expires_at": { "type": "string", "format": "date-time", "description": "Download link expiry" }
+                  }
+                },
+                "example": {
+                  "beat_id": "classic-rock",
+                  "format": "midi",
+                  "tracks_exported": ["kick", "snare", "hihat"],
+                  "file_size_bytes": 1248,
+                  "download_url": "https://beatbox.dubstack.ai/exports/classic-rock-beat.mid",
+                  "expires_at": "2026-02-11T15:30:00Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid export configuration.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "validation_error",
+                  "message": "Track \"timpani\" not found in beat \"classic-rock\". Available tracks: kick, snare, hihat"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/kits/{id}/sounds/{soundId}": {
+      "put": {
+        "summary": "Configure a kit sound",
+        "description": "Adjusts parameters for an individual sound within a kit. Supports pitch tuning (semitones), decay envelope, stereo panning, mute state, and velocity. Demonstrates integer, string enum, boolean, and float parameter types in a single request body.",
+        "operationId": "configureSound",
+        "tags": ["Mixer"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Kit ID",
+            "schema": {
+              "type": "string",
+              "enum": ["tr-808", "acoustic", "linndrum", "cr-78"]
+            },
+            "example": "tr-808"
+          },
+          {
+            "name": "soundId",
+            "in": "path",
+            "required": true,
+            "description": "Sound/instrument ID within the kit (e.g. kick, snare, hihat)",
+            "schema": {
+              "type": "string"
+            },
+            "example": "kick"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Sound parameter configuration. All fields are optional - only provided fields will be updated.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SoundConfig"
+              },
+              "example": {
+                "tune": 3,
+                "decay": 65,
+                "pan": "left",
+                "mute": false,
+                "velocity": 0.85
+              },
+              "examples": {
+                "tuneAndDecay": {
+                  "summary": "Tune up 3 semitones with long decay",
+                  "value": {
+                    "tune": 3,
+                    "decay": 65,
+                    "pan": "center",
+                    "mute": false,
+                    "velocity": 0.85
+                  }
+                },
+                "ghostNote": {
+                  "summary": "Ghost note with low velocity",
+                  "value": {
+                    "tune": 0,
+                    "decay": 20,
+                    "pan": "center",
+                    "mute": false,
+                    "velocity": 0.15
+                  }
+                },
+                "pannedAndMuted": {
+                  "summary": "Hard-panned and muted for later use",
+                  "value": {
+                    "tune": -5,
+                    "decay": 40,
+                    "pan": "hard-left",
+                    "mute": true,
+                    "velocity": 1.0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sound parameters updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "kit_id": { "type": "string" },
+                    "sound_id": { "type": "string" },
+                    "label": { "type": "string" },
+                    "config": {
+                      "$ref": "#/components/schemas/SoundConfig"
+                    }
+                  }
+                },
+                "example": {
+                  "kit_id": "tr-808",
+                  "sound_id": "kick",
+                  "label": "Kick",
+                  "config": {
+                    "tune": 3,
+                    "decay": 65,
+                    "pan": "left",
+                    "mute": false,
+                    "velocity": 0.85
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Kit or sound not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "not_found",
+                  "message": "Sound \"triangle\" not found in kit \"tr-808\". Available: kick, snare, hihat, clap, tom, cowbell, rimshot, conga"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/kits/{id}/mix": {
+      "post": {
+        "summary": "Create a custom mix",
+        "description": "Creates a full mixer configuration for a kit by specifying per-channel volumes, panning, mute states, and master effects. Demonstrates array of objects, nested objects, and mixed parameter types in a single request.",
+        "operationId": "createMix",
+        "tags": ["Mixer"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Kit ID to create a mix for",
+            "schema": {
+              "type": "string",
+              "enum": ["tr-808", "acoustic", "linndrum", "cr-78"]
+            },
+            "example": "tr-808"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Full mixer configuration with per-channel settings and master effects.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MixConfig"
+              },
+              "example": {
+                "name": "Heavy Bass Mix",
+                "channels": [
+                  { "sound": "kick", "volume": 0.95, "pan": "center", "mute": false },
+                  { "sound": "snare", "volume": 0.7, "pan": "center", "mute": false },
+                  { "sound": "hihat", "volume": 0.5, "pan": "right", "mute": false },
+                  { "sound": "clap", "volume": 0.6, "pan": "left", "mute": true }
+                ],
+                "master_volume": 0.85,
+                "effects": {
+                  "reverb": true,
+                  "reverb_amount": 0.3,
+                  "compression": "medium",
+                  "eq_low": 3.0,
+                  "eq_high": -1.5
+                }
+              },
+              "examples": {
+                "heavyBass": {
+                  "summary": "Heavy bass mix with reverb",
+                  "value": {
+                    "name": "Heavy Bass Mix",
+                    "channels": [
+                      { "sound": "kick", "volume": 0.95, "pan": "center", "mute": false },
+                      { "sound": "snare", "volume": 0.7, "pan": "center", "mute": false },
+                      { "sound": "hihat", "volume": 0.5, "pan": "right", "mute": false },
+                      { "sound": "clap", "volume": 0.6, "pan": "left", "mute": true }
+                    ],
+                    "master_volume": 0.85,
+                    "effects": {
+                      "reverb": true,
+                      "reverb_amount": 0.3,
+                      "compression": "medium",
+                      "eq_low": 3.0,
+                      "eq_high": -1.5
+                    }
+                  }
+                },
+                "dryMinimal": {
+                  "summary": "Dry minimal mix, no effects",
+                  "value": {
+                    "name": "Dry Minimal",
+                    "channels": [
+                      { "sound": "kick", "volume": 0.8, "pan": "center", "mute": false },
+                      { "sound": "hihat", "volume": 0.4, "pan": "right", "mute": false }
+                    ],
+                    "master_volume": 0.7,
+                    "effects": {
+                      "reverb": false,
+                      "reverb_amount": 0.0,
+                      "compression": "off",
+                      "eq_low": 0,
+                      "eq_high": 0
+                    }
+                  }
+                },
+                "wideStereo": {
+                  "summary": "Wide stereo spread with compression",
+                  "value": {
+                    "name": "Wide Stereo",
+                    "channels": [
+                      { "sound": "kick", "volume": 0.9, "pan": "center", "mute": false },
+                      { "sound": "snare", "volume": 0.75, "pan": "center", "mute": false },
+                      { "sound": "hihat", "volume": 0.6, "pan": "hard-right", "mute": false },
+                      { "sound": "tom", "volume": 0.7, "pan": "hard-left", "mute": false },
+                      { "sound": "cowbell", "volume": 0.3, "pan": "right", "mute": false }
+                    ],
+                    "master_volume": 0.9,
+                    "effects": {
+                      "reverb": true,
+                      "reverb_amount": 0.15,
+                      "compression": "heavy",
+                      "eq_low": 1.5,
+                      "eq_high": 2.0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Mix configuration created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "mix_id": { "type": "string", "description": "Generated mix identifier" },
+                    "kit_id": { "type": "string" },
+                    "name": { "type": "string" },
+                    "channel_count": { "type": "integer", "description": "Number of configured channels" },
+                    "master_volume": { "type": "number" },
+                    "effects_active": {
+                      "type": "array",
+                      "items": { "type": "string" },
+                      "description": "List of active effect names"
+                    },
+                    "created_at": { "type": "string", "format": "date-time" }
+                  }
+                },
+                "example": {
+                  "mix_id": "mix-heavy-bass-a1b2c3",
+                  "kit_id": "tr-808",
+                  "name": "Heavy Bass Mix",
+                  "channel_count": 4,
+                  "master_volume": 0.85,
+                  "effects_active": ["reverb", "compression"],
+                  "created_at": "2026-02-11T14:30:00Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid mix configuration.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "validation_error",
+                  "message": "Sound \"triangle\" is not available in kit \"tr-808\". Available: kick, snare, hihat, clap, tom, cowbell, rimshot, conga"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/me": {
+      "get": {
+        "summary": "Get current session",
+        "description": "Returns the current session details including all custom beats created in this session, session age, and storage usage. Each authenticated user gets an isolated session - custom beats from one user are never visible to another.",
+        "operationId": "getSession",
+        "tags": ["Sessions"],
+        "responses": {
+          "200": {
+            "description": "Current session details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                },
+                "example": {
+                  "session_id": "sess-a1b2c3d4e5f6",
+                  "created_at": "2026-02-11T13:00:00Z",
+                  "expires_at": "2026-02-11T14:00:00Z",
+                  "ttl_seconds": 3600,
+                  "custom_beats": [
+                    {
+                      "id": "custom-my-custom-beat",
+                      "name": "My Custom Beat",
+                      "bpm": 120,
+                      "kit": "tr-808",
+                      "created_at": "2026-02-11T13:05:30Z"
+                    },
+                    {
+                      "id": "custom-trap-variant",
+                      "name": "Trap Variant",
+                      "bpm": 140,
+                      "kit": "electronic",
+                      "created_at": "2026-02-11T13:10:15Z"
+                    }
+                  ],
+                  "custom_beats_count": 2,
+                  "custom_beats_limit": 10,
+                  "custom_mixes": [],
+                  "custom_mixes_count": 0
+                },
+                "examples": {
+                  "activeSession": {
+                    "summary": "Session with 2 custom beats",
+                    "value": {
+                      "session_id": "sess-a1b2c3d4e5f6",
+                      "created_at": "2026-02-11T13:00:00Z",
+                      "expires_at": "2026-02-11T14:00:00Z",
+                      "ttl_seconds": 3600,
+                      "custom_beats": [
+                        {
+                          "id": "custom-my-custom-beat",
+                          "name": "My Custom Beat",
+                          "bpm": 120,
+                          "kit": "tr-808",
+                          "created_at": "2026-02-11T13:05:30Z"
+                        }
+                      ],
+                      "custom_beats_count": 1,
+                      "custom_beats_limit": 10,
+                      "custom_mixes": [],
+                      "custom_mixes_count": 0
+                    }
+                  },
+                  "emptySession": {
+                    "summary": "Fresh session with no custom data",
+                    "value": {
+                      "session_id": "sess-f6e5d4c3b2a1",
+                      "created_at": "2026-02-11T14:00:00Z",
+                      "expires_at": "2026-02-11T15:00:00Z",
+                      "ttl_seconds": 3600,
+                      "custom_beats": [],
+                      "custom_beats_count": 0,
+                      "custom_beats_limit": 10,
+                      "custom_mixes": [],
+                      "custom_mixes_count": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No active session. Authenticate first.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "unauthorized",
+                  "message": "No active session. Provide a valid service JWT or token."
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Clear session (logout)",
+        "description": "Explicitly clears all session data including custom beats, mixes, and playback state. This is equivalent to logging out - all custom-created resources are permanently deleted. Sessions also auto-expire after the TTL (default 1 hour of inactivity).",
+        "operationId": "clearSession",
+        "tags": ["Sessions"],
+        "responses": {
+          "200": {
+            "description": "Session cleared. All custom data deleted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Confirmation message"
+                    },
+                    "deleted_beats": {
+                      "type": "integer",
+                      "description": "Number of custom beats that were deleted"
+                    },
+                    "deleted_mixes": {
+                      "type": "integer",
+                      "description": "Number of custom mixes that were deleted"
+                    },
+                    "session_duration_seconds": {
+                      "type": "integer",
+                      "description": "How long the session was active before clearing"
+                    }
+                  }
+                },
+                "example": {
+                  "message": "Session cleared. All custom data deleted.",
+                  "deleted_beats": 3,
+                  "deleted_mixes": 1,
+                  "session_duration_seconds": 1847
+                },
+                "examples": {
+                  "clearedWithData": {
+                    "summary": "Session cleared with custom data",
+                    "value": {
+                      "message": "Session cleared. All custom data deleted.",
+                      "deleted_beats": 3,
+                      "deleted_mixes": 1,
+                      "session_duration_seconds": 1847
+                    }
+                  },
+                  "clearedEmpty": {
+                    "summary": "Session cleared (was already empty)",
+                    "value": {
+                      "message": "Session cleared. No custom data to delete.",
+                      "deleted_beats": 0,
+                      "deleted_mixes": 0,
+                      "session_duration_seconds": 120
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Beat": {
+        "type": "object",
+        "required": ["id", "name", "bpm", "kit", "tracks"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique beat pattern identifier"
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable name for the pattern"
+          },
+          "bpm": {
+            "type": "integer",
+            "minimum": 40,
+            "maximum": 300,
+            "description": "Beats per minute (tempo)"
+          },
+          "kit": {
+            "type": "string",
+            "description": "Drum kit ID used for this pattern",
+            "enum": ["tr-808", "acoustic", "linndrum", "cr-78"]
+          },
+          "time_signature": {
+            "type": "string",
+            "default": "4/4",
+            "description": "Musical time signature"
+          },
+          "steps": {
+            "type": "integer",
+            "default": 16,
+            "description": "Number of steps in the sequence (always 16)"
+          },
+          "tracks": {
+            "$ref": "#/components/schemas/Tracks"
+          },
+          "duration_ms": {
+            "type": "integer",
+            "description": "Duration of one loop in milliseconds"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp (for created beats only)"
+          }
+        }
+      },
+      "NewBeat": {
+        "type": "object",
+        "required": ["bpm", "kit", "tracks"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Optional name for the beat pattern",
+            "default": "Untitled Beat",
+            "example": "My Custom Beat"
+          },
+          "bpm": {
+            "type": "integer",
+            "minimum": 40,
+            "maximum": 300,
+            "description": "Beats per minute (tempo). Range: 40-300.",
+            "example": 120
+          },
+          "kit": {
+            "type": "string",
+            "description": "Drum kit to use. Must be one of the available kit IDs.",
+            "enum": ["tr-808", "acoustic", "linndrum", "cr-78"],
+            "example": "tr-808"
+          },
+          "time_signature": {
+            "type": "string",
+            "default": "4/4",
+            "description": "Musical time signature"
+          },
+          "tracks": {
+            "$ref": "#/components/schemas/Tracks"
+          }
+        }
+      },
+      "Tracks": {
+        "type": "object",
+        "description": "Track data keyed by instrument name. Each track is an array of exactly 16 steps where 1 = hit and 0 = silence. Available instruments depend on the selected kit.",
+        "additionalProperties": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "enum": [0, 1]
+          },
+          "minItems": 16,
+          "maxItems": 16
+        },
+        "example": {
+          "kick": [1,0,0,0,1,0,0,0,1,0,0,1,0,0,1,0],
+          "snare": [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+          "hihat": [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+        }
+      },
+      "Kit": {
+        "type": "object",
+        "required": ["id", "name", "brand", "year", "description", "genreTags", "accentColor", "sounds"],
+        "description": "Rich drum kit metadata for visual gallery rendering",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique kit identifier",
+            "example": "tr-808"
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable kit name",
+            "example": "TR-808"
+          },
+          "brand": {
+            "type": "string",
+            "description": "Manufacturer or brand name",
+            "example": "Roland"
+          },
+          "year": {
+            "type": "integer",
+            "description": "Year of original release",
+            "example": 1980
+          },
+          "description": {
+            "type": "string",
+            "description": "Rich description of the kit and its historical significance",
+            "example": "The legendary Roland TR-808 Rhythm Composer. Iconic analog drum machine that defined hip-hop, electro, and modern pop."
+          },
+          "genreTags": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Music genres associated with this kit",
+            "example": ["hip-hop", "electro", "pop", "trap"]
+          },
+          "accentColor": {
+            "type": "string",
+            "description": "Hex color code for visual theming in the gallery",
+            "example": "#3b82f6"
+          },
+          "sounds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Sound"
+            },
+            "description": "Available sounds/instruments in this kit"
+          }
+        }
+      },
+      "KitDetail": {
+        "type": "object",
+        "description": "Full kit details with controls for single-kit view",
+        "allOf": [
+          { "$ref": "#/components/schemas/Kit" },
+          {
+            "type": "object",
+            "required": ["controls"],
+            "properties": {
+              "controls": {
+                "$ref": "#/components/schemas/KitControls"
+              }
+            }
+          }
+        ]
+      },
+      "KitControls": {
+        "type": "object",
+        "description": "Control parameters for adjusting kit sounds",
+        "required": ["tuneRange", "decayRange"],
+        "properties": {
+          "tuneRange": {
+            "type": "object",
+            "description": "Pitch tuning range in semitones",
+            "properties": {
+              "min": { "type": "integer", "example": -12 },
+              "max": { "type": "integer", "example": 12 },
+              "default": { "type": "integer", "example": 0 }
+            }
+          },
+          "decayRange": {
+            "type": "object",
+            "description": "Decay envelope range (0-100%)",
+            "properties": {
+              "min": { "type": "integer", "example": 0 },
+              "max": { "type": "integer", "example": 100 },
+              "default": { "type": "integer", "example": 40 }
+            }
+          }
+        }
+      },
+      "Sound": {
+        "type": "object",
+        "required": ["id", "label", "character", "sampleHint"],
+        "description": "Individual sound/instrument in a kit",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Sound identifier used as track key in beat patterns",
+            "example": "kick"
+          },
+          "label": {
+            "type": "string",
+            "description": "Human-readable sound label",
+            "example": "Kick"
+          },
+          "character": {
+            "type": "string",
+            "description": "Tonal character description for preview",
+            "example": "deep boomy sub"
+          },
+          "sampleHint": {
+            "type": "string",
+            "description": "Suggested sample filename for audio playback",
+            "example": "808-kick.wav"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": ["error", "message"],
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Machine-readable error code",
+            "example": "not_found"
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable error description",
+            "example": "Beat with id \"latin-jazz\" not found"
+          }
+        }
+      },
+      "PlaybackSession": {
+        "type": "object",
+        "description": "Playback session status and statistics returned when stopping or querying a session",
+        "required": ["beat_id", "status"],
+        "properties": {
+          "beat_id": {
+            "type": "string",
+            "description": "The beat pattern that was playing"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["playing", "stopped", "paused"],
+            "description": "Current playback state"
+          },
+          "played_loops": {
+            "type": "integer",
+            "description": "Number of complete loops played in this session"
+          },
+          "total_duration_ms": {
+            "type": "integer",
+            "description": "Total time the beat was playing in milliseconds"
+          },
+          "stopped_at_step": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 15,
+            "description": "The step index (0-15) where playback was stopped"
+          }
+        }
+      },
+      "VolumeConfig": {
+        "type": "object",
+        "required": ["level"],
+        "description": "Volume adjustment parameters. Demonstrates number (float), integer, and boolean types.",
+        "properties": {
+          "level": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "description": "Master volume level (0.0 = silent, 1.0 = full volume)",
+            "example": 0.75
+          },
+          "fade_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 5000,
+            "default": 0,
+            "description": "Fade transition duration in milliseconds. 0 = instant change.",
+            "example": 500
+          },
+          "mute": {
+            "type": "boolean",
+            "default": false,
+            "description": "Mute toggle. When true, volume is silenced but level is preserved for unmuting.",
+            "example": false
+          }
+        }
+      },
+      "TempoConfig": {
+        "type": "object",
+        "required": ["bpm"],
+        "description": "Tempo change configuration. Demonstrates integer, boolean, and conditional integer types.",
+        "properties": {
+          "bpm": {
+            "type": "integer",
+            "minimum": 40,
+            "maximum": 300,
+            "description": "Target beats per minute",
+            "example": 135
+          },
+          "ramp": {
+            "type": "boolean",
+            "default": false,
+            "description": "Gradually transition to new tempo instead of instant change",
+            "example": true
+          },
+          "ramp_bars": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 16,
+            "default": 2,
+            "description": "Number of bars over which to ramp the tempo. Only used when ramp is true.",
+            "example": 4
+          }
+        }
+      },
+      "SoundConfig": {
+        "type": "object",
+        "description": "Individual sound parameter configuration. Demonstrates integer, string enum, boolean, and float types in one object.",
+        "properties": {
+          "tune": {
+            "type": "integer",
+            "minimum": -12,
+            "maximum": 12,
+            "default": 0,
+            "description": "Pitch tuning in semitones (-12 = one octave down, +12 = one octave up)",
+            "example": 3
+          },
+          "decay": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100,
+            "default": 40,
+            "description": "Decay envelope percentage (0 = short punch, 100 = long sustain)",
+            "example": 65
+          },
+          "pan": {
+            "type": "string",
+            "enum": ["hard-left", "left", "center", "right", "hard-right"],
+            "default": "center",
+            "description": "Stereo panning position",
+            "example": "left"
+          },
+          "mute": {
+            "type": "boolean",
+            "default": false,
+            "description": "Mute this sound without removing it from the mix",
+            "example": false
+          },
+          "velocity": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "default": 1.0,
+            "description": "Hit velocity/loudness multiplier (0.0 = ghost note, 1.0 = full hit)",
+            "example": 0.85
+          }
+        }
+      },
+      "MixConfig": {
+        "type": "object",
+        "required": ["channels"],
+        "description": "Full mixer configuration for a drum kit. Demonstrates array of objects, nested objects, and mixed parameter types in a single request.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name for this mix preset",
+            "example": "Heavy Bass Mix"
+          },
+          "channels": {
+            "type": "array",
+            "description": "Per-sound channel configurations. Each channel maps to one kit sound.",
+            "items": {
+              "$ref": "#/components/schemas/ChannelConfig"
+            },
+            "minItems": 1,
+            "maxItems": 16
+          },
+          "master_volume": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "default": 1.0,
+            "description": "Master output volume applied after channel mixing",
+            "example": 0.85
+          },
+          "effects": {
+            "$ref": "#/components/schemas/EffectsConfig"
+          }
+        }
+      },
+      "ChannelConfig": {
+        "type": "object",
+        "required": ["sound", "volume"],
+        "description": "Configuration for a single mixer channel (one sound/instrument)",
+        "properties": {
+          "sound": {
+            "type": "string",
+            "description": "Sound/instrument ID to configure (must exist in the kit)",
+            "example": "kick"
+          },
+          "volume": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "description": "Channel volume level (0.0 = silent, 1.0 = full)",
+            "example": 0.95
+          },
+          "pan": {
+            "type": "string",
+            "enum": ["hard-left", "left", "center", "right", "hard-right"],
+            "default": "center",
+            "description": "Stereo pan position for this channel",
+            "example": "center"
+          },
+          "mute": {
+            "type": "boolean",
+            "default": false,
+            "description": "Mute this channel",
+            "example": false
+          }
+        }
+      },
+      "EffectsConfig": {
+        "type": "object",
+        "description": "Audio effects configuration for the master bus. Demonstrates boolean, float, and string enum types.",
+        "properties": {
+          "reverb": {
+            "type": "boolean",
+            "default": false,
+            "description": "Enable reverb effect on the master bus",
+            "example": true
+          },
+          "reverb_amount": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "default": 0.2,
+            "description": "Reverb wet/dry mix (0.0 = fully dry, 1.0 = fully wet)",
+            "example": 0.3
+          },
+          "compression": {
+            "type": "string",
+            "enum": ["off", "light", "medium", "heavy"],
+            "default": "off",
+            "description": "Dynamic range compression preset for the master bus",
+            "example": "medium"
+          },
+          "eq_low": {
+            "type": "number",
+            "minimum": -12.0,
+            "maximum": 12.0,
+            "default": 0,
+            "description": "Low frequency EQ boost/cut in decibels",
+            "example": 3.0
+          },
+          "eq_high": {
+            "type": "number",
+            "minimum": -12.0,
+            "maximum": 12.0,
+            "default": 0,
+            "description": "High frequency EQ boost/cut in decibels",
+            "example": -1.5
+          }
+        }
+      },
+      "ExportConfig": {
+        "type": "object",
+        "required": ["format"],
+        "description": "Beat export configuration with format selection and track filtering. Demonstrates string enum, array of strings, booleans, and optional string types.",
+        "properties": {
+          "format": {
+            "type": "string",
+            "enum": ["midi", "wav", "json", "stems"],
+            "description": "Export file format. MIDI for DAW import, WAV for audio bounce, JSON for raw data, stems for individual track audio files.",
+            "example": "midi"
+          },
+          "tracks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Specific tracks to include in the export. If omitted, all tracks are exported.",
+            "example": ["kick", "snare", "hihat"]
+          },
+          "include_metadata": {
+            "type": "boolean",
+            "default": true,
+            "description": "Include BPM, kit info, and timestamps in export metadata",
+            "example": true
+          },
+          "normalize": {
+            "type": "boolean",
+            "default": true,
+            "description": "Normalize audio levels in WAV/stems export to prevent clipping",
+            "example": false
+          },
+          "filename": {
+            "type": "string",
+            "description": "Custom filename for the export (without extension). Auto-generated if not provided.",
+            "example": "my-beat-export"
+          }
+        }
+      },
+      "Session": {
+        "type": "object",
+        "description": "User session containing all custom-created resources. Each authenticated user gets an isolated session. Custom beats and mixes are ephemeral - they persist until session expiry (1 hour inactivity) or explicit logout via DELETE /sessions/me. Sessions are unique per customer - no cross-session data access.",
+        "required": ["session_id", "created_at", "expires_at"],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Unique session identifier (prefixed with sess-)",
+            "example": "sess-a1b2c3d4e5f6"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the session was created"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the session will auto-expire if no activity"
+          },
+          "ttl_seconds": {
+            "type": "integer",
+            "description": "Session time-to-live in seconds (resets on activity)",
+            "example": 3600
+          },
+          "custom_beats": {
+            "type": "array",
+            "description": "Custom beat patterns created in this session",
+            "items": {
+              "$ref": "#/components/schemas/Beat"
+            }
+          },
+          "custom_beats_count": {
+            "type": "integer",
+            "description": "Number of custom beats in session"
+          },
+          "custom_beats_limit": {
+            "type": "integer",
+            "description": "Maximum custom beats allowed per session",
+            "example": 10
+          },
+          "custom_mixes": {
+            "type": "array",
+            "description": "Custom mixer configurations created in this session",
+            "items": {
+              "type": "object"
+            }
+          },
+          "custom_mixes_count": {
+            "type": "integer",
+            "description": "Number of custom mixes in session"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "serviceJwt": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "HS256-signed service JWT. Required claims: iss=dubstack-content-service, aud=dubstack-beatbox-sandbox, exp (short TTL). Generated by content-service broker for each playground execution request."
+      },
+      "serviceToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-Service-Token",
+        "description": "Pre-shared static service token for internal backend-to-backend calls. Alternative to JWT for simpler service integrations."
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Beats",
+      "description": "Create, explore, and export drum beat patterns. Each beat is a 16-step sequence with multiple instrument tracks. Supports filtering by genre, kit, and BPM range."
+    },
+    {
+      "name": "Playback",
+      "description": "Control active beat playback sessions. Start, stop, adjust volume and tempo in real-time. Demonstrates number (float), integer, and boolean parameter types."
+    },
+    {
+      "name": "Kits",
+      "description": "Browse available drum kits and their sounds. Each kit includes brand, year, genre tags, accent color, and detailed sound definitions for Web Audio synthesis."
+    },
+    {
+      "name": "Mixer",
+      "description": "Configure individual sounds and create full mix presets. Adjust tuning, decay, panning, velocity, and master effects. Demonstrates array of objects, nested objects, and string enum types."
+    },
+    {
+      "name": "Sessions",
+      "description": "Manage ephemeral user sessions. Each customer gets an isolated session that stores their custom beats and mixes. Sessions auto-expire after 1 hour of inactivity, or can be explicitly cleared (logout). Custom resources are unique per customer and never shared."
+    }
+  ]
+}
