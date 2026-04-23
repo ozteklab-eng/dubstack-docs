@@ -1,0 +1,22 @@
+---
+title: "List sounds in a kit"
+openapi: "GET /kits/{id}/sounds"
+method: "GET"
+path: "/kits/{id}/sounds"
+specName: "api-reference"
+operationId: "getKitSounds"
+description: "Returns all available sounds/instruments in a specific drum kit with character descriptions and sample hints."
+---
+
+Returns all available sounds/instruments in a specific drum kit with character descriptions and sample hints.
+
+> `GET /kits/{id}/sounds`
+
+### Parameters
+- `id` (path, string, required) · Kit ID · example: `acoustic`
+
+### Responses
+- `200` Kit sounds listed.
+- `404` Kit not found.
+
+<PlaygroundEmbed specName="api-reference" method="GET" path="/kits/{id}/sounds" operationId="getKitSounds" />
