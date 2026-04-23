@@ -1,0 +1,436 @@
+{
+  "$schema": "https://dubstack.ai/dubstack.json",
+  "site": {
+    "name": "dubstack",
+    "tagline": "Beautiful, AI-powered documentation for modern teams",
+    "logo": {
+      "light": "/logo/light.svg",
+      "dark": "/logo/dark.svg"
+    },
+    "favicon": "/img/favicon.ico",
+    "timezone": "UTC"
+  },
+  "topbarCtaButton": {
+    "label": "Get Started",
+    "href": "/quickstart"
+  },
+  "theme": "groove",
+  "widgets": {
+    "search": {
+      "enabled": true,
+      "placeholder": "Search...",
+      "position": "sidebar",
+      "background_color": "#18171A",
+      "text_color": "#f3f4f6",
+      "border_color": "#ffffff14",
+      "border_radius": 8,
+      "height": 48,
+      "width": 400,
+      "blur_background": true,
+      "blur_amount": 12,
+      "overlay_opacity": 0.6,
+      "animation_style": "fade"
+    },
+    "assistant": {
+      "title": "Assistant",
+      "welcome_title": "Hi! How can I help you today?",
+      "welcome_subtitle": "Ask me anything about the docs, code samples, or best practices.",
+      "logo_url": "/img/assistant-star.svg",
+      "watermark_logo_url": "/logo/light.svg",
+      "background_color": "#0e0e10",
+      "width": 300
+    }
+  },
+  "layout": {
+    "sidebar": {
+      "width": 250,
+      "position": "left",
+      "collapsible": true
+    },
+    "header": {
+      "height": 70,
+      "sticky": true
+    },
+    "content": {
+      "max_width": 900
+    }
+  },
+  "canvas_layout": {
+    "components": [
+      {
+        "instanceId": "default-header",
+        "componentId": "site-header",
+        "x": 0,
+        "y": 0,
+        "width": 1200,
+        "height": 56,
+        "zIndex": 3,
+        "locked": true
+      },
+      {
+        "instanceId": "default-sidebar",
+        "componentId": "sidebar-nav",
+        "x": 0,
+        "y": 56,
+        "width": 250,
+        "height": 844,
+        "zIndex": 1,
+        "locked": true
+      },
+      {
+        "instanceId": "main-content",
+        "componentId": "main-content",
+        "x": 274,
+        "y": 56,
+        "width": 926,
+        "height": 844,
+        "zIndex": 0,
+        "locked": true
+      },
+      {
+        "instanceId": "default-toc",
+        "componentId": "table-of-contents",
+        "x": 1000,
+        "y": 56,
+        "width": 200,
+        "height": 400,
+        "zIndex": 1,
+        "locked": true
+      },
+      {
+        "instanceId": "default-assistant",
+        "componentId": "assistant-widget",
+        "x": 900,
+        "y": 56,
+        "width": 300,
+        "height": 844,
+        "zIndex": 2,
+        "locked": true
+      }
+    ],
+    "last_updated": "2026-01-30T08:30:00.000Z"
+  },
+  "navigation": {
+    "auto_generate": false,
+    "anchors": [
+      {
+        "name": "Documentation",
+        "url": "https://docs.dubstack.ai",
+        "icon": "book"
+      },
+      {
+        "name": "Blog",
+        "url": "https://blogs.dubstack.ai",
+        "icon": "newspaper"
+      }
+    ],
+    "tabs": [
+      {
+        "tab": "Guides",
+        "default": true,
+        "groups": [
+          {
+            "group": "Getting started",
+            "icon": "rocket",
+            "pages": [
+              {
+                "slug": "index",
+                "icon": "house"
+              },
+              {
+                "slug": "quickstart",
+                "icon": "zap"
+              },
+              {
+                "slug": "development",
+                "icon": "terminal"
+              }
+            ]
+          },
+          {
+            "group": "Customization",
+            "icon": "gear",
+            "pages": [
+              {
+                "slug": "essentials/settings",
+                "icon": "gear"
+              },
+              {
+                "slug": "essentials/navigation",
+                "icon": "map"
+              }
+            ]
+          },
+          {
+            "group": "Writing content",
+            "icon": "file-text",
+            "pages": [
+              {
+                "slug": "essentials/markdown",
+                "icon": "file-text"
+              },
+              {
+                "slug": "essentials/mdx-components",
+                "icon": "shapes"
+              },
+              {
+                "slug": "essentials/code",
+                "icon": "code"
+              },
+              {
+                "slug": "essentials/tables",
+                "icon": "table"
+              },
+              {
+                "slug": "essentials/images",
+                "icon": "image"
+              },
+              {
+                "slug": "essentials/reusable-snippets",
+                "icon": "recycle"
+              },
+              {
+                "slug": "essentials/twoslash-demo",
+                "icon": "code"
+              }
+            ]
+          },
+          {
+            "group": "AI tools",
+            "icon": "sparkles",
+            "pages": [
+              {
+                "slug": "ai-tools/cursor",
+                "icon": "arrow-pointer"
+              },
+              {
+                "slug": "ai-tools/claude-code",
+                "icon": "terminal"
+              },
+              {
+                "slug": "ai-tools/windsurf",
+                "icon": "wind"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API reference",
+        "groups": [
+          {
+            "group": "API documentation",
+            "icon": "book",
+            "openapi": "api-reference/openapi.json",
+            "pages": [
+              {
+                "slug": "api-reference/introduction",
+                "icon": "book"
+              },
+              {
+                "slug": "api-reference/openapi",
+                "icon": "brackets-curly"
+              }
+            ]
+          },
+          {
+            "group": "Beat patterns",
+            "icon": "play",
+            "openapi": "api-reference/openapi.json",
+            "pages": [
+              "GET /beats",
+              "POST /beats",
+              "GET /beats/{id}",
+              "DELETE /beats/{id}",
+              "POST /beats/{id}/play",
+              "POST /beats/{id}/stop",
+              "PUT /beats/{id}/volume",
+              "PUT /beats/{id}/tempo",
+              "POST /beats/{id}/export"
+            ]
+          },
+          {
+            "group": "Drum kits",
+            "icon": "music",
+            "openapi": "api-reference/openapi.json",
+            "pages": [
+              "GET /kits",
+              "GET /kits/{id}",
+              "GET /kits/{id}/sounds",
+              "PUT /kits/{id}/sounds/{soundId}",
+              "POST /kits/{id}/mix"
+            ]
+          },
+          {
+            "group": "Sessions",
+            "icon": "user",
+            "openapi": "api-reference/openapi.json",
+            "pages": [
+              "GET /sessions/me",
+              "DELETE /sessions/me"
+            ]
+          }
+        ],
+        "openapi": "api-reference/openapi.json"
+      }
+    ],
+    "header": [
+      {
+        "label": "Home",
+        "href": "/"
+      },
+      {
+        "label": "Quickstart",
+        "href": "/quickstart"
+      },
+      {
+        "label": "API reference",
+        "href": "/api-reference"
+      }
+    ],
+    "sidebar": [
+      {
+        "group": "Getting started",
+        "icon": "rocket"
+      },
+      {
+        "group": "Customization",
+        "icon": "gear"
+      },
+      {
+        "group": "Writing content",
+        "icon": "file-text"
+      },
+      {
+        "group": "AI tools",
+        "icon": "sparkles"
+      },
+      {
+        "group": "API documentation",
+        "icon": "book",
+        "openapi": "api-reference/openapi.json"
+      },
+      {
+        "group": "Endpoint examples",
+        "icon": "code",
+        "openapi": "api-reference/openapi.json"
+      }
+    ]
+  },
+  "homepage": {
+    "type": "docs",
+    "landing_page": null,
+    "hero": {
+      "title": "Welcome to dubstack",
+      "tagline": "Beautiful, AI-powered documentation for modern teams",
+      "cta": {
+        "label": "Get Started",
+        "href": "/quickstart"
+      }
+    }
+  },
+  "sections": {},
+  "footer": {
+    "use_theme_studio": false,
+    "style": "none",
+    "socials": {
+      "x": "",
+      "github": "https://github.com/dubstack-ai",
+      "linkedin": ""
+    },
+    "columns": [
+      {
+        "header": "Resources",
+        "links": [
+          {
+            "label": "Documentation",
+            "url": "/quickstart"
+          },
+          {
+            "label": "API Reference",
+            "url": "/api-reference"
+          }
+        ]
+      },
+      {
+        "header": "Company",
+        "links": [
+          {
+            "label": "About",
+            "url": "/about"
+          },
+          {
+            "label": "Blog",
+            "url": "/blogs"
+          }
+        ]
+      },
+      {
+        "header": "Legal",
+        "links": [
+          {
+            "label": "Privacy",
+            "url": "/privacy"
+          },
+          {
+            "label": "Terms",
+            "url": "/terms"
+          }
+        ]
+      }
+    ],
+    "branding": {
+      "show_powered_by": true
+    },
+    "logo": {
+      "dark": "/logo/starter-dark.svg",
+      "light": "/logo/starter-light.svg"
+    }
+  },
+  "seo": {
+    "title_template": "%s | dubstack",
+    "description": "Beautiful, AI-powered documentation platform for modern teams. Create stunning docs with OpenAPI support, Theme Studio, and MCP server integration.",
+    "og_image": "/images/checks-passed.png"
+  },
+  "integrations": {
+    "analytics": {
+      "google": null,
+      "plausible": null
+    },
+    "ai": {
+      "provider": null,
+      "api_key_env": "OPENAI_API_KEY"
+    }
+  },
+  "auth": {
+    "enabled": false,
+    "provider": "oidc",
+    "provider_name": "SSO",
+    "provider_icon_url": "",
+    "oidc": {
+      "issuer": "",
+      "client_id": "",
+      "scopes": "openid profile email",
+      "token_proxy": ""
+    },
+    "feature_tier": "free",
+    "require_auth_for_admin": true,
+    "require_auth_for_docs": false
+  },
+  "theme_config": {
+    "fonts": {
+      "heading": "Inter",
+      "body": "Inter",
+      "code": "JetBrains Mono"
+    },
+    "code_block": {
+      "header_height": 32,
+      "radius": 18,
+      "syntax_theme": "github-dark"
+    },
+    "scrollbar": {
+      "width": 6,
+      "radius": 999
+    }
+  }
+}
