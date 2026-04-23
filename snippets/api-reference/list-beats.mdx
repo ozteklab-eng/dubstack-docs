@@ -1,0 +1,26 @@
+---
+title: "List beat patterns"
+openapi: "GET /beats"
+method: "GET"
+path: "/beats"
+specName: "api-reference"
+operationId: "listBeats"
+description: "Returns all pre-seeded demo beat patterns. Each pattern includes BPM, kit selection, and track data with 16-step sequences for each instrument."
+---
+
+Returns all pre-seeded demo beat patterns. Each pattern includes BPM, kit selection, and track data with 16-step sequences for each instrument.
+
+> `GET /beats`
+
+### Parameters
+- `genre` (query, string, optional) · Filter beats by music genre tag · example: `hip-hop`
+- `kit` (query, string, optional) · Filter beats by drum kit ID · example: `tr-808`
+- `bpm_min` (query, integer, optional) · Minimum BPM filter (inclusive) · example: `80`
+- `bpm_max` (query, integer, optional) · Maximum BPM filter (inclusive) · example: `140`
+- `limit` (query, integer, optional) · Maximum number of results to return · example: `10`
+- `offset` (query, integer, optional) · Number of results to skip for pagination · example: `0`
+
+### Responses
+- `200` List of beat patterns.
+
+<PlaygroundEmbed specName="api-reference" method="GET" path="/beats" operationId="listBeats" />
