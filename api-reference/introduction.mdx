@@ -1,0 +1,40 @@
+---
+title: "Introduction"
+description: "Explore the BeatBox API with an interactive playground and endpoint pages"
+icon: "code"
+---
+
+<Callout type="info">
+The starter kit ships with the BeatBox API so you can see a full OpenAPI workflow immediately. Replace the sample spec later if you want to document your own API.
+</Callout>
+
+## Explore the API
+
+Use the interactive playground to inspect every operation, test requests manually, and generate language snippets.
+
+<CardGroup cols={2}>
+  <Card title="Full API playground" icon="play" href="/api-reference/openapi">
+    Browse every BeatBox endpoint, authenticate with a token, and try requests directly from the docs.
+  </Card>
+  <Card title="Reusable snippets" icon="recycle" href="/essentials/reusable-snippets">
+    Generate endpoint snippets once and embed them into guides or onboarding flows.
+  </Card>
+</CardGroup>
+
+## What ships in the starter
+
+The default starter includes three API sections:
+
+- **Beat patterns** for creating, playing, exporting, and controlling beats
+- **Drum kits** for inspecting kits, sounds, and custom mixes
+- **Sessions** for checking and clearing the active session
+
+## How to customize this
+
+1. Replace `api-reference/openapi.json` with your own OpenAPI spec
+2. Use the dashboard to generate snippets when you need them
+3. Publish only the endpoint pages you want visible in navigation
+
+<Callout type="success">
+DubStack keeps the uploaded spec as the source of truth. The playground reads from the spec, while endpoint pages stay explicit and controllable.
+</Callout>
