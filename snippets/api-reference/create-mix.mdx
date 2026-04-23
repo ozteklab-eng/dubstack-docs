@@ -1,0 +1,65 @@
+---
+title: "Create a custom mix"
+openapi: "POST /kits/{id}/mix"
+method: "POST"
+path: "/kits/{id}/mix"
+specName: "api-reference"
+operationId: "createMix"
+description: "Creates a full mixer configuration for a kit by specifying per-channel volumes, panning, mute states, and master effects. Demonstrates array of objects, nested objects, and mixed parameter types in a single request."
+---
+
+Creates a full mixer configuration for a kit by specifying per-channel volumes, panning, mute states, and master effects. Demonstrates array of objects, nested objects, and mixed parameter types in a single request.
+
+> `POST /kits/{id}/mix`
+
+### Parameters
+- `id` (path, string, required) · Kit ID to create a mix for · example: `tr-808`
+
+### Request Body
+Full mixer configuration with per-channel settings and master effects.
+
+```json
+{
+  "name": "Heavy Bass Mix",
+  "channels": [
+    {
+      "sound": "kick",
+      "volume": 0.95,
+      "pan": "center",
+      "mute": false
+    },
+    {
+      "sound": "snare",
+      "volume": 0.7,
+      "pan": "center",
+      "mute": false
+    },
+    {
+      "sound": "hihat",
+      "volume": 0.5,
+      "pan": "right",
+      "mute": false
+    },
+    {
+      "sound": "clap",
+      "volume": 0.6,
+      "pan": "left",
+      "mute": true
+    }
+  ],
+  "master_volume": 0.85,
+  "effects": {
+    "reverb": true,
+    "reverb_amount": 0.3,
+    "compression": "medium",
+    "eq_low": 3,
+    "eq_high": -1.5
+  }
+}
+```
+
+### Responses
+- `201` Mix configuration created successfully.
+- `400` Invalid mix configuration.
+
+<PlaygroundEmbed specName="api-reference" method="POST" path="/kits/{id}/mix" operationId="createMix" />
