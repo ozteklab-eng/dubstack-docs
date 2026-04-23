@@ -1,0 +1,118 @@
+{
+  "specName": "api-reference",
+  "generatedAt": "2026-04-03T08:47:44.834Z",
+  "endpoints": [
+    {
+      "file": "api-reference/list-beats.mdx",
+      "title": "List beat patterns",
+      "method": "GET",
+      "path": "/beats",
+      "operationId": "listBeats"
+    },
+    {
+      "file": "api-reference/create-beat.mdx",
+      "title": "Create a beat pattern",
+      "method": "POST",
+      "path": "/beats",
+      "operationId": "createBeat"
+    },
+    {
+      "file": "api-reference/get-beat.mdx",
+      "title": "Get a beat pattern",
+      "method": "GET",
+      "path": "/beats/{id}",
+      "operationId": "getBeat"
+    },
+    {
+      "file": "api-reference/delete-beat.mdx",
+      "title": "Delete a custom beat",
+      "method": "DELETE",
+      "path": "/beats/{id}",
+      "operationId": "deleteBeat"
+    },
+    {
+      "file": "api-reference/play-beat.mdx",
+      "title": "Play a beat pattern",
+      "method": "POST",
+      "path": "/beats/{id}/play",
+      "operationId": "playBeat"
+    },
+    {
+      "file": "api-reference/list-kits.mdx",
+      "title": "List drum kits",
+      "method": "GET",
+      "path": "/kits",
+      "operationId": "listKits"
+    },
+    {
+      "file": "api-reference/get-kit.mdx",
+      "title": "Get a drum kit",
+      "method": "GET",
+      "path": "/kits/{id}",
+      "operationId": "getKit"
+    },
+    {
+      "file": "api-reference/get-kit-sounds.mdx",
+      "title": "List sounds in a kit",
+      "method": "GET",
+      "path": "/kits/{id}/sounds",
+      "operationId": "getKitSounds"
+    },
+    {
+      "file": "api-reference/stop-beat.mdx",
+      "title": "Stop beat playback",
+      "method": "POST",
+      "path": "/beats/{id}/stop",
+      "operationId": "stopBeat"
+    },
+    {
+      "file": "api-reference/set-volume.mdx",
+      "title": "Set playback volume",
+      "method": "PUT",
+      "path": "/beats/{id}/volume",
+      "operationId": "setVolume"
+    },
+    {
+      "file": "api-reference/set-tempo.mdx",
+      "title": "Change playback tempo",
+      "method": "PUT",
+      "path": "/beats/{id}/tempo",
+      "operationId": "setTempo"
+    },
+    {
+      "file": "api-reference/export-beat.mdx",
+      "title": "Export a beat pattern",
+      "method": "POST",
+      "path": "/beats/{id}/export",
+      "operationId": "exportBeat"
+    },
+    {
+      "file": "api-reference/configure-sound.mdx",
+      "title": "Configure a kit sound",
+      "method": "PUT",
+      "path": "/kits/{id}/sounds/{soundId}",
+      "operationId": "configureSound"
+    },
+    {
+      "file": "api-reference/create-mix.mdx",
+      "title": "Create a custom mix",
+      "method": "POST",
+      "path": "/kits/{id}/mix",
+      "operationId": "createMix"
+    },
+    {
+      "file": "api-reference/get-session.mdx",
+      "title": "Get current session",
+      "method": "GET",
+      "path": "/sessions/me",
+      "operationId": "getSession"
+    },
+    {
+      "file": "api-reference/clear-session.mdx",
+      "title": "Clear session (logout)",
+      "method": "DELETE",
+      "path": "/sessions/me",
+      "operationId": "clearSession"
+    }
+  ]
+}
