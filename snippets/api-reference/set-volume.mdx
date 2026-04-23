@@ -1,0 +1,33 @@
+---
+title: "Set playback volume"
+openapi: "PUT /beats/{id}/volume"
+method: "PUT"
+path: "/beats/{id}/volume"
+specName: "api-reference"
+operationId: "setVolume"
+description: "Adjusts the master volume level for a beat's playback session. Supports optional fade transition for smooth volume changes. Volume is a float from 0.0 (silent) to 1.0 (full). Demonstrates number, integer, and boolean parameter types."
+---
+
+Adjusts the master volume level for a beat's playback session. Supports optional fade transition for smooth volume changes. Volume is a float from 0.0 (silent) to 1.0 (full). Demonstrates number, integer, and boolean parameter types.
+
+> `PUT /beats/{id}/volume`
+
+### Parameters
+- `id` (path, string, required) · Beat pattern ID · example: `trap`
+
+### Request Body
+Volume configuration with optional fade and mute controls.
+
+```json
+{
+  "level": 0.75,
+  "fade_ms": 500,
+  "mute": false
+}
+```
+
+### Responses
+- `200` Volume updated successfully.
+- `400` Invalid volume configuration.
+
+<PlaygroundEmbed specName="api-reference" method="PUT" path="/beats/{id}/volume" operationId="setVolume" />
