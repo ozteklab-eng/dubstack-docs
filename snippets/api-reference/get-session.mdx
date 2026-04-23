@@ -1,0 +1,19 @@
+---
+title: "Get current session"
+openapi: "GET /sessions/me"
+method: "GET"
+path: "/sessions/me"
+specName: "api-reference"
+operationId: "getSession"
+description: "Returns the current session details including all custom beats created in this session, session age, and storage usage. Each authenticated user gets an isolated session - custom beats from one user are never visible to another."
+---
+
+Returns the current session details including all custom beats created in this session, session age, and storage usage. Each authenticated user gets an isolated session - custom beats from one user are never visible to another.
+
+> `GET /sessions/me`
+
+### Responses
+- `200` Current session details.
+- `401` No active session. Authenticate first.
+
+<PlaygroundEmbed specName="api-reference" method="GET" path="/sessions/me" operationId="getSession" />
