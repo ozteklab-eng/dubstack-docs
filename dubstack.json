@@ -1,0 +1,196 @@
+{
+  "$schema": "https://dubstack.ai/dubstack.json",
+  "site": {
+    "name": "dubstack docs",
+    "tagline": "Build, publish, and scale developer documentation with DubStack.",
+    "logo": {
+      "light": "/assets/logo-light.svg",
+      "dark": "/assets/logo-dark.svg"
+    },
+    "favicon": "/assets/favicon.svg",
+    "timezone": "UTC"
+  },
+  "theme": "mint",
+  "colors": {
+    "primary": "#f97316",
+    "light": "#f97316",
+    "dark": "#fb923c"
+  },
+  "topbarCtaButton": {
+    "label": "Get started",
+    "href": "/quickstart"
+  },
+  "contextual": {
+    "enabled": true,
+    "options": ["copy", "view", "claude", "chatgpt", "perplexity"],
+    "default": "copy",
+    "labels": {
+      "copy": "Copy page",
+      "view": "View as Markdown",
+      "claude": "Ask Claude",
+      "chatgpt": "Ask ChatGPT",
+      "perplexity": "Ask Perplexity"
+    }
+  },
+  "widgets": {
+    "search": {
+      "enabled": true,
+      "placeholder": "Search docs..."
+    },
+    "assistant": {
+      "title": "Assistant",
+      "welcome_title": "How can I help with DubStack?",
+      "welcome_subtitle": "Ask about configuration, publishing, migration, and docs workflows."
+    }
+  },
+  "navigation": {
+    "auto_generate": false,
+    "tabs": [
+      {
+        "tab": "Guides",
+        "default": true,
+        "groups": [
+          {
+            "group": "Getting started",
+            "icon": "rocket",
+            "pages": [
+              { "slug": "index", "icon": "house" },
+              { "slug": "quickstart", "icon": "zap" },
+              { "slug": "getting-started/overview", "icon": "book-open" },
+              { "slug": "getting-started/create-site", "icon": "plus" },
+              { "slug": "getting-started/connect-git", "icon": "git-branch" },
+              { "slug": "getting-started/skip-git-hosted-repo", "icon": "cloud" },
+              { "slug": "getting-started/deploy", "icon": "upload-cloud" }
+            ]
+          },
+          {
+            "group": "Writing content",
+            "icon": "file-text",
+            "pages": [
+              { "slug": "writing-content/mdx", "icon": "file-code" },
+              { "slug": "writing-content/components", "icon": "puzzle-piece" },
+              { "slug": "writing-content/code-blocks", "icon": "code" },
+              { "slug": "writing-content/images-assets", "icon": "image" },
+              { "slug": "writing-content/reusable-snippets", "icon": "recycle" },
+              { "slug": "writing-content/tables", "icon": "table" }
+            ]
+          },
+          {
+            "group": "Configuration",
+            "icon": "settings",
+            "pages": [
+              { "slug": "configuration/dubstack-json", "icon": "braces" },
+              { "slug": "configuration/navigation", "icon": "map" },
+              { "slug": "configuration/theming", "icon": "palette" },
+              { "slug": "configuration/redirects", "icon": "corner-up-right" },
+              { "slug": "configuration/seo-search", "icon": "search" }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Product",
+        "groups": [
+          {
+            "group": "Dashboard",
+            "icon": "layout-dashboard",
+            "pages": [
+              { "slug": "dashboard/overview", "icon": "layout-dashboard" },
+              { "slug": "dashboard/team-members", "icon": "users" },
+              { "slug": "dashboard/billing-plans", "icon": "credit-card" }
+            ]
+          },
+          {
+            "group": "Editor",
+            "icon": "pencil-ruler",
+            "pages": [
+              { "slug": "editor/overview", "icon": "pencil" },
+              { "slug": "editor/slash-commands", "icon": "command" },
+              { "slug": "editor/publishing", "icon": "git-pull-request" }
+            ]
+          },
+          {
+            "group": "Theme Studio",
+            "icon": "paintbrush",
+            "pages": [
+              { "slug": "theme-studio/overview", "icon": "paintbrush" },
+              { "slug": "theme-studio/canvas-layout", "icon": "layout-template" },
+              { "slug": "theme-studio/enterprise-gating", "icon": "shield" }
+            ]
+          },
+          {
+            "group": "AI",
+            "icon": "sparkles",
+            "pages": [
+              { "slug": "ai/assistant", "icon": "bot" },
+              { "slug": "ai/contextual-actions", "icon": "mouse-pointer-click" },
+              { "slug": "ai/mcp", "icon": "plug" }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Deploy and migrate",
+        "groups": [
+          {
+            "group": "Deployment",
+            "icon": "rocket",
+            "pages": [
+              { "slug": "deployment/custom-domains", "icon": "globe" },
+              { "slug": "deployment/preview-deployments", "icon": "eye" },
+              { "slug": "deployment/git-sync", "icon": "refresh-cw" },
+              { "slug": "deployment/forgejo-github-gitlab", "icon": "git-merge" }
+            ]
+          },
+          {
+            "group": "Migration",
+            "icon": "repeat",
+            "pages": [
+              { "slug": "migration/overview", "icon": "route" },
+              { "slug": "migration/public-wiki-previews", "icon": "scan-search" },
+              { "slug": "migration/authored-config-import", "icon": "file-json" },
+              { "slug": "migration/generated-reconstruction", "icon": "wand-sparkles" },
+              { "slug": "migration/claim-adopt-flow", "icon": "badge-check" }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Reference",
+        "groups": [
+          {
+            "group": "API reference",
+            "icon": "book",
+            "pages": [
+              { "slug": "api-reference/introduction", "icon": "book" }
+            ]
+          },
+          {
+            "group": "Reference",
+            "icon": "list-checks",
+            "pages": [
+              { "slug": "reference/tiers", "icon": "layers" },
+              { "slug": "reference/limits", "icon": "gauge" },
+              { "slug": "reference/troubleshooting", "icon": "wrench" },
+              { "slug": "reference/changelog", "icon": "history" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "footer": {
+    "style": "default",
+    "socials": {
+      "github": "https://github.com/dubstack-ai",
+      "x": ""
+    },
+    "branding": {
+      "show_powered_by": true
+    }
+  },
+  "seo": {
+    "title_template": "%s | dubstack docs",
+    "description": "Product documentation for DubStack, the developer documentation platform for docs, API references, AI workflows, and Theme Studio."
+  }
+}
