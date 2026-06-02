@@ -4,18 +4,73 @@ description: Use public repository previews as an acquisition and migration surf
 icon: scan-search
 ---
 
-This page documents Public wiki previews for DubStack.
+Public wiki previews let DubStack show what a public repository's documentation would look like on DubStack before the repository is claimed by a customer.
 
-## Overview
+## URL format
 
-Use public repository previews as an acquisition and migration surface.
+Public previews live on:
 
-## What to configure
+```text
+https://dubstack.wiki/<owner>/<repo>
+```
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+This is an unclaimed acquisition surface. Customer-owned docs sites live on `*.dubstack.live` or a configured custom domain after claim/adopt completes.
 
-## Next steps
+## Import modes
 
-This page is a scaffold for the full product documentation pass.
+DubStack separates two import modes.
+
+| Mode | When it is used | Behavior |
+| --- | --- | --- |
+| Authored config import | The repository has an authored docs config such as `docs.json` | Convert the authored config into `dubstack.json` and render through the shared docs renderer. |
+| Generated reconstruction | The repository does not have an authored docs config | Build a documentation structure from source files and repository signals. AI planning runs only through the generated reconstruction path. |
+
+The two modes must stay separate. Authored config import is deterministic migration work. Generated reconstruction is a documentation generation workflow.
+
+## Showcase groups
+
+The public wiki homepage separates curated examples from generated or trending discovery surfaces.
+
+- Authored examples show high-value repositories with authored docs configuration.
+- Generated examples show repositories reconstructed from source content.
+- Trending/discovery entries can come from repository search and may or may not already have docs configuration.
+
+Curated examples are protected from garbage collection. Unclaimed generated previews can be garbage-collected unless they are protected, claimed, or explicitly retained.
+
+## Provenance banner
+
+Public previews show a provenance banner so visitors know the preview is an acquisition copy, not the upstream project's official docs site.
+
+The banner records the generation/import date and makes the boundary clear before visitors compare the preview with the upstream site.
+
+## Claim/adopt boundary
+
+A public preview does not become a customer stack automatically.
+
+The lifecycle is:
+
+```text
+Public preview on dubstack.wiki
+-> claim/adopt request
+-> customer/dashboard stack creation
+-> Git integration and ownership setup
+-> customer site on *.dubstack.live or custom domain
+```
+
+This boundary protects customer ownership, billing, Git permissions, garbage collection rules, and hosted-domain behavior.
+
+## Operational controls
+
+Internal operators manage previews from the Control Plane. The Control Plane should expose:
+
+- imported/generated mode
+- source repository
+- source commit
+- generation/import timestamp
+- transform job status
+- validation issues
+- protected/garbage-collection state
+- regenerate/delete controls
+- claim/adopt lifecycle state
+
+The Control Plane manages lifecycle visibility and operator actions. It is not the transformation engine itself.

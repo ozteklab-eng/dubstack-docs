@@ -4,18 +4,111 @@ description: Insert structured docs components from the editor command menu.
 icon: command
 ---
 
-This page documents Slash commands for DubStack.
+Slash commands insert structured documentation components from the visual editor. Type `/` in an empty editor line, choose a component, then continue editing the inserted block.
 
-## Overview
+## Supported commands
 
-Insert structured docs components from the editor command menu.
+The editor supports common writing blocks:
 
-## What to configure
+- Text
+- Heading 1
+- Heading 2
+- Heading 3
+- Heading 4
+- Blockquote
+- Unordered List
+- Numbered List
+- Table
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+It also supports media and embeds:
 
-## Next steps
+- Image
+- Video
+- YouTube
+- Loom
+- Vimeo
+- Embed
 
-This page is a scaffold for the full product documentation pass.
+Documentation components include:
+
+- Info Callout
+- Check Callout
+- Note Callout
+- Tip Callout
+- Warning Callout
+- Danger Callout
+- Accordion
+- Accordion Group
+- Card
+- Info Card
+- Check Card
+- Note Card
+- Tip Card
+- Warning Card
+- Danger Card
+- 2 columns
+- 3 columns
+- 4 columns
+- Mermaid
+- Code Block
+- Code Group
+- Badge
+- Tabs
+- Steps
+- Frame
+- Update
+- Parameter Fields
+- Response Fields
+- Expandable
+- Request Example
+- Response Example
+
+DubStack-specific editor helpers may also be visible for product previews and renderer fixtures, including Snippet, Endpoint, Gallery, Properties Table, and Comparison Table.
+
+## Steps
+
+The `Steps` command inserts one empty step with a visible step number, an empty title placeholder, and a body paragraph placeholder.
+
+Use the plus button beside the steps block to add more steps. The internal child block is `step`, but only `Steps` is exposed as a user-facing slash command.
+
+## Changelog updates
+
+The `Update` command inserts a changelog timeline entry with the current date.
+
+The attributes menu supports:
+
+- Label
+- Tags
+- Description
+- RSS metadata
+
+RSS metadata is stored with the update entry so generated feeds can use clean text metadata without exposing rich editor content.
+
+## Typed cards
+
+Typed card commands insert card variants with semantic styling:
+
+- Info Card
+- Check Card
+- Note Card
+- Tip Card
+- Warning Card
+- Danger Card
+
+These preserve their type through editor import/export and public rendering.
+
+## Authoring contract
+
+Slash commands should insert structured editor nodes where round-trip fidelity matters. They should not insert opaque raw MDX unless the component is intentionally raw content.
+
+The publish path remains:
+
+```text
+Visual editor
+-> MDX in Git
+-> Git sync
+-> R2 artifacts
+-> public renderer
+```
+
+The rendered site should be driven by authored content, `dubstack.json`, dashboard settings, and entitlement checks. Do not rely on hidden defaults for customer-facing behavior.

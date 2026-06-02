@@ -4,18 +4,66 @@ description: Synchronize Git-backed content into R2 for frontend rendering.
 icon: refresh-cw
 ---
 
-This page documents Git sync for DubStack.
+Git is the write source of truth. R2 is the read source for deployed documentation sites.
 
-## Overview
+## Data flow
 
-Synchronize Git-backed content into R2 for frontend rendering.
+```text
+Author edits docs
+-> Git commit
+-> Git webhook or manual sync
+-> Git sync worker
+-> R2 content artifacts
+-> Content API
+-> frontend renderer
+```
 
-## What to configure
+The frontend should read published artifacts. It should not read local files or invent replacement content when a published artifact is missing.
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+## Artifacts
 
-## Next steps
+Git sync publishes the docs config, navigation, page content, metadata, and version/cache markers into R2.
 
-This page is a scaffold for the full product documentation pass.
+`dubstack.json` is the canonical site configuration file. It controls docs navigation, theme tokens, header/footer behavior, widgets, contextual actions, and runtime docs settings.
+
+## Cache behavior
+
+After a successful sync or deployment, caches should roll forward to the new artifact version.
+
+The accepted fallback is the previous known-good artifact for the same tenant or preview. DubStack should not use fake runtime defaults as a replacement for missing origin data.
+
+## Cloudflare deploy cache purge
+
+Cloudflare Worker deploys now purge the relevant Cloudflare zone automatically after a successful deploy.
+
+The deploy purge helper:
+
+- loads local Cloudflare credentials from ignored environment files at deploy time
+- resolves the target zone from the active Wrangler route config
+- supports web frontend routes from `wrangler.jsonc`
+- supports wiki worker routes from `wrangler.toml`
+- purges `dubstack.live` for the default web deploy
+- purges `dubstack.ai` and `dubstack.live` for production web deploys
+- purges `dubstack.wiki` for wiki worker deploys
+
+This avoids cache-buster URLs for normal deploy validation.
+
+## Validation
+
+Use these checks when changing sync or deploy behavior:
+
+```bash
+# Web frontend deploy path
+pnpm --filter @dubstack/web run deploy:cf
+
+# Direct web zone purge validation
+apps/web/scripts/purge-cloudflare-zone-cache.sh
+
+# Production route purge validation
+DUBSTACK_WEB_DEPLOY_ENV=production apps/web/scripts/purge-cloudflare-zone-cache.sh
+
+# Wiki route purge validation
+WRANGLER_CONFIG=workers/dubstack-wiki/wrangler.toml apps/web/scripts/purge-cloudflare-zone-cache.sh
+```
+
+A successful deploy should end with a Cloudflare zone purge completion line for the expected zone.
