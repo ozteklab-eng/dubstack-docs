@@ -1,21 +1,84 @@
 ---
 title: MCP
-description: Expose docs context to AI tools through public and authenticated MCP servers.
+description: Connect AI tools to your published docs through public and authenticated Model Context Protocol servers.
 icon: plug
 ---
 
-This page documents MCP for DubStack.
+DubStack exposes your documentation to AI tools through Model Context Protocol servers.
 
-## Overview
+## Public docs MCP
 
-Expose docs context to AI tools through public and authenticated MCP servers.
+Every published public docs site has a public MCP server at `/mcp`.
 
-## What to configure
+```text
+https://your-docs-domain.com/mcp
+```
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+Use this endpoint when you want AI tools to read and search your public docs. It does not require authentication and does not grant dashboard access.
 
-## Next steps
+The public server exposes two read-only tools:
 
-This page is a scaffold for the full product documentation pass.
+| Tool | What it does |
+| --- | --- |
+| `search` | Searches public indexed docs pages and returns titles, URLs, snippets, and file paths. |
+| `query_docs_filesystem` | Reads and searches a virtual filesystem of your published docs pages with commands like `tree`, `cat`, and `rg`. |
+
+## Discovery
+
+DubStack publishes MCP discovery documents automatically:
+
+| Path | Purpose |
+| --- | --- |
+| `/mcp` | Public MCP server and GET discovery response. |
+| `/.well-known/mcp` | Discovery document. |
+| `/.well-known/mcp.json` | JSON discovery document alias. |
+| `/.well-known/mcp/server-card.json` | Single server card. |
+| `/.well-known/mcp/server-cards.json` | Server-card list. |
+
+## Skill file
+
+Your docs site also serves a generated skill file:
+
+```text
+https://your-docs-domain.com/skill.md
+```
+
+Agents connected to your MCP server can discover the same skill through MCP resources. The skill tells agents to use your current published docs as the source of truth and points them at your public MCP server.
+
+## Connect from an MCP client
+
+Claude Code example:
+
+```bash
+claude mcp add --transport http my-docs https://your-docs-domain.com/mcp
+```
+
+Generic MCP JSON config:
+
+```json
+{
+  "mcpServers": {
+    "my-docs": {
+      "type": "http",
+      "url": "https://your-docs-domain.com/mcp"
+    }
+  }
+}
+```
+
+Codex TOML config:
+
+```toml
+[mcp_servers.my-docs]
+url = "https://your-docs-domain.com/mcp"
+```
+
+## Authenticated MCP
+
+Authenticated MCP is a separate endpoint planned for protected docs and user-scoped content. It will live at `/authed/mcp` and require an OAuth/client-credentials flow.
+
+Do not use the public `/mcp` endpoint for private docs or dashboard write access.
+
+## Admin MCP
+
+Dashboard/content-management MCP is also separate. It will be an authenticated team workflow for trusted agents that need to edit docs, work on branches, update settings, or open pull requests.
