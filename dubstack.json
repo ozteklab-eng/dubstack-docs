@@ -436,7 +436,7 @@
   },
   "assistant": {
     "enabled": true,
-    "prompt": "Codex enterprise assistant profile smoke 2026-06-14. Keep docs answers concise and cite published docs when available.",
+    "prompt": "",
     "response_handling": {
       "deflection_enabled": false,
       "support_email": "",
