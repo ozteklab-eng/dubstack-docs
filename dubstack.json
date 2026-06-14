@@ -38,7 +38,8 @@
       "logo_url": "/img/assistant-star.svg",
       "watermark_logo_url": "/logo/light.svg",
       "background_color": "#0e0e10",
-      "width": 300
+      "width": 300,
+      "enabled": true
     }
   },
   "layout": {
@@ -431,6 +432,26 @@
     "scrollbar": {
       "width": 6,
       "radius": 999
+    }
+  },
+  "assistant": {
+    "enabled": true,
+    "prompt": "Codex enterprise assistant profile smoke 2026-06-14. Keep docs answers concise and cite published docs when available.",
+    "response_handling": {
+      "deflection_enabled": false,
+      "support_email": "",
+      "show_help_button": false
+    },
+    "search_domains": {
+      "enabled": false,
+      "domains": []
+    },
+    "bot_protection": {
+      "invisible_captcha_enabled": true
+    },
+    "starter_questions": {
+      "enabled": false,
+      "questions": []
     }
   }
 }
