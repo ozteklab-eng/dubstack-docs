@@ -436,7 +436,7 @@
   },
   "assistant": {
     "enabled": true,
-    "prompt": "Codex smoke test: answer in one concise sentence when the question is a greeting.",
+    "prompt": "",
     "response_handling": {
       "deflection_enabled": false,
       "support_email": "",
