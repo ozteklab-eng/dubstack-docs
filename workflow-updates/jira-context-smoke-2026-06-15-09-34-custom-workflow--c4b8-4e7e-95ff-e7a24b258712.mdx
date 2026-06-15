@@ -1,0 +1,20 @@
+---
+title: "Workflow Jira Context Validation"
+description: "Smoke test validation for Jira integration context"
+---
+
+# Workflow Jira Context Validation
+
+**Workflow Run ID:** `ba998ac1-c4b8-4e7e-95ff-e7a24b258712`
+
+The workflow runner successfully accessed Jira context from the `dubstackdocs` workspace. Integration retrieved 3 issues from the SCRUM project using JQL query `project = SCRUM ORDER BY updated DESC`:
+
+- **SCRUM-2** (Story) - In Progress: "Task 2"
+- **SCRUM-1** (Task) - To Do: "Task 1" 
+- **SCRUM-4** (Subtask) - To Do: "Subtask 2.1"
+
+All issues were updated on 2026-06-15 and accessible via their Atlassian URLs. Jira context integration is functioning correctly for automated workflow runs.
+
+*Validation completed: 2026-06-15 09:34*
+
+<!-- workflow_run_id: ba998ac1-c4b8-4e7e-95ff-e7a24b258712 -->
