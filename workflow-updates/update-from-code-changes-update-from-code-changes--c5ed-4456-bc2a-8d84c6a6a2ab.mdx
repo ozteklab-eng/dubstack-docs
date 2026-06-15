@@ -1,0 +1,69 @@
+---
+title: "Update From Code Changes Workflow"
+description: "Automated documentation updates from code repositories and project management context"
+icon: "git-branch"
+---
+
+# Update From Code Changes Workflow
+
+**⚠️ SMOKE TEST DRAFT - NOT FOR PRODUCTION**
+
+The Update from Code Changes workflow automatically generates documentation updates by analyzing code repositories and project management context.
+
+## How It Works
+
+### Trigger & Schedule
+- **Workflow ID**: `update_from_code_changes`
+- **Trigger**: Custom schedule (twice weekly)
+- **Update Mode**: Pull request
+
+### Context Sources
+
+#### Repository Context
+- Uses selected repositories as **read-only context only**
+- Example: `github:ozteklab-eng/dubstack-docs@main`
+- Documentation updates are always opened against the connected docs repository
+- No direct code change payload required for manual runs
+
+#### Integration Context
+
+**Slack Integration**
+- Workspace: Connected since setup
+- Transcript collection available when explicit channel/thread sources are enabled
+- Manual runs may not include Slack context
+
+**Jira Integration**
+- Workspace integration with JQL queries
+- Example query: `project = SCRUM ORDER BY updated DESC`
+- Bounded issue context (typically 4 most recent issues)
+- Includes issue types: Story, Task, Subtask, Feature
+- Provides status, update timestamps, and URLs
+
+### Published Documentation Context
+- Samples existing published pages (e.g., 10 of 33 pages)
+- Includes page map with titles and descriptions
+- Provides content excerpts for context
+- Covers sections like AI tools, API reference, development guides, and essentials
+
+## Workflow Execution
+
+1. **Context Collection**: Gathers repository metadata, Jira issues, and published docs
+2. **Analysis**: Reviews selected integration context and documentation state
+3. **Update Generation**: Creates documentation updates based on collected context
+4. **Pull Request**: Opens PR against the connected documentation repository
+
+## Configuration
+
+### Required Integrations
+- **Slack**: For team communication context
+- **Jira**: For project management and issue tracking context
+
+### Repository Selection
+- Choose repositories for read-only context
+- Ensure proper permissions for documentation repository updates
+
+---
+
+*This workflow helps maintain documentation currency by leveraging existing project context and code repository metadata.*
+
+<!-- workflow_run_id: dd6b4b00-c5ed-4456-bc2a-8d84c6a6a2ab -->
