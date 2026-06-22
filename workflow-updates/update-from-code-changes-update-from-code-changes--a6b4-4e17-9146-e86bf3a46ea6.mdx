@@ -1,0 +1,33 @@
+---
+title: Update from Code Changes Workflow Documentation Draft
+
+frontmatter:
+  workflow_id: update_from_code_changes
+  trigger: code_change
+  update_mode: pull_request
+  schedule: twice_weekly
+  selected_integrations: slack, jira
+  workflow_run_id: 5bae81b0-a6b4-4e17-9146-e86bf3a46ea6
+  status: draft
+  test_only: true
+
+The **Update from Code Changes** workflow automates documentation updates based on code changes and selected integration context. It uses the `github:ozteklab-eng/dubstack-docs@main` repository as a read-only source for documentation structure and content. This workflow does not directly inspect code changes but leverages published documentation, repository metadata, and bounded Jira issues to guide updates.
+
+The workflow integrates with **Jira** to reference specific issues, such as `SCRUM-2`, `SCRUM-1`, `SCRUM-4`, and `SCRUM-3`, which may inform documentation updates. However, no direct code change payload is available for this manual run, so updates are based on existing documentation and metadata.
+
+This draft is a **smoke-test** and is not intended for production use. It outlines the workflow's use of repositories and Jira context without making claims about code inspection or external system integration.
+
+---
+
+
+# Update From Code Changes workflow update
+
+**Review Checklist:**
+
+- [ ] Confirm that no code inspection claims are made.
+- [ ] Ensure no external system credentials or URLs are included.
+- [ ] Verify that the test-only status is clearly marked.
+- [ ] Confirm that no Slack or PR context is assumed without explicit source.
+- [ ] Ensure the document remains neutral and factual.
+
+<!-- workflow_run_id: 5bae81b0-a6b4-4e17-9146-e86bf3a46ea6 -->
