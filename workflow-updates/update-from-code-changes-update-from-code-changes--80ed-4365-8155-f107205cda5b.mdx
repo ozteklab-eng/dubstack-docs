@@ -1,0 +1,64 @@
+---
+title: "Update From Code Changes workflow update"
+description: "Draft documentation update requested from a documentation workflow run."
+---
+
+# Update From Code Changes Workflow
+
+**⚠️ SMOKE TEST DRAFT - NOT FOR PRODUCTION**
+
+## Overview
+
+The "Update from code changes" workflow automatically generates documentation updates based on code repository changes and project management context.
+
+## Configuration
+
+- **Workflow ID**: `update_from_code_changes`
+- **Trigger**: Code changes in monitored repositories
+- **Update Mode**: Pull request
+- **Schedule**: Twice weekly
+- **Integrations**: Slack, Jira
+
+## How It Works
+
+### Repository Context
+
+The workflow monitors selected repositories as read-only context sources:
+- **Source Repository**: `github:ozteklab-eng/dubstack-docs@main`
+- **Documentation Target**: Connected docs repository (separate from source)
+- **Access Pattern**: Read-only context collection from source, write access to docs repo
+
+### Jira Integration
+
+Pulls bounded issues from your Jira workspace to understand current development priorities:
+- **Workspace**: `dubstackdocs`
+- **Query**: `project = SCRUM ORDER BY updated DESC`
+- **Context**: Recent issues, status updates, and task priorities
+
+### Slack Integration
+
+Connects to your Slack workspace for team communication context:
+- **Workspace**: `dubstack-dev`
+- **Usage**: Optional transcript collection from specified channels/threads
+
+## Workflow Execution
+
+1. **Code Change Detection**: Monitors repository for changes
+2. **Context Collection**: Gathers Jira issues and optional Slack context
+3. **Documentation Analysis**: Reviews existing docs structure and content
+4. **Update Generation**: Creates relevant documentation updates
+5. **Pull Request**: Opens PR against documentation repository
+
+## Manual Runs
+
+Manual workflow runs use:
+- Published documentation context
+- Repository metadata
+- Integration context (Jira issues, Slack workspace)
+- No specific code change payload
+
+---
+
+*Draft generated from workflow run: `eed789ee-80ed-4365-8155-f107205cda5b`*
+
+<!-- workflow_run_id: eed789ee-80ed-4365-8155-f107205cda5b -->
