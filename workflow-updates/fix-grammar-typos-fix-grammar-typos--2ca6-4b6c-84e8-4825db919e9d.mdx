@@ -1,0 +1,53 @@
+---
+title: Grammar and Typo Fixes Audit Summary
+
+frontmatter:
+  workflow_id: fix_grammar_typos
+  trigger: custom_schedule
+  update_mode: pull_request
+  schedule: daily
+  selected_integrations: none
+  resolved_integration_context:
+    workflow_run_source: manual
+    additional_context_repositories: none
+    scan_details: |
+      Grammar and typo scan for ozteklab-eng/dubstack-docs@main: scanned 34 published pages.
+      No high-confidence grammar or typo findings were detected in the scanned published pages.
+  published_docs_context: ozteklab-eng/dubstack-docs@main
+  published_pages_sampled: 10 of 34
+  published_page_map: |
+    - Claude Code with DubStack MCP (/ai-tools/claude-code) — Use Claude Code to manage your DubStack documentation with MCP server integration
+    - Cursor setup (/ai-tools/cursor) — Configure Cursor for writing DubStack documentation
+    - Windsurf setup (/ai-tools/windsurf) — Configure Windsurf IDE for DubStack documentation
+    - Introduction (/api-reference/introduction) — Explore the BeatBox API with an interactive playground and endpoint pages
+    - Local Development (/development) — Preview changes locally before deploying to production
+    - Code blocks (/essentials/code) — Display inline code and code blocks
+    - Images and media (/essentials/images) — Embed images, videos, and other rich media in your documentation
+    - Markdown syntax (/essentials/markdown) — Text, titles, links, quotes, and code formatting in standard Markdown
+    - MDX Components (/essentials/mdx-components) — Use tabs, cards, callouts, steps, accordions, and other MDX components in your docs
+    - Navigation (/essentials/navigation) — Configure your documentation navigation in dubstack.json
+  published_page_excerpts: |
+    - Claude Code with DubStack MCP (/ai-tools/claude-code): Claude Code is Anthropic's official CLI tool. This guide shows how to use Claude Code with the DubStack MCP server to manage your documentation directly from the command line. Prerequisites - Active Claude subscription (Pro, Max, or API access) - DubStack account with API access - Node.js 18+ installed What is MCP? Model Context Protocol (MCP) is an open standard that lets AI assistants like Claude securely access external tools and data sources. The DubStack MCP server lets Claude read and write your documentation, manage navigation, update themes, and more. Setup 1. Install Claude Code 2. Install DubStack MCP Server 3. Configure MCP in Claude Code Add the DubStack MCP server to your Cla...
+    - Cursor setup (/ai-tools/cursor): Use Cursor to write and maintain your DubStack documentation. This guide shows how to configure Cursor for better results with MDX and DubStack components. Prerequisites - Cursor editor installed - Access to your documentation repository Project rules Create project rules that all team members can use. In your documentation repository root: Create .cursor/rules.md : bash npm install @dubstack/sdk bash yarn add @dubstack/sdk bash pnpm add @dubstack/sdk javascript const config = apiUrl: 'https://api.dubstack.com', apiKey: process.env.DUBSTACK API KEY ; javascript Node.js const response = await fetch('/api/docs'); const data = await response.json(); python Python import requests response = r...
+    - Windsurf setup (/ai-tools/windsurf): Windsurf is an AI-powered IDE that excels at technical documentation. This guide shows how to set up Windsurf for writing DubStack docs with MDX components. Prerequisites - Windsurf IDE installed - DubStack project cloned locally Configuration 1. Create workspace settings Create .windsurf/settings.json in your docs repository: 2. Install recommended extensions Add to .windsurf/extensions.json : 3. Configure AI rules Create .windsurf/ai-rules.md : language filename.ext code here yaml --- title: "Page Title" description: "Page description for SEO" icon: "lucide-icon-name" --- AI chat prompts Use these prompts to leverage Windsurf's AI for documentation tasks: Flow mode tips Windsurf's Flow ...
+    - Introduction (/api-reference/introduction): The starter kit ships with the BeatBox API so you can see a full OpenAPI workflow immediately. Replace the sample spec later if you want to document your own API. Explore the API Use the interactive playground to inspect every operation, test requests manually, and generate language snippets. Browse every BeatBox endpoint, authenticate with a token, and try requests directly from the docs. Generate endpoint snippets once and embed them into guides or onboarding flows. What ships in the starter The default starter includes three API sections: - Beat patterns for creating, playing, exporting, and controlling beats - Drum kits for inspecting kits, sounds, and custom mixes - Sessions for chec...
+
+---
+
+
+# Fix Grammar Typos workflow update
+
+### Audit Summary
+
+A grammar and typo scan was performed on 34 published pages from the `ozteklab-eng/dubstack-docs@main` repository. The scan sampled 10 of these pages for review. No high-confidence grammar or typo findings were detected in the scanned content.
+
+---
+
+### Review Checklist
+
+- [ ] Confirm that no grammar or typo fixes are required based on the scan results.
+- [ ] Verify that the audit summary accurately reflects the findings.
+- [ ] Ensure that no false positives or assumptions were made about the content.
+- [ ] Approve the audit as complete and ready for deployment.
+
+<!-- workflow_run_id: ef9a4bcd-2ca6-4b6c-84e8-4825db919e9d -->
