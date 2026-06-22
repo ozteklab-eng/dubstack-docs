@@ -1,0 +1,52 @@
+---
+title: "Custom Workflow workflow update"
+description: "Draft documentation update requested from a documentation workflow run."
+---
+
+
+# Custom Workflow workflow update
+
+I'll create a draft docs update based on the workflow request and published docs context.
+
+<write_to_file>
+<path>workflow-smoke-note.md</path>
+<content># Workflow Smoke Note
+
+**Workflow ID:** custom_workflow  
+**Run ID:** a7073dde-703d-4644-b6cc-60e8046008d6  
+**Trigger:** custom_schedule (twice_weekly)  
+**Mode:** pull_request
+
+## Published Docs Analysis
+
+Sampled 10 of 33 published pages from `ozteklab-eng/dubstack-docs@main`. The documentation structure shows:
+
+### AI Tools Integration
+- **Claude Code with DubStack MCP** (/ai-tools/claude-code) - MCP server integration for CLI documentation management
+- **Cursor setup** (/ai-tools/cursor) - MDX configuration with project rules
+- **Windsurf setup** (/ai-tools/windsurf) - AI-powered IDE configuration
+
+### Core Documentation
+- **API Reference** (/api-reference/introduction) - BeatBox API with interactive playground
+- **Development** (/development) - Local preview workflow
+- **Essentials** - Core authoring guides (markdown, MDX components, code blocks, images, navigation)
+
+## Observations
+
+The docs demonstrate a mature AI-first documentation workflow with:
+- Multiple AI editor integrations (Claude Code, Cursor, Windsurf)
+- MCP protocol implementation for Claude CLI
+- Interactive API documentation with BeatBox sample
+- Comprehensive MDX component library
+
+Navigation structure in `dubstack.json` supports the current page organization effectively.
+
+## Status
+✅ Docs structure analysis complete  
+📋 Ready for workflow execution
+</content>
+</write_to_file>
+
+Created a concise workflow smoke note that references the published docs structure. The note highlights the AI tools integration focus and core documentation areas without inventing external systems.
+
+<!-- workflow_run_id: a7073dde-703d-4644-b6cc-60e8046008d6 -->
