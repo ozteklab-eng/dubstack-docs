@@ -1,0 +1,131 @@
+---
+title: SEO Metadata Audit for ozteklab-eng/dubstack-docs@main
+date: 2025-04-06
+workflow_id: audit_seo_metadata
+trigger: custom_schedule
+schedule: every_monday
+update_mode: pull_request
+resolved_integration_context:
+  workflow_run_source: manual
+  additional_context_repositories: none
+  scanned_pages: 34
+  published_pages_sampled: 10
+  findings_count: 30
+
+This document summarizes the SEO metadata audit findings for the `ozteklab-eng/dubstack-docs@main` repository. The audit scanned 10 published pages and identified 30 metadata issues across various paths. The findings include discrepancies between page titles and H1 headings, missing frontmatter titles, and short or long descriptions. Recommendations are provided based on the observed issues.
+
+---
+
+
+# Audit Seo Metadata workflow update
+
+### Page-Specific Findings and Recommendations
+
+#### `/ai-tools/claude-code` (Claude Code with DubStack MCP)
+- **Issue**: H1 differs from title: "Ask Claude to summarize a doc"
+- **Recommendation**: Ensure the H1 heading matches the page title for consistency.
+
+#### `/ai-tools/cursor` (Cursor setup)
+- **Issue**: H1 differs from title: "DubStack technical writing rules"
+- **Recommendation**: Update the H1 heading to match the page title.
+
+#### `/ai-tools/windsurf` (Windsurf setup)
+- **Issue**: Description is short (49 characters)
+- **Recommendation**: Expand the description to provide more context for SEO purposes.
+- **Issue**: H1 differs from title: "DubStack Documentation AI Rules"
+- **Recommendation**: Align the H1 heading with the page title.
+
+#### `/api-reference/introduction` (Introduction)
+- **Issue**: Missing explicit frontmatter title
+- **Recommendation**: Add a frontmatter title to the page.
+- **Issue**: Missing top-level H1 heading
+- **Recommendation**: Add a top-level H1 heading.
+- **Issue**: Duplicate title used by another page
+- **Recommendation**: Update the title to avoid duplication.
+
+#### `/development` (Local Development)
+- **Issue**: Missing top-level H1 heading
+- **Recommendation**: Add a top-level H1 heading.
+
+#### `/essentials/code` (Code blocks)
+- **Issue**: Description is short (35 characters)
+- **Recommendation**: Expand the description for better SEO.
+- **Issue**: Missing top-level H1 heading
+- **Recommendation**: Add a top-level H1 heading.
+
+#### `/essentials/images` (Images and media)
+- **Issue**: Missing top-level H1 heading
+- **Recommendation**: Add a top-level H1 heading.
+
+#### `/essentials/markdown` (Markdown syntax)
+- **Issue**: H1 differs from title: "Heading 1"
+- **Recommendation**: Ensure the H1 heading matches the page title.
+
+#### `/essentials/mdx-components` (MDX Components)
+- **Issue**: H1 differs from title: "Heading 1"
+- **Recommendation**: Ensure the H1 heading matches the page title.
+
+#### `/essentials/navigation` (Navigation)
+- **Issue**: Missing explicit frontmatter title
+- **Recommendation**: Add a frontmatter title.
+- **Issue**: Missing top-level H1 heading
+- **Recommendation**: Add a top-level H1 heading.
+
+#### `/essentials/reusable-snippets` (Reusable snippets)
+- **Issue**: H1 differs from title: "Quick Start Guide"
+- **Recommendation**: Ensure the H1 heading matches the page title.
+
+#### `/essentials/settings` (Settings)
+- **Issue**: Missing explicit frontmatter title
+- **Recommendation**: Add a frontmatter title.
+- **Issue**: Missing top-level H1 heading
+- **Recommendation**: Add a top-level H1 heading.
+
+#### `/essentials/tables` (Tables)
+- **Issue**: Missing explicit frontmatter title
+- **Recommendation**: Add a frontmatter title.
+- **Issue**: Missing top-level H1 heading
+- **Recommendation**: Add a top-level H1 heading.
+
+#### `/` (Introduction)
+- **Issue**: Missing top-level H1 heading
+- **Recommendation**: Add a top-level H1 heading.
+- **Issue**: Duplicate title used by another page
+- **Recommendation**: Update the title to avoid duplication.
+
+#### `/quickstart` (Quickstart)
+- **Issue**: Missing explicit frontmatter title
+- **Recommendation**: Add a frontmatter title.
+- **Issue**: Description is short (39 characters)
+- **Recommendation**: Expand the description for better SEO.
+
+#### `/snippets/api-reference/clear-session` (Clear session (logout))
+- **Issue**: Description is long (247 characters)
+- **Recommendation**: Shorten the description for clarity and SEO.
+- **Issue**: Missing top-level H1 heading
+- **Recommendation**: Add a top-level H1 heading.
+
+#### `/snippets/api-reference/configure-sound` (Configure a kit sound)
+- **Issue**: Description is long (245 characters)
+- **Recommendation**: Shorten the description for clarity and SEO.
+- **Issue**: Missing top-level H1 heading
+- **Recommendation**: Add a top-level H1 heading.
+
+#### `/snippets/api-reference/create-beat` (Create a beat pattern)
+- **Issue**: Description is long (299 characters)
+- **Recommendation**: Shorten the description for clarity and SEO.
+- **Issue**: Missing top-level H1 heading
+- **Recommendation**: Add a top-level H1 heading.
+
+---
+
+### Review Checklist
+
+- [ ] Confirm all H1 headings match the page title where discrepancies were noted.
+- [ ] Add missing top-level H1 headings to pages that lack them.
+- [ ] Ensure frontmatter titles are explicitly defined where missing.
+- [ ] Adjust descriptions to meet optimal length for SEO.
+- [ ] Verify that duplicate titles are resolved across pages.
+- [ ] Validate that all recommended changes align with the content and purpose of each page.
+
+<!-- workflow_run_id: 163a1eb6-4520-4eec-ace7-07a9894e5745 -->
