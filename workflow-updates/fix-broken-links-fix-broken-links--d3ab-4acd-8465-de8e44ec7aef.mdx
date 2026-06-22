@@ -1,0 +1,66 @@
+---
+title: Fix Broken Links in Documentation
+
+The workflow identified 10 broken links across 6 published documentation pages. These links either point to non-existent internal pages or return 404 errors for external resources. Below is a grouped summary of the findings, along with suggested fixes where applicable.
+
+---
+
+
+# Fix Broken Links workflow update
+
+### Broken Links by Source Page
+
+#### `/ai-tools/claude-code` (Claude Code with DubStack MCP)
+- **Broken Link**: `/admin/api-keys` (line 220)  
+  - **Issue**: No published page exists at `/admin/api-keys`.  
+  - **Suggestion**: Review the context of this link to determine if it should be removed or replaced with a valid internal path.
+
+#### `/api-reference/introduction` (Introduction)
+- **Broken Link**: `/api-reference/openapi` (line 11)  
+  - **Issue**: No published page exists at `/api-reference/openapi`.  
+  - **Suggestion**: This may be a duplicate or misconfigured link. Verify if the intended page exists or if the link should be removed.
+
+#### `/essentials/mdx-components` (MDX Components)
+- **Broken Link**: `/features/theme-studio` (line 61)  
+  - **Issue**: No published page exists at `/features/theme-studio`.  
+  - **Suggestion**: This link may be outdated. Confirm if the target page exists or if it should be removed.
+- **Broken Link**: `/features/ai-assistant` (line 64)  
+  - **Issue**: No published page exists at `/features/ai-assistant`.  
+  - **Suggestion**: This link may be outdated. Confirm if the target page exists or if it should be removed.
+
+#### `/essentials/settings` (Settings)
+- **Broken Link**: `/features/theme-studio` (line 411)  
+  - **Issue**: No published page exists at `/features/theme-studio`.  
+  - **Suggestion**: This link may be outdated. Confirm if the target page exists or if it should be removed.
+- **Broken Link**: `/features/git-sync` (line 414)  
+  - **Issue**: No published page exists at `/features/git-sync`.  
+  - **Suggestion**: This link may be outdated. Confirm if the target page exists or if it should be removed.
+
+#### `/` (Introduction)
+- **Broken Link**: `/api-reference/openapi` (line 11)  
+  - **Issue**: No published page exists at `/api-reference/openapi`.  
+  - **Suggestion**: This may be a duplicate or misconfigured link. Verify if the intended page exists or if the link should be removed.
+- **Broken Link**: `/api-reference/openapi` (line 60)  
+  - **Issue**: No published page exists at `/api-reference/openapi`.  
+  - **Suggestion**: This may be a duplicate or misconfigured link. Verify if the intended page exists or if the link should be removed.
+
+#### `/development` (Local Development)
+- **Broken Link**: `https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx` (line 71)  
+  - **Issue**: External link returns HTTP 404.  
+  - **Suggestion**: Verify if the extension is still available or if a replacement link should be used.
+- **Broken Link**: `https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode` (line 71)  
+  - **Issue**: External link returns HTTP 404.  
+  - **Suggestion**: Verify if the extension is still available or if a replacement link should be used.
+
+---
+
+### Review Checklist
+
+- [ ] Confirm if any of the internal links should be removed or updated with valid paths.
+- [ ] Verify if external links are still valid or if replacements are needed.
+- [ ] Ensure that no new broken links are introduced during the update process.
+- [ ] Validate that all changes align with the current documentation structure and content.
+
+---
+
+<!-- workflow_run_id: b86ad039-d3ab-4acd-8465-de8e44ec7aef -->
