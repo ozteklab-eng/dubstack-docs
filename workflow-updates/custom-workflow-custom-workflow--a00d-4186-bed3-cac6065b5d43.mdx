@@ -1,0 +1,38 @@
+---
+title: "Custom Workflow update"
+description: "Draft documentation update requested from a documentation workflow run."
+---
+
+# Workflow Slack Notifications - Validation Testing
+
+**Status**: In Progress  
+**Deployment**: workflow-smoke  
+**Workflow Run**: `47583afc-a00d-4186-bed3-cac6065b5d43`
+
+## Overview
+
+DubStack workflow Slack notifications are currently being validated on the `workflow-smoke` deployment environment. This testing ensures proper integration with the dubstack-dev Slack workspace before production rollout.
+
+## Current Test Configuration
+
+- **Workflow**: custom_workflow
+- **Schedule**: twice_weekly  
+- **Slack Channel**: #social
+- **Integration Status**: Connected (since 2026-06-09)
+
+## Known Issues
+
+- Slack transcript collection failed safely with `not_in_channel` error
+- Bot may need channel permissions adjustment
+
+## Next Steps
+
+- Validate notification delivery
+- Confirm channel permissions
+- Test message formatting
+- Prepare for production deployment
+
+---
+*Internal use only - not for customer-facing documentation*
+
+<!-- workflow_run_id: 47583afc-a00d-4186-bed3-cac6065b5d43 -->
