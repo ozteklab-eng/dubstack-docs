@@ -1,0 +1,28 @@
+---
+title: "Custom Workflow update"
+description: "Draft documentation update requested from a documentation workflow run."
+---
+
+# Workflow Slack Notifications - Validation Testing
+
+**Status**: Testing in progress  
+**Environment**: workflow-smoke deployment  
+**Workflow ID**: custom_workflow  
+**Run ID**: e5e2f3de-87f0-4b0e-ab54-1c9c37457a0c
+
+## Overview
+
+DubStack workflow Slack notifications are currently being validated on the workflow-smoke deployment environment. This testing ensures notification delivery and formatting work correctly before production rollout.
+
+## Test Configuration
+
+- **Workspace**: dubstack-dev
+- **Schedule**: twice_weekly
+- **Integration**: Slack (connected since 2026-06-09)
+- **Update mode**: pull_request
+
+## Next Steps
+
+Once validation completes successfully, Slack notifications will be enabled for production workflows.
+
+<!-- workflow_run_id: e5e2f3de-87f0-4b0e-ab54-1c9c37457a0c -->
