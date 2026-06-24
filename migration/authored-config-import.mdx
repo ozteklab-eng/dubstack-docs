@@ -1,21 +1,47 @@
 ---
 title: Authored config import
-description: Transform existing authored docs configuration into DubStack docs config.
+description: Transform existing authored docs configuration into dubstack docs config.
 icon: file-json
 ---
 
-This page documents Authored config import for DubStack.
+Authored config import is for repositories that already have documentation structure.
 
-## Overview
+The import reads the existing docs configuration and maps it to `dubstack.json` where possible.
 
-Transform existing authored docs configuration into DubStack docs config.
+## Good candidates
 
-## What to configure
+Use authored config import when the source repository has:
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+- MDX or Markdown documentation pages
+- a navigation/config file
+- a predictable assets directory
+- OpenAPI specs or API reference metadata
+- existing route structure you want to preserve
 
-## Next steps
+## What gets mapped
 
-This page is a scaffold for the full product documentation pass.
+| Source concept | dubstack target |
+| --- | --- |
+| Site name | `name` |
+| Navigation groups | `navigation.tabs` and `navigation.groups` |
+| Page routes | page slugs and MDX file paths |
+| API specs | `openapi` references |
+| Theme basics | `theme` settings when compatible |
+| Redirects | `redirects` entries when available |
+
+Not every source setting has a one-to-one equivalent. Review the imported config before publishing.
+
+## Review checklist
+
+After import:
+
+- confirm every navigation item opens a page
+- confirm renamed routes have redirects
+- confirm OpenAPI operations render correctly
+- confirm images and relative links resolve
+- remove unsupported source-only settings
+- commit the converted `dubstack.json`
+
+## When not to use it
+
+Do not use authored config import for repositories that only contain application code and no docs configuration. Use generated reconstruction for those repositories instead.

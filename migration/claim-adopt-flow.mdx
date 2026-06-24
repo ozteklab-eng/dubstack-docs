@@ -1,21 +1,54 @@
 ---
 title: Claim and adopt
-description: Promote a public preview into a customer-owned DubStack site.
+description: Promote a public preview into a customer-owned dubstack site.
 icon: badge-check
 ---
 
-This page documents Claim and adopt for DubStack.
+Claim and adopt promotes a public preview into an owned dubstack site.
 
-## Overview
+This creates a clear boundary between an unclaimed preview and a customer-managed production docs site.
 
-Promote a public preview into a customer-owned DubStack site.
+## Lifecycle
 
-## What to configure
+```text
+Public preview
+-> claim request
+-> workspace ownership check
+-> site creation or adoption
+-> source connection
+-> production publish
+```
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+## What changes after adoption
 
-## Next steps
+| Before claim | After adoption |
+| --- | --- |
+| Preview lives on `dubstack.wiki`. | Site lives on `*.dubstack.live` or a custom domain. |
+| Preview is unclaimed. | Site belongs to a workspace. |
+| Source may be generated or imported. | Source is connected to a managed repository or hosted source. |
+| Preview can be garbage-collected unless protected. | Customer site follows workspace retention and billing rules. |
 
-This page is a scaffold for the full product documentation pass.
+## Adoption checklist
+
+Before adopting a preview:
+
+- confirm you control or are authorized to manage the source repository
+- review generated or imported content
+- decide the production branch
+- verify the desired site slug/subdomain
+- connect Git or hosted source
+- publish and test the live URL
+
+## After adoption
+
+After a preview becomes an owned site:
+
+- configure custom domain if needed
+- invite team members
+- add redirects from old docs URLs
+- review assistant/search behavior
+- remove or archive the old preview if it should no longer be discoverable
+
+## Safety boundary
+
+A public preview should never silently become a customer production site. Ownership, source connection, and workspace context must be explicit.

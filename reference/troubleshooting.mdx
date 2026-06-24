@@ -1,21 +1,79 @@
 ---
 title: Troubleshooting
-description: Resolve common DubStack setup and publishing issues.
+description: Resolve common dubstack setup and publishing issues.
 icon: wrench
 ---
 
-This page documents Troubleshooting for DubStack.
+Use this page when a docs site does not look or behave as expected.
 
-## Overview
+## First checks
 
-Resolve common DubStack setup and publishing issues.
+Start here before changing configuration:
 
-## What to configure
+1. Open the dashboard activity feed.
+2. Confirm the latest sync completed successfully.
+3. Confirm the connected repository and branch are correct.
+4. Open the live URL in a fresh tab.
+5. Hard refresh the browser.
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+## Page not found
 
-## Next steps
+Check:
 
-This page is a scaffold for the full product documentation pass.
+- the MDX file exists in the repository
+- the page slug is listed in `dubstack.json`
+- the file path matches the navigation slug
+- the latest commit has synced
+- redirects do not point to the missing page
+
+## Navigation is wrong
+
+Check:
+
+- the `navigation` section in `dubstack.json`
+- whether the page is hidden
+- whether the wrong branch is connected
+- whether a manual update is needed
+
+## Theme did not update
+
+Check:
+
+- the theme change was saved
+- the configuration change committed to the source
+- the latest sync completed
+- light and dark logo paths exist
+- the browser is not showing stale cached assets
+
+## API reference is missing endpoints
+
+Check:
+
+- the OpenAPI spec path in `dubstack.json`
+- whether `pages` lists only selected operations
+- whether operations use `x-hidden: true`
+- whether methods and paths match the spec exactly
+- whether the spec is valid OpenAPI 3.x JSON
+
+## Assistant answer is stale
+
+Check:
+
+- the relevant page is published
+- the latest sync completed
+- the answer has linked sources
+- the page uses clear headings and examples
+- a manual update has run after the source change
+
+## Custom domain does not verify
+
+Check:
+
+- DNS points to the target shown in the dashboard
+- `/docs` setups proxy both `/docs` and `/docs/*`
+- forwarded host/proto headers are preserved for subpath setups
+- certificate/DNS propagation has completed
+
+<Callout type="info">
+  If the dashboard activity feed shows an infrastructure error, do not keep changing docs content. Wait for the platform path to recover or contact support with the failed activity ID.
+</Callout>

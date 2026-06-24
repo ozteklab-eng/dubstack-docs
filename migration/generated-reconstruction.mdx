@@ -4,18 +4,52 @@ description: Generate documentation previews for repositories without authored d
 icon: wand-sparkles
 ---
 
-This page documents Generated reconstruction for DubStack.
+Generated reconstruction creates a documentation preview for repositories that do not already have a complete docs structure.
 
-## Overview
+It is useful for evaluating how a codebase could become a docs site, but it should be reviewed before becoming production documentation.
 
-Generate documentation previews for repositories without authored docs config.
+## When to use generated reconstruction
 
-## What to configure
+Use it when a repository has:
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+- source code but little or no documentation
+- scattered Markdown files without navigation
+- examples or API handlers that need explanation
+- a need for an acquisition or migration preview
 
-## Next steps
+## Output
 
-This page is a scaffold for the full product documentation pass.
+A reconstruction can produce:
+
+- proposed navigation
+- generated MDX pages
+- overview and setup content
+- API or module descriptions where signals exist
+- a preview site for review
+
+## Review required
+
+Generated documentation must be reviewed by a human before production use.
+
+Check for:
+
+- incorrect assumptions
+- missing prerequisites
+- code paths described as public APIs when they are internal
+- stale package names or commands
+- incomplete security notes
+- pages that should be removed or rewritten
+
+## Promote to owned docs
+
+After the generated preview is useful:
+
+1. Claim or adopt the preview into a workspace.
+2. Connect the appropriate repository or hosted source.
+3. Review and edit generated pages.
+4. Publish from the owned source.
+5. Add redirects and a custom domain if needed.
+
+<Callout type="warning">
+  Generated reconstruction is not a replacement for product ownership. Treat it as a starting point that accelerates docs creation.
+</Callout>

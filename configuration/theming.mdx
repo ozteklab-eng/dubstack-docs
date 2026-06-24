@@ -4,18 +4,65 @@ description: Configure colors, fonts, logos, code blocks, and visual tokens.
 icon: palette
 ---
 
-This page documents Theming for DubStack.
+Theming controls the visual language of your published docs site.
 
-## Overview
+Most sites start with dashboard configuration and keep the resulting settings synchronized through `dubstack.json`.
 
-Configure colors, fonts, logos, code blocks, and visual tokens.
+## Common theme settings
 
-## What to configure
+| Setting | Purpose |
+| --- | --- |
+| Primary color | Brand color used for active states and key accents. |
+| Accent color | Secondary accent used for highlights and supporting UI. |
+| Logo | Light and dark logo assets for the docs shell. |
+| Favicon | Browser favicon assets. |
+| Fonts | Typography used by headings and body text. |
+| Code block theme | Syntax highlighting behavior for code examples. |
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+## Configure from the dashboard
 
-## Next steps
+1. Open the dashboard.
+2. Go to Editor.
+3. Open Site configuration.
+4. Update branding, colors, and theme settings.
+5. Preview the result.
+6. Publish the configuration change.
 
-This page is a scaffold for the full product documentation pass.
+## Configure in source
+
+Theme settings can also be represented in `dubstack.json`:
+
+```json
+{
+  "theme": {
+    "primary_color": "#15803D",
+    "accent_color": "#07C983",
+    "font_family": "Inter"
+  }
+}
+```
+
+Keep source and dashboard edits coordinated. If your team reviews all changes in pull requests, make theme changes through the same Git-backed workflow.
+
+## Light and dark assets
+
+Provide separate assets when your logo or favicon needs different contrast in light and dark mode.
+
+Recommended files:
+
+```text
+assets/logo-light.svg
+assets/logo-dark.svg
+assets/favicon-light.svg
+assets/favicon-dark.svg
+```
+
+## Code block theme
+
+Code block theme controls syntax highlighting. Use the dashboard setting when possible so your team can preview the result before publishing.
+
+Use a system/default theme unless your brand requires a specific light and dark pair.
+
+## Enterprise customization
+
+Theme Studio and Canvas Layout provide deeper visual control for eligible workspaces. Use standard theme settings for normal docs-shell customization and Theme Studio when the site needs a custom layout system.

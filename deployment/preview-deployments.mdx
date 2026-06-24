@@ -4,18 +4,65 @@ description: Preview documentation changes before publishing to production.
 icon: eye
 ---
 
-This page documents Preview deployments for DubStack.
+Preview deployments let your team review documentation changes before they become the live production docs.
 
-## Overview
+Use previews for pull requests, branch reviews, and content changes that need visual validation.
 
-Preview documentation changes before publishing to production.
+## When to use previews
 
-## What to configure
+Use a preview when you want to check:
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+- a new page or section
+- navigation changes
+- OpenAPI-generated endpoint pages
+- screenshots and assets
+- theme or layout changes
+- assistant/search behavior after content changes
 
-## Next steps
+Do not use previews as the long-term production site. Keep one configured production branch for the live docs.
 
-This page is a scaffold for the full product documentation pass.
+## How previews work
+
+A preview is created from a non-production branch or review event.
+
+```text
+Branch or pull request
+-> preview sync
+-> preview URL
+-> review and approve
+-> merge to production branch
+-> live sync
+```
+
+The preview uses the same renderer as the live site, so visual issues found in preview are usually real publish issues.
+
+## What to review
+
+Before merging a docs change:
+
+- Open the preview URL.
+- Check the changed pages.
+- Check sidebar navigation and page order.
+- Verify links to renamed or moved pages.
+- Check API endpoint pages if OpenAPI changed.
+- Check mobile width for pages with tables or large code examples.
+
+## Branch behavior
+
+Production docs should come from the configured deployment branch. Preview branches are temporary review surfaces.
+
+If a preview branch is deleted, its preview can be removed or allowed to expire based on workspace policy.
+
+## Troubleshooting
+
+### Preview does not appear
+
+Confirm the repository provider is connected and the branch or pull request event reached dubstack.
+
+### Preview is stale
+
+Run a manual update or push a new commit to the preview branch.
+
+### Preview differs from live after merge
+
+Confirm the merge reached the configured production branch and the live sync completed successfully.

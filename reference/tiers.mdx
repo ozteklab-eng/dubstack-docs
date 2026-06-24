@@ -4,18 +4,40 @@ description: Compare Free, Pro, Enterprise, trials, and feature entitlements.
 icon: layers
 ---
 
-This page documents Tiers for DubStack.
+dubstack features are controlled by workspace tier and entitlements.
 
-## Overview
+Use this page to understand the general product boundary. The dashboard is the source of truth for the current plan and enabled features in your workspace.
 
-Compare Free, Pro, Enterprise, trials, and feature entitlements.
+## Tier overview
 
-## What to configure
+| Tier | Typical fit | Common capabilities |
+| --- | --- | --- |
+| Free | Evaluation and small public docs sites. | Core docs hosting, editor access, standard branding, and basic publishing. |
+| Pro | Production docs for teams. | Custom domains, richer publishing workflows, and team-oriented docs operations. |
+| Enterprise | Advanced branding, governance, and custom workflows. | Theme Studio, SSO-oriented controls, custom branding, and deeper operational support. |
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+Exact limits and entitlements can change as the product evolves. Check the Billing and plans page in the dashboard for your workspace-specific state.
 
-## Next steps
+## Trials
 
-This page is a scaffold for the full product documentation pass.
+A trial can temporarily enable features from a higher tier. When a trial ends, features that require that tier may become read-only or unavailable until the workspace upgrades.
+
+Before a trial ends:
+
+- confirm the production domain setup you need
+- export or commit content changes
+- review integrations that depend on the higher tier
+- decide whether the workspace should upgrade
+
+## Feature gates
+
+Feature gates protect capabilities that require a specific tier or integration state.
+
+Examples:
+
+- custom domains require domain-capable entitlement
+- Theme Studio requires Enterprise entitlement
+- SSO configuration requires Enterprise entitlement
+- private or advanced assistant controls may require a higher tier
+
+If a feature is unavailable, check the dashboard for the reason before assuming the site is misconfigured.

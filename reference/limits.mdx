@@ -4,18 +4,47 @@ description: Understand product limits and operational boundaries.
 icon: gauge
 ---
 
-This page documents Limits for DubStack.
+Limits keep docs sites reliable and predictable.
 
-## Overview
+The dashboard shows the current workspace state where limits are enforced. This page explains the kinds of boundaries you should expect.
 
-Understand product limits and operational boundaries.
+## Common limit areas
 
-## What to configure
+| Area | What can be limited |
+| --- | --- |
+| Sites | Number of active docs sites in a workspace. |
+| Team members | Number of users or seats. |
+| Custom domains | Number of configured domains. |
+| Git integrations | Connected repositories and provider access. |
+| OpenAPI specs | Spec size, number of specs, and generated endpoint pages. |
+| AI usage | Assistant and agent usage by plan, credits, or fair-use controls. |
+| Storage and assets | Uploaded assets and published content artifacts. |
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+## Practical guidance
 
-## Next steps
+- Keep OpenAPI specs focused on public APIs.
+- Hide internal endpoints from generated navigation.
+- Split very large docs sets into clear sections.
+- Compress large images before committing them.
+- Use reusable snippets for repeated content.
+- Keep workflow and agent runs focused to one task.
 
-This page is a scaffold for the full product documentation pass.
+## What happens at a limit
+
+Depending on the limit, dubstack may:
+
+- block a new configuration change
+- require an upgrade
+- queue work until capacity is available
+- ask you to reduce the content size or scope
+- show a dashboard warning with next steps
+
+## Need a higher limit
+
+If your docs site needs higher limits, contact support from the dashboard with:
+
+- workspace name
+- site name
+- the limit you reached
+- expected growth
+- whether this blocks production publishing

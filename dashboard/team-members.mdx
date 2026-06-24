@@ -4,18 +4,48 @@ description: Invite teammates and manage organization roles.
 icon: users
 ---
 
-This page documents Team members for DubStack.
+Team members let more people work on the same docs workspace.
 
-## Overview
+Invite teammates after the site source and first publish are working.
 
-Invite teammates and manage organization roles.
+## Invite a member
 
-## What to configure
+1. Open the dashboard.
+2. Go to Settings.
+3. Open team or members settings.
+4. Enter the teammate's email address.
+5. Choose the appropriate role.
+6. Send the invite.
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+The invited user should accept with the same email address.
 
-## Next steps
+## Role guidance
 
-This page is a scaffold for the full product documentation pass.
+Assign the least privilege needed:
+
+| Role type | Typical use |
+| --- | --- |
+| Owner/Admin | Workspace management, billing, integrations, and dangerous settings. |
+| Editor | Content and configuration changes. |
+| Viewer | Read-only dashboard visibility where available. |
+
+Exact role names can vary by workspace configuration. Use the dashboard role picker as the source of truth.
+
+## Git provider access
+
+Dashboard access and Git provider access are separate.
+
+A teammate may need both:
+
+- dashboard access to open the editor and settings
+- repository access to review or merge pull requests
+- provider app access if they manage repository installation
+
+## Offboarding
+
+When removing a teammate:
+
+1. Remove dashboard membership.
+2. Review Git provider access.
+3. Rotate any shared credentials that person could access.
+4. Review pending invites and automation ownership.

@@ -1,21 +1,49 @@
 ---
 title: Migration
-description: Move existing documentation projects into DubStack.
+description: Move existing documentation projects into dubstack.
 icon: route
 ---
 
-This page documents Migration for DubStack.
+Migration moves an existing documentation source into dubstack while preserving ownership, URLs, and review workflow.
 
-## Overview
+There are two main migration paths.
 
-Move existing documentation projects into DubStack.
+| Path | Use it when | Result |
+| --- | --- | --- |
+| Authored config import | The repository already has a docs configuration and MDX-style content. | Convert existing structure into `dubstack.json` and render through dubstack. |
+| Generated reconstruction | The repository does not already have a usable docs structure. | Generate a preview structure from repository signals, then review before adoption. |
 
-## What to configure
+## Recommended migration order
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+1. Inventory the current docs source.
+2. Identify the production branch.
+3. Decide whether the repo has an authored docs config.
+4. Create a preview or staging site.
+5. Review navigation, page rendering, search, and OpenAPI pages.
+6. Add redirects for old URLs.
+7. Connect the production source.
+8. Switch the domain after validation.
 
-## Next steps
+## What to validate
 
-This page is a scaffold for the full product documentation pass.
+Before switching traffic:
+
+- homepage and quickstart
+- sidebar navigation
+- top-level tabs or anchors
+- OpenAPI endpoint pages
+- images and assets
+- code blocks
+- redirects from old paths
+- custom domain or `/docs` subpath routing
+- assistant and search behavior
+
+## Keep ownership clear
+
+Public previews and customer-owned sites are separate.
+
+A public preview on `dubstack.wiki` is not a production customer site. A claimed/adopted site has an owner, source connection, billing/workspace context, and production URL.
+
+<Callout type="info">
+  Treat migration as a review workflow, not a blind import. The goal is a docs site your team can maintain after the cutover.
+</Callout>

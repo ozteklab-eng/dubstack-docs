@@ -4,18 +4,60 @@ description: Route old documentation URLs to new locations.
 icon: corner-up-right
 ---
 
-This page documents Redirects for DubStack.
+Redirects send readers from old docs URLs to current pages.
 
-## Overview
+Use redirects when you rename pages, move sections, or migrate from another docs structure.
 
-Route old documentation URLs to new locations.
+## Configure redirects
 
-## What to configure
+Add redirects to `dubstack.json`:
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+```json
+{
+  "redirects": [
+    {
+      "source": "/old-quickstart",
+      "destination": "/quickstart"
+    },
+    {
+      "source": "/guides/auth",
+      "destination": "/guides/authentication"
+    }
+  ]
+}
+```
 
-## Next steps
+Use root-relative paths for pages on the same docs site.
 
-This page is a scaffold for the full product documentation pass.
+## External redirects
+
+Use a full URL when the destination is outside your docs site:
+
+```json
+{
+  "source": "/status",
+  "destination": "https://status.example.com"
+}
+```
+
+## Migration redirects
+
+When migrating an existing docs site:
+
+1. Export or list old URLs.
+2. Map each old URL to the nearest current page.
+3. Add redirects before switching the domain.
+4. Test the most visited old URLs.
+5. Keep redirects for as long as external links still point to old paths.
+
+## Redirect checklist
+
+- Do not create redirect loops.
+- Prefer exact redirects for moved pages.
+- Keep destination pages published.
+- Preserve query strings only when your support flow needs them.
+- Test redirects after publishing.
+
+<Callout type="warning">
+  Redirects cannot fix a missing page that is still referenced in navigation. Fix navigation and redirects together when moving pages.
+</Callout>

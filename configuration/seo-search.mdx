@@ -4,18 +4,61 @@ description: Configure metadata, search prompts, indexing, and AI-readable docs 
 icon: search
 ---
 
-This page documents SEO and search for DubStack.
+Good metadata helps readers, search engines, and AI tools understand your docs.
 
-## Overview
+Start with strong page titles and descriptions, then add redirects and AI-readable surfaces as the docs grow.
 
-Configure metadata, search prompts, indexing, and AI-readable docs surfaces.
+## Page metadata
 
-## What to configure
+Set `title` and `description` in frontmatter:
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+```mdx
+---
+title: Authentication
+description: Learn how to authenticate API requests.
+---
+```
 
-## Next steps
+The title should be specific. The description should explain what the reader can do after reading the page.
 
-This page is a scaffold for the full product documentation pass.
+## Search quality
+
+Improve search by writing pages with:
+
+- descriptive headings
+- specific product terms
+- short procedural steps
+- examples near the explanation they support
+- links to related pages
+
+Avoid generic titles such as `Overview` in deep sections unless the navigation context makes the subject clear.
+
+## AI-readable docs
+
+Published docs expose machine-readable surfaces so AI tools can use current docs content:
+
+| Surface | Purpose |
+| --- | --- |
+| `/llms.txt` | Entry point for AI tools to discover docs content. |
+| `/llms-full.txt` | Larger docs index when available. |
+| `/mcp` | Public read-only MCP endpoint for search and file-style docs access. |
+| `/skill.md` | Skill instructions for supported AI tools. |
+| Page Markdown | Markdown representation of docs pages when supported by the renderer. |
+
+## Indexing checklist
+
+- Keep public pages useful without requiring dashboard access.
+- Do not publish private credentials or internal-only runbooks.
+- Use redirects when changing established URLs.
+- Keep OpenAPI summaries and descriptions accurate.
+- Republish after large navigation or metadata changes.
+
+## Troubleshooting search
+
+If a page is missing from search or assistant answers:
+
+1. Confirm the page is in navigation or intentionally discoverable.
+2. Confirm the page has synced to the live site.
+3. Confirm the page is not hidden from public output.
+4. Run a manual update.
+5. Ask again using terms that appear in the page title or headings.
