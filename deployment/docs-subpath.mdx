@@ -1,0 +1,64 @@
+---
+title: /docs subpath
+description: Serve a dubstack site from a path such as example.com/docs.
+icon: folder-tree
+---
+
+Use a `/docs` subpath when your main website already lives on the root domain and you want documentation to appear under the same hostname.
+
+```text
+example.com          -> your main website
+example.com/docs     -> your dubstack documentation site
+```
+
+## How it differs from a custom domain
+
+A custom domain such as `docs.example.com` is host-based. You point DNS at dubstack and the full hostname serves your docs.
+
+A subpath such as `example.com/docs` is path-based. DNS alone cannot point only one path to dubstack. The application or proxy that owns `example.com` must route requests under `/docs` to the dubstack origin for that site.
+
+## Requirements
+
+To use a subpath, you need:
+
+- A published dubstack site.
+- Control over the root website or edge proxy for the domain.
+- A route that forwards `/docs` and all nested paths to the dubstack origin.
+- The ability to forward static asset and API requests under the same `/docs` prefix.
+
+## Routing model
+
+When a site is mounted at `/docs`, the root website keeps serving everything outside the docs path.
+
+```text
+GET /                  -> root website
+GET /pricing           -> root website
+GET /docs              -> dubstack origin
+GET /docs/quickstart   -> dubstack origin
+GET /docs/_next/...    -> dubstack origin assets
+GET /docs/api/theme    -> dubstack origin API
+```
+
+The proxy should preserve the original request method, query string, and request body. It should also forward the response headers returned by the dubstack origin, including preload headers for assets.
+
+## Common setup
+
+If your root site runs on an edge platform, configure a route or rewrite for `/docs/*` to the origin hostname shown for the dubstack deployment.
+
+The origin should only be used by your root application or edge proxy. Visitors should use the public path on your own domain.
+
+## Validation
+
+After the route is configured, check:
+
+- `/docs` loads the docs homepage.
+- `/docs/quickstart` or another nested page loads directly after a refresh.
+- Browser dev tools show static assets loading from `/docs/_next/...`, not from `/_next/...`.
+- The assistant, search, theme, and page navigation work from the mounted path.
+- Links inside the docs keep users under `/docs`.
+
+## When to use a subdomain instead
+
+Use a host-based custom domain such as `docs.example.com` when you want the simplest setup. A subdomain only needs DNS and domain verification.
+
+Use `/docs` when sharing the root domain matters more than operational simplicity.

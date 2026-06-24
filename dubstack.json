@@ -137,6 +137,7 @@
             "icon": "rocket",
             "pages": [
               { "slug": "deployment/custom-domains", "icon": "globe" },
+              { "slug": "deployment/docs-subpath", "icon": "folder-tree" },
               { "slug": "deployment/preview-deployments", "icon": "eye" },
               { "slug": "deployment/git-sync", "icon": "refresh-cw" },
               { "slug": "deployment/forgejo-github-gitlab", "icon": "git-merge" }
@@ -182,8 +183,7 @@
   "footer": {
     "style": "default",
     "socials": {
-      "github": "https://github.com/dubstack-ai",
-      "x": ""
+      "github": "https://github.com/dubstack-ai"
     },
     "branding": {
       "show_powered_by": true
