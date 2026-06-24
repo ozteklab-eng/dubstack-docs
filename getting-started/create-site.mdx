@@ -4,18 +4,64 @@ description: Create a documentation site from the dashboard.
 icon: plus
 ---
 
-This page documents Create a site for DubStack.
+A site is the public documentation surface for one product, API, or knowledge base.
 
-## Overview
+Each site has its own source repository, navigation, deployment history, preview branches, and live URL.
 
-Create a documentation site from the dashboard.
+## Create the site
 
-## What to configure
+From the dashboard:
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+1. Choose the organization that should own the site.
+2. Start the new site flow.
+3. Select the type of docs you are building.
+4. Choose whether to connect Git or use a hosted starter repository.
+5. Confirm the site name and starter profile.
+6. Continue to the dashboard once setup completes.
 
-## Next steps
+The dashboard opens on the new site's overview page after creation.
 
-This page is a scaffold for the full product documentation pass.
+## Source options
+
+### Connect Git
+
+Connect Git when your team wants to keep ownership of the docs repository.
+
+Use this for production documentation when you already have:
+
+- A GitHub or GitLab repository.
+- A preferred default branch.
+- Existing MDX docs or an OpenAPI spec.
+- A review flow based on pull requests or merge requests.
+
+### Hosted repository
+
+Use the hosted repository flow when you want to get started without preparing a repository first.
+
+This creates a starter-backed site that can be edited from the dashboard. You can connect a customer-owned Git provider later when your team is ready to own the repository directly.
+
+## What gets created
+
+A new site includes:
+
+- A `dubstack.live` preview domain.
+- A source connection or hosted starter source.
+- A `dubstack.json` configuration file.
+- Starter MDX pages.
+- A dashboard overview with publish activity.
+- Editor access for content changes.
+
+## Verify setup
+
+After the site is created:
+
+- Open the live preview from the dashboard.
+- Confirm the site title and navigation are correct.
+- Open the editor and check that files are visible.
+- Run a manual update if the live preview is waiting for the first sync.
+
+## Troubleshooting
+
+If the site opens but content is missing, run a manual update from the dashboard and check the Activity panel.
+
+If Git connection fails, confirm the repository exists, the installed Git app has access to it, and the selected branch exists.

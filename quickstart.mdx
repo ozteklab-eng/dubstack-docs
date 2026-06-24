@@ -1,21 +1,88 @@
 ---
 title: Quickstart
-description: Create your first DubStack documentation site.
+description: Create, edit, and publish your first dubstack documentation site.
 icon: zap
 ---
 
+This quickstart takes you from an empty workspace to a published documentation site.
+
+You can start with a connected Git repository, or use the hosted repository flow when you want dubstack to create the starter repository for you.
+
+## Before you start
+
+You need:
+
+- A dubstack account.
+- A workspace or organization for the site.
+- A GitHub or GitLab account if you want to connect your own repository.
+- Access to your DNS provider only if you plan to attach a custom domain.
+
 ## 1. Create a site
 
-Start from the dashboard and choose either a connected Git repository or a hosted repository created by DubStack.
+Open the dashboard and create a new documentation site.
 
-## 2. Add content
+During setup, choose one of these source options:
 
-Write MDX pages and configure navigation in `dubstack.json`.
+| Source option | Use it when |
+| --- | --- |
+| Connect Git | You already have a docs repository or want to use a repository under your own GitHub or GitLab account. |
+| Hosted repository | You want dubstack to create a starter repository and let you edit from the dashboard first. |
 
-## 3. Publish
+The site is created with a live preview domain on `dubstack.live`.
 
-Changes flow through Git, sync to R2, and render on your tenant domain or custom domain.
+## 2. Review the starter
+
+The starter includes:
+
+- MDX pages for the first documentation sections.
+- `dubstack.json` for navigation, theme, widgets, and site settings.
+- A deploy path that syncs Git content into the published docs site.
+
+Open the live site from the dashboard and confirm the homepage, sidebar, search, and assistant button load correctly.
+
+## 3. Make your first edit
+
+Open the editor from the dashboard.
+
+A good first change is to edit `quickstart.mdx` or create a short page under a getting-started section.
+
+Use the editor to:
+
+- Update page content.
+- Insert supported MDX components.
+- Preview the rendered page.
+- Save the file back to the connected repository.
+
+## 4. Publish
+
+When you publish, dubstack follows the same production path used for normal updates:
+
+```text
+Git commit
+-> sync worker
+-> published content artifacts
+-> docs frontend
+```
+
+Use the Activity panel on the dashboard to confirm the publish completed.
+
+## 5. Verify the site
+
+After the publish finishes, check:
+
+- The live site opens on the `dubstack.live` domain.
+- The edited page is visible after a hard refresh.
+- Sidebar navigation matches `dubstack.json`.
+- Search and assistant open from the header.
+- No draft-only content is visible on the public site.
+
+## Next steps
+
+- Connect a custom domain when you are ready to use your own hostname.
+- Configure navigation in `dubstack.json`.
+- Upload an OpenAPI spec if your docs include an API reference.
+- Invite team members after the first site is working.
 
 <Callout type="info">
-  The production read path is Git to sync worker to R2 to the docs frontend. Avoid direct content writes outside this flow.
+  Git is the write source of truth. Published docs are rendered from synchronized content artifacts, not from local files or dashboard-only state.
 </Callout>

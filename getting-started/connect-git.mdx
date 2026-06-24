@@ -4,18 +4,78 @@ description: Connect a Git repository as the source for docs content.
 icon: git-branch
 ---
 
-This page documents Connect Git for DubStack.
+Git is the source of truth for published documentation content.
 
-## Overview
+When Git is connected, dubstack reads docs content from your repository, publishes synchronized artifacts, and creates documentation updates through the same review path your team already uses.
 
-Connect a Git repository as the source for docs content.
+## Supported providers
 
-## What to configure
+dubstack currently focuses on GitHub and GitLab for production setup.
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+| Provider | Use case |
+| --- | --- |
+| GitHub | Recommended for GitHub App installation, repository access, preview deployments, and pull-request based authoring. |
+| GitLab | Use when your docs repository lives in GitLab and your team reviews changes through merge requests. |
 
-## Next steps
+Other provider surfaces may appear in the dashboard, but GitHub and GitLab are the primary production paths to validate first.
 
-This page is a scaffold for the full product documentation pass.
+## Repository requirements
+
+Your repository should contain:
+
+- A `dubstack.json` file at the repository root or configured docs root.
+- MDX pages referenced by navigation.
+- Any assets used by the docs.
+- Optional OpenAPI specs for API reference pages.
+
+The selected branch must exist before you connect it.
+
+## Connect GitHub
+
+1. Open the site's Git settings.
+2. Choose GitHub.
+3. Install or configure the GitHub App for the repository owner.
+4. Select the repository and branch.
+5. Confirm the connection.
+6. Run a manual update to sync the first content artifacts.
+
+After connection, the Git settings page shows the repository, branch, sync status, and latest activity.
+
+## Connect GitLab
+
+1. Open the site's Git settings.
+2. Choose GitLab.
+3. Authorize GitLab access when prompted.
+4. Select the repository and branch.
+5. Confirm the connection.
+6. Run a manual update to sync the first content artifacts.
+
+GitLab authoring features may require an additional authoring OAuth connection so dubstack can create merge requests on behalf of the connected user.
+
+## What happens after connection
+
+Once connected:
+
+```text
+Repository update
+-> webhook or manual update
+-> sync worker
+-> published content artifacts
+-> live docs site
+```
+
+If a sync fails, the live site should keep serving the previous known-good content while the dashboard reports the failure.
+
+## Verify the connection
+
+Check these after connecting:
+
+- The Git settings page shows the expected provider, repository, and branch.
+- Manual update completes successfully.
+- The live site shows the latest content.
+- Preview deployments work for non-production branches when enabled.
+- Agent or workflow authoring is only enabled for repositories where write access is configured.
+
+<Callout type="warning">
+  Do not connect protected baseline or demo sites to throwaway repositories unless you are intentionally running an authoring smoke test. Keep production baselines stable so visual and behavior regressions are easy to spot.
+</Callout>
