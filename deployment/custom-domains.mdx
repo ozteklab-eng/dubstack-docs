@@ -1,21 +1,111 @@
 ---
 title: Custom domains
-description: Attach customer-owned domains to DubStack documentation sites.
+description: Attach a customer-owned domain or /docs subpath to a dubstack documentation site.
 icon: globe
 ---
 
-This page documents Custom domains for DubStack.
+Use a custom domain when you want visitors to read your docs on a domain you control instead of the default `*.dubstack.live` hostname.
 
-## Overview
+dubstack supports two routing modes:
 
-Attach customer-owned domains to DubStack documentation sites.
+| Mode | Example | Best for |
+| --- | --- | --- |
+| Host-based domain | `docs.example.com` | The simplest production setup for most docs sites |
+| `/docs` subpath | `example.com/docs` | Teams that already use the root domain for their website and want docs under the same host |
 
-## What to configure
+## Choose a routing mode
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+### Host-based domain
 
-## Next steps
+Use a host-based domain when your docs can live on their own hostname.
 
-This page is a scaffold for the full product documentation pass.
+```text
+docs.example.com -> your dubstack site
+```
+
+This mode is DNS-driven. You add the domain in the dubstack dashboard, configure the DNS record shown by the setup screen, then verify the domain.
+
+### `/docs` subpath
+
+Use a `/docs` subpath when your main website already owns the root domain.
+
+```text
+example.com      -> your main website
+example.com/docs -> your dubstack site
+```
+
+DNS cannot route a single path. The application, reverse proxy, or edge worker serving `example.com` must proxy `/docs` and `/docs/*` to the dubstack origin hostname generated for your site.
+
+For the complete subpath setup, see [/docs subpath](/deployment/docs-subpath).
+
+## Add a custom domain
+
+1. Open your site in the dubstack dashboard.
+2. Go to **Settings → Deployment → Custom domain**.
+3. Choose whether to enable **Host at `/docs`**.
+4. Enter the domain you want visitors to use.
+5. Click **Add domain**.
+6. Configure the DNS or proxy instructions shown in the dashboard.
+7. Click **Verify** after the DNS/proxy change has propagated.
+
+The dashboard shows the active platform URL, the custom URL, and the origin target used for subpath proxying.
+
+## DNS for host-based domains
+
+For a host-based domain such as `docs.example.com`, create the DNS record shown in the dashboard.
+
+Typical setup:
+
+```text
+Type:  CNAME
+Name:  docs
+Value: cname.dubstack.live
+```
+
+If your DNS provider proxies traffic, keep the record mode recommended by the dashboard. Some providers require DNS-only mode during verification and can be switched back after the certificate is active.
+
+## Origin hostnames for subpath domains
+
+When **Host at `/docs`** is enabled, dubstack generates a dedicated origin hostname:
+
+```text
+<site>--origin.dubstack.live
+```
+
+Proxy these paths to that origin:
+
+```text
+https://example.com/docs     -> https://<site>--origin.dubstack.live/docs
+https://example.com/docs/... -> https://<site>--origin.dubstack.live/docs/...
+```
+
+Do not send visitors directly to the `--origin` hostname. It exists for your root website, edge worker, or reverse proxy to fetch from.
+
+## Verification behavior
+
+Domain verification checks that the domain reaches the expected dubstack site. This prevents a domain from verifying against the wrong tenant if a DNS or proxy rule points to the wrong origin.
+
+For `/docs` subpaths, verification expects:
+
+- `/docs` reaches the generated origin.
+- The proxy forwards the public host context.
+- The rendered site remains mounted under `/docs`.
+- Static assets and API calls stay under the `/docs` prefix.
+
+## Troubleshooting
+
+### The domain verifies against the wrong site
+
+Check that your DNS record or proxy target points to the origin shown for the same site in the dashboard.
+
+### `/docs` loads, but assets fail
+
+Your proxy is likely forwarding the page but not preserving asset paths. Verify that requests such as `/docs/_next/...`, `/docs/api/theme`, `/docs/img/...`, and `/docs/assets/...` reach the dubstack origin.
+
+### Direct refresh on a nested page fails
+
+Make sure both `/docs` and `/docs/*` are proxied. A rule for only `/docs` will not handle `/docs/quickstart` or deeper pages.
+
+### The browser leaves `/docs`
+
+Check that the proxy forwards `X-Forwarded-Host`, `X-Public-Host`, and `X-Forwarded-Proto`. These headers let dubstack generate public URLs for the mounted domain instead of the raw origin.

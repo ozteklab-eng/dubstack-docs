@@ -11,11 +11,11 @@ example.com          -> your main website
 example.com/docs     -> your dubstack documentation site
 ```
 
-## How it differs from a custom domain
+## How it differs from a custom subdomain
 
-A custom domain such as `docs.example.com` is host-based. You point DNS at dubstack and the full hostname serves your docs.
+A custom subdomain such as `docs.example.com` is host-based. You point DNS at dubstack and the full hostname serves your docs.
 
-A subpath such as `example.com/docs` is path-based. DNS alone cannot point only one path to dubstack. The application or proxy that owns `example.com` must route requests under `/docs` to the dubstack origin for that site.
+A subpath such as `example.com/docs` is path-based. DNS cannot point only one path to dubstack. The application, edge worker, or reverse proxy that owns `example.com` must route `/docs` and `/docs/*` to the dubstack origin for that site.
 
 ## Requirements
 
@@ -24,7 +24,30 @@ To use a subpath, you need:
 - A published dubstack site.
 - Control over the root website or edge proxy for the domain.
 - A route that forwards `/docs` and all nested paths to the dubstack origin.
-- The ability to forward static asset and API requests under the same `/docs` prefix.
+- The ability to preserve the original request method, query string, body, and response headers.
+- The ability to forward `X-Forwarded-Host`, `X-Public-Host`, and `X-Forwarded-Proto`.
+
+## Enable subpath hosting
+
+1. Open your site in the dubstack dashboard.
+2. Go to **Settings → Deployment → Custom domain**.
+3. Enable **Host at `/docs`**.
+4. Enter your root domain, for example `example.com`.
+5. Click **Add domain**.
+6. Copy the generated origin hostname.
+
+The origin hostname has this shape:
+
+```text
+<site>--origin.dubstack.live
+```
+
+Proxy to the origin with the `/docs` path preserved:
+
+```text
+https://example.com/docs     -> https://<site>--origin.dubstack.live/docs
+https://example.com/docs/... -> https://<site>--origin.dubstack.live/docs/...
+```
 
 ## Routing model
 
@@ -37,15 +60,93 @@ GET /docs              -> dubstack origin
 GET /docs/quickstart   -> dubstack origin
 GET /docs/_next/...    -> dubstack origin assets
 GET /docs/api/theme    -> dubstack origin API
+GET /docs/llms.txt     -> dubstack origin AI-readable index
 ```
 
-The proxy should preserve the original request method, query string, and request body. It should also forward the response headers returned by the dubstack origin, including preload headers for assets.
+Do not strip `/docs` before forwarding to dubstack. The origin is designed to receive the `/docs` prefix and render public links, assets, assistant calls, search, MCP metadata, and LLM indexes under that same prefix.
 
-## Common setup
+## Cloudflare Worker example
 
-If your root site runs on an edge platform, configure a route or rewrite for `/docs/*` to the origin hostname shown for the dubstack deployment.
+Use this when your root domain is already routed through Cloudflare Workers.
 
-The origin should only be used by your root application or edge proxy. Visitors should use the public path on your own domain.
+Replace `DOCS_ORIGIN_HOST` and `PUBLIC_HOST` with the values shown in your dubstack dashboard.
+
+```js
+const DOCS_ORIGIN_HOST = '<site>--origin.dubstack.live';
+const PUBLIC_HOST = 'example.com';
+const DOCS_PREFIX = '/docs';
+
+function shouldProxy(pathname) {
+  return pathname === DOCS_PREFIX || pathname.startsWith(`${DOCS_PREFIX}/`);
+}
+
+function buildProxyRequest(request) {
+  const target = new URL(request.url);
+  target.hostname = DOCS_ORIGIN_HOST;
+  target.protocol = 'https:';
+
+  const proxyRequest = new Request(target, request);
+  proxyRequest.headers.set('X-Forwarded-Host', PUBLIC_HOST);
+  proxyRequest.headers.set('X-Public-Host', PUBLIC_HOST);
+  proxyRequest.headers.set('X-Forwarded-Proto', 'https');
+  return proxyRequest;
+}
+
+export default {
+  async fetch(request) {
+    const url = new URL(request.url);
+
+    if (!shouldProxy(url.pathname)) {
+      return fetch(request);
+    }
+
+    return fetch(buildProxyRequest(request));
+  }
+};
+```
+
+If your Worker also rewrites HTML or response headers, keep those rewrites limited to `/docs` traffic. The dubstack dashboard includes a fuller Worker snippet that prefixes supported static asset paths and preload headers for stricter root-site setups.
+
+## Vercel rewrites example
+
+Use this when your root site is deployed on Vercel.
+
+```json
+{
+  "rewrites": [
+    {
+      "source": "/docs",
+      "destination": "https://<site>--origin.dubstack.live/docs"
+    },
+    {
+      "source": "/docs/:match*",
+      "destination": "https://<site>--origin.dubstack.live/docs/:match*"
+    }
+  ]
+}
+```
+
+The first rewrite handles the docs homepage. The second handles nested pages, assets, APIs, search, assistant requests, and AI-readable metadata under `/docs`.
+
+## Generic reverse proxy example
+
+For Nginx-style reverse proxies, preserve `/docs` and forward the public host headers.
+
+```nginx
+location = /docs {
+  proxy_pass https://<site>--origin.dubstack.live/docs;
+  proxy_set_header X-Forwarded-Host $host;
+  proxy_set_header X-Public-Host $host;
+  proxy_set_header X-Forwarded-Proto https;
+}
+
+location /docs/ {
+  proxy_pass https://<site>--origin.dubstack.live;
+  proxy_set_header X-Forwarded-Host $host;
+  proxy_set_header X-Public-Host $host;
+  proxy_set_header X-Forwarded-Proto https;
+}
+```
 
 ## Validation
 
@@ -54,8 +155,28 @@ After the route is configured, check:
 - `/docs` loads the docs homepage.
 - `/docs/quickstart` or another nested page loads directly after a refresh.
 - Browser dev tools show static assets loading from `/docs/_next/...`, not from `/_next/...`.
-- The assistant, search, theme, and page navigation work from the mounted path.
+- `/docs/api/theme` returns site theme data.
+- `/docs/llms.txt` lists docs URLs under `/docs`.
+- Search, assistant, API playground, and page navigation work from the mounted path.
 - Links inside the docs keep users under `/docs`.
+
+## Troubleshooting
+
+### The docs homepage works, but nested pages 404
+
+Your proxy probably handles `/docs` but not `/docs/*`. Add the wildcard route.
+
+### Static assets load from the root domain
+
+Make sure your proxy preserves the `/docs` prefix and forwards the generated response headers. If your root app rewrites HTML, it must not remove `/docs` from dubstack asset URLs.
+
+### The site shows the raw origin URL
+
+Forward `X-Forwarded-Host`, `X-Public-Host`, and `X-Forwarded-Proto`. These headers tell dubstack which public domain is serving the mounted docs.
+
+### The origin hostname appears in search results
+
+Do not link users to `https://<site>--origin.dubstack.live`. That hostname is for proxy traffic only. Direct origin responses are marked `noindex`, but your public links and sitemap should use your mounted domain.
 
 ## When to use a subdomain instead
 
