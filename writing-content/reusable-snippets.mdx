@@ -4,18 +4,55 @@ description: Reuse common content blocks across pages.
 icon: recycle
 ---
 
-This page documents Reusable snippets for DubStack.
+Reusable snippets help keep repeated content consistent across pages.
 
-## Overview
+Use snippets for warnings, prerequisites, shared setup notes, and repeated API concepts.
 
-Reuse common content blocks across pages.
+## When to use a snippet
 
-## What to configure
+Use a snippet when the same block appears in several pages and should be updated in one place.
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+Good candidates:
 
-## Next steps
+- authentication prerequisites
+- beta feature notices
+- support escalation instructions
+- shared SDK install notes
+- common security warnings
 
-This page is a scaffold for the full product documentation pass.
+Avoid snippets for one-off content that only appears on a single page.
+
+## Suggested structure
+
+```text
+snippets/
+  api-authentication.mdx
+  manual-update-note.mdx
+  support-contact.mdx
+```
+
+## Example snippet
+
+```mdx
+<Callout type="warning">
+  Never commit production credentials to your docs repository.
+</Callout>
+```
+
+## Include snippets
+
+Use the supported include/import pattern for your site configuration and renderer version. Keep snippet paths stable so existing pages do not break when content is reorganized.
+
+If a snippet does not render after publishing:
+
+- confirm the snippet file exists in the repository
+- confirm the path is correct
+- confirm the syntax is supported by the current renderer
+- run a manual update after committing the change
+
+## Snippet quality rules
+
+- Keep snippets short.
+- Do not hide page-specific instructions inside shared snippets.
+- Avoid snippets that contain secrets or environment-specific credentials.
+- Review every page that uses a snippet before changing its meaning.

@@ -4,18 +4,100 @@ description: Document code with syntax highlighting, copy actions, and assistant
 icon: code
 ---
 
-This page documents Code blocks for DubStack.
+Use code blocks for commands, configuration, API requests, and examples readers should copy.
 
-## Overview
+## Basic code block
 
-Document code with syntax highlighting, copy actions, and assistant-ready context.
+````mdx
+```bash
+npm install
+npm run dev
+```
+````
 
-## What to configure
+Add a language after the opening fence so syntax highlighting and AI parsing work better.
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+## Configuration examples
 
-## Next steps
+Use JSON for config examples:
 
-This page is a scaffold for the full product documentation pass.
+````mdx
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "default": true
+      }
+    ]
+  }
+}
+```
+````
+
+Keep examples valid JSON when possible. Do not use comments inside JSON examples.
+
+## Commands
+
+Use shell blocks for terminal commands:
+
+````mdx
+```bash
+pnpm install
+pnpm run build
+```
+````
+
+If a command contains placeholders, name them clearly:
+
+````mdx
+```bash
+curl https://api.example.com/v1/projects \
+  -H "Authorization: Bearer $API_TOKEN"
+```
+````
+
+## Code groups
+
+Use code groups when the same action has multiple variants:
+
+````mdx
+<CodeGroup>
+```bash npm
+npm install @acme/sdk
+```
+
+```bash pnpm
+pnpm add @acme/sdk
+```
+</CodeGroup>
+````
+
+## API request and response examples
+
+Keep request and response examples close together:
+
+````mdx
+<RequestExample>
+```bash
+curl https://api.example.com/v1/projects \
+  -H "Authorization: Bearer $API_TOKEN"
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "data": []
+}
+```
+</ResponseExample>
+````
+
+## Safety rules
+
+- Never publish real API keys, tokens, passwords, or magic links.
+- Prefer environment variables for secrets in examples.
+- Keep example domains clearly separate from production credentials.
+- Make commands copy-pasteable, but do not hide required prerequisites.

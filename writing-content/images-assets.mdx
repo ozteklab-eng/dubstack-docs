@@ -4,18 +4,61 @@ description: Use repository-backed images, media, and asset variants.
 icon: image
 ---
 
-This page documents Images and assets for DubStack.
+Images and assets should live with the docs source whenever possible.
 
-## Overview
+This keeps previews, pull requests, and published docs reproducible.
 
-Use repository-backed images, media, and asset variants.
+## Recommended structure
 
-## What to configure
+```text
+images/
+  dashboard-preview.png
+  editor-navigation.png
+  api-playground.png
+```
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+Reference images from MDX:
 
-## Next steps
+```mdx
+![Dashboard preview](/images/dashboard-preview.png)
+```
 
-This page is a scaffold for the full product documentation pass.
+## Alt text
+
+Write alt text that explains the image content:
+
+```mdx
+![The dashboard home page showing the live preview card and recent activity](/images/dashboard-home.png)
+```
+
+Avoid alt text like `screenshot` or `image` because it does not help readers or AI tools.
+
+## Frames
+
+Use a frame when the image benefits from a visual boundary:
+
+```mdx
+<Frame>
+  <img src="/images/editor-navigation.png" alt="Editor navigation pane" />
+</Frame>
+```
+
+## Asset updates
+
+When replacing an image:
+
+1. Keep the file name stable if the meaning is the same.
+2. Use a new file name if the image shows a different product area.
+3. Commit the image with the page that references it.
+4. Publish and verify the live page.
+
+## Large media
+
+For large videos or files, prefer an external media host and embed the video or link to the file. Keep the docs repository focused on files needed to render pages reliably.
+
+## Checklist
+
+- Use descriptive file names.
+- Use compressed assets when possible.
+- Add alt text for every image.
+- Avoid screenshots that expose secrets, private customer data, internal URLs, or account identifiers.

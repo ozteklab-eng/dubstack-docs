@@ -4,18 +4,53 @@ description: Document structured data with Markdown and MDX tables.
 icon: table
 ---
 
-This page documents Tables for DubStack.
+Tables are useful for compact comparisons, field lists, limits, and status matrices.
 
-## Overview
+Use them when readers need to compare values across rows.
 
-Document structured data with Markdown and MDX tables.
+## Markdown table
 
-## What to configure
+```mdx
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `string` | Unique identifier. |
+| `created_at` | `string` | ISO timestamp for creation. |
+| `status` | `string` | Current state. |
+```
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+Rendered result:
 
-## Next steps
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `string` | Unique identifier. |
+| `created_at` | `string` | ISO timestamp for creation. |
+| `status` | `string` | Current state. |
 
-This page is a scaffold for the full product documentation pass.
+## Comparison table
+
+```mdx
+| Option | Best for | Tradeoff |
+| --- | --- | --- |
+| Connect Git | Teams with an existing docs repo. | Requires provider authorization. |
+| Hosted repository | Teams that want to start quickly. | Move to customer-owned Git later if needed. |
+```
+
+## Keep tables readable
+
+- Use short column names.
+- Keep cells concise.
+- Move long explanations below the table.
+- Avoid tables with too many columns on mobile.
+- Use code formatting for literal values.
+
+## API fields
+
+For request and response schemas, use parameter or response field components when the content is more like a schema than a comparison:
+
+```mdx
+<ParamField path="limit" type="number">
+  Maximum number of records to return.
+</ParamField>
+```
+
+Use tables for overview comparisons, not deeply nested API schemas.

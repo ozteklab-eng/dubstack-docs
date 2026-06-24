@@ -4,18 +4,107 @@ description: Write content with Markdown, frontmatter, and MDX components.
 icon: file-code
 ---
 
-This page documents MDX for DubStack.
+MDX is the page format for dubstack docs.
 
-## Overview
+Use Markdown for normal writing and MDX components for structured blocks such as cards, callouts, tabs, accordions, parameter fields, and code examples.
 
-Write content with Markdown, frontmatter, and MDX components.
+## Page frontmatter
 
-## What to configure
+Every page should start with frontmatter:
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+```mdx
+---
+title: Authentication
+description: Learn how to authenticate requests to the Acme API.
+icon: key
+---
+```
 
-## Next steps
+Common fields:
 
-This page is a scaffold for the full product documentation pass.
+| Field | Purpose |
+| --- | --- |
+| `title` | Page title in the browser, search, navigation, and assistant context. |
+| `description` | Short page summary for search and previews. |
+| `icon` | Optional icon for navigation and page chrome. |
+| `openapi` | Optional operation binding for API reference pages. |
+| `hidden` | Hide a page from normal navigation when supported by the current site config. |
+
+## Markdown basics
+
+```mdx
+# Main heading
+
+Use short paragraphs and descriptive headings.
+
+## Steps
+
+1. Create a token.
+2. Store it securely.
+3. Send it with each request.
+
+## Notes
+
+- Keep examples current.
+- Link to related pages.
+- Avoid duplicating long explanations across many pages.
+```
+
+## Links
+
+Use root-relative links for pages in the same docs site:
+
+```mdx
+Read the [quickstart](/quickstart) before configuring authentication.
+```
+
+Use full URLs for external sites:
+
+```mdx
+Open the [status page](https://status.example.com).
+```
+
+## Images
+
+Reference repository-backed assets with relative or root-relative paths:
+
+```mdx
+![Dashboard preview](/images/dashboard-preview.png)
+```
+
+Use descriptive alt text so readers and AI tools understand the image context.
+
+## Components
+
+Use components for structured content:
+
+```mdx
+<Callout type="info">
+  Store production credentials in your secret manager, not in docs.
+</Callout>
+```
+
+```mdx
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="zap" href="/quickstart">
+    Build your first docs site.
+  </Card>
+  <Card title="Configuration" icon="settings" href="/configuration/dubstack-json">
+    Configure navigation, theme, and behavior.
+  </Card>
+</CardGroup>
+```
+
+## Writing for AI tools
+
+Published docs are used by search, the assistant, and public MCP tools. Make pages easier to retrieve by:
+
+- using specific headings
+- defining product terms before using them
+- keeping setup steps ordered
+- adding examples near the relevant explanation
+- linking to related pages instead of relying on duplicated text
+
+<Callout type="info">
+  MDX files are source content. Commit them to the connected repository and publish before expecting changes on the live site.
+</Callout>

@@ -4,18 +4,102 @@ description: Use structured MDX components for cards, callouts, tabs, accordions
 icon: puzzle-piece
 ---
 
-This page documents Components for DubStack.
+Components make documentation easier to scan and easier for AI tools to interpret.
 
-## Overview
+Use components when structure matters. Use plain Markdown when a paragraph or list is enough.
 
-Use structured MDX components for cards, callouts, tabs, accordions, steps, and more.
+## Callouts
 
-## What to configure
+Callouts highlight important information:
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+```mdx
+<Callout type="info">
+  Use manual update when a hosted OpenAPI spec URL changes without a Git commit.
+</Callout>
+```
 
-## Next steps
+Common types include `info`, `check`, `note`, `tip`, `warning`, and `danger`.
 
-This page is a scaffold for the full product documentation pass.
+## Cards
+
+Cards link readers to related pages or workflows:
+
+```mdx
+<CardGroup cols={2}>
+  <Card title="Connect Git" icon="git-branch" href="/getting-started/connect-git">
+    Connect an existing repository.
+  </Card>
+  <Card title="Hosted repository" icon="cloud" href="/getting-started/skip-git-hosted-repo">
+    Start without installing a Git provider app immediately.
+  </Card>
+</CardGroup>
+```
+
+Use short card titles and one focused sentence.
+
+## Accordions
+
+Accordions are useful for optional details:
+
+```mdx
+<Accordion title="When should I use manual update?">
+  Use manual update when the source changed but a webhook did not trigger a publish.
+</Accordion>
+```
+
+Do not hide critical first-run steps inside accordions.
+
+## Tabs
+
+Tabs are useful for language, provider, or platform variants:
+
+```mdx
+<Tabs>
+  <Tab title="GitHub">
+    Install the GitHub app and select the repository.
+  </Tab>
+  <Tab title="GitLab">
+    Authorize GitLab access and select the project.
+  </Tab>
+</Tabs>
+```
+
+Keep each tab equivalent so readers can compare choices.
+
+## Steps
+
+Use steps for ordered procedures:
+
+```mdx
+<Steps>
+  <Step title="Create the site">
+    Choose a source option from onboarding.
+  </Step>
+  <Step title="Publish">
+    Run the first sync and open the live URL.
+  </Step>
+</Steps>
+```
+
+## API fields
+
+Use parameter and response fields for API concepts:
+
+```mdx
+<ParamField path="siteId" type="string" required>
+  The site identifier from the dashboard URL or API response.
+</ParamField>
+```
+
+```mdx
+<ResponseField name="status" type="string">
+  Current deployment status.
+</ResponseField>
+```
+
+## Component checklist
+
+- Keep component content short.
+- Do not nest complex components unless needed.
+- Prefer one concept per card, callout, tab, or accordion.
+- Preview before publishing to catch invalid MDX.
