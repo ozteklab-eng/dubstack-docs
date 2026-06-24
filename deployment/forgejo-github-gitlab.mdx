@@ -4,18 +4,69 @@ description: Understand GitHub, GitLab, and Forgejo source support.
 icon: git-merge
 ---
 
-This page documents Git providers for DubStack.
+Git is the write source of truth for dubstack docs.
 
-## Overview
+A connected provider lets dubstack read source content, receive update signals, and write documentation changes when an authorized workflow or agent action requires it.
 
-Understand GitHub, GitLab, and Forgejo source support.
+## Provider support
 
-## What to configure
+| Provider | Typical use |
+| --- | --- |
+| GitHub | Primary hosted Git provider for connected repos, pull requests, and app-based access. |
+| GitLab | Hosted Git provider for teams that keep docs and code in GitLab. |
+| Forgejo | Self-hosted Git provider for teams that operate their own Git service. |
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+Provider availability can depend on your plan and workspace configuration.
 
-## Next steps
+## Connect a repository
 
-This page is a scaffold for the full product documentation pass.
+From the dashboard:
+
+1. Open Settings.
+2. Go to Deployment.
+3. Open Git settings.
+4. Choose the provider.
+5. Authorize the provider app or token with the required repository scope.
+6. Select the repository and branch.
+7. Run a manual update to verify the first sync.
+
+## Repository requirements
+
+A docs repository should include:
+
+- MDX pages.
+- `dubstack.json`.
+- Images and assets referenced by pages.
+- OpenAPI specs if the site has an API reference.
+- Any reusable snippets used by pages.
+
+## Branches and previews
+
+Use the deployment branch for production docs. Use preview branches for review workflows when your plan and provider integration support previews.
+
+Do not use preview branches as the long-term production source.
+
+## Provider permissions
+
+Grant the smallest provider scope that supports your intended workflow:
+
+| Workflow | Permission needed |
+| --- | --- |
+| Read and publish docs | Repository read access. |
+| Dashboard edits | Write access to content files and configuration. |
+| Agent draft PRs | Branch and pull request creation access. |
+| Webhook-driven updates | Webhook delivery from the provider. |
+
+## First-sync troubleshooting
+
+If the first sync fails:
+
+- Confirm the repository is installed or authorized for the provider app.
+- Confirm the selected branch exists.
+- Confirm `dubstack.json` is present at the repository root.
+- Confirm page slugs in navigation map to files.
+- Re-run manual update after fixing provider access.
+
+<Callout type="info">
+  You can migrate between provider-backed sources, but keep one active production source at a time to avoid branch and publish confusion.
+</Callout>

@@ -1,21 +1,57 @@
 ---
 title: Dashboard
-description: Manage DubStack sites, settings, content workflows, and account configuration.
+description: Manage dubstack sites, settings, content workflows, and account configuration.
 icon: layout-dashboard
 ---
 
-This page documents Dashboard for DubStack.
+The dashboard is the control surface for your docs site.
 
-## Overview
+Use it to monitor deploys, edit content, configure integrations, manage team access, and review how users interact with your docs.
 
-Manage DubStack sites, settings, content workflows, and account configuration.
+## Main areas
 
-## What to configure
+| Area | What it manages |
+| --- | --- |
+| Home | Site status, preview, manual update, activity, and setup guidance. |
+| Editor | Page content, navigation, files, assets, and site configuration. |
+| Analytics | Visitors, views, assistant usage, search activity, and feedback. |
+| API | OpenAPI specs and API playground configuration. |
+| Workflows | Automated documentation maintenance and update workflows. |
+| Agent | Repository-aware documentation agent and connected team integrations. |
+| Assistant | Public docs assistant configuration and diagnostics. |
+| Settings | Deployment, domains, members, billing, integrations, and account settings. |
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+## Home page
 
-## Next steps
+The home page gives a quick operational view:
 
-This page is a scaffold for the full product documentation pass.
+- Live site preview or screenshot.
+- Current deployment status.
+- Manual update action.
+- Recent activity.
+- Setup banner when the site still needs core configuration.
+
+Use manual update when the source changed outside the normal webhook path or when a hosted spec URL changed without a Git commit.
+
+## Site settings
+
+Settings are split by responsibility:
+
+- Deployment settings control source connections and domains.
+- Organization settings control team and integration-level concerns.
+- Account settings control the signed-in user's profile.
+- Site configuration controls published docs behavior from `dubstack.json`.
+
+## Team access
+
+Invite team members from the dashboard after the site source is connected. Assign the least-privileged role that lets the person do their work.
+
+## Troubleshooting from the dashboard
+
+When something does not appear on the public site:
+
+1. Check the activity feed.
+2. Confirm the connected branch and latest sync time.
+3. Verify `dubstack.json` references the page or spec.
+4. Open the live page directly.
+5. Use settings diagnostics for integrations and assistant readiness.

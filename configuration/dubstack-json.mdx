@@ -1,21 +1,99 @@
 ---
 title: dubstack.json
-description: Configure a DubStack docs site from the canonical docs config file.
+description: Configure a dubstack docs site from the canonical docs config file.
 icon: braces
 ---
 
-This page documents dubstack.json for DubStack.
+`dubstack.json` is the site configuration file in your docs repository.
 
-## Overview
+Use it to control navigation, theme settings, OpenAPI references, redirects, contextual actions, and other published-site behavior.
 
-Configure a DubStack docs site from the canonical docs config file.
+## Minimal file
 
-## What to configure
+```json
+{
+  "name": "Acme Docs",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "default": true,
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": ["index", "quickstart"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+## Core fields
 
-## Next steps
+| Field | Purpose |
+| --- | --- |
+| `name` | Display name for the docs site and search context. |
+| `navigation` | Tabs, groups, pages, anchors, and OpenAPI-generated pages. |
+| `theme` | Published theme tokens such as colors, logos, and appearance settings. |
+| `redirects` | Source-to-destination redirects for renamed or moved pages. |
+| `contextual` | Page actions such as copy Markdown, view Markdown, assistant, and MCP actions. |
+| `openapi` | Default OpenAPI spec reference inherited by nested navigation items. |
 
-This page is a scaffold for the full product documentation pass.
+## Source of truth
+
+Keep `dubstack.json` committed with your docs. Dashboard configuration pages write back to the same source-backed configuration where supported.
+
+A publish uses the configuration from the synced commit, not unsaved local state.
+
+## Navigation references
+
+Use page slugs without the `.mdx` extension:
+
+```json
+{
+  "group": "Guides",
+  "pages": [
+    "index",
+    "quickstart",
+    "guides/authentication"
+  ]
+}
+```
+
+For a file at `guides/authentication.mdx`, the slug is `guides/authentication`.
+
+## OpenAPI references
+
+Reference a spec from a navigation group to generate endpoint pages:
+
+```json
+{
+  "group": "API reference",
+  "openapi": "api-reference/openapi.json"
+}
+```
+
+List operations in `pages` when you only want selected endpoints visible:
+
+```json
+{
+  "group": "API reference",
+  "openapi": "api-reference/openapi.json",
+  "pages": ["GET /v1/projects", "POST /v1/projects"]
+}
+```
+
+## Validate changes
+
+Before publishing configuration changes:
+
+- Confirm every page slug maps to a file.
+- Confirm OpenAPI paths and methods exist in the spec.
+- Confirm redirects point to current pages.
+- Commit the change before expecting it on the public site.
+
+<Callout type="warning">
+  Do not store API keys, passwords, or private tokens in `dubstack.json`. Use dashboard-managed secrets and integration settings for credentials.
+</Callout>

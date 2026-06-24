@@ -4,18 +4,48 @@ description: Add an AI assistant surface to help readers use your docs.
 icon: bot
 ---
 
-This page documents Assistant for DubStack.
+The assistant helps readers ask questions about your published documentation without leaving the docs site.
 
-## Overview
+It uses the content that has been published for the current site, then returns an answer with sources when relevant.
 
-Add an AI assistant surface to help readers use your docs.
+## What the assistant can do
 
-## What to configure
+- Answer setup and usage questions from your docs.
+- Link back to source pages so readers can verify details.
+- Use the current page as context when opened from a page action.
+- Help readers discover related pages when they do not know the exact page name.
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+## What the assistant cannot do
 
-## Next steps
+- Access private dashboard settings from the public docs site.
+- Edit files or create pull requests from the public assistant surface.
+- Use unpublished local changes that have not synced to the site.
+- Bypass visibility, entitlement, or deployment boundaries.
 
-This page is a scaffold for the full product documentation pass.
+## Improve assistant answers
+
+Write pages so both humans and AI tools can understand them:
+
+- Use descriptive headings.
+- Define product-specific terms before using acronyms.
+- Keep procedures in ordered steps.
+- Add examples for configuration and API usage.
+- Cross-link related pages.
+- Keep hidden or internal-only material out of public pages.
+
+## Source freshness
+
+The assistant reads from the published docs index. If an answer is missing a recent change:
+
+1. Confirm the change is committed to the connected source.
+2. Run a manual update from the dashboard if needed.
+3. Wait for the activity item to finish.
+4. Refresh the docs page and ask again.
+
+## Reader notice
+
+AI responses can contain mistakes. Review linked sources before relying on a generated answer for production changes.
+
+<Callout type="info">
+  The dashboard agent is separate from the public assistant. The dashboard agent helps trusted team members draft documentation changes, while the public assistant answers reader questions from published docs.
+</Callout>

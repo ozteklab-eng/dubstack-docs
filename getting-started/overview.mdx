@@ -1,21 +1,63 @@
 ---
 title: Overview
-description: Understand the main DubStack onboarding paths.
+description: Understand the main dubstack onboarding paths.
 icon: book-open
 ---
 
-This page documents Overview for DubStack.
+dubstack gives every site a Git-backed source of truth, a dashboard editor, and a published docs frontend.
 
-## Overview
+Most teams start in one of two ways:
 
-Understand the main DubStack onboarding paths.
+<CardGroup cols={2}>
+  <Card title="Connect your repository" icon="git-branch" href="/getting-started/connect-git">
+    Use an existing GitHub or GitLab repository when your docs already live with your code or your team wants to own the repository from day one.
+  </Card>
+  <Card title="Start with a hosted repository" icon="cloud" href="/getting-started/skip-git-hosted-repo">
+    Let dubstack create a starter-backed docs site first, then connect a customer-owned repository later.
+  </Card>
+</CardGroup>
 
-## What to configure
+## How publishing works
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+A dubstack site has three layers:
 
-## Next steps
+| Layer | Purpose |
+| --- | --- |
+| Source | Your MDX files, assets, OpenAPI specs, and `dubstack.json` in Git. |
+| Sync | The publish path that turns source content into versioned site artifacts. |
+| Runtime | The public docs frontend on `dubstack.live` or your custom domain. |
 
-This page is a scaffold for the full product documentation pass.
+```text
+Git source
+-> dubstack sync
+-> published content artifacts
+-> docs frontend
+```
+
+This keeps editing and publishing predictable. The dashboard can help you edit files, but the published site is still driven by synchronized source content.
+
+## What to configure first
+
+1. Create the site and choose a source option.
+2. Confirm the live preview opens on the generated `dubstack.live` domain.
+3. Update the homepage or quickstart page.
+4. Review `dubstack.json` so navigation matches your intended structure.
+5. Add an OpenAPI spec if you have API reference docs.
+6. Invite teammates after the site has a working source and deploy path.
+
+## Recommended first pages
+
+Start with a small set of pages that answer real user questions:
+
+- Overview or introduction
+- Quickstart
+- Authentication or setup guide
+- Core concepts
+- API reference introduction
+- Troubleshooting
+
+Add deeper sections after the first publish is working.
+
+<Callout type="info">
+  Keep each first change small. A focused first publish verifies the full source, sync, and runtime path before your team migrates larger docs sets.
+</Callout>

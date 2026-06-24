@@ -4,18 +4,107 @@ description: Organize pages, groups, tabs, anchors, products, versions, and lang
 icon: map
 ---
 
-This page documents Navigation for DubStack.
+Navigation controls how readers move through your docs and how search and AI tools understand the site structure.
 
-## Overview
+Define navigation in `dubstack.json`.
 
-Organize pages, groups, tabs, anchors, products, versions, and languages.
+## Tabs and groups
 
-## What to configure
+Use tabs for large product areas and groups for related pages:
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "default": true,
+        "groups": [
+          {
+            "group": "Getting started",
+            "icon": "rocket",
+            "pages": ["index", "quickstart"]
+          }
+        ]
+      },
+      {
+        "tab": "Reference",
+        "groups": [
+          {
+            "group": "API reference",
+            "icon": "book",
+            "pages": ["api-reference/introduction"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
 
-## Next steps
+## Page entries
 
-This page is a scaffold for the full product documentation pass.
+A page can be a string slug or an object with extra metadata:
+
+```json
+{
+  "slug": "guides/authentication",
+  "icon": "key",
+  "title": "Authentication"
+}
+```
+
+Use object entries when you want a specific icon or label in the sidebar.
+
+## Nested groups
+
+Use nested groups when a section has several related pages:
+
+```json
+{
+  "group": "SDKs",
+  "pages": [
+    {
+      "group": "JavaScript",
+      "pages": ["sdks/javascript/install", "sdks/javascript/auth"]
+    },
+    {
+      "group": "Python",
+      "pages": ["sdks/python/install", "sdks/python/auth"]
+    }
+  ]
+}
+```
+
+## External links
+
+Use external links for changelogs, status pages, support portals, or dashboards that live outside the docs site:
+
+```json
+{
+  "label": "Status",
+  "href": "https://status.example.com",
+  "external": true
+}
+```
+
+## OpenAPI-generated pages
+
+Attach an OpenAPI spec to a group to generate endpoint pages:
+
+```json
+{
+  "group": "API reference",
+  "openapi": "api-reference/openapi.json"
+}
+```
+
+When `pages` is omitted, all non-hidden operations are generated. When `pages` is present, only the listed operations are shown.
+
+## Navigation checklist
+
+- Put the most common getting-started path near the top.
+- Keep group names short.
+- Avoid deeply nested structures until the docs set is large enough to need them.
+- Keep API reference pages in a predictable Reference area.
+- Run a publish after changing navigation so search and public MCP reflect the current structure.

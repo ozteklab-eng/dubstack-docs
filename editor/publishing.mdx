@@ -4,18 +4,52 @@ description: Review and publish documentation changes through Git-backed workflo
 icon: git-pull-request
 ---
 
-This page documents Publishing for DubStack.
+Publishing moves source changes into the public docs runtime.
 
-## Overview
+The exact flow depends on your source type, but the contract is the same: source changes sync into published artifacts, then the live site serves those artifacts.
 
-Review and publish documentation changes through Git-backed workflows.
+## Source-backed publishing
 
-## What to configure
+For connected repositories:
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+1. Make a content or configuration change.
+2. Commit it to the connected branch or open a pull request.
+3. Merge when the change is reviewed.
+4. Let the webhook or manual update trigger a sync.
+5. Verify the live site.
 
-## Next steps
+## Hosted repository publishing
 
-This page is a scaffold for the full product documentation pass.
+For hosted repository sites:
+
+1. Edit from the dashboard.
+2. Save through the dashboard flow.
+3. Review the activity feed.
+4. Open the live page after the update finishes.
+
+You can connect a customer-owned repository later when your team wants to move ownership out of the hosted source.
+
+## Manual update
+
+Use manual update when:
+
+- A webhook did not arrive.
+- You changed a hosted OpenAPI spec URL.
+- You want to re-sync the current branch after provider maintenance.
+- Support asks you to refresh published artifacts.
+
+Manual update does not replace source control. It re-runs the publish path from the configured source.
+
+## Deployment checks
+
+After publishing, check:
+
+- The activity item finished successfully.
+- The dashboard shows the expected latest sync time.
+- Changed pages open on the live site.
+- Navigation and search include new pages.
+- API endpoint pages render if the change involved OpenAPI.
+
+<Callout type="warning">
+  Do not rely on dashboard preview alone for production verification. Always open the live URL after the publish finishes.
+</Callout>

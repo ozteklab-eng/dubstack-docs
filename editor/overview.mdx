@@ -1,21 +1,47 @@
 ---
 title: Editor
-description: Edit pages, navigation, and configuration from the DubStack dashboard.
+description: Edit pages, navigation, and configuration from the dubstack dashboard.
 icon: pencil
 ---
 
-This page documents Editor for DubStack.
+The editor lets your team maintain docs without leaving the dashboard.
 
-## Overview
+It works with the same source-backed files that power the published site.
 
-Edit pages, navigation, and configuration from the DubStack dashboard.
+## Editor panes
 
-## What to configure
+| Pane | Purpose |
+| --- | --- |
+| Navigation | Browse the published docs structure and open pages. |
+| File browser | Open source files directly when you know the path. |
+| Assets | Upload and manage images or other docs assets. |
+| Site configuration | Edit visual site settings backed by `dubstack.json`. |
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+## Edit a page
 
-## Next steps
+1. Open the dashboard.
+2. Go to Editor.
+3. Choose a page from Navigation or File browser.
+4. Edit the MDX content.
+5. Preview the rendered result.
+6. Save through the source-backed publish flow.
 
-This page is a scaffold for the full product documentation pass.
+## MDX support
+
+The editor supports standard Markdown plus MDX components used by the docs renderer, including cards, callouts, tabs, accordions, steps, and code examples.
+
+Use slash commands to insert supported blocks without memorizing every component shape.
+
+## Configuration editing
+
+Site configuration is available from the editor so docs authors can update navigation, branding, theme settings, OpenAPI references, and contextual actions in the same workflow as page content.
+
+Configuration changes should still be reviewed like code changes because they affect the public site.
+
+## Good editing practice
+
+- Keep each change focused.
+- Preview pages before publishing.
+- Avoid mixing content rewrites with navigation refactors in one change.
+- Keep reusable snippets for repeated text.
+- Commit assets with the pages that reference them.
