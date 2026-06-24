@@ -1,21 +1,72 @@
 ---
 title: Hosted repository flow
-description: Start with a DubStack-hosted repository when you do not want to connect Git yet.
+description: Start with a hosted repository when you do not want to connect Git yet.
 icon: cloud
 ---
 
-This page documents Hosted repository flow for DubStack.
+Use the hosted repository flow when you want to create a site before connecting your own GitHub or GitLab repository.
 
-## Overview
+This is useful for trials, demos, and first drafts where the priority is to see the docs site running quickly.
 
-Start with a DubStack-hosted repository when you do not want to connect Git yet.
+## When to use it
 
-## What to configure
+Choose the hosted repository flow when:
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+- You do not have a docs repository yet.
+- You want to explore the dashboard editor first.
+- You want a starter site without installing a Git provider app immediately.
+- You are validating the docs structure before moving it into a team-owned repository.
 
-## Next steps
+Choose a connected Git repository instead when your team already has a production docs repo or requires pull-request review from the start.
 
-This page is a scaffold for the full product documentation pass.
+## What gets created
+
+The hosted flow creates a starter-backed documentation site with:
+
+- A live `dubstack.live` URL.
+- Starter MDX pages.
+- A `dubstack.json` configuration file.
+- Dashboard editor access.
+- Manual update and publish activity in the dashboard.
+
+The site still follows the normal publish model. Content changes are synchronized into the published docs artifacts before the public site renders them.
+
+## Create a hosted site
+
+From onboarding:
+
+1. Create or select an organization.
+2. Choose the docs type and starter profile.
+3. Select the option to skip connecting Git for now.
+4. Let dubstack create the starter-backed site.
+5. Continue to the site dashboard.
+6. Open the live site once setup completes.
+
+## Edit the hosted starter
+
+After setup:
+
+1. Open the editor.
+2. Edit an existing MDX page or create a new one.
+3. Preview the page.
+4. Save the change.
+5. Publish or run a manual update from the dashboard.
+
+Use the Activity panel to confirm the update finished.
+
+## Move to your own Git provider later
+
+When your team is ready, connect GitHub or GitLab from Git settings.
+
+Before switching source ownership, confirm:
+
+- The target repository contains the current docs files.
+- `dubstack.json` is present.
+- The selected branch exists.
+- Team members know where future reviews should happen.
+
+After the repository is connected, run a manual update and verify the live site still renders the expected content.
+
+## Limitations
+
+A hosted repository flow is best for getting started. For production team workflows, connect a repository owned by your organization so reviews, branch protection, and audit history stay with your normal Git process.

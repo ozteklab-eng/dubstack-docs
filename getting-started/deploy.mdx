@@ -1,21 +1,71 @@
 ---
 title: Deploy
-description: Publish documentation changes through the Git and R2 sync pipeline.
+description: Publish documentation changes through the Git and content sync pipeline.
 icon: upload-cloud
 ---
 
-This page documents Deploy for DubStack.
+A deploy publishes the latest documentation content to the live site.
 
-## Overview
+dubstack deploys are content deploys. The source starts in Git or the hosted starter source, then synchronized artifacts are served by the public docs frontend.
 
-Publish documentation changes through the Git and R2 sync pipeline.
+## Publish flow
 
-## What to configure
+```text
+Edit docs
+-> save or commit
+-> publish/manual update
+-> sync content artifacts
+-> update live site
+```
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+The public site should serve the previous known-good version until a new sync completes successfully.
 
-## Next steps
+## Manual update
 
-This page is a scaffold for the full product documentation pass.
+Use manual update when you want to pull the latest source content into the live site immediately.
+
+Manual update is useful after:
+
+- Connecting a repository for the first time.
+- Changing navigation in `dubstack.json`.
+- Uploading or replacing an API spec.
+- Fixing a failed or stale deployment.
+- Verifying that the dashboard and live site are in sync.
+
+The dashboard records the update in Activity so you can see when it started and completed.
+
+## Branch previews
+
+Preview deployments let you review changes before they become the live production version.
+
+Use preview deployments for:
+
+- Pull request or merge request review.
+- Non-production branches.
+- Larger navigation or API reference changes.
+- Verifying generated docs before publishing them.
+
+A preview should be tied to a branch or review context. The production branch remains the source for the live site.
+
+## Validate a deploy
+
+After a deploy or manual update, check:
+
+- The Activity panel shows the update completed.
+- The live site loads without falling back to old content.
+- Edited pages show the expected content.
+- Navigation and links match `dubstack.json`.
+- Assets load from the live site without broken links.
+- API playground pages can find the expected OpenAPI spec when one is configured.
+
+## Troubleshooting
+
+If the live site does not update:
+
+1. Check the Activity panel for the latest update.
+2. Confirm the source branch is correct.
+3. Confirm `dubstack.json` is valid.
+4. Run a manual update.
+5. Hard refresh the live site after the update completes.
+
+If the deploy fails, keep the last known-good live site available while you fix the source content or connection issue.
