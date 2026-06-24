@@ -1,0 +1,89 @@
+---
+title: Playground authentication
+description: Configure how users authenticate when trying API requests from your docs.
+icon: key
+---
+
+The API playground lets readers try endpoints from a docs page.
+
+Authentication behavior is controlled by your OpenAPI spec and site configuration.
+
+## Define security in OpenAPI
+
+Use standard OpenAPI security schemes for bearer tokens, API keys, or basic auth.
+
+```json
+{
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key"
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ]
+}
+```
+
+When the playground sees a security scheme, it shows an authorization control for the request.
+
+## Keep secrets out of Git
+
+Do not commit real API keys, bearer tokens, or customer credentials into your docs repository.
+
+Use placeholders in examples:
+
+```bash
+curl https://api.example.com/v1/projects \
+  -H "x-api-key: <your-api-key>"
+```
+
+Readers enter their own value in the playground before sending a request.
+
+## Proxy behavior
+
+For browser safety, the playground can send requests through the DubStack docs backend instead of directly from the reader's browser.
+
+This helps avoid common CORS issues, but your API still decides whether the supplied credentials are valid.
+
+## Environment-specific servers
+
+Use OpenAPI `servers` to define where playground requests go:
+
+```json
+{
+  "servers": [
+    {
+      "url": "https://api.example.com",
+      "description": "Production"
+    },
+    {
+      "url": "https://api-staging.example.com",
+      "description": "Staging"
+    }
+  ]
+}
+```
+
+Make sure public docs point at an API environment you are comfortable exposing to readers.
+
+## When to hide the playground
+
+Hide or avoid interactive playgrounds for endpoints that:
+
+- mutate production data in risky ways
+- require private credentials readers will not have
+- are internal-only
+- are not ready for external usage
+
+For those pages, use code examples and explanatory copy instead.
+
+<Callout type="info">
+  The playground is for trying your documented API. It is not a replacement for server-side authorization, rate limiting, auditing, or abuse protection on your API.
+</Callout>

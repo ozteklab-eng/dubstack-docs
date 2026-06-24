@@ -1,0 +1,122 @@
+---
+title: OpenAPI setup
+description: Add an OpenAPI spec and publish generated API endpoint pages.
+icon: file-json
+---
+
+OpenAPI setup has two parts:
+
+- add the spec file to your docs repository
+- reference that spec from `dubstack.json`
+
+## Add the spec file
+
+Place your primary spec at:
+
+```text
+api-reference/openapi.json
+```
+
+For multiple APIs, use named specs:
+
+```text
+api-reference/openapi/payments.json
+api-reference/openapi/admin.json
+```
+
+DubStack supports JSON OpenAPI specs in Git-backed docs. Keep the spec committed with the docs so deployments are reproducible.
+
+## Generate all endpoint pages
+
+Add `openapi` to a navigation group and omit `pages` to publish every non-hidden operation from the spec:
+
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Reference",
+        "groups": [
+          {
+            "group": "API reference",
+            "icon": "book",
+            "openapi": "api-reference/openapi.json"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+When the site syncs, DubStack generates endpoint pages from the spec operations.
+
+## Publish selected endpoints
+
+If you only want selected operations visible, keep `openapi` on the group and list the operations in `pages`:
+
+```json
+{
+  "group": "API reference",
+  "openapi": "api-reference/openapi.json",
+  "pages": [
+    "GET /v1/projects",
+    "POST /v1/projects",
+    "GET /v1/projects/{projectId}"
+  ]
+}
+```
+
+Use uppercase HTTP methods and the exact path from the OpenAPI spec.
+
+## Hide operations from generated navigation
+
+Set `x-hidden: true` on an OpenAPI operation when it should stay out of auto-generated navigation:
+
+```json
+{
+  "paths": {
+    "/internal/jobs": {
+      "post": {
+        "summary": "Create internal job",
+        "x-hidden": true,
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Use this for internal, experimental, deprecated, or support-only endpoints.
+
+## Manual endpoint pages
+
+You can also create an MDX page and attach it to an operation with frontmatter:
+
+```mdx
+---
+title: Create project
+openapi: "POST /v1/projects"
+---
+
+Use this endpoint to create a project.
+```
+
+Manual pages are useful when an endpoint needs onboarding copy, diagrams, or workflow context beyond the generated reference.
+
+## Validate before publishing
+
+Before committing a spec:
+
+- Confirm the spec is valid OpenAPI 3.x JSON.
+- Confirm operation paths and methods match the values in `dubstack.json`.
+- Keep servers and authentication settings accurate for the environment you want users to try.
+- Run a manual update from the dashboard after changing a hosted spec URL that does not create a Git commit.
+
+<Callout type="warning">
+  If a generated endpoint page is blank, check that the `openapi` reference matches the spec path and that the operation exists in the spec.
+</Callout>

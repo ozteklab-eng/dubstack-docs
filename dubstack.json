@@ -163,7 +163,9 @@
             "group": "API reference",
             "icon": "book",
             "pages": [
-              { "slug": "api-reference/introduction", "icon": "book" }
+              { "slug": "api-reference/introduction", "icon": "book" },
+              { "slug": "api-reference/openapi-setup", "icon": "file-json" },
+              { "slug": "api-reference/playground-authentication", "icon": "key" }
             ]
           },
           {

@@ -1,21 +1,45 @@
 ---
 title: API reference
-description: Document DubStack APIs intended for customer use.
+description: Publish interactive API documentation from OpenAPI specs and MDX endpoint pages.
 icon: book
 ---
 
-This page documents API reference for DubStack.
+DubStack can render API documentation from OpenAPI specs, manually authored MDX endpoint pages, or a mix of both.
 
-## Overview
+Use this section when your docs need endpoint pages, request examples, response schemas, and an interactive playground.
 
-Document DubStack APIs intended for customer use.
+## Supported API documentation paths
 
-## What to configure
+| Path | Use it when |
+| --- | --- |
+| OpenAPI-generated pages | You already have an OpenAPI 3.x JSON spec and want DubStack to generate endpoint pages from it. |
+| Manual MDX endpoint pages | You want full control over page copy while still attaching each page to an API operation. |
+| Embedded playgrounds | You want to place a runnable endpoint example inside a guide or tutorial. |
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+## Source of truth
 
-## Next steps
+Keep API specs in the same Git repository as the rest of your docs.
 
-This page is a scaffold for the full product documentation pass.
+The canonical location for the main spec is:
+
+```text
+api-reference/openapi.json
+```
+
+You can also store named specs under:
+
+```text
+api-reference/openapi/payments.json
+api-reference/openapi/admin.json
+```
+
+After the repo syncs, DubStack stores the spec with the published docs artifacts and uses it to render API reference pages and playgrounds.
+
+## What to read next
+
+- [OpenAPI setup](/api-reference/openapi-setup): add a spec and generate endpoint pages.
+- [Playground authentication](/api-reference/playground-authentication): configure how users try requests from the docs site.
+
+<Callout type="info">
+  Platform management API docs are separate from customer API docs. This section explains how to document your own product APIs inside a DubStack docs site.
+</Callout>
