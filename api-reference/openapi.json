@@ -1,0 +1,415 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "DubStack Docs Runtime API",
+    "version": "2026-06-25",
+    "description": "Public endpoints exposed by a published DubStack docs site for AI access, assistant chat, and API playground execution."
+  },
+  "servers": [
+    {
+      "url": "https://dubstack-docs-test.dubstack.live",
+      "description": "Published docs site"
+    }
+  ],
+  "tags": [
+    {
+      "name": "AI Access",
+      "description": "Endpoints agents and AI clients use to read published documentation."
+    },
+    {
+      "name": "Assistant",
+      "description": "Reader-facing assistant endpoints for published docs sites."
+    },
+    {
+      "name": "API Playground",
+      "description": "Endpoints used by the API playground to load specs and proxy safe test requests."
+    }
+  ],
+  "paths": {
+    "/mcp": {
+      "get": {
+        "operationId": "getMcpDiscovery",
+        "summary": "Get MCP discovery",
+        "description": "Returns public MCP discovery metadata for the current docs site.",
+        "tags": ["AI Access"],
+        "responses": {
+          "200": {
+            "description": "MCP discovery metadata.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/McpDiscovery"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "callMcpServer",
+        "summary": "Call MCP server",
+        "description": "Handles Streamable HTTP MCP requests for public, read-only docs tools.",
+        "tags": ["AI Access"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonRpcRequest"
+              },
+              "examples": {
+                "toolsList": {
+                  "summary": "List available tools",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/list"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "MCP JSON-RPC response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonRpcResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "closeMcpSession",
+        "summary": "Close MCP session",
+        "description": "Closes an MCP Streamable HTTP session when the client no longer needs it.",
+        "tags": ["AI Access"],
+        "responses": {
+          "200": {
+            "description": "Session close response."
+          },
+          "204": {
+            "description": "Session closed without a response body."
+          }
+        }
+      }
+    },
+    "/.well-known/mcp/server-card.json": {
+      "get": {
+        "operationId": "getMcpServerCard",
+        "summary": "Get MCP server card",
+        "description": "Returns a single server-card document that MCP-capable clients can use to discover the docs site's public MCP endpoint.",
+        "tags": ["AI Access"],
+        "responses": {
+          "200": {
+            "description": "MCP server card.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/McpServerCard"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/.well-known/mcp/server-cards.json": {
+      "get": {
+        "operationId": "getMcpServerCards",
+        "summary": "Get MCP server cards",
+        "description": "Returns all server cards advertised by the docs site.",
+        "tags": ["AI Access"],
+        "responses": {
+          "200": {
+            "description": "MCP server cards collection.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "servers": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/McpServerCard"
+                      }
+                    }
+                  },
+                  "required": ["servers"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/llms.txt": {
+      "get": {
+        "operationId": "getLlmsIndex",
+        "summary": "Get LLM index",
+        "description": "Returns the compact LLM-readable index for the current docs site.",
+        "tags": ["AI Access"],
+        "responses": {
+          "200": {
+            "description": "Plain-text LLM index.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/llms-full.txt": {
+      "get": {
+        "operationId": "getFullLlmsIndex",
+        "summary": "Get full LLM index",
+        "description": "Returns the expanded LLM-readable index with more published docs content.",
+        "tags": ["AI Access"],
+        "responses": {
+          "200": {
+            "description": "Plain-text expanded LLM index.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/chat": {
+      "post": {
+        "operationId": "askAssistant",
+        "summary": "Ask assistant",
+        "description": "Sends a reader question to the public docs assistant for the current site.",
+        "tags": ["Assistant"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssistantRequest"
+              },
+              "examples": {
+                "question": {
+                  "summary": "Ask a docs question",
+                  "value": {
+                    "message": "How do I connect a GitHub repository?",
+                    "page": "/getting-started/connect-git"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Assistant answer with optional sources.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssistantResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Assistant backend is unavailable."
+          }
+        }
+      }
+    },
+    "/api/playground/spec": {
+      "get": {
+        "operationId": "getPlaygroundSpec",
+        "summary": "Get playground spec",
+        "description": "Loads a published OpenAPI specification for the current docs site so the browser playground can render endpoint pages.",
+        "tags": ["API Playground"],
+        "parameters": [
+          {
+            "name": "spec",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "api-reference"
+            },
+            "description": "Spec name. The default resolves to api-reference/openapi.json."
+          },
+          {
+            "name": "branch",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Preview branch to read from."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Published OpenAPI spec payload.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublishedSpec"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Spec not found."
+          }
+        }
+      }
+    },
+    "/api/playground/proxy": {
+      "post": {
+        "operationId": "proxyPlaygroundRequest",
+        "summary": "Proxy playground request",
+        "description": "Proxies a reader-triggered playground request to an origin allowed by the published OpenAPI spec.",
+        "tags": ["API Playground"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlaygroundProxyRequest"
+              },
+              "examples": {
+                "getRequest": {
+                  "summary": "Proxy a GET request",
+                  "value": {
+                    "url": "https://api.example.com/v1/items",
+                    "method": "GET",
+                    "headers": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Proxied response from the configured API origin.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlaygroundProxyResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Target origin is not allowed by the published spec."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "McpDiscovery": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "name": { "type": "string" },
+          "transport": { "type": "string" },
+          "endpoint": { "type": "string" }
+        }
+      },
+      "McpServerCard": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "url": { "type": "string", "format": "uri" }
+        }
+      },
+      "JsonRpcRequest": {
+        "type": "object",
+        "properties": {
+          "jsonrpc": { "type": "string", "example": "2.0" },
+          "id": { "oneOf": [{ "type": "string" }, { "type": "number" }] },
+          "method": { "type": "string" },
+          "params": { "type": "object", "additionalProperties": true }
+        },
+        "required": ["jsonrpc", "method"]
+      },
+      "JsonRpcResponse": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "jsonrpc": { "type": "string", "example": "2.0" },
+          "id": { "oneOf": [{ "type": "string" }, { "type": "number" }, { "type": "null" }] },
+          "result": { "type": "object", "additionalProperties": true },
+          "error": { "type": "object", "additionalProperties": true }
+        }
+      },
+      "AssistantRequest": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "message": { "type": "string" },
+          "question": { "type": "string" },
+          "page": { "type": "string" }
+        }
+      },
+      "AssistantResponse": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "answer": { "type": "string" },
+          "message": { "type": "string" },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        }
+      },
+      "PublishedSpec": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "display_name": { "type": "string" },
+          "base_url": { "type": ["string", "null"] },
+          "spec_content": { "type": "object", "additionalProperties": true }
+        },
+        "required": ["name", "display_name", "spec_content"]
+      },
+      "PlaygroundProxyRequest": {
+        "type": "object",
+        "properties": {
+          "url": { "type": "string", "format": "uri" },
+          "method": { "type": "string", "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"] },
+          "headers": { "type": "object", "additionalProperties": { "type": "string" } },
+          "body": {}
+        },
+        "required": ["url"]
+      },
+      "PlaygroundProxyResponse": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "status": { "type": "number" },
+          "headers": { "type": "object", "additionalProperties": { "type": "string" } },
+          "body": {}
+        }
+      }
+    }
+  }
+}

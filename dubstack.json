@@ -4,11 +4,17 @@
     "name": "dubstack docs",
     "tagline": "Build, publish, and scale developer documentation with DubStack.",
     "logo": {
-      "light": "/assets/logo-light.svg",
-      "dark": "/assets/logo-dark.svg"
+      "light": "/api/static/logo/light.svg",
+      "dark": "/api/static/logo/dark.svg"
     },
     "favicon": "/assets/favicon.svg",
     "timezone": "UTC"
+  },
+  "api": {
+    "openapi": "api-reference/openapi.json",
+    "playground": {
+      "display": "interactive"
+    }
   },
   "theme": "mint",
   "colors": {
@@ -167,6 +173,11 @@
               { "slug": "api-reference/openapi-setup", "icon": "file-json" },
               { "slug": "api-reference/playground-authentication", "icon": "key" }
             ]
+          },
+          {
+            "group": "Docs runtime API",
+            "icon": "terminal",
+            "openapi": "api-reference/openapi.json"
           },
           {
             "group": "Reference",
