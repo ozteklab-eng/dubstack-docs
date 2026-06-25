@@ -16,11 +16,11 @@
       "display": "interactive"
     }
   },
-  "theme": "mint",
+  "theme": "luma",
   "colors": {
-    "primary": "#f97316",
-    "light": "#f97316",
-    "dark": "#fb923c"
+    "primary": "#15803D",
+    "light": "#07C983",
+    "dark": "#15803D"
   },
   "topbarCtaButton": {
     "label": "Get started",
