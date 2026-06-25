@@ -3,7 +3,7 @@
   "info": {
     "title": "DubStack Docs Runtime API",
     "version": "2026-06-25",
-    "description": "Public endpoints exposed by a published DubStack docs site for AI access, assistant chat, and API playground execution."
+    "description": "Public endpoints exposed by a published DubStack docs site for AI access, assistant chat, LLM-readable exports, and browser API playground execution. These endpoints run on each published docs domain and are scoped to that site."
   },
   "servers": [
     {
@@ -30,15 +30,37 @@
       "get": {
         "operationId": "getMcpDiscovery",
         "summary": "Get MCP discovery",
-        "description": "Returns public MCP discovery metadata for the current docs site.",
-        "tags": ["AI Access"],
+        "description": "Returns the public Model Context Protocol discovery document for the current docs site. Use this endpoint to verify that the site exposes a read-only MCP surface for agents and MCP-capable clients.",
+        "tags": [
+          "AI Access"
+        ],
         "responses": {
           "200": {
-            "description": "MCP discovery metadata.",
+            "description": "Public MCP discovery metadata for the current docs site.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/McpDiscovery"
+                },
+                "examples": {
+                  "discovery": {
+                    "summary": "Discovery response",
+                    "value": {
+                      "name": "DubStack Docs MCP",
+                      "description": "Read-only MCP server for the published docs site.",
+                      "transport": "streamable-http",
+                      "endpoint": "https://dubstack-docs-test.dubstack.live/mcp",
+                      "capabilities": {
+                        "tools": [
+                          "search",
+                          "query_docs_filesystem"
+                        ],
+                        "resources": [
+                          "skill.md"
+                        ]
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -48,8 +70,10 @@
       "post": {
         "operationId": "callMcpServer",
         "summary": "Call MCP server",
-        "description": "Handles Streamable HTTP MCP requests for public, read-only docs tools.",
-        "tags": ["AI Access"],
+        "description": "Handles Streamable HTTP JSON-RPC requests for the public docs MCP server. Public MCP tools are read-only and scoped to the published documentation for the current site.",
+        "tags": [
+          "AI Access"
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -65,18 +89,55 @@
                     "id": 1,
                     "method": "tools/list"
                   }
+                },
+                "searchDocs": {
+                  "summary": "Search published docs",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 2,
+                    "method": "tools/call",
+                    "params": {
+                      "name": "search",
+                      "arguments": {
+                        "query": "custom domain setup",
+                        "limit": 5
+                      }
+                    }
+                  }
                 }
               }
             }
-          }
+          },
+          "description": "JSON-RPC request sent by an MCP client."
         },
         "responses": {
           "200": {
-            "description": "MCP JSON-RPC response.",
+            "description": "JSON-RPC response from the public MCP server.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/JsonRpcResponse"
+                },
+                "examples": {
+                  "tools": {
+                    "summary": "Tool list response",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 1,
+                      "result": {
+                        "tools": [
+                          {
+                            "name": "search",
+                            "description": "Search the published docs for relevant pages."
+                          },
+                          {
+                            "name": "query_docs_filesystem",
+                            "description": "Read published docs through a read-only virtual filesystem."
+                          }
+                        ]
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -86,11 +147,38 @@
       "delete": {
         "operationId": "closeMcpSession",
         "summary": "Close MCP session",
-        "description": "Closes an MCP Streamable HTTP session when the client no longer needs it.",
-        "tags": ["AI Access"],
+        "description": "Closes a Streamable HTTP MCP session. Clients call this when they no longer need a session-bound MCP connection.",
+        "tags": [
+          "AI Access"
+        ],
         "responses": {
           "200": {
-            "description": "Session close response."
+            "description": "Session close acknowledgement.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean",
+                      "description": "Whether the session close request was accepted.",
+                      "example": true
+                    }
+                  },
+                  "required": [
+                    "ok"
+                  ]
+                },
+                "examples": {
+                  "closed": {
+                    "summary": "Session closed",
+                    "value": {
+                      "ok": true
+                    }
+                  }
+                }
+              }
+            }
           },
           "204": {
             "description": "Session closed without a response body."
@@ -103,14 +191,27 @@
         "operationId": "getMcpServerCard",
         "summary": "Get MCP server card",
         "description": "Returns a single server-card document that MCP-capable clients can use to discover the docs site's public MCP endpoint.",
-        "tags": ["AI Access"],
+        "tags": [
+          "AI Access"
+        ],
         "responses": {
           "200": {
-            "description": "MCP server card.",
+            "description": "Server card that describes the public MCP endpoint for this docs site.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/McpServerCard"
+                },
+                "examples": {
+                  "serverCard": {
+                    "summary": "Public docs MCP server card",
+                    "value": {
+                      "name": "DubStack Docs MCP",
+                      "description": "Read-only MCP access to the published docs site.",
+                      "url": "https://dubstack-docs-test.dubstack.live/mcp",
+                      "transport": "streamable-http"
+                    }
+                  }
                 }
               }
             }
@@ -123,7 +224,9 @@
         "operationId": "getMcpServerCards",
         "summary": "Get MCP server cards",
         "description": "Returns all server cards advertised by the docs site.",
-        "tags": ["AI Access"],
+        "tags": [
+          "AI Access"
+        ],
         "responses": {
           "200": {
             "description": "MCP server cards collection.",
@@ -139,7 +242,24 @@
                       }
                     }
                   },
-                  "required": ["servers"]
+                  "required": [
+                    "servers"
+                  ]
+                },
+                "examples": {
+                  "serverCards": {
+                    "summary": "Server cards collection",
+                    "value": {
+                      "servers": [
+                        {
+                          "name": "DubStack Docs MCP",
+                          "description": "Read-only MCP access to the published docs site.",
+                          "url": "https://dubstack-docs-test.dubstack.live/mcp",
+                          "transport": "streamable-http"
+                        }
+                      ]
+                    }
+                  }
                 }
               }
             }
@@ -152,7 +272,9 @@
         "operationId": "getLlmsIndex",
         "summary": "Get LLM index",
         "description": "Returns the compact LLM-readable index for the current docs site.",
-        "tags": ["AI Access"],
+        "tags": [
+          "AI Access"
+        ],
         "responses": {
           "200": {
             "description": "Plain-text LLM index.",
@@ -172,7 +294,9 @@
         "operationId": "getFullLlmsIndex",
         "summary": "Get full LLM index",
         "description": "Returns the expanded LLM-readable index with more published docs content.",
-        "tags": ["AI Access"],
+        "tags": [
+          "AI Access"
+        ],
         "responses": {
           "200": {
             "description": "Plain-text expanded LLM index.",
@@ -192,7 +316,9 @@
         "operationId": "askAssistant",
         "summary": "Ask assistant",
         "description": "Sends a reader question to the public docs assistant for the current site.",
-        "tags": ["Assistant"],
+        "tags": [
+          "Assistant"
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -234,7 +360,9 @@
         "operationId": "getPlaygroundSpec",
         "summary": "Get playground spec",
         "description": "Loads a published OpenAPI specification for the current docs site so the browser playground can render endpoint pages.",
-        "tags": ["API Playground"],
+        "tags": [
+          "API Playground"
+        ],
         "parameters": [
           {
             "name": "spec",
@@ -278,7 +406,9 @@
         "operationId": "proxyPlaygroundRequest",
         "summary": "Proxy playground request",
         "description": "Proxies a reader-triggered playground request to an origin allowed by the published OpenAPI spec.",
-        "tags": ["API Playground"],
+        "tags": [
+          "API Playground"
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -323,55 +453,219 @@
         "type": "object",
         "additionalProperties": true,
         "properties": {
-          "name": { "type": "string" },
-          "transport": { "type": "string" },
-          "endpoint": { "type": "string" }
-        }
+          "name": {
+            "type": "string",
+            "description": "Human-readable name for the docs MCP server.",
+            "example": "DubStack Docs MCP"
+          },
+          "description": {
+            "type": "string",
+            "description": "Short description of what the MCP server exposes.",
+            "example": "Read-only MCP server for the published docs site."
+          },
+          "transport": {
+            "type": "string",
+            "description": "MCP transport supported by this endpoint.",
+            "enum": [
+              "streamable-http"
+            ],
+            "example": "streamable-http"
+          },
+          "endpoint": {
+            "type": "string",
+            "format": "uri",
+            "description": "Absolute URL clients should use for MCP requests.",
+            "example": "https://dubstack-docs-test.dubstack.live/mcp"
+          },
+          "capabilities": {
+            "type": "object",
+            "description": "High-level feature summary for discovery clients.",
+            "additionalProperties": true,
+            "properties": {
+              "tools": {
+                "type": "array",
+                "description": "Read-only MCP tools available for the published docs site.",
+                "items": {
+                  "type": "string"
+                },
+                "example": [
+                  "search",
+                  "query_docs_filesystem"
+                ]
+              },
+              "resources": {
+                "type": "array",
+                "description": "Static MCP resources exposed by the docs site.",
+                "items": {
+                  "type": "string"
+                },
+                "example": [
+                  "skill.md"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "name",
+          "transport",
+          "endpoint"
+        ]
       },
       "McpServerCard": {
         "type": "object",
         "additionalProperties": true,
         "properties": {
-          "name": { "type": "string" },
-          "description": { "type": "string" },
-          "url": { "type": "string", "format": "uri" }
-        }
+          "name": {
+            "type": "string",
+            "description": "Display name for the public docs MCP server.",
+            "example": "DubStack Docs MCP"
+          },
+          "description": {
+            "type": "string",
+            "description": "Short explanation of the server purpose.",
+            "example": "Read-only MCP access to the published docs site."
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Absolute MCP endpoint URL.",
+            "example": "https://dubstack-docs-test.dubstack.live/mcp"
+          },
+          "transport": {
+            "type": "string",
+            "description": "Transport protocol used by the MCP endpoint.",
+            "enum": [
+              "streamable-http"
+            ],
+            "example": "streamable-http"
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "url"
+        ]
       },
       "JsonRpcRequest": {
         "type": "object",
         "properties": {
-          "jsonrpc": { "type": "string", "example": "2.0" },
-          "id": { "oneOf": [{ "type": "string" }, { "type": "number" }] },
-          "method": { "type": "string" },
-          "params": { "type": "object", "additionalProperties": true }
+          "jsonrpc": {
+            "type": "string",
+            "description": "JSON-RPC protocol version. MCP uses 2.0.",
+            "example": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "description": "Client-generated request identifier returned in the matching response.",
+            "example": 1
+          },
+          "method": {
+            "type": "string",
+            "description": "MCP JSON-RPC method to invoke, such as tools/list or tools/call.",
+            "example": "tools/list"
+          },
+          "params": {
+            "type": "object",
+            "description": "Method-specific parameters. Tool calls include a tool name and arguments object.",
+            "additionalProperties": true,
+            "example": {
+              "name": "search",
+              "arguments": {
+                "query": "custom domain setup",
+                "limit": 5
+              }
+            }
+          }
         },
-        "required": ["jsonrpc", "method"]
+        "required": [
+          "jsonrpc",
+          "method"
+        ]
       },
       "JsonRpcResponse": {
         "type": "object",
         "additionalProperties": true,
         "properties": {
-          "jsonrpc": { "type": "string", "example": "2.0" },
-          "id": { "oneOf": [{ "type": "string" }, { "type": "number" }, { "type": "null" }] },
-          "result": { "type": "object", "additionalProperties": true },
-          "error": { "type": "object", "additionalProperties": true }
-        }
+          "jsonrpc": {
+            "type": "string",
+            "description": "JSON-RPC protocol version.",
+            "example": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Identifier from the request, or null for responses that cannot be matched to a request.",
+            "example": 1
+          },
+          "result": {
+            "type": "object",
+            "description": "Successful method result. Shape depends on the MCP method.",
+            "additionalProperties": true
+          },
+          "error": {
+            "type": "object",
+            "description": "JSON-RPC error object when the request fails.",
+            "additionalProperties": true,
+            "properties": {
+              "code": {
+                "type": "number",
+                "description": "JSON-RPC error code.",
+                "example": -32601
+              },
+              "message": {
+                "type": "string",
+                "description": "Human-readable error message.",
+                "example": "Method not found"
+              }
+            }
+          }
+        },
+        "required": [
+          "jsonrpc"
+        ]
       },
       "AssistantRequest": {
         "type": "object",
         "additionalProperties": true,
         "properties": {
-          "message": { "type": "string" },
-          "question": { "type": "string" },
-          "page": { "type": "string" }
+          "message": {
+            "type": "string"
+          },
+          "question": {
+            "type": "string"
+          },
+          "page": {
+            "type": "string"
+          }
         }
       },
       "AssistantResponse": {
         "type": "object",
         "additionalProperties": true,
         "properties": {
-          "answer": { "type": "string" },
-          "message": { "type": "string" },
+          "answer": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
           "sources": {
             "type": "array",
             "items": {
@@ -384,29 +678,73 @@
       "PublishedSpec": {
         "type": "object",
         "properties": {
-          "name": { "type": "string" },
-          "display_name": { "type": "string" },
-          "base_url": { "type": ["string", "null"] },
-          "spec_content": { "type": "object", "additionalProperties": true }
+          "name": {
+            "type": "string"
+          },
+          "display_name": {
+            "type": "string"
+          },
+          "base_url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "spec_content": {
+            "type": "object",
+            "additionalProperties": true
+          }
         },
-        "required": ["name", "display_name", "spec_content"]
+        "required": [
+          "name",
+          "display_name",
+          "spec_content"
+        ]
       },
       "PlaygroundProxyRequest": {
         "type": "object",
         "properties": {
-          "url": { "type": "string", "format": "uri" },
-          "method": { "type": "string", "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"] },
-          "headers": { "type": "object", "additionalProperties": { "type": "string" } },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH",
+              "DELETE",
+              "OPTIONS",
+              "HEAD"
+            ]
+          },
+          "headers": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
           "body": {}
         },
-        "required": ["url"]
+        "required": [
+          "url"
+        ]
       },
       "PlaygroundProxyResponse": {
         "type": "object",
         "additionalProperties": true,
         "properties": {
-          "status": { "type": "number" },
-          "headers": { "type": "object", "additionalProperties": { "type": "string" } },
+          "status": {
+            "type": "number"
+          },
+          "headers": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
           "body": {}
         }
       }
