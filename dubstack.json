@@ -4,8 +4,8 @@
     "name": "dubstack docs",
     "tagline": "Build, publish, and scale developer documentation with DubStack.",
     "logo": {
-      "light": "/api/static/logo/light.svg",
-      "dark": "/api/static/logo/dark.svg"
+      "light": "/assets/logo-light.svg",
+      "dark": "/assets/logo-dark.svg"
     },
     "favicon": "/assets/favicon.svg",
     "timezone": "UTC"
