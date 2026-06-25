@@ -271,17 +271,23 @@
       "get": {
         "operationId": "getLlmsIndex",
         "summary": "Get LLM index",
-        "description": "Returns the compact LLM-readable index for the current docs site.",
+        "description": "Returns the compact LLM-readable index for the current docs site. This export gives agents a fast overview of published pages, canonical URLs, and the highest-value entry points without requiring a browser.",
         "tags": [
           "AI Access"
         ],
         "responses": {
           "200": {
-            "description": "Plain-text LLM index.",
+            "description": "Compact plain-text index of the published docs site.",
             "content": {
               "text/plain": {
                 "schema": {
                   "type": "string"
+                },
+                "examples": {
+                  "index": {
+                    "summary": "Compact LLM index",
+                    "value": "# DubStack Docs\n\n> Product documentation for building, publishing, and operating DubStack docs sites.\n\n## Pages\n- [Quickstart](https://dubstack-docs-test.dubstack.live/quickstart)\n- [MCP](https://dubstack-docs-test.dubstack.live/ai/mcp)\n- [API reference](https://dubstack-docs-test.dubstack.live/api-reference/introduction)"
+                  }
                 }
               }
             }
@@ -293,17 +299,23 @@
       "get": {
         "operationId": "getFullLlmsIndex",
         "summary": "Get full LLM index",
-        "description": "Returns the expanded LLM-readable index with more published docs content.",
+        "description": "Returns the expanded LLM-readable export for the current docs site. Use this when an agent needs deeper page context and more body content than the compact index provides.",
         "tags": [
           "AI Access"
         ],
         "responses": {
           "200": {
-            "description": "Plain-text expanded LLM index.",
+            "description": "Expanded plain-text export with page summaries and selected body content.",
             "content": {
               "text/plain": {
                 "schema": {
                   "type": "string"
+                },
+                "examples": {
+                  "fullIndex": {
+                    "summary": "Expanded LLM index",
+                    "value": "# DubStack Docs\n\n## Quickstart\nLaunch a docs site, connect Git, customize content, and publish.\n\n## Public MCP\nDubStack exposes read-only MCP tools so agents can search and inspect published docs."
+                  }
                 }
               }
             }
@@ -315,7 +327,7 @@
       "post": {
         "operationId": "askAssistant",
         "summary": "Ask assistant",
-        "description": "Sends a reader question to the public docs assistant for the current site.",
+        "description": "Sends a reader question to the public docs assistant for the current site. The assistant answers from the published documentation and returns source links when retrieval finds relevant pages.",
         "tags": [
           "Assistant"
         ],
@@ -330,21 +342,37 @@
                 "question": {
                   "summary": "Ask a docs question",
                   "value": {
-                    "message": "How do I connect a GitHub repository?",
-                    "page": "/getting-started/connect-git"
+                    "message": "How do I connect a custom domain?",
+                    "page": "/deployment/custom-domains"
                   }
                 }
               }
             }
-          }
+          },
+          "description": "Reader question and optional page context for the public assistant."
         },
         "responses": {
           "200": {
-            "description": "Assistant answer with optional sources.",
+            "description": "Assistant answer generated from the published docs, with optional source citations.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/AssistantResponse"
+                },
+                "examples": {
+                  "answer": {
+                    "summary": "Assistant answer",
+                    "value": {
+                      "answer": "Open Settings, choose Domain setup, enter your domain, then add the DNS records shown in the dashboard. Once DNS propagates, verify the domain and publish your site.",
+                      "sources": [
+                        {
+                          "title": "Custom domains",
+                          "url": "https://dubstack-docs-test.dubstack.live/deployment/custom-domains",
+                          "path": "/deployment/custom-domains"
+                        }
+                      ]
+                    }
+                  }
                 }
               }
             }
@@ -359,7 +387,7 @@
       "get": {
         "operationId": "getPlaygroundSpec",
         "summary": "Get playground spec",
-        "description": "Loads a published OpenAPI specification for the current docs site so the browser playground can render endpoint pages.",
+        "description": "Loads a published OpenAPI specification for the current docs site. The docs renderer uses this endpoint to build API reference pages and the browser playground from the same source document.",
         "tags": [
           "API Playground"
         ],
@@ -372,7 +400,7 @@
               "type": "string",
               "default": "api-reference"
             },
-            "description": "Spec name. The default resolves to api-reference/openapi.json."
+            "description": "Spec name from dubstack.json or the default api-reference spec."
           },
           {
             "name": "branch",
@@ -381,16 +409,40 @@
             "schema": {
               "type": "string"
             },
-            "description": "Preview branch to read from."
+            "description": "Optional preview branch to read from when rendering branch preview docs."
           }
         ],
         "responses": {
           "200": {
-            "description": "Published OpenAPI spec payload.",
+            "description": "Published OpenAPI spec metadata and the parsed OpenAPI document.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PublishedSpec"
+                },
+                "examples": {
+                  "spec": {
+                    "summary": "Loaded API reference spec",
+                    "value": {
+                      "name": "api-reference",
+                      "display_name": "DubStack Docs Runtime API",
+                      "base_url": "https://dubstack-docs-test.dubstack.live",
+                      "spec_content": {
+                        "openapi": "3.1.0",
+                        "info": {
+                          "title": "DubStack Docs Runtime API",
+                          "version": "2026-06-25"
+                        },
+                        "paths": {
+                          "/mcp": {
+                            "get": {
+                              "summary": "Get MCP discovery"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -405,7 +457,7 @@
       "post": {
         "operationId": "proxyPlaygroundRequest",
         "summary": "Proxy playground request",
-        "description": "Proxies a reader-triggered playground request to an origin allowed by the published OpenAPI spec.",
+        "description": "Proxies a reader-triggered playground request to an origin allowed by the published OpenAPI spec. The proxy keeps browser playground calls scoped to documented operations and avoids exposing tenant secrets in the frontend.",
         "tags": [
           "API Playground"
         ],
@@ -417,25 +469,44 @@
                 "$ref": "#/components/schemas/PlaygroundProxyRequest"
               },
               "examples": {
-                "getRequest": {
-                  "summary": "Proxy a GET request",
+                "call": {
+                  "summary": "Proxy a documented endpoint request",
                   "value": {
-                    "url": "https://api.example.com/v1/items",
+                    "url": "https://dubstack-docs-test.dubstack.live/mcp",
                     "method": "GET",
-                    "headers": {}
+                    "headers": {
+                      "Accept": "application/json"
+                    }
                   }
                 }
               }
             }
-          }
+          },
+          "description": "Request generated by the browser playground for an allowed URL."
         },
         "responses": {
           "200": {
-            "description": "Proxied response from the configured API origin.",
+            "description": "Captured upstream response returned to the browser playground.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PlaygroundProxyResponse"
+                },
+                "examples": {
+                  "proxiedResponse": {
+                    "summary": "Proxied response",
+                    "value": {
+                      "status": 200,
+                      "headers": {
+                        "content-type": "application/json"
+                      },
+                      "body": {
+                        "name": "DubStack Docs MCP",
+                        "transport": "streamable-http",
+                        "endpoint": "https://dubstack-docs-test.dubstack.live/mcp"
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -646,14 +717,22 @@
         "additionalProperties": true,
         "properties": {
           "message": {
-            "type": "string"
+            "type": "string",
+            "description": "Reader question to answer from the published docs."
           },
           "question": {
-            "type": "string"
+            "type": "string",
+            "description": "Alternate question field accepted by clients that send question instead of message."
           },
           "page": {
-            "type": "string"
+            "type": "string",
+            "description": "Optional current docs page path used as local context for the answer."
           }
+        },
+        "description": "Question payload sent by the public assistant widget.",
+        "example": {
+          "message": "How do I publish a preview deployment?",
+          "page": "/deployment/preview-deployments"
         }
       },
       "AssistantResponse": {
@@ -661,52 +740,85 @@
         "additionalProperties": true,
         "properties": {
           "answer": {
-            "type": "string"
+            "type": "string",
+            "description": "Assistant response text generated from published documentation."
           },
           "message": {
-            "type": "string"
+            "type": "string",
+            "description": "Alternate answer field returned by compatibility paths."
           },
           "sources": {
             "type": "array",
             "items": {
               "type": "object",
               "additionalProperties": true
-            }
+            },
+            "description": "Published docs pages used as supporting context for the answer."
           }
+        },
+        "description": "Answer returned by the public assistant widget.",
+        "example": {
+          "answer": "Create a branch preview from the dashboard, review the generated URL, then merge or publish when ready.",
+          "sources": [
+            {
+              "title": "Preview deployments",
+              "url": "https://dubstack-docs-test.dubstack.live/deployment/preview-deployments",
+              "path": "/deployment/preview-deployments"
+            }
+          ]
         }
       },
       "PublishedSpec": {
         "type": "object",
         "properties": {
           "name": {
-            "type": "string"
+            "type": "string",
+            "description": "Stable spec identifier configured for the docs site."
           },
           "display_name": {
-            "type": "string"
+            "type": "string",
+            "description": "Human-friendly spec title shown in the dashboard and public docs."
           },
           "base_url": {
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "description": "Preferred base URL used by the playground when the spec does not define a server URL."
           },
           "spec_content": {
             "type": "object",
-            "additionalProperties": true
+            "additionalProperties": true,
+            "description": "Parsed OpenAPI document used to render endpoint docs and playground controls."
           }
         },
         "required": [
           "name",
           "display_name",
           "spec_content"
-        ]
+        ],
+        "description": "Wrapper returned by the spec loader, including display metadata and the parsed OpenAPI document.",
+        "example": {
+          "name": "api-reference",
+          "display_name": "DubStack Docs Runtime API",
+          "base_url": "https://dubstack-docs-test.dubstack.live",
+          "spec_content": {
+            "openapi": "3.1.0",
+            "info": {
+              "title": "DubStack Docs Runtime API",
+              "version": "2026-06-25"
+            },
+            "paths": {}
+          }
+        }
       },
       "PlaygroundProxyRequest": {
         "type": "object",
         "properties": {
           "url": {
             "type": "string",
-            "format": "uri"
+            "format": "uri",
+            "description": "Fully resolved URL for the documented operation selected in the playground."
           },
           "method": {
             "type": "string",
@@ -718,34 +830,61 @@
               "DELETE",
               "OPTIONS",
               "HEAD"
-            ]
+            ],
+            "description": "HTTP method for the documented operation."
           },
           "headers": {
             "type": "object",
             "additionalProperties": {
               "type": "string"
-            }
+            },
+            "description": "Headers supplied by the playground. Sensitive credentials should come from user input, not tenant defaults."
           },
-          "body": {}
+          "body": {
+            "description": "Request body supplied by the playground."
+          }
         },
         "required": [
           "url"
-        ]
+        ],
+        "description": "Browser playground request scoped to a URL allowed by the published OpenAPI spec.",
+        "example": {
+          "url": "https://dubstack-docs-test.dubstack.live/mcp",
+          "method": "GET",
+          "headers": {
+            "Accept": "application/json"
+          }
+        }
       },
       "PlaygroundProxyResponse": {
         "type": "object",
         "additionalProperties": true,
         "properties": {
           "status": {
-            "type": "number"
+            "type": "number",
+            "description": "HTTP status returned by the upstream operation."
           },
           "headers": {
             "type": "object",
             "additionalProperties": {
               "type": "string"
-            }
+            },
+            "description": "Response headers returned by the upstream operation."
           },
-          "body": {}
+          "body": {
+            "description": "Parsed response body when JSON, otherwise the raw response text."
+          }
+        },
+        "description": "Upstream response captured by the playground proxy.",
+        "example": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json"
+          },
+          "body": {
+            "name": "DubStack Docs MCP",
+            "transport": "streamable-http"
+          }
         }
       }
     }
