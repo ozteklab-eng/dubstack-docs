@@ -16,7 +16,7 @@
       "display": "interactive"
     }
   },
-  "theme": "luma",
+  "theme": "prism",
   "colors": {
     "primary": "#15803D",
     "light": "#07C983",
