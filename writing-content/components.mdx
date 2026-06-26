@@ -12,6 +12,10 @@ Use components when structure matters. Use plain Markdown when a paragraph or li
 
 Callouts highlight important information:
 
+<Callout type="info">
+  Use manual update when a hosted OpenAPI spec URL changes without a Git commit.
+</Callout>
+
 ```mdx
 <Callout type="info">
   Use manual update when a hosted OpenAPI spec URL changes without a Git commit.
@@ -23,6 +27,15 @@ Common types include `info`, `check`, `note`, `tip`, `warning`, and `danger`.
 ## Cards
 
 Cards link readers to related pages or workflows:
+
+<CardGroup cols={2}>
+  <Card title="Connect Git" icon="git-branch" href="/getting-started/connect-git">
+    Connect an existing repository.
+  </Card>
+  <Card title="Hosted repository" icon="cloud" href="/getting-started/skip-git-hosted-repo">
+    Start without installing a Git provider app immediately.
+  </Card>
+</CardGroup>
 
 ```mdx
 <CardGroup cols={2}>
@@ -41,6 +54,10 @@ Use short card titles and one focused sentence.
 
 Accordions are useful for optional details:
 
+<Accordion title="When should I use manual update?">
+  Use manual update when the source changed but a webhook did not trigger a publish.
+</Accordion>
+
 ```mdx
 <Accordion title="When should I use manual update?">
   Use manual update when the source changed but a webhook did not trigger a publish.
@@ -52,6 +69,15 @@ Do not hide critical first-run steps inside accordions.
 ## Tabs
 
 Tabs are useful for language, provider, or platform variants:
+
+<Tabs>
+  <Tab title="GitHub">
+    Install the GitHub app and select the repository.
+  </Tab>
+  <Tab title="GitLab">
+    Authorize GitLab access and select the project.
+  </Tab>
+</Tabs>
 
 ```mdx
 <Tabs>
@@ -70,6 +96,15 @@ Keep each tab equivalent so readers can compare choices.
 
 Use steps for ordered procedures:
 
+<Steps>
+  <Step title="Create the site">
+    Choose a source option from onboarding.
+  </Step>
+  <Step title="Publish">
+    Run the first sync and open the live URL.
+  </Step>
+</Steps>
+
 ```mdx
 <Steps>
   <Step title="Create the site">
@@ -85,11 +120,19 @@ Use steps for ordered procedures:
 
 Use parameter and response fields for API concepts:
 
+<ParamField path="siteId" type="string" required>
+  The site identifier from the dashboard URL or API response.
+</ParamField>
+
 ```mdx
 <ParamField path="siteId" type="string" required>
   The site identifier from the dashboard URL or API response.
 </ParamField>
 ```
+
+<ResponseField name="status" type="string">
+  Current deployment status.
+</ResponseField>
 
 ```mdx
 <ResponseField name="status" type="string">
