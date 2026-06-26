@@ -22,13 +22,6 @@
     "light": "#07C983",
     "dark": "#15803D"
   },
-  "global_settings": {
-    "code_block_background": "#090b0e",
-    "code_block_surface": "#121519",
-    "code_block_header_background": "#121519",
-    "code_block_border_color": "#232831",
-    "code_block_theme": "github-dark"
-  },
   "topbarCtaButton": {
     "label": "Get started",
     "href": "/quickstart"
