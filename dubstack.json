@@ -17,6 +17,7 @@
     }
   },
   "theme": "prism",
+  "palette": "classic",
   "colors": {
     "primary": "#15803D",
     "light": "#07C983",
