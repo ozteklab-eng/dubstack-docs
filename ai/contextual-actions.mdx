@@ -1,21 +1,81 @@
 ---
 title: Contextual actions
-description: Expose copy, markdown, and AI actions on documentation pages.
+description: Give readers and AI tools page-level actions for copying, opening, and asking about docs content.
 icon: mouse-pointer-click
 ---
 
-This page documents Contextual actions for DubStack.
+Contextual actions are the quick actions shown on published documentation pages.
 
-## Overview
+They help readers copy page content, open a markdown view, send the page to an AI assistant, or connect an external AI tool to the current docs context.
 
-Expose copy, markdown, and AI actions on documentation pages.
+## Common actions
 
-## What to configure
+| Action | What it does |
+| --- | --- |
+| Copy page | Copies the current page content for reuse in another tool. |
+| View as Markdown | Opens a markdown version of the current page. |
+| Ask assistant | Opens the docs assistant with the current page as context. |
+| Ask external AI | Opens a supported AI tool with page context when that action is enabled. |
+| Copy MCP details | Copies the public MCP endpoint or installation command for the docs site. |
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+## Configure actions
 
-## Next steps
+Configure contextual actions in `dubstack.json`.
 
-This page is a scaffold for the full product documentation pass.
+```json
+{
+  "contextual": {
+    "enabled": true,
+    "options": ["copy", "view", "claude", "chatgpt", "perplexity"],
+    "default": "copy",
+    "labels": {
+      "copy": "Copy page",
+      "view": "View as Markdown",
+      "claude": "Ask Claude",
+      "chatgpt": "Ask ChatGPT",
+      "perplexity": "Ask Perplexity"
+    }
+  }
+}
+```
+
+Use the smallest set of actions that helps your readers. A short menu is easier to understand and reduces accidental data sharing.
+
+## Public page behavior
+
+Contextual actions use published page content only. They do not expose dashboard settings, unpublished files, private team notes, or protected repository data.
+
+If a page is not published, it is not available through contextual actions on the public site.
+
+## AI tool actions
+
+AI tool actions are useful when readers want to ask a question outside the built-in assistant.
+
+Before enabling an external AI action, review your content policy and make sure the page content is safe to send to that destination. Public docs are already visible, but external tools can have different retention, privacy, or workspace policies.
+
+<Callout type="warning">
+  Do not enable external actions for docs that include secrets, private customer details, unreleased product plans, or internal-only procedures.
+</Callout>
+
+## MCP actions
+
+MCP actions help developers connect an agent directly to the published docs site.
+
+For public docs, the MCP endpoint is available at:
+
+```text
+https://your-docs-domain.com/mcp
+```
+
+Readers can use the copied endpoint in clients that support HTTP MCP servers. The public MCP server is read-only and scoped to published docs content.
+
+## Troubleshooting
+
+If an action is missing from a page:
+
+1. Confirm `contextual.enabled` is `true`.
+2. Confirm the action key is listed in `contextual.options`.
+3. Publish the branch that contains the `dubstack.json` change.
+4. Refresh the published page after the update completes.
+
+If an action opens the wrong page, check that canonical URLs and redirects are configured correctly.

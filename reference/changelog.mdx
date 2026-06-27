@@ -4,6 +4,20 @@ description: Track product documentation updates.
 icon: history
 ---
 
+Follow this changelog for notable updates to the DubStack product documentation.
+
+<Update label="Public docs expanded" description="Expanded the customer-facing product docs with clearer AI, Theme Studio, API, deployment, and configuration guidance." tags={["docs"]}>
+  The docs now separate public product guidance from internal architecture notes and use the canonical Git-backed product docs repository as the source of truth.
+</Update>
+
+<Update label="API reference added" description="Added the docs runtime OpenAPI reference, API playground guidance, MCP discovery endpoints, and assistant request examples." tags={["api", "docs"]}>
+  The API reference is generated from the product docs OpenAPI spec and is published as part of the public docs site.
+</Update>
+
+<Update label="MCP documentation added" description="Documented the public read-only MCP server, discovery paths, skill file, and future authenticated MCP boundaries." tags={["mcp", "ai"]}>
+  Public MCP access is scoped to published docs content and remains separate from authenticated dashboard authoring workflows.
+</Update>
+
 <Update label="Initial product docs scaffold" description="Created the canonical DubStack product documentation repository structure." tags={["docs"]}>
-  The first version defines the customer-facing docs information architecture and separates it from starter templates and internal operations notes.
+  The first version defined the customer-facing docs information architecture and separated it from starter templates and internal operations notes.
 </Update>

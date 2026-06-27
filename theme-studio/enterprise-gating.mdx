@@ -1,21 +1,58 @@
 ---
 title: Enterprise gating
-description: Control which Theme Studio features are available by entitlement and trial state.
+description: Control which visual customization features are available by entitlement and trial state.
 icon: shield
 ---
 
-This page documents Enterprise gating for DubStack.
+Enterprise gating controls access to advanced visual customization and branding capabilities.
 
-## Overview
+The goal is simple: users should only see and publish features their plan allows, and the public runtime should enforce the same boundary.
 
-Control which Theme Studio features are available by entitlement and trial state.
+## Gated feature areas
 
-## What to configure
+| Feature area | Availability |
+| --- | --- |
+| Standard docs shell themes | Available on all plans. |
+| Basic colors and navigation settings | Available on all plans. |
+| Custom domains | Available on paid plans. |
+| Theme Studio visual editing | Enterprise. |
+| Canvas Layout runtime | Enterprise and explicit opt-in. |
+| Advanced component library | Enterprise. |
+| Custom brand removal or white-labeling | Enterprise. |
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+Plan names and exact limits can change. Use the dashboard billing page as the source of truth for your account.
 
-## Next steps
+## Dashboard behavior
 
-This page is a scaffold for the full product documentation pass.
+The dashboard should make entitlement state clear:
+
+- Available features are editable.
+- Locked features explain which plan is required.
+- Trial-only features show trial state when applicable.
+- Save and publish actions are blocked when the account is not entitled.
+
+Do not rely on disabled controls alone. Server-side checks must enforce the same rules.
+
+## Runtime behavior
+
+The public site reads the published configuration and the site's entitlement state. If a site is not allowed to use an Enterprise-only runtime feature, the frontend must fall back safely instead of rendering a partial or broken layout.
+
+## Trials
+
+Trials can temporarily unlock Enterprise capabilities for evaluation.
+
+Before publishing production changes from a trial, confirm what happens when the trial ends. Some settings may remain visible for review but become locked until the plan is upgraded.
+
+## Operational checklist
+
+Before enabling an Enterprise-only feature for a site:
+
+1. Confirm the organization tier or trial state.
+2. Confirm the site is the intended target deployment.
+3. Preview the public site after saving.
+4. Validate mobile, desktop, light mode, and dark mode.
+5. Confirm the fallback behavior if the feature is later disabled.
+
+<Callout type="warning">
+  Treat entitlement checks as a backend and runtime responsibility. A hidden button is not an access-control boundary.
+</Callout>

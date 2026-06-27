@@ -1,21 +1,86 @@
 ---
 title: Canvas Layout
-description: Use Canvas Layout when a site explicitly opts into the Theme Studio runtime.
+description: Understand how Canvas Layout changes the published docs runtime.
 icon: layout-template
 ---
 
-This page documents Canvas Layout for DubStack.
+Canvas Layout is the Theme Studio runtime for sites that explicitly opt into a visual layout.
 
-## Overview
+It lets Enterprise teams position and style high-level page regions while keeping documentation content Git-backed.
 
-Use Canvas Layout when a site explicitly opts into the Theme Studio runtime.
+## Runtime modes
 
-## What to configure
+DubStack supports two published layout modes:
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+| Mode | Use it for |
+| --- | --- |
+| Docs shell | Standard documentation sites with sidebar navigation, content pages, API references, and docs search. |
+| Canvas Layout | Enterprise sites that need a custom visual composition around the docs experience. |
 
-## Next steps
+Enterprise tier alone does not force Canvas Layout. A site must explicitly opt in.
 
-This page is a scaffold for the full product documentation pass.
+## Canvas components
+
+A Canvas Layout is made from components such as:
+
+- Header.
+- Sidebar.
+- Main content area.
+- Hero section.
+- Navigation cards.
+- Footer.
+- Assistant launcher.
+- Custom content blocks.
+
+The layout defines where components appear. The content inside documentation pages still comes from MDX and published source files.
+
+## Configuration shape
+
+Canvas data is stored with the site configuration and published with the same deployment lifecycle as other docs settings.
+
+A simplified example:
+
+```json
+{
+  "canvas_layout": {
+    "components": [
+      {
+        "id": "sidebar",
+        "type": "sidebar",
+        "x": 0,
+        "y": 0,
+        "width": 260,
+        "height": 900
+      },
+      {
+        "id": "main-content",
+        "type": "main-content",
+        "x": 260,
+        "y": 0,
+        "width": 860,
+        "height": 900
+      }
+    ]
+  }
+}
+```
+
+Production configuration includes additional styling, responsive behavior, and component-specific settings.
+
+## Publishing behavior
+
+When Canvas Layout is enabled:
+
+1. The dashboard saves the layout configuration.
+2. A publish or update syncs the configuration.
+3. The public runtime reads the layout mode from the site theme API.
+4. The frontend renders the Canvas runtime for that site.
+
+If Canvas Layout is disabled, the site renders with the standard docs shell.
+
+## Guardrails
+
+- Do not use Canvas Layout to hide required legal, billing, or support information.
+- Keep navigation usable on desktop and mobile breakpoints.
+- Keep page content in MDX so search, MCP, assistant, and source review keep working.
+- Validate both light and dark modes before publishing.

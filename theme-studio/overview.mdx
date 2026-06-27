@@ -1,21 +1,67 @@
 ---
 title: Theme Studio
-description: Customize Enterprise documentation experiences visually.
+description: Customize Enterprise documentation experiences visually without breaking Git-backed content.
 icon: paintbrush
 ---
 
-This page documents Theme Studio for DubStack.
+Theme Studio is the visual customization surface for Enterprise documentation sites.
 
-## Overview
+Use it when the docs experience needs a branded layout, custom components, or a more tailored landing page than the standard docs shell.
 
-Customize Enterprise documentation experiences visually.
+## When to use Theme Studio
 
-## What to configure
+Theme Studio is best for teams that need:
 
-- Keep source content in Git.
-- Keep rendered content synchronized through the DubStack publish path.
-- Keep customer-facing behavior driven by `dubstack.json`, dashboard settings, or server-side entitlements.
+- A branded docs landing page.
+- Custom hero, footer, or navigation treatments.
+- Component-level layout control.
+- Visual theme changes without editing every page manually.
+- A previewable design workflow before publishing changes.
 
-## Next steps
+Standard docs configuration still lives in Git. Theme Studio changes are saved as site configuration and published through the normal docs update path.
 
-This page is a scaffold for the full product documentation pass.
+## What Theme Studio controls
+
+| Area | What you can customize |
+| --- | --- |
+| Layout | Page regions, component placement, spacing, and canvas structure. |
+| Branding | Logos, colors, typography, and surface treatments. |
+| Components | Headers, footers, cards, hero sections, and future custom content blocks. |
+| Assistant styling | Assistant frame, prompt area, and visual tokens where enabled. |
+| Navigation shell | Sidebar and header treatments for sites that opt into a custom runtime. |
+
+## What stays in Git
+
+Theme Studio does not replace your documentation source.
+
+Keep these in Git:
+
+- MDX pages.
+- OpenAPI specs.
+- Navigation structure.
+- Redirects.
+- Reusable snippets.
+- `dubstack.json` configuration.
+
+This keeps review, rollback, and portability intact.
+
+## Entitlements
+
+Theme Studio is an Enterprise feature. Non-Enterprise sites can still use standard theming through `dubstack.json`, but they cannot publish Theme Studio canvas layouts.
+
+<Callout type="info">
+  Enterprise access controls are enforced by the dashboard and the published runtime. A site should not rely on hidden UI alone for entitlement boundaries.
+</Callout>
+
+## Recommended workflow
+
+1. Create or connect the docs source repository.
+2. Publish a standard docs shell first.
+3. Confirm navigation, pages, and API references are correct.
+4. Open Theme Studio and adjust layout or branding.
+5. Preview the changes on a non-production deployment.
+6. Publish once the rendered site matches the approved design.
+
+## Avoiding drift
+
+Use Theme Studio for presentation, not for duplicating docs content. If a block contains product instructions, keep the canonical copy in MDX and link to it from the visual layout.
