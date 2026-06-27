@@ -18,6 +18,9 @@
   },
   "theme": "prism",
   "palette": "classic",
+  "styling": {
+    "codeblocks": "system"
+  },
   "colors": {
     "primary": "#15803D",
     "light": "#07C983",
