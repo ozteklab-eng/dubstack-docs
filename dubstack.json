@@ -130,6 +130,9 @@
             "pages": [
               { "slug": "ai/agent", "icon": "sparkles" },
               { "slug": "ai/assistant", "icon": "bot" },
+              { "slug": "ai/integrations", "icon": "plug" },
+              { "slug": "ai/integrations/slack", "icon": "message-circle" },
+              { "slug": "ai/integrations/jira", "icon": "panels-top-left" },
               { "slug": "ai/contextual-actions", "icon": "mouse-pointer-click" },
               { "slug": "ai/mcp", "icon": "plug" }
             ]

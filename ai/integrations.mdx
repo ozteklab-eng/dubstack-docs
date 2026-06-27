@@ -1,0 +1,56 @@
+---
+title: Agent integrations
+description: Connect collaboration and issue-tracking tools so the dashboard agent can use bounded team context.
+icon: plug
+---
+
+Agent integrations let the dashboard agent use context from the tools where product work already happens.
+
+Use integrations when a documentation update depends on a conversation, issue, release plan, or support signal that is not already in the published docs.
+
+## What integrations are for
+
+Integrations can help the agent:
+
+- answer dashboard questions with additional workspace context
+- draft documentation updates from connected tool context
+- enrich automations with selected collaboration or issue-tracking context
+- notify teams when automation runs finish
+
+They do not change the source of truth. Documentation changes still write through the connected Git provider.
+
+## Available integrations
+
+| Integration | Use it for |
+| --- | --- |
+| [Slack](/ai/integrations/slack) | Agent conversations in Slack, docs answers, draft PR requests, and workflow notifications. |
+| [Jira](/ai/integrations/jira) | Issue context for dashboard agent requests and automations. |
+
+Availability can depend on plan, repository access, and workspace authorization.
+
+## Connect an integration
+
+1. Open the dashboard.
+2. Select the deployment.
+3. Go to **Settings > Organization > Agent integrations**.
+4. Choose the integration.
+5. Complete the provider authorization flow.
+6. Return to the dashboard and confirm the integration status is connected.
+
+Some integrations also appear inside the **Agent** setup flow when they are required for that surface.
+
+## Scope and safety
+
+Integrations are scoped to the current organization and deployment.
+
+The agent should only use integration context when:
+
+- the integration is connected
+- the current user is allowed to configure or use it
+- the request needs that external context
+- the workflow or agent run explicitly selects it
+
+<Callout type="warning">
+  Do not paste private credentials into prompts or docs. Use provider authorization and dashboard-managed integration settings instead.
+</Callout>
+

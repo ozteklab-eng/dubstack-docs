@@ -1,0 +1,92 @@
+---
+title: Slack integration
+description: Connect Slack so the agent can answer docs questions, draft documentation updates, and notify teams from Slack.
+icon: message-circle
+---
+
+The Slack integration adds the DubStack agent to your Slack workspace.
+
+After it is connected, authorized workspace members can ask the agent questions from Slack and request draft documentation changes for the selected deployment.
+
+## What Slack can do
+
+Slack can be used for:
+
+- asking questions about published docs
+- starting documentation update requests from Slack
+- opening draft pull requests when the deployment has authoring-ready Git access
+- using bounded Slack thread or channel context in agent and automation runs
+- sending workflow notifications to selected channels
+
+Slack does not replace repository review. Documentation changes still go through the connected Git provider.
+
+## Requirements
+
+Before connecting Slack, confirm:
+
+- the deployment is selected in the dashboard
+- the Slack app is configured for your workspace
+- your plan and organization are eligible for the agent surface
+- the docs repository is connected if you want the agent to create pull requests
+- Slack scopes are complete after installation
+
+If Slack was installed before new permissions were added, reconnect the app from the dashboard so the missing scopes are granted.
+
+## Connect Slack
+
+1. Open the dashboard.
+2. Select the deployment.
+3. Go to **Agent**.
+4. Choose **Connect Slack**.
+5. Approve the Slack workspace authorization.
+6. Return to the Agent page.
+7. Confirm the Slack app row says the agent is connected.
+
+You can also manage the connection from **Settings > Organization > Agent integrations**.
+
+## Use the agent in Slack
+
+Once connected, open Slack and mention the agent in a supported conversation.
+
+Examples:
+
+```text
+@dub what can you do for this deployment?
+```
+
+```text
+@dub draft a short troubleshooting page from this thread and open a pull request.
+```
+
+```text
+@dub explain where our API authentication docs mention token rotation.
+```
+
+When more than one deployment is connected to the same Slack workspace, choose the deployment before asking the agent to act.
+
+```text
+@dub use docs-production
+```
+
+## Repository authoring
+
+For Slack requests that create documentation changes, the deployment needs an authoring-ready Git integration.
+
+GitHub-backed deployments should have the GitHub app installed on the repository with pull request access.
+
+GitLab-backed deployments should have GitLab authoring access connected before merge requests are created.
+
+## Workflow notifications
+
+Automations can send run results to Slack when Slack is connected.
+
+Use notification settings in the automation drawer to choose the channel and whether to notify on all runs or only failures.
+
+## Disconnect Slack
+
+1. Open **Agent** or **Settings > Organization > Agent integrations**.
+2. Find Slack.
+3. Choose **Disconnect**.
+
+Disconnecting Slack stops new Slack agent interactions for that organization or deployment scope. Existing pull requests and published docs are not removed.
+

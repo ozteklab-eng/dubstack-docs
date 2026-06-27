@@ -1,0 +1,86 @@
+---
+title: Jira integration
+description: Connect Jira so the dashboard agent and automations can use scoped issue context.
+icon: panels-top-left
+---
+
+The Jira integration gives the dashboard agent controlled access to issue context.
+
+Use it when a documentation update depends on product work tracked in Jira, such as feature issues, bug reports, release epics, or support-driven documentation gaps.
+
+## What Jira can do
+
+Jira can provide:
+
+- issue titles, descriptions, and selected metadata for dashboard agent answers
+- issue context for Slack agent requests when Jira context is requested
+- issue context for automations that support integrations
+- bounded JQL-based context for recurring documentation workflows
+
+Jira does not write documentation by itself. The agent writes docs changes through the connected Git provider.
+
+## Requirements
+
+Before connecting Jira, confirm:
+
+- your organization is eligible for agent integrations
+- you know the Atlassian site subdomain to connect
+- the Jira OAuth app is configured for the environment
+- your Atlassian account can access the issues you want the agent to use
+- the deployment has repository authoring access if you want pull requests
+
+## Connect Jira
+
+1. Open the dashboard.
+2. Select the deployment.
+3. Go to **Settings > Organization > Agent integrations**.
+4. Choose **Jira**.
+5. Enter the Atlassian site subdomain.
+6. Authorize Jira access.
+7. Return to the dashboard and confirm Jira is connected.
+
+The dashboard stores the selected workspace and granted scopes for that organization or deployment scope.
+
+## Use Jira context with the agent
+
+Ask for Jira context when the issue tracker contains the source details.
+
+Examples:
+
+```text
+Use Jira context for PROJ-123 and draft a migration note for the docs.
+```
+
+```text
+Summarize the open documentation issues for the billing project.
+```
+
+If the request needs precise issue selection, include the issue key, project, or a clear filter.
+
+## Use Jira context in automations
+
+Automations that support integrations can enable Jira context.
+
+When configuring the automation, set:
+
+| Setting | Purpose |
+| --- | --- |
+| JQL | Narrows which issues the automation can read. |
+| Limit | Caps the number of issues included in a run. |
+
+Keep JQL narrow. Smaller context usually produces better documentation updates and reduces unnecessary token usage.
+
+Example JQL:
+
+```text
+project = DOCS AND statusCategory != Done ORDER BY updated DESC
+```
+
+## Disconnect Jira
+
+1. Open **Settings > Organization > Agent integrations**.
+2. Find Jira.
+3. Choose **Disconnect**.
+
+Disconnecting Jira stops new Jira context collection. Existing docs, pull requests, and previous run records are not removed.
+
