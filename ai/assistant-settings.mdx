@@ -1,0 +1,84 @@
+---
+title: Configure the assistant
+description: Control public assistant behavior, readiness, protection, and suggestions.
+icon: settings
+---
+
+The public assistant is configured from the dashboard and published to the selected deployment.
+
+Open **Assistant** from the dashboard to manage reader-facing assistant behavior and to check whether the retrieval pipeline is ready.
+
+## Status and control
+
+Use **Assistant Status** to enable or pause the public assistant.
+
+When paused, the docs site should not expose the normal reader assistant experience for that deployment. Published docs remain available.
+
+## Response handling
+
+Response handling controls how the assistant behaves when it cannot produce a useful answer.
+
+| Setting | Behavior |
+| --- | --- |
+| Deflection | Lets the assistant route unanswered questions toward your support process when enabled. |
+| Support email | Email address used when the contact-support action is available. |
+| Help button | Shows a support action in the chat UI when deflection is enabled. |
+
+Deflection controls can be gated by plan and environment capability. If a control is disabled, the dashboard shows the reason.
+
+## Search domains
+
+Search domains let the assistant use approved external domains as additional context when the feature is available.
+
+Keep domains narrow. Prefer product documentation, API references, changelogs, or support knowledge bases that are safe for the assistant to read.
+
+Examples:
+
+```text
+docs.example.com
+api.example.com
+*.support.example.com
+```
+
+## Bot protection
+
+Invisible CAPTCHA can protect public assistant endpoints from automated abuse when the environment is configured for it.
+
+If the capability is unavailable, the dashboard keeps the switch disabled and shows the reason.
+
+## Starter questions
+
+Starter questions appear as suggestions in the assistant chat UI.
+
+Use short questions that map to high-value docs entry points:
+
+- How do I connect Git?
+- How do I add a custom domain?
+- How do I publish an API reference?
+
+The dashboard supports up to three starter questions for the public assistant.
+
+## Assistant instructions
+
+Enterprise deployments can add site-specific assistant instructions from the dashboard.
+
+These instructions are additive to platform safety rules and repository-backed assistant guidance. Use them for style, domain vocabulary, and response preferences.
+
+Do not put credentials, customer secrets, or private incident details in assistant instructions.
+
+## Readiness checks
+
+The Assistant page shows readiness for the published docs index, managed retrieval index, and advanced answer path.
+
+If answers are stale or incomplete:
+
+1. Confirm the docs change is committed and published.
+2. Run a manual update if the source changed outside the webhook path.
+3. Use the Assistant readiness controls to refresh or sync the index when available.
+4. Ask the assistant again after the readiness checks report healthy.
+
+## Related
+
+- [Assistant](/ai/assistant)
+- [MCP](/ai/mcp)
+- [Feedback analytics](/dashboard/feedback-analytics)

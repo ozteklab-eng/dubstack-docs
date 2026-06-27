@@ -85,6 +85,38 @@ List operations in `pages` when you only want selected endpoints visible:
 }
 ```
 
+## Add-ons configuration
+
+Dashboard add-ons are stored under the `addons` key when the deployment supports writing those settings back to source.
+
+```json
+{
+  "addons": {
+    "feedback": {
+      "thumbs_rating": true,
+      "edit_suggestions": false,
+      "raise_issues": false,
+      "contextual_feedback": false,
+      "code_snippet_feedback": false,
+      "agent_feedback": false
+    },
+    "ci_checks": {
+      "broken_links": "disabled",
+      "grammar_linter": "disabled"
+    },
+    "previews": {
+      "preview_deployments": true,
+      "preview_deployment_authentication": false
+    },
+    "visibility": {
+      "noindex": false
+    }
+  }
+}
+```
+
+CI check values can be `disabled`, `advisory`, or `required`. Unsupported add-ons are forced back to a safe disabled state by the dashboard API.
+
 ## Validate changes
 
 Before publishing configuration changes:

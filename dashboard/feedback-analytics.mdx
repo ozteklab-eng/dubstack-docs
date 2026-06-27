@@ -1,0 +1,62 @@
+---
+title: Feedback analytics
+description: Review reader and agent feedback collected from a deployment.
+icon: chart-no-axes-combined
+---
+
+Feedback analytics show how readers and agents rate docs pages, assistant answers, and supported agent actions.
+
+Open **Analytics > Feedback** from the dashboard to review feedback for the selected deployment.
+
+## What is tracked
+
+The feedback view can include:
+
+- total feedback count for the selected date range
+- positive and negative rating counts
+- daily feedback volume
+- sentiment breakdown
+- pages where feedback was submitted
+- feedback source breakdown
+- recent feedback entries
+
+Feedback is scoped to the current deployment. Switching deployments changes the analytics scope.
+
+## Enable page feedback
+
+Page feedback depends on the **Thumbs rating** add-on.
+
+1. Open **Settings > Deployment > Add-ons**.
+2. Enable **Thumbs rating**.
+3. Publish or refresh the docs site.
+4. Confirm public pages show the feedback control.
+5. Review submitted ratings in **Analytics > Feedback**.
+
+If the add-on is disabled, public page feedback submissions are rejected for that deployment.
+
+## Feedback sources
+
+| Source | Meaning |
+| --- | --- |
+| Page feedback | Reader rating submitted from a docs page. |
+| Assistant feedback | Rating submitted against an assistant answer. |
+| Agent feedback | Structured feedback submitted by an enabled agent surface. |
+
+Not every source is available on every plan or deployment. Use the Add-ons page to see the current capability state.
+
+## Use feedback with automations
+
+Feedback can power documentation improvement automations when the workflow and required capabilities are available.
+
+For best results:
+
+- collect page paths with feedback
+- ask readers for short comments when something is not helpful
+- keep negative feedback tied to concrete docs gaps
+- review generated pull requests before merging
+
+## Related
+
+- [Add-ons](/settings/deployment/addons)
+- [Automation reference](/automations/reference)
+- [Configure automation runs](/automations/configuration)

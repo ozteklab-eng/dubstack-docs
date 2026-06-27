@@ -1,0 +1,91 @@
+---
+title: Configure automation runs
+description: Configure triggers, schedules, context, integrations, notifications, and run modes.
+icon: settings-2
+---
+
+Automation configuration controls when a workflow runs, what context it can read, and how documentation changes are applied.
+
+Open **Automations**, choose a workflow, then use the configuration drawer.
+
+## Trigger types
+
+Each workflow exposes only the trigger types it supports.
+
+| Trigger | Behavior |
+| --- | --- |
+| Content update | Runs after docs content changes. |
+| Code change | Runs when selected source repositories change. |
+| Custom schedule | Runs on a recurring schedule. |
+
+For code-change workflows, select the source repositories that should trigger or inform the run.
+
+## Schedules
+
+Scheduled workflows use a preset schedule and the deployment timezone shown in the dashboard.
+
+Use schedules for recurring maintenance such as broken link checks, changelog drafts, translation sync, and feedback reviews.
+
+## Update modes
+
+| Mode | Behavior |
+| --- | --- |
+| Require review | Opens a pull request or merge request for review. |
+| Automatically | Applies the change directly when the workflow is allowed to write. |
+
+Use **Require review** for production docs unless the workflow is narrow, low risk, and easy to roll back.
+
+## Context repositories
+
+Context repositories let a workflow inspect source code or product repositories in addition to the docs repository.
+
+Use them when documentation changes depend on product implementation details.
+
+Keep context focused:
+
+- select only repositories relevant to the workflow
+- prefer the default branch unless the workflow targets a release branch
+- avoid adding broad repositories that increase noise and token usage
+
+## Integration context
+
+Supported workflows can use connected integrations.
+
+| Integration | Typical use |
+| --- | --- |
+| Slack | Use selected channel or thread context and send workflow notifications. |
+| Jira | Use bounded issue context through a JQL query and issue limit. |
+
+Integration context is only available when the integration is connected and the workflow supports that context type.
+
+## Translation settings
+
+Translation workflows require at least one target language.
+
+Languages already configured for the docs site can be included automatically. Add extra target languages from the workflow drawer when the automation should keep them in sync.
+
+## Notifications
+
+When Slack is connected, workflows can send run results to a selected channel.
+
+Notification modes:
+
+| Mode | Behavior |
+| --- | --- |
+| All run results | Notify when runs succeed, fail, or need attention. |
+| Failures only | Notify only when a run fails or needs review. |
+
+Invite the app to the target channel before selecting it.
+
+## Run now
+
+Use **Run now** to manually enqueue a supported workflow after it is configured.
+
+The runner checks readiness before starting. If required repository access, model configuration, or integration context is missing, the dashboard shows the blocking reason.
+
+## Related
+
+- [Automations](/automations)
+- [Automation reference](/automations/reference)
+- [Slack integration](/ai/integrations/slack)
+- [Jira integration](/ai/integrations/jira)

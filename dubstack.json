@@ -109,6 +109,7 @@
             "pages": [
               { "slug": "dashboard/overview", "icon": "layout-dashboard" },
               { "slug": "settings/deployment/addons", "icon": "sliders-horizontal" },
+              { "slug": "dashboard/feedback-analytics", "icon": "chart-no-axes-combined" },
               { "slug": "dashboard/team-members", "icon": "users" },
               { "slug": "dashboard/billing-plans", "icon": "credit-card" }
             ]
@@ -137,7 +138,9 @@
             "pages": [
               { "slug": "ai/agent", "icon": "sparkles" },
               { "slug": "ai/assistant", "icon": "bot" },
+              { "slug": "ai/assistant-settings", "icon": "settings" },
               { "slug": "ai/integrations", "icon": "plug" },
+              { "slug": "ai/integration-permissions", "icon": "shield-check" },
               { "slug": "ai/integrations/slack", "icon": "message-circle" },
               { "slug": "ai/integrations/jira", "icon": "panels-top-left" },
               { "slug": "ai/contextual-actions", "icon": "mouse-pointer-click" },
@@ -150,6 +153,7 @@
             "pages": [
               { "slug": "automations", "icon": "workflow" },
               { "slug": "automations/reference", "icon": "list-checks" },
+              { "slug": "automations/configuration", "icon": "settings-2" },
               { "slug": "automations/create", "icon": "plus" }
             ]
           },
@@ -200,6 +204,7 @@
             "pages": [
               { "slug": "api-reference/introduction", "icon": "book" },
               { "slug": "api-reference/openapi-setup", "icon": "file-json" },
+              { "slug": "api-reference/spec-management", "icon": "file-json" },
               { "slug": "api-reference/playground-authentication", "icon": "key" }
             ]
           },

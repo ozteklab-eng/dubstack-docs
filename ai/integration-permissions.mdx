@@ -1,0 +1,66 @@
+---
+title: Integration permissions and scopes
+description: Understand how agent integrations are scoped, authorized, and disconnected.
+icon: shield-check
+---
+
+Agent integrations are connected through provider authorization flows and scoped to the current organization and deployment.
+
+Use **Settings > Organization > Agent integrations** to view connected and available providers.
+
+## Connection scope
+
+Most agent integrations are organization-scoped. Some records can also be associated with a selected deployment when the integration is used by deployment-specific agent or automation surfaces.
+
+The dashboard resolves the most specific connected installation for the current site before falling back to organization-level context.
+
+## Provider status
+
+| Status | Meaning |
+| --- | --- |
+| Connected | The provider has an active installation for the current scope. |
+| Available | The provider is in the catalog but not connected. |
+| Not configured | The environment is missing required OAuth or app configuration. |
+| Not eligible | The current plan or role cannot connect this provider. |
+
+When a provider cannot be connected, the dashboard shows the reason returned by the integration capability check.
+
+## Active and catalog providers
+
+Active providers can be connected when configuration, plan, and permissions allow it.
+
+Catalog providers are visible as planned integration categories but cannot be connected until the provider is enabled for the environment.
+
+## Authorization and roles
+
+Connecting or disconnecting integrations requires permission to configure integrations for the current organization or deployment.
+
+Integration context should only be used when:
+
+- the provider is connected
+- the installation has the required scopes
+- the user or workflow is allowed to use that integration
+- the request needs that provider's context
+
+## Missing scopes
+
+If a provider was connected before new scopes were added, the dashboard can show missing scopes.
+
+Reconnect the provider from the dashboard to approve the updated scope set.
+
+## Disconnect behavior
+
+Disconnecting an integration stops future agent and automation runs from using that provider context.
+
+Disconnecting does not remove:
+
+- existing documentation
+- previous pull requests or merge requests
+- historical run records
+- already-published docs content
+
+## Related
+
+- [Agent integrations](/ai/integrations)
+- [Slack integration](/ai/integrations/slack)
+- [Jira integration](/ai/integrations/jira)
