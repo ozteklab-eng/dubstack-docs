@@ -4,43 +4,97 @@ description: Create, edit, and publish your first dubstack documentation site.
 icon: zap
 ---
 
-This quickstart takes you from an empty workspace to a published documentation site.
+This quickstart takes you from an empty workspace to a published documentation site with real source control, navigation, and a live docs URL.
 
-You can start with a connected Git repository, or use the hosted repository flow when you want dubstack to create the starter repository for you.
+You can connect your own Git repository, or use the hosted repository flow when you want dubstack to create the starter source for you.
+
+## What you will build
+
+By the end, you will have:
+
+- a docs site with a `dubstack.live` URL
+- a source repository or hosted starter source
+- a `dubstack.json` configuration file
+- at least one edited MDX page
+- a completed publish activity
+- a live page you can open and verify
 
 ## Before you start
 
 You need:
 
-- A dubstack account.
-- A workspace or organization for the site.
-- A GitHub or GitLab account if you want to connect your own repository.
-- Access to your DNS provider only if you plan to attach a custom domain.
+- a dubstack account
+- a workspace or organization for the site
+- a GitHub or GitLab account if you want to connect your own repository
+- DNS access only if you plan to attach a custom domain later
 
 ## 1. Create a site
 
-Open the dashboard and create a new documentation site.
+Open the dashboard and start the new site flow.
 
-During setup, choose one of these source options:
+Choose the kind of docs you are building, then pick a source option.
 
 | Source option | Use it when |
 | --- | --- |
-| Connect Git | You already have a docs repository or want to use a repository under your own GitHub or GitLab account. |
-| Hosted repository | You want dubstack to create a starter repository and let you edit from the dashboard first. |
+| Connect Git | You already have a docs repository, or your team wants the repository under its own Git provider account from day one. |
+| Hosted repository | You want a working starter immediately and plan to edit from the dashboard first. |
 
-The site is created with a live preview domain on `dubstack.live`.
+After setup finishes, the dashboard opens on the site's overview page.
 
-## 2. Review the starter
+## 2. Review the starter source
 
-The starter includes:
+The starter source includes MDX pages, assets, and `dubstack.json`.
 
-- MDX pages for the first documentation sections.
-- `dubstack.json` for navigation, theme, widgets, and site settings.
-- A deploy path that syncs Git content into the published docs site.
+A minimal source usually looks like this:
 
-Open the live site from the dashboard and confirm the homepage, sidebar, search, and assistant button load correctly.
+```text
+.
+├── dubstack.json
+├── index.mdx
+├── quickstart.mdx
+├── api-reference/
+│   └── openapi.json
+└── assets/
+    ├── logo-dark.svg
+    └── logo-light.svg
+```
 
-## 3. Make your first edit
+The exact files depend on the starter profile and whether your site includes an API reference.
+
+## 3. Check `dubstack.json`
+
+`dubstack.json` controls navigation, theme, API reference setup, widgets, redirects, and footer behavior.
+
+A small config can start like this:
+
+```json
+{
+  "site": {
+    "name": "Product Docs"
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "default": true,
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": [
+              { "slug": "index" },
+              { "slug": "quickstart" }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Keep the config committed with the docs source so every publish is reproducible.
+
+## 4. Make your first edit
 
 Open the editor from the dashboard.
 
@@ -48,14 +102,22 @@ A good first change is to edit `quickstart.mdx` or create a short page under a g
 
 Use the editor to:
 
-- Update page content.
-- Insert supported MDX components.
-- Preview the rendered page.
-- Save the file back to the connected repository.
+1. update MDX content
+2. insert supported components with slash commands
+3. preview the rendered page
+4. save the file back to the connected source
 
-## 4. Publish
+For example, add a callout to a page:
 
-When you publish, dubstack follows the same production path used for normal updates:
+```mdx
+<Callout type="info">
+  This page is now managed through dubstack.
+</Callout>
+```
+
+## 5. Publish
+
+When you publish, dubstack follows the same production path used for normal updates.
 
 ```text
 Git commit
@@ -64,24 +126,39 @@ Git commit
 -> docs frontend
 ```
 
-Use the Activity panel on the dashboard to confirm the publish completed.
+Use the Activity panel on the dashboard to confirm the update completed.
 
-## 5. Verify the site
+If your source changed outside the normal webhook path, use Manual update from the overview page.
+
+## 6. Verify the live site
 
 After the publish finishes, check:
 
-- The live site opens on the `dubstack.live` domain.
-- The edited page is visible after a hard refresh.
-- Sidebar navigation matches `dubstack.json`.
-- Search and assistant open from the header.
-- No draft-only content is visible on the public site.
+- the live site opens on the `dubstack.live` domain
+- the edited page is visible after a hard refresh
+- sidebar navigation matches `dubstack.json`
+- search opens from the header
+- the assistant opens and shows the reader notice
+- no draft-only content is visible on the public site
 
-## Next steps
+## 7. Connect the next production pieces
 
-- Connect a custom domain when you are ready to use your own hostname.
-- Configure navigation in `dubstack.json`.
-- Upload an OpenAPI spec if your docs include an API reference.
-- Invite team members after the first site is working.
+Once the first publish works, continue with the pieces your site needs:
+
+<CardGroup cols={2}>
+  <Card title="Connect Git" icon="git-branch" href="/getting-started/connect-git">
+    Attach a GitHub or GitLab repository as the long-term source of truth.
+  </Card>
+  <Card title="Configure navigation" icon="map" href="/configuration/navigation">
+    Organize tabs, groups, pages, and OpenAPI-generated endpoints.
+  </Card>
+  <Card title="Add an API reference" icon="terminal" href="/api-reference/openapi-setup">
+    Commit an OpenAPI spec and publish endpoint pages with an interactive playground.
+  </Card>
+  <Card title="Use a custom domain" icon="globe" href="/deployment/custom-domains">
+    Attach your own hostname after the site is ready for production traffic.
+  </Card>
+</CardGroup>
 
 <Callout type="info">
   Git is the write source of truth. Published docs are rendered from synchronized content artifacts, not from local files or dashboard-only state.
