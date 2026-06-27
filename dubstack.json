@@ -54,7 +54,7 @@
     "auto_generate": false,
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Documentation",
         "default": true,
         "groups": [
           {
@@ -92,12 +92,7 @@
               { "slug": "configuration/redirects", "icon": "corner-up-right" },
               { "slug": "configuration/seo-search", "icon": "search" }
             ]
-          }
-        ]
-      },
-      {
-        "tab": "Product",
-        "groups": [
+          },
           {
             "group": "Dashboard",
             "icon": "layout-dashboard",
@@ -137,7 +132,7 @@
         ]
       },
       {
-        "tab": "Deploy and migrate",
+        "tab": "Guides",
         "groups": [
           {
             "group": "Deployment",
@@ -186,8 +181,19 @@
             "pages": [
               { "slug": "reference/tiers", "icon": "layers" },
               { "slug": "reference/limits", "icon": "gauge" },
-              { "slug": "reference/troubleshooting", "icon": "wrench" },
-              { "slug": "reference/changelog", "icon": "history" }
+              { "slug": "reference/troubleshooting", "icon": "wrench" }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Changelog",
+        "groups": [
+          {
+            "group": "Changelog",
+            "icon": "history",
+            "pages": [
+              { "slug": "changelog", "icon": "history" }
             ]
           }
         ]
