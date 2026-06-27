@@ -128,6 +128,15 @@
               { "slug": "ai/contextual-actions", "icon": "mouse-pointer-click" },
               { "slug": "ai/mcp", "icon": "plug" }
             ]
+          },
+          {
+            "group": "Reference",
+            "icon": "list-checks",
+            "pages": [
+              { "slug": "reference/tiers", "icon": "layers" },
+              { "slug": "reference/limits", "icon": "gauge" },
+              { "slug": "reference/troubleshooting", "icon": "wrench" }
+            ]
           }
         ]
       },
@@ -174,15 +183,6 @@
             "group": "Docs runtime API",
             "icon": "terminal",
             "openapi": "api-reference/openapi.json"
-          },
-          {
-            "group": "Reference",
-            "icon": "list-checks",
-            "pages": [
-              { "slug": "reference/tiers", "icon": "layers" },
-              { "slug": "reference/limits", "icon": "gauge" },
-              { "slug": "reference/troubleshooting", "icon": "wrench" }
-            ]
           }
         ]
       },
