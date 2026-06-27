@@ -1,10 +1,12 @@
 ---
 title: Introduction
-description: Build, publish, and scale developer documentation with DubStack.
+description: Build, publish, and scale developer documentation with dubstack.
 icon: house
 ---
 
-DubStack helps teams publish developer documentation, API references, and AI-ready content from Git-backed sources.
+dubstack helps teams publish developer documentation, API references, and AI-ready content from Git-backed sources.
+
+Use these docs to create a site, connect source control, configure the docs shell, publish API references, and prepare your docs for production traffic.
 
 <CardGroup cols={2}>
   <Card title="Start with a site" icon="rocket" href="/quickstart">
@@ -16,15 +18,38 @@ DubStack helps teams publish developer documentation, API references, and AI-rea
   <Card title="Write content" icon="file-text" href="/writing-content/mdx">
     Author MDX pages with cards, callouts, code blocks, images, and structured components.
   </Card>
+  <Card title="Publish APIs" icon="terminal" href="/api-reference/introduction">
+    Generate endpoint pages and playgrounds from OpenAPI specs.
+  </Card>
+  <Card title="Use AI surfaces" icon="sparkles" href="/ai/assistant">
+    Add reader assistance, contextual actions, and public MCP access for published docs.
+  </Card>
   <Card title="Migrate existing docs" icon="repeat" href="/migration/overview">
-    Bring existing Git-backed docs into DubStack through deterministic import or generated reconstruction.
+    Bring existing Git-backed docs into dubstack through deterministic import or generated reconstruction.
   </Card>
 </CardGroup>
 
 ## Product surfaces
 
-- Dashboard: manage sites, editor workflows, team access, billing, and settings.
-- Docs Shell: render clean documentation sites from Git-backed MDX and `dubstack.json`.
-- Theme Studio: customize Enterprise docs experiences with Canvas Layout.
-- Public wiki previews: preview public repositories before claim/adopt.
-- Control Plane: internal DubStack operations and lifecycle management.
+| Surface | What it is for |
+| --- | --- |
+| Dashboard | Manage sites, editor workflows, team access, billing, settings, and publish activity. |
+| Editor | Update MDX pages, assets, navigation, and site configuration from the dashboard. |
+| Docs shell | Render production documentation sites from Git-backed MDX, OpenAPI specs, and `dubstack.json`. |
+| API reference | Publish endpoint docs and browser playgrounds from OpenAPI specs. |
+| Assistant | Answer reader questions from published docs with linked sources. |
+| Public MCP | Let AI tools search and inspect published docs through a read-only MCP server. |
+| Theme Studio | Customize Enterprise docs experiences with visual layout controls. |
+| Public wiki previews | Preview public repositories before claim or adoption. |
+
+## Recommended path
+
+1. Create a site from the dashboard.
+2. Connect Git or start with a hosted repository.
+3. Edit the starter content and navigation.
+4. Publish and verify the live docs site.
+5. Add API references, assistant settings, and custom domains when the base site is stable.
+
+<Callout type="info">
+  The public docs site is powered by the same source-backed publish path your customers use. Changes should be committed, synced, and verified on the live tenant before relying on them.
+</Callout>
