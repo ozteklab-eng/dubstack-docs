@@ -1,0 +1,91 @@
+---
+title: Automations
+description: Configure documentation automations that keep your site accurate as your product changes.
+icon: workflow
+---
+
+Automations run the dashboard agent against a clear trigger, repository context, and update mode.
+
+Use them for recurring documentation maintenance and for drafting updates when product code, API behavior, feedback, or assistant conversations show that content needs attention.
+
+## How automations work
+
+```text
+Trigger
+-> collect bounded context
+-> run the dashboard agent
+-> create a documentation update
+-> open a pull request or apply the update directly
+```
+
+The docs repository remains the write source of truth. Automations write through the connected Git provider and published docs continue to render from synced artifacts.
+
+## Requirements
+
+Before enabling automations, connect:
+
+- a Git-backed docs repository
+- an authoring-capable Git integration
+- an authoring model profile
+
+Some automations require additional signals:
+
+- Feedback-driven improvements require feedback collection to be enabled.
+- Assistant conversation improvements require assistant analytics.
+- Translation requires language routing and translation policy support.
+
+## Available automation types
+
+<CardGroup cols={2}>
+  <Card title="Update from code changes" icon="git-branch" href="/automations/reference#update-from-code-changes">
+    Draft content updates when source code, product features, or API behavior changes.
+  </Card>
+  <Card title="Draft changelog" icon="history" href="/automations/reference#draft-changelog">
+    Prepare changelog drafts from recent product updates on a schedule.
+  </Card>
+  <Card title="Fix broken links" icon="link" href="/automations/reference#fix-broken-links">
+    Find and repair broken internal or external links before readers hit them.
+  </Card>
+  <Card title="Apply style guide" icon="check-circle" href="/automations/reference#apply-style-guide">
+    Enforce voice, tone, terminology, and formatting rules across docs updates.
+  </Card>
+</CardGroup>
+
+## Triggers
+
+Automations can run from supported trigger types:
+
+| Trigger | Use case |
+| --- | --- |
+| Content update | Run after published docs content changes. |
+| Code change | Run after selected source repository changes are merged. |
+| Custom schedule | Run on a recurring schedule such as daily or weekly. |
+
+Each automation only exposes trigger types it can safely support.
+
+## Update modes
+
+| Mode | Behavior |
+| --- | --- |
+| Require review | Open a pull request for a teammate to review before merge. |
+| Automatically | Apply the update directly when the automation is allowed to write. |
+
+Use review mode for production docs unless you have a very narrow automation and clear rollback expectations.
+
+## Context
+
+Automations can read bounded context from:
+
+- the connected docs repository
+- selected source repositories
+- connected agent integrations such as Slack or Jira
+- published docs and analytics signals when the automation requires them
+
+Context stays scoped to the current organization, deployment, and enabled integration settings.
+
+## Next steps
+
+- Review the [automation reference](/automations/reference).
+- Create a [custom automation](/automations/create).
+- Configure repository access from [Git settings](/deployment/forgejo-github-gitlab).
+

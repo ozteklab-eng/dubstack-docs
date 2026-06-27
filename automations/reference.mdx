@@ -1,0 +1,143 @@
+---
+title: Automation reference
+description: Review built-in automation triggers, requirements, and behavior.
+icon: list-checks
+---
+
+This page describes the built-in automations available from the dashboard.
+
+Availability depends on your connected repository, authoring permissions, enabled add-ons, and runtime capabilities.
+
+## Self-updating content workflows
+
+### Update from code changes
+
+Updates content when source code for products, features, or APIs changes.
+
+| Setting | Value |
+| --- | --- |
+| Triggers | Custom schedule, code change |
+| Update modes | Require review, automatically |
+| Required capabilities | Docs repository, repository write access, authoring model |
+| Context repositories | Supported |
+| Integrations | Supported |
+
+Use this automation when product source changes should produce a docs draft. Add selected source repositories as context so the agent can inspect relevant code while it runs.
+
+### Draft changelog
+
+Drafts a changelog entry from recent product updates on a recurring schedule.
+
+| Setting | Value |
+| --- | --- |
+| Triggers | Custom schedule |
+| Update modes | Require review, automatically |
+| Required capabilities | Docs repository, repository write access, authoring model |
+| Context repositories | Supported |
+
+Use this automation to keep release notes and changelog pages fresh without requiring a manual first draft.
+
+### Draft improvements from assistant conversations
+
+Reviews assistant question trends and opens targeted content updates on a schedule.
+
+| Setting | Value |
+| --- | --- |
+| Triggers | Custom schedule |
+| Update modes | Require review, automatically |
+| Required capabilities | Docs repository, repository write access, authoring model, assistant analytics |
+
+Use this automation when repeated reader questions show gaps in the docs.
+
+### Draft improvements from user feedback
+
+Reviews page feedback and opens targeted updates on a schedule.
+
+| Setting | Value |
+| --- | --- |
+| Triggers | Custom schedule |
+| Update modes | Require review, automatically |
+| Required capabilities | Docs repository, repository write access, authoring model, feedback collection |
+
+Enable feedback collection before using this automation.
+
+## Maintenance workflows
+
+### Translate content
+
+Keeps selected languages in sync whenever content changes.
+
+| Setting | Value |
+| --- | --- |
+| Triggers | Content update, custom schedule |
+| Update modes | Require review, automatically |
+| Required capabilities | Docs repository, repository write access, authoring model, language routing |
+
+Translation also requires configured language paths and a translation policy for the deployment.
+
+### Fix broken links
+
+Finds and fixes broken internal and external links whenever content changes.
+
+| Setting | Value |
+| --- | --- |
+| Triggers | Content update, custom schedule |
+| Update modes | Require review, automatically |
+| Required capabilities | Docs repository, repository write access, authoring model |
+
+Use review mode when external link behavior may require human judgment.
+
+### Audit SEO metadata
+
+Audits titles, meta descriptions, headings, and canonical tags whenever content changes.
+
+| Setting | Value |
+| --- | --- |
+| Triggers | Content update, custom schedule |
+| Update modes | Require review, automatically |
+| Required capabilities | Docs repository, repository write access, authoring model |
+
+Use this automation to catch missing titles, weak descriptions, duplicate heading structures, and canonical issues.
+
+### Fix grammar & typos
+
+Finds and fixes typos, spelling mistakes, and grammar errors whenever content changes.
+
+| Setting | Value |
+| --- | --- |
+| Triggers | Content update, custom schedule |
+| Update modes | Require review, automatically |
+| Required capabilities | Docs repository, repository write access, authoring model |
+
+This automation is useful as a low-risk first automation because changes are usually small and easy to review.
+
+### Apply style guide
+
+Enforces your style guide's voice, tone, and rules whenever content changes.
+
+| Setting | Value |
+| --- | --- |
+| Triggers | Content update, custom schedule |
+| Update modes | Require review, automatically |
+| Required capabilities | Docs repository, repository write access, authoring model |
+
+Add style guide rules before enabling this automation.
+
+## Custom automations
+
+Custom automations let you define the trigger, instructions, context repositories, integrations, and update mode.
+
+See [Create automations](/automations/create) for setup guidance.
+
+## Slack notifications
+
+When Slack is connected, automations can post run results to selected channels.
+
+Notification modes:
+
+| Mode | Behavior |
+| --- | --- |
+| All run results | Post when automation runs complete or fail. |
+| Failures only | Post only when an automation needs attention. |
+
+Invite the app to a channel before selecting that channel for workflow notifications.

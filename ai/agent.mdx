@@ -1,0 +1,67 @@
+---
+title: Agent
+description: Use the dashboard agent to answer, draft, and maintain documentation with connected repository and integration context.
+icon: sparkles
+---
+
+The dashboard agent helps trusted workspace members maintain documentation from the dashboard and connected collaboration tools.
+
+It is separate from the public assistant. The public assistant answers reader questions from published docs. The dashboard agent can use private deployment context and, when configured, create documentation changes through the connected repository.
+
+## What the agent can do
+
+- Answer questions about the selected deployment.
+- Inspect published docs and managed docs indexes.
+- Use connected integration context such as Slack or Jira when enabled.
+- Draft documentation changes.
+- Open pull requests through an authoring-capable Git provider.
+- Support automations that run on schedules, code changes, or content updates.
+
+## Requirements
+
+Agent authoring requires:
+
+- a selected deployment
+- a connected docs repository
+- authoring permissions for the Git provider
+- an authoring model profile
+- connected integrations when the request needs external context
+
+The dashboard shows readiness checks for the docs index, managed index, advanced answers, Slack, and repository access.
+
+## Repository access
+
+The agent writes through Git.
+
+For GitHub-backed deployments, install the GitHub app on the repository and grant pull request permissions.
+
+For GitLab-backed deployments, connect GitLab authoring access from Git settings before running workflows that create merge requests.
+
+## Integration context
+
+Connected integrations can provide scoped context to the agent:
+
+| Integration | Common use |
+| --- | --- |
+| Slack | Read bounded thread or channel context and continue authoring conversations. |
+| Jira | Read selected issue metadata from a bounded JQL query. |
+
+Only connected integrations that support the requested action are made available to the agent.
+
+## Protected baselines
+
+Some test deployments are protected baselines. They stay readable so the team can inspect configuration, but authoring controls remain disabled to prevent accidental changes.
+
+Create a disposable deployment when testing Slack, Git, or automation authoring.
+
+## Safety boundaries
+
+- The agent must stay scoped to the selected organization and deployment.
+- Public reader assistant requests do not grant dashboard authoring access.
+- Repository changes should use pull request review unless the workflow is intentionally configured for direct updates.
+- Secrets and private tokens should not be committed to documentation.
+
+<Callout type="info">
+  Use [Automations](/automations) when you want the agent to run from a recurring trigger or repository event.
+</Callout>
+

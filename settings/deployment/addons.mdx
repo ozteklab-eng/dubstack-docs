@@ -1,0 +1,58 @@
+---
+title: Add-ons
+description: Enable optional feedback, quality, preview, and visibility controls for a deployment.
+icon: sliders-horizontal
+---
+
+Add-ons control optional behavior for a single deployment.
+
+Open **Settings > Add-ons** in the dashboard to configure them.
+
+## Feedback
+
+Feedback add-ons help you collect signals from readers and agents.
+
+| Add-on | Behavior |
+| --- | --- |
+| Thumbs rating | Shows thumbs up/down feedback controls on docs pages. |
+| Edit suggestions | Allows readers to suggest page edits when the feature is available. |
+| Raise issues | Allows readers to raise documentation issues when the feature is available. |
+| Contextual feedback | Collects feedback tied to a specific page context. |
+| Code snippet feedback | Collects feedback on code examples and snippets. |
+| Agent feedback | Allows agents to submit structured feedback about content quality, accuracy, and completeness. |
+
+Feedback is deployment-scoped. Analytics for reader feedback appear in the dashboard feedback view.
+
+## CI/CD checks
+
+CI/CD add-ons can add checks to the pull request pipeline.
+
+| Add-on | Modes |
+| --- | --- |
+| Broken links | Disabled, advisory, required |
+| Grammar linter | Disabled, advisory, required |
+
+Use advisory mode while tuning a check. Use required mode only when the check is reliable enough to block merges.
+
+## Previews
+
+Preview deployments are enabled by default when the deployment supports previews.
+
+Preview authentication restricts preview access to authenticated organization members.
+
+## Visibility
+
+The noindex setting asks search engines not to index the deployment while keeping docs publicly accessible.
+
+When enabled, DubStack sets noindex and nofollow metadata and serves crawler rules for the deployment.
+
+<Callout type="warning">
+  If your repository supplies a custom robots.txt file, update that file separately. A custom robots.txt can override deployment-level visibility expectations.
+</Callout>
+
+## Capability gates
+
+Some add-ons depend on plan, repository, provider, or runtime support.
+
+If an add-on is disabled in the dashboard, read the card reason. The reason comes from the current deployment capability check, not from a static UI-only rule.
+
