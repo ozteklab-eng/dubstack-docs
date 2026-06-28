@@ -19,6 +19,7 @@ The feedback view can include:
 - pages where feedback was submitted
 - feedback source breakdown
 - recent feedback entries
+- optional reader email addresses when collection is enabled
 
 Feedback is scoped to the current deployment. Switching deployments changes the analytics scope.
 
@@ -33,6 +34,21 @@ Page feedback depends on the **Thumbs rating** add-on.
 5. Review submitted ratings in **Analytics > Feedback**.
 
 If the add-on is disabled, public page feedback submissions are rejected for that deployment.
+
+## Optional reader emails
+
+Page feedback can optionally collect a reader email address.
+
+Enable this from **Settings > Deployment > Add-ons**:
+
+1. Enable **Thumbs rating**.
+2. Enable **Collect reader emails**.
+3. Add a short email disclaimer.
+4. Publish or refresh the docs site.
+
+Reader email collection is optional for the reader. If they submit an address, the feedback form validates it before sending the event. The email then appears in the **Recent feedback** list so your team can follow up.
+
+Reader emails are not collected for page feedback unless the deployment add-on is enabled.
 
 ## Feedback sources
 

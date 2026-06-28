@@ -20,8 +20,31 @@ Feedback add-ons help you collect signals from readers and agents.
 | Contextual feedback | Collects feedback tied to a specific page context. |
 | Code snippet feedback | Collects feedback on code examples and snippets. |
 | Agent feedback | Allows agents to submit structured feedback about content quality, accuracy, and completeness. |
+| Reader email collection | Adds an optional email field to negative page feedback forms. |
+| Reader email disclaimer | Shows a short notice below the optional email field. |
 
 Feedback is deployment-scoped. Analytics for reader feedback appear in **Analytics > Feedback**. See [Feedback analytics](/dashboard/feedback-analytics) for how to review collected signals.
+
+## Reader email collection
+
+Reader email collection is optional and only applies to page feedback.
+
+When **Collect reader emails** is enabled:
+
+- readers can leave the email field blank
+- submitted email addresses are validated before the feedback is accepted
+- the email address is stored with the feedback event metadata
+- the email address appears in recent feedback entries in **Analytics > Feedback**
+
+Use the disclaimer field to explain how your team may use the email address.
+
+Example disclaimer:
+
+```text
+We may use your email to follow up about this feedback.
+```
+
+If **Collect reader emails** is disabled, the public feedback form does not show the email field and submitted page feedback does not store a reader email.
 
 ## CI/CD checks
 
