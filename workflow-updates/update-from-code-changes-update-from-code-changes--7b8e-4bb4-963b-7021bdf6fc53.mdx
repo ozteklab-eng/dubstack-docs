@@ -1,0 +1,39 @@
+---
+title: Update from Code Changes Workflow Documentation Draft
+
+frontmatter:
+  workflow_id: update_from_code_changes
+  trigger: code_change
+  update_mode: pull_request
+  schedule: twice_weekly
+  selected_integrations: slack, jira
+  workflow_run_id: 27e0d911-7b8e-4bb4-963b-7021bdf6fc53
+  status: draft
+  test_only: true
+
+---
+
+
+# Update From Code Changes workflow update
+
+This documentation draft outlines the **Update from Code Changes** workflow, which leverages repository metadata and Jira context to generate or update documentation. The workflow is configured to run on a **twice_weekly** schedule and is triggered by **code_change** events.
+
+The workflow uses the **github:ozteklab-eng/dubstack-docs@main** repository as a read-only source for documentation content. It does not directly inspect code changes but instead relies on published documentation, repository metadata, and Jira issue data to inform updates.
+
+Selected Jira context includes four bounded issues from the **dubstackdocs** workspace, with the most recent updates occurring on **2026-06-15**. These issues are used to identify relevant documentation tasks or updates.
+
+Published documentation pages include guides for tools like **Claude Code**, **Cursor**, and **Windsurf**, as well as essential documentation components such as **code blocks**, **markdown syntax**, and **navigation configuration**.
+
+This draft is intended for **smoke testing** and should be reviewed for accuracy and completeness before being finalized.
+
+---
+
+**Review Checklist:**
+
+- [ ] Confirm that the workflow configuration matches the provided details.
+- [ ] Verify that the selected integrations (Slack, Jira) are correctly referenced.
+- [ ] Ensure that the repository and Jira context are accurately described.
+- [ ] Validate that the published documentation pages and excerpts are representative of the current state.
+- [ ] Confirm that the document is marked as a draft and test-only.
+
+<!-- workflow_run_id: 27e0d911-7b8e-4bb4-963b-7021bdf6fc53 -->
