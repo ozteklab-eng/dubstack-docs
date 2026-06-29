@@ -26,6 +26,18 @@
     "light": "#07C983",
     "dark": "#15803D"
   },
+  "addons": {
+    "feedback": {
+      "thumbs_rating": true,
+      "edit_suggestions": false,
+      "raise_issues": false,
+      "contextual_feedback": false,
+      "code_snippet_feedback": false,
+      "agent_feedback": false,
+      "collect_reader_emails": false,
+      "reader_email_disclaimer": ""
+    }
+  },
   "redirects": [
     { "source": "/agent", "destination": "/ai/agent" },
     { "source": "/assistant", "destination": "/ai/assistant" },
