@@ -34,10 +34,22 @@ Theme settings can also be represented in `dubstack.json`:
 
 ```json
 {
-  "theme": {
-    "primary_color": "#15803D",
-    "accent_color": "#07C983",
-    "font_family": "Inter"
+  "theme": "prism",
+  "palette": "classic",
+  "colors": {
+    "primary": "#15803D",
+    "light": "#07C983",
+    "dark": "#15803D"
+  },
+  "site": {
+    "logo": {
+      "light": "/assets/logo-light.svg",
+      "dark": "/assets/logo-dark.svg"
+    },
+    "favicon": "/assets/favicon.svg"
+  },
+  "styling": {
+    "codeblocks": "system"
   }
 }
 ```

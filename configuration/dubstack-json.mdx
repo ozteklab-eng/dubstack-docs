@@ -12,7 +12,14 @@ Use it to control navigation, theme settings, OpenAPI references, redirects, con
 
 ```json
 {
-  "name": "Acme Docs",
+  "site": {
+    "name": "Acme Docs",
+    "logo": {
+      "light": "/assets/logo-light.svg",
+      "dark": "/assets/logo-dark.svg"
+    },
+    "favicon": "/assets/favicon.svg"
+  },
   "navigation": {
     "tabs": [
       {
@@ -34,12 +41,35 @@ Use it to control navigation, theme settings, OpenAPI references, redirects, con
 
 | Field | Purpose |
 | --- | --- |
-| `name` | Display name for the docs site and search context. |
+| `site` | Display name, tagline, logo, favicon, and other site-level branding. |
 | `navigation` | Tabs, groups, pages, anchors, and OpenAPI-generated pages. |
-| `theme` | Published theme tokens such as colors, logos, and appearance settings. |
+| `theme` | Theme shell preset used for sizing, navigation, and page layout. |
+| `palette` | Color-token preset layered onto the selected theme shell. |
+| `colors` | Primary and accent colors used by active states, links, and highlights. |
+| `styling` | Visual overrides such as code block behavior. |
 | `redirects` | Source-to-destination redirects for renamed or moved pages. |
 | `contextual` | Page actions such as copy Markdown, view Markdown, assistant, and MCP actions. |
-| `openapi` | Default OpenAPI spec reference inherited by nested navigation items. |
+| `api` | Default OpenAPI spec reference and playground display mode. |
+
+## Site branding
+
+Put public site branding under `site`.
+
+```json
+{
+  "site": {
+    "name": "Acme Docs",
+    "tagline": "Developer documentation for Acme.",
+    "logo": {
+      "light": "/assets/logo-light.svg",
+      "dark": "/assets/logo-dark.svg"
+    },
+    "favicon": "/assets/favicon.svg"
+  }
+}
+```
+
+Keep image paths repository-relative or root-relative so the publish pipeline can copy them to the published asset store.
 
 ## Source of truth
 
