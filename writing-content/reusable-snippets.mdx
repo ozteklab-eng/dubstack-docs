@@ -4,13 +4,13 @@ description: Reuse common content blocks across pages.
 icon: recycle
 ---
 
-Reusable snippets help keep repeated content consistent across pages.
+Reusable snippets keep repeated content consistent across pages.
 
-Use snippets for warnings, prerequisites, shared setup notes, and repeated API concepts.
+Use snippets for warnings, prerequisites, shared setup notes, repeated API concepts, and content that must be updated in one place.
 
 ## When to use a snippet
 
-Use a snippet when the same block appears in several pages and should be updated in one place.
+Use a snippet when the same block appears in several pages and should be updated from a single source file.
 
 Good candidates:
 
@@ -22,37 +22,80 @@ Good candidates:
 
 Avoid snippets for one-off content that only appears on a single page.
 
-## Suggested structure
+## Create a snippet file
+
+Put reusable MDX files under `snippets/` in the same repository as the rest of your docs.
 
 ```text
 snippets/
-  api-authentication.mdx
+  security-note.mdx
   manual-update-note.mdx
   support-contact.mdx
 ```
 
-## Example snippet
+A snippet can contain normal MDX content and supported DubStack components.
 
-```mdx
+```mdx snippets/security-note.mdx
 <Callout type="warning">
-  Never commit production credentials to your docs repository.
+  Never commit production credentials, API keys, private keys, or magic links to your docs repository. Use environment variables or your provider's secret store instead.
 </Callout>
 ```
 
-## Include snippets
+## Import a snippet
 
-Use the supported include/import pattern for your site configuration and renderer version. Keep snippet paths stable so existing pages do not break when content is reorganized.
+Import the snippet from `/snippets/`, then render it where the shared content should appear.
+
+```mdx
+import SecurityNote from "/snippets/security-note.mdx";
+
+Before you publish, review the shared security guidance:
+
+<SecurityNote />
+```
+
+import SecurityNote from "/snippets/security-note.mdx";
+
+Before you publish, review the shared security guidance:
+
+<SecurityNote />
+
+## Use the snippet tag
+
+You can also include a snippet directly with the `Snippet` component.
+
+```mdx
+<Snippet file="security-note.mdx" />
+```
+
+Both forms resolve from the repository `snippets/` folder. `security-note.mdx` and `snippets/security-note.mdx` point to the same snippet file.
+
+## Current support
+
+Hosted docs support repository-backed `.mdx` and `.md` snippets from the `snippets/` folder.
+
+A snippet can include another snippet, but keep nesting shallow. Recursive snippet loops are skipped during rendering.
+
+The hosted renderer does not currently support public customer-facing JSX snippets, named variable imports, or prop interpolation inside snippet files. Keep those patterns out of production docs until they are explicitly supported.
+
+## Publishing snippets
+
+Snippets are source files, so they follow the same publishing flow as the rest of your docs.
+
+1. Commit the snippet file and every page that imports it.
+2. Push the changes to the connected branch.
+3. Run a manual update if you need the site to refresh immediately.
+4. Open the published page and confirm the snippet renders where it is imported.
 
 If a snippet does not render after publishing:
 
 - confirm the snippet file exists in the repository
-- confirm the path is correct
-- confirm the syntax is supported by the current renderer
-- run a manual update after committing the change
+- confirm the path points to the `snippets/` folder
+- confirm the syntax matches one of the supported forms above
+- confirm the connected branch has synced successfully
 
 ## Snippet quality rules
 
 - Keep snippets short.
-- Do not hide page-specific instructions inside shared snippets.
+- Use snippets for shared meaning, not for hiding page-specific instructions.
 - Avoid snippets that contain secrets or environment-specific credentials.
 - Review every page that uses a snippet before changing its meaning.
