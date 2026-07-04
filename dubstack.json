@@ -532,6 +532,10 @@
                 "icon": "refresh-cw"
               },
               {
+                "slug": "deployment/source-control-troubleshooting",
+                "icon": "circle-alert"
+              },
+              {
                 "slug": "deployment/webhooks-ci",
                 "icon": "workflow"
               },

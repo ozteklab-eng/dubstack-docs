@@ -1,0 +1,213 @@
+---
+title: Source control troubleshooting
+description: Diagnose Git, deployment, preview, and published-content issues when docs changes do not appear as expected.
+icon: circle-alert
+---
+
+Use this guide when a docs change was committed but the live site, preview deployment, editor, or assistant-readable content does not match what you expect.
+
+DubStack follows one source-control contract:
+
+```text
+Git repository
+-> webhook or manual update
+-> sync worker
+-> published artifacts
+-> public docs site, search, assistant, and MCP
+```
+
+Troubleshooting is fastest when you identify which step did not advance.
+
+## Start with the deployment branch
+
+The live site publishes from the configured deployment branch.
+
+Check these first:
+
+- The commit exists in the connected repository.
+- The commit was pushed to the configured deployment branch.
+- The dashboard Git settings still point to the intended repository and branch.
+- The repository was not renamed, transferred, archived, or deleted.
+- `dubstack.json` exists at the configured docs root.
+
+If the commit is on a feature branch, use a preview deployment or merge the branch into the deployment branch before expecting the live site to change.
+
+## Run a manual update
+
+Manual update uses the same Git-to-published-artifacts path as automatic updates, but it does not wait for a provider webhook.
+
+Use it when:
+
+- a webhook was delayed or missed
+- you changed Git provider settings
+- the dashboard shows stale repository metadata
+- a site cache appears behind the latest source commit
+- you want to confirm the sync worker can still read the repository
+
+1. Open the dashboard.
+2. Go to the site overview or deployment history.
+3. Click **Manual update**.
+4. Wait for the activity item to finish.
+5. Reopen the changed page on the public site.
+
+If manual update succeeds, the repository credentials and sync path are working. The remaining issue is usually webhook delivery, branch selection, or cache timing.
+
+## Check the activity and deployment history
+
+The activity panel and deployment history show what DubStack attempted to publish.
+
+Look for:
+
+| Signal | What it usually means |
+| --- | --- |
+| No new activity after a push | Provider webhook did not reach DubStack, or the push was not to the deployment branch. |
+| Manual update failed | DubStack could not read, parse, or publish the repository. |
+| Sync succeeded but page is missing | Navigation, file path, hidden/noindex, or generated API configuration needs checking. |
+| Preview failed but live works | The preview branch has invalid config or content not present on the live branch. |
+| Latest source appears in activity but not in browser | Browser/CDN cache may be stale; retry after cache invalidation completes. |
+
+Use deployment logs before editing source files. Logs usually identify whether the failure is provider access, source parsing, navigation, assets, or OpenAPI generation.
+
+## Validate required source files
+
+Every docs repository should include the source files that DubStack needs to build the site.
+
+Minimum source structure:
+
+```text
+dubstack.json
+index.mdx
+```
+
+Common source issues:
+
+- `dubstack.json` is missing from the configured docs root.
+- `dubstack.json` has invalid JSON syntax.
+- Navigation points to a file that does not exist.
+- A page has invalid frontmatter.
+- An image or asset path points to a missing file.
+- An OpenAPI spec path in config points to a missing or invalid spec.
+- A page was renamed without a redirect.
+
+Use [Pages and files](/writing-content/pages-files), [Page frontmatter](/configuration/pages-frontmatter), and [Redirects](/configuration/redirects) to verify source structure.
+
+## GitHub checks
+
+For GitHub-connected sites, verify the GitHub App before debugging content.
+
+Check:
+
+- the app is installed on the account or organization that owns the repository
+- the repository is included in the app installation access list
+- the app still has code, pull request, checks, and deployment permissions required by your enabled features
+- the configured branch exists
+- branch protection allows app-created branches and pull requests when editor, agent, or workflow authoring is enabled
+
+If the repository is missing from Git settings, update the GitHub App installation and grant access to the repository.
+
+If automatic deployments do not trigger but manual update works, reinstall or reauthorize the GitHub App and verify webhook delivery from the provider side.
+
+See [GitHub](/deployment/github) for the full setup path.
+
+## GitLab checks
+
+For GitLab-connected sites or GitLab copy targets, verify the token and project settings.
+
+Check:
+
+- the GitLab instance URL is correct and reachable over HTTPS
+- the project ID or project path resolves to the intended project
+- the access token is active and not expired
+- the token can read the repository
+- the token has the scopes required by your configured GitLab mode
+- the configured branch exists
+- webhook settings are present if automatic updates are expected from GitLab
+
+GitLab OAuth and GitLab deployment tokens serve different purposes. OAuth connects a user account for authoring and context. The deployment token or provider credential is what lets DubStack read repository files for sync/copy operations.
+
+See [GitLab](/deployment/gitlab) for provider-specific setup.
+
+## Hosted starter repository checks
+
+If the site was created with the hosted repository flow, DubStack manages the source repository for you.
+
+Check:
+
+- the site still shows a hosted repository in Git settings
+- editor changes were published, not just saved locally in the browser
+- manual update succeeds
+- the live page path matches the page slug
+
+Move from hosted source to your own repository when your team needs direct Git ownership, branch protection, provider-native reviews, or external automation.
+
+## Preview deployment checks
+
+Preview deployments are branch-specific.
+
+If a preview fails:
+
+- confirm the branch exists
+- confirm the branch is not the configured deployment branch when the preview feature requires a separate branch
+- inspect the preview activity/log output
+- validate `dubstack.json` on that branch
+- check navigation paths, frontmatter, images, snippets, and OpenAPI specs on that branch
+- compare the branch against the deployment branch to find the source change that introduced the failure
+
+If the live site works but preview fails, keep the investigation scoped to the preview branch first.
+
+See [Preview deployments](/deployment/preview-deployments) for the preview workflow.
+
+## Page is published but not discoverable
+
+A page can exist in Git and still not appear where you expect.
+
+Check:
+
+| Symptom | Check |
+| --- | --- |
+| Direct URL works, sidebar does not show it | Add the page slug to `dubstack.json` navigation. |
+| Page is missing from search or assistant context | Check `hidden`, `noindex`, and sync timing. |
+| Old URL returns 404 after a rename | Add a redirect from the old path to the new path. |
+| API endpoint page is missing | Check the OpenAPI spec path, operation visibility, and generation status. |
+| Page title is wrong | Check frontmatter `title` and generated API operation metadata. |
+
+Use [Navigation](/configuration/navigation), [Hidden pages](/configuration/hidden-pages), and [Endpoint visibility](/api-reference/endpoint-visibility) for the related controls.
+
+## Provider access changed
+
+Repository access can change outside DubStack.
+
+Revalidate the connection after:
+
+- repository rename or transfer
+- organization ownership change
+- provider app uninstall/reinstall
+- token rotation
+- branch rename
+- permissions or branch protection updates
+- self-hosted Git provider URL or TLS changes
+
+After revalidating, run a manual update and verify the latest commit appears in deployment history.
+
+## Escalation checklist
+
+Before contacting support, collect:
+
+- site subdomain or custom domain
+- provider and repository name
+- configured deployment branch
+- commit SHA that should be live
+- affected page URL
+- whether manual update succeeds
+- latest deployment or activity error message
+- whether the issue affects live site, preview, editor, search, assistant, or MCP
+
+This gives support enough information to distinguish provider access, source validation, published-artifact sync, and frontend cache issues.
+
+## Related
+
+- [Manual updates and deployment history](/deployment/manual-updates-history)
+- [Git sync](/deployment/git-sync)
+- [GitHub](/deployment/github)
+- [GitLab](/deployment/gitlab)
+- [Preview deployments](/deployment/preview-deployments)
