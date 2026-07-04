@@ -1,0 +1,72 @@
+---
+title: Tiles
+description: Add visual preview cards for features, templates, and component galleries.
+icon: panels-top-left
+---
+
+Tiles show a visual preview with a title and description.
+
+Use tiles when the image or preview matters more than a normal text card: template galleries, UI previews, theme examples, and feature showcases.
+
+## Basic tile
+
+<Tile href="/getting-started/overview" title="Starter walkthrough" description="Open the guide that explains the starter site structure.">
+  <img src="/logo/light.svg" alt="DubStack logo preview" />
+</Tile>
+
+```mdx
+<Tile href="/getting-started/overview" title="Starter walkthrough" description="Open the guide that explains the starter site structure.">
+  <img src="/logo/light.svg" alt="DubStack logo preview" />
+</Tile>
+```
+
+## Tile grid
+
+Combine tiles with columns to create a responsive gallery.
+
+<Columns cols={2}>
+  <Tile href="/writing-content/cards" title="Cards" description="Link to related pages with compact summaries.">
+    <img src="/logo/light.svg" alt="Cards preview" />
+  </Tile>
+
+  <Tile href="/writing-content/media-embeds" title="Media" description="Add images, video, embeds, and diagrams.">
+    <img src="/logo/dark.svg" alt="Media preview" />
+  </Tile>
+</Columns>
+
+```mdx
+<Columns cols={2}>
+  <Tile href="/writing-content/cards" title="Cards" description="Link to related pages with compact summaries.">
+    <img src="/logo/light.svg" alt="Cards preview" />
+  </Tile>
+
+  <Tile href="/writing-content/media-embeds" title="Media" description="Add images, video, embeds, and diagrams.">
+    <img src="/logo/dark.svg" alt="Media preview" />
+  </Tile>
+</Columns>
+```
+
+## Properties
+
+<ResponseField name="href" type="string">
+  URL opened when readers click the tile. Use a root-relative path for another docs page or a full URL for an external page.
+</ResponseField>
+
+<ResponseField name="title" type="string">
+  Short title shown below the preview.
+</ResponseField>
+
+<ResponseField name="description" type="string">
+  One sentence that explains where the tile goes or what the preview shows.
+</ResponseField>
+
+<ResponseField name="children" type="MDX content" required>
+  Preview content. Use images, SVGs, or short visual examples.
+</ResponseField>
+
+## Guidelines
+
+- Use landscape preview assets so the tile grid stays balanced.
+- Keep descriptions short; tiles should scan like visual navigation.
+- Use accessible `alt` text for every image preview.
+- Use [cards](/writing-content/cards) instead when the content is text-first.

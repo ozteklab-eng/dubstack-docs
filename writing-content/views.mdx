@@ -1,0 +1,83 @@
+---
+title: Views
+description: Create switchable page sections for languages, frameworks, or setup variants.
+icon: gallery-horizontal-end
+---
+
+Views let readers switch the visible page content for a specific language, framework, or environment.
+
+Use views when the same concept needs parallel versions and you want the page to remember one selected option at a time.
+
+<View title="JavaScript" icon="braces">
+  JavaScript readers see this section.
+
+  ```javascript
+  console.log("Hello from JavaScript");
+  ```
+</View>
+
+<View title="Python" icon="file-code">
+  Python readers see this section.
+
+  ```python
+  print("Hello from Python")
+  ```
+</View>
+
+## Basic views
+
+Define one `View` for each option.
+
+````mdx
+<View title="JavaScript" icon="braces">
+  JavaScript readers see this section.
+
+  ```javascript
+  console.log("Hello from JavaScript");
+  ```
+</View>
+
+<View title="Python" icon="file-code">
+  Python readers see this section.
+
+  ```python
+  print("Hello from Python")
+  ```
+</View>
+````
+
+## When to use views
+
+Use views for page-level alternatives:
+
+- programming language setup
+- framework-specific installation
+- cloud provider variants
+- operating system differences
+
+Use [tabs and steps](/writing-content/tabs-and-steps) for shorter inline alternatives. Use [code groups](/writing-content/code-groups) for code examples that differ but share the same explanation.
+
+## Properties
+
+<ResponseField name="title" type="string" required>
+  Label shown in the view selector.
+</ResponseField>
+
+<ResponseField name="icon" type="string">
+  Optional icon shown beside the active view in the selector.
+</ResponseField>
+
+<ResponseField name="iconType" type="string">
+  Optional icon style when the selected icon library supports multiple styles.
+</ResponseField>
+
+<ResponseField name="children" type="MDX content" required>
+  Content shown when this view is selected.
+</ResponseField>
+
+## Guidelines
+
+- Keep headings inside each view equivalent so readers can compare variants.
+- Do not place unrelated topics in different views.
+- Keep the default view useful for the most common reader.
+- Avoid nesting views inside tabs or accordions.

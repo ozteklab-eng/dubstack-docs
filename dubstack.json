@@ -203,6 +203,22 @@
                 "icon": "message-circle-question"
               },
               {
+                "slug": "writing-content/colors",
+                "icon": "palette"
+              },
+              {
+                "slug": "writing-content/tiles",
+                "icon": "panels-top-left"
+              },
+              {
+                "slug": "writing-content/panels",
+                "icon": "panel-right"
+              },
+              {
+                "slug": "writing-content/views",
+                "icon": "gallery-horizontal-end"
+              },
+              {
                 "slug": "writing-content/fields-expandables",
                 "icon": "list-tree"
               },

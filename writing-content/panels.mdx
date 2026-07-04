@@ -1,0 +1,75 @@
+---
+title: Panels
+description: Pin supporting content in the right rail of a docs page.
+icon: panel-right
+---
+
+Panels replace the right table of contents with custom supporting content.
+
+Use a panel when the side rail should show related actions, examples, or small reference details instead of headings.
+
+<Panel>
+  <Info>
+    This content is pinned to the right rail on wide screens and appears inline on smaller screens.
+  </Info>
+
+  <Card title="Related guide" icon="book-open" href="/writing-content/request-response-examples">
+    Learn how request and response examples use the same rail.
+  </Card>
+</Panel>
+
+## Basic panel
+
+```mdx
+<Panel>
+  <Info>
+    This content is pinned to the right rail on wide screens and appears inline on smaller screens.
+  </Info>
+</Panel>
+```
+
+## Panel with actions
+
+Panels can contain normal MDX components.
+
+```mdx
+<Panel>
+  <Card title="Deployment settings" icon="settings" href="/deployment/git-settings">
+    Configure repository and branch settings.
+  </Card>
+
+  <Tip>
+    Keep panel content short so it remains useful in the side rail.
+  </Tip>
+</Panel>
+```
+
+## Request and response examples
+
+If a page uses a custom panel and also needs API examples, put request and response examples inside the panel so the right rail has one owner.
+
+````mdx
+<Panel>
+  <RequestExample>
+```bash cURL
+curl https://api.example.com/v1/sites \
+  -H "Authorization: Bearer $API_TOKEN"
+```
+  </RequestExample>
+
+  <ResponseExample>
+```json Response
+{
+  "status": "ready"
+}
+```
+  </ResponseExample>
+</Panel>
+````
+
+## Guidelines
+
+- Use one panel per page unless there is a specific ordering need.
+- Keep side-rail content brief.
+- Do not use panels for critical setup steps that mobile readers must find immediately.
+- Use [request and response examples](/writing-content/request-response-examples) for API examples that should live in the same rail.
