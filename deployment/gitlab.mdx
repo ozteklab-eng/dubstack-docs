@@ -1,0 +1,110 @@
+---
+title: GitLab
+description: Mirror docs into GitLab and connect GitLab authoring access for workflows.
+icon: gitlab
+---
+
+GitLab support lets teams keep a copy of their docs in GitLab and use GitLab context for authoring workflows.
+
+<Callout type="info">
+  GitHub is the primary production deployment source in the current setup path. GitLab can be connected as a copy target and authoring integration. Production-source activation for GitLab is controlled by workspace rollout and should be verified in Git settings before switching a live site.
+</Callout>
+
+## What GitLab does today
+
+| Capability | Status |
+| --- | --- |
+| Copy docs from the active deployment source into GitLab | Supported |
+| Use GitLab as a backup or migration target | Supported |
+| Connect GitLab OAuth for workflow and authoring context | Supported |
+| Use GitLab as the active production deployment source | Rollout-controlled; verify in the dashboard |
+| Self-hosted GitLab instance URL | Supported where the instance is reachable by dubstack |
+
+## Connect GitLab as a copy target
+
+1. Open the dashboard.
+2. Go to **Settings > Deployment > Git settings**.
+3. Choose **GitLab**.
+4. Enter the GitLab instance URL. Leave it as `https://gitlab.com` for hosted GitLab.
+5. Enter the numeric project ID or project path accepted by the dashboard.
+6. Enter a GitLab deployment token.
+7. Choose the branch.
+8. Save the connection.
+9. Copy docs from the active source into GitLab.
+
+## Deployment token requirements
+
+Use a GitLab project access token where possible.
+
+Recommended token settings:
+
+| Setting | Value |
+| --- | --- |
+| Role | Maintainer |
+| Scopes | `api`, `read_api` |
+| Expiration | Use your organization's rotation policy |
+
+If project access tokens are unavailable, use a personal access token owned by a service account. Avoid using a personal employee token for long-running production workflows.
+
+## Optional GitLab OAuth
+
+The deployment token keeps the repository copy target connected. GitLab OAuth is separate.
+
+Connect GitLab OAuth when automations or agent workflows need repository-aware authoring context, merge request access, or user-scoped GitLab actions.
+
+To connect OAuth:
+
+1. Open **Settings > Deployment > Git settings**.
+2. Open the GitLab configuration.
+3. Click **Connect GitLab** for hosted GitLab or **Connect Self-Hosted GitLab** for a reachable self-hosted instance.
+4. Complete the GitLab authorization flow.
+5. Return to Git settings and confirm the GitLab account is connected.
+
+## Copy behavior
+
+When GitLab is configured as a copy target, dubstack copies the active docs source into the GitLab repository.
+
+Use this for:
+
+- backup copies
+- migration testing
+- validating GitLab repository structure
+- preparing a future provider switch
+- giving GitLab-based teams access to docs files
+
+Keep one active production source at a time. Do not edit the source repository and GitLab copy target independently unless you are intentionally migrating.
+
+## Self-hosted GitLab
+
+For self-hosted GitLab, the instance must be reachable by dubstack over HTTPS.
+
+Before connecting:
+
+- confirm the public base URL is correct
+- confirm the project ID or path resolves through the GitLab API
+- confirm the token can access the project
+- confirm outbound webhook/API traffic is allowed by your network policy
+
+## Troubleshooting
+
+### GitLab token is rejected
+
+Confirm the token has `api` and `read_api` scopes and can read the selected project.
+
+### Initial copy did not complete
+
+Check the active deployment source first. GitLab copy depends on a valid source repository and published docs files.
+
+### OAuth connects but copy still fails
+
+OAuth and deployment tokens serve different purposes. Confirm the deployment token is still present and valid.
+
+### Self-hosted instance cannot connect
+
+Confirm the instance URL is externally reachable and uses a trusted TLS certificate.
+
+## Related
+
+- [Git providers](/deployment/forgejo-github-gitlab)
+- [GitHub](/deployment/github)
+- [Git sync](/deployment/git-sync)

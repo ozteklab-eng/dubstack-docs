@@ -10,25 +10,33 @@ A connected provider lets dubstack read source content, receive update signals, 
 
 ## Provider support
 
-| Provider | Typical use |
+| Provider | Current role |
 | --- | --- |
-| GitHub | Primary hosted Git provider for connected repos, pull requests, and app-based access. |
-| GitLab | Hosted Git provider for teams that keep docs and code in GitLab. |
-| Forgejo | Self-hosted Git provider for teams that operate their own Git service. |
+| GitHub | Primary connected-source provider for production docs, previews, editor commits, and agent draft pull requests. |
+| GitLab | Copy target and authoring integration for backup, migration, and GitLab-aware workflows. Production-source activation is rollout-controlled. |
+| Forgejo | Self-hosted provider support for existing configured deployments. New setup availability depends on workspace configuration. |
 
-Provider availability can depend on your plan and workspace configuration.
+Provider availability can depend on your plan, workspace configuration, and rollout state.
+
+## Choose a provider path
+
+| Goal | Recommended path |
+| --- | --- |
+| Production docs from your own repository | [GitHub](/deployment/github) |
+| Keep a GitLab copy or prepare a migration | [GitLab](/deployment/gitlab) |
+| Review generic provider concepts | This page |
+| Configure a custom self-hosted provider | Contact support or your dubstack operator until the setup is enabled in your workspace. |
 
 ## Connect a repository
 
 From the dashboard:
 
-1. Open Settings.
-2. Go to Deployment.
-3. Open Git settings.
-4. Choose the provider.
-5. Authorize the provider app or token with the required repository scope.
-6. Select the repository and branch.
-7. Run a manual update to verify the first sync.
+1. Open **Settings > Deployment > Git settings**.
+2. Choose the provider.
+3. Authorize the provider app, deployment token, or OAuth flow required by that provider.
+4. Select the repository and branch.
+5. Save the connection.
+6. Run a manual update to verify the first sync.
 
 ## Repository requirements
 
@@ -70,3 +78,9 @@ If the first sync fails:
 <Callout type="info">
   You can migrate between provider-backed sources, but keep one active production source at a time to avoid branch and publish confusion.
 </Callout>
+
+## Related
+
+- [GitHub](/deployment/github)
+- [GitLab](/deployment/gitlab)
+- [Deployment permissions](/dashboard/deployment-permissions)

@@ -1,0 +1,104 @@
+---
+title: GitHub
+description: Connect a GitHub repository with the dubstack GitHub App.
+icon: github
+---
+
+GitHub is the primary connected-source provider for dubstack docs.
+
+Use the GitHub App when your documentation source lives in a GitHub repository and you want automatic updates, preview deployments, editor commits, agent draft pull requests, and workflow-driven documentation changes.
+
+## When you need the GitHub App
+
+| Repository type | GitHub App required? |
+| --- | --- |
+| Hosted starter repository created by dubstack | No, the hosted source is managed for you. |
+| Your own GitHub repository | Yes, install the app and grant access to the docs repository. |
+| Private GitHub repository | Yes, install the app with access to the private repository. |
+
+The dashboard shows the active repository, branch, last sync time, and app installation state in **Settings > Deployment > Git settings**.
+
+## Connect GitHub
+
+1. Open the dashboard.
+2. Go to **Settings > Deployment > Git settings**.
+3. Choose **GitHub**.
+4. Install or manage the dubstack GitHub App.
+5. Grant access to the documentation repository.
+6. Select the repository and branch that should publish the live site.
+7. Save the connection.
+8. Run a manual update to verify the first sync.
+
+## Recommended repository structure
+
+At minimum, the repository should include:
+
+```text
+dubstack.json
+index.mdx
+quickstart.mdx
+```
+
+For richer sites, include:
+
+- `api-reference/openapi.json` or another configured OpenAPI spec path
+- image and asset files used by pages
+- reusable snippets
+- folders that match the slugs in `dubstack.json`
+
+## GitHub App access
+
+Grant access only to the repositories dubstack needs.
+
+The GitHub App is used for:
+
+- reading docs source files
+- receiving repository events
+- creating branches and draft pull requests when agent authoring is enabled
+- creating preview deployments for supported branch or pull request workflows
+- updating docs files from the dashboard editor where allowed
+
+If your organization uses branch protection, keep it enabled. Agent and editor changes should still follow the repository's review rules.
+
+## Hosted starter to GitHub
+
+If you skipped Git during onboarding, your site can start with a hosted repository. Move to your own GitHub repository when you want full repository ownership.
+
+Recommended path:
+
+1. Open **Settings > Deployment > Git settings**.
+2. Choose GitHub as the target provider.
+3. Install the GitHub App if needed.
+4. Clone or copy the hosted docs source into your GitHub organization.
+5. Select the new repository and branch.
+6. Run a manual update.
+7. Confirm the live site matches the previous hosted version.
+
+## Troubleshooting
+
+### Repository is missing from the picker
+
+Check that the GitHub App is installed on the organization or account that owns the repository, and that the repository is included in the installation's repository access list.
+
+### Updates do not run after push
+
+Check:
+
+- the push went to the configured branch
+- the GitHub App is still installed
+- the repository has not been renamed or transferred
+- the activity feed shows the latest webhook or manual update
+
+### Agent cannot open a pull request
+
+Check that the GitHub App has access to the repository and that branch protection allows app-created branches and pull requests. The app should not need to bypass required reviews.
+
+### Manual update works but webhook updates do not
+
+Reinstall or reauthorize the GitHub App, then run another manual update to verify the connection.
+
+## Related
+
+- [Git providers](/deployment/forgejo-github-gitlab)
+- [Preview deployments](/deployment/preview-deployments)
+- [Deployment permissions](/dashboard/deployment-permissions)

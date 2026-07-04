@@ -197,7 +197,9 @@
               { "slug": "deployment/docs-subpath", "icon": "folder-tree" },
               { "slug": "deployment/preview-deployments", "icon": "eye" },
               { "slug": "deployment/git-sync", "icon": "refresh-cw" },
-              { "slug": "deployment/forgejo-github-gitlab", "icon": "git-merge" }
+              { "slug": "deployment/forgejo-github-gitlab", "icon": "git-merge" },
+              { "slug": "deployment/github", "icon": "github" },
+              { "slug": "deployment/gitlab", "icon": "gitlab" }
             ]
           },
           {
