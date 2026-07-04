@@ -1,41 +1,129 @@
 ---
-title: Publishing
-description: Review and publish documentation changes through Git-backed workflows.
+title: Branching and publishing
+description: Review, preview, and publish documentation changes through Git-backed workflows.
 icon: git-pull-request
 ---
 
 Publishing moves source changes into the public docs runtime.
 
-The exact flow depends on your source type, but the contract is the same: source changes sync into published artifacts, then the live site serves those artifacts.
+The exact flow depends on your connected source, branch, and repository rules. The contract is consistent: source changes are written to Git, synced into published artifacts, and then served by the live site.
+
+```text
+Editor or Git change
+-> branch, commit, or pull request
+-> deployment branch
+-> sync job
+-> published docs site
+```
+
+## Save, publish, and sync
+
+| Stage | What it means |
+| --- | --- |
+| Edit | Change content, navigation, assets, or site configuration in the dashboard editor |
+| Save | Persist the change in the editor or connected source path, depending on the source type |
+| Publish | Commit the change, create a branch or pull request, or update the deployment branch depending on repository rules |
+| Sync | Build published artifacts from the configured source |
+| Live | Serve the updated docs from the public site |
+
+A dashboard preview is useful while editing, but the live site is the final verification target.
 
 ## Source-backed publishing
 
-For connected repositories:
+Use this flow when your site is connected to a customer-owned Git repository.
 
-1. Make a content or configuration change.
-2. Commit it to the connected branch or open a pull request.
-3. Merge when the change is reviewed.
-4. Let the webhook or manual update trigger a sync.
-5. Verify the live site.
+<Steps>
+  <Step title="Choose the working branch">
+    Use the branch selector in the editor toolbar or your Git provider to choose where the change should be made.
+
+    Use the deployment branch for small direct edits when your repository allows direct publishing. Use a feature branch when the change needs review.
+  </Step>
+
+  <Step title="Make the change">
+    Edit pages, navigation, site configuration, assets, or OpenAPI specs.
+
+    For source changes made outside the dashboard, commit and push them to the configured branch.
+  </Step>
+
+  <Step title="Review the diff">
+    Before publishing, review changed files and confirm the change is limited to the intended pages and configuration.
+
+    Check `dubstack.json` carefully when navigation, theme, redirects, SEO, or API reference settings change.
+  </Step>
+
+  <Step title="Publish or open a pull request">
+    If the deployment branch allows direct publishing, publish to commit and sync the change.
+
+    If the branch is protected or the change needs review, create a pull request from the feature branch into the deployment branch.
+  </Step>
+
+  <Step title="Review the preview">
+    Open the preview deployment for the branch or pull request.
+
+    Check page rendering, navigation, search, API reference pages, assistant responses, and any changed assets.
+  </Step>
+
+  <Step title="Merge and verify live">
+    Merge the reviewed pull request into the deployment branch.
+
+    After the sync finishes, open the live site and verify the updated page directly.
+  </Step>
+</Steps>
 
 ## Hosted repository publishing
 
-For hosted repository sites:
+Use this flow when the site was created with the hosted starter source during onboarding.
 
-1. Edit from the dashboard.
-2. Save through the dashboard flow.
-3. Review the activity feed.
-4. Open the live page after the update finishes.
+<Steps>
+  <Step title="Edit in the dashboard">
+    Open the editor and make the content or configuration change.
+  </Step>
 
-You can connect a customer-owned repository later when your team wants to move ownership out of the hosted source.
+  <Step title="Save the change">
+    Save through the dashboard flow and wait for the activity item to complete.
+  </Step>
+
+  <Step title="Verify the published site">
+    Open the live URL and confirm the page, navigation, search result, or API reference output changed as expected.
+  </Step>
+</Steps>
+
+You can move from a hosted source to a customer-owned Git repository later. See [Git essentials](/editor/git-essentials) and [GitHub](/deployment/github).
+
+## Branching decisions
+
+| Situation | Recommended path |
+| --- | --- |
+| Small typo and no branch protection | Publish directly to the deployment branch |
+| New guide, migration, or API reference change | Create a feature branch and pull request |
+| Agent-authored docs update | Review the generated branch and draft pull request |
+| Change touches `dubstack.json` | Use a branch and preview unless the change is trivial |
+| OpenAPI spec update | Use a branch and verify generated endpoint pages in preview |
+| Emergency correction | Publish directly only if your repository policy allows it |
+
+## Preview deployments
+
+Preview deployments let reviewers inspect a branch before it becomes live.
+
+Use previews to check:
+
+- new pages and deleted pages
+- navigation changes
+- API reference endpoint rendering
+- code blocks, callouts, tabs, accordions, and tables
+- custom domain or `/docs` path behavior when relevant
+- assistant answers and public MCP discovery after source updates
+
+Preview URLs are temporary review surfaces. The deployment branch remains the source for the production docs site.
 
 ## Manual update
 
 Use manual update when:
 
 - A webhook did not arrive.
+- A provider maintenance window delayed repository events.
 - You changed a hosted OpenAPI spec URL.
-- You want to re-sync the current branch after provider maintenance.
+- You need to re-sync the current branch after a failed deployment.
 - Support asks you to refresh published artifacts.
 
 Manual update does not replace source control. It re-runs the publish path from the configured source.
@@ -45,11 +133,34 @@ Manual update does not replace source control. It re-runs the publish path from 
 After publishing, check:
 
 - The activity item finished successfully.
-- The dashboard shows the expected latest sync time.
+- Deployment history shows the expected latest sync.
 - Changed pages open on the live site.
 - Navigation and search include new pages.
 - API endpoint pages render if the change involved OpenAPI.
+- `llms.txt`, `llms-full.txt`, `skill.md`, and public MCP reflect the change when AI discovery is enabled.
 
 <Callout type="warning">
   Do not rely on dashboard preview alone for production verification. Always open the live URL after the publish finishes.
 </Callout>
+
+## Troubleshooting
+
+### Publish is disabled
+
+Check that there are pending changes, that your account can write to the source, and that the selected branch allows the action you are trying to perform.
+
+### A pull request is required
+
+Your deployment branch is protected. Create a branch and pull request, then merge after review.
+
+### The live site still shows the old content
+
+Check deployment history. If no sync ran, use manual update and confirm the provider webhook is still configured.
+
+### The preview works but the live site does not
+
+Confirm the pull request was merged into the deployment branch configured in Git settings.
+
+### A generated API page is missing
+
+Confirm the OpenAPI spec path is configured, committed to the source, and included in the branch that triggered the sync.

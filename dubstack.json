@@ -309,6 +309,10 @@
                 "icon": "command"
               },
               {
+                "slug": "editor/git-essentials",
+                "icon": "git-branch"
+              },
+              {
                 "slug": "editor/keyboard-shortcuts",
                 "icon": "keyboard"
               },

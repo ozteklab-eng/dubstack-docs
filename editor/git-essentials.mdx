@@ -1,0 +1,148 @@
+---
+title: Git essentials
+description: Understand branches, commits, pull requests, previews, and sync in the dubstack editor.
+icon: git-branch
+---
+
+The dubstack editor is built on the same source-control model as your docs repository.
+
+You can use the dashboard without memorizing Git commands, but understanding the underlying concepts makes publishing, reviews, previews, and troubleshooting easier.
+
+## Source of truth
+
+DubStack uses a Git-backed publishing model.
+
+```text
+Authoring change
+-> Git commit or pull request
+-> Sync into published artifacts
+-> Live site reads published artifacts
+```
+
+Git remains the write source of truth. Published artifacts are the read path used by the live docs site.
+
+## Core concepts
+
+<AccordionGroup>
+  <Accordion title="Repository">
+    A repository stores your documentation files and their history.
+
+    A typical docs repository includes `dubstack.json`, MDX pages, images, snippets, and optional OpenAPI specs.
+  </Accordion>
+
+  <Accordion title="Deployment branch">
+    The branch that publishes to your live site. Many teams use `main`, but the active deployment branch is whatever you configure in Git settings.
+
+    Changes on this branch are eligible for live deployment after a sync completes.
+  </Accordion>
+
+  <Accordion title="Feature branch">
+    A separate branch used to draft and review changes before they reach the deployment branch.
+
+    Feature branches are useful for larger edits, agent-authored drafts, and changes that need review before publishing.
+  </Accordion>
+
+  <Accordion title="Commit">
+    A saved change in the repository. A commit records what changed, when it changed, and the message that describes the change.
+
+    Dashboard editor saves and agent-authored updates become commits through the connected Git provider when publishing is complete.
+  </Accordion>
+
+  <Accordion title="Pull request or merge request">
+    A review request from a feature branch into the deployment branch.
+
+    Use pull requests or merge requests when your team requires review, branch protection, or a preview URL before the change goes live.
+  </Accordion>
+
+  <Accordion title="Preview deployment">
+    A temporary rendered docs site for a branch or proposed change.
+
+    Use previews to review navigation, API reference pages, search, assistant behavior, and visual changes before merging.
+  </Accordion>
+
+  <Accordion title="Published artifact">
+    The compiled content package served by the public docs site.
+
+    The live frontend reads published artifacts. It should not depend on local files or unfinished dashboard state.
+  </Accordion>
+</AccordionGroup>
+
+## How editor actions map to Git
+
+| Editor or dashboard action | Source-control effect |
+| --- | --- |
+| Edit a page | Creates a pending content change in the editor session |
+| Save or publish from the dashboard | Writes the change to the configured source path when the source allows editor writes |
+| Create a branch | Creates or selects an isolated line of work |
+| Save on a feature branch | Commits changes to that branch |
+| Create a pull request | Opens a review from the feature branch to the deployment branch |
+| Merge a pull request | Moves the approved changes into the deployment branch |
+| Manual update | Re-syncs the configured source into published artifacts |
+| External Git push | Triggers a sync when the provider webhook is configured |
+| Agent draft | Creates a branch and draft pull request when repository access is enabled |
+
+The exact actions visible in the editor depend on your connected provider, branch protection, repository permissions, and feature access.
+
+## Hosted starter repositories
+
+If you skip Git during onboarding, DubStack can start with a hosted source. This lets you edit and publish without connecting your own Git provider immediately.
+
+Move to a customer-owned repository when you want:
+
+- repository ownership in your organization
+- branch protection and required reviews
+- local development workflows
+- external CI checks
+- agent-authored pull requests against your own repository
+- long-term source portability
+
+See [GitHub](/deployment/github) for the primary connected-source setup path.
+
+## Connected repositories
+
+For connected repositories, the deployment branch and source path are configured in **Settings → Deployment → Git settings**.
+
+The live site updates when:
+
+- a webhook arrives from the connected provider
+- a dashboard editor publish writes to the source
+- a pull request is merged into the deployment branch
+- you trigger a manual update from the dashboard
+
+Use [Manual updates and history](/deployment/manual-updates-history) when a webhook is delayed or you need to re-sync the current branch.
+
+## Branch protection
+
+Branch protection should stay enabled for production docs repositories.
+
+When branch protection requires reviews, publish changes through a branch and pull request instead of pushing directly to the deployment branch. This keeps documentation changes on the same review path as code changes.
+
+If an action is blocked by branch protection, use the provider pull request flow or adjust repository rules in your Git provider.
+
+## File ownership
+
+Keep generated and authored content separated.
+
+- Author MDX pages directly in the docs source.
+- Keep `dubstack.json` as the site configuration file.
+- Keep OpenAPI specs in a predictable path such as `api-reference/openapi.json`.
+- Store images and reusable snippets in folders committed to the same source.
+- Avoid editing the same file independently from multiple disconnected sources.
+
+## Troubleshooting
+
+### The editor shows an older version of a page
+
+Run a manual update, then reload the editor. If the page is still stale, confirm the configured branch and source path in Git settings.
+
+### A preview does not match the live site
+
+Check which branch the preview is rendering. A preview branch can differ from the deployment branch until it is merged.
+
+### Agent or workflow changes are not appearing as pull requests
+
+Confirm the Git provider is connected, the app or token has repository access, and the target repository allows branch creation.
+
+### A live page did not update after a merge
+
+Check deployment history for the latest sync. If no sync ran, verify the provider webhook and use a manual update.
