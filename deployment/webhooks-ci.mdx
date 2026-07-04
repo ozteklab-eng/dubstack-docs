@@ -1,0 +1,96 @@
+---
+title: Webhooks and CI
+sidebarTitle: Webhooks and CI
+icon: workflow
+---
+
+DubStack uses Git provider events to keep published docs in sync with your source repository.
+
+For most teams, the provider app or token integration handles updates automatically. CI can sit before DubStack in your repository workflow to validate docs before changes reach the deployment branch.
+
+## Update flow
+
+```text
+Docs change
+-> Git provider event
+-> sync worker
+-> published artifacts
+-> live docs site
+```
+
+For GitHub-backed repositories, the GitHub App receives repository events and starts the sync path for the configured docs source.
+
+For GitLab-backed repositories, availability depends on the GitLab connection mode enabled for your workspace. Check [GitLab](/deployment/gitlab) before using GitLab as a production source.
+
+## Deployment branch
+
+Choose one branch as the live docs source.
+
+Common patterns:
+
+| Pattern | Use when |
+| --- | --- |
+| `main` publishes docs | Your docs repository is dedicated to documentation. |
+| `docs` publishes docs | Your product repo keeps docs on a separate branch. |
+| protected deployment branch | You require pull requests and CI checks before publishing. |
+
+Pushes to non-deployment branches should be reviewed through previews or pull requests before merging to the live branch.
+
+## Using CI with DubStack
+
+Run CI before merging into the deployment branch.
+
+Useful checks include:
+
+- MDX syntax validation
+- link checks
+- OpenAPI schema validation
+- formatting checks
+- spellcheck or terminology checks
+- custom tests for generated snippets
+
+After CI passes and the change reaches the deployment branch, the Git provider update should trigger DubStack sync.
+
+## Recommended pull request flow
+
+1. Create a branch for the docs change.
+2. Run local or CI checks.
+3. Open a pull request.
+4. Review the preview deployment when available.
+5. Merge into the deployment branch.
+6. Confirm the live activity item succeeds.
+
+If the provider event does not arrive, use [Manual updates](/deployment/manual-updates-history) to retry the sync from the configured branch.
+
+## Webhook troubleshooting
+
+### Pushes do not update the site
+
+Check:
+
+- the push went to the configured deployment branch
+- the Git provider app or token is still connected
+- the repository was not renamed or transferred
+- the branch exists and contains `dubstack.json`
+- the activity feed shows a recent update attempt
+
+### Pull request previews do not appear
+
+Check that preview deployments are available for the site and provider path, then confirm the pull request targets the deployment branch.
+
+### CI passed but the site did not update
+
+CI only validates the repository. The provider event still needs to reach DubStack and the sync worker still needs repository access.
+
+Run a manual update to determine whether the issue is provider event delivery or repository sync itself.
+
+### Multiple docs sources are connected
+
+Keep one active production docs source per site. If you maintain a backup copy in another provider, make sure only the intended source is marked active for publishing.
+
+## Related
+
+- [Git sync](/deployment/git-sync)
+- [GitHub](/deployment/github)
+- [GitLab](/deployment/gitlab)
+- [Preview deployments](/deployment/preview-deployments)

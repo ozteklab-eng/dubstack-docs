@@ -464,6 +464,14 @@
                 "icon": "eye"
               },
               {
+                "slug": "deployment/manual-updates-history",
+                "icon": "refresh-cw"
+              },
+              {
+                "slug": "deployment/webhooks-ci",
+                "icon": "workflow"
+              },
+              {
                 "slug": "deployment/git-sync",
                 "icon": "refresh-cw"
               },

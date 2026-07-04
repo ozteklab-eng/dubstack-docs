@@ -1,0 +1,106 @@
+---
+title: Manual updates and history
+sidebarTitle: Manual updates
+icon: refresh-cw
+---
+
+Manual updates let you refresh a live docs site from the connected repository without waiting for another Git provider event.
+
+Use a manual update when a webhook was missed, a sync needs to be retried, or you want to pull the latest configured branch into the published site before continuing validation.
+
+## What a manual update does
+
+A manual update runs the same Git to published-content path used by normal updates.
+
+```text
+Dashboard manual update
+-> permission check
+-> active docs repository
+-> Git sync worker
+-> R2 published artifacts
+-> frontend cache refresh
+-> dashboard preview screenshot refresh
+```
+
+Manual updates do not edit files. They read the configured docs branch and republish the current repository state.
+
+## Requirements
+
+Manual updates require:
+
+- a selected site
+- permission to trigger deployments for that site
+- an active docs Git integration
+- repository owner, repository name, branch, and app installation details for the active source
+
+If the active integration is missing repository or installation details, reconnect the repository from [Git settings](/deployment/forgejo-github-gitlab) before retrying.
+
+## Trigger a manual update
+
+1. Open the dashboard for the site.
+2. Go to **Home**.
+3. Click the refresh icon in the site actions row.
+4. Wait for the activity item to finish.
+5. Open the live docs site and confirm the expected content is visible.
+
+The dashboard shows a loading state while the request is queued. After the sync finishes, the activity feed and preview card should update.
+
+## Deployment history
+
+Deployment history records recent live updates for the site.
+
+A deployment record can include:
+
+| Field | Meaning |
+| --- | --- |
+| Status | Whether the update succeeded, failed, or is still running. |
+| Trigger | Manual update, webhook, preview, or another deployment trigger. |
+| Branch | The branch used for the update. |
+| Commit SHA | The commit synced when available. |
+| Commit message | The source commit message or platform update label. |
+| Duration | How long the update took. |
+| Preview screenshot | The dashboard preview image captured after update. |
+
+Manual updates are labeled as manual activity so they can be distinguished from Git provider updates.
+
+## When to use manual updates
+
+Use manual updates for:
+
+- retrying after a failed or missed webhook
+- verifying a new repository connection
+- refreshing the dashboard preview screenshot
+- pulling changes after switching the deployment branch
+- confirming a support or migration fix
+
+Do not use manual updates as a replacement for a healthy Git webhook path. If manual update is the only reliable path, inspect the provider installation and webhook setup.
+
+## Troubleshooting
+
+### Manual update says no active docs integration exists
+
+Connect a docs repository in **Settings > Deployment > Git settings**.
+
+### Manual update fails with missing repository details
+
+Reconnect the Git provider app or repository. The active integration needs repository owner, repository name, branch, and app installation details.
+
+### The update succeeds but the page still looks stale
+
+Check:
+
+- the change was committed to the configured branch
+- the activity item finished successfully
+- the page is not open on an old preview URL
+- the browser cache was refreshed
+- the changed page is included in `dubstack.json` navigation when it should be public
+
+### The preview screenshot is stale
+
+Wait for screenshot processing after the update completes. If the site content changed but the dashboard preview did not, run another manual update after confirming the live site renders correctly.
+
+## Related
+
+- [Git sync](/deployment/git-sync)
+- [Git providers](/deployment/forgejo-github-gitlab)
+- [Preview deployments](/deployment/preview-deployments)
