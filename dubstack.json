@@ -245,8 +245,28 @@
                 "icon": "pencil"
               },
               {
+                "slug": "editor/pages",
+                "icon": "file-text"
+              },
+              {
+                "slug": "editor/navigation",
+                "icon": "map"
+              },
+              {
+                "slug": "editor/live-preview",
+                "icon": "eye"
+              },
+              {
+                "slug": "editor/site-configurations",
+                "icon": "sliders-horizontal"
+              },
+              {
                 "slug": "editor/slash-commands",
                 "icon": "command"
+              },
+              {
+                "slug": "editor/keyboard-shortcuts",
+                "icon": "keyboard"
               },
               {
                 "slug": "editor/publishing",

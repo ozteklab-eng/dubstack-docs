@@ -1,0 +1,64 @@
+---
+title: Site configurations
+description: Edit site-level settings backed by dubstack.json from the editor.
+icon: sliders-horizontal
+---
+
+Site configurations let you update docs settings without hand-editing `dubstack.json`.
+
+The visual editor writes to the same source-backed configuration used by the public renderer, sync worker, and dashboard preview.
+
+## Open site configurations
+
+1. Open **Editor**.
+2. Open the navigation pane.
+3. Select **Site configurations** at the bottom of the pane.
+4. Use the visual form for common settings, or switch to JSON view when you need precise control.
+
+## Configuration sections
+
+The current configuration surface includes:
+
+- General
+- Branding
+- Styling
+- Typography
+- Navbar
+- Footer
+- Banner
+- Thumbnail
+- Content
+- Codeblocks
+- Context menu
+- Navigation
+- Search
+- API reference
+- Redirects
+- SEO
+- Analytics
+- 404 page
+- Variables
+
+Some advanced sections appear only when the deployment tier supports the underlying feature.
+
+## Visual mode and JSON mode
+
+| Mode | Use it for |
+| --- | --- |
+| Visual | Common settings with validation and guided controls. |
+| JSON | Reviewing the source configuration or editing fields that are easier to express directly. |
+
+If you edit JSON directly, keep the structure valid and preview before publishing.
+
+## Source of truth
+
+`dubstack.json` remains the source of truth for site configuration.
+
+Dashboard controls should write to real config paths that the renderer consumes. If a field is not connected to runtime behavior, it should not be treated as a shipped setting.
+
+## Related
+
+- [Configure dubstack.json](/configuration/dubstack-json)
+- [Theming](/configuration/theming)
+- [Navigation](/configuration/navigation)
+- [API reference](/api-reference/introduction)

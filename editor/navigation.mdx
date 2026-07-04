@@ -1,0 +1,46 @@
+---
+title: Navigation
+description: Manage the docs sidebar and source navigation from the editor.
+icon: map
+---
+
+The navigation pane controls how readers move through your docs.
+
+Navigation is stored in `dubstack.json`, so changes made in the editor are part of the same source-backed publish flow as page edits.
+
+## Navigation versus file browser
+
+| Pane | Use it for |
+| --- | --- |
+| Navigation | Reader-facing page order, groups, labels, icons, and site configuration access. |
+| File browser | Source files, unlisted pages, assets, config files, and folders. |
+
+A file can exist in the repository without appearing in navigation. This is useful for drafts, snippets, assets, and hidden support pages.
+
+## Open navigation settings
+
+Hover over a navigation item to reveal its actions.
+
+Use the settings action to edit labels and item-specific configuration. Use create actions to add files or folders where supported.
+
+## Site configuration shortcut
+
+The bottom of the navigation pane includes **Site configurations**.
+
+Use it to edit visual and runtime settings backed by `dubstack.json`, including branding, theme, navigation behavior, search, API reference settings, redirects, SEO, and add-on surfaces.
+
+## Keep navigation reviewable
+
+Navigation changes affect the public site structure. Treat them like code changes:
+
+- keep labels short and predictable
+- avoid moving many pages in the same change as a content rewrite
+- preview the site before publishing
+- verify internal links after moving or renaming pages
+
+## Related
+
+- [Pages and files](/editor/pages)
+- [Site configurations](/editor/site-configurations)
+- [Configure navigation](/configuration/navigation)
+- [Publishing](/editor/publishing)

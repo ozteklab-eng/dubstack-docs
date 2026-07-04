@@ -1,0 +1,78 @@
+---
+title: Pages and files
+description: Create, open, rename, upload, and delete docs files from the editor.
+icon: file-text
+---
+
+Use the editor sidebar to work with both published navigation and source files.
+
+The navigation pane shows the docs structure readers use. The file browser shows source files from the connected docs repository, including files that are not listed in navigation.
+
+## Open a page
+
+1. Open the dashboard.
+2. Go to **Editor**.
+3. Use **Navigation** to browse published docs structure, or open **File browser** from the toolbar menu.
+4. Select a page or file.
+5. Edit the content.
+6. Save or publish through the Git-backed flow.
+
+## Create a file
+
+Use the file browser when you want to create a source file directly.
+
+1. Open **File browser**.
+2. Choose the folder where the file should live.
+3. Click the create-file action.
+4. Choose a content type.
+5. Enter a file name.
+6. Add optional starter content.
+7. Create the file.
+
+For docs pages, use `.mdx`. For configuration, use JSON files such as `dubstack.json` or `api-reference/openapi.json`.
+
+## Create a folder
+
+Use folders to organize source files by topic.
+
+1. Open **File browser**.
+2. Choose the parent folder.
+3. Click the create-folder action.
+4. Enter a folder name.
+5. Create the folder.
+
+Folder changes should be published with the pages that reference the new paths.
+
+## Rename files and folders
+
+Hover over a file or folder and open its settings menu.
+
+From there you can rename the item and review the current path. Renaming changes source paths, so update any links that reference the old path before publishing.
+
+## Upload files
+
+Use upload for images, icons, OpenAPI specs, or other docs assets.
+
+Supported upload types include MDX, Markdown, JSON, YAML, text, images, SVG, and common web assets.
+
+When uploading an asset:
+
+- choose the content type
+- select the file
+- set the destination path
+- add a commit message when needed
+
+## Delete files and folders
+
+Deleting a file or folder removes it from the source repository when the change is published.
+
+<Callout type="warning">
+  Before deleting a page, remove or update links to that page and check that navigation no longer references it.
+</Callout>
+
+## Related
+
+- [Navigation](/editor/navigation)
+- [Publishing](/editor/publishing)
+- [MDX](/writing-content/mdx)
+- [Images and assets](/writing-content/images-assets)
