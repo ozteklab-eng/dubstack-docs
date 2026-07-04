@@ -1,0 +1,73 @@
+---
+title: Tabs and steps
+description: Organize alternate content and sequential procedures.
+icon: list-ordered
+---
+
+Use tabs for alternate choices and steps for ordered procedures.
+
+## Tabs
+
+<Tabs>
+  <Tab title="GitHub">
+    Connect the GitHub app, choose a repository, then publish from the dashboard.
+  </Tab>
+
+  <Tab title="GitLab">
+    Connect GitLab with a token, choose a project, then sync through the Git provider settings.
+  </Tab>
+</Tabs>
+
+```mdx
+<Tabs>
+  <Tab title="GitHub">
+    Connect the GitHub app, choose a repository, then publish from the dashboard.
+  </Tab>
+
+  <Tab title="GitLab">
+    Connect GitLab with a token, choose a project, then sync through the Git provider settings.
+  </Tab>
+</Tabs>
+```
+
+## Steps
+
+<Steps>
+  <Step title="Create the page">
+    Add an `.mdx` file to your docs repository.
+  </Step>
+
+  <Step title="Add it to navigation">
+    Reference the page from `dubstack.json` so readers can find it.
+  </Step>
+
+  <Step title="Publish the site">
+    Commit the change and run a manual update if you want to refresh immediately.
+  </Step>
+</Steps>
+
+```mdx
+<Steps>
+  <Step title="Create the page">
+    Add an `.mdx` file to your docs repository.
+  </Step>
+
+  <Step title="Add it to navigation">
+    Reference the page from `dubstack.json`.
+  </Step>
+</Steps>
+```
+
+## Supported props
+
+<ResponseField name="title" type="string" required>
+  Required on each `Tab` and `Step`.
+</ResponseField>
+
+<ResponseField name="defaultTab" type="string">
+  Optional `Tabs` prop for choosing which tab opens first.
+</ResponseField>
+
+<ResponseField name="children" type="MDX content" required>
+  Content inside each tab or step.
+</ResponseField>

@@ -147,6 +147,34 @@
                 "icon": "puzzle-piece"
               },
               {
+                "slug": "writing-content/cards",
+                "icon": "panels-top-left"
+              },
+              {
+                "slug": "writing-content/callouts",
+                "icon": "badge-alert"
+              },
+              {
+                "slug": "writing-content/accordions",
+                "icon": "list-collapse"
+              },
+              {
+                "slug": "writing-content/tabs-and-steps",
+                "icon": "list-ordered"
+              },
+              {
+                "slug": "writing-content/code-groups",
+                "icon": "square-terminal"
+              },
+              {
+                "slug": "writing-content/frames",
+                "icon": "scan"
+              },
+              {
+                "slug": "writing-content/file-trees",
+                "icon": "folder-tree"
+              },
+              {
                 "slug": "writing-content/code-blocks",
                 "icon": "code"
               },

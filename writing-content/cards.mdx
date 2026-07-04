@@ -1,0 +1,81 @@
+---
+title: Cards
+description: Use cards and card groups to create visual links and grouped actions.
+icon: panels-top-left
+---
+
+Cards are compact containers for important links, short summaries, and grouped calls to action.
+
+## Basic card
+
+<Card title="Configure navigation" icon="map" href="/configuration/navigation">
+  Learn how to organize reader-facing pages from `dubstack.json` or the editor.
+</Card>
+
+```mdx
+<Card title="Configure navigation" icon="map" href="/configuration/navigation">
+  Learn how to organize reader-facing pages.
+</Card>
+```
+
+## Card groups
+
+Use `CardGroup` when several cards belong together.
+
+<CardGroup cols={2}>
+  <Card title="Write MDX" icon="file-code" href="/writing-content/mdx">
+    Author pages with Markdown, MDX components, and frontmatter.
+  </Card>
+
+  <Card title="Add API docs" icon="terminal" href="/api-reference/introduction">
+    Generate endpoint pages from an OpenAPI specification.
+  </Card>
+</CardGroup>
+
+```mdx
+<CardGroup cols={2}>
+  <Card title="Write MDX" icon="file-code" href="/writing-content/mdx">
+    Author pages with Markdown and MDX components.
+  </Card>
+
+  <Card title="Add API docs" icon="terminal" href="/api-reference/introduction">
+    Generate endpoint pages from an OpenAPI specification.
+  </Card>
+</CardGroup>
+```
+
+## Typed cards
+
+Typed cards use the same intent colors as callouts.
+
+<Card title="Review before publishing" type="warning">
+  Use typed cards for grouped warnings, tips, or success states that need more structure than a callout.
+</Card>
+
+```mdx
+<Card title="Review before publishing" type="warning">
+  Use typed cards for grouped warnings, tips, or success states.
+</Card>
+```
+
+## Supported props
+
+<ResponseField name="title" type="string" required>
+  Primary card label.
+</ResponseField>
+
+<ResponseField name="href" type="string">
+  Optional link target. Use internal paths for docs pages or full URLs for external links.
+</ResponseField>
+
+<ResponseField name="icon" type="string">
+  Optional icon name.
+</ResponseField>
+
+<ResponseField name="type" type="string">
+  Optional intent style. Supported values include `info`, `note`, `tip`, `warning`, `check`, and `danger`.
+</ResponseField>
+
+<ResponseField name="cols" type="number">
+  Number of columns used by `CardGroup` on wide viewports.
+</ResponseField>

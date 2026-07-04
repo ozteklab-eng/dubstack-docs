@@ -1,0 +1,46 @@
+---
+title: File trees
+description: Show project structure and docs repository layouts.
+icon: folder-tree
+---
+
+Use file trees to explain where files live in a docs repository.
+
+<Tree>
+  <Tree.Folder name="api-reference" defaultOpen>
+    <Tree.File name="openapi.json" />
+    <Tree.File name="introduction.mdx" />
+  </Tree.Folder>
+
+  <Tree.Folder name="getting-started" defaultOpen>
+    <Tree.File name="overview.mdx" />
+    <Tree.File name="deploy.mdx" />
+  </Tree.Folder>
+
+  <Tree.File name="dubstack.json" />
+</Tree>
+
+```mdx
+<Tree>
+  <Tree.Folder name="api-reference" defaultOpen>
+    <Tree.File name="openapi.json" />
+    <Tree.File name="introduction.mdx" />
+  </Tree.Folder>
+
+  <Tree.File name="dubstack.json" />
+</Tree>
+```
+
+## Supported props
+
+<ResponseField name="name" type="string" required>
+  File or folder name shown in the tree.
+</ResponseField>
+
+<ResponseField name="defaultOpen" type="boolean">
+  Opens a folder by default.
+</ResponseField>
+
+<ResponseField name="openable" type="boolean">
+  Set to `false` for folders that should always stay open.
+</ResponseField>

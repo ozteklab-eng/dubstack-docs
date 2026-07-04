@@ -1,0 +1,34 @@
+---
+title: Frames
+description: Wrap images and visual examples in a bordered frame.
+icon: scan
+---
+
+Frames give images and visual examples consistent spacing, borders, and optional captions.
+
+<Frame caption="Use captions to explain what the reader is seeing.">
+  <img src="/logo/light.svg" alt="DubStack logo" />
+</Frame>
+
+```mdx
+<Frame caption="Use captions to explain what the reader is seeing.">
+  <img src="/logo/light.svg" alt="DubStack logo" />
+</Frame>
+```
+
+## When to use frames
+
+- Product screenshots.
+- Diagrams.
+- Short visual examples.
+- Media that needs a caption.
+
+## Supported props
+
+<ResponseField name="caption" type="string">
+  Optional text displayed below the framed content.
+</ResponseField>
+
+<ResponseField name="children" type="HTML or MDX content" required>
+  The visual content inside the frame. Images are resolved through the tenant asset pipeline.
+</ResponseField>

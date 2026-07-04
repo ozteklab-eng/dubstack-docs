@@ -1,0 +1,65 @@
+---
+title: Code groups
+description: Show multiple related code examples in one tabbed block.
+icon: square-terminal
+---
+
+Use code groups when readers need to compare commands, request examples, or configuration formats.
+
+<CodeGroup>
+```bash cURL
+curl https://your-site.dubstack.live/mcp \
+  -H 'Content-Type: application/json' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+```
+
+```js JavaScript
+await fetch('https://your-site.dubstack.live/mcp', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list' })
+})
+```
+</CodeGroup>
+
+````mdx
+<CodeGroup>
+```bash cURL
+curl https://your-site.dubstack.live/mcp \
+  -H 'Content-Type: application/json' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+```
+
+```js JavaScript
+await fetch('https://your-site.dubstack.live/mcp', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list' })
+})
+```
+</CodeGroup>
+````
+
+## Good uses
+
+- Request examples in multiple languages.
+- Configuration variants for local, staging, and production.
+- Equivalent commands for different tools.
+
+## Authoring rules
+
+Each fenced code block inside a `CodeGroup` should include a language and a short label. The label becomes the tab text.
+
+````mdx
+```json Production
+{
+  "theme": "prism"
+}
+```
+````
+
+## Supported props
+
+<ResponseField name="children" type="code fences" required>
+  One or more fenced code blocks. Each block becomes a selectable example.
+</ResponseField>

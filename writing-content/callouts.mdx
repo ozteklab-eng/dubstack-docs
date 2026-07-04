@@ -1,0 +1,59 @@
+---
+title: Callouts
+description: Highlight notes, warnings, tips, checks, and important context.
+icon: badge-alert
+---
+
+Callouts help readers notice context that should not be buried inside regular paragraphs.
+
+## Intent callouts
+
+<Info>Use info callouts for neutral guidance or extra context.</Info>
+
+<Tip>Use tips for helpful shortcuts or recommended next steps.</Tip>
+
+<Warning>Use warnings for risky actions or behavior that can surprise readers.</Warning>
+
+<Check>Use checks for completed setup or expected success states.</Check>
+
+<Danger>Use danger callouts for destructive actions or irreversible changes.</Danger>
+
+```mdx
+<Info>Use info callouts for neutral guidance or extra context.</Info>
+
+<Tip>Use tips for helpful shortcuts.</Tip>
+
+<Warning>Use warnings for risky actions.</Warning>
+
+<Check>Use checks for expected success states.</Check>
+
+<Danger>Use danger callouts for destructive actions.</Danger>
+```
+
+## Generic callout
+
+Use `Callout` when the callout type should come from data or editor controls.
+
+<Callout type="info">
+  This callout uses the generic component with a `type` prop.
+</Callout>
+
+```mdx
+<Callout type="info">
+  This callout uses the generic component with a `type` prop.
+</Callout>
+```
+
+## Supported props
+
+<ResponseField name="type" type="string">
+  Intent style for `Callout`. Supported values include `info`, `note`, `tip`, `warning`, `success`, and `error`.
+</ResponseField>
+
+<ResponseField name="title" type="string">
+  Optional callout heading.
+</ResponseField>
+
+<ResponseField name="children" type="MDX content" required>
+  Callout body. The body can include links, inline code, lists, and fenced code blocks.
+</ResponseField>

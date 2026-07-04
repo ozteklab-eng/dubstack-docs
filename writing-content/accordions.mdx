@@ -1,0 +1,65 @@
+---
+title: Accordions
+description: Hide secondary details behind expandable sections.
+icon: list-collapse
+---
+
+Use accordions when a page needs progressive disclosure: troubleshooting steps, optional configuration, long explanations, or groups of related details.
+
+## Single accordion
+
+<Accordion title="When should I use an accordion?">
+  Use an accordion when the reader does not need the content immediately, but should be able to expand it without leaving the page.
+
+  Accordions can contain paragraphs, lists, links, callouts, and code blocks.
+</Accordion>
+
+````mdx
+<Accordion title="When should I use an accordion?">
+  Use an accordion when the reader does not need the content immediately.
+
+  ```bash
+  curl https://api.example.com/health
+  ```
+</Accordion>
+````
+
+## Accordion groups
+
+Group related accordions together when several sections belong to the same task.
+
+<AccordionGroup>
+  <Accordion title="No pages are showing">
+    Check that the page exists in the docs repository and is listed in `dubstack.json` navigation.
+  </Accordion>
+
+  <Accordion title="The page exists but renders as not found">
+    Run a manual update from the dashboard, then check that the public docs site and MCP filesystem both see the same file.
+  </Accordion>
+</AccordionGroup>
+
+```mdx
+<AccordionGroup>
+  <Accordion title="No pages are showing">
+    Check that the page exists in the docs repository.
+  </Accordion>
+
+  <Accordion title="The page exists but renders as not found">
+    Run a manual update from the dashboard.
+  </Accordion>
+</AccordionGroup>
+```
+
+## Supported props
+
+<ResponseField name="title" type="string" required>
+  Text shown in the collapsed accordion header.
+</ResponseField>
+
+<ResponseField name="defaultOpen" type="boolean">
+  Opens the accordion when the page first loads.
+</ResponseField>
+
+<ResponseField name="icon" type="string">
+  Optional icon name shown next to the title when supported by the active icon library.
+</ResponseField>
