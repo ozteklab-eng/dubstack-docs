@@ -2,27 +2,27 @@
   "openapi": "3.1.0",
   "info": {
     "title": "DubStack Docs Runtime API",
-    "version": "2026-06-25",
-    "description": "Public endpoints exposed by a published DubStack docs site for AI access, assistant chat, LLM-readable exports, and browser API playground execution. These endpoints run on each published docs domain and are scoped to that site."
+    "version": "2026-07-05",
+    "description": "Public runtime endpoints exposed by each published DubStack docs site. These endpoints let readers, API playgrounds, assistants, and MCP-capable clients inspect and query the published documentation for the current site. The surface is scoped to the site that serves it and does not expose dashboard administration APIs."
   },
   "servers": [
     {
       "url": "https://dubstack-docs-test.dubstack.live",
-      "description": "Published docs site"
+      "description": "Published docs site origin for this example deployment"
     }
   ],
   "tags": [
     {
       "name": "AI Access",
-      "description": "Endpoints agents and AI clients use to read published documentation."
+      "description": "Read-only endpoints for agents, crawlers, and MCP-capable clients that need structured access to published documentation."
     },
     {
       "name": "Assistant",
-      "description": "Reader-facing assistant endpoints for published docs sites."
+      "description": "Reader-facing assistant endpoint for answering questions from the published documentation corpus."
     },
     {
       "name": "API Playground",
-      "description": "Endpoints used by the API playground to load specs and proxy safe test requests."
+      "description": "Runtime endpoints used by generated API reference pages and the browser request builder."
     }
   ],
   "paths": {
@@ -30,13 +30,13 @@
       "get": {
         "operationId": "getMcpDiscovery",
         "summary": "Get MCP discovery",
-        "description": "Returns the public Model Context Protocol discovery document for the current docs site. Use this endpoint to verify that the site exposes a read-only MCP surface for agents and MCP-capable clients.",
+        "description": "Returns the public Model Context Protocol discovery document for the current docs site. Use this endpoint to confirm that the site exposes a read-only MCP server, discover the supported transport, and find the tools available to agents. The endpoint is tenant-scoped by the request host, so it only describes the published documentation for the current site.",
         "tags": [
           "AI Access"
         ],
         "responses": {
           "200": {
-            "description": "Public MCP discovery metadata for the current docs site.",
+            "description": "Discovery metadata for the current site's public read-only MCP server.",
             "content": {
               "application/json": {
                 "schema": {
@@ -47,7 +47,7 @@
                     "summary": "Discovery response",
                     "value": {
                       "name": "DubStack Docs MCP",
-                      "description": "Read-only MCP server for the published docs site.",
+                      "description": "Read-only MCP server for this published documentation site.",
                       "transport": "streamable-http",
                       "endpoint": "https://dubstack-docs-test.dubstack.live/mcp",
                       "capabilities": {
@@ -70,7 +70,7 @@
       "post": {
         "operationId": "callMcpServer",
         "summary": "Call MCP server",
-        "description": "Handles Streamable HTTP JSON-RPC requests for the public docs MCP server. Public MCP tools are read-only and scoped to the published documentation for the current site.",
+        "description": "Handles Streamable HTTP JSON-RPC requests for the public docs MCP server. Clients use this endpoint to list tools and call read-only tools such as documentation search or virtual filesystem reads. Tool execution is scoped to published docs content for the current site and should not be used for authoring or dashboard administration.",
         "tags": [
           "AI Access"
         ],
@@ -104,15 +104,29 @@
                       }
                     }
                   }
+                },
+                "readFile": {
+                  "summary": "Read a published docs file",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 3,
+                    "method": "tools/call",
+                    "params": {
+                      "name": "query_docs_filesystem",
+                      "arguments": {
+                        "command": "cat /quickstart.mdx"
+                      }
+                    }
+                  }
                 }
               }
             }
           },
-          "description": "JSON-RPC request sent by an MCP client."
+          "description": "Streamable HTTP JSON-RPC request sent by an MCP client."
         },
         "responses": {
           "200": {
-            "description": "JSON-RPC response from the public MCP server.",
+            "description": "JSON-RPC response from the public MCP server. Successful tool calls return method-specific results; invalid requests return JSON-RPC error objects.",
             "content": {
               "application/json": {
                 "schema": {
@@ -147,13 +161,13 @@
       "delete": {
         "operationId": "closeMcpSession",
         "summary": "Close MCP session",
-        "description": "Closes a Streamable HTTP MCP session. Clients call this when they no longer need a session-bound MCP connection.",
+        "description": "Closes a Streamable HTTP MCP session when a client no longer needs the connection. Stateless clients may not need to call this endpoint, but session-aware clients can use it to release server-side session state cleanly.",
         "tags": [
           "AI Access"
         ],
         "responses": {
           "200": {
-            "description": "Session close acknowledgement.",
+            "description": "Session close acknowledgement with a JSON response body.",
             "content": {
               "application/json": {
                 "schema": {
@@ -181,7 +195,7 @@
             }
           },
           "204": {
-            "description": "Session closed without a response body."
+            "description": "Session close acknowledgement without a response body."
           }
         }
       }
@@ -190,13 +204,13 @@
       "get": {
         "operationId": "getMcpServerCard",
         "summary": "Get MCP server card",
-        "description": "Returns a single server-card document that MCP-capable clients can use to discover the docs site's public MCP endpoint.",
+        "description": "Returns a single server-card document for the current docs site. Discovery clients can use this well-known URL to identify the public MCP endpoint, display name, description, and transport before connecting.",
         "tags": [
           "AI Access"
         ],
         "responses": {
           "200": {
-            "description": "Server card that describes the public MCP endpoint for this docs site.",
+            "description": "Server-card metadata for the public MCP endpoint on this docs site.",
             "content": {
               "application/json": {
                 "schema": {
@@ -222,14 +236,14 @@
     "/.well-known/mcp/server-cards.json": {
       "get": {
         "operationId": "getMcpServerCards",
-        "summary": "Get MCP server cards",
-        "description": "Returns all server cards advertised by the docs site.",
+        "summary": "List MCP server cards",
+        "description": "Returns the collection of MCP server cards advertised by the current docs site. Most sites expose one public read-only docs MCP server, but the collection form lets discovery clients handle multiple advertised servers consistently.",
         "tags": [
           "AI Access"
         ],
         "responses": {
           "200": {
-            "description": "MCP server cards collection.",
+            "description": "Collection of MCP server cards advertised by this docs site.",
             "content": {
               "application/json": {
                 "schema": {
@@ -270,18 +284,19 @@
     "/llms.txt": {
       "get": {
         "operationId": "getLlmsIndex",
-        "summary": "Get LLM index",
-        "description": "Returns the compact LLM-readable index for the current docs site. This export gives agents a fast overview of published pages, canonical URLs, and the highest-value entry points without requiring a browser.",
+        "summary": "Get compact LLM index",
+        "description": "Returns the compact LLM-readable index for the current docs site as plain text. This export gives agents a fast overview of important pages, canonical URLs, and high-value entry points without needing to crawl rendered HTML.",
         "tags": [
           "AI Access"
         ],
         "responses": {
           "200": {
-            "description": "Compact plain-text index of the published docs site.",
+            "description": "Compact plain-text index of the published docs site for LLM and agent consumption.",
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Plain-text LLM index. The exact content depends on the published site navigation and page metadata."
                 },
                 "examples": {
                   "index": {
@@ -298,8 +313,8 @@
     "/llms-full.txt": {
       "get": {
         "operationId": "getFullLlmsIndex",
-        "summary": "Get full LLM index",
-        "description": "Returns the expanded LLM-readable export for the current docs site. Use this when an agent needs deeper page context and more body content than the compact index provides.",
+        "summary": "Get expanded LLM index",
+        "description": "Returns the expanded LLM-readable export for the current docs site as plain text. Use this endpoint when an agent needs deeper page summaries and selected body content than the compact index provides.",
         "tags": [
           "AI Access"
         ],
@@ -309,7 +324,8 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Expanded plain-text LLM export generated from the published docs corpus."
                 },
                 "examples": {
                   "fullIndex": {
@@ -327,7 +343,7 @@
       "post": {
         "operationId": "askAssistant",
         "summary": "Ask assistant",
-        "description": "Sends a reader question to the public docs assistant for the current site. The assistant answers from the published documentation and returns source links when retrieval finds relevant pages.",
+        "description": "Sends a reader question to the public docs assistant for the current site. The assistant answers from published documentation and returns source links when retrieval finds relevant pages. This endpoint is intended for the public reader widget and should be treated as an AI-generated response surface, not a source of dashboard administration state.",
         "tags": [
           "Assistant"
         ],
@@ -349,11 +365,11 @@
               }
             }
           },
-          "description": "Reader question and optional page context for the public assistant."
+          "description": "Reader question and optional current-page context for the public assistant widget."
         },
         "responses": {
           "200": {
-            "description": "Assistant answer generated from the published docs, with optional source citations.",
+            "description": "Assistant response generated from published documentation, with optional source citations.",
             "content": {
               "application/json": {
                 "schema": {
@@ -378,7 +394,7 @@
             }
           },
           "503": {
-            "description": "Assistant backend is unavailable."
+            "description": "Assistant backend is unavailable or disabled for the current site."
           }
         }
       }
@@ -387,7 +403,7 @@
       "get": {
         "operationId": "getPlaygroundSpec",
         "summary": "Get playground spec",
-        "description": "Loads a published OpenAPI specification for the current docs site. The docs renderer uses this endpoint to build API reference pages and the browser playground from the same source document.",
+        "description": "Loads a published OpenAPI specification for the current docs site. Generated API reference pages and the browser request builder use this endpoint to read the same parsed spec metadata, base URL fallback, and operation definitions that were published during the latest sync.",
         "tags": [
           "API Playground"
         ],
@@ -400,7 +416,7 @@
               "type": "string",
               "default": "api-reference"
             },
-            "description": "Spec name from dubstack.json or the default api-reference spec."
+            "description": "Spec name configured in dubstack.json. Omit this parameter to load the default API reference spec."
           },
           {
             "name": "branch",
@@ -409,12 +425,12 @@
             "schema": {
               "type": "string"
             },
-            "description": "Optional preview branch to read from when rendering branch preview docs."
+            "description": "Optional preview branch identifier used when rendering branch preview docs."
           }
         ],
         "responses": {
           "200": {
-            "description": "Published OpenAPI spec metadata and the parsed OpenAPI document.",
+            "description": "Published OpenAPI spec metadata together with the parsed OpenAPI document.",
             "content": {
               "application/json": {
                 "schema": {
@@ -448,7 +464,7 @@
             }
           },
           "404": {
-            "description": "Spec not found."
+            "description": "No published spec exists for the requested site, spec name, or preview branch."
           }
         }
       }
@@ -457,7 +473,7 @@
       "post": {
         "operationId": "proxyPlaygroundRequest",
         "summary": "Proxy playground request",
-        "description": "Proxies a reader-triggered playground request to an origin allowed by the published OpenAPI spec. The proxy keeps browser playground calls scoped to documented operations and avoids exposing tenant secrets in the frontend.",
+        "description": "Proxies a reader-triggered playground request to a target URL allowed by the published OpenAPI spec. The proxy keeps browser playground calls scoped to documented public origins, blocks private or reserved network targets, and avoids placing tenant credentials in frontend code.",
         "tags": [
           "API Playground"
         ],
@@ -482,7 +498,7 @@
               }
             }
           },
-          "description": "Request generated by the browser playground for an allowed URL."
+          "description": "Request generated by the browser playground for a documented operation and allowed target URL."
         },
         "responses": {
           "200": {
@@ -512,7 +528,7 @@
             }
           },
           "403": {
-            "description": "Target origin is not allowed by the published spec."
+            "description": "Target origin or URL is not allowed by the published OpenAPI spec or playground security policy."
           }
         }
       }
@@ -550,12 +566,12 @@
           },
           "capabilities": {
             "type": "object",
-            "description": "High-level feature summary for discovery clients.",
+            "description": "High-level list of public read-only MCP capabilities advertised by this docs site.",
             "additionalProperties": true,
             "properties": {
               "tools": {
                 "type": "array",
-                "description": "Read-only MCP tools available for the published docs site.",
+                "description": "Tool names available to MCP clients. Public docs tools are read-only and scoped to published documentation.",
                 "items": {
                   "type": "string"
                 },
@@ -566,7 +582,7 @@
               },
               "resources": {
                 "type": "array",
-                "description": "Static MCP resources exposed by the docs site.",
+                "description": "Static resources advertised to MCP clients, such as the generated skill file when enabled.",
                 "items": {
                   "type": "string"
                 },
@@ -581,7 +597,8 @@
           "name",
           "transport",
           "endpoint"
-        ]
+        ],
+        "description": "Discovery document describing the public read-only MCP server exposed by a published docs site."
       },
       "McpServerCard": {
         "type": "object",
@@ -616,7 +633,8 @@
           "name",
           "description",
           "url"
-        ]
+        ],
+        "description": "Well-known MCP server-card metadata for discovery clients."
       },
       "JsonRpcRequest": {
         "type": "object",
@@ -640,12 +658,12 @@
           },
           "method": {
             "type": "string",
-            "description": "MCP JSON-RPC method to invoke, such as tools/list or tools/call.",
+            "description": "MCP JSON-RPC method to invoke, such as initialize, tools/list, or tools/call.",
             "example": "tools/list"
           },
           "params": {
             "type": "object",
-            "description": "Method-specific parameters. Tool calls include a tool name and arguments object.",
+            "description": "Method-specific parameters. Tool calls include the tool name and an arguments object.",
             "additionalProperties": true,
             "example": {
               "name": "search",
@@ -659,7 +677,8 @@
         "required": [
           "jsonrpc",
           "method"
-        ]
+        ],
+        "description": "JSON-RPC request envelope used by Streamable HTTP MCP clients."
       },
       "JsonRpcResponse": {
         "type": "object",
@@ -687,12 +706,12 @@
           },
           "result": {
             "type": "object",
-            "description": "Successful method result. Shape depends on the MCP method.",
+            "description": "Successful method result. Shape depends on the MCP method or tool that was called.",
             "additionalProperties": true
           },
           "error": {
             "type": "object",
-            "description": "JSON-RPC error object when the request fails.",
+            "description": "JSON-RPC error object returned when a request cannot be completed.",
             "additionalProperties": true,
             "properties": {
               "code": {
@@ -710,7 +729,8 @@
         },
         "required": [
           "jsonrpc"
-        ]
+        ],
+        "description": "JSON-RPC response envelope returned by the public MCP server."
       },
       "AssistantRequest": {
         "type": "object",
@@ -718,18 +738,18 @@
         "properties": {
           "message": {
             "type": "string",
-            "description": "Reader question to answer from the published docs."
+            "description": "Reader question to answer from the published docs. Use either message or question."
           },
           "question": {
             "type": "string",
-            "description": "Alternate question field accepted by clients that send question instead of message."
+            "description": "Alternate reader question field accepted by clients that send question instead of message."
           },
           "page": {
             "type": "string",
             "description": "Optional current docs page path used as local context for the answer."
           }
         },
-        "description": "Question payload sent by the public assistant widget.",
+        "description": "Question payload sent by the public reader assistant widget.",
         "example": {
           "message": "How do I publish a preview deployment?",
           "page": "/deployment/preview-deployments"
@@ -745,7 +765,7 @@
           },
           "message": {
             "type": "string",
-            "description": "Alternate answer field returned by compatibility paths."
+            "description": "Alternate response text field returned by compatibility paths."
           },
           "sources": {
             "type": "array",
@@ -756,7 +776,7 @@
             "description": "Published docs pages used as supporting context for the answer."
           }
         },
-        "description": "Answer returned by the public assistant widget.",
+        "description": "Answer returned by the public reader assistant widget.",
         "example": {
           "answer": "Create a branch preview from the dashboard, review the generated URL, then merge or publish when ready.",
           "sources": [
@@ -784,12 +804,12 @@
               "string",
               "null"
             ],
-            "description": "Preferred base URL used by the playground when the spec does not define a server URL."
+            "description": "Preferred base URL used by the playground when the OpenAPI document does not define a server URL."
           },
           "spec_content": {
             "type": "object",
             "additionalProperties": true,
-            "description": "Parsed OpenAPI document used to render endpoint docs and playground controls."
+            "description": "Parsed OpenAPI document used to render generated endpoint docs and playground controls."
           }
         },
         "required": [
@@ -797,7 +817,7 @@
           "display_name",
           "spec_content"
         ],
-        "description": "Wrapper returned by the spec loader, including display metadata and the parsed OpenAPI document.",
+        "description": "Wrapper returned by the playground spec loader, including display metadata, base URL fallback, and parsed OpenAPI content.",
         "example": {
           "name": "api-reference",
           "display_name": "DubStack Docs Runtime API",
@@ -831,17 +851,17 @@
               "OPTIONS",
               "HEAD"
             ],
-            "description": "HTTP method for the documented operation."
+            "description": "HTTP method for the documented operation. Defaults to GET when omitted by older clients."
           },
           "headers": {
             "type": "object",
             "additionalProperties": {
               "type": "string"
             },
-            "description": "Headers supplied by the playground. Sensitive credentials should come from user input, not tenant defaults."
+            "description": "Headers supplied by the reader through the playground. Sensitive values should come from user input, not tenant defaults."
           },
           "body": {
-            "description": "Request body supplied by the playground."
+            "description": "Request body supplied by the playground for methods that support a body."
           }
         },
         "required": [
@@ -869,13 +889,13 @@
             "additionalProperties": {
               "type": "string"
             },
-            "description": "Response headers returned by the upstream operation."
+            "description": "Response headers returned by the upstream operation after proxy filtering."
           },
           "body": {
-            "description": "Parsed response body when JSON, otherwise the raw response text."
+            "description": "Parsed response body when JSON, otherwise raw response text."
           }
         },
-        "description": "Upstream response captured by the playground proxy.",
+        "description": "Upstream response captured by the playground proxy and returned to the browser request builder.",
         "example": {
           "status": 200,
           "headers": {
