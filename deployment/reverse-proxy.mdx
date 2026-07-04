@@ -1,0 +1,165 @@
+---
+title: Reverse proxy
+description: Route a root website path such as /docs to a dubstack origin.
+icon: route
+---
+
+Use a reverse proxy when another application already owns your root domain and you want documentation to live under that same host.
+
+```text
+example.com          -> main website
+example.com/docs     -> dubstack docs
+example.com/docs/api -> dubstack docs API routes
+```
+
+A reverse proxy is required for path-based docs because DNS can only route hostnames, not individual URL paths.
+
+## When to use this
+
+Use a reverse proxy when:
+
+- Your marketing site, product app, or gateway already serves `example.com`.
+- You want docs mounted at `example.com/docs`.
+- You can control routing rules for `/docs` and `/docs/*`.
+- You can forward public host headers to the upstream origin.
+
+If your docs can live at `docs.example.com`, use [Custom domains](/deployment/custom-domains) instead. Host-based domains are simpler because they only need DNS and domain verification.
+
+## Routing requirements
+
+Proxy these routes to the origin hostname shown in the dubstack dashboard.
+
+| Public route | Upstream target | Required |
+| --- | --- | --- |
+| `/docs` | `https://<site>--origin.dubstack.live/docs` | Yes |
+| `/docs/*` | `https://<site>--origin.dubstack.live/docs/*` | Yes |
+| `/docs/_next/*` | `https://<site>--origin.dubstack.live/docs/_next/*` | Yes |
+| `/docs/api/*` | `https://<site>--origin.dubstack.live/docs/api/*` | Yes |
+| `/docs/assets/*` | `https://<site>--origin.dubstack.live/docs/assets/*` | If used |
+| `/docs/img/*` | `https://<site>--origin.dubstack.live/docs/img/*` | If used |
+| `/docs/llms.txt` | `https://<site>--origin.dubstack.live/docs/llms.txt` | If AI discovery is enabled |
+| `/docs/llms-full.txt` | `https://<site>--origin.dubstack.live/docs/llms-full.txt` | If AI discovery is enabled |
+| `/docs/skill.md` | `https://<site>--origin.dubstack.live/docs/skill.md` | If agent skill discovery is enabled |
+| `/docs/mcp` | `https://<site>--origin.dubstack.live/docs/mcp` | If public MCP is enabled |
+
+Do not strip the `/docs` prefix before sending the request upstream. The origin renders links, assets, search, assistant requests, MCP discovery, and LLM indexes under that prefix.
+
+## Header requirements
+
+Forward these headers from the public request to the upstream origin.
+
+| Header | Value |
+| --- | --- |
+| `X-Forwarded-Host` | Public host, for example `example.com` |
+| `X-Public-Host` | Public host, for example `example.com` |
+| `X-Forwarded-Proto` | Public protocol, usually `https` |
+| `X-Forwarded-For` | Client IP chain, if your proxy supports it |
+| `User-Agent` | Original user agent |
+
+The upstream hostname should remain the origin shown by dubstack, for example `<site>--origin.dubstack.live`. The public host is passed through the forwarding headers.
+
+## Nginx example
+
+```nginx
+server {
+  listen 443 ssl http2;
+  server_name example.com;
+
+  location = /docs {
+    proxy_pass https://<site>--origin.dubstack.live/docs;
+    proxy_ssl_server_name on;
+    proxy_set_header Host <site>--origin.dubstack.live;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Public-Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header User-Agent $http_user_agent;
+  }
+
+  location /docs/ {
+    proxy_pass https://<site>--origin.dubstack.live;
+    proxy_ssl_server_name on;
+    proxy_set_header Host <site>--origin.dubstack.live;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Public-Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header User-Agent $http_user_agent;
+  }
+}
+```
+
+## Caddy example
+
+```caddyfile
+example.com {
+  handle /docs* {
+    reverse_proxy https://<site>--origin.dubstack.live {
+      header_up Host <site>--origin.dubstack.live
+      header_up X-Forwarded-Host {host}
+      header_up X-Public-Host {host}
+      header_up X-Forwarded-Proto https
+      header_up User-Agent {header.User-Agent}
+    }
+  }
+
+  handle {
+    reverse_proxy localhost:3000
+  }
+}
+```
+
+If your proxy strips path prefixes by default, disable that behavior or use an explicit rewrite that keeps `/docs` in the upstream URL.
+
+## Caching
+
+Use conservative caching for proxied docs traffic until the route is verified.
+
+- Do not cache `/docs/api/*`.
+- Do not cache `/docs/mcp` or `/docs/authed/mcp`.
+- Do not cache `/docs/llms.txt`, `/docs/llms-full.txt`, or `/docs/skill.md` while testing.
+- Static assets under `/docs/_next/static/*` can be cached by the browser or CDN after the site is stable.
+
+When in doubt, start with no CDN cache for `/docs` and add caching after direct page loads, search, assistant requests, and API playground requests work.
+
+## Validation checklist
+
+After configuring the proxy, verify these URLs on the public domain:
+
+```text
+https://example.com/docs
+https://example.com/docs/quickstart
+https://example.com/docs/api/theme
+https://example.com/docs/llms.txt
+https://example.com/docs/skill.md
+```
+
+Also check the browser network panel:
+
+- HTML document loads from `/docs`, not from the raw origin hostname.
+- Static assets load from `/docs/_next/...`.
+- API calls load from `/docs/api/...`.
+- Links keep users inside `/docs`.
+- The public site does not expose the `--origin.dubstack.live` URL.
+
+## Troubleshooting
+
+### The docs homepage works, but nested pages 404
+
+Add a wildcard route for `/docs/*`. A rule for only `/docs` cannot handle nested docs pages, assets, API calls, or AI discovery files.
+
+### Static assets load from `/_next`
+
+The proxy or root application is removing the `/docs` prefix. Keep the prefix on upstream requests and avoid rewriting rendered HTML from dubstack.
+
+### The page redirects to the origin hostname
+
+Forward `X-Forwarded-Host`, `X-Public-Host`, and `X-Forwarded-Proto`. These headers tell dubstack which public URL should be used for generated links.
+
+### Search or assistant requests fail
+
+Make sure `/docs/api/*` is routed to the origin and not cached by the root application or CDN.
+
+### LLM files or MCP discovery are missing
+
+Proxy the AI discovery files under `/docs`, including `/docs/llms.txt`, `/docs/llms-full.txt`, `/docs/skill.md`, and `/docs/mcp` when those features are enabled.

@@ -472,6 +472,22 @@
                 "icon": "folder-tree"
               },
               {
+                "slug": "deployment/reverse-proxy",
+                "icon": "route"
+              },
+              {
+                "slug": "deployment/cloudflare",
+                "icon": "cloud"
+              },
+              {
+                "slug": "deployment/vercel-rewrites",
+                "icon": "triangle"
+              },
+              {
+                "slug": "deployment/route53-cloudfront",
+                "icon": "cloud-cog"
+              },
+              {
                 "slug": "deployment/preview-deployments",
                 "icon": "eye"
               },

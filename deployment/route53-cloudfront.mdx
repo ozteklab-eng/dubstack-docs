@@ -1,0 +1,130 @@
+---
+title: Route 53 and CloudFront
+description: Serve dubstack docs through AWS DNS and CloudFront.
+icon: cloud-cog
+---
+
+Use Route 53 and CloudFront when your production website is already routed through AWS and you want docs on either a custom subdomain or a `/docs` subpath.
+
+## Choose a routing mode
+
+| Mode | Public URL | AWS setup |
+| --- | --- | --- |
+| Custom subdomain | `docs.example.com` | Route 53 DNS record to the dubstack target shown in the dashboard |
+| `/docs` subpath | `example.com/docs` | CloudFront behaviors that route `/docs` and `/docs/*` to the dubstack origin |
+
+Use the subdomain mode unless the docs must share the exact root domain.
+
+## Custom subdomain with Route 53
+
+1. Open your site in the dubstack dashboard.
+2. Go to **Settings → Deployment → Custom domain**.
+3. Add a host-based domain such as `docs.example.com`.
+4. Copy the DNS target shown in the dashboard.
+5. In Route 53, create the requested record.
+6. Return to the dashboard and verify the domain after DNS has propagated.
+
+Typical record shape:
+
+```text
+Type:  CNAME
+Name:  docs
+Value: cname.dubstack.live
+```
+
+Use the exact record shown in the dashboard if it differs from this example.
+
+## `/docs` subpath with CloudFront
+
+For a subpath mount, the root domain remains on your existing CloudFront distribution and only docs paths are routed to dubstack.
+
+1. Enable **Host at `/docs`** in **Settings → Deployment → Custom domain**.
+2. Copy the generated origin hostname, for example `<site>--origin.dubstack.live`.
+3. Add that hostname as a CloudFront origin.
+4. Add behaviors for `/docs` and `/docs/*` that point to the dubstack origin.
+5. Preserve the public host context through forwarded or injected headers.
+6. Keep dynamic docs routes uncached until validation is complete.
+
+## Recommended behaviors
+
+| Path pattern | Origin | Cache policy |
+| --- | --- | --- |
+| `/docs` | `<site>--origin.dubstack.live` | Disabled while validating |
+| `/docs/*` | `<site>--origin.dubstack.live` | Disabled while validating |
+| `/.well-known/acme-challenge/*` | Existing website origin | Disabled |
+| `/.well-known/vercel/*` | Existing website origin, if used | Disabled |
+| `Default (*)` | Existing website origin | Your normal website policy |
+
+After validation, you can enable caching for static asset paths such as `/docs/_next/static/*`. Keep `/docs/api/*`, `/docs/mcp`, assistant requests, and AI discovery files uncached or very short-lived.
+
+## Origin request policy
+
+The CloudFront behavior for docs should avoid sending the public `Host` header as the TLS host for the dubstack origin. Use an origin request policy that excludes the viewer `Host` header or configure the origin so TLS uses `<site>--origin.dubstack.live`.
+
+Forward or inject public context headers for the docs origin:
+
+| Header | Value |
+| --- | --- |
+| `X-Forwarded-Host` | `example.com` |
+| `X-Public-Host` | `example.com` |
+| `X-Forwarded-Proto` | `https` |
+
+If your CloudFront setup cannot inject these headers directly, use a CloudFront Function, Lambda@Edge, or an upstream edge proxy that can add them.
+
+## Optional root-level AI files
+
+By default, AI files live under the docs path:
+
+```text
+example.com/docs/llms.txt
+example.com/docs/llms-full.txt
+example.com/docs/skill.md
+example.com/docs/mcp
+```
+
+If you want root-level discovery, add explicit behaviors for the selected paths and route them to the docs origin with the path mapped under `/docs`.
+
+```text
+/llms.txt      -> /docs/llms.txt
+/llms-full.txt -> /docs/llms-full.txt
+/skill.md      -> /docs/skill.md
+```
+
+Only add root-level discovery when it does not conflict with your main website.
+
+## Validate the setup
+
+Open these URLs after the CloudFront distribution has deployed:
+
+```text
+https://example.com/docs
+https://example.com/docs/quickstart
+https://example.com/docs/api/theme
+https://example.com/docs/llms.txt
+```
+
+Then verify:
+
+- Nested docs pages work on direct refresh.
+- Assets load from `/docs/_next/...`.
+- Public links stay on `example.com/docs`.
+- The `--origin.dubstack.live` hostname is not exposed to visitors.
+- Search, assistant, feedback, and API playground requests are not served from stale CDN cache.
+
+## Troubleshooting
+
+### CloudFront returns a TLS or 502 error
+
+Check that the origin domain is the generated `--origin.dubstack.live` hostname and that the viewer `Host` header is not being used as the upstream TLS host.
+
+### The main website breaks after adding docs
+
+Review behavior order. CloudFront should match `/docs` and `/docs/*` before the default behavior, while all non-docs traffic continues to the main website origin.
+
+### Verification paths fail
+
+Allow certificate and provider verification paths such as `/.well-known/acme-challenge/*` through to the service that owns the root domain.
+
+### Docs render but links leave the public domain
+
+Forward or inject `X-Forwarded-Host`, `X-Public-Host`, and `X-Forwarded-Proto` for the docs origin behaviors.

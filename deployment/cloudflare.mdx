@@ -1,0 +1,177 @@
+---
+title: Cloudflare Worker proxy
+description: Mount dubstack docs at /docs with a Cloudflare Worker.
+icon: cloud
+---
+
+Use a Cloudflare Worker when your root domain is on Cloudflare and you want `example.com/docs` to serve your dubstack documentation.
+
+This setup keeps your main site at the root domain and routes only docs traffic to the dubstack origin.
+
+```text
+example.com          -> main site
+example.com/docs     -> dubstack origin
+example.com/docs/... -> dubstack origin
+```
+
+## Prerequisites
+
+Before you start, make sure you have:
+
+- A published dubstack site.
+- Access to the Cloudflare account that manages the root domain.
+- **Host at `/docs`** enabled in **Settings → Deployment → Custom domain**.
+- The generated origin hostname, for example `<site>--origin.dubstack.live`.
+
+## Worker script
+
+Create a Worker that proxies `/docs` and `/docs/*` to the generated origin hostname.
+
+```js
+const DOCS_PREFIX = '/docs';
+const DOCS_ORIGIN_HOST = '<site>--origin.dubstack.live';
+const PUBLIC_HOST = 'example.com';
+
+const DOCS_ROOT_FILES = new Set([
+  '/llms.txt',
+  '/llms-full.txt',
+  '/skill.md'
+]);
+
+function shouldProxy(pathname) {
+  return pathname === DOCS_PREFIX || pathname.startsWith(`${DOCS_PREFIX}/`);
+}
+
+function buildProxyRequest(request) {
+  const upstreamUrl = new URL(request.url);
+  upstreamUrl.hostname = DOCS_ORIGIN_HOST;
+  upstreamUrl.protocol = 'https:';
+
+  const headers = new Headers(request.headers);
+  headers.set('Host', DOCS_ORIGIN_HOST);
+  headers.set('X-Forwarded-Host', PUBLIC_HOST);
+  headers.set('X-Public-Host', PUBLIC_HOST);
+  headers.set('X-Forwarded-Proto', 'https');
+
+  const clientIp = request.headers.get('CF-Connecting-IP');
+  if (clientIp) headers.set('X-Forwarded-For', clientIp);
+
+  return new Request(upstreamUrl, {
+    method: request.method,
+    headers,
+    body: request.body,
+    redirect: 'manual'
+  });
+}
+
+export default {
+  async fetch(request) {
+    const url = new URL(request.url);
+
+    if (!shouldProxy(url.pathname)) {
+      return fetch(request);
+    }
+
+    return fetch(buildProxyRequest(request));
+  }
+};
+```
+
+Keep the `/docs` prefix in the upstream request. The origin uses that prefix to generate correct links and asset URLs.
+
+## Route the Worker
+
+Attach the Worker to the root domain route that should handle docs traffic.
+
+Typical route:
+
+```text
+example.com/docs*
+```
+
+If the Worker is also responsible for the root website, keep the non-docs branch in the script and forward non-docs traffic to your main site.
+
+## Root-level AI discovery files
+
+By default, AI-readable files are served under the docs path:
+
+```text
+example.com/docs/llms.txt
+example.com/docs/llms-full.txt
+example.com/docs/skill.md
+example.com/docs/mcp
+```
+
+If you want these files to also exist at the root domain, add explicit routes in your Worker and map them to the docs origin.
+
+```js
+function shouldProxy(pathname) {
+  return pathname === DOCS_PREFIX ||
+    pathname.startsWith(`${DOCS_PREFIX}/`) ||
+    DOCS_ROOT_FILES.has(pathname) ||
+    pathname.startsWith('/.well-known/skills/') ||
+    pathname.startsWith('/.well-known/agent-skills/');
+}
+
+function normalizePath(pathname) {
+  if (DOCS_ROOT_FILES.has(pathname)) return `${DOCS_PREFIX}${pathname}`;
+  if (pathname.startsWith('/.well-known/')) return `${DOCS_PREFIX}${pathname}`;
+  return pathname;
+}
+```
+
+When using root-level AI discovery, set `upstreamUrl.pathname = normalizePath(url.pathname)` before creating the upstream request.
+
+## DNS and custom domains
+
+Cloudflare can serve the root website, the Worker, and the docs path from the same hostname. The root hostname still points to your root application or Worker setup.
+
+The generated `--origin.dubstack.live` hostname is only the upstream target. Do not create public links to it.
+
+## Caching
+
+Start with Cloudflare cache bypassed for docs routes while validating.
+
+```js
+return fetch(buildProxyRequest(request), {
+  cf: { cacheTtl: 0, cacheEverything: false }
+});
+```
+
+After validation, static assets under `/docs/_next/static/*` can be cached. Keep dynamic routes such as `/docs/api/*`, `/docs/mcp`, and assistant requests uncached.
+
+## Validate the setup
+
+Check these URLs from the public domain:
+
+```text
+https://example.com/docs
+https://example.com/docs/quickstart
+https://example.com/docs/api/theme
+https://example.com/docs/llms.txt
+```
+
+Then open browser dev tools and confirm:
+
+- The page URL stays on `example.com/docs`.
+- Static assets load from `/docs/_next/...`.
+- API calls load from `/docs/api/...`.
+- Search and assistant requests are not blocked by cache or firewall rules.
+
+## Common issues
+
+### The Worker serves the root website instead of docs
+
+Check that the Worker route includes `/docs*` and that the script tests both `/docs` and `/docs/` paths.
+
+### The docs site loses the `/docs` prefix
+
+The Worker is rewriting paths too aggressively. Forward the same pathname to the origin unless you are intentionally mapping root-level AI files.
+
+### The raw origin hostname appears in links
+
+Set `X-Forwarded-Host`, `X-Public-Host`, and `X-Forwarded-Proto` on the upstream request.
+
+### Browser requests are cached during setup
+
+Temporarily bypass Cloudflare cache for `/docs*` until the route is verified.

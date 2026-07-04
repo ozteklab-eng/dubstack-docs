@@ -1,0 +1,142 @@
+---
+title: Vercel rewrites
+description: Route /docs from a Vercel app to a dubstack origin.
+icon: triangle
+---
+
+Use Vercel rewrites when your root website is deployed on Vercel and docs should appear at `example.com/docs`.
+
+```text
+Vercel app          -> example.com
+Vercel rewrite      -> example.com/docs
+Dubstack origin     -> <site>--origin.dubstack.live/docs
+```
+
+## Prerequisites
+
+Before adding rewrites:
+
+- Publish your dubstack site.
+- Enable **Host at `/docs`** in **Settings → Deployment → Custom domain**.
+- Copy the generated origin hostname.
+- Make sure your Vercel app already serves the root domain.
+
+## Basic rewrites
+
+Add rewrites for `/docs` and `/docs/:path*`.
+
+```json filename="vercel.json"
+{
+  "rewrites": [
+    {
+      "source": "/docs",
+      "destination": "https://<site>--origin.dubstack.live/docs"
+    },
+    {
+      "source": "/docs/:path*",
+      "destination": "https://<site>--origin.dubstack.live/docs/:path*"
+    }
+  ]
+}
+```
+
+Deploy the Vercel app after changing `vercel.json`.
+
+## When to use an edge proxy instead
+
+Static rewrites are the simplest option, but some setups need an edge function or middleware instead.
+
+Use an edge proxy when you need to:
+
+- Set `X-Forwarded-Host`, `X-Public-Host`, or `X-Forwarded-Proto` explicitly.
+- Proxy root-level AI discovery files such as `/llms.txt` or `/skill.md`.
+- Bypass cache for `/docs/api/*` and assistant requests.
+- Preserve custom request headers used by your gateway.
+
+## Middleware proxy example
+
+Use this shape when rewrites cannot set the required forwarding headers for your deployment.
+
+```ts filename="middleware.ts"
+import { NextRequest } from 'next/server';
+
+const DOCS_PREFIX = '/docs';
+const DOCS_ORIGIN_HOST = '<site>--origin.dubstack.live';
+const PUBLIC_HOST = 'example.com';
+
+export function middleware(request: NextRequest) {
+  const url = request.nextUrl.clone();
+
+  if (url.pathname !== DOCS_PREFIX && !url.pathname.startsWith(`${DOCS_PREFIX}/`)) {
+    return;
+  }
+
+  url.protocol = 'https:';
+  url.hostname = DOCS_ORIGIN_HOST;
+  url.port = '';
+
+  const headers = new Headers(request.headers);
+  headers.set('Host', DOCS_ORIGIN_HOST);
+  headers.set('X-Forwarded-Host', PUBLIC_HOST);
+  headers.set('X-Public-Host', PUBLIC_HOST);
+  headers.set('X-Forwarded-Proto', 'https');
+
+  return fetch(url, {
+    method: request.method,
+    headers,
+    body: request.body,
+    redirect: 'manual'
+  });
+}
+
+export const config = {
+  matcher: ['/docs', '/docs/:path*']
+};
+```
+
+The exact proxy implementation depends on your Next.js and Vercel runtime settings. The important behavior is that `/docs` remains in the upstream path and the public host context is forwarded.
+
+## External proxy in front of Vercel
+
+If Cloudflare, CloudFront, Nginx, or another proxy sits in front of Vercel, allow verification and certificate paths to pass through to Vercel without heavy caching or redirects.
+
+Common allowlist paths:
+
+```text
+/.well-known/acme-challenge/*
+/.well-known/vercel/*
+```
+
+These routes are used by certificate and domain verification flows. Blocking them can prevent the root domain from verifying correctly.
+
+## Validate the setup
+
+After deployment, open:
+
+```text
+https://example.com/docs
+https://example.com/docs/quickstart
+https://example.com/docs/api/theme
+https://example.com/docs/llms.txt
+```
+
+Check that:
+
+- Direct refresh works on nested docs pages.
+- Static assets load from `/docs/_next/...`.
+- The docs site does not link visitors to the `--origin.dubstack.live` hostname.
+- Search, assistant, and API playground requests stay under `/docs/api/...`.
+
+## Troubleshooting
+
+### Vercel shows its own 404 for nested pages
+
+The wildcard rewrite is missing or ordered after a catch-all route. Add `/docs/:path*` and ensure no application route overrides it.
+
+### The docs page loads but assets fail
+
+Confirm that `/docs/_next/*`, `/docs/img/*`, and `/docs/assets/*` are covered by the wildcard rewrite or middleware matcher.
+
+### Generated links point to the origin hostname
+
+Use middleware or an edge proxy that can set `X-Forwarded-Host`, `X-Public-Host`, and `X-Forwarded-Proto`.
