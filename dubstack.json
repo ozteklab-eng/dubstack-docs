@@ -573,6 +573,10 @@
                 "icon": "send"
               },
               {
+                "slug": "api-reference/base-url-authentication",
+                "icon": "shield-check"
+              },
+              {
                 "slug": "api-reference/nested-schemas",
                 "icon": "brackets"
               },

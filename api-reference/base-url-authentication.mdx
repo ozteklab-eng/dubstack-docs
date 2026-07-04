@@ -1,0 +1,299 @@
+---
+title: Base URLs and authentication
+description: Configure OpenAPI servers, security schemes, and playground request behavior.
+icon: shield-check
+---
+
+Base URLs and authentication determine where the API playground sends requests and which credentials readers must provide before trying an endpoint.
+
+Configure both in your OpenAPI spec first. Use `dubstack.json` for playground display and request-routing behavior.
+
+## Base URL source of truth
+
+The playground resolves request URLs in this order:
+
+1. The operation URL from the OpenAPI spec.
+2. The first matching `servers` entry in the OpenAPI spec.
+3. The Base URL saved in dashboard spec settings, when the spec does not define a server.
+
+Prefer defining servers in the OpenAPI spec so the docs repository remains reproducible.
+
+```json
+{
+  "openapi": "3.1.0",
+  "servers": [
+    {
+      "url": "https://api.example.com",
+      "description": "Production"
+    },
+    {
+      "url": "https://sandbox.example.com",
+      "description": "Sandbox"
+    }
+  ]
+}
+```
+
+Use a sandbox server when readers should be able to try requests without touching production data.
+
+## Operation-specific servers
+
+You can override the global server list on an operation when one endpoint uses a different origin.
+
+```json
+{
+  "paths": {
+    "/uploads": {
+      "post": {
+        "summary": "Create upload",
+        "servers": [
+          {
+            "url": "https://uploads.example.com",
+            "description": "Upload API"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Use operation-level servers sparingly. They are harder for readers to reason about than one clear API base URL.
+
+## Bearer authentication
+
+Use bearer authentication for JWTs, OAuth access tokens, or any API that expects an `Authorization: Bearer ...` header.
+
+```json
+{
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+}
+```
+
+The playground shows an authorization input. Readers enter their own token at request time.
+
+## API key authentication
+
+Use API key authentication when your API expects a key in a header, query string, or cookie.
+
+Header example:
+
+```json
+{
+  "components": {
+    "securitySchemes": {
+      "apiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key"
+      }
+    }
+  },
+  "security": [
+    {
+      "apiKeyAuth": []
+    }
+  ]
+}
+```
+
+Query string example:
+
+```json
+{
+  "components": {
+    "securitySchemes": {
+      "queryKeyAuth": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "api_key"
+      }
+    }
+  },
+  "security": [
+    {
+      "queryKeyAuth": []
+    }
+  ]
+}
+```
+
+Prefer header-based API keys for public docs. Query parameters are more likely to appear in logs, browser history, and shared URLs.
+
+## Basic authentication
+
+Use basic authentication only when your API already requires it.
+
+```json
+{
+  "components": {
+    "securitySchemes": {
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  },
+  "security": [
+    {
+      "basicAuth": []
+    }
+  ]
+}
+```
+
+Readers provide the username and password values in the playground. Do not put real credentials in your OpenAPI examples.
+
+## Per-operation security
+
+Set `security` at the root when most endpoints use the same authentication. Override `security` on an operation when a specific endpoint is public or uses a different scheme.
+
+Public endpoint override:
+
+```json
+{
+  "paths": {
+    "/status": {
+      "get": {
+        "summary": "Get status",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Different scheme override:
+
+```json
+{
+  "paths": {
+    "/admin/jobs": {
+      "post": {
+        "summary": "Create admin job",
+        "security": [
+          {
+            "adminKeyAuth": []
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+## Playground request routing
+
+Configure playground behavior in `dubstack.json`.
+
+```json
+{
+  "api": {
+    "openapi": "api-reference/openapi.json",
+    "playground": {
+      "display": "interactive",
+      "proxy": true,
+      "credentials": false
+    }
+  }
+}
+```
+
+| Field | Use |
+| --- | --- |
+| `display` | Controls whether the playground is interactive, simplified, or hidden. |
+| `proxy` | Routes reader-triggered requests through the docs playground proxy when enabled. |
+| `credentials` | Includes browser-managed credentials for direct browser requests when `proxy` is disabled. |
+
+The default and recommended mode for public docs is `proxy: true`. The playground proxy validates that requests target URLs allowed by the published OpenAPI spec and blocks private, local, or reserved network targets.
+
+## Code sample settings
+
+Use `api.examples` when you want more control over generated examples.
+
+```json
+{
+  "api": {
+    "examples": {
+      "languages": ["bash", "javascript", "python"],
+      "defaults": "required",
+      "prefill": true,
+      "autogenerate": true
+    }
+  }
+}
+```
+
+| Field | Use |
+| --- | --- |
+| `languages` | Controls the generated snippet language order. |
+| `defaults` | Controls whether optional values appear in examples. |
+| `prefill` | Starts playground fields from OpenAPI example values when available. |
+| `autogenerate` | Generates snippets from the spec when enabled. |
+
+Keep examples realistic but safe. Use placeholders for credentials and non-destructive sample payloads for public docs.
+
+## Security checklist
+
+Before enabling live requests on public docs:
+
+- Use a public sandbox API for destructive endpoints where possible.
+- Define `servers` explicitly.
+- Define `components.securitySchemes` and operation `security` accurately.
+- Do not commit API keys, bearer tokens, session cookies, or customer data to Git.
+- Hide or simplify playgrounds for internal-only or dangerous operations.
+- Confirm your API has its own authorization, rate limits, and audit logs.
+
+## Troubleshooting
+
+### The playground sends requests to the wrong host
+
+Check the OpenAPI `servers` array first. If the spec has no `servers`, check the Base URL saved in dashboard spec settings.
+
+### The authorization input does not appear
+
+Confirm the spec defines `components.securitySchemes` and applies the scheme through `security` at the root or operation level.
+
+### A public endpoint still asks for credentials
+
+Set `security: []` on that operation to override the root security requirement.
+
+### A request is blocked before reaching the API
+
+The target may be private, local, reserved, or missing from the published OpenAPI `servers` list. Use a public API origin that is intentionally exposed to readers.
+
+## Related
+
+- [OpenAPI setup](/api-reference/openapi-setup)
+- [API playground overview](/api-reference/playground-overview)
+- [Live API requests](/api-reference/live-requests)
+- [Request builder](/api-reference/request-builder)
+- [Troubleshooting](/api-reference/troubleshooting)
