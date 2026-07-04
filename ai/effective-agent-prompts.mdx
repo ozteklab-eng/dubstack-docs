@@ -1,0 +1,126 @@
+---
+title: Effective agent prompts
+sidebarTitle: Effective prompts
+icon: pen-line
+---
+
+The dashboard agent works best when prompts describe the documentation outcome, the source context, and the review expectation.
+
+Short prompts are fine for small edits. Larger work should include enough detail for the agent to plan, draft, and open a reviewable change.
+
+## Start with the outcome
+
+Tell the agent what should be true when the work is done.
+
+Good outcomes are specific:
+
+```text
+Draft a troubleshooting page for users who see a 401 response from the API playground.
+```
+
+```text
+Update the GitHub deployment guide so it explains app installation, default branch selection, and manual update behavior.
+```
+
+Avoid vague prompts such as:
+
+```text
+Improve the docs.
+```
+
+If you want a broad quality pass, name the kind of pass:
+
+```text
+Review the quickstart for missing prerequisites and draft a pull request with only those fixes.
+```
+
+## Include the source of truth
+
+Point to the source context the agent should use.
+
+Useful context includes:
+
+- a docs page path
+- a pull request link
+- a Jira issue key or bounded JQL filter
+- a Slack thread
+- a changelog entry
+- a product release note
+- a branch or repository name
+
+Examples:
+
+```text
+Use Jira issue DOCS-42 and update /api-reference/playground-authentication with the new token rotation note.
+```
+
+```text
+Based on this Slack thread, draft a short guide under /deployment about manual updates and preview screenshots.
+```
+
+## Scope the change
+
+A scoped request is easier to review.
+
+Add boundaries such as:
+
+- which page or folder to edit
+- whether to create a new page
+- whether navigation should change
+- whether examples should be TypeScript, Python, cURL, or generic text
+- whether the output should be a draft pull request
+
+Example:
+
+```text
+Create one new page under /configuration. Add it to the Configuration group. Do not change API reference pages.
+```
+
+## Ask for reviewable changes
+
+Use the agent to draft changes that your team can inspect.
+
+For repository-backed deployments, prefer prompts like:
+
+```text
+Open a draft pull request with the proposed docs change.
+```
+
+```text
+Make the smallest safe change and explain what files changed in the pull request description.
+```
+
+## Use follow-up prompts
+
+When the agent creates a draft, keep follow-up feedback in the same conversation or thread when possible.
+
+Examples:
+
+```text
+Make the intro shorter and add a prerequisite section.
+```
+
+```text
+Keep the page, but remove the unreleased feature mention.
+```
+
+```text
+Add one cURL example and one TypeScript example.
+```
+
+## Prompt checklist
+
+Before sending a large request, check that the prompt answers:
+
+- What page or workflow should change?
+- What source context should the agent trust?
+- What should the agent avoid changing?
+- Should the output be a draft pull request?
+- Who needs to review it?
+
+## Related
+
+- [Agent](/ai/agent)
+- [Slack integration](/ai/integrations/slack)
+- [Agent use cases](/ai/agent-use-cases)
+- [Automations](/automations)

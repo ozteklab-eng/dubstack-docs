@@ -1,0 +1,101 @@
+---
+title: AI surfaces
+sidebarTitle: AI surfaces
+icon: panels-top-left
+---
+
+DubStack has separate AI surfaces for separate trust boundaries.
+
+Use this page to choose the right surface before connecting tools, enabling assistant features, or asking an agent to change documentation.
+
+## Surface summary
+
+| Surface | Audience | Access | Can write docs |
+| --- | --- | --- | --- |
+| Public assistant | Docs readers | Published docs site | No |
+| Public MCP | External AI tools reading public docs | Published docs site `/mcp` | No |
+| Dashboard agent | Trusted workspace members | Dashboard | Yes, through reviewable repository changes when authoring is ready |
+| Agent integrations | Trusted workspace members and configured workflows | Dashboard-authorized providers | Indirectly, through the dashboard agent or automations |
+| Automations | Workspace members with workflow access | Dashboard and configured triggers | Yes, when the workflow has repository authoring access |
+
+## Public assistant
+
+The public assistant is the reader-facing chat experience on your published docs site.
+
+It answers from published documentation, cites source pages when relevant, and respects public indexing and visibility controls.
+
+Use it for:
+
+- reader setup questions
+- API usage questions
+- page-specific questions opened from contextual actions
+- discovery questions when users do not know which page to read
+
+Do not use it for:
+
+- editing docs
+- accessing dashboard-only settings
+- reading unpublished branches
+- private incident or support data
+
+## Public MCP
+
+The public MCP server lets compatible AI tools search and read your published docs.
+
+It is read-only and available at:
+
+```text
+https://your-docs-domain.com/mcp
+```
+
+Use public MCP when a reader wants their local AI tool to work from your current docs instead of pasted snippets.
+
+Public MCP tools can search docs, read published pages, and submit documentation feedback when feedback is enabled.
+
+## Dashboard agent
+
+The dashboard agent is for trusted team members.
+
+It can answer with deployment context and, when repository authoring is ready, draft documentation changes through your Git provider.
+
+Authoring actions require:
+
+- a selected deployment
+- a connected docs repository
+- a supported Git authoring path
+- the right workspace role
+- an authoring model profile
+
+The agent should open reviewable changes instead of silently editing the production branch.
+
+## Agent integrations
+
+Agent integrations add scoped context from tools such as Slack and Jira.
+
+Integrations do not write docs by themselves. They provide context that the agent or an automation can use when a user asks for a docs answer or documentation update.
+
+Keep integration scope narrow. Connect only providers that contain source context you are comfortable using for documentation work.
+
+## Automations
+
+Automations use the same authoring boundary as the dashboard agent.
+
+They can run from manual, scheduled, repository, or content-update triggers depending on the workflow. Workflows that create documentation changes need repository authoring access and should produce reviewable changes unless explicitly configured otherwise.
+
+## Repository instructions
+
+Use repository instructions when you want the authoring agent and assistant to follow site-specific conventions.
+
+| File | Used by | Notes |
+| --- | --- | --- |
+| `.dubstack/AGENTS.md` | Dashboard agent, Slack authoring, automations | Preferred private path for authoring rules. |
+| `.dubstack/Assistant.md` | Public assistant, when Enterprise custom instructions are enabled | Preferred private path for reader-assistant guidance. |
+
+Keep instruction files out of public navigation. Do not put credentials, API keys, or private incident details in them.
+
+## Related
+
+- [Assistant](/ai/assistant)
+- [Agent](/ai/agent)
+- [MCP](/ai/mcp)
+- [Automations](/automations)

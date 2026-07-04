@@ -341,16 +341,36 @@
             "icon": "sparkles",
             "pages": [
               {
-                "slug": "ai/agent",
-                "icon": "sparkles"
+                "slug": "ai/ai-surfaces",
+                "icon": "panels-top-left"
               },
               {
                 "slug": "ai/assistant",
                 "icon": "bot"
               },
               {
+                "slug": "ai/assistant-usage",
+                "icon": "messages-square"
+              },
+              {
                 "slug": "ai/assistant-settings",
                 "icon": "settings"
+              },
+              {
+                "slug": "ai/agent",
+                "icon": "sparkles"
+              },
+              {
+                "slug": "ai/effective-agent-prompts",
+                "icon": "pen-line"
+              },
+              {
+                "slug": "ai/agent-use-cases",
+                "icon": "list-checks"
+              },
+              {
+                "slug": "ai/agent-instructions",
+                "icon": "file-cog"
               },
               {
                 "slug": "ai/integrations",

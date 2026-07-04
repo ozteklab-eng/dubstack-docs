@@ -1,0 +1,102 @@
+---
+title: Agent use cases
+sidebarTitle: Use cases
+icon: list-checks
+---
+
+Use the dashboard agent for documentation work that benefits from repository context, connected integrations, and reviewable Git changes.
+
+## Create a new page from product context
+
+Use this when product details exist in a Slack thread, Jira issue, pull request, or release note.
+
+Example:
+
+```text
+Create a new guide explaining the manual update flow from this Slack thread. Add it under Deployment and open a draft pull request.
+```
+
+The agent should use the supplied context, draft a page, and update navigation when requested.
+
+## Update docs after a feature change
+
+When a product change lands, ask the agent to update the relevant docs.
+
+Example:
+
+```text
+This pull request changes the preview screenshot pipeline. Update the deployment preview docs and include any new dashboard behavior users need to know.
+```
+
+Keep the source link in the prompt so reviewers can compare the docs change with the product change.
+
+## Fix stale or confusing docs
+
+Use the agent to revise pages that create support load or reader confusion.
+
+Example:
+
+```text
+Users keep asking what custom domain records to create. Review /deployment/custom-domains and add clearer setup and troubleshooting steps.
+```
+
+Pair this with feedback analytics when available.
+
+## Draft changelog entries
+
+Use the agent to summarize product changes into a changelog draft.
+
+Example:
+
+```text
+Draft a changelog entry for the new page feedback controls and include the dashboard path where users enable them.
+```
+
+The agent should not publish the changelog without review.
+
+## Review existing content
+
+Use review prompts for grammar, broken links, missing prerequisites, or consistency checks.
+
+Examples:
+
+```text
+Review /api-reference/openapi-setup for missing prerequisites and draft only the required fixes.
+```
+
+```text
+Find inconsistent naming between Git sync, manual update, and deployment preview docs.
+```
+
+## Use integrations as bounded context
+
+Connected integrations can provide context without requiring the agent to read everything in that provider.
+
+Examples:
+
+```text
+Use Jira issue DOCS-124 as context and update the troubleshooting page.
+```
+
+```text
+Use this Slack thread as context and draft a short FAQ page.
+```
+
+Keep Jira filters and Slack context focused. Smaller, bounded context usually produces better documentation changes.
+
+## When to use automations instead
+
+Use [Automations](/automations) when the same task should run repeatedly or from a trigger.
+
+Examples:
+
+- draft changelogs on a schedule
+- review assistant feedback trends weekly
+- fix broken links after content updates
+- audit SEO metadata regularly
+
+## Related
+
+- [Effective agent prompts](/ai/effective-agent-prompts)
+- [Agent integrations](/ai/integrations)
+- [Automations reference](/automations/reference)

@@ -1,0 +1,99 @@
+---
+title: Agent instructions
+sidebarTitle: Agent instructions
+icon: file-cog
+---
+
+Agent instructions let you define documentation conventions that the authoring agent should follow.
+
+Use instructions for tone, terminology, example style, and page structure. Keep secrets and private operational details out of instruction files.
+
+## Instruction locations
+
+DubStack reads authoring instructions from the published repository snapshot.
+
+| Path | Use |
+| --- | --- |
+| `.dubstack/AGENTS.md` | Preferred path for authoring-agent instructions. |
+| `.dubstack/Agents.md` | Accepted compatibility path. |
+| `AGENTS.md` | Accepted fallback path. Add it to `.dubstackignore` if you do not want it served publicly. |
+| `Agents.md` | Accepted fallback path. Add it to `.dubstackignore` if you do not want it served publicly. |
+
+Prefer `.dubstack/AGENTS.md` because files in `.dubstack/` are intended for platform configuration and are not normal docs pages.
+
+## What to include
+
+Good instruction files are practical and specific.
+
+Include guidance such as:
+
+- preferred voice and tone
+- product terminology
+- code example languages
+- required sections for API guides
+- how to name pages
+- when to add troubleshooting notes
+- how to handle unreleased features
+- what files or folders should not be changed
+
+Example:
+
+```markdown
+# Documentation agent instructions
+
+## Voice
+- Use direct, action-oriented language.
+- Write for developers who are setting up production docs.
+- Avoid marketing claims inside task guides.
+
+## Examples
+- Prefer TypeScript and cURL examples.
+- Include required environment variables before commands.
+- Do not invent endpoints or configuration fields.
+
+## Review rules
+- Open draft pull requests for generated changes.
+- Keep changes small unless the prompt explicitly asks for a restructure.
+```
+
+## Keep instructions safe
+
+Do not include:
+
+- API keys
+- private tokens
+- customer secrets
+- unreleased security details
+- private support or incident notes
+- credentials for test accounts
+
+If instructions mention internal processes, keep them general enough that they can safely be stored with the docs repository.
+
+## Assistant instructions
+
+The public assistant has a separate instruction file:
+
+```text
+.dubstack/Assistant.md
+```
+
+Assistant instructions are for reader-facing answers. Agent instructions are for authoring behavior.
+
+Enterprise custom assistant instructions can also be configured from the dashboard when the feature is enabled.
+
+## Republish after changes
+
+Instruction files are read from the published repository snapshot.
+
+After changing instructions:
+
+1. Commit the file to the docs repository.
+2. Run a manual update if the webhook did not sync automatically.
+3. Check the activity log for a successful update.
+4. Ask the agent a small test question before using it for larger authoring work.
+
+## Related
+
+- [Agent](/ai/agent)
+- [AI surfaces](/ai/ai-surfaces)
+- [Configure the assistant](/ai/assistant-settings)

@@ -1,0 +1,97 @@
+---
+title: Use the assistant
+sidebarTitle: Use the assistant
+icon: messages-square
+---
+
+The public assistant helps readers get answers from your published docs.
+
+It is designed for reader support, not documentation authoring. It cannot edit files, change settings, or access private dashboard context.
+
+## Open the assistant
+
+Readers can open the assistant from the docs header or from an enabled contextual action on a page.
+
+When opened from a page action, the assistant can use the current page as extra context for the conversation.
+
+## Ask focused questions
+
+Good assistant questions include the task or page area the reader cares about.
+
+Examples:
+
+```text
+How do I connect a GitHub repository?
+```
+
+```text
+What DNS records do I need for a custom domain?
+```
+
+```text
+Where is the OpenAPI spec configured?
+```
+
+```text
+Why is my preview deployment not updating?
+```
+
+## Use sources
+
+Assistant answers can include source links.
+
+Open the linked docs pages when:
+
+- you are changing production configuration
+- the answer includes API details
+- the answer mentions plan or entitlement behavior
+- the answer affects authentication, domains, or deployment
+
+AI responses can contain mistakes. Treat sources as the final verification path.
+
+## Ask follow-up questions
+
+The assistant keeps the current conversation context.
+
+Examples:
+
+```text
+Show me the shorter version.
+```
+
+```text
+Give me the steps as a checklist.
+```
+
+```text
+Where is that configured in dubstack.json?
+```
+
+## When answers are stale
+
+The assistant reads the published docs index.
+
+If the answer does not include a recent change:
+
+1. Confirm the docs change is committed.
+2. Confirm the deployment update completed.
+3. Refresh the page.
+4. Ask again with the page path or feature name.
+
+## When the assistant cannot answer
+
+The assistant should avoid guessing when the docs do not contain enough information.
+
+If it cannot answer:
+
+- search the docs normally
+- check linked source pages
+- contact the docs owner or support path shown by the site
+- submit page feedback when feedback is enabled
+
+## Related
+
+- [Assistant](/ai/assistant)
+- [Configure the assistant](/ai/assistant-settings)
+- [AI discovery files](/ai/ai-discovery-files)
+- [MCP](/ai/mcp)
