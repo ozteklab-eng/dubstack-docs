@@ -1,0 +1,80 @@
+---
+title: Single sign-on
+shortTitle: SSO
+description: Configure enterprise identity controls for dashboard access.
+icon: building-2
+---
+
+Single sign-on lets Enterprise organizations route dashboard access through their identity provider.
+
+<Callout type="info">
+  SSO is an Enterprise feature. If the SSO controls are not visible in your dashboard, check the current plan and entitlement state in Billing.
+</Callout>
+
+## What SSO controls
+
+SSO controls how team members authenticate into the dubstack dashboard. It does not replace Git provider permissions, repository branch protection, or docs-site visitor authentication.
+
+Use SSO when your organization needs:
+
+- centralized identity management
+- enforced company login methods
+- easier offboarding
+- enterprise access reviews
+- separation between dashboard access and repository access
+
+## Supported setup model
+
+The dashboard stores SSO configuration at the organization level. Enterprise organizations can configure the provider details exposed by the Authentication settings page.
+
+Prepare these values before configuring SSO:
+
+| Value | Purpose |
+| --- | --- |
+| Provider | The identity provider your organization uses. |
+| Organization domain | The email domain expected for members. |
+| Client ID | Public OAuth/OIDC client identifier from the provider. |
+| Client secret | Secret issued by the provider. Store it only in the dashboard field. |
+| Authorization URL | Provider endpoint that starts the login flow. |
+| Token URL | Provider endpoint used to exchange the login code. |
+| User info URL | Provider endpoint used to retrieve identity details when required. |
+
+Exact field availability depends on the enabled provider and workspace entitlement.
+
+## Configure SSO
+
+1. Open the dashboard.
+2. Go to **Settings > Authentication**.
+3. Confirm the workspace is on an Enterprise plan or trial with SSO enabled.
+4. Choose the provider type available for your workspace.
+5. Copy the redirect URL shown by dubstack into your identity provider.
+6. Enter the provider client and endpoint details in dubstack.
+7. Save the configuration.
+8. Test sign-in with a non-owner member before enforcing SSO operationally.
+
+## Break-glass access
+
+Keep at least one owner or admin account with a tested recovery path before changing identity settings.
+
+Recommended practice:
+
+- keep ownership on a durable company-controlled mailbox
+- store recovery credentials in a password manager
+- test SSO with a secondary member before relying on it
+- document who can disable or repair SSO if the provider is unavailable
+
+## Offboarding with SSO
+
+Removing a user from the identity provider should stop future sign-ins through SSO, but you should also review:
+
+- dubstack organization membership
+- Git provider repository access
+- Slack or Jira workspace access used by agent integrations
+- pending invites
+- active API keys the user created or managed
+
+## Related
+
+- [Team members](/dashboard/team-members)
+- [Roles](/dashboard/roles)
+- [Billing and plans](/dashboard/billing-plans)

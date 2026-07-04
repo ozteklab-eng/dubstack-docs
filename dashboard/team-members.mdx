@@ -4,48 +4,80 @@ description: Invite teammates and manage organization roles.
 icon: users
 ---
 
-Team members let more people work on the same docs workspace.
+Team members let more people work in the same dubstack organization.
 
-Invite teammates after the site source and first publish are working.
+Invite teammates after the site source and first publish are working, then assign the least-privileged role that lets each person do their job.
+
+## Requirements
+
+Team invites depend on plan and role:
+
+| Requirement | Details |
+| --- | --- |
+| Plan | Team invites are available on Pro and Enterprise workspaces. |
+| Inviter role | Editors can invite editors and viewers. Admins and owners can invite admins, editors, and viewers. |
+| Invite email | The invited user must accept with the same email address. |
+
+Free workspaces can evaluate the product with the owner account. Upgrade when you need team collaboration.
 
 ## Invite a member
 
 1. Open the dashboard.
-2. Go to Settings.
-3. Open team or members settings.
-4. Enter the teammate's email address.
-5. Choose the appropriate role.
-6. Send the invite.
+2. Go to **Settings > Organization > Members**.
+3. Enter the teammate's email address.
+4. Choose the role.
+5. Send the invite.
+6. Ask the teammate to accept from the email address that received the invite.
 
-The invited user should accept with the same email address.
+Pending invites appear on the members page until they are accepted, cancelled, or expired.
 
-## Role guidance
+## Choose a role
 
-Assign the least privilege needed:
-
-| Role type | Typical use |
+| Role | Use when |
 | --- | --- |
-| Owner/Admin | Workspace management, billing, integrations, and dangerous settings. |
-| Editor | Content and configuration changes. |
-| Viewer | Read-only dashboard visibility where available. |
+| Owner | The person or durable company account must retain full recovery control. |
+| Admin | The person manages members, billing, SSO, domains, Git source, or organization settings. |
+| Editor | The person writes, reviews, publishes, or configures docs. |
+| Viewer | The person needs read-only dashboard visibility. |
 
-Exact role names can vary by workspace configuration. Use the dashboard role picker as the source of truth.
+See [Roles](/dashboard/roles) for the full permission matrix.
+
+## Manage pending invites
+
+Use pending invites to confirm who still needs access.
+
+Recommended maintenance:
+
+- cancel invites that were sent to the wrong email address
+- resend invites only after confirming the person still needs access
+- avoid sending admin invites unless the recipient needs admin-level duties
+- review pending invites before changing plan or ownership state
 
 ## Git provider access
 
-Dashboard access and Git provider access are separate.
+Dashboard membership and Git provider access are separate.
 
 A teammate may need both:
 
-- dashboard access to open the editor and settings
+- dashboard access to use the editor, settings, workflows, and analytics
 - repository access to review or merge pull requests
 - provider app access if they manage repository installation
 
-## Offboarding
+If a teammate can edit in dubstack but cannot merge a pull request, update the Git provider permissions or ask a repository maintainer to review the change.
+
+## Offboard a member
 
 When removing a teammate:
 
 1. Remove dashboard membership.
-2. Review Git provider access.
-3. Rotate any shared credentials that person could access.
-4. Review pending invites and automation ownership.
+2. Review pending invites for the same person.
+3. Review Git provider repository access.
+4. Review Slack, Jira, and other integration access.
+5. Rotate shared credentials and API keys the person could access.
+6. Review recent activity or audit logs if the workspace has audit logging enabled.
+
+## Related
+
+- [Roles](/dashboard/roles)
+- [Deployment permissions](/dashboard/deployment-permissions)
+- [API keys](/dashboard/api-keys)

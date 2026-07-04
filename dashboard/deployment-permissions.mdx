@@ -1,0 +1,84 @@
+---
+title: Deployment permissions
+description: Understand how dashboard roles and Git provider permissions affect publishing.
+icon: lock-keyhole
+---
+
+Deployment permissions decide who can move documentation changes from draft or branch state into a published site.
+
+There are two permission systems to understand:
+
+| Permission system | Controls |
+| --- | --- |
+| dubstack role | Dashboard actions such as editing, publishing, manual updates, previews, assistant settings, and workflow configuration. |
+| Git provider access | Repository actions such as reviewing pull requests, merging branches, and changing branch protection. |
+
+A user may need both. For example, an editor can create a documentation update in dubstack, but the pull request still follows the repository's review and merge rules.
+
+## Who can publish
+
+| Action | Required dubstack role |
+| --- | --- |
+| View deployment status | Viewer |
+| Trigger a manual update | Editor |
+| Publish content from the editor | Editor |
+| Create or update preview deployments | Editor |
+| Configure preview behavior | Editor |
+| Change the production Git source | Admin |
+| Change custom domain settings | Admin |
+
+The connected Git provider can apply stricter rules. If a branch is protected, the provider may require pull request review before a change can reach the production branch.
+
+## Manual updates
+
+Manual update is useful when:
+
+- the provider webhook did not fire
+- a hosted OpenAPI spec changed without a Git commit
+- you want to refresh the published artifact after fixing provider access
+- you need to verify the current branch and site state
+
+Manual update does not bypass role checks or provider permissions.
+
+## Pull requests and previews
+
+When docs are connected to a repository, use pull requests for changes that need review.
+
+Recommended flow:
+
+1. Create or receive a branch with the docs change.
+2. Open the preview deployment.
+3. Review changed pages, navigation, API reference pages, and mobile layout.
+4. Merge according to your repository rules.
+5. Confirm the production deployment completes.
+
+## External contributors
+
+People with repository access but no dubstack dashboard access can still propose changes through Git. Those changes only publish after the connected production branch receives them and a deployment runs.
+
+For safer collaboration:
+
+- keep production branch protection enabled
+- require review for large navigation or API spec changes
+- avoid giving repository admin access to users who only need docs editing
+- keep dashboard admin access limited
+
+## Troubleshooting
+
+### The publish button is unavailable
+
+Check the user's role. Viewer access is read-only. Editor or higher is required for content publishing actions.
+
+### The deployment did not start after merge
+
+Check the provider app installation, webhook delivery, connected branch, and activity feed. Run a manual update after fixing provider access.
+
+### A user can edit but cannot merge
+
+This is expected when the Git provider requires repository review or branch protection. Update repository permissions or ask a repository maintainer to review the pull request.
+
+## Related
+
+- [Roles](/dashboard/roles)
+- [Git providers](/deployment/forgejo-github-gitlab)
+- [Preview deployments](/deployment/preview-deployments)

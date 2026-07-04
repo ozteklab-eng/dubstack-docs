@@ -1,0 +1,67 @@
+---
+title: API keys
+description: Store keys used by the dashboard API playground.
+icon: key-round
+---
+
+API keys let the dashboard API playground send authenticated requests to your API while you test endpoint pages.
+
+Use this page for keys that are safe to use in a documentation testing context. Do not store production secrets unless your organization has approved that workflow.
+
+## What API keys are for
+
+API keys are used by the API playground when an OpenAPI operation requires authentication.
+
+Typical uses:
+
+- testing a sandbox API from generated endpoint pages
+- saving a reusable playground key for teammates
+- keeping demo credentials separate from production credentials
+- validating docs examples before publishing
+
+## Create a key
+
+1. Open the dashboard.
+2. Go to **Settings > Security > API keys**.
+3. Click **New API Key**.
+4. Add a name and optional description.
+5. Enter a key value or generate a playground key when available.
+6. Save the key.
+7. Open an API reference page and select the saved key in the playground.
+
+## Key fields
+
+| Field | Purpose |
+| --- | --- |
+| Name | Human-readable label shown in the dashboard. |
+| Description | Optional note describing the environment or purpose. |
+| Key value | Secret value used by the API playground request. |
+
+## Security guidance
+
+- Prefer sandbox or restricted API credentials.
+- Use short-lived keys where your API supports them.
+- Delete keys that are no longer needed.
+- Rotate keys after team changes.
+- Do not commit API keys into your docs repository.
+- Do not paste customer production secrets into example docs pages.
+
+## Troubleshooting
+
+### The playground request returns 401
+
+Confirm the selected key is valid for the API environment configured in the OpenAPI spec.
+
+### The key is not visible in the playground
+
+Refresh the page after saving the key. Confirm you are viewing the same site and organization where the key was created.
+
+### A key should no longer be usable
+
+Delete it from the dashboard and revoke it in the upstream API provider if that provider issued the credential.
+
+## Related
+
+- [API playground authentication](/api-reference/playground-authentication)
+- [Spec management](/api-reference/spec-management)
+- [Roles](/dashboard/roles)

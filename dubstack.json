@@ -123,6 +123,11 @@
               { "slug": "settings/deployment/addons", "icon": "sliders-horizontal" },
               { "slug": "dashboard/feedback-analytics", "icon": "chart-no-axes-combined" },
               { "slug": "dashboard/team-members", "icon": "users" },
+              { "slug": "dashboard/roles", "icon": "shield-check" },
+              { "slug": "dashboard/deployment-permissions", "icon": "lock-keyhole" },
+              { "slug": "dashboard/api-keys", "icon": "key-round" },
+              { "slug": "dashboard/sso", "icon": "building-2" },
+              { "slug": "dashboard/audit-logs", "icon": "clipboard-list" },
               { "slug": "dashboard/billing-plans", "icon": "credit-card" }
             ]
           },

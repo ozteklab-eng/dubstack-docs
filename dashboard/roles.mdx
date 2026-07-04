@@ -1,0 +1,108 @@
+---
+title: Roles
+description: Understand owner, admin, editor, and viewer access in dubstack.
+icon: shield-check
+---
+
+Roles control what members can view, edit, publish, and configure inside a dubstack organization.
+
+Use roles to keep day-to-day documentation work fast while reserving dangerous settings for trusted admins.
+
+<Callout type="info">
+  Role-based access controls apply to dashboard actions. Git provider permissions are separate and should be reviewed in your GitHub, GitLab, or Forgejo organization.
+</Callout>
+
+## Role summary
+
+| Capability | Viewer | Editor | Admin | Owner |
+| --- | :---: | :---: | :---: | :---: |
+| View dashboard and content | Yes | Yes | Yes | Yes |
+| Ask the agent questions | Yes | Yes | Yes | Yes |
+| Edit docs content | No | Yes | Yes | Yes |
+| Publish content | No | Yes | Yes | Yes |
+| Trigger deployments | No | Yes | Yes | Yes |
+| Manage navigation and site configuration | No | Yes | Yes | Yes |
+| Create API keys | No | Yes | Yes | Yes |
+| Configure integrations | No | Yes | Yes | Yes |
+| Configure assistant and workflows | No | Yes | Yes | Yes |
+| Invite editors and viewers | No | Yes | Yes | Yes |
+| Invite admins | No | No | Yes | Yes |
+| Update member roles | No | No | Yes | Yes |
+| Remove members | No | No | Yes | Yes |
+| Manage billing | No | No | Yes | Yes |
+| Manage SSO | No | No | Yes | Yes |
+| Manage custom domains | No | No | Yes | Yes |
+| Change Git source | No | No | Yes | Yes |
+| Delete organization | No | No | Yes | Yes |
+
+## Owner
+
+The owner is the primary organization authority. Ownership is created when the organization is created and should belong to a durable company-controlled account.
+
+Owners can:
+
+- manage every dashboard area
+- recover access if other admins are removed
+- control billing and destructive organization actions
+- manage SSO, domains, Git source, and member roles
+
+Keep ownership limited and protect the owner account with strong authentication.
+
+## Admin
+
+Admins manage operational settings for the organization.
+
+Admins can:
+
+- invite and remove members
+- change member roles
+- manage billing and plan settings
+- configure SSO and custom domains
+- change repository source settings
+- configure integrations and automation behavior
+
+Use admin access for platform owners, docs leads, or engineering managers who are responsible for production docs operations.
+
+## Editor
+
+Editors manage content and publishing workflows.
+
+Editors can:
+
+- edit pages and site configuration
+- publish content changes
+- trigger deployments and manual updates
+- configure assistant and workflow behavior
+- create API keys for API playground testing
+- invite editor or viewer teammates
+
+Editors should not need billing, SSO, custom domain, or Git source administration for normal documentation work.
+
+## Viewer
+
+Viewers can inspect dashboard state without changing production docs.
+
+Viewers can:
+
+- view dashboard and analytics areas where available
+- read docs content in the editor
+- ask documentation questions through enabled agent surfaces
+
+Use viewer access for stakeholders, support staff, or reviewers who need visibility but should not publish or configure docs.
+
+## How permissions are enforced
+
+Dashboard actions are checked against the member's organization role. dubstack also mirrors role relationships into the authorization layer for organization, site, agent, workflow, and integration resources.
+
+If an action is blocked, check:
+
+1. The signed-in user is a member of the correct organization.
+2. The member has the required role.
+3. The feature is enabled for the workspace tier.
+4. The relevant integration or Git source is connected.
+
+## Related
+
+- [Team members](/dashboard/team-members)
+- [Deployment permissions](/dashboard/deployment-permissions)
+- [Billing and plans](/dashboard/billing-plans)

@@ -1,0 +1,65 @@
+---
+title: Audit logs
+description: Track important organization, feature, and operational changes.
+icon: clipboard-list
+---
+
+Audit logs help admins understand who changed important settings and when those changes happened.
+
+<Callout type="info">
+  Organization-facing audit logs are an Enterprise capability. Operational audit surfaces may also appear in the control plane for dubstack operators.
+</Callout>
+
+## What to use audit logs for
+
+Use audit logs when you need to investigate or review:
+
+- member invitation and role changes
+- billing and entitlement changes
+- feature flag updates
+- integration installation or removal
+- Git source changes
+- domain and deployment configuration changes
+- assistant, workflow, or agent configuration changes
+- destructive organization actions
+
+## Useful fields
+
+Audit entries should be read with this context:
+
+| Field | Meaning |
+| --- | --- |
+| Timestamp | When the action was recorded. |
+| Actor | The user or system component that performed the action. |
+| Category | The product area affected by the change. |
+| Action | The specific operation that ran. |
+| Result | Whether the action succeeded, failed, or was blocked. |
+| Metadata | Extra details such as organization, site, feature, or integration identifiers. |
+
+## Review checklist
+
+When investigating a change:
+
+1. Filter to the affected organization or site.
+2. Narrow the date range to when the behavior changed.
+3. Compare the audit entry with the deployment activity feed.
+4. Check whether the actor had the expected role.
+5. Review related provider events in GitHub, GitLab, Forgejo, Slack, or Jira if the action involved an integration.
+
+## Security guidance
+
+Audit logs are most useful when paired with least-privilege roles.
+
+Recommended practice:
+
+- keep admin access limited
+- review member roles regularly
+- remove unused invites
+- rotate API keys after personnel changes
+- keep provider app access scoped to required repositories
+
+## Related
+
+- [Roles](/dashboard/roles)
+- [Deployment permissions](/dashboard/deployment-permissions)
+- [Git providers](/deployment/forgejo-github-gitlab)
