@@ -1,0 +1,83 @@
+---
+title: Generated skill file
+description: Use the generated skill.md file to help agents understand your docs site and public MCP server.
+icon: badge-check
+---
+
+DubStack publishes a generated `skill.md` file for public docs sites.
+
+The skill file gives agents a concise description of how to use the docs site, where to connect to the public MCP server, and which pages are good starting points.
+
+## Open the skill file
+
+Append `/skill.md` to your docs domain.
+
+```text
+https://your-docs-domain.com/skill.md
+```
+
+The response is Markdown and is intended for AI agents, MCP clients, and developer tools that can load product instructions.
+
+## What it contains
+
+The generated skill file includes:
+
+- the site name and description
+- the public docs URL
+- the public MCP endpoint
+- recommended starting pages from navigation
+- guidance to use published docs as the source of truth
+- feedback instructions when agent feedback is enabled
+
+## MCP resource discovery
+
+The public MCP server also exposes `skill.md` as a resource.
+
+Clients that support MCP resources can discover the same instructions after connecting to:
+
+```text
+https://your-docs-domain.com/mcp
+```
+
+This lets an agent use both the high-level skill file and the searchable docs filesystem from the same server.
+
+## Well-known discovery
+
+DubStack also publishes agent-skill discovery metadata under `/.well-known/agent-skills/`.
+
+Useful paths include:
+
+| Path | Purpose |
+| --- | --- |
+| `/skill.md` | Main generated skill file. |
+| `/.well-known/agent-skills/index.json` | Agent skill discovery manifest. |
+| `/.well-known/agent-skills/<skill-id>/skill.md` | Generated skill URL listed by the discovery manifest. |
+
+## When to use it
+
+Use `skill.md` when you want to give an agent durable instructions about your product or docs site.
+
+Use MCP when the agent needs to search or read exact published pages.
+
+Use `llms.txt` when the agent only needs a page directory.
+
+## Current customization model
+
+DubStack currently generates `skill.md` from the published docs site and MCP server metadata. Custom repository-supplied skill files are not currently supported.
+
+## Troubleshooting
+
+If `/skill.md` returns `404`:
+
+1. Confirm the docs site is public.
+2. Confirm AI discovery/indexing is enabled.
+3. Run a manual update from the dashboard.
+4. Check that `/mcp` returns discovery metadata.
+
+If the skill file references stale pages, publish the latest navigation changes and wait for the deployment update to finish.
+
+## Related
+
+- [MCP](/ai/mcp)
+- [AI index files](/ai/llms-indexes)
+- [AI discovery files](/ai/ai-discovery-files)

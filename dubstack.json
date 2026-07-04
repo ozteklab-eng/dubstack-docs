@@ -393,6 +393,18 @@
                 "icon": "mouse-pointer-click"
               },
               {
+                "slug": "ai/markdown-export",
+                "icon": "file-text"
+              },
+              {
+                "slug": "ai/llms-indexes",
+                "icon": "list-tree"
+              },
+              {
+                "slug": "ai/generated-skill-file",
+                "icon": "badge-check"
+              },
+              {
                 "slug": "ai/ai-discovery-files",
                 "icon": "file-search"
               },

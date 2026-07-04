@@ -1,0 +1,110 @@
+---
+title: AI index files
+description: Understand the generated llms.txt and llms-full.txt files on published docs sites.
+icon: list-tree
+---
+
+DubStack generates AI-readable index files for every public docs site. These files help agents discover your pages without scraping the visual site shell.
+
+The generated files update when your published docs update.
+
+## Available files
+
+| Path | Purpose |
+| --- | --- |
+| `/llms.txt` | Compact index of published pages. |
+| `/llms-full.txt` | Full text bundle of published pages. |
+
+Both files use `text/plain` responses so agents and command-line tools can read them directly.
+
+## `llms.txt`
+
+`llms.txt` is the quick index.
+
+```text
+https://your-docs-domain.com/llms.txt
+```
+
+It includes:
+
+- the site title
+- the site description
+- a pointer to `/llms-full.txt`
+- links to pages from the published navigation
+
+Use it when an agent needs to choose which page to read next.
+
+```bash
+curl -L https://your-docs-domain.com/llms.txt
+```
+
+## `llms-full.txt`
+
+`llms-full.txt` combines published page content into one text file.
+
+```text
+https://your-docs-domain.com/llms-full.txt
+```
+
+It includes:
+
+- the site title and description
+- generation metadata
+- total page count
+- each page title
+- each page URL
+- each page's published content
+
+Use it for tools that ingest a whole docs site as a single file. For interactive agents, prefer [MCP](/ai/mcp) because MCP lets the agent search and read only the pages it needs.
+
+```bash
+curl -L https://your-docs-domain.com/llms-full.txt
+```
+
+## Indexing controls
+
+AI index files follow the site's public indexing controls.
+
+When public indexing is disabled, generated AI-readable files and public MCP discovery return `404`.
+
+Use this when a site should remain reachable to humans but should not expose machine-readable discovery files.
+
+## Agent feedback
+
+When agent feedback is enabled, `llms-full.txt` can include instructions that tell agents how to report documentation issues for the page they are reading.
+
+This helps you identify pages that are confusing, outdated, or incomplete from an agent's point of view.
+
+## What not to put in public docs
+
+AI indexes are public for public sites. Do not publish:
+
+- API keys or tokens
+- private customer data
+- unreleased roadmap details
+- internal incident notes
+- credentials, magic links, or temporary secrets
+
+## Verify the files
+
+After publishing, open:
+
+```text
+https://your-docs-domain.com/llms.txt
+https://your-docs-domain.com/llms-full.txt
+```
+
+Then confirm the page list matches your published navigation.
+
+If pages are missing, check:
+
+1. The page is included in `dubstack.json` navigation.
+2. The page file is published on the active branch.
+3. The page is not hidden or excluded.
+4. The latest deployment completed successfully.
+
+## Related
+
+- [AI discovery files](/ai/ai-discovery-files)
+- [Markdown export](/ai/markdown-export)
+- [MCP](/ai/mcp)

@@ -1,0 +1,87 @@
+---
+title: Markdown export
+description: Copy or open clean Markdown versions of published pages for AI tools, reviews, and content reuse.
+icon: file-text
+---
+
+Markdown export gives readers a clean text version of the current page so they can reuse docs content in AI tools, support workflows, and internal notes without copying the rendered site chrome.
+
+DubStack exposes Markdown through page contextual actions today. Site-level AI indexes are available through [`llms.txt`](/ai/llms-indexes) and [`llms-full.txt`](/ai/llms-indexes).
+
+## Copy a page as Markdown
+
+When contextual actions are enabled, the **Copy page** action copies the current page content as Markdown.
+
+Use this when you want to paste a page into:
+
+- an AI assistant conversation
+- an issue or pull request
+- a support reply
+- an internal handoff note
+
+The copied content comes from the published page content. It does not include dashboard state, unpublished editor changes, private repository files, or team-only notes.
+
+## View as Markdown
+
+The **View as Markdown** action opens the current page content as a Markdown document in the browser.
+
+This is useful when you want to inspect the raw text shape that an AI tool receives before copying or sharing it.
+
+## Configure Markdown actions
+
+Contextual actions are configured in `dubstack.json`.
+
+```json
+{
+  "contextual": {
+    "enabled": true,
+    "options": ["copy", "view", "claude", "chatgpt", "perplexity"],
+    "default": "copy"
+  }
+}
+```
+
+Use `copy` for clipboard export and `view` for a readable Markdown view.
+
+## Use with external AI tools
+
+External AI actions send the tool a prompt for the current page context.
+
+Before enabling external AI actions, confirm the page content is safe to send to that destination. Public docs are already visible to readers, but external AI tools can have separate retention, workspace, and privacy policies.
+
+<Callout type="warning">
+  Do not publish secrets, private customer data, unreleased plans, or internal procedures in public documentation.
+</Callout>
+
+## Site-wide Markdown files
+
+For whole-site ingestion, use the generated AI index files instead of copying pages one by one.
+
+| File | Use it for |
+| --- | --- |
+| `/llms.txt` | A compact index of public pages. |
+| `/llms-full.txt` | A full text bundle of published pages. |
+| `/skill.md` | Agent instructions and MCP discovery guidance. |
+
+See [AI index files](/ai/llms-indexes) and [Generated skill file](/ai/generated-skill-file) for the generated file behavior.
+
+## Current server behavior
+
+DubStack currently supports contextual Markdown copy/view actions and generated AI index files. Dedicated server-rendered page `.md` URLs are not required for these actions.
+
+## Troubleshooting
+
+If Markdown actions are missing:
+
+1. Confirm `contextual.enabled` is `true`.
+2. Confirm `copy` or `view` is listed in `contextual.options`.
+3. Publish the branch that contains the `dubstack.json` update.
+4. Refresh the published page after the update completes.
+
+If copied Markdown is stale, run a manual update from the dashboard and wait for the deployment activity to complete.
+
+## Related
+
+- [Contextual actions](/ai/contextual-actions)
+- [AI index files](/ai/llms-indexes)
+- [Generated skill file](/ai/generated-skill-file)
