@@ -1,0 +1,136 @@
+---
+title: Changelog updates
+description: Create changelog pages with Update components, tags, direct links, and RSS feeds.
+icon: history
+---
+
+Use changelog pages to publish product updates, release notes, documentation changes, and migration notices.
+
+## Create a changelog page
+
+Create `changelog.mdx` or another page dedicated to updates.
+
+```mdx
+---
+title: Changelog
+description: Product updates and announcements.
+rss: true
+---
+```
+
+Add the page to `dubstack.json` navigation so readers can find it from the header or sidebar.
+
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Changelog",
+        "groups": [
+          {
+            "group": "Changelog",
+            "pages": ["changelog"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+## Add updates
+
+Use the `Update` component for each entry.
+
+```mdx
+<Update label="2026-07-05" description="Configuration references" tags={["docs", "configuration"]}>
+  Added field-by-field configuration reference pages for appearance, structure, API settings, and SEO/search.
+</Update>
+```
+
+| Prop | Type | Purpose |
+| --- | --- | --- |
+| `label` | string | Date, version, or release label. Also creates the update anchor. |
+| `description` | string | Short summary shown beside the label. |
+| `tags` | string[] | Optional filters for grouping updates. |
+| `rss` | object | Optional RSS title and description override. |
+
+## Direct links
+
+Each update label creates an anchor. A label of `2026-07-05` creates this link:
+
+```text
+/changelog#2026-07-05
+```
+
+Use unique labels. If two updates have the same label, the renderer must disambiguate them, which makes public links harder to predict.
+
+## Tags
+
+Tags help readers filter updates by area.
+
+```mdx
+<Update label="2026-07-05" description="API docs" tags={["api", "docs"]}>
+  Improved API operation descriptions and generated endpoint examples.
+</Update>
+```
+
+Recommended tag style:
+
+- lowercase
+- short nouns
+- consistent labels across updates
+
+Examples: `api`, `docs`, `editor`, `assistant`, `deployment`, `configuration`.
+
+## RSS feeds
+
+Set `rss: true` in page frontmatter to publish an RSS feed for the changelog page.
+
+```mdx
+---
+title: Changelog
+rss: true
+---
+```
+
+The feed is available by appending `/rss.xml` to the page URL:
+
+```text
+/changelog/rss.xml
+```
+
+RSS entries use the `Update` label and description by default. If an update contains images, components, or long formatted content, provide an RSS-specific summary.
+
+```mdx
+<Update
+  label="2026-07-05"
+  description="Configuration references"
+  rss={{
+    title: "Configuration reference pages added",
+    description: "New field-by-field docs explain appearance, structure, API, and SEO/search settings."
+  }}
+>
+  <Card title="Configuration references" href="/configuration/settings-reference">
+    Start from the settings reference.
+  </Card>
+</Update>
+```
+
+## What to include
+
+Useful changelog entries usually answer three questions:
+
+1. What changed?
+2. Who is affected?
+3. What should readers do next?
+
+Keep the entry concise and link to the full guide or reference page when the change needs more explanation.
+
+## Review checklist
+
+- The label is unique and stable.
+- The description is specific.
+- Tags use existing tag names where possible.
+- Links point to published pages.
+- RSS text is provided when the visible update relies on components or images.

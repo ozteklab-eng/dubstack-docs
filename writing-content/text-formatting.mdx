@@ -1,0 +1,149 @@
+---
+title: Text formatting
+description: Format paragraphs, emphasis, links, lists, inline code, code fences, blockquotes, and tables in MDX pages.
+icon: pilcrow
+---
+
+Use standard Markdown for most writing. Add MDX components only when the content needs a structured surface such as cards, callouts, tabs, accordions, or API fields.
+
+## Paragraphs
+
+Keep paragraphs short and focused. A blank line starts a new paragraph.
+
+```mdx
+Use short paragraphs for setup instructions.
+
+Start a new paragraph when the reader moves to a new idea.
+```
+
+## Emphasis
+
+```mdx
+Use **bold** for important terms.
+Use _italic_ for light emphasis.
+Use `inline code` for literal values, paths, commands, and field names.
+```
+
+Rendered result:
+
+Use **bold** for important terms.
+Use _italic_ for light emphasis.
+Use `inline code` for literal values, paths, commands, and field names.
+
+## Links
+
+Use root-relative links for pages in the same docs site:
+
+```mdx
+Read the [quickstart](/quickstart) before configuring Git.
+```
+
+Use full URLs for external resources:
+
+```mdx
+Open the [status page](https://status.example.com).
+```
+
+Prefer descriptive link text. Avoid vague links such as "click here" because search, assistant retrieval, and screen readers all benefit from explicit labels.
+
+## Lists
+
+Use unordered lists for related items where order does not matter:
+
+```mdx
+- Create the page.
+- Add it to navigation.
+- Publish the change.
+```
+
+Use ordered lists for procedures:
+
+```mdx
+1. Create a branch.
+2. Edit the MDX file.
+3. Open a pull request.
+4. Publish after review.
+```
+
+Keep list items parallel. If one item starts with a verb, the rest should usually start with verbs too.
+
+## Code fences
+
+Use fenced code blocks for commands, config, and examples.
+
+````mdx
+```bash
+npm install
+npm run dev
+```
+````
+
+Include a language when possible so syntax highlighting and copy actions behave correctly.
+
+Common language identifiers:
+
+| Language | Fence |
+| --- | --- |
+| Shell | `bash` |
+| JSON | `json` |
+| JavaScript | `javascript` |
+| TypeScript | `typescript` |
+| MDX | `mdx` |
+| YAML | `yaml` |
+
+## Blockquotes
+
+Use blockquotes for short quoted material or imported notes. Use callouts for product guidance, warnings, or task-specific instructions.
+
+```mdx
+> This quote came from a migration note.
+```
+
+For first-party guidance, prefer:
+
+```mdx
+<Callout type="info">
+  Store credentials in secret storage, not in documentation source.
+</Callout>
+```
+
+## Tables
+
+Use tables for compact comparisons and field lists.
+
+```mdx
+| Field | Type | Purpose |
+| --- | --- | --- |
+| `title` | string | Page title. |
+| `description` | string | Page summary. |
+```
+
+Move long explanations below the table so mobile readers do not have to scroll horizontally through dense cells.
+
+## Escaping MDX characters
+
+MDX treats `{}` and JSX tags as syntax. When you need to show them as text, put the example inside inline code or a code fence.
+
+```mdx
+Use `{{customer_id}}` as the placeholder in the template.
+```
+
+For longer examples, use a code fence:
+
+````mdx
+```mdx
+<Card title="Example">
+  Content goes here.
+</Card>
+```
+````
+
+## Retrieval-friendly writing
+
+Search, the assistant, and public MCP tools all work better when pages are explicit.
+
+- Put the user goal in the page title or first heading.
+- Use concrete terms users will search for.
+- Keep examples close to the concept they explain.
+- Link to adjacent setup, troubleshooting, and reference pages.
+- Avoid hiding important instructions only inside screenshots.

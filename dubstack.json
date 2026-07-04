@@ -143,6 +143,18 @@
                 "icon": "file-code"
               },
               {
+                "slug": "writing-content/text-formatting",
+                "icon": "pilcrow"
+              },
+              {
+                "slug": "writing-content/headings-anchors",
+                "icon": "heading"
+              },
+              {
+                "slug": "writing-content/changelog-updates",
+                "icon": "history"
+              },
+              {
                 "slug": "writing-content/components",
                 "icon": "puzzle-piece"
               },

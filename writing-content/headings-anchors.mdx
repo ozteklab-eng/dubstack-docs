@@ -1,0 +1,99 @@
+---
+title: Headings and anchors
+description: Structure MDX pages with predictable headings, table of contents entries, and stable anchor links.
+icon: heading
+---
+
+Headings make a page scannable, power the table of contents, and create direct links to sections.
+
+## Heading levels
+
+Use one page title from frontmatter, then structure the body with `##` and `###` headings.
+
+```mdx
+---
+title: GitHub deployment
+---
+
+## Connect the GitHub app
+
+### Choose repositories
+
+### Select the production branch
+
+## Publish changes
+```
+
+Avoid starting the body with a duplicate `#` heading that matches the frontmatter title. The renderer already has the page title.
+
+## Anchor links
+
+Headings receive anchor IDs from the heading text. The generated anchor is lowercase, removes markup, and replaces non-alphanumeric characters with dashes.
+
+| Heading | Anchor |
+| --- | --- |
+| `## Publish changes` | `#publish-changes` |
+| `## API keys and secrets` | `#api-keys-and-secrets` |
+| `## Step 2: Configure Git` | `#step-2-configure-git` |
+
+Use these anchors for direct links:
+
+```mdx
+See [Publish changes](#publish-changes).
+```
+
+Use full page paths for cross-page anchor links:
+
+```mdx
+See [Git publishing](/editor/publishing#publish-changes).
+```
+
+## Stable anchors
+
+Changing heading text changes the generated anchor. If external links already point to a heading, avoid renaming that heading casually.
+
+When a heading must change:
+
+1. Add a redirect if the page path changed.
+2. Keep a nearby compatibility heading when the anchor is widely linked.
+3. Update internal links in the docs repository.
+4. Check the page in the browser after publishing.
+
+## Table of contents behavior
+
+The table of contents is built from visible page headings. Keep headings concise so the right rail remains useful.
+
+Good heading labels:
+
+- `Connect GitHub`
+- `Configure redirects`
+- `Troubleshoot failed syncs`
+
+Weak heading labels:
+
+- `More details`
+- `Other stuff`
+- `Important`
+
+## Changelog anchors
+
+`Update` entries create anchors from their `label` value.
+
+```mdx
+<Update label="2026-07-05" description="Configuration references">
+  Added field-by-field configuration reference pages.
+</Update>
+```
+
+The example above creates `#2026-07-05`.
+
+Use unique labels on a changelog page so direct links remain predictable.
+
+## Heading checklist
+
+- Use the frontmatter `title` for the page title.
+- Use `##` for major page sections.
+- Use `###` for subsections.
+- Keep headings short enough for the table of contents.
+- Use terms readers will search for.
+- Check anchors before sharing deep links publicly.

@@ -1,12 +1,12 @@
 ---
 title: Redirects
-description: Route old documentation URLs to new locations.
+description: Route old documentation URLs to new locations with exact, parameterized, and catch-all redirects.
 icon: corner-up-right
 ---
 
 Redirects send readers from old docs URLs to current pages.
 
-Use redirects when you rename pages, move sections, or migrate from another docs structure.
+Use redirects when you rename pages, move sections, migrate from another docs structure, or preserve links from a previous platform.
 
 ## Configure redirects
 
@@ -29,6 +29,24 @@ Add redirects to `dubstack.json`:
 
 Use root-relative paths for pages on the same docs site.
 
+## Redirect fields
+
+| Field | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| `source` | string | Required | Old request path. Query strings and anchors are ignored for matching. |
+| `destination` | string | Required | New internal path or external URL. May include query strings and anchors. |
+| `permanent` | boolean | `true` | Uses a permanent redirect unless set to `false`. |
+
+```json
+{
+  "source": "/old-page",
+  "destination": "/new-page",
+  "permanent": true
+}
+```
+
+Set `permanent` to `false` for temporary campaign or maintenance redirects that you plan to remove.
+
 ## External redirects
 
 Use a full URL when the destination is outside your docs site:
@@ -40,22 +58,106 @@ Use a full URL when the destination is outside your docs site:
 }
 ```
 
+Use external redirects sparingly. Prefer internal docs pages for product help so search and assistant retrieval keep useful context.
+
+## Query strings and anchors
+
+Redirect sources match paths only. Do not put query strings or anchors in `source`.
+
+```json
+{
+  "source": "/old-guide",
+  "destination": "/new-guide#configure"
+}
+```
+
+Destinations may include query strings and anchors.
+
+## Parameterized redirects
+
+Use named parameters to preserve one path segment.
+
+```json
+{
+  "source": "/old-guides/:slug",
+  "destination": "/guides/:slug"
+}
+```
+
+This maps:
+
+| Request | Destination |
+| --- | --- |
+| `/old-guides/authentication` | `/guides/authentication` |
+| `/old-guides/deployments` | `/guides/deployments` |
+
+## Catch-all redirects
+
+Use `:name*` to preserve multiple trailing path segments.
+
+```json
+{
+  "source": "/docs/:slug*",
+  "destination": "/guides/:slug*"
+}
+```
+
+This maps:
+
+| Request | Destination |
+| --- | --- |
+| `/docs/api` | `/guides/api` |
+| `/docs/api/authentication` | `/guides/api/authentication` |
+
+Catch-all redirects are useful during migrations where a whole section moves.
+
+## Unsupported wildcard shortcuts
+
+DubStack redirects support named parameters and catch-all parameters. Do not rely on partial wildcard shortcuts such as `/article-*` unless your deployment has a tested custom proxy rule in front of DubStack.
+
+Use explicit redirects or named parameters instead.
+
+## Avoid redirect loops
+
+The renderer ignores direct self-redirects, but you should still avoid circular chains.
+
+Bad example:
+
+```json
+{
+  "redirects": [
+    {
+      "source": "/docs/:slug*",
+      "destination": "/help/:slug*"
+    },
+    {
+      "source": "/help/:slug*",
+      "destination": "/docs/:slug*"
+    }
+  ]
+}
+```
+
+Keep redirect chains short. A reader should land on the final page in one hop whenever possible.
+
 ## Migration redirects
 
 When migrating an existing docs site:
 
 1. Export or list old URLs.
 2. Map each old URL to the nearest current page.
-3. Add redirects before switching the domain.
-4. Test the most visited old URLs.
-5. Keep redirects for as long as external links still point to old paths.
+3. Use catch-all redirects only where the section structure is preserved.
+4. Add redirects before switching the domain.
+5. Test the most visited old URLs.
+6. Keep redirects for as long as external links still point to old paths.
 
 ## Redirect checklist
 
 - Do not create redirect loops.
-- Prefer exact redirects for moved pages.
+- Prefer exact redirects for high-value moved pages.
+- Use parameterized redirects only when the old and new structures match.
 - Keep destination pages published.
-- Preserve query strings only when your support flow needs them.
+- Update internal links instead of relying on redirects inside your own docs.
 - Test redirects after publishing.
 
 <Callout type="warning">
