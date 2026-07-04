@@ -1,0 +1,183 @@
+---
+title: Pages and files
+description: Understand how source files become published docs pages, URLs, navigation entries, search records, and AI-readable content.
+icon: files
+---
+
+Every published docs page starts as a source file in the connected docs repository.
+
+DubStack syncs the repository, publishes the content, and uses `dubstack.json` plus page frontmatter to decide how the page appears in navigation, search, assistant context, and public MCP tools.
+
+## Supported page files
+
+| File type | Use it for |
+| --- | --- |
+| `.mdx` | Recommended format. Supports Markdown plus DubStack components. |
+| `.md` | Plain Markdown pages, useful during migrations or simple content imports. |
+
+Prefer `.mdx` for new pages so you can use cards, callouts, tabs, accordions, code groups, API fields, and changelog updates.
+
+## File paths become URLs
+
+The file path becomes the public URL without the extension.
+
+| Source file | Public path |
+| --- | --- |
+| `index.mdx` | `/` |
+| `quickstart.mdx` | `/quickstart` |
+| `guides/authentication.mdx` | `/guides/authentication` |
+| `api-reference/openapi-setup.mdx` | `/api-reference/openapi-setup` |
+
+Keep file names lowercase and URL-safe. Use hyphens instead of spaces.
+
+## Create a page
+
+1. Add a `.mdx` file to the repository.
+2. Add frontmatter at the top of the file.
+3. Add the page slug to `dubstack.json` navigation.
+4. Commit the change and publish.
+
+```mdx
+---
+title: Authentication
+description: Learn how to authenticate API requests.
+icon: key
+---
+
+Use this guide to configure authentication for API requests.
+```
+
+Add it to navigation without the extension:
+
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Guides",
+            "pages": ["guides/authentication"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+## Index pages
+
+Use `index.mdx` for the site home page.
+
+For folders, use explicit page names unless you intentionally want a folder landing page.
+
+```text
+index.mdx
+quickstart.mdx
+guides/authentication.mdx
+guides/webhooks.mdx
+```
+
+If a folder needs an overview page, use a clear slug such as `guides/overview.mdx` or `guides/index.mdx`, then add it to navigation where readers expect it.
+
+## Navigation controls visibility
+
+A page can exist in the repository without appearing in navigation.
+
+| State | How it happens | Result |
+| --- | --- | --- |
+| Navigable | Page slug is listed in `dubstack.json`. | Readers see it in navigation. |
+| Hidden by source | Page has `hidden: true` frontmatter. | Page is not shown in normal navigation. |
+| Unlisted | Page exists but is not listed in navigation. | Page may still be reachable by direct URL depending on indexing settings. |
+| Noindex | Page has `noindex: true` frontmatter. | Page is excluded from indexing surfaces. |
+
+Use [Hidden pages](/configuration/hidden-pages) when you intentionally want a page available by direct link but absent from the sidebar.
+
+## Frontmatter controls metadata
+
+Use frontmatter for page-level metadata.
+
+```mdx
+---
+title: Webhooks
+description: Receive event notifications from DubStack.
+icon: webhook
+noindex: false
+---
+```
+
+Common fields:
+
+| Field | Purpose |
+| --- | --- |
+| `title` | Page title, navigation fallback, search title, and AI context label. |
+| `description` | Page summary used by metadata, search snippets, and AI-readable surfaces. |
+| `icon` | Optional icon shown where navigation supports it. |
+| `hidden` | Removes the page from normal navigation. |
+| `noindex` | Excludes the page from search, sitemap, and AI-readable indexes. |
+| `rss` | Enables an RSS feed for pages made of `Update` components. |
+| `openapi` | Binds an authored MDX page to an OpenAPI operation. |
+
+See [Page frontmatter](/configuration/pages-frontmatter) for the full source-backed reference.
+
+## External links in navigation
+
+Use a navigation object with `href` when the item points outside the docs source.
+
+```json
+{
+  "title": "Status",
+  "href": "https://status.example.com",
+  "external": true,
+  "icon": "activity"
+}
+```
+
+Use external navigation items for status pages, community links, support portals, and external product surfaces.
+
+## API-generated pages
+
+OpenAPI endpoint pages are generated from a spec, not authored as individual MDX files.
+
+```json
+{
+  "group": "API reference",
+  "openapi": "api-reference/openapi.json"
+}
+```
+
+Use authored MDX pages for conceptual API guides and generated endpoint pages for operation-level reference.
+
+## Moving or renaming pages
+
+When you rename or move a file, the public URL changes.
+
+Before publishing a move:
+
+1. Update `dubstack.json` navigation.
+2. Update internal links that point to the old path.
+3. Add a redirect from the old URL to the new URL.
+4. Test the old URL and the new page after publishing.
+
+```json
+{
+  "redirects": [
+    {
+      "source": "/guides/auth",
+      "destination": "/guides/authentication"
+    }
+  ]
+}
+```
+
+## Review checklist
+
+- File names are lowercase and URL-safe.
+- Every published page has `title` and `description` frontmatter.
+- New pages are added to navigation when readers should discover them.
+- Hidden/noindex behavior is intentional.
+- Internal links use root-relative paths.
+- Renamed pages have redirects.
+- API endpoint pages come from OpenAPI specs, not duplicated MDX copies.

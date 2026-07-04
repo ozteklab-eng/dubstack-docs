@@ -143,6 +143,10 @@
                 "icon": "file-code"
               },
               {
+                "slug": "writing-content/pages-files",
+                "icon": "files"
+              },
+              {
                 "slug": "writing-content/text-formatting",
                 "icon": "pilcrow"
               },
