@@ -140,6 +140,45 @@ Use parameter and response fields for API concepts:
 </ResponseField>
 ```
 
+See [Fields and expandables](/writing-content/fields-expandables) for nested object examples.
+
+## Badges
+
+Badges add compact status labels inside prose.
+
+This feature is <Badge color="green" size="sm" shape="pill">available</Badge> for published docs.
+
+```mdx
+This feature is <Badge color="green" size="sm" shape="pill">available</Badge> for published docs.
+```
+
+See [Badges](/writing-content/badges) for colors, sizes, icons, and disabled states.
+
+## Request and response examples
+
+Use request and response examples when API-focused guides need code samples in the right rail.
+
+````mdx
+<RequestExample>
+```bash cURL
+curl https://api.example.com/v1/sites \
+  -H "Authorization: Bearer $API_TOKEN"
+```
+</RequestExample>
+````
+
+See [Request and response examples](/writing-content/request-response-examples) for right-rail behavior and multi-language examples.
+
+## Media and diagrams
+
+Use repository assets and diagrams to explain UI flows, architecture, and deployment behavior.
+
+```mdx
+<Image src="/logo/light.svg" darkSrc="/logo/dark.svg" alt="DubStack logo" framed />
+```
+
+See [Media, embeds, and diagrams](/writing-content/media-embeds) for images, videos, embeds, and Mermaid diagrams.
+
 ## Component checklist
 
 - Keep component content short.

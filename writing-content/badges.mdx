@@ -1,0 +1,105 @@
+---
+title: Badges
+description: Add compact status labels, plan labels, and inline metadata to docs pages.
+icon: badge
+---
+
+Badges highlight short status, plan, or format labels inside documentation.
+
+Use badges sparingly. They work best for small pieces of metadata, not full explanations.
+
+## Basic badge
+
+<Badge>Beta</Badge>
+
+```mdx
+<Badge>Beta</Badge>
+```
+
+## Colors
+
+Use color to indicate meaning, but keep the label explicit so the page remains clear without color alone.
+
+<Badge color="green">Available</Badge> <Badge color="orange">Preview</Badge> <Badge color="red">Deprecated</Badge>
+
+```mdx
+<Badge color="green">Available</Badge>
+<Badge color="orange">Preview</Badge>
+<Badge color="red">Deprecated</Badge>
+```
+
+Common color values include `gray`, `blue`, `green`, `yellow`, `orange`, `red`, `purple`, `white`, and `surface`.
+
+## Sizes and shapes
+
+<Badge size="xs">XS</Badge> <Badge size="sm">Small</Badge> <Badge size="md">Default</Badge> <Badge size="lg">Large</Badge>
+
+```mdx
+<Badge size="xs">XS</Badge>
+<Badge size="sm">Small</Badge>
+<Badge size="md">Default</Badge>
+<Badge size="lg">Large</Badge>
+```
+
+Use `shape="pill"` for labels that sit inside prose.
+
+This endpoint is <Badge color="green" size="sm" shape="pill">stable</Badge> and returns JSON.
+
+```mdx
+This endpoint is <Badge color="green" size="sm" shape="pill">stable</Badge> and returns JSON.
+```
+
+## Icons
+
+Badges can include icons from the docs icon set.
+
+<Badge icon="check" color="green">Verified</Badge> <Badge icon="clock" color="orange">Pending</Badge>
+
+```mdx
+<Badge icon="check" color="green">Verified</Badge>
+<Badge icon="clock" color="orange">Pending</Badge>
+```
+
+## Stroke and disabled states
+
+Use `stroke` when the badge should feel quieter than a filled badge.
+
+<Badge stroke color="blue">Optional</Badge> <Badge disabled icon="lock" color="gray">Locked</Badge>
+
+```mdx
+<Badge stroke color="blue">Optional</Badge>
+<Badge disabled icon="lock" color="gray">Locked</Badge>
+```
+
+## Props
+
+<ResponseField name="color" type="string" default="gray">
+  Visual color token for the badge.
+</ResponseField>
+
+<ResponseField name="size" type="string" default="md">
+  One of `xs`, `sm`, `md`, or `lg`.
+</ResponseField>
+
+<ResponseField name="shape" type="string" default="rounded">
+  Use `rounded` or `pill`.
+</ResponseField>
+
+<ResponseField name="icon" type="string">
+  Optional icon name or asset URL.
+</ResponseField>
+
+<ResponseField name="stroke" type="boolean" default="false">
+  Renders the badge as an outline style.
+</ResponseField>
+
+<ResponseField name="disabled" type="boolean" default="false">
+  Lowers opacity for unavailable or inactive states.
+</ResponseField>
+
+## Guidelines
+
+- Keep badge text short.
+- Do not use badges as buttons.
+- Pair color with text, not color alone.
+- Avoid stacking too many badges in a paragraph.

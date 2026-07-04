@@ -1,0 +1,118 @@
+---
+title: Fields and expandables
+description: Document request parameters, response properties, and nested object fields.
+icon: list-tree
+---
+
+Field components describe structured data such as API parameters, response properties, configuration keys, and object attributes.
+
+Use `ParamField` for values the reader sends. Use `ResponseField` for values returned by an API or produced by a configuration file.
+
+## Parameter fields
+
+<ParamField path="siteId" type="string" required>
+  The site identifier from the dashboard URL or API response.
+</ParamField>
+
+```mdx
+<ParamField path="siteId" type="string" required>
+  The site identifier from the dashboard URL or API response.
+</ParamField>
+```
+
+## Response fields
+
+<ResponseField name="status" type="string">
+  Current deployment status, such as `queued`, `syncing`, `synced`, or `failed`.
+</ResponseField>
+
+```mdx
+<ResponseField name="status" type="string">
+  Current deployment status, such as `queued`, `syncing`, `synced`, or `failed`.
+</ResponseField>
+```
+
+## Required fields
+
+Set `required` for mandatory values.
+
+<ParamField path="branch" type="string" required>
+  Git branch used as the source for a deployment.
+</ParamField>
+
+```mdx
+<ParamField path="branch" type="string" required>
+  Git branch used as the source for a deployment.
+</ParamField>
+```
+
+## Nested objects
+
+Use `Expandable` inside a field to keep nested properties available without overwhelming the page.
+
+<ResponseField name="site" type="object" required>
+  Site metadata used for branding and generated metadata.
+
+  <Expandable title="properties">
+    <ResponseField name="name" type="string" required>
+      Public site name.
+    </ResponseField>
+
+    <ResponseField name="logo" type="object">
+      Light and dark logo assets.
+    </ResponseField>
+
+    <ResponseField name="favicon" type="string">
+      Path to the favicon asset.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+```mdx
+<ResponseField name="site" type="object" required>
+  Site metadata used for branding and generated metadata.
+
+  <Expandable title="properties">
+    <ResponseField name="name" type="string" required>
+      Public site name.
+    </ResponseField>
+
+    <ResponseField name="logo" type="object">
+      Light and dark logo assets.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+```
+
+## Props
+
+<ResponseField name="name" type="string">
+  Field name shown for `ResponseField`.
+</ResponseField>
+
+<ResponseField name="path" type="string">
+  Field path shown for `ParamField`.
+</ResponseField>
+
+<ResponseField name="type" type="string">
+  Type label shown beside the field name.
+</ResponseField>
+
+<ResponseField name="required" type="boolean" default="false">
+  Adds a required label.
+</ResponseField>
+
+<ResponseField name="title" type="string">
+  Title shown by `Expandable`. Defaults to `properties`.
+</ResponseField>
+
+<ResponseField name="defaultOpen" type="boolean" default="false">
+  Opens an `Expandable` by default.
+</ResponseField>
+
+## Guidelines
+
+- Use fields for schemas and configuration reference pages.
+- Prefer nested expandables for object fields with several children.
+- Keep each field description focused on behavior, not implementation history.
+- Do not hide required first-run setup steps inside expandables.

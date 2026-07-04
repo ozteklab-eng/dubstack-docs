@@ -183,8 +183,20 @@
                 "icon": "square-terminal"
               },
               {
+                "slug": "writing-content/request-response-examples",
+                "icon": "panel-right"
+              },
+              {
                 "slug": "writing-content/frames",
                 "icon": "scan"
+              },
+              {
+                "slug": "writing-content/badges",
+                "icon": "badge"
+              },
+              {
+                "slug": "writing-content/fields-expandables",
+                "icon": "list-tree"
               },
               {
                 "slug": "writing-content/file-trees",
@@ -196,6 +208,10 @@
               },
               {
                 "slug": "writing-content/images-assets",
+                "icon": "image"
+              },
+              {
+                "slug": "writing-content/media-embeds",
                 "icon": "image"
               },
               {

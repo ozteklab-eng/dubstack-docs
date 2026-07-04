@@ -1,0 +1,106 @@
+---
+title: Request and response examples
+description: Pin request and response code examples beside API-focused content.
+icon: panel-right
+---
+
+Use request and response examples when a guide needs persistent code samples beside the main explanation.
+
+On wide screens, examples appear in the right rail. On smaller screens, they render inline so readers can scroll through them naturally.
+
+## Request example
+
+<RequestExample>
+```bash cURL
+curl https://api.example.com/v1/sites \
+  -H "Authorization: Bearer $API_TOKEN"
+```
+</RequestExample>
+
+Use `RequestExample` for commands, SDK calls, or request bodies.
+
+````mdx
+<RequestExample>
+```bash cURL
+curl https://api.example.com/v1/sites \
+  -H "Authorization: Bearer $API_TOKEN"
+```
+</RequestExample>
+````
+
+## Response example
+
+<ResponseExample>
+```json 200 OK
+{
+  "data": [],
+  "next_cursor": null
+}
+```
+</ResponseExample>
+
+Use `ResponseExample` for successful responses, error responses, or generated objects.
+
+````mdx
+<ResponseExample>
+```json 200 OK
+{
+  "data": [],
+  "next_cursor": null
+}
+```
+</ResponseExample>
+````
+
+## Multiple examples
+
+Add more than one fenced code block to create tabs.
+
+<RequestExample>
+```bash cURL
+curl https://api.example.com/v1/sites \
+  -H "Authorization: Bearer $API_TOKEN"
+```
+
+```ts TypeScript
+const response = await fetch('https://api.example.com/v1/sites', {
+  headers: { Authorization: `Bearer ${process.env.API_TOKEN}` },
+});
+```
+</RequestExample>
+
+````mdx
+<RequestExample>
+```bash cURL
+curl https://api.example.com/v1/sites \
+  -H "Authorization: Bearer $API_TOKEN"
+```
+
+```ts TypeScript
+const response = await fetch('https://api.example.com/v1/sites', {
+  headers: { Authorization: `Bearer ${process.env.API_TOKEN}` },
+});
+```
+</RequestExample>
+````
+
+Set `dropdown` when the page has many variants and tabs would take too much space.
+
+```mdx
+<RequestExample dropdown>
+  ...
+</RequestExample>
+```
+
+## When to use endpoint pages instead
+
+Use generated API endpoint pages when the page should include the full request builder, parameter forms, authentication inputs, and response previews from an OpenAPI operation.
+
+Use request and response examples when a guide needs a lightweight code sample beside explanatory prose.
+
+## Guidelines
+
+- Use environment variables in examples instead of real tokens.
+- Label code fences clearly, such as `cURL`, `TypeScript`, or `200 OK`.
+- Keep request and response examples close to the text they support.
+- Prefer generated endpoint pages for complete API reference coverage.
