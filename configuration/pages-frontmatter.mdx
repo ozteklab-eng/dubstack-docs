@@ -1,0 +1,53 @@
+---
+title: Page frontmatter
+description: Configure page titles, descriptions, icons, ordering, and visibility from MDX metadata.
+icon: file-cog
+---
+
+Frontmatter is the metadata block at the top of an `.mdx` or `.md` file.
+
+DubStack reads frontmatter during sync and stores page metadata in the published pages index. The public renderer, navigation, search, workflows, and public MCP use that metadata where relevant.
+
+## Basic frontmatter
+
+```mdx
+---
+title: Authentication
+description: Learn how to authenticate API requests.
+icon: key
+order: 2
+---
+```
+
+## Supported fields
+
+<ResponseField name="title" type="string">
+  Page title used in navigation, page headers, browser titles, search results, and public MCP responses. If omitted, DubStack derives a title from the file path.
+</ResponseField>
+
+<ResponseField name="description" type="string">
+  Short page summary used under the page title and in metadata surfaces.
+</ResponseField>
+
+<ResponseField name="icon" type="string">
+  Icon name used for navigation entries when the page is listed in navigation.
+</ResponseField>
+
+<ResponseField name="order" type="number">
+  Numeric ordering hint used by generated indexes and auto-generated navigation paths.
+</ResponseField>
+
+<ResponseField name="hidden" type="boolean | string">
+  Set to `true` or `"true"` to keep a page out of generated navigation and workflow scans that skip hidden pages.
+</ResponseField>
+
+## Authoring rules
+
+- Keep frontmatter at the very top of the file.
+- Use simple scalar values for fields that the sync worker reads.
+- Prefer explicit `title` and `description` for every public page.
+- Use `hidden: true` only when the page should not appear in generated navigation.
+
+<Callout type="warning">
+  Frontmatter is source-controlled content. Do not put API keys, passwords, private tokens, or internal secrets in page frontmatter.
+</Callout>

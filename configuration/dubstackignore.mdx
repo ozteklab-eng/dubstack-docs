@@ -1,0 +1,52 @@
+---
+title: Exclude files from publishing
+description: Use .dubstackignore to prevent files from being synced into published docs.
+icon: file-x
+---
+
+Use `.dubstackignore` when files should stay in the repository but never publish to the public docs site.
+
+The sync worker reads `.dubstackignore` from the root of the docs repository and skips matching docs files during sync.
+
+## Create .dubstackignore
+
+Add a `.dubstackignore` file at the repository root:
+
+```text .dubstackignore
+# Draft documents
+drafts/**
+*.draft.mdx
+
+# Internal notes
+internal/**
+private-notes.md
+```
+
+## What excluded means
+
+Excluded files:
+
+- are not copied to the published content store
+- do not appear in navigation
+- are not available through public page routes
+- are not included in the public MCP filesystem
+- are not used by public search or assistant retrieval
+
+## Pattern support
+
+The sync worker supports basic glob-style patterns.
+
+| Pattern | Meaning |
+| --- | --- |
+| `drafts/**` | Exclude everything under the `drafts` directory. |
+| `*.draft.mdx` | Exclude root-level files ending in `.draft.mdx`. |
+| `internal/**` | Exclude everything under `internal`. |
+| `private-notes.md` | Exclude one file. |
+
+## Default exclusions
+
+The sync pipeline already skips hidden dotfiles, `node_modules`, and repository-only files such as `README.md` from the docs page set.
+
+<Callout type="warning">
+  Use `.dubstackignore` for files that must not publish. Use `hidden: true` only when the file can publish but should not appear in generated navigation.
+</Callout>

@@ -1,0 +1,163 @@
+---
+title: Settings reference
+description: Reference for the dubstack.json fields used by the docs renderer and sync pipeline.
+icon: list-checks
+---
+
+`dubstack.json` is the source-backed settings file for a DubStack docs site.
+
+This reference covers fields currently used by the public renderer, sync worker, dashboard settings, and public AI surfaces.
+
+## Quick reference
+
+| Field | Type | Purpose |
+| --- | --- | --- |
+| `$schema` | string | Optional schema URL for editor assistance. |
+| `site.name` | string | Public site name. |
+| `site.tagline` | string | Short site tagline. |
+| `site.logo.light` | string | Logo path for light mode. |
+| `site.logo.dark` | string | Logo path for dark mode. |
+| `site.favicon` | string | Favicon path. |
+| `theme` | string | Theme shell preset. |
+| `palette` | string | Color-token preset layered onto the shell. |
+| `colors.primary` | string | Primary accent color. |
+| `colors.light` | string | Accent color used in dark contexts. |
+| `colors.dark` | string | Accent color used in light contexts and buttons. |
+| `styling.codeblocks` | string | Code block theme mode. |
+| `navigation.tabs` | array | Top-level docs navigation tabs. |
+| `navigation.groups` | array | Grouped navigation when tabs are not used. |
+| `redirects` | array | Source-to-destination redirects. |
+| `contextual.options` | array | Page action menu options. |
+| `widgets.search.enabled` | boolean | Enables site search. |
+| `widgets.assistant` | object | Public assistant labels and welcome copy. |
+| `api.openapi` | string | Default OpenAPI spec path. |
+| `api.playground.display` | string | API playground display mode. |
+| `addons.feedback` | object | Reader feedback controls. |
+| `topbarCtaButton` | object | Optional header CTA. |
+
+## Site
+
+```json
+{
+  "site": {
+    "name": "Acme Docs",
+    "tagline": "Developer documentation for Acme.",
+    "logo": {
+      "light": "/logo/light.svg",
+      "dark": "/logo/dark.svg"
+    },
+    "favicon": "/img/favicon.ico"
+  }
+}
+```
+
+## Theme and colors
+
+```json
+{
+  "theme": "prism",
+  "palette": "classic",
+  "colors": {
+    "primary": "#15803D",
+    "light": "#07C983",
+    "dark": "#15803D"
+  },
+  "styling": {
+    "codeblocks": "system"
+  }
+}
+```
+
+`theme` controls layout and shell rhythm. `palette` controls token defaults. `colors` applies brand overrides.
+
+## Navigation
+
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "default": true,
+        "groups": [
+          {
+            "group": "Getting started",
+            "icon": "rocket",
+            "pages": ["index", "quickstart"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Page entries can be strings or objects:
+
+```json
+{
+  "slug": "configuration/navigation",
+  "title": "Navigation",
+  "icon": "map"
+}
+```
+
+## API reference
+
+```json
+{
+  "api": {
+    "openapi": "api-reference/openapi.json",
+    "playground": {
+      "display": "interactive"
+    }
+  }
+}
+```
+
+The OpenAPI file is synced with the rest of the docs repository. Generated endpoint pages are published from that source.
+
+## Redirects
+
+```json
+{
+  "redirects": [
+    {
+      "source": "/old-page",
+      "destination": "/new-page"
+    }
+  ]
+}
+```
+
+## Contextual actions
+
+```json
+{
+  "contextual": {
+    "enabled": true,
+    "options": ["copy", "view", "claude", "chatgpt", "perplexity"],
+    "default": "copy"
+  }
+}
+```
+
+## Feedback add-on
+
+```json
+{
+  "addons": {
+    "feedback": {
+      "thumbs_rating": true,
+      "agent_feedback": true,
+      "collect_reader_emails": false
+    }
+  }
+}
+```
+
+Feedback controls can also be managed from the dashboard add-ons page when the deployment supports source-backed settings updates.
+
+<Callout type="warning">
+  `dubstack.json` is public site configuration. Store credentials and private integration secrets in dashboard-managed secret storage, not in source configuration.
+</Callout>

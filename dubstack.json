@@ -201,6 +201,22 @@
                 "icon": "braces"
               },
               {
+                "slug": "configuration/settings-reference",
+                "icon": "list-checks"
+              },
+              {
+                "slug": "configuration/pages-frontmatter",
+                "icon": "file-cog"
+              },
+              {
+                "slug": "configuration/hidden-pages",
+                "icon": "eye-off"
+              },
+              {
+                "slug": "configuration/dubstackignore",
+                "icon": "file-x"
+              },
+              {
                 "slug": "configuration/navigation",
                 "icon": "map"
               },

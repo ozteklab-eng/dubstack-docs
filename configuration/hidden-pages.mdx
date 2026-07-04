@@ -1,0 +1,69 @@
+---
+title: Hidden pages
+description: Keep pages out of generated navigation while preserving source-backed content.
+icon: eye-off
+---
+
+Hidden pages stay in your docs repository, but are removed from generated navigation and workflow scans that skip hidden pages.
+
+Use hidden pages for drafts, migration helpers, or source-backed pages that should not appear in the sidebar yet.
+
+## Hide a page with frontmatter
+
+Add `hidden: true` to the page frontmatter:
+
+```mdx
+---
+title: Internal migration notes
+hidden: true
+---
+```
+
+When the sync worker sees this field, the page metadata is marked as hidden.
+
+## Remove a page from navigation
+
+A page that is not listed in `dubstack.json` navigation does not appear in the rendered sidebar.
+
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Guides",
+            "pages": ["index", "quickstart"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+In this example, only `index` and `quickstart` are listed in the Guides group.
+
+## Hidden is not private
+
+Hidden navigation is not access control. Do not use it for confidential content.
+
+For content that must not publish at all, exclude the file with [`.dubstackignore`](/configuration/dubstackignore) or keep it outside the docs repository.
+
+<Callout type="warning">
+  If a file is published and someone knows the URL, hidden navigation alone should not be treated as a privacy boundary.
+</Callout>
+
+## When to use hidden pages
+
+- Temporarily hold a page while a section is being reorganized.
+- Keep migration notes available to the team during a transition.
+- Publish a direct-link-only support page that should not distract readers in navigation.
+
+## When not to use hidden pages
+
+- Secrets or credentials.
+- Internal-only runbooks.
+- Customer-specific private docs.
+- Anything requiring authentication or role-based access.
