@@ -1,0 +1,125 @@
+---
+title: Response examples
+description: Add request and response examples to make API reference pages easier to test.
+icon: braces
+---
+
+Examples make generated API pages more useful.
+
+DubStack reads OpenAPI request body examples and response examples when rendering endpoint pages and playground payloads.
+
+## Request body examples
+
+Add examples under the request body media type.
+
+```yaml
+paths:
+  /v1/projects:
+    post:
+      summary: Create project
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectRequest'
+            examples:
+              minimal:
+                summary: Minimal project
+                value:
+                  name: API reference
+              with_slug:
+                summary: Project with slug
+                value:
+                  name: API reference
+                  slug: api-reference
+```
+
+The playground uses the example value as a starting payload when available.
+
+## Response examples
+
+Add response examples under each status code and content type.
+
+```yaml
+responses:
+  '200':
+    description: Project created
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/Project'
+        examples:
+          created:
+            summary: Created project
+            value:
+              id: proj_123
+              name: API reference
+              slug: api-reference
+```
+
+Document common error responses as well as success responses so readers know what to expect.
+
+```yaml
+responses:
+  '400':
+    description: Invalid request
+    content:
+      application/json:
+        examples:
+          missing_name:
+            summary: Missing name
+            value:
+              error: invalid_request
+              message: name is required
+```
+
+## Schema examples
+
+OpenAPI also supports examples on schema fields.
+
+```yaml
+components:
+  schemas:
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+          example: proj_123
+        name:
+          type: string
+          example: API reference
+```
+
+Field examples help the generated page produce more realistic payloads when a full request or response example is not supplied.
+
+## Multiple examples
+
+Use named examples when the same endpoint has several valid shapes.
+
+| Example type | Use case |
+| --- | --- |
+| Minimal | Show the shortest valid request. |
+| Complete | Show all commonly used fields. |
+| Error | Show expected error payloads. |
+| Environment-specific | Show a value for a sandbox or staging API. |
+
+## Keep examples safe
+
+Do not include real tokens, private customer IDs, production secrets, or sensitive payloads in public specs.
+
+Use placeholders instead:
+
+```json
+{
+  "authorization": "Bearer <token>",
+  "projectId": "proj_123"
+}
+```
+
+## Related
+
+- [Playground authentication](/api-reference/playground-authentication)
+- [API playground overview](/api-reference/playground-overview)
+- [OpenAPI setup](/api-reference/openapi-setup)

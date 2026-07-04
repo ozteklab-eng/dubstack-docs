@@ -1,0 +1,119 @@
+---
+title: API reference troubleshooting
+description: Fix common OpenAPI, generated endpoint, and API playground issues.
+icon: wrench
+---
+
+Use this guide when generated API pages or playground requests do not behave as expected.
+
+<AccordionGroup>
+  <Accordion title="No endpoint pages were generated">
+    Check that your OpenAPI file is valid JSON and uses OpenAPI 3.x.
+
+    ```json
+    {
+      "openapi": "3.1.0",
+      "info": {
+        "title": "Example API",
+        "version": "1.0.0"
+      },
+      "paths": {}
+    }
+    ```
+
+    Then confirm `dubstack.json` references the spec from a navigation group or tab:
+
+    ```json
+    {
+      "group": "API reference",
+      "openapi": "api-reference/openapi.json"
+    }
+    ```
+  </Accordion>
+
+  <Accordion title="A generated endpoint page is blank">
+    Confirm the page frontmatter points at an operation that exists in the spec.
+
+    ```mdx
+    ---
+    title: Get project
+    openapi: "GET /v1/projects/{projectId}"
+    ---
+    ```
+
+    The method must be uppercase and the path must match the OpenAPI path, including path parameters.
+  </Accordion>
+
+  <Accordion title="An endpoint is missing from navigation">
+    Check whether the operation is excluded, hidden, or not listed in `dubstack.json`.
+
+    - `x-excluded: true` leaves the operation out of generated docs artifacts.
+    - `x-hidden: true` marks the operation as hidden in managed endpoint state.
+    - A `pages` array under an OpenAPI group publishes only the listed operations.
+
+    See [Endpoint visibility](/api-reference/endpoint-visibility).
+  </Accordion>
+
+  <Accordion title="The Try it button is not available">
+    The request builder needs operation metadata from OpenAPI.
+
+    Check that:
+
+    - the page has valid `openapi` frontmatter
+    - the operation exists in the configured spec
+    - the page does not set `playground: none`
+    - the spec includes enough request metadata to build useful inputs
+  </Accordion>
+
+  <Accordion title="Playground requests fail before reaching my API">
+    Confirm the spec has a valid `servers` URL and that the origin is publicly reachable.
+
+    The playground proxy rejects private, local, and internal network targets. Public docs should only proxy to public API origins that you intentionally expose to readers.
+  </Accordion>
+
+  <Accordion title="Playground requests reach my API but are rejected">
+    Check the API-side response first. Common causes are:
+
+    - missing or invalid API key
+    - bearer token expired
+    - request body does not match the schema
+    - required path or query parameter missing
+    - API environment does not allow public test traffic
+
+    If the endpoint needs authentication, document the expected auth scheme in OpenAPI and explain where readers get credentials.
+  </Accordion>
+
+  <Accordion title="The generated payload is not useful">
+    Add examples to the request body or schema fields.
+
+    ```yaml
+    requestBody:
+      content:
+        application/json:
+          examples:
+            default:
+              value:
+                name: Example project
+    ```
+
+    See [Response examples](/api-reference/response-examples).
+  </Accordion>
+</AccordionGroup>
+
+## Validation checklist
+
+Before publishing an API spec change:
+
+- Validate the OpenAPI document.
+- Confirm `servers` points at the intended API environment.
+- Confirm security schemes match the API.
+- Confirm examples do not contain real secrets.
+- Confirm hidden or excluded operations behave as expected.
+- Run a manual update from the dashboard after changing a hosted spec URL that does not create a Git commit.
+
+## Related
+
+- [OpenAPI setup](/api-reference/openapi-setup)
+- [API playground overview](/api-reference/playground-overview)
+- [Endpoint visibility](/api-reference/endpoint-visibility)
+- [Response examples](/api-reference/response-examples)

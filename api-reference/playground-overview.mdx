@@ -1,0 +1,100 @@
+---
+title: API playground overview
+description: Let readers explore and test documented API endpoints from your docs.
+icon: terminal
+---
+
+The API playground turns an OpenAPI specification into interactive endpoint documentation.
+
+Readers can review endpoint details, inspect parameters and schemas, copy generated examples, and send test requests from the docs page when the endpoint is safe to expose interactively.
+
+## How it works
+
+DubStack uses your OpenAPI file as the source of truth.
+
+```text
+api-reference/openapi.json
+```
+
+When the site syncs, DubStack reads the spec, generates endpoint pages, and uses the same spec to render the request builder, response examples, and code snippets.
+
+<Steps>
+  <Step title="Add a valid OpenAPI 3.x JSON file">
+    Keep the spec in the same Git repository as your docs so every deployment is reproducible.
+  </Step>
+  <Step title="Reference the spec from dubstack.json">
+    Add an `openapi` field to an API reference group or tab.
+  </Step>
+  <Step title="Publish or manage endpoint pages">
+    Choose whether all operations should appear, or manage visibility operation by operation from the dashboard.
+  </Step>
+  <Step title="Try requests from the docs">
+    Readers can enter required auth values and send requests through the playground when an endpoint has a server URL and valid request metadata.
+  </Step>
+</Steps>
+
+## Playground modes
+
+Generated endpoint pages have two views:
+
+| View | Purpose |
+| --- | --- |
+| Documentation | Shows the endpoint method, path, description, authorization, parameters, body fields, and response schema. |
+| Try it | Opens the interactive request builder for sending a request and viewing the response. |
+
+The request builder is shown only when the page has OpenAPI operation metadata and the page frontmatter does not disable the playground.
+
+```mdx
+---
+title: Create project
+openapi: "POST /v1/projects"
+playground: interactive
+---
+```
+
+Set `playground: none` on a manual endpoint page when you want to document the operation without showing the interactive request builder.
+
+## Request routing
+
+Playground requests can be proxied through the docs site so readers do not need browser CORS access to your API.
+
+The proxy only sends requests to origins allowed by the published OpenAPI spec. Keep the `servers` field accurate so requests go to the intended environment.
+
+```json
+{
+  "servers": [
+    {
+      "url": "https://api.example.com",
+      "description": "Production"
+    }
+  ]
+}
+```
+
+<Callout type="warning">
+  Do not point public docs at an environment that can mutate production data unless the API has proper authorization, rate limiting, and abuse protection.
+</Callout>
+
+## What the playground reads from OpenAPI
+
+The renderer uses these OpenAPI fields for the public page:
+
+| OpenAPI field | Used for |
+| --- | --- |
+| `summary` | Endpoint title fallback and compact labels. |
+| `description` | Endpoint body copy. |
+| `servers` | Base URL for request execution. |
+| `parameters` | Path, query, header, and cookie inputs. |
+| `requestBody` | Body fields and request examples. |
+| `responses` | Response status codes, schemas, and examples. |
+| `components.securitySchemes` | Authorization controls. |
+| `security` | Required auth per operation or spec. |
+| `tags` | Generated navigation groups. |
+
+## Related
+
+- [OpenAPI setup](/api-reference/openapi-setup)
+- [Playground authentication](/api-reference/playground-authentication)
+- [Endpoint visibility](/api-reference/endpoint-visibility)
+- [Response examples](/api-reference/response-examples)
+- [Troubleshooting](/api-reference/troubleshooting)

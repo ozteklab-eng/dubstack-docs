@@ -1,0 +1,104 @@
+---
+title: Endpoint visibility
+description: Control which generated API endpoint pages are published, hidden, or excluded.
+icon: eye-off
+---
+
+Endpoint visibility controls which operations from an OpenAPI spec become public docs pages.
+
+Use visibility controls when a spec contains internal endpoints, beta endpoints, deprecated endpoints, or operations that should remain available by direct link but not promoted in navigation.
+
+## Visibility states
+
+| State | Behavior |
+| --- | --- |
+| Published | The endpoint page is generated and appears in the public API reference navigation. |
+| Hidden | The endpoint is tracked by the spec manager but should not be promoted in public navigation. |
+| Excluded | The endpoint is intentionally left out of generated docs artifacts. |
+| Unpublished | The endpoint exists in the spec but has not been published as a generated page. |
+
+## Use OpenAPI extensions
+
+Add visibility metadata directly to the operation when the rule should travel with the spec.
+
+```json
+{
+  "paths": {
+    "/internal/jobs": {
+      "post": {
+        "summary": "Create internal job",
+        "x-excluded": true,
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Use `x-excluded: true` when the operation should not generate public endpoint artifacts.
+
+```json
+{
+  "paths": {
+    "/beta/reports": {
+      "get": {
+        "summary": "List beta reports",
+        "x-hidden": true,
+        "responses": {
+          "200": {
+            "description": "Reports"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Use `x-hidden: true` to mark the operation as hidden in managed endpoint state. The dashboard can then keep that endpoint out of promoted public navigation while still retaining the operation in the spec catalog.
+
+## Publish selected operations from navigation
+
+When you want strict control from `dubstack.json`, list only the operations that should appear in a group.
+
+```json
+{
+  "group": "Projects API",
+  "openapi": "api-reference/openapi.json",
+  "pages": [
+    "GET /v1/projects",
+    "POST /v1/projects",
+    "GET /v1/projects/{projectId}"
+  ]
+}
+```
+
+Use uppercase HTTP methods and the exact path from the OpenAPI spec.
+
+## Manage visibility from the dashboard
+
+The **API Specs** dashboard page can inspect operations from a spec and manage endpoint state without hand-editing every generated page.
+
+Use it to:
+
+- publish endpoint pages
+- hide endpoints from promoted navigation
+- exclude internal operations
+- regenerate snippets and endpoint pages after a spec update
+
+## Recommended policy
+
+- Publish endpoints that are stable and safe for readers to discover.
+- Hide endpoints that are useful by direct link but should not be highlighted.
+- Exclude internal-only endpoints and unsupported operations.
+- Keep visibility metadata close to the spec when your API build pipeline generates the spec.
+
+## Related
+
+- [Manage API specifications](/api-reference/spec-management)
+- [OpenAPI setup](/api-reference/openapi-setup)
+- [API playground overview](/api-reference/playground-overview)
