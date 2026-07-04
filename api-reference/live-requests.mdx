@@ -1,0 +1,102 @@
+---
+title: Live API requests
+description: Configure and test live requests from public API reference pages safely.
+icon: send
+---
+
+Live API requests let readers send a documented request from an endpoint page and inspect the response without leaving the docs.
+
+This is useful for sandbox APIs, onboarding flows, and endpoints where readers have their own credentials.
+
+## Request flow
+
+When a reader clicks **Send** or **Try it**, DubStack uses this flow:
+
+1. The public endpoint page loads the published OpenAPI spec for the current site.
+2. The request builder creates a URL, method, headers, and body from the selected operation.
+3. The browser sends the request payload to the DubStack playground proxy.
+4. The proxy validates the target URL and origin against the published spec.
+5. The proxy forwards the request and returns the upstream status and response body to the page.
+
+The response appears in the playground response panel.
+
+## Configure the base URL
+
+Set `servers` in your OpenAPI spec.
+
+```json
+{
+  "servers": [
+    {
+      "url": "https://api.example.com",
+      "description": "Production"
+    }
+  ]
+}
+```
+
+The playground uses the server URL to build live request URLs.
+
+For public docs, choose an environment that is safe for readers to call. A sandbox or demo API is usually better than production for unauthenticated examples.
+
+## Proxy safety checks
+
+The public playground proxy validates each target before forwarding a request.
+
+It blocks:
+
+- non-HTTP protocols
+- local or private hostnames
+- internal service names
+- reserved or private IP ranges
+- hostnames that resolve to private or reserved networks
+- origins that are not listed in the published OpenAPI `servers` array
+
+This prevents a public docs page from being used as a proxy to private infrastructure.
+
+<Callout type="warning">
+  Proxy checks do not replace API security. Your API still needs authorization, rate limits, validation, and audit logging.
+</Callout>
+
+## Forwarded headers and bodies
+
+The playground forwards reader-supplied headers except unsafe transport headers such as `Host` and `Content-Length`.
+
+For JSON bodies, the proxy sends `Content-Type: application/json` when the request body is an object and no content type is already provided.
+
+GET and HEAD requests do not send a body.
+
+## Authentication
+
+Use OpenAPI security schemes to show authorization inputs.
+
+Readers provide their own token or key in the playground. Values entered into the playground are request-time inputs and should not be stored in your docs repository.
+
+See [Playground authentication](/api-reference/playground-authentication) for security scheme examples.
+
+## Recommended patterns
+
+| API type | Recommended setup |
+| --- | --- |
+| Public sandbox | Enable live requests and point `servers` at the sandbox base URL. |
+| Production API | Enable only if every endpoint has proper authorization and abuse controls. |
+| Destructive operations | Consider `playground: none` and provide code examples instead. |
+| Internal API | Keep the endpoint hidden or disable the playground. |
+
+## Troubleshooting
+
+If a live request fails before reaching your API:
+
+1. Confirm the spec has a valid `servers[0].url`.
+2. Confirm the target origin matches one of the spec server origins.
+3. Confirm the hostname resolves publicly.
+4. Confirm the URL is not private, local, or internal-only.
+5. Confirm the endpoint page is mapped to the correct OpenAPI operation.
+
+If the request reaches your API but returns an error, inspect the response panel. The upstream status code and response body are returned to the page.
+
+## Related
+
+- [Request builder](/api-reference/request-builder)
+- [Playground authentication](/api-reference/playground-authentication)
+- [Troubleshooting](/api-reference/troubleshooting)

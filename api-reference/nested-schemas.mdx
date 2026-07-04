@@ -1,0 +1,160 @@
+---
+title: Nested schemas
+description: Document nested objects, arrays, refs, and composed schemas clearly in generated API reference pages.
+icon: brackets
+---
+
+Nested schemas make API reference pages easier to scan when request or response payloads contain objects inside objects.
+
+DubStack reads schema structure from OpenAPI and renders nested body and response fields on generated endpoint pages.
+
+## Use component schemas
+
+Define reusable models in `components.schemas` and reference them from operations.
+
+```json
+{
+  "components": {
+    "schemas": {
+      "Project": {
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique project identifier.",
+            "example": "proj_123"
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable project name.",
+            "example": "Developer docs"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Then reference the schema from responses or request bodies.
+
+```json
+{
+  "responses": {
+    "200": {
+      "description": "Project details",
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/Project"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+## Nested objects
+
+Use `properties` inside object fields.
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "description": "Custom metadata for the project.",
+      "properties": {
+        "environment": {
+          "type": "string",
+          "example": "production"
+        },
+        "owner": {
+          "type": "string",
+          "example": "platform"
+        }
+      }
+    }
+  }
+}
+```
+
+Nested fields render under their parent field so readers can understand the full payload shape without reading the raw spec.
+
+## Arrays of objects
+
+Use `items` for arrays.
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "members": {
+      "type": "array",
+      "description": "Users assigned to the project.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["owner", "editor", "viewer"]
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+The playground can also generate example values from array item schemas.
+
+## Composed schemas
+
+DubStack resolves common OpenAPI composition patterns for generated examples and field rendering.
+
+| Pattern | Behavior |
+| --- | --- |
+| `$ref` | Resolves component schemas. |
+| `allOf` | Merges object properties where possible. |
+| `oneOf` | Uses the first non-null candidate for generated examples. |
+| `anyOf` | Uses the first non-null candidate for generated examples. |
+
+For complex polymorphic APIs, include explicit examples so readers see the exact shape you expect.
+
+## Descriptions matter
+
+Add descriptions to nested fields, not just top-level objects.
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "pagination": {
+      "type": "object",
+      "description": "Pagination state for the current result set.",
+      "properties": {
+        "nextCursor": {
+          "type": "string",
+          "nullable": true,
+          "description": "Cursor for the next page, or null when there are no more results."
+        }
+      }
+    }
+  }
+}
+```
+
+Clear descriptions make generated endpoint pages useful for humans and improve agent answers from the public MCP server.
+
+## Related
+
+- [Response examples](/api-reference/response-examples)
+- [Request builder](/api-reference/request-builder)
+- [OpenAPI setup](/api-reference/openapi-setup)

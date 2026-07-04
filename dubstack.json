@@ -545,6 +545,18 @@
                 "icon": "terminal"
               },
               {
+                "slug": "api-reference/request-builder",
+                "icon": "panel-top"
+              },
+              {
+                "slug": "api-reference/live-requests",
+                "icon": "send"
+              },
+              {
+                "slug": "api-reference/nested-schemas",
+                "icon": "brackets"
+              },
+              {
                 "slug": "api-reference/openapi-setup",
                 "icon": "file-json"
               },

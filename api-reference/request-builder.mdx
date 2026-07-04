@@ -1,0 +1,142 @@
+---
+title: Request builder
+description: Understand how the API playground builds request inputs from OpenAPI parameters, bodies, examples, and security schemes.
+icon: panel-top
+---
+
+The request builder is the interactive form on generated API endpoint pages.
+
+It reads your OpenAPI operation and turns the operation metadata into request inputs, code examples, and response previews.
+
+## Source of truth
+
+The request builder is generated from the published OpenAPI spec referenced by `dubstack.json`.
+
+```json
+{
+  "api": {
+    "openapi": "api-reference/openapi.json",
+    "playground": {
+      "display": "interactive"
+    }
+  }
+}
+```
+
+For each operation, DubStack reads:
+
+| OpenAPI field | Request builder behavior |
+| --- | --- |
+| `servers` | Provides the base URL for the request. |
+| `parameters` | Creates path, query, header, and cookie inputs. |
+| `requestBody` | Creates JSON body fields and request payload examples. |
+| `components.securitySchemes` | Creates authorization inputs. |
+| `security` | Marks which authorization schemes apply. |
+| `responses` | Creates documented response tabs and examples. |
+| `examples` and `example` | Prefills request and response payloads where available. |
+
+## Required inputs
+
+Mark required values in OpenAPI so readers know what must be provided before sending a request.
+
+```json
+{
+  "parameters": [
+    {
+      "name": "projectId",
+      "in": "path",
+      "required": true,
+      "schema": {
+        "type": "string"
+      },
+      "description": "The project identifier."
+    }
+  ]
+}
+```
+
+Required fields are shown as required in both the documentation view and interactive request builder.
+
+## Request body examples
+
+Use request examples to give the builder realistic starting payloads.
+
+```json
+{
+  "requestBody": {
+    "required": true,
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "#/components/schemas/CreateProjectRequest"
+        },
+        "examples": {
+          "minimal": {
+            "summary": "Minimal project",
+            "value": {
+              "name": "Developer docs"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+If no example is provided, DubStack generates a fallback payload from the schema type, defaults, enums, and field examples.
+
+## Authorization inputs
+
+Security schemes create authorization controls.
+
+```json
+{
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ]
+}
+```
+
+Readers enter their own token or key before sending a request. Do not commit real credentials to your OpenAPI spec.
+
+## Code examples
+
+The right rail generates code examples from the current request shape.
+
+The generated examples use the selected method, URL, headers, authorization values, and body fields. They are intended as starting points, not a replacement for full SDK documentation.
+
+## When the builder is disabled
+
+The interactive builder is disabled when:
+
+- the endpoint page has `playground: none`
+- the operation is not mapped to OpenAPI metadata
+- the spec cannot be loaded
+- the spec does not provide a usable base URL for sending requests
+
+Use `playground: none` for internal, risky, or explanatory pages that should show documentation without an interactive sender.
+
+```mdx
+---
+title: Delete project
+openapi: "DELETE /v1/projects/{projectId}"
+playground: none
+---
+```
+
+## Related
+
+- [Live API requests](/api-reference/live-requests)
+- [Playground authentication](/api-reference/playground-authentication)
+- [Response examples](/api-reference/response-examples)
