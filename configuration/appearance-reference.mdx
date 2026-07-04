@@ -1,0 +1,145 @@
+---
+title: Appearance reference
+description: Field-by-field reference for branding, theme, palette, colors, fonts, logos, favicon, and code block appearance.
+icon: palette
+---
+
+Use these fields to control the visual identity of a DubStack docs site from source.
+
+Prefer the dashboard Site configuration editor for visual changes when your team wants a preview before publishing. Commit the same values to `dubstack.json` when your site is Git-reviewed.
+
+## Theme shell and palette
+
+| Field | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| `theme` | string | Site default | Selects the layout shell, spacing rhythm, sidebar/header treatment, and API reference layout. |
+| `palette` | string | Site default | Selects the color-token preset layered onto the theme shell. |
+| `themeToggle` | boolean | `true` | Shows or hides the light/dark mode control. |
+
+```json
+{
+  "theme": "prism",
+  "palette": "classic",
+  "themeToggle": true
+}
+```
+
+`theme` and `palette` are separate on purpose. Use the shell that gives the right layout, then apply the palette and brand colors that match your product.
+
+## Brand colors
+
+| Field | Type | Purpose |
+| --- | --- | --- |
+| `colors.primary` | string | Primary brand/accent color. Used for active states, links, and key controls. |
+| `colors.light` | string | Brand token used where the renderer needs a brighter accent, usually in dark contexts. |
+| `colors.dark` | string | Brand token used where the renderer needs a darker accent, usually in light contexts. |
+| `theme.colors.background` | string | Advanced background token for the selected shell. |
+| `theme.colors.foreground` | string | Advanced foreground text token. |
+| `theme.colors.muted` | string | Advanced muted text token. |
+| `theme.colors.border_default` | string | Advanced default border token. |
+| `theme.colors.border_subtle` | string | Advanced subtle border token. |
+
+```json
+{
+  "colors": {
+    "primary": "#15803D",
+    "light": "#07C983",
+    "dark": "#15803D"
+  }
+}
+```
+
+Use `colors.*` for normal brand overrides. Use `theme.colors.*` only when you need lower-level token control across the docs shell.
+
+## Logo and favicon
+
+| Field | Type | Purpose |
+| --- | --- | --- |
+| `site.name` | string | Public site name used by the header, browser metadata, AI discovery, and MCP labels. |
+| `site.tagline` | string | Short site description used in metadata and discovery surfaces. |
+| `site.logo.light` | string | Logo shown in light mode. |
+| `site.logo.dark` | string | Logo shown in dark mode. |
+| `site.favicon` | string or object | Browser favicon. Use one path or light/dark paths when contrast differs. |
+| `site_header.logo_url` | string | Advanced header logo override. Usually managed by the dashboard. |
+| `site_header.show_logo` | boolean | Shows or hides the header logo. |
+| `site_header.show_brand` | boolean | Shows or hides the site name next to the logo. |
+
+```json
+{
+  "site": {
+    "name": "Acme Docs",
+    "tagline": "Developer documentation for Acme.",
+    "logo": {
+      "light": "/assets/logo-light.svg",
+      "dark": "/assets/logo-dark.svg"
+    },
+    "favicon": {
+      "light": "/assets/favicon-light.svg",
+      "dark": "/assets/favicon-dark.svg"
+    }
+  }
+}
+```
+
+Asset paths are resolved from the published docs repository. Keep the files in source so previews, production, and branch deployments use the same assets.
+
+## Fonts
+
+| Field | Type | Purpose |
+| --- | --- | --- |
+| `theme.fonts.heading` | string | Heading font family. |
+| `theme.fonts.body` | string | Body text font family. |
+| `theme.fonts.code` | string | Code and inline-code font family. |
+
+```json
+{
+  "theme": {
+    "fonts": {
+      "heading": "Inter",
+      "body": "Inter",
+      "code": "JetBrains Mono"
+    }
+  }
+}
+```
+
+Use fonts available in the dashboard selector unless your deployment has a custom font-loading plan.
+
+## Code blocks and inline code
+
+| Field | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| `styling.codeblocks` | string | `system` | Code block theme mode. Use `system` unless you need a fixed theme. |
+| `theme.code_block.theme` | string | Theme default | Advanced syntax theme override. |
+| `theme.code_block.background` | string | Theme default | Advanced code block content background. |
+| `theme.code_block.header_background` | string | Theme default | Advanced code block header background. |
+| `theme.code_block.border_color` | string | Theme default | Advanced code block border color. |
+| `theme.code_block.radius` | number | Theme default | Advanced code block border radius. |
+| `theme.inline_code.text_dark` | string | Theme default | Inline-code text color in dark mode. |
+| `theme.inline_code.text_light` | string | Theme default | Inline-code text color in light mode. |
+
+```json
+{
+  "styling": {
+    "codeblocks": "system"
+  }
+}
+```
+
+Advanced code block fields are useful for theme authors. Most sites should keep `styling.codeblocks` on `system` so light and dark mode stay coherent.
+
+## Custom CSS
+
+| Field | Type | Purpose |
+| --- | --- | --- |
+| `styles.custom` | string | Optional stylesheet path from the docs repository. |
+
+```json
+{
+  "styles": {
+    "custom": "/custom.css"
+  }
+}
+```
+
+Use custom CSS sparingly. Prefer source-backed theme settings first so previews, generated screenshots, and AI-readable pages remain predictable.

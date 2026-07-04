@@ -1,0 +1,143 @@
+---
+title: SEO and search reference
+description: Field-by-field reference for indexing, metadata, search, AI discovery files, and public feedback surfaces.
+icon: search-check
+---
+
+Use these settings to control discoverability for humans, search engines, and AI agents.
+
+## Site metadata
+
+| Field | Type | Purpose |
+| --- | --- | --- |
+| `site.name` | string | Site title used in metadata, UI labels, AI discovery, and MCP labels. |
+| `site.tagline` | string | Short site description used in metadata and discovery surfaces. |
+| `seo.metatags` | object | Additional global metadata fields. |
+
+```json
+{
+  "site": {
+    "name": "Acme Docs",
+    "tagline": "Developer documentation for Acme."
+  },
+  "seo": {
+    "metatags": {
+      "og:image": "/assets/social-card.png"
+    }
+  }
+}
+```
+
+Use page frontmatter for page-specific titles and descriptions. Use global site metadata for defaults.
+
+## Page frontmatter
+
+| Field | Type | Purpose |
+| --- | --- | --- |
+| `title` | string | Page title and navigation fallback. |
+| `description` | string | Page summary used by metadata, search snippets, and AI-readable indexes. |
+| `icon` | string | Page icon when supported by navigation. |
+| `noindex` | boolean | Excludes the page from public indexing surfaces. |
+
+```mdx
+---
+title: Quickstart
+description: Create and publish your first docs site.
+icon: zap
+---
+```
+
+Write descriptions as reader-facing summaries. They are reused by search, AI discovery, and previews.
+
+## Indexing policy
+
+| Field | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| `seo.indexing` | `navigable` \| `all` | `navigable` | Controls whether only navigable pages or every source page is indexed. |
+| `addons.visibility.noindex` | boolean | `false` | Site-level switch to disable public indexing and AI discovery. |
+
+```json
+{
+  "seo": {
+    "indexing": "navigable"
+  },
+  "addons": {
+    "visibility": {
+      "noindex": false
+    }
+  }
+}
+```
+
+Use `navigable` for production docs. Use `all` only when hidden source pages are intentionally part of the searchable knowledge base.
+
+## Search controls
+
+| Field | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| `widgets.search.enabled` | boolean | `true` | Enables site search. |
+| `widgets.search.placeholder` | string | Theme default | Placeholder text in the search box. |
+| `topbar.showSearch` | boolean | `true` | Shows search in the header. |
+
+```json
+{
+  "topbar": {
+    "showSearch": true
+  },
+  "widgets": {
+    "search": {
+      "enabled": true,
+      "placeholder": "Search docs..."
+    }
+  }
+}
+```
+
+Search results are built from published content. If a page is missing from search, check navigation, frontmatter, and indexing policy first.
+
+## AI discovery surfaces
+
+DubStack exposes AI-readable docs through public routes when indexing is enabled:
+
+| Route | Purpose |
+| --- | --- |
+| `/llms.txt` | Compact AI-readable index. |
+| `/llms-full.txt` | Larger AI-readable index with more page content. |
+| `/mcp` | Public read-only MCP server for agents. |
+| `/skill.md` | Agent skill instructions generated from the published docs. |
+
+These routes use public docs content and public site metadata. They do not expose dashboard secrets.
+
+## Public feedback
+
+| Field | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| `addons.feedback.thumbs_rating` | boolean | `false` | Shows Yes/No reader feedback on pages. |
+| `addons.feedback.agent_feedback` | boolean | `false` | Allows the public MCP server to submit structured content feedback. |
+| `addons.feedback.contextual_feedback` | boolean | `false` | Enables feedback actions from contextual UI surfaces. |
+| `addons.feedback.code_snippet_feedback` | boolean | `false` | Enables feedback for code snippet surfaces when supported. |
+| `addons.feedback.collect_reader_emails` | boolean | `false` | Allows feedback forms to request reader email addresses. |
+| `addons.feedback.reader_email_disclaimer` | string | Empty | Short notice shown when collecting reader emails. |
+
+```json
+{
+  "addons": {
+    "feedback": {
+      "thumbs_rating": true,
+      "agent_feedback": true,
+      "collect_reader_emails": false
+    }
+  }
+}
+```
+
+Feedback settings can be managed from the dashboard add-ons page. Keep source-backed values reviewed when your site uses Git as the approval boundary.
+
+## Troubleshooting
+
+| Symptom | Check |
+| --- | --- |
+| Page is not searchable | Confirm it is in navigation or set `seo.indexing` to `all`. |
+| AI tools cannot read docs | Confirm `addons.visibility.noindex` is `false`. |
+| Metadata looks generic | Add page `title` and `description` frontmatter. |
+| Feedback is missing | Enable `addons.feedback.thumbs_rating` and publish the config. |

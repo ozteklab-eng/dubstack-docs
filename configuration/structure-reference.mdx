@@ -1,0 +1,200 @@
+---
+title: Structure reference
+description: Field-by-field reference for navigation, header, footer, banner, redirects, contextual actions, and page structure.
+icon: layout-list
+---
+
+Use these fields to control the information architecture and persistent UI around your docs content.
+
+## Navigation entry points
+
+| Field | Type | Purpose |
+| --- | --- | --- |
+| `navigation.tabs` | array | Top-level header tabs. Each tab contains one or more groups. |
+| `navigation.groups` | array | Sidebar groups when the site does not use tabs. |
+| `navigation.auto_generate` | boolean | Allows generated navigation when the source tree can be inferred. Keep `false` for reviewed product docs. |
+
+```json
+{
+  "navigation": {
+    "auto_generate": false,
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "default": true,
+        "groups": [
+          {
+            "group": "Getting started",
+            "icon": "rocket",
+            "pages": ["index", "quickstart"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Use tabs when the site has clear product areas such as docs, API reference, guides, and changelog.
+
+## Tabs
+
+| Field | Type | Purpose |
+| --- | --- | --- |
+| `navigation.tabs[].tab` | string | Label shown in the header. |
+| `navigation.tabs[].default` | boolean | Marks the default tab for the site. |
+| `navigation.tabs[].groups` | array | Sidebar groups shown when this tab is active. |
+
+Only one tab should be marked as the default.
+
+## Groups
+
+| Field | Type | Purpose |
+| --- | --- | --- |
+| `navigation.tabs[].groups[].group` | string | Sidebar group label. |
+| `navigation.tabs[].groups[].icon` | string | Icon name shown beside the group. |
+| `navigation.tabs[].groups[].pages` | array | Ordered pages in the group. |
+| `navigation.tabs[].groups[].openapi` | string | OpenAPI spec path that generates endpoint pages for the group. |
+
+```json
+{
+  "group": "Docs runtime API",
+  "icon": "terminal",
+  "openapi": "api-reference/openapi.json"
+}
+```
+
+Use `openapi` groups for generated endpoint navigation. Use `pages` groups for authored MDX pages.
+
+## Pages
+
+| Field | Type | Purpose |
+| --- | --- | --- |
+| `pages[]` | string | Slug for an authored page, without the `.mdx` extension. |
+| `pages[].slug` | string | Explicit page slug. |
+| `pages[].title` | string | Optional navigation title override. |
+| `pages[].icon` | string | Optional page icon. |
+| `pages[].href` | string | External or internal link target when the item is a link instead of a source page. |
+| `pages[].external` | boolean | Marks the link as external. |
+
+```json
+{
+  "slug": "configuration/navigation",
+  "title": "Navigation",
+  "icon": "map"
+}
+```
+
+Use object entries when you need icons, titles, or external links. Use string entries for simple authored pages.
+
+## Header controls
+
+| Field | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| `topbar.showTabs` | boolean | `true` | Shows navigation tabs in the header. |
+| `topbar.showSearch` | boolean | `true` | Shows search in the header. |
+| `topbarCtaButton.label` | string | None | Header CTA label. |
+| `topbarCtaButton.href` | string | None | Header CTA destination. |
+| `anchors` | boolean | `true` | Shows anchor links on page headings. |
+
+```json
+{
+  "topbar": {
+    "showTabs": true,
+    "showSearch": true
+  },
+  "topbarCtaButton": {
+    "label": "Get started",
+    "href": "/quickstart"
+  },
+  "anchors": true
+}
+```
+
+## Banner
+
+| Field | Type | Purpose |
+| --- | --- | --- |
+| `banner.content` | string | Short announcement text shown above the docs shell. |
+| `banner.type` | `info` \| `warning` \| `success` \| `error` | Banner treatment. |
+| `banner.color` | string | Optional accent color. |
+| `banner.dismissible` | boolean | Allows visitors to hide the banner locally. |
+
+```json
+{
+  "banner": {
+    "content": "New API version available.",
+    "type": "info",
+    "dismissible": true
+  }
+}
+```
+
+## Contextual actions
+
+| Field | Type | Purpose |
+| --- | --- | --- |
+| `contextual.enabled` | boolean | Enables the page action menu. |
+| `contextual.options` | array | Ordered actions to show. |
+| `contextual.default` | string | Default action when a compact UI needs one primary action. |
+| `contextual.display` | `header` \| `toc` | Placement for the action menu. |
+| `contextual.location` | `header` \| `toc` | Backward-compatible alias for `display`. |
+| `contextual.labels` | object | Optional label overrides by action key. |
+
+Supported action keys include `copy`, `view`, `assistant`, `claude`, `chatgpt`, `perplexity`, `grok`, `aistudio`, `devin`, `windsurf`, `mcp`, `add-mcp`, `cursor`, `vscode`, `devin-mcp`, and `download-spec`.
+
+```json
+{
+  "contextual": {
+    "enabled": true,
+    "options": ["copy", "view", "mcp", "chatgpt"],
+    "default": "copy",
+    "display": "header"
+  }
+}
+```
+
+Do not put private integration secrets in contextual settings. These fields only control public page actions.
+
+## Footer
+
+| Field | Type | Purpose |
+| --- | --- | --- |
+| `footer.style` | string | Footer style preset. |
+| `footer.socials.github` | string | GitHub profile or repository link. |
+| `footer.socials.linkedin` | string | LinkedIn URL. |
+| `footer.socials.twitter` | string | X/Twitter URL. |
+| `footer.socials.discord` | string | Discord URL. |
+| `footer.branding.show_powered_by` | boolean | Shows or hides platform attribution based on plan and policy. |
+
+```json
+{
+  "footer": {
+    "style": "default",
+    "socials": {
+      "github": "https://github.com/acme/docs"
+    }
+  }
+}
+```
+
+## Redirects
+
+| Field | Type | Purpose |
+| --- | --- | --- |
+| `redirects[].source` | string | Old path. |
+| `redirects[].destination` | string | New path or external URL. |
+| `redirects[].permanent` | boolean | Optional permanent redirect hint. |
+
+```json
+{
+  "redirects": [
+    {
+      "source": "/old-page",
+      "destination": "/new-page"
+    }
+  ]
+}
+```
+
+Redirects are public routing rules. Review them in pull requests the same way you review page moves.

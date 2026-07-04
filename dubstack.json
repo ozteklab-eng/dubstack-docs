@@ -205,6 +205,22 @@
                 "icon": "list-checks"
               },
               {
+                "slug": "configuration/appearance-reference",
+                "icon": "palette"
+              },
+              {
+                "slug": "configuration/structure-reference",
+                "icon": "layout-list"
+              },
+              {
+                "slug": "configuration/api-settings-reference",
+                "icon": "terminal"
+              },
+              {
+                "slug": "configuration/seo-search-reference",
+                "icon": "search-check"
+              },
+              {
                 "slug": "configuration/pages-frontmatter",
                 "icon": "file-cog"
               },

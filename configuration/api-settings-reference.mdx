@@ -1,0 +1,148 @@
+---
+title: API settings reference
+description: Field-by-field reference for OpenAPI specs, endpoint generation, playground behavior, parameter display, and code examples.
+icon: terminal
+---
+
+Use these fields to publish API reference pages from source-backed OpenAPI specs.
+
+## Spec sources
+
+| Field | Type | Purpose |
+| --- | --- | --- |
+| `api.openapi` | string or array | OpenAPI spec paths or URLs. Use repository-relative paths for source-backed specs. |
+| `openapi` | string | Legacy alias for the first OpenAPI spec. Kept for compatibility. |
+| `api.asyncapi` | string or array | AsyncAPI spec paths. Available in dashboard configuration for sites that opt into async API references. |
+| `navigation.tabs[].groups[].openapi` | string | Generates endpoint navigation from a specific OpenAPI spec. |
+
+```json
+{
+  "api": {
+    "openapi": "api-reference/openapi.json"
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Docs runtime API",
+            "icon": "terminal",
+            "openapi": "api-reference/openapi.json"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Keep specs in the same repository as the docs when possible. That gives every branch preview the matching API reference.
+
+## Playground display
+
+| Field | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| `api.playground.display` | `interactive` \| `simple` \| `none` \| `auth` | `interactive` | Controls how endpoint pages expose the request playground. |
+| `api.playground.proxy` | boolean | `true` | Routes Try it requests through the DubStack playground proxy. |
+| `api.playground.credentials` | boolean | `false` | Includes browser credentials for direct cross-origin requests when proxy is disabled. |
+
+```json
+{
+  "api": {
+    "playground": {
+      "display": "interactive",
+      "proxy": true,
+      "credentials": false
+    }
+  }
+}
+```
+
+Use `interactive` for public developer docs. Use `none` when endpoint pages should remain read-only.
+
+## Base URL display
+
+| Field | Type | Purpose |
+| --- | --- | --- |
+| `api.url` | `full` | Shows the complete base URL on endpoint pages. Leave unset for the default compact display. |
+
+```json
+{
+  "api": {
+    "url": "full"
+  }
+}
+```
+
+## Parameter display
+
+| Field | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| `api.params.expanded` | `all` \| `closed` | `closed` | Opens or collapses parameter detail sections by default. |
+| `api.params.post` | array | None | OpenAPI field keys rendered as parameter pills after the field name. |
+
+```json
+{
+  "api": {
+    "params": {
+      "expanded": "closed",
+      "post": ["nullable", "deprecated"]
+    }
+  }
+}
+```
+
+Use parameter pills for small metadata that helps readers scan a reference quickly.
+
+## Code examples
+
+| Field | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| `api.examples.languages` | array | Renderer default | Code snippet languages and order. |
+| `api.examples.defaults` | `required` \| `all` | `all` | Controls whether optional parameters are included in generated examples. |
+| `api.examples.prefill` | boolean | `false` | Prefills playground fields with example values from the spec. |
+| `api.examples.autogenerate` | boolean | `true` | Generates code examples from the spec when examples are not authored manually. |
+
+```json
+{
+  "api": {
+    "examples": {
+      "languages": ["curl", "javascript", "python"],
+      "defaults": "required",
+      "prefill": true,
+      "autogenerate": true
+    }
+  }
+}
+```
+
+Use authored examples in the OpenAPI spec for important flows. Use generated examples for complete endpoint coverage.
+
+## Agent markdown
+
+| Field | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| `api.mdx` | boolean | `true` | Includes API specs in markdown served to AI-readable surfaces. |
+
+```json
+{
+  "api": {
+    "mdx": true
+  }
+}
+```
+
+Leave this enabled when you want `/llms.txt`, `/llms-full.txt`, and the public MCP server to provide complete API context.
+
+## Practical setup
+
+1. Add the spec under `api-reference/openapi.json`.
+2. Set `api.openapi` to that path.
+3. Add an `openapi` navigation group where endpoints should appear.
+4. Configure playground behavior.
+5. Publish and verify the generated endpoint pages.
+
+<Callout type="warning">
+  Do not store bearer tokens, API keys, or customer credentials in `dubstack.json` or in OpenAPI examples. Use placeholders in source and configure real credentials in the dashboard or your own backend.
+</Callout>
