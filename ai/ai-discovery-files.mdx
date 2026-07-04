@@ -1,0 +1,88 @@
+---
+title: AI discovery files
+description: Understand the generated llms.txt, llms-full.txt, skill.md, and MCP discovery files on published docs sites.
+icon: file-search
+---
+
+DubStack publishes AI-readable files for every public docs site so agents can discover current documentation without scraping the site shell.
+
+These files are generated from the published docs navigation and content. They update when the site is republished.
+
+## Generated files
+
+| Path | Purpose |
+| --- | --- |
+| `/llms.txt` | Compact index of public docs pages with links. |
+| `/llms-full.txt` | Full-page content bundle for tools that ingest larger text files. |
+| `/skill.md` | Agent instructions that describe how to use the docs site and its MCP server. |
+| `/mcp` | Public MCP server endpoint and discovery response. |
+| `/.well-known/mcp` | MCP discovery document for tools that auto-detect servers. |
+| `/.well-known/mcp/server-card.json` | Tool metadata and safety annotations for the public MCP server. |
+
+## `llms.txt`
+
+`llms.txt` is the quick index.
+
+Use it when an AI tool needs to discover the page list before deciding what to read.
+
+```text
+https://your-docs-domain.com/llms.txt
+```
+
+It contains:
+
+- the site title
+- the site description
+- a link to `/llms-full.txt`
+- public page links from the published navigation
+
+## `llms-full.txt`
+
+`llms-full.txt` contains the rendered text content for public docs pages.
+
+```text
+https://your-docs-domain.com/llms-full.txt
+```
+
+Use it for tools that ingest a single text bundle. For interactive agents, prefer the public MCP server because MCP lets the agent search and read only the pages it needs.
+
+## `skill.md`
+
+`skill.md` gives agents instructions for using your docs as a source of truth.
+
+```text
+https://your-docs-domain.com/skill.md
+```
+
+The generated skill points agents at:
+
+- the public docs site
+- the public MCP server
+- recommended starting pages from navigation
+- feedback instructions when agent feedback is enabled
+
+## MCP resources
+
+The public MCP server exposes `skill.md` as a resource. MCP clients that support resources can discover the skill without asking the user to install it separately.
+
+## Disable public AI discovery
+
+AI discovery files follow the deployment's public indexing controls.
+
+When public indexing is disabled, generated AI-readable files and public MCP discovery should return `404`.
+
+Use this for sites that should remain public to readers but should not be exposed through machine-readable indexes.
+
+## Safety checklist
+
+- Do not publish secrets, private tokens, or unreleased customer data in public docs.
+- Keep page titles and descriptions specific so search and MCP results are useful.
+- Use redirects when moving established pages.
+- Republish after large navigation or OpenAPI changes.
+- Test `/llms.txt`, `/skill.md`, and `/mcp` after changing AI discovery settings.
+
+## Related
+
+- [MCP](/ai/mcp)
+- [Contextual actions](/ai/contextual-actions)
+- [SEO and search](/configuration/seo-search)

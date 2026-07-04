@@ -33,7 +33,7 @@
       "raise_issues": false,
       "contextual_feedback": false,
       "code_snippet_feedback": false,
-      "agent_feedback": false,
+      "agent_feedback": true,
       "collect_reader_emails": false,
       "reader_email_disclaimer": ""
     }
@@ -156,6 +156,7 @@
               { "slug": "ai/integrations/slack", "icon": "message-circle" },
               { "slug": "ai/integrations/jira", "icon": "panels-top-left" },
               { "slug": "ai/contextual-actions", "icon": "mouse-pointer-click" },
+              { "slug": "ai/ai-discovery-files", "icon": "file-search" },
               { "slug": "ai/mcp", "icon": "plug" }
             ]
           },

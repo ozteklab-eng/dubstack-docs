@@ -16,12 +16,68 @@ https://your-docs-domain.com/mcp
 
 Use this endpoint when you want AI tools to read and search your public docs. It does not require authentication and does not grant dashboard access.
 
-The public server exposes two read-only tools:
+The public server exposes tools for reading public docs and reporting documentation issues:
 
 | Tool | What it does |
 | --- | --- |
 | `search` | Searches public indexed docs pages and returns titles, URLs, snippets, and file paths. |
 | `query_docs_filesystem` | Reads and searches a virtual filesystem of your published docs pages with commands like `tree`, `cat`, and `rg`. |
+| `submit_feedback` | Reports a documentation issue when an agent finds a page that is incorrect, outdated, confusing, or incomplete. |
+
+## How agents use it
+
+AI tools decide when to call MCP tools while generating a response.
+
+A common flow is:
+
+1. Call `search` to find likely pages.
+2. Call `query_docs_filesystem` to read exact page content from the virtual docs filesystem.
+3. Answer the user with links to the source pages.
+4. Call `submit_feedback` only when the agent finds a substantive documentation issue.
+
+MCP reads from the published docs site. It does not read unpublished editor changes, private dashboard state, or source repository secrets.
+
+## Tool inputs
+
+### `search`
+
+```json
+{
+  "query": "custom domains",
+  "limit": 5
+}
+```
+
+Optional `language` and `version` fields are reserved for multilingual and versioned sites.
+
+### `query_docs_filesystem`
+
+```json
+{
+  "command": "tree / -L 2"
+}
+```
+
+Supported commands include `ls`, `tree`, `find`, `cat`, `head`, `tail`, `rg`, and `grep`.
+
+Examples:
+
+```bash
+cat /quickstart.mdx
+head -80 /api-reference/introduction.mdx
+rg -n "custom domain" /
+```
+
+### `submit_feedback`
+
+```json
+{
+  "path": "/quickstart",
+  "feedback": "The page says to open a settings page that no longer exists."
+}
+```
+
+Feedback is stored with the deployment feedback analytics for the site. Use it for documentation-quality issues, not for normal reader questions.
 
 ## Discovery
 
@@ -35,6 +91,10 @@ DubStack publishes MCP discovery documents automatically:
 | `/.well-known/mcp/server-card.json` | Single server card. |
 | `/.well-known/mcp/server-cards.json` | Server-card list. |
 
+`/.well-known/mcp` and `/.well-known/mcp.json` return the same discovery document.
+
+Server-card responses include tool metadata and safety annotations so MCP clients can inspect available tools before connecting.
+
 ## Skill file
 
 Your docs site also serves a generated skill file:
@@ -44,6 +104,8 @@ https://your-docs-domain.com/skill.md
 ```
 
 Agents connected to your MCP server can discover the same skill through MCP resources. The skill tells agents to use your current published docs as the source of truth and points them at your public MCP server.
+
+For the rest of the AI-readable docs files, see [AI discovery files](/ai/ai-discovery-files).
 
 ## Connect from an MCP client
 
@@ -82,3 +144,13 @@ Do not use the public `/mcp` endpoint for private docs or dashboard write access
 ## Admin MCP
 
 Dashboard/content-management MCP is also separate. It will be an authenticated team workflow for trusted agents that need to edit docs, work on branches, update settings, or open pull requests.
+
+## Troubleshooting
+
+If an MCP client cannot connect:
+
+1. Confirm the public docs site loads.
+2. Open `/mcp` in a browser and verify it returns discovery JSON.
+3. Open `/.well-known/mcp/server-card.json` and confirm the expected tools are listed.
+4. Check that AI discovery/indexing is not disabled for the deployment.
+5. Republish the site if the latest docs content or add-on settings have not synced yet.
