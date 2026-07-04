@@ -1,0 +1,67 @@
+---
+title: Tooltips
+description: Add short contextual definitions and helper text to inline docs content.
+icon: message-circle-question
+---
+
+Tooltips add lightweight context when a term needs a quick definition without interrupting the page.
+
+Use tooltips for abbreviations, product-specific terms, or short clarifications. Do not hide required setup steps inside tooltips.
+
+## Basic tooltip
+
+<Tooltip tip="Model Context Protocol: a standard way for agents to call tools and read context.">MCP</Tooltip> lets agents query published docs.
+
+```mdx
+<Tooltip tip="Model Context Protocol: a standard way for agents to call tools and read context.">MCP</Tooltip> lets agents query published docs.
+```
+
+## Tooltip with headline and link
+
+<Tooltip headline="API keys" tip="Use scoped API keys for automation and rotate them when access changes." cta="Read API key docs" href="/dashboard/api-keys">API keys</Tooltip> should be stored in a secret manager.
+
+```mdx
+<Tooltip
+  headline="API keys"
+  tip="Use scoped API keys for automation and rotate them when access changes."
+  cta="Read API key docs"
+  href="/dashboard/api-keys"
+>
+  API keys
+</Tooltip>
+```
+
+## Markdown inside the trigger
+
+The tooltip trigger can contain inline Markdown such as `code`, **bold text**, or emphasis.
+
+<Tooltip tip="The docs source branch connected to the deployment.">`product-docs` branch</Tooltip>
+
+```mdx
+<Tooltip tip="The docs source branch connected to the deployment.">`product-docs` branch</Tooltip>
+```
+
+## Props
+
+<ResponseField name="tip" type="string" required>
+  Text displayed inside the tooltip.
+</ResponseField>
+
+<ResponseField name="headline" type="string">
+  Optional heading shown before the tooltip text.
+</ResponseField>
+
+<ResponseField name="cta" type="string">
+  Optional call-to-action link text.
+</ResponseField>
+
+<ResponseField name="href" type="string">
+  URL used by `cta`. Required when `cta` is set.
+</ResponseField>
+
+## Guidelines
+
+- Keep tooltip text short.
+- Use a normal link when the reader must click through.
+- Do not put secrets, private URLs, or environment-specific details in tooltips.
+- Make the surrounding sentence understandable even if the tooltip is not opened.

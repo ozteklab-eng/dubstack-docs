@@ -195,6 +195,14 @@
                 "icon": "badge"
               },
               {
+                "slug": "writing-content/icons",
+                "icon": "icons"
+              },
+              {
+                "slug": "writing-content/tooltips",
+                "icon": "message-circle-question"
+              },
+              {
                 "slug": "writing-content/fields-expandables",
                 "icon": "list-tree"
               },

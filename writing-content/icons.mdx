@@ -1,0 +1,84 @@
+---
+title: Icons
+description: Add inline icons to docs pages and configure icon names, size, color, and library source.
+icon: icons
+---
+
+Use icons to add visual emphasis to short labels, headings, cards, badges, and navigation entries.
+
+## Basic icon
+
+<Icon icon="flag" size={32} />
+
+```mdx
+<Icon icon="flag" size={32} />
+```
+
+## Inline icons
+
+Icons render inline with surrounding text.
+
+Published docs <Icon icon="check" color="#15803D" /> are available after a successful sync.
+
+```mdx
+Published docs <Icon icon="check" color="#15803D" /> are available after a successful sync.
+```
+
+## Icon libraries
+
+By default, icons use the configured site icon library. You can override the library on a single icon.
+
+```mdx
+<Icon icon="flag" library="standard" size={24} />
+```
+
+Supported library aliases include:
+
+| Alias | Use |
+| --- | --- |
+| `standard` | Built-in standard icon set. |
+| `lucide` | Alias for `standard`. |
+| `fa` | Font Awesome source when configured. |
+| `fontawesome` | Alias for `fa`. |
+| `font-awesome` | Alias for `fa`. |
+| `tabler` | Alias for the Tabler-compatible source. |
+
+## Icon variants
+
+Use `iconType` when the selected icon library supports variants.
+
+```mdx
+<Icon icon="flag" library="fa" iconType="solid" size={24} />
+```
+
+## Props
+
+<ResponseField name="icon" type="string" required>
+  Icon name to display. `name` is also accepted as an alias.
+</ResponseField>
+
+<ResponseField name="library" type="string">
+  Optional icon library override. `iconLibrary` is also accepted.
+</ResponseField>
+
+<ResponseField name="iconType" type="string">
+  Optional icon variant for libraries that support variants.
+</ResponseField>
+
+<ResponseField name="size" type="number" default="16">
+  Icon size in pixels.
+</ResponseField>
+
+<ResponseField name="color" type="string">
+  CSS color value for the icon.
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Optional class name for advanced styling.
+</ResponseField>
+
+## Guidelines
+
+- Use icons as supporting cues, not as the only source of meaning.
+- Keep icon names consistent across navigation, cards, and docs content.
+- Prefer short inline icon usage. Use cards or callouts when the content needs explanation.
