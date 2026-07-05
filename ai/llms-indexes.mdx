@@ -76,6 +76,18 @@ When public indexing is disabled, generated AI-readable files and public MCP dis
 
 Use this when a site should remain reachable to humans but should not expose machine-readable discovery files.
 
+## Authentication behavior
+
+AI index files follow the same docs authentication policy as the rendered site.
+
+| Site access | Index behavior |
+| --- | --- |
+| Public docs | `/llms.txt` and `/llms-full.txt` are public. |
+| Password-protected docs | Readers must unlock the site before index content is returned. |
+| `/docs` subpath | Index files stay under the mounted path, such as `/docs/llms.txt`. |
+
+For protected docs, unauthenticated agents and crawlers cannot use AI index files to bypass the login page. For setup details, see [Docs authentication](/deployment/docs-authentication).
+
 ## Agent feedback
 
 When agent feedback is enabled, `llms-full.txt` can include instructions that tell agents how to report documentation issues for the page they are reading.

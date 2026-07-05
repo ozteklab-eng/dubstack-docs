@@ -113,6 +113,19 @@ When public indexing is disabled, generated AI-readable files and public MCP dis
 
 Use this for sites that should remain public to readers but should not be exposed through machine-readable indexes.
 
+## Protected docs behavior
+
+Docs authentication protects AI-readable files the same way it protects rendered pages.
+
+When password authentication is enabled:
+
+- unauthenticated requests to `/llms.txt`, `/llms-full.txt`, `/skill.md`, `/mcp`, and `.well-known` discovery files do not expose protected content
+- readers must unlock the site before protected AI-readable content can be returned
+- `/docs` subpath sites keep all AI discovery paths under `/docs`, such as `/docs/llms.txt` and `/docs/.well-known/mcp`
+- public MCP clients without a valid reader session cannot search or read protected pages
+
+For access-control setup, see [Docs authentication](/deployment/docs-authentication).
+
 ## Safety checklist
 
 - Do not publish secrets, private tokens, or unreleased customer data in public docs.

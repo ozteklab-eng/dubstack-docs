@@ -93,6 +93,20 @@ For whole-site ingestion, use the generated AI index files instead of copying pa
 
 See [AI index files](/ai/llms-indexes) and [Generated skill file](/ai/generated-skill-file) for the generated file behavior.
 
+## Authentication behavior
+
+Markdown export follows the same reader access rules as the rendered page.
+
+| Site access | Markdown behavior |
+| --- | --- |
+| Public docs | `.md` URLs and Markdown `Accept` requests are public. |
+| Password-protected docs | Readers must unlock the site before Markdown content is returned. |
+| `/docs` subpath | Markdown URLs stay under the mounted path, such as `https://example.com/docs/quickstart.md`. |
+
+For protected docs, unauthenticated Markdown requests return an authentication response instead of page content. This prevents AI tools, MCP clients, and crawlers from bypassing the rendered site login.
+
+For setup details, see [Docs authentication](/deployment/docs-authentication).
+
 ## Troubleshooting
 
 If Markdown actions are missing:

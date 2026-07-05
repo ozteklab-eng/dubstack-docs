@@ -16,6 +16,14 @@ https://your-docs-domain.com/mcp
 
 Use this endpoint when you want AI tools to read and search your public docs. It does not require authentication and does not grant dashboard access.
 
+If your site is mounted under a `/docs` subpath, use the mounted endpoint:
+
+```text
+https://your-domain.com/docs/mcp
+```
+
+If docs authentication is enabled, unauthenticated MCP clients cannot read protected content. Readers must unlock the docs site first, and authoring agents should use dashboard, Git, Slack, or workflow surfaces instead of the public docs MCP.
+
 ## Public MCP compared to authoring surfaces
 
 DubStack has separate MCP surfaces for separate jobs.
@@ -93,6 +101,8 @@ head -80 /api-reference/introduction.mdx
 rg -n "custom domain" /
 ```
 
+`query_docs_filesystem` is read-only. Commands run against a virtual docs filesystem generated from published pages, not against the source repository or server filesystem.
+
 ### `submit_feedback`
 
 This tool is advertised only when **Settings > Deployment > Add-ons > Agent feedback** is enabled for the deployment.
@@ -165,6 +175,12 @@ Use your published docs URL with `/mcp` appended.
 
 ```text
 https://your-docs-domain.com/mcp
+```
+
+For a `/docs` subpath deployment, use:
+
+```text
+https://your-domain.com/docs/mcp
 ```
 
 For clients with a connector form, use:
@@ -283,11 +299,15 @@ The expected tools are:
 | `search` | A query such as `custom domains` returns ranked page results. |
 | `submit_feedback` | Available only when Agent feedback is enabled. Use it only for documentation-quality issues. |
 
+If `search` returns no results, the server should return an empty result set rather than an execution error. Try a known page title, then run `tree / -L 2` to confirm the site has indexed pages.
+
 ## Protected and authoring access
 
 Do not use the public `/mcp` endpoint for private docs or dashboard write access.
 
-Protected docs access and dashboard content-management MCP are separate product surfaces. Until those surfaces are available, use the dashboard, connected Git provider, Slack agent, and automation workflows for authenticated authoring tasks.
+Password-protected docs use the same reader session as the rendered site. Public MCP clients without that reader session cannot access protected pages, Markdown exports, `llms.txt`, `skill.md`, or discovery files that expose protected content.
+
+Dashboard content-management MCP is a separate product surface. Until that surface is available, use the dashboard, connected Git provider, Slack agent, and automation workflows for authenticated authoring tasks.
 
 ## Troubleshooting
 
@@ -298,3 +318,7 @@ If an MCP client cannot connect:
 3. Open `/.well-known/mcp/server-card.json` and confirm the expected tools are listed.
 4. Check that AI discovery/indexing is not disabled for the deployment.
 5. Republish the site if the latest docs content or add-on settings have not synced yet.
+
+If the site is mounted under `/docs`, test `/docs/mcp`, `/docs/.well-known/mcp`, and `/docs/.well-known/mcp/server-card.json`. A proxy that forwards pages but not `/docs/.well-known/*` or `/docs/api/*` can make rendered pages work while MCP discovery fails.
+
+If the site is password protected, unlock the docs site in the same browser or client context before testing protected MCP access. For machine-to-machine authoring, use an authenticated authoring surface instead of the public docs MCP.

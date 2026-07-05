@@ -16,7 +16,15 @@ Append `/skill.md` to your docs domain.
 https://your-docs-domain.com/skill.md
 ```
 
+For a site mounted at `/docs`, use:
+
+```text
+https://your-domain.com/docs/skill.md
+```
+
 The response is Markdown and is intended for AI agents, MCP clients, and developer tools that can load product instructions.
+
+If docs authentication is enabled, the generated skill file follows the same reader access policy as the rest of the site. A public agent cannot use `/skill.md` to bypass password-protected docs.
 
 ## What it contains
 
@@ -127,6 +135,8 @@ If `/skill.md` returns `404`:
 2. Confirm AI discovery/indexing is enabled.
 3. Run a manual update from the dashboard.
 4. Check that `/mcp` returns discovery metadata.
+
+If `/skill.md` redirects to a login page or returns an authentication response, docs authentication is enabled. Unlock the site first, or use an authenticated authoring surface if the agent needs private docs context.
 
 If the skill file references stale pages, publish the latest navigation changes and wait for the deployment update to finish.
 
