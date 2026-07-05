@@ -134,10 +134,10 @@
               }
             ]
           },
-          {
-            "group": "Deployment",
-            "icon": "cloud",
-            "pages": [
+        {
+          "group": "Deployment",
+          "icon": "cloud",
+          "pages": [
               {
                 "slug": "deployment/github",
                 "icon": "github"
@@ -201,13 +201,39 @@
               {
                 "slug": "deployment/source-control-troubleshooting",
                 "icon": "wrench"
-              }
-            ]
-          },
-          {
-            "group": "Writing content",
-            "icon": "file-text",
-            "pages": [
+            }
+          ]
+        },
+        {
+          "group": "Migration",
+          "icon": "git-pull-request-arrow",
+          "pages": [
+            {
+              "slug": "migration/overview",
+              "icon": "map"
+            },
+            {
+              "slug": "migration/public-wiki-previews",
+              "icon": "globe"
+            },
+            {
+              "slug": "migration/generated-reconstruction",
+              "icon": "sparkles"
+            },
+            {
+              "slug": "migration/authored-config-import",
+              "icon": "file-cog"
+            },
+            {
+              "slug": "migration/claim-adopt-flow",
+              "icon": "badge-check"
+            }
+          ]
+        },
+        {
+          "group": "Writing content",
+          "icon": "file-text",
+          "pages": [
               {
                 "slug": "writing-content/mdx",
                 "icon": "file-code"
