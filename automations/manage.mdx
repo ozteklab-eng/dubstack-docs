@@ -43,6 +43,14 @@ Manual runs use the automation's current configuration, selected context reposit
 
 Manual runs still enforce readiness checks and the daily run limit.
 
+## Trigger from the Admin API
+
+Use an Admin API key when an external backend system should trigger a workflow.
+
+API-triggered runs appear in the same run history with the `api` trigger source. They use the workflow's saved configuration and enforce the same readiness checks as manual runs.
+
+Only workflows configured with the **Custom schedule** trigger are API-triggerable. See [API keys](/dashboard/api-keys) for setup and request examples.
+
 ## Run history
 
 Open the run history view to inspect recent automation runs.

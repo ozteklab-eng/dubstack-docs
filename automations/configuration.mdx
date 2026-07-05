@@ -33,6 +33,25 @@ Scheduled workflows use one of the supported schedule presets:
 
 The scheduler scans enabled scheduled workflows and queues due runs within the configured queue-delay window, normally within 10 minutes.
 
+## API-triggered runs
+
+Workflows that use the **Custom schedule** trigger can also be triggered by a trusted backend system through the Admin API.
+
+Use this when your own scheduler, CI pipeline, release tool, or internal platform should decide when the workflow runs.
+
+Admin API-triggered runs still use the workflow's saved configuration:
+
+- update mode
+- context repositories
+- integration context
+- notification settings
+- additional instructions
+- workflow-specific setup fields
+
+The Admin API does not bypass readiness checks. The workflow must be enabled, use the **Custom schedule** trigger, have repository authoring access, pass setup requirements, and stay within the daily run limit.
+
+See [API keys](/dashboard/api-keys) for key creation, scoping, and trigger examples.
+
 ## Update modes
 
 | Mode | Behavior |

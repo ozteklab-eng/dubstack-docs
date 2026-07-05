@@ -1,67 +1,137 @@
 ---
 title: API keys
-description: Store keys used by the dashboard API playground.
+description: Create scoped Admin API keys for trusted automation.
 icon: key-round
 ---
 
-API keys let the dashboard API playground send authenticated requests to your API while you test endpoint pages.
+API keys give trusted backend systems a controlled way to call dubstack without using a browser session.
 
-Use this page for keys that are safe to use in a documentation testing context. Do not store production secrets unless your organization has approved that workflow.
+Use **Settings > Security > API keys** for server-side automation such as triggering enabled workflows from CI, cron, release tooling, or an internal platform job.
+
+<Callout type="warning">
+  Admin API keys are secrets. Store them in a secret manager, never in your docs repository, public pages, screenshots, or client-side code.
+</Callout>
 
 ## What API keys are for
 
-API keys are used by the API playground when an OpenAPI operation requires authentication.
+Admin API keys are separate from reader-facing playground credentials.
 
-Typical uses:
+Use them when a trusted system needs to call dubstack on behalf of your organization:
 
-- testing a sandbox API from generated endpoint pages
-- saving a reusable playground key for teammates
-- keeping demo credentials separate from production credentials
-- validating docs examples before publishing
+- triggering an enabled workflow from CI or a release pipeline
+- running a scheduled backend job from your own scheduler
+- integrating internal platform tooling with documentation automation
+- rotating access without sharing a personal dashboard session
+
+The first supported scope is `workflows:run`, which allows a key to trigger eligible automation runs through the Admin API.
 
 ## Create a key
 
 1. Open the dashboard.
-2. Go to **Settings > Security > API keys**.
-3. Click **New API Key**.
-4. Add a name and optional description.
-5. Enter a key value or generate a playground key when available.
-6. Save the key.
-7. Open an API reference page and select the saved key in the playground.
+2. Select the organization and deployment.
+3. Go to **Settings > Security > API keys**.
+4. Enter a clear name, such as `Release workflow trigger`.
+5. Optionally set an expiry date.
+6. Keep **Restrict this key to this deployment** enabled unless a backend job must operate across multiple deployments.
+7. Click **Create key**.
+8. Store the raw key immediately. dubstack only shows the raw key once.
+
+After you leave the page, only the key prefix, scope, status, and audit metadata remain visible.
 
 ## Key fields
 
 | Field | Purpose |
 | --- | --- |
 | Name | Human-readable label shown in the dashboard. |
-| Description | Optional note describing the environment or purpose. |
-| Key value | Secret value used by the API playground request. |
+| Scope | The allowed Admin API capability. The initial scope is `workflows:run`. |
+| Site scope | Restricts the key to one deployment. Site-scoped keys are the safest default. |
+| Expires at | Optional expiry timestamp. Expired keys stop authenticating. |
+| Last used | Timestamp from the latest successful use. |
+| Status | Shows whether the key is active, expired, or revoked. |
+
+## Trigger a workflow
+
+Use a key with the `workflows:run` scope to trigger an enabled workflow that uses the **Custom schedule** trigger.
+
+```bash
+curl --request POST \
+  --url "https://api.dubstack.ai/api/agent/workflows/{workflowId}/api-trigger" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "site_id": "site-id-for-unscoped-keys"
+  }'
+```
+
+If the key is restricted to a deployment, omit `site_id`; dubstack uses the key's deployment scope.
+
+Built-in workflows use their workflow ID. Custom workflows use the `custom_workflow:{id}` route form.
+
+Successful requests return `202 Accepted` with the queued run details.
+
+## Required workflow state
+
+The Admin API does not bypass workflow readiness checks.
+
+Before a workflow can be triggered by API:
+
+- the workflow must be enabled
+- the selected trigger must be **Custom schedule**
+- repository authoring access must be ready
+- the authoring model profile must be ready
+- required workflow setup fields must be complete
+- no run for that workflow can already be queued or running
+- the daily workflow run limit must have remaining capacity
+
+If a check fails, the API returns a structured error with a `reason` field.
+
+## Revoke a key
+
+Revoke a key when a client no longer needs access or when you suspect the key was exposed.
+
+1. Go to **Settings > Security > API keys**.
+2. Find the key by name or prefix.
+3. Click **Revoke**.
+4. Confirm the action.
+5. Remove the key from the external system or secret store.
+
+Revocation is immediate. Existing clients using the key will stop working on their next request.
 
 ## Security guidance
 
-- Prefer sandbox or restricted API credentials.
-- Use short-lived keys where your API supports them.
-- Delete keys that are no longer needed.
-- Rotate keys after team changes.
-- Do not commit API keys into your docs repository.
-- Do not paste customer production secrets into example docs pages.
+- Prefer site-scoped keys.
+- Use one key per external system so rotation is targeted.
+- Set expiries for temporary or project-specific automation.
+- Rotate keys after team or vendor changes.
+- Store keys only in backend secret stores.
+- Review `Last used` before revoking a key so you understand which client still depends on it.
+- Do not paste Admin API keys into public docs, examples, frontend code, or support tickets.
 
 ## Troubleshooting
 
-### The playground request returns 401
+### The API returns 401
 
-Confirm the selected key is valid for the API environment configured in the OpenAPI spec.
+Confirm the `Authorization` header uses `Bearer` and the raw key value. The key is only shown once when it is created.
 
-### The key is not visible in the playground
+### The API returns 403
 
-Refresh the page after saving the key. Confirm you are viewing the same site and organization where the key was created.
+The key may be site-scoped to a different deployment, or the requested deployment does not belong to the same organization.
 
-### A key should no longer be usable
+### The API returns workflow_not_api_triggerable
 
-Delete it from the dashboard and revoke it in the upstream API provider if that provider issued the credential.
+Only workflows configured with the **Custom schedule** trigger can be triggered through the Admin API.
+
+### The API returns workflow_not_enabled
+
+Enable the workflow from **Automate > Workflows** before calling the trigger endpoint.
+
+### The workflow is queued but does not finish
+
+Open **Automate > Workflows**, inspect the run history, and check the runner status, repository readiness, model readiness, and integration setup.
 
 ## Related
 
-- [API playground authentication](/api-reference/playground-authentication)
-- [Spec management](/api-reference/spec-management)
+- [Configure automation runs](/automations/configuration)
+- [Manage automations](/automations/manage)
+- [Automation reference](/automations/reference)
 - [Roles](/dashboard/roles)
