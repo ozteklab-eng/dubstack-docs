@@ -1,0 +1,163 @@
+---
+title: Editor tutorial
+sidebarTitle: Tutorial
+summary: Make your first documentation change from the dashboard editor.
+description: Create a focused editor change, preview it, publish through the source-backed flow, and verify the live docs site.
+icon: graduation-cap
+---
+
+This tutorial walks through a complete dashboard-editor change.
+
+You will open the editor, make a small content update, preview it, publish through the source-backed flow, and verify the live docs site.
+
+## Before you start
+
+You need:
+
+- access to the deployment in the dashboard
+- editor or admin permissions for content changes
+- a connected source, either a hosted starter source or a Git repository
+- a page you can safely update
+
+<Callout type="tip">
+  Start with a small change, such as updating a page description or adding one short paragraph. Keep the first edit easy to review and easy to roll back.
+</Callout>
+
+## Walkthrough
+
+<Steps>
+  <Step title="Open the editor">
+    Open the dashboard, choose the deployment, then go to **Editor**.
+
+    Use the **Navigation** pane when you want to edit a page that already appears in the docs sidebar. Use **File browser** when you know the source path or need to open a file that is not listed in navigation.
+  </Step>
+
+  <Step title="Choose the working branch">
+    Use the branch selector in the editor toolbar to confirm where the change will be saved.
+
+    If your source supports branches, create or select a feature branch for changes that need review. Use the deployment branch only for small direct edits when your repository policy allows it.
+
+    <Callout type="warning">
+      If your deployment branch is protected, publish through a branch and pull request instead of trying to write directly to the protected branch.
+    </Callout>
+  </Step>
+
+  <Step title="Edit an existing page">
+    Select a page from **Navigation** or **File browser**.
+
+    Make a focused MDX change. For example, update the frontmatter description or add one paragraph below the introduction.
+
+    ```mdx
+    ---
+    title: Quickstart
+    description: Launch your first docs update from the dashboard editor.
+    ---
+    ```
+
+    Use slash commands when you want to insert a supported block such as a callout, card, tabs, steps, or accordion without writing the full MDX shape by hand.
+  </Step>
+
+  <Step title="Create a new page when needed">
+    If the change needs a new page, open **File browser**, choose the folder, and create an `.mdx` file.
+
+    Add frontmatter and initial content:
+
+    ```mdx
+    ---
+    title: Troubleshooting setup
+    description: Common setup issues and how to resolve them.
+    ---
+
+    Start with the problem readers are likely to search for, then add the fix.
+    ```
+
+    Add the page to navigation before publishing if readers should see it in the sidebar.
+  </Step>
+
+  <Step title="Preview the rendered page">
+    Open preview from the editor toolbar and check the rendered page before publishing.
+
+    Verify:
+
+    - headings and links work
+    - callouts, cards, tabs, steps, and accordions render correctly
+    - images and assets load
+    - API reference pages still show the expected method, path, parameters, and examples when the change touches OpenAPI content
+    - light and dark mode still look correct for visual changes
+  </Step>
+
+  <Step title="Review the source change">
+    Before publishing, review the changed files.
+
+    Check page files, `dubstack.json`, uploaded assets, snippets, redirects, and OpenAPI specs when they are part of the change.
+
+    Keep unrelated edits out of the same publish action so reviewers can understand the change quickly.
+  </Step>
+
+  <Step title="Publish or open a review request">
+    Use **Publish** from the editor toolbar.
+
+    The exact action depends on your source and branch policy:
+
+    | Source state | Expected action |
+    | --- | --- |
+    | Hosted starter source | Save and publish through the dashboard flow. |
+    | Git repository with direct publishing allowed | Commit and sync the deployment branch. |
+    | Protected branch or review-required change | Create a pull request or merge request from the working branch. |
+
+    If a review request is created, share the preview deployment with reviewers before merging.
+  </Step>
+
+  <Step title="Verify the live site">
+    After the activity item or deployment history shows the sync completed, open the live docs URL.
+
+    Confirm the published page, navigation, search result, markdown export, and AI-readable indexes changed as expected.
+
+    For AI-readable surfaces, check the generated files when relevant:
+
+    ```text
+    /llms.txt
+    /llms-full.txt
+    /skill.md
+    /mcp
+    ```
+  </Step>
+</Steps>
+
+## Common first-edit checks
+
+| Check | Why it matters |
+| --- | --- |
+| Page opens from navigation | Confirms `dubstack.json` points at the right source page. |
+| Page opens by direct URL | Confirms the source path generated the expected route. |
+| Markdown export works | Confirms agents and AI tools can read the page directly. |
+| Search finds the page | Confirms the published index picked up the content. |
+| Preview and live match | Confirms the deployment branch is the source of the live site. |
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="I cannot publish">
+    Check your role, the selected branch, and the source connection. Some branches require a pull request or merge request instead of direct publishing.
+  </Accordion>
+
+  <Accordion title="The page previews but does not appear in navigation">
+    Add the page to the navigation configuration before publishing, or confirm it is intentionally hidden and accessible only by direct URL.
+  </Accordion>
+
+  <Accordion title="The live site still shows old content">
+    Check deployment history and run a manual update if the repository webhook did not trigger a sync.
+  </Accordion>
+
+  <Accordion title="The API reference did not update">
+    Confirm the OpenAPI spec file or URL changed on the deployment branch and that the generated endpoint route is visible in the API reference navigation.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+- [Pages and files](/editor/pages)
+- [Live preview](/editor/live-preview)
+- [Branching and publishing](/editor/publishing)
+- [Git essentials](/editor/git-essentials)
+- [Preview deployments](/deployment/preview-deployments)

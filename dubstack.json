@@ -387,6 +387,10 @@
                 "icon": "pencil"
               },
               {
+                "slug": "editor/tutorial",
+                "icon": "graduation-cap"
+              },
+              {
                 "slug": "editor/pages",
                 "icon": "file-text"
               },
