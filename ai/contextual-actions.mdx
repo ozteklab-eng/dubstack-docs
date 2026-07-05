@@ -10,13 +10,18 @@ They help readers copy page content, open a markdown view, send the page to an A
 
 ## Common actions
 
-| Action | What it does |
-| --- | --- |
-| Copy page | Copies the current page content for reuse in another tool. |
-| View as Markdown | Opens a markdown version of the current page. |
-| Ask assistant | Opens the docs assistant with the current page as context. |
-| Ask external AI | Opens a supported AI tool with page context when that action is enabled. |
-| Copy MCP details | Copies the public MCP endpoint or installation command for the docs site. |
+| Action key | Label | What it does |
+| --- | --- | --- |
+| `copy` | Copy page | Copies the current page content as Markdown. |
+| `view` | View as Markdown | Opens a Markdown version of the current page. |
+| `assistant` | Ask assistant | Opens the docs assistant with the current page as context. |
+| `claude`, `chatgpt`, `perplexity`, `grok`, `aistudio`, `devin`, `windsurf` | External AI actions | Opens or prepares a supported external AI tool with page context. |
+| `mcp` | Copy MCP server URL | Copies the public MCP endpoint for the docs site. |
+| `add-mcp` | Copy MCP install command | Copies an `npx add-mcp` command for the public MCP endpoint. |
+| `cursor` | Connect to Cursor | Copies an MCP JSON block that can be added to Cursor. |
+| `vscode` | Connect to VS Code | Copies a VS Code CLI command that adds the public MCP server. |
+| `devin-mcp` | Connect to Devin | Copies an MCP JSON block for Devin-compatible MCP configuration. |
+| `download-spec` | Download API spec | Opens the public OpenAPI specification download for API reference pages. |
 
 ## Configure actions
 
@@ -26,11 +31,15 @@ Configure contextual actions in `dubstack.json`.
 {
   "contextual": {
     "enabled": true,
-    "options": ["copy", "view", "claude", "chatgpt", "perplexity"],
+    "options": ["copy", "view", "mcp", "add-mcp", "cursor", "vscode", "claude", "chatgpt", "perplexity"],
     "default": "copy",
     "labels": {
       "copy": "Copy page",
       "view": "View as Markdown",
+      "mcp": "Copy MCP server URL",
+      "add-mcp": "Copy MCP install command",
+      "cursor": "Connect to Cursor",
+      "vscode": "Connect to VS Code",
       "claude": "Ask Claude",
       "chatgpt": "Ask ChatGPT",
       "perplexity": "Ask Perplexity"
@@ -68,6 +77,32 @@ https://your-docs-domain.com/mcp
 ```
 
 Readers can use the copied endpoint in clients that support HTTP MCP servers. The public MCP server is read-only and scoped to published docs content.
+
+When `add-mcp` is enabled, the action copies a command like:
+
+```bash
+npx add-mcp https://your-docs-domain.com/mcp
+```
+
+When `vscode` is enabled, the action copies a VS Code command with a generated HTTP MCP server config for the current docs domain.
+
+When `cursor` or `devin-mcp` is enabled, the action copies an MCP JSON block with the current docs domain and `/mcp` endpoint.
+
+## API spec action
+
+Use `download-spec` on API reference sites when you want readers to download the published OpenAPI specification from the contextual menu.
+
+The action opens:
+
+```text
+https://your-docs-domain.com/api/playground/spec
+```
+
+For docs mounted under `/docs`, the action uses the matching subpath:
+
+```text
+https://your-domain.com/docs/api/playground/spec
+```
 
 ## Troubleshooting
 

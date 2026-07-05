@@ -69,6 +69,10 @@
     "options": [
       "copy",
       "view",
+      "mcp",
+      "add-mcp",
+      "cursor",
+      "vscode",
       "claude",
       "chatgpt",
       "perplexity"
@@ -77,6 +81,10 @@
     "labels": {
       "copy": "Copy page",
       "view": "View as Markdown",
+      "mcp": "Copy MCP server URL",
+      "add-mcp": "Copy MCP install command",
+      "cursor": "Connect to Cursor",
+      "vscode": "Connect to VS Code",
       "claude": "Ask Claude",
       "chatgpt": "Ask ChatGPT",
       "perplexity": "Ask Perplexity"
