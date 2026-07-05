@@ -1,6 +1,6 @@
 ---
 title: MCP
-description: Connect AI tools to your published docs through public and authenticated Model Context Protocol servers.
+description: Connect AI tools to your published public docs through the Model Context Protocol.
 icon: plug
 ---
 
@@ -16,15 +16,15 @@ https://your-docs-domain.com/mcp
 
 Use this endpoint when you want AI tools to read and search your public docs. It does not require authentication and does not grant dashboard access.
 
-## Public MCP compared to admin MCP
+## Public MCP compared to authoring surfaces
 
 DubStack has separate MCP surfaces for separate jobs.
 
-| Surface | Audience | Access | Endpoint |
+| Surface | Status | Audience | Access |
 | --- | --- | --- | --- |
-| Public docs MCP | Readers, support teams, customers, and public AI tools | Read and search published public docs; submit documentation feedback when enabled | `/mcp` on the docs site |
-| Authenticated search MCP | Readers who need protected docs access | Planned: read docs scoped to the signed-in user's access | `/authed/mcp` on the docs site |
-| Admin MCP | Trusted team members and authoring agents | Planned: edit docs, work on branches, update navigation, and open pull requests | Hosted dashboard MCP endpoint |
+| Public docs MCP | Available | Readers, support teams, customers, and public AI tools | Read and search published public docs; submit documentation feedback when enabled. |
+| Protected docs MCP | Reserved | Readers who need signed-in access to protected docs | Not currently available for public sites. |
+| Authoring MCP | Reserved | Trusted team members and authoring agents | Not currently available from public docs sites. Authoring actions stay inside the dashboard, Git provider, Slack agent, and automation workflows. |
 
 Use the public `/mcp` endpoint for reader-facing documentation search. Do not use it for private docs, branch edits, dashboard settings, or pull-request workflows.
 
@@ -109,7 +109,7 @@ DubStack publishes MCP discovery documents automatically:
 
 Server-card responses include tool metadata and safety annotations so MCP clients can inspect available tools before connecting.
 
-The public server reserves `/mcp` and `/authed/mcp` for MCP. Do not create docs pages or redirects at those paths.
+The public server reserves `/mcp` for MCP. Do not create docs pages or redirects at that path.
 
 ## Tool safety annotations
 
@@ -183,15 +183,11 @@ For clients with a UI connector form, use:
 | Transport | HTTP |
 | Authentication | None for public docs |
 
-## Authenticated MCP
-
-Authenticated MCP is a separate endpoint planned for protected docs and user-scoped content. It will live at `/authed/mcp` and require an OAuth/client-credentials flow.
+## Protected and authoring access
 
 Do not use the public `/mcp` endpoint for private docs or dashboard write access.
 
-## Admin MCP
-
-Dashboard/content-management MCP is also separate. It will be an authenticated team workflow for trusted agents that need to edit docs, work on branches, update settings, or open pull requests.
+Protected docs access and dashboard content-management MCP are separate product surfaces. Until those surfaces are available, use the dashboard, connected Git provider, Slack agent, and automation workflows for authenticated authoring tasks.
 
 ## Troubleshooting
 
