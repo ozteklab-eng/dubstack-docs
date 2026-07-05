@@ -147,6 +147,10 @@
                 "icon": "gitlab"
               },
               {
+                "slug": "deployment/gitlab-self-hosted-oauth",
+                "icon": "key-round"
+              },
+              {
                 "slug": "deployment/monorepo",
                 "icon": "folder-tree"
               },
@@ -768,6 +772,10 @@
               {
                 "slug": "deployment/gitlab",
                 "icon": "gitlab"
+              },
+              {
+                "slug": "deployment/gitlab-self-hosted-oauth",
+                "icon": "key-round"
               }
             ]
           },

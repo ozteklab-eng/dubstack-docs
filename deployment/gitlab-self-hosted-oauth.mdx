@@ -1,0 +1,123 @@
+---
+title: Self-hosted GitLab OAuth
+description: Connect a reachable self-hosted GitLab instance for agent and workflow authoring.
+icon: gitlab
+---
+
+Self-hosted GitLab OAuth lets dubstack automations act as an authorized GitLab user on a reachable GitLab instance.
+
+Use it when your docs repository lives on a self-hosted GitLab instance and you want agent, Slack, or workflow actions to create documentation changes as branches, commits, and merge requests.
+
+<Callout type="info">
+  Self-hosted GitLab OAuth is only the authoring connection. Configure the GitLab deployment token separately so dubstack can read or copy repository content. See [GitLab](/deployment/gitlab).
+</Callout>
+
+## What OAuth enables
+
+When self-hosted GitLab OAuth is connected, eligible automations can:
+
+- read GitLab user and project metadata
+- create a feature branch
+- write or update documentation files
+- commit generated documentation changes
+- open a merge request against the configured branch
+- collect bounded merge request context for workflow runs
+
+GitLab permissions still apply. The connected GitLab user must have permission to read the project and create branches or merge requests.
+
+## Prerequisites
+
+Before connecting, confirm:
+
+- the GitLab instance is reachable from dubstack over HTTPS
+- the instance uses a trusted TLS certificate
+- the docs repository exists on that instance
+- the deployment token connection is configured in [Git settings](/deployment/gitlab)
+- your dubstack workspace has self-hosted GitLab OAuth enabled
+- the GitLab user who authorizes OAuth can create branches and merge requests in the project
+
+If you do not see **Connect Self-Hosted GitLab** in Git settings, contact your dubstack operator or support team to enable the workspace configuration.
+
+## Register the OAuth application
+
+Your GitLab administrator must register an OAuth application on the self-hosted GitLab instance.
+
+Use these settings:
+
+| Setting | Value |
+| --- | --- |
+| Application name | `dubstack` |
+| Redirect URI | Use the redirect URI provided for your dubstack workspace. |
+| Confidential | Enabled |
+| Trusted | Disabled unless your security team intentionally wants to skip user consent |
+| Scopes | `api`, `read_user` |
+
+<Callout type="warning">
+  Keep the application secret outside the docs repository. OAuth client secrets should be stored only in the workspace's secret configuration.
+</Callout>
+
+## Connect authoring access
+
+After the workspace is configured with the self-hosted GitLab OAuth application:
+
+1. Open the dashboard.
+2. Go to **Settings > Deployment > Git settings**.
+3. Choose **GitLab**.
+4. Enter the self-hosted GitLab instance URL.
+5. Confirm the GitLab deployment token and branch are saved.
+6. Click **Connect Self-Hosted GitLab**.
+7. Authorize the OAuth application in GitLab.
+8. Return to Git settings and confirm the GitLab OAuth status is connected.
+
+The OAuth connection can be scoped to the current site or used as an organization fallback, depending on how your workspace is configured.
+
+## Validate the connection
+
+Use one safe authoring action before relying on the connection in a production workflow:
+
+1. Open a non-critical docs branch or disposable test site.
+2. Run an agent or workflow action that drafts documentation changes.
+3. Confirm a branch is created in GitLab.
+4. Confirm the commit contains only the expected documentation files.
+5. Confirm the merge request targets the configured branch.
+
+Do not test authoring on a protected internal baseline site. Protected sites intentionally block repository mutations from agents and Slack.
+
+## Rotate credentials
+
+If the GitLab OAuth application secret changes:
+
+1. Update the workspace secret configuration.
+2. Reconnect GitLab OAuth in Git settings.
+3. Re-run a safe authoring validation.
+
+If a GitLab user leaves the team or loses project access, disconnect and reconnect OAuth with a service account or another authorized user.
+
+## Troubleshooting
+
+### Connect Self-Hosted GitLab is missing
+
+The workspace is not configured for self-hosted GitLab OAuth. Contact your dubstack operator or support team.
+
+### OAuth authorization fails
+
+Check the OAuth application's redirect URI, client ID, client secret, and scopes. A stale client secret or mismatched redirect URI usually causes authorization failures.
+
+### Authoring says GitLab OAuth is not connected
+
+Reconnect GitLab OAuth in Git settings. The deployment token alone cannot create branches, commits, or merge requests.
+
+### Merge request creation fails
+
+Confirm the connected GitLab user has permission to create branches and merge requests in the repository, and confirm branch protection allows the operation.
+
+### Workflow context skips merge requests
+
+Confirm the workflow has GitLab repository context selected, the GitLab OAuth connection is connected, and the run type supports bounded merge request context.
+
+## Related
+
+- [GitLab](/deployment/gitlab)
+- [Git providers](/deployment/forgejo-github-gitlab)
+- [Source control troubleshooting](/deployment/source-control-troubleshooting)
+- [Automations](/automations)
