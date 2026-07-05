@@ -22,7 +22,7 @@ DubStack has separate MCP surfaces for separate jobs.
 
 | Surface | Audience | Access | Endpoint |
 | --- | --- | --- | --- |
-| Public docs MCP | Readers, support teams, customers, and public AI tools | Read and search published public docs, submit documentation feedback | `/mcp` on the docs site |
+| Public docs MCP | Readers, support teams, customers, and public AI tools | Read and search published public docs; submit documentation feedback when enabled | `/mcp` on the docs site |
 | Authenticated search MCP | Readers who need protected docs access | Planned: read docs scoped to the signed-in user's access | `/authed/mcp` on the docs site |
 | Admin MCP | Trusted team members and authoring agents | Planned: edit docs, work on branches, update navigation, and open pull requests | Hosted dashboard MCP endpoint |
 
@@ -34,7 +34,7 @@ The public server exposes tools for reading public docs and reporting documentat
 | --- | --- |
 | `search` | Searches public indexed docs pages and returns titles, URLs, snippets, and file paths. |
 | `query_docs_filesystem` | Reads and searches a virtual filesystem of your published docs pages with commands like `tree`, `cat`, and `rg`. |
-| `submit_feedback` | Reports a documentation issue when an agent finds a page that is incorrect, outdated, confusing, or incomplete. |
+| `submit_feedback` | Reports a documentation issue when an agent finds a page that is incorrect, outdated, confusing, or incomplete. This tool is available only when the **Agent feedback** add-on is enabled. |
 
 ## How agents use it
 
@@ -45,7 +45,7 @@ A common flow is:
 1. Call `search` to find likely pages.
 2. Call `query_docs_filesystem` to read exact page content from the virtual docs filesystem.
 3. Answer the user with links to the source pages.
-4. Call `submit_feedback` only when the agent finds a substantive documentation issue.
+4. If `submit_feedback` is available, call it only when the agent finds a substantive documentation issue.
 
 MCP reads from the published docs site. It does not read unpublished editor changes, private dashboard state, or source repository secrets.
 
@@ -82,6 +82,8 @@ rg -n "custom domain" /
 
 ### `submit_feedback`
 
+This tool is advertised only when **Settings > Deployment > Add-ons > Agent feedback** is enabled for the deployment.
+
 ```json
 {
   "path": "/quickstart",
@@ -117,7 +119,7 @@ The server card describes tool behavior so MCP clients can show the right approv
 | --- | --- | --- | --- |
 | `search` | Yes | Yes | Searches indexed public docs content only. |
 | `query_docs_filesystem` | Yes | Yes | Reads a virtual filesystem generated from published docs. |
-| `submit_feedback` | No | No | Creates a feedback record for a documentation-quality issue. |
+| `submit_feedback` | No | No | Creates a feedback record for a documentation-quality issue when Agent feedback is enabled. |
 
 All public MCP tools operate against the current published docs site, not the open web.
 
@@ -142,7 +144,7 @@ Use resources for durable agent instructions, then use tools for live retrieval:
 1. Read the generated skill resource to understand how the docs site wants agents to behave.
 2. Use `search` to find candidate pages.
 3. Use `query_docs_filesystem` to read exact published page content.
-4. Use `submit_feedback` only for substantive documentation issues.
+4. If `submit_feedback` is available, use it only for substantive documentation issues.
 
 ## Connect from an MCP client
 
