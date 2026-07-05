@@ -219,6 +219,10 @@
                 "icon": "gallery-horizontal-end"
               },
               {
+                "slug": "writing-content/prompts",
+                "icon": "sparkles"
+              },
+              {
                 "slug": "writing-content/visibility",
                 "icon": "eye"
               },
