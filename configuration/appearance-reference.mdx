@@ -110,18 +110,28 @@ For examples, supported family names, and fallback guidance, see [Fonts](/config
 | Field | Type | Default | Purpose |
 | --- | --- | --- | --- |
 | `styling.codeblocks` | string | `system` | Code block theme mode. Use `system` unless you need a fixed theme. |
-| `theme.code_block.theme` | string | Theme default | Advanced syntax theme override. |
-| `theme.code_block.background` | string | Theme default | Advanced code block content background. |
-| `theme.code_block.header_background` | string | Theme default | Advanced code block header background. |
-| `theme.code_block.border_color` | string | Theme default | Advanced code block border color. |
-| `theme.code_block.radius` | number | Theme default | Advanced code block border radius. |
-| `theme.inline_code.text_dark` | string | Theme default | Inline-code text color in dark mode. |
-| `theme.inline_code.text_light` | string | Theme default | Inline-code text color in light mode. |
+| `theme_config.code_block.syntax_theme` | string | Theme default | Advanced syntax theme override. |
+| `theme_config.code_block.background` | string | Theme default | Advanced code block content background. |
+| `theme_config.code_block.surface` | string | Theme default | Advanced code block surface background. |
+| `theme_config.code_block.header_background` | string | Theme default | Advanced code block header background. |
+| `theme_config.code_block.border_color` | string | Theme default | Advanced code block border color. |
+| `theme_config.code_block.comment_color` | string | Theme default | Advanced comment/token accent color. |
+| `theme_config.code_block.radius` | number | Theme default | Advanced code block border radius. |
+| `theme_config.code_block.content_radius` | number | Theme default | Advanced code block content radius. |
 
 ```json
 {
+  "theme": "prism",
   "styling": {
     "codeblocks": "system"
+  },
+  "theme_config": {
+    "code_block": {
+      "syntax_theme": "github-dark",
+      "background": "#0d0d0d",
+      "header_background": "#18171A",
+      "border_color": "#2d2d2d"
+    }
   }
 }
 ```
