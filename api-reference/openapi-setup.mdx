@@ -26,6 +26,26 @@ api-reference/openapi/admin.json
 
 DubStack supports JSON OpenAPI specs in Git-backed docs. Keep the spec committed with the docs so deployments are reproducible.
 
+## Public raw spec URLs
+
+After publishing, DubStack exposes the default OpenAPI spec at standard public paths for agents, API tools, and crawlers that look for a raw spec document:
+
+```text
+https://your-docs-domain.com/openapi.json
+https://your-docs-domain.com/api/openapi.json
+https://your-docs-domain.com/api-reference/openapi.json
+```
+
+These endpoints return the raw OpenAPI document for the current published site. They do not include the playground metadata wrapper.
+
+The browser playground continues to use:
+
+```text
+https://your-docs-domain.com/api/playground/spec
+```
+
+That endpoint returns the published spec together with display metadata, base URL fallback, and playground configuration.
+
 ## Generate all endpoint pages
 
 Add `openapi` to a navigation group and omit `pages` to publish every non-hidden operation from the spec:

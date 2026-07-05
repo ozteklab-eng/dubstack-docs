@@ -1085,6 +1085,201 @@
           }
         ]
       }
+    },
+    "/openapi.json": {
+      "get": {
+        "operationId": "getRootOpenApiSpec",
+        "summary": "Get root OpenAPI spec",
+        "description": "Returns the default published OpenAPI document for the current docs site at a standard root-level discovery path. Use this endpoint for crawlers, agents, and tools that look for /openapi.json.",
+        "tags": [
+          "AI Access"
+        ],
+        "parameters": [
+          {
+            "name": "spec",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "api-reference"
+            },
+            "description": "Spec name configured in dubstack.json. Omit this parameter to return the default API reference spec."
+          },
+          {
+            "name": "branch",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Optional preview branch identifier used when reading branch preview docs."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Raw OpenAPI document for the current docs site and selected spec name.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenApiDocument"
+                },
+                "examples": {
+                  "spec": {
+                    "summary": "Published OpenAPI document",
+                    "value": {
+                      "openapi": "3.1.0",
+                      "info": {
+                        "title": "DubStack Docs Runtime API",
+                        "version": "2026-07-05"
+                      },
+                      "paths": {
+                        "/mcp": {
+                          "get": {
+                            "summary": "Get MCP discovery"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No published OpenAPI spec exists for the current site, spec name, or preview branch."
+          }
+        }
+      }
+    },
+    "/api/openapi.json": {
+      "get": {
+        "operationId": "getApiOpenApiSpec",
+        "summary": "Get API OpenAPI spec",
+        "description": "Returns the default published OpenAPI document for the current docs site at the /api/openapi.json discovery path. Use this endpoint for tools that scan API-prefixed standard spec locations.",
+        "tags": [
+          "AI Access"
+        ],
+        "parameters": [
+          {
+            "name": "spec",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "api-reference"
+            },
+            "description": "Spec name configured in dubstack.json. Omit this parameter to return the default API reference spec."
+          },
+          {
+            "name": "branch",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Optional preview branch identifier used when reading branch preview docs."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Raw OpenAPI document for the current docs site and selected spec name.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenApiDocument"
+                },
+                "examples": {
+                  "spec": {
+                    "summary": "Published OpenAPI document",
+                    "value": {
+                      "openapi": "3.1.0",
+                      "info": {
+                        "title": "DubStack Docs Runtime API",
+                        "version": "2026-07-05"
+                      },
+                      "paths": {
+                        "/mcp": {
+                          "get": {
+                            "summary": "Get MCP discovery"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No published OpenAPI spec exists for the current site, spec name, or preview branch."
+          }
+        }
+      }
+    },
+    "/api-reference/openapi.json": {
+      "get": {
+        "operationId": "getApiReferenceOpenApiSpec",
+        "summary": "Get API reference OpenAPI spec",
+        "description": "Returns the default published OpenAPI document for the current docs site from the API reference namespace. Use this endpoint when exposing the same spec next to generated endpoint pages.",
+        "tags": [
+          "AI Access"
+        ],
+        "parameters": [
+          {
+            "name": "spec",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "api-reference"
+            },
+            "description": "Spec name configured in dubstack.json. Omit this parameter to return the default API reference spec."
+          },
+          {
+            "name": "branch",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Optional preview branch identifier used when reading branch preview docs."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Raw OpenAPI document for the current docs site and selected spec name.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenApiDocument"
+                },
+                "examples": {
+                  "spec": {
+                    "summary": "Published OpenAPI document",
+                    "value": {
+                      "openapi": "3.1.0",
+                      "info": {
+                        "title": "DubStack Docs Runtime API",
+                        "version": "2026-07-05"
+                      },
+                      "paths": {
+                        "/mcp": {
+                          "get": {
+                            "summary": "Get MCP discovery"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No published OpenAPI spec exists for the current site, spec name, or preview branch."
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1757,6 +1952,53 @@
           "digest"
         ],
         "description": "Single generated skill descriptor in the agent skills index."
+      },
+      "OpenApiDocument": {
+        "type": "object",
+        "description": "Raw published OpenAPI document for the current docs site.",
+        "required": [
+          "openapi",
+          "info",
+          "paths"
+        ],
+        "properties": {
+          "openapi": {
+            "type": "string",
+            "description": "OpenAPI version string."
+          },
+          "info": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "OpenAPI info object."
+          },
+          "servers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Server definitions from the published spec."
+          },
+          "paths": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "OpenAPI paths object."
+          },
+          "components": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Reusable OpenAPI components."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "OpenAPI tag metadata."
+          }
+        },
+        "additionalProperties": true
       }
     }
   }
