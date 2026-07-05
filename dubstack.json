@@ -135,6 +135,76 @@
             ]
           },
           {
+            "group": "Deployment",
+            "icon": "cloud",
+            "pages": [
+              {
+                "slug": "deployment/github",
+                "icon": "github"
+              },
+              {
+                "slug": "deployment/gitlab",
+                "icon": "gitlab"
+              },
+              {
+                "slug": "deployment/monorepo",
+                "icon": "folder-tree"
+              },
+              {
+                "slug": "deployment/preview-deployments",
+                "icon": "git-pull-request"
+              },
+              {
+                "slug": "deployment/manual-updates-history",
+                "icon": "refresh-cw"
+              },
+              {
+                "slug": "deployment/custom-domains",
+                "icon": "globe"
+              },
+              {
+                "slug": "deployment/docs-subpath",
+                "icon": "route"
+              },
+              {
+                "slug": "deployment/cloudflare",
+                "icon": "cloud"
+              },
+              {
+                "slug": "deployment/vercel-rewrites",
+                "icon": "split"
+              },
+              {
+                "slug": "deployment/reverse-proxy",
+                "icon": "network"
+              },
+              {
+                "slug": "deployment/route53-cloudfront",
+                "icon": "server"
+              },
+              {
+                "slug": "deployment/webhooks-ci",
+                "icon": "workflow"
+              },
+              {
+                "slug": "deployment/security-headers",
+                "icon": "shield-check"
+              },
+              {
+                "slug": "deployment/forgejo-github-gitlab",
+                "icon": "git-branch"
+              },
+              {
+                "slug": "deployment/git-sync",
+                "icon": "refresh-cw"
+              },
+              {
+                "slug": "deployment/source-control-troubleshooting",
+                "icon": "wrench"
+              }
+            ]
+          },
+          {
             "group": "Writing content",
             "icon": "file-text",
             "pages": [

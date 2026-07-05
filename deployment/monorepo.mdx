@@ -1,0 +1,132 @@
+---
+title: Monorepo setup
+description: Publish docs from a subdirectory inside a larger repository.
+icon: folder-tree
+---
+
+Use monorepo setup when your documentation files live inside a subdirectory of a larger repository.
+
+For example:
+
+```text
+your-repo/
+├── apps/
+│   ├── web/
+│   └── api/
+├── docs/
+│   ├── dubstack.json
+│   ├── index.mdx
+│   └── quickstart.mdx
+└── package.json
+```
+
+In this example, configure the docs path as `docs`.
+
+## When to use it
+
+Use monorepo setup when:
+
+- your product code and docs live in the same repository
+- `dubstack.json` is not at the repository root
+- you want deployments to read only the docs directory
+- you want previews and manual updates to use the same docs root
+
+Do not use monorepo setup when your docs repository already has `dubstack.json` at the root.
+
+## Requirements
+
+Your docs directory must contain:
+
+```text
+dubstack.json
+index.mdx
+```
+
+The directory can also contain:
+
+- API specs such as `api-reference/openapi.json`
+- image and asset files
+- reusable snippets
+- nested page folders
+
+Navigation paths in `dubstack.json` are resolved relative to the configured docs directory.
+
+## Configure the docs directory
+
+1. Open the dashboard.
+2. Go to **Settings > Deployment > Git settings**.
+3. Connect or edit your GitHub or GitLab repository.
+4. Turn on **Docs are in a subdirectory**.
+5. Enter the relative path to the docs directory, such as `docs`.
+6. Save the connection.
+7. Run a manual update.
+8. Open the live site and confirm the expected pages render.
+
+Do not include a leading or trailing slash. Use `docs`, not `/docs/`.
+
+## How paths resolve
+
+If the docs path is `docs`, DubStack reads:
+
+```text
+docs/dubstack.json
+docs/index.mdx
+docs/api-reference/openapi.json
+```
+
+Published URLs do not include the docs directory name unless your navigation includes it.
+
+For example, this source file:
+
+```text
+docs/guides/quickstart.mdx
+```
+
+publishes at:
+
+```text
+/guides/quickstart
+```
+
+## OpenAPI specs in a monorepo
+
+Keep OpenAPI spec paths relative to the docs directory.
+
+```json
+{
+  "api": {
+    "openapi": "api-reference/openapi.json"
+  }
+}
+```
+
+With docs path `docs`, this points to:
+
+```text
+docs/api-reference/openapi.json
+```
+
+## Troubleshooting
+
+### The site says `dubstack.json` is missing
+
+Check that the docs path points to the directory containing `dubstack.json`.
+
+### Pages are missing from navigation
+
+Check that every navigation slug in `dubstack.json` maps to an `.mdx` file under the configured docs directory.
+
+### API endpoint pages are missing
+
+Check that the OpenAPI path in `dubstack.json` is relative to the docs directory and that the spec is valid JSON or YAML.
+
+### Manual update succeeds but old content still appears
+
+Confirm the latest commit was pushed to the configured branch and run another manual update from the dashboard.
+
+## Related
+
+- [GitHub](/deployment/github)
+- [GitLab](/deployment/gitlab)
+- [Git sync](/deployment/git-sync)
+- [Source control troubleshooting](/deployment/source-control-troubleshooting)
