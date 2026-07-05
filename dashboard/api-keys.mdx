@@ -65,9 +65,11 @@ curl --request POST \
 
 If the key is restricted to a deployment, omit `site_id`; dubstack uses the key's deployment scope.
 
-Built-in workflows use their workflow ID. Custom workflows use the `custom_workflow:{id}` route form.
+Built-in workflows use their workflow ID. The saved custom workflow configuration uses `custom_workflow`. User-created custom workflow records use the `custom_workflow:{id}` route form.
 
 Successful requests return `202 Accepted` with the queued run details.
+
+API-triggered runs appear in the workflow run history with the `api` trigger source. Run metadata stores the Admin API key prefix, not the raw key.
 
 ## Required workflow state
 
