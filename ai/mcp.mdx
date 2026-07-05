@@ -148,13 +148,94 @@ Use resources for durable agent instructions, then use tools for live retrieval:
 
 ## Connect from an MCP client
 
-Claude Code example:
+Use your published docs URL with `/mcp` appended.
+
+```text
+https://your-docs-domain.com/mcp
+```
+
+For clients with a connector form, use:
+
+| Field | Value |
+| --- | --- |
+| Name | A short name for the docs site |
+| URL | `https://your-docs-domain.com/mcp` |
+| Transport | HTTP |
+| Authentication | None for public docs |
+
+### Claude
+
+1. Open Claude settings.
+2. Open **Connectors**.
+3. Click **Add custom connector**.
+4. Enter a short name and `https://your-docs-domain.com/mcp`.
+5. Add the connector.
+6. In a chat, open attachments and select the docs connector when you want Claude to use the site.
+
+### Claude Code
+
+Use the Claude Code CLI:
 
 ```bash
 claude mcp add --transport http my-docs https://your-docs-domain.com/mcp
 ```
 
-Generic MCP JSON config:
+Then ask Claude Code to search or read the docs through the connected MCP server.
+
+### Codex
+
+Codex supports streamable HTTP MCP servers through its shared CLI and IDE configuration.
+
+Use the CLI:
+
+```bash
+codex mcp add my-docs --url https://your-docs-domain.com/mcp
+```
+
+Or edit `~/.codex/config.toml`:
+
+```toml
+[mcp_servers.my-docs]
+url = "https://your-docs-domain.com/mcp"
+```
+
+In the Codex TUI, run `/mcp` to confirm the server is connected.
+
+### Cursor
+
+1. Open the command palette.
+2. Search for **Open MCP settings**.
+3. Add a custom MCP server.
+4. Configure the public docs endpoint:
+
+```json
+{
+  "mcpServers": {
+    "my-docs": {
+      "url": "https://your-docs-domain.com/mcp"
+    }
+  }
+}
+```
+
+### VS Code
+
+Create or update `.vscode/mcp.json`:
+
+```json
+{
+  "servers": {
+    "my-docs": {
+      "type": "http",
+      "url": "https://your-docs-domain.com/mcp"
+    }
+  }
+}
+```
+
+### Generic JSON clients
+
+For clients that use the common `mcpServers` JSON shape:
 
 ```json
 {
@@ -167,21 +248,27 @@ Generic MCP JSON config:
 }
 ```
 
-Codex TOML config:
+## Test the connection
 
-```toml
-[mcp_servers.my-docs]
-url = "https://your-docs-domain.com/mcp"
+After connecting, ask your client to inspect the docs tree or search for a known topic.
+
+Good test prompts:
+
+```text
+Use the docs MCP to show the top-level documentation tree.
 ```
 
-For clients with a UI connector form, use:
+```text
+Use the docs MCP to search for custom domains, then summarize the relevant pages with links.
+```
 
-| Field | Value |
+The expected tools are:
+
+| Tool | Test command or behavior |
 | --- | --- |
-| Name | A short name for the docs site |
-| URL | `https://your-docs-domain.com/mcp` |
-| Transport | HTTP |
-| Authentication | None for public docs |
+| `query_docs_filesystem` | `tree / -L 2` returns the published docs tree. |
+| `search` | A query such as `custom domains` returns ranked page results. |
+| `submit_feedback` | Available only when Agent feedback is enabled. Use it only for documentation-quality issues. |
 
 ## Protected and authoring access
 
