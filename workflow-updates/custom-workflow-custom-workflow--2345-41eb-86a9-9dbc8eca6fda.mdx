@@ -1,0 +1,43 @@
+---
+title: DubStack Workflow Documentation Update Draft
+slug: /docs/workflow/custom_workflow
+description: Documentation update for the custom workflow with Slack integration and pull request update mode.
+
+---
+
+
+# Custom Workflow update
+
+This document outlines the current state of the DubStack workflow documentation based on the latest run. The workflow, identified as `custom_workflow`, is triggered by `custom_schedule` and operates in `pull_request` update mode, executing `twice_weekly`. The selected integration is Slack, with the workspace `dubstack-dev` connected since 2026-06-09T03:12:34.356Z. The selected Slack context source is `#social`.
+
+No additional context repositories are attached to this workflow run. The Slack transcript collection failed safely with the status `not_in_channel`, and no claims are made about inspected messages.
+
+The documentation is published from the `ozteklab-eng/dubstack-docs@main` repository. A sample of 10 out of 34 pages was reviewed, covering essential topics such as AI tool integrations, API references, and documentation best practices.
+
+Key pages include:
+
+- **Claude Code with DubStack MCP**: Explains how to use Claude Code with the DubStack MCP server for documentation management.
+- **Cursor setup**: Details configuration steps for using Cursor with MDX and DubStack components.
+- **Windsurf setup**: Guides on setting up the Windsurf IDE for writing DubStack documentation.
+- **Introduction**: Overview of the BeatBox API and its interactive playground.
+- **Local Development**: Instructions for previewing changes locally before deployment.
+
+The documentation includes code samples, configuration examples, and guidance for developers using various tools and workflows.
+
+---
+
+**Review Checklist**
+
+- [ ] Confirm that all documentation aligns with the workflow's purpose and integration context.
+- [ ] Verify that no claims are made about inspected Slack messages or unauthorized data access.
+- [ ] Ensure that no external systems or analytics are falsely claimed to be integrated.
+- [ ] Check that all code samples and configuration examples are accurate and relevant.
+- [ ] Confirm that the documentation remains neutral, factual, and free of unsupported claims.
+
+---
+
+**Smoke Test Note**
+
+This workflow run is part of the `workflow-smoke` deployment. Slack notifications for the DubStack workflow are being validated internally. No production-facing changes are being made at this time.
+
+<!-- workflow_run_id: d6c07858-2345-41eb-86a9-9dbc8eca6fda -->
