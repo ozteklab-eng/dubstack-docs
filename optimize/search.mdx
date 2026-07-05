@@ -1,0 +1,97 @@
+---
+title: Search
+description: Improve in-product search quality with clear titles, descriptions, navigation, and published content structure.
+icon: search
+---
+
+Search helps readers find the right page without knowing your navigation structure.
+
+DubStack builds search from published docs content. Good search quality starts with clear page metadata, strong headings, and navigation that reflects the way readers think about your product.
+
+## What search uses
+
+Search quality is influenced by:
+
+- page titles
+- page descriptions
+- headings
+- body content
+- navigation labels
+- OpenAPI operation summaries and descriptions
+- published page paths
+
+Pages that are hidden from public indexing are not useful search candidates. Keep important pages visible in navigation and keep private content out of public docs.
+
+## Write searchable titles
+
+Prefer titles that name the exact task or object.
+
+| Weak | Strong |
+| --- | --- |
+| Overview | Authentication overview |
+| Setup | Connect GitHub |
+| API | API playground authentication |
+| Settings | Configure deployment add-ons |
+
+Generic titles are harder for readers and AI tools to interpret because the surrounding navigation context may not appear in every search surface.
+
+## Write descriptions for snippets
+
+Descriptions are reused across metadata, search snippets, AI indexes, and previews.
+
+```mdx
+---
+title: Configure deployment add-ons
+description: Enable page feedback, reader email collection, CI checks, preview authentication, and noindex controls.
+---
+```
+
+Write descriptions as outcomes, not labels. A reader should understand why the page is relevant before opening it.
+
+## Structure pages for retrieval
+
+Use headings that match likely reader questions.
+
+```mdx
+## Connect a GitHub repository
+
+## Trigger a manual update
+
+## Troubleshoot failed syncs
+```
+
+Put examples near the explanation they support. Search and AI retrieval work better when the page keeps related concepts close together.
+
+## Keep API search useful
+
+For OpenAPI-backed pages, write clear operation summaries and descriptions in the spec.
+
+```json
+{
+  "summary": "Create an API key",
+  "description": "Creates a scoped API key for a deployment so automation can call the DubStack API."
+}
+```
+
+Avoid placeholder summaries such as `Get item` or `Post request`. API operation text becomes public docs content.
+
+## Refresh search after changes
+
+Search updates after content sync and publish completes.
+
+If search results look stale:
+
+1. Confirm the latest commit has synced.
+2. Trigger a manual update from the dashboard.
+3. Refresh the public docs page.
+4. Search for exact words from the page title or heading.
+5. Check whether the page is hidden or marked `noindex`.
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/optimize/seo">SEO</a>
+  <a href="/configuration/seo-search-reference">SEO and search reference</a>
+  <a href="/writing-content/headings-anchors">Headings and anchors</a>
+  <a href="/api-reference/openapi-setup">OpenAPI setup</a>
+</RelatedTopics>

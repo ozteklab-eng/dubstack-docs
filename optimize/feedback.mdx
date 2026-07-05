@@ -1,0 +1,75 @@
+---
+title: Feedback
+description: Collect page ratings and agent feedback, then review the results from the dashboard.
+icon: thumbs-up
+---
+
+Feedback shows where readers and agents struggle with your documentation.
+
+Enable feedback from deployment add-ons, then review ratings and comments from the dashboard analytics view.
+
+## Enable page feedback
+
+Page feedback is controlled per deployment.
+
+1. Open **Settings > Deployment > Add-ons**.
+2. Enable **Thumbs rating**.
+3. Publish or refresh the docs site.
+4. Open a public docs page and confirm the **Yes** and **No** feedback controls appear.
+
+Readers can then submit simple page-level ratings from the docs site.
+
+## Collect reader emails
+
+Reader email collection is optional.
+
+1. Open **Settings > Deployment > Add-ons**.
+2. Enable **Collect reader emails**.
+3. Add a short disclaimer explaining how your team uses submitted email addresses.
+4. Save and republish.
+
+When enabled, readers can include an email address with feedback so your team can follow up. Do not request sensitive information in the disclaimer or feedback prompt.
+
+## Enable agent feedback
+
+Agent feedback lets supported AI surfaces submit structured feedback about pages they read.
+
+1. Open **Settings > Deployment > Add-ons**.
+2. Enable **Agent feedback**.
+3. Keep the public MCP and AI-readable routes available for the deployment.
+
+Agent feedback is useful when external tools find missing setup steps, stale examples, or unclear API descriptions.
+
+## Review feedback
+
+Open **Analytics > Feedback** from the dashboard.
+
+The feedback view shows:
+
+- total feedback for the selected time range
+- positive and negative rating counts
+- feedback by page
+- feedback source
+- recent feedback entries
+- optional reader email addresses when collection is enabled
+
+Feedback is scoped to the selected deployment. Switch deployments to review a different docs site.
+
+## Turn feedback into fixes
+
+Use feedback as input to content maintenance workflows.
+
+- Group repeated negative feedback by page.
+- Add missing steps or examples directly in the affected MDX file.
+- Update OpenAPI descriptions when API endpoint feedback is unclear.
+- Use automations to draft targeted improvements when workflow prerequisites are configured.
+- Review generated pull requests before merging.
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/dashboard/feedback-analytics">Feedback analytics</a>
+  <a href="/settings/deployment/addons">Deployment add-ons</a>
+  <a href="/automations/reference">Automation reference</a>
+  <a href="/ai/mcp">Public MCP</a>
+</RelatedTopics>

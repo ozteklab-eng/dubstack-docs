@@ -1,0 +1,131 @@
+---
+title: SEO
+description: Configure page metadata, canonical URLs, sitemaps, robots.txt, and indexing controls for published docs.
+icon: search-check
+---
+
+SEO settings help search engines, social previews, and AI readers understand which docs pages should be indexed and cited.
+
+DubStack generates public metadata from your site config and page frontmatter. Start with clear page titles and descriptions, then use indexing controls when a page or deployment should stay out of public discovery.
+
+## What DubStack generates
+
+DubStack generates the following public discovery surfaces for published docs:
+
+| Surface | Purpose |
+| --- | --- |
+| Page metadata | Uses the page title and description with the current public URL. |
+| Canonical URLs | Uses the deployed page URL so crawlers know the preferred address. |
+| `/sitemap.xml` | Lists indexable docs pages from public navigation. |
+| `/robots.txt` | Allows or blocks crawler access based on deployment visibility settings. |
+| AI discovery routes | Exposes `/llms.txt`, `/llms-full.txt`, `/skill.md`, and `/mcp` when indexing is enabled. |
+
+<Note>
+  Indexing controls affect more than search engines. Pages excluded from public indexing are also excluded from AI-readable surfaces such as the public MCP server.
+</Note>
+
+## Add page metadata
+
+Set page metadata in frontmatter at the top of each MDX file.
+
+```mdx
+---
+title: Authentication
+description: Learn how to authenticate API requests with API keys and bearer tokens.
+---
+```
+
+Use titles and descriptions that describe the task the reader can complete after reading the page.
+
+<CardGroup cols={2}>
+  <Card title="Good title" icon="badge-check">
+    Use specific titles such as `Create an API key`, `Configure a custom domain`, or `Handle webhook retries`.
+  </Card>
+
+  <Card title="Good description" icon="text">
+    Summarize the outcome in one sentence. Keep descriptions specific enough for search snippets and AI citations.
+  </Card>
+</CardGroup>
+
+## Set a page canonical URL
+
+Use `canonical` when a page should point crawlers to a different preferred URL.
+
+```mdx
+---
+title: Legacy API v1
+description: Reference for legacy v1 API behavior.
+canonical: https://docs.example.com/api/v2
+---
+```
+
+Canonical URLs should be absolute `https://` URLs. Use them for versioned docs, migration pages, or pages that intentionally duplicate content from another canonical source.
+
+## Disable indexing for one page
+
+Set `noindex: true` in frontmatter to keep a page out of public indexing surfaces.
+
+```mdx
+---
+title: Internal rollout notes
+description: Draft notes for a limited rollout.
+noindex: true
+---
+```
+
+Pages marked `noindex` are omitted from the public sitemap and public MCP filesystem. They should not be used for content that contains secrets; keep private material out of the docs repository entirely.
+
+## Hide a page from navigation
+
+Set `hidden: true` when a page should not appear in navigation.
+
+```mdx
+---
+title: Migration notes
+description: Supporting notes linked from the migration guide.
+hidden: true
+---
+```
+
+Hidden pages are also excluded from the generated sitemap. Use hidden pages for supporting material that readers reach through direct links, not for private content.
+
+## Disable indexing for a deployment
+
+Use the deployment add-ons page when an entire site should stay out of public indexing.
+
+1. Open **Settings > Deployment > Add-ons**.
+2. Enable **Don't index project**.
+3. Publish or refresh the deployment.
+4. Confirm `/robots.txt` disallows crawling and `/sitemap.xml` is empty.
+
+This is useful for staging sites, private review environments, or temporary migrations where the deployment is public but should not be discoverable.
+
+## Verify SEO output
+
+After publishing, verify these URLs on the live docs domain:
+
+```txt
+https://docs.example.com/sitemap.xml
+https://docs.example.com/robots.txt
+https://docs.example.com/llms.txt
+```
+
+For page-level checks, open the page source or browser inspector and confirm the title, description, canonical URL, and robots metadata match the page frontmatter and deployment settings.
+
+## Troubleshooting
+
+| Symptom | Check |
+| --- | --- |
+| Page missing from sitemap | Confirm the page is in navigation and does not set `hidden` or `noindex`. |
+| Page still appears in search engines | Republish, then allow crawler caches to expire. Search engines can retain old results for some time. |
+| Public MCP cannot see a page | Confirm the page is not marked `noindex` and the deployment is not set to noindex. |
+| Generic page snippet | Add a specific `description` in page frontmatter and republish. |
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/configuration/pages-frontmatter">Page frontmatter</a>
+  <a href="/configuration/seo-search-reference">SEO and search reference</a>
+  <a href="/settings/deployment/addons">Deployment add-ons</a>
+  <a href="/ai/llms-indexes">AI-readable indexes</a>
+</RelatedTopics>

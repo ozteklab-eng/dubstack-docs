@@ -12,18 +12,12 @@ Use these settings to control discoverability for humans, search engines, and AI
 | --- | --- | --- |
 | `site.name` | string | Site title used in metadata, UI labels, AI discovery, and MCP labels. |
 | `site.tagline` | string | Short site description used in metadata and discovery surfaces. |
-| `seo.metatags` | object | Additional global metadata fields. |
 
 ```json
 {
   "site": {
     "name": "Acme Docs",
     "tagline": "Developer documentation for Acme."
-  },
-  "seo": {
-    "metatags": {
-      "og:image": "/assets/social-card.png"
-    }
   }
 }
 ```
@@ -53,14 +47,12 @@ Write descriptions as reader-facing summaries. They are reused by search, AI dis
 
 | Field | Type | Default | Purpose |
 | --- | --- | --- | --- |
-| `seo.indexing` | `navigable` \| `all` | `navigable` | Controls whether only navigable pages or every source page is indexed. |
 | `addons.visibility.noindex` | boolean | `false` | Site-level switch to disable public indexing and AI discovery. |
+| Page `noindex` frontmatter | boolean | `false` | Page-level switch to exclude a page from sitemap and public AI surfaces. |
+| Page `hidden` frontmatter | boolean | `false` | Removes a page from navigation and public sitemap output. |
 
 ```json
 {
-  "seo": {
-    "indexing": "navigable"
-  },
   "addons": {
     "visibility": {
       "noindex": false
@@ -69,24 +61,18 @@ Write descriptions as reader-facing summaries. They are reused by search, AI dis
 }
 ```
 
-Use `navigable` for production docs. Use `all` only when hidden source pages are intentionally part of the searchable knowledge base.
+Published indexing is based on public navigation. Pages marked `hidden` or `noindex` are excluded from public sitemap output and public AI-readable surfaces.
 
 ## Search controls
 
 | Field | Type | Default | Purpose |
 | --- | --- | --- | --- |
-| `widgets.search.enabled` | boolean | `true` | Enables site search. |
 | `widgets.search.placeholder` | string | Theme default | Placeholder text in the search box. |
-| `topbar.showSearch` | boolean | `true` | Shows search in the header. |
 
 ```json
 {
-  "topbar": {
-    "showSearch": true
-  },
   "widgets": {
     "search": {
-      "enabled": true,
       "placeholder": "Search docs..."
     }
   }

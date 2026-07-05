@@ -315,6 +315,24 @@
             ]
           },
           {
+            "group": "Optimize",
+            "icon": "chart-no-axes-combined",
+            "pages": [
+              {
+                "slug": "optimize/seo",
+                "icon": "search-check"
+              },
+              {
+                "slug": "optimize/search",
+                "icon": "search"
+              },
+              {
+                "slug": "optimize/feedback",
+                "icon": "thumbs-up"
+              }
+            ]
+          },
+          {
             "group": "Dashboard",
             "icon": "layout-dashboard",
             "pages": [
