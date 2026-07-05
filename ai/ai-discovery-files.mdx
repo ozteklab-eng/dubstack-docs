@@ -12,8 +12,8 @@ These files are generated from the published docs navigation and content. They u
 
 | Path | Purpose |
 | --- | --- |
-| `/llms.txt` | Compact index of public docs pages with links. |
-| `/llms-full.txt` | Full-page content bundle for tools that ingest larger text files. |
+| `/llms.txt` | Compact index of public docs pages, page descriptions, and declared OpenAPI specs. |
+| `/llms-full.txt` | Deduplicated full-page content bundle for tools that ingest larger text files. |
 | `/skill.md` | Agent instructions that describe how to use the docs site and its MCP server. |
 | `/mcp` | Public MCP server endpoint and discovery response. |
 | `/.well-known/mcp` | MCP discovery document for tools that auto-detect servers. |
@@ -40,6 +40,11 @@ It contains:
 - the site description
 - a link to `/llms-full.txt`
 - public page links from the published navigation
+- page descriptions from frontmatter when available
+- generated API endpoint descriptions from OpenAPI operation metadata when frontmatter descriptions are absent
+- declared OpenAPI spec links such as `/api-reference/openapi.json`
+
+If the same page appears in more than one navigation tab, `llms.txt` lists the page once using the first published navigation position.
 
 ## `llms-full.txt`
 
@@ -49,7 +54,9 @@ It contains:
 https://your-docs-domain.com/llms-full.txt
 ```
 
-Use it for tools that ingest a single text bundle. For interactive agents, prefer the public MCP server because MCP lets the agent search and read only the pages it needs.
+Use it for tools that ingest a single text bundle. If the same page appears in more than one navigation tab, the full export includes that page body once.
+
+For interactive agents, prefer the public MCP server because MCP lets the agent search and read only the pages it needs.
 
 ## `skill.md`
 

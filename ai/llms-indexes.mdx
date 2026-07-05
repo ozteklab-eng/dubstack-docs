@@ -12,8 +12,8 @@ The generated files update when your published docs update.
 
 | Path | Purpose |
 | --- | --- |
-| `/llms.txt` | Compact index of published pages. |
-| `/llms-full.txt` | Full text bundle of published pages. |
+| `/llms.txt` | Compact index of published pages, descriptions, and declared OpenAPI specs. |
+| `/llms-full.txt` | Deduplicated full text bundle of published pages. |
 
 Both files use `text/plain` responses so agents and command-line tools can read them directly.
 
@@ -31,6 +31,11 @@ It includes:
 - the site description
 - a pointer to `/llms-full.txt`
 - links to pages from the published navigation
+- page descriptions from frontmatter when available
+- generated API endpoint descriptions from OpenAPI operation metadata when page descriptions are absent
+- declared OpenAPI spec links, such as `/api-reference/openapi.json`
+
+If a page appears in more than one navigation tab, the compact index lists it once. This keeps agent page selection focused while preserving the published navigation order.
 
 Use it when an agent needs to choose which page to read next.
 
@@ -54,6 +59,8 @@ It includes:
 - each page title
 - each page URL
 - each page's published content
+
+If a page appears in more than one navigation tab, the full export includes the page body once.
 
 Use it for tools that ingest a whole docs site as a single file. For interactive agents, prefer [MCP](/ai/mcp) because MCP lets the agent search and read only the pages it needs.
 
@@ -94,7 +101,7 @@ https://your-docs-domain.com/llms.txt
 https://your-docs-domain.com/llms-full.txt
 ```
 
-Then confirm the page list matches your published navigation.
+Then confirm the page list matches your published navigation and repeated navigation entries are not duplicated in the AI export.
 
 If pages are missing, check:
 
