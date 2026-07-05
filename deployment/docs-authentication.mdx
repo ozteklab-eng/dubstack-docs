@@ -1,0 +1,134 @@
+---
+title: Docs authentication
+description: Restrict access to published documentation with password-protected reader sessions.
+icon: lock-keyhole
+---
+
+Use docs authentication when a published site should not be readable by everyone on the internet.
+
+The first supported private mode is password authentication. It gives a site one shared reader password and protects the public docs shell, Markdown exports, assistant answers, MCP endpoints, AI discovery files, API reference pages, sitemap output, and public metadata routes that can expose protected content.
+
+<Info>
+  Password authentication controls read access. It does not identify individual readers or provide group-based personalization. Member, OAuth/OIDC, and JWT reader modes are planned for stricter identity-aware access.
+</Info>
+
+## When to use password authentication
+
+Password authentication is useful when:
+
+- you need to share docs with a customer, partner, or internal group before launch
+- you want coarse-grained access control without configuring an identity provider
+- the password can be distributed safely through your normal team process
+- every authorized reader can use the same password
+
+Use an identity-aware mode instead when you need per-user audit trails, group-based access, automatic deprovisioning, or personalized API playground values.
+
+## Enable private docs
+
+1. Open the site in the dubstack dashboard.
+2. Go to **Settings → Authentication**.
+3. Set **Site visibility** to **Private**.
+4. Choose **Password** as the authentication method.
+5. Enter a password with at least 8 characters.
+6. Click **Save policy**.
+
+After the policy is saved, readers must unlock the site before protected content is returned.
+
+## Reader experience
+
+When a reader opens a protected page without a valid reader session, dubstack redirects them to the docs login page.
+
+| Site routing mode | Login path |
+| --- | --- |
+| Default or host-based domain | `/login` |
+| `/docs` subpath | `/docs/login` |
+
+After a correct password is submitted, dubstack issues a Secure, HttpOnly reader cookie. The cookie is scoped to the docs host and is valid for seven days unless the session is invalidated earlier.
+
+## What is protected
+
+Password mode protects content-bearing public routes, including:
+
+- rendered documentation pages
+- Markdown exports such as `.md` and `Accept: text/markdown`
+- `llms.txt` and `llms-full.txt`
+- `skill.md`
+- MCP discovery and MCP server routes
+- agent-card and agent-skill discovery files
+- assistant and search responses
+- API reference pages and OpenAPI/spec routes
+- sitemap output
+
+Static assets required by the login page, theme loading, and password verification stay available so the unlock flow can render and submit.
+
+## Rotate the password
+
+To change the reader password:
+
+1. Go to **Settings → Authentication**.
+2. Keep **Private** and **Password** selected.
+3. Enter a new password.
+4. Click **Save policy**.
+
+Rotating the password also invalidates existing reader sessions. Readers must unlock the site again with the new password.
+
+## Sign out readers
+
+Use **Sign out readers** when you want to invalidate existing reader cookies without changing the password.
+
+This is useful when:
+
+- a password was shared wider than intended
+- a customer engagement ended
+- you want to force readers to re-enter the current password
+- you are testing protected docs behavior
+
+The action rotates the reader session version for that site. It does not change the visibility mode or the configured password.
+
+## Disable docs authentication
+
+To make the site public again:
+
+1. Go to **Settings → Authentication**.
+2. Set **Site visibility** to **Public**.
+3. Click **Save policy**.
+
+Disabling docs authentication clears password mode and invalidates existing private reader sessions.
+
+## `/docs` subpath behavior
+
+Password authentication works with `/docs` subpath routing.
+
+For a site mounted at `example.com/docs`:
+
+- protected pages redirect to `example.com/docs/login`
+- password verification posts to `example.com/docs/api/docs-auth/password`
+- assistant, search, MCP, AI discovery, and API reference requests stay under `/docs`
+- successful unlock redirects readers back to the mounted docs path
+
+For setup details, see [/docs subpath](/deployment/docs-subpath).
+
+## Troubleshooting
+
+### Readers keep returning to the login page
+
+Check that the browser accepts Secure cookies for the docs hostname. If the site is mounted under `/docs`, confirm that the proxy forwards `/docs/api/docs-auth/password` to the dubstack origin without stripping the `/docs` prefix.
+
+### The password is accepted but assistant requests fail
+
+Confirm the assistant request is sent to the same hostname where the reader unlocked the site. Reader cookies are host-scoped.
+
+### Public MCP clients cannot read the docs
+
+This is expected for protected docs. Public MCP clients must connect through an authenticated reader session before protected content can be read.
+
+### The site uses `/docs` and static assets fail on the login page
+
+Check that your proxy forwards `/docs/_next/*`, `/docs/img/*`, `/docs/assets/*`, and `/docs/api/*` to the generated origin hostname.
+
+## Related
+
+- [/docs subpath](/deployment/docs-subpath)
+- [Custom domains](/deployment/custom-domains)
+- [Deployment permissions](/dashboard/deployment-permissions)
+- [MCP](/ai/mcp)

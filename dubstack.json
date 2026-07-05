@@ -167,6 +167,10 @@
                 "icon": "git-pull-request"
               },
               {
+                "slug": "deployment/docs-authentication",
+                "icon": "lock-keyhole"
+              },
+              {
                 "slug": "deployment/manual-updates-history",
                 "icon": "refresh-cw"
               },
@@ -744,6 +748,10 @@
               {
                 "slug": "deployment/security-headers",
                 "icon": "shield-check"
+              },
+              {
+                "slug": "deployment/docs-authentication",
+                "icon": "lock-keyhole"
               },
               {
                 "slug": "deployment/docs-subpath",
