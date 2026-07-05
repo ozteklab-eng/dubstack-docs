@@ -555,6 +555,10 @@
                 "icon": "sliders-horizontal"
               },
               {
+                "slug": "editor/settings",
+                "icon": "settings"
+              },
+              {
                 "slug": "editor/slash-commands",
                 "icon": "command"
               },
