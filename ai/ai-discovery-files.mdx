@@ -17,7 +17,12 @@ These files are generated from the published docs navigation and content. They u
 | `/skill.md` | Agent instructions that describe how to use the docs site and its MCP server. |
 | `/mcp` | Public MCP server endpoint and discovery response. |
 | `/.well-known/mcp` | MCP discovery document for tools that auto-detect servers. |
+| `/.well-known/mcp.json` | JSON alias for the MCP discovery document. |
 | `/.well-known/mcp/server-card.json` | Tool metadata and safety annotations for the public MCP server. |
+| `/.well-known/mcp/server-cards.json` | Server-card list for clients that expect multiple MCP endpoints. |
+| `/.well-known/agent-skills/index.json` | Recommended skill discovery manifest with integrity metadata. |
+| `/.well-known/skills/index.json` | Compatibility skills index. |
+| `/.well-known/agent-card.json` | Agent card that describes the docs site and links to available skills. |
 
 ## `llms.txt`
 
@@ -65,6 +70,34 @@ The generated skill points agents at:
 
 The public MCP server exposes `skill.md` as a resource. MCP clients that support resources can discover the skill without asking the user to install it separately.
 
+## Agent discovery manifests
+
+The agent-skills manifest is the preferred way for tools to discover hosted skill files.
+
+```text
+https://your-docs-domain.com/.well-known/agent-skills/index.json
+```
+
+It includes a `sha256` digest for each generated skill file so clients can verify the content they fetch.
+
+The compatibility skills index remains available for clients that use the original skills discovery format.
+
+```text
+https://your-docs-domain.com/.well-known/skills/index.json
+```
+
+Both indexes point to the generated skill file for the site. Use the URL returned by the index instead of guessing the final skill path.
+
+## Agent card
+
+DubStack also publishes an agent card.
+
+```text
+https://your-docs-domain.com/.well-known/agent-card.json
+```
+
+The agent card describes the docs site, the canonical documentation URL, the supported text modes, and the generated skill files available for the site.
+
 ## Disable public AI discovery
 
 AI discovery files follow the deployment's public indexing controls.
@@ -79,7 +112,7 @@ Use this for sites that should remain public to readers but should not be expose
 - Keep page titles and descriptions specific so search and MCP results are useful.
 - Use redirects when moving established pages.
 - Republish after large navigation or OpenAPI changes.
-- Test `/llms.txt`, `/skill.md`, and `/mcp` after changing AI discovery settings.
+- Test `/llms.txt`, `/skill.md`, `/mcp`, `/.well-known/mcp`, `/.well-known/agent-skills/index.json`, and `/.well-known/agent-card.json` after changing AI discovery settings.
 
 ## Related
 

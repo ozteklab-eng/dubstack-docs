@@ -61,6 +61,9 @@ GET /docs/quickstart   -> dubstack origin
 GET /docs/_next/...    -> dubstack origin assets
 GET /docs/api/theme    -> dubstack origin API
 GET /docs/llms.txt     -> dubstack origin AI-readable index
+GET /docs/skill.md     -> dubstack origin agent skill file
+GET /docs/mcp          -> dubstack origin public MCP server
+GET /docs/.well-known/* -> dubstack origin discovery metadata
 ```
 
 Do not strip `/docs` before forwarding to dubstack. The origin is designed to receive the `/docs` prefix and render public links, assets, assistant calls, search, MCP metadata, and LLM indexes under that same prefix.
@@ -157,6 +160,10 @@ After the route is configured, check:
 - Browser dev tools show static assets loading from `/docs/_next/...`, not from `/_next/...`.
 - `/docs/api/theme` returns site theme data.
 - `/docs/llms.txt` lists docs URLs under `/docs`.
+- `/docs/skill.md` returns Markdown.
+- `/docs/.well-known/mcp` returns the MCP discovery document.
+- `/docs/.well-known/agent-skills/index.json` returns the agent-skills manifest.
+- `/docs/.well-known/agent-card.json` returns the agent card.
 - Search, assistant, API playground, and page navigation work from the mounted path.
 - Links inside the docs keep users under `/docs`.
 

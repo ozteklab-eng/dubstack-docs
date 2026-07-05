@@ -43,15 +43,69 @@ This lets an agent use both the high-level skill file and the searchable docs fi
 
 ## Well-known discovery
 
-DubStack also publishes agent-skill discovery metadata under `/.well-known/agent-skills/`.
+DubStack also publishes skill and agent discovery metadata under `.well-known` paths.
 
 Useful paths include:
 
 | Path | Purpose |
 | --- | --- |
 | `/skill.md` | Main generated skill file. |
-| `/.well-known/agent-skills/index.json` | Agent skill discovery manifest. |
-| `/.well-known/agent-skills/<skill-id>/skill.md` | Generated skill URL listed by the discovery manifest. |
+| `/.well-known/agent-skills/index.json` | Recommended agent-skills discovery manifest with integrity metadata. |
+| `/.well-known/agent-skills/<skill-id>/skill.md` | Generated skill URL listed by the agent-skills manifest. |
+| `/.well-known/skills/index.json` | Compatibility skills index for clients that use the original skills discovery format. |
+| `/.well-known/skills/<skill-id>/SKILL.md` | Generated skill URL listed by the compatibility skills index. |
+| `/.well-known/agent-card.json` | Agent card that describes the docs site and links to the available skills. |
+
+Use the URLs returned by the discovery manifests as the canonical skill-file URLs. DubStack keeps compatibility aliases available for common `skill.md` and `SKILL.md` casing, but clients should not depend on a guessed path.
+
+### Agent-skills manifest
+
+`/.well-known/agent-skills/index.json` returns a manifest with a `sha256` digest for each skill file.
+
+```json
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "my-docs-site",
+      "type": "skill-md",
+      "description": "Use when answering questions about this documentation site.",
+      "url": "https://docs.example.com/.well-known/agent-skills/my-docs-site/skill.md",
+      "digest": "sha256:..."
+    }
+  ]
+}
+```
+
+### Compatibility skills index
+
+`/.well-known/skills/index.json` returns the original skills index shape for clients that have not adopted the agent-skills manifest.
+
+```json
+{
+  "skills": [
+    {
+      "name": "my-docs-site",
+      "description": "Use when answering questions about this documentation site.",
+      "files": ["SKILL.md"]
+    }
+  ]
+}
+```
+
+### Agent card
+
+`/.well-known/agent-card.json` returns a JSON card for agents that discover sites through a single metadata request.
+
+The card includes:
+
+- the docs site name and description
+- the canonical documentation URL
+- supported text input and output modes
+- non-streaming capability metadata
+- a `skills` array that points to the generated skill file
+
+For custom domains or reverse proxies, discovery URLs are generated from the public request host and route mount. Make sure your proxy forwards the public host and protocol headers described in [Reverse proxy](/deployment/reverse-proxy).
 
 ## When to use it
 

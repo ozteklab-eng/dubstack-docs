@@ -41,6 +41,12 @@ Proxy these routes to the origin hostname shown in the dubstack dashboard.
 | `/docs/llms-full.txt` | `https://<site>--origin.dubstack.live/docs/llms-full.txt` | If AI discovery is enabled |
 | `/docs/skill.md` | `https://<site>--origin.dubstack.live/docs/skill.md` | If agent skill discovery is enabled |
 | `/docs/mcp` | `https://<site>--origin.dubstack.live/docs/mcp` | If public MCP is enabled |
+| `/docs/.well-known/mcp` | `https://<site>--origin.dubstack.live/docs/.well-known/mcp` | If public MCP is enabled |
+| `/docs/.well-known/mcp.json` | `https://<site>--origin.dubstack.live/docs/.well-known/mcp.json` | If public MCP is enabled |
+| `/docs/.well-known/mcp/*` | `https://<site>--origin.dubstack.live/docs/.well-known/mcp/*` | If public MCP is enabled |
+| `/docs/.well-known/agent-card.json` | `https://<site>--origin.dubstack.live/docs/.well-known/agent-card.json` | If agent skill discovery is enabled |
+| `/docs/.well-known/agent-skills/*` | `https://<site>--origin.dubstack.live/docs/.well-known/agent-skills/*` | If agent skill discovery is enabled |
+| `/docs/.well-known/skills/*` | `https://<site>--origin.dubstack.live/docs/.well-known/skills/*` | If agent skill discovery is enabled |
 
 Do not strip the `/docs` prefix before sending the request upstream. The origin renders links, assets, search, assistant requests, MCP discovery, and LLM indexes under that prefix.
 
@@ -132,6 +138,9 @@ https://example.com/docs/quickstart
 https://example.com/docs/api/theme
 https://example.com/docs/llms.txt
 https://example.com/docs/skill.md
+https://example.com/docs/.well-known/mcp
+https://example.com/docs/.well-known/agent-card.json
+https://example.com/docs/.well-known/agent-skills/index.json
 ```
 
 Also check the browser network panel:
@@ -162,4 +171,4 @@ Make sure `/docs/api/*` is routed to the origin and not cached by the root appli
 
 ### LLM files or MCP discovery are missing
 
-Proxy the AI discovery files under `/docs`, including `/docs/llms.txt`, `/docs/llms-full.txt`, `/docs/skill.md`, and `/docs/mcp` when those features are enabled.
+Proxy the AI discovery files under `/docs`, including `/docs/llms.txt`, `/docs/llms-full.txt`, `/docs/skill.md`, `/docs/mcp`, `/docs/.well-known/mcp*`, `/docs/.well-known/agent-card.json`, `/docs/.well-known/agent-skills/*`, and `/docs/.well-known/skills/*` when those features are enabled.
