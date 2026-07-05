@@ -8,6 +8,18 @@ Feedback shows where readers and agents struggle with your documentation.
 
 Enable feedback from deployment add-ons, then review ratings and comments from the dashboard analytics view.
 
+<Info>
+  Feedback is deployment-scoped. Enable the add-on for each deployment that should collect ratings.
+</Info>
+
+## Feedback types
+
+| Type | What it collects | Where it appears |
+| --- | --- | --- |
+| Page feedback | Yes/No ratings and optional written comments from docs pages. | **Analytics > Feedback** |
+| Assistant feedback | Ratings submitted against assistant answers when assistant feedback is enabled. | **Analytics > Feedback** |
+| Agent feedback | Structured content-quality feedback from supported agent surfaces. | **Analytics > Feedback** and public feedback API records |
+
 ## Enable page feedback
 
 Page feedback is controlled per deployment.
@@ -17,7 +29,7 @@ Page feedback is controlled per deployment.
 3. Publish or refresh the docs site.
 4. Open a public docs page and confirm the **Yes** and **No** feedback controls appear.
 
-Readers can then submit simple page-level ratings from the docs site.
+Readers can then submit simple page-level ratings from the docs site. Negative ratings can include an optional written comment.
 
 ## Collect reader emails
 
@@ -32,13 +44,20 @@ When enabled, readers can include an email address with feedback so your team ca
 
 ## Enable agent feedback
 
-Agent feedback lets supported AI surfaces submit structured feedback about pages they read.
+Agent feedback lets supported AI surfaces submit structured feedback about pages they read. It is intended for documentation-quality issues, such as stale instructions, missing setup steps, or unclear API descriptions.
 
 1. Open **Settings > Deployment > Add-ons**.
 2. Enable **Agent feedback**.
 3. Keep the public MCP and AI-readable routes available for the deployment.
 
-Agent feedback is useful when external tools find missing setup steps, stale examples, or unclear API descriptions.
+When enabled:
+
+- the public MCP server advertises the `submit_feedback` tool
+- generated AI discovery files include feedback instructions
+- Markdown exports can include agent instructions for the current page
+- accepted feedback is stored with the selected deployment's analytics
+
+Agents should not use this channel for normal reader questions or support conversations.
 
 ## Review feedback
 
@@ -46,11 +65,11 @@ Open **Analytics > Feedback** from the dashboard.
 
 The feedback view shows:
 
-- total feedback for the selected time range
-- positive and negative rating counts
-- feedback by page
-- feedback source
-- recent feedback entries
+- feedback over time for the selected date range
+- sentiment breakdown for positive and negative ratings
+- top pages with submitted feedback
+- source breakdown across pages, assistant answers, and agent actions
+- recent feedback entries with page path and source metadata
 - optional reader email addresses when collection is enabled
 
 Feedback is scoped to the selected deployment. Switch deployments to review a different docs site.

@@ -8,6 +8,10 @@ Add-ons control optional behavior for a single deployment.
 
 Open **Settings > Deployment > Add-ons** in the dashboard to configure them.
 
+<Info>
+  Add-on changes apply to the selected deployment. If you manage multiple deployments, enable the same add-on on each deployment that needs it.
+</Info>
+
 ## Feedback
 
 Feedback add-ons help you collect signals from readers and agents.
@@ -24,6 +28,8 @@ Feedback add-ons help you collect signals from readers and agents.
 | Reader email disclaimer | Shows a short notice below the optional email field. |
 
 Feedback is deployment-scoped. Analytics for reader feedback appear in **Analytics > Feedback**. See [Feedback analytics](/dashboard/feedback-analytics) for how to review collected signals.
+
+Contextual feedback, code snippet feedback, edit suggestions, and issue creation depend on the current deployment capabilities. If the dashboard disables a card, use the card reason to see which provider, repository, plan, or runtime capability is missing.
 
 ## Reader email collection
 
@@ -78,3 +84,10 @@ When enabled, DubStack sets noindex and nofollow metadata and serves crawler rul
 Some add-ons depend on plan, repository, provider, or runtime support.
 
 If an add-on is disabled in the dashboard, read the card reason. The reason comes from the current deployment capability check, not from a static UI-only rule.
+
+Examples:
+
+- Git-backed add-ons require a connected repository.
+- Issue and edit workflows can depend on the Git provider and repository visibility.
+- Agent feedback requires the public MCP and AI discovery surfaces to remain available.
+- Preview authentication requires preview deployments to be available for the selected deployment.
