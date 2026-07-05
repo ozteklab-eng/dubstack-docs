@@ -21,6 +21,10 @@
       "description": "Reader-facing assistant endpoint for answering questions from the published documentation corpus."
     },
     {
+      "name": "Feedback",
+      "description": "Public feedback endpoints for reader ratings and agent-reported documentation issues."
+    },
+    {
       "name": "API Playground",
       "description": "Runtime endpoints used by generated API reference pages and the browser request builder."
     }
@@ -544,6 +548,230 @@
           }
         }
       }
+    },
+    "/feedback": {
+      "post": {
+        "operationId": "submitFeedback",
+        "summary": "Submit feedback",
+        "description": "Records feedback for the current published docs site. Use this endpoint for page ratings, assistant answer ratings, and structured agent feedback when the corresponding deployment add-on is enabled. Requests are tenant-scoped by the docs site host and rate-limited per site and client IP.",
+        "tags": [
+          "Feedback"
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Feedback payload submitted by a docs reader, assistant UI, or agent feedback surface.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackRequest"
+              },
+              "examples": {
+                "pageRating": {
+                  "summary": "Positive page rating",
+                  "value": {
+                    "source": "page-feedback",
+                    "rating": "up",
+                    "message": "Positive page rating for OpenAPI setup",
+                    "session_id": "page-feedback-01JZ9K9W8Q2F3S8S7H6N5M4P3A",
+                    "page_path": "/api-reference/openapi-setup",
+                    "page_url": "https://dubstack-docs-test.dubstack.live/api-reference/openapi-setup",
+                    "metadata": {
+                      "feedback_surface": "page",
+                      "page_title": "OpenAPI setup"
+                    }
+                  }
+                },
+                "agentIssue": {
+                  "summary": "Agent-reported docs issue",
+                  "value": {
+                    "source": "agent-feedback",
+                    "rating": "down",
+                    "message": "The page mentions a settings item that is not present in the current dashboard.",
+                    "session_id": "mcp-feedback-1780825618877",
+                    "page_path": "/settings/deployment/addons",
+                    "page_url": "https://dubstack-docs-test.dubstack.live/settings/deployment/addons",
+                    "metadata": {
+                      "feedback_surface": "agent",
+                      "mcp_tool": "submit_feedback"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Feedback event accepted and stored for the current deployment.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedbackResponse"
+                },
+                "examples": {
+                  "created": {
+                    "summary": "Created feedback event",
+                    "value": {
+                      "ok": true,
+                      "id": "ckz8y7x6w0000abc123def456",
+                      "created_at": "2026-07-05T01:30:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The message, rating, reader email, or JSON body is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "missingMessage": {
+                    "summary": "Missing message",
+                    "value": {
+                      "error": "Message is required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The relevant feedback or assistant add-on is disabled for the current site.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "disabled": {
+                    "summary": "Feedback disabled",
+                    "value": {
+                      "error": "Agent feedback is disabled for this site"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "The feedback message is larger than the accepted payload size.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many feedback requests were submitted for the site and client IP in the current rate-limit window.",
+            "headers": {
+              "Retry-After": {
+                "description": "Number of seconds to wait before retrying.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "X-RateLimit-Limit": {
+                "description": "Maximum feedback requests allowed in the current window.",
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Remaining feedback requests in the current window.",
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp, in seconds, when the current rate-limit window resets.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The feedback event could not be recorded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "bash",
+            "label": "Submit page feedback",
+            "source": "curl --request POST \\\n  --url https://dubstack-docs-test.dubstack.live/feedback \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n    \"source\": \"page-feedback\",\n    \"rating\": \"up\",\n    \"message\": \"This page answered my setup question.\",\n    \"page_path\": \"/api-reference/openapi-setup\",\n    \"page_url\": \"https://dubstack-docs-test.dubstack.live/api-reference/openapi-setup\"\n  }'"
+          },
+          {
+            "lang": "javascript",
+            "label": "Report an agent-discovered issue",
+            "source": "await fetch(\"https://dubstack-docs-test.dubstack.live/feedback\", {\n  method: \"POST\",\n  headers: { \"Content-Type\": \"application/json\" },\n  body: JSON.stringify({\n    source: \"agent-feedback\",\n    rating: \"down\",\n    message: \"The page links to a dashboard screen that no longer exists.\",\n    page_path: \"/settings/deployment/addons\",\n    page_url: \"https://dubstack-docs-test.dubstack.live/settings/deployment/addons\",\n    metadata: { feedback_surface: \"agent\" }\n  })\n});"
+          }
+        ]
+      },
+      "options": {
+        "operationId": "getFeedbackOptions",
+        "summary": "Check feedback methods",
+        "description": "Returns the allowed methods and CORS headers for public feedback submissions. Browser and agent clients can use this preflight route before submitting feedback.",
+        "tags": [
+          "Feedback"
+        ],
+        "responses": {
+          "204": {
+            "description": "Feedback preflight response with allowed methods and headers.",
+            "headers": {
+              "Allow": {
+                "description": "Allowed HTTP methods for the feedback endpoint.",
+                "schema": {
+                  "type": "string",
+                  "example": "POST, OPTIONS"
+                }
+              },
+              "Access-Control-Allow-Origin": {
+                "description": "Allowed cross-origin requester value.",
+                "schema": {
+                  "type": "string",
+                  "example": "*"
+                }
+              },
+              "Access-Control-Allow-Methods": {
+                "description": "Allowed cross-origin methods.",
+                "schema": {
+                  "type": "string",
+                  "example": "POST, OPTIONS"
+                }
+              },
+              "Access-Control-Allow-Headers": {
+                "description": "Allowed cross-origin request headers.",
+                "schema": {
+                  "type": "string",
+                  "example": "Content-Type"
+                }
+              }
+            }
+          }
+        },
+        "x-hidden": true
+      }
     }
   },
   "components": {
@@ -918,6 +1146,118 @@
             "transport": "streamable-http"
           }
         }
+      },
+      "FeedbackRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "rating": {
+            "type": "string",
+            "enum": [
+              "up",
+              "down"
+            ],
+            "description": "Feedback rating. Use up for positive feedback and down for negative or corrective feedback.",
+            "example": "down"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000,
+            "description": "Human-readable feedback message. Empty messages are rejected.",
+            "example": "The page references a dashboard screen that has moved."
+          },
+          "source": {
+            "type": "string",
+            "description": "Feedback source. Page ratings use page-feedback. Agent-submitted docs issues use agent-feedback. Assistant answer ratings may omit the value or use an assistant-specific source.",
+            "example": "agent-feedback"
+          },
+          "session_id": {
+            "type": "string",
+            "maxLength": 160,
+            "description": "Optional client-generated session identifier used to group feedback from the same reader or agent session.",
+            "example": "mcp-feedback-1780825618877"
+          },
+          "page_path": {
+            "type": "string",
+            "maxLength": 500,
+            "description": "Docs page path related to the feedback.",
+            "example": "/settings/deployment/addons"
+          },
+          "page_url": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 1000,
+            "description": "Absolute docs page URL related to the feedback.",
+            "example": "https://dubstack-docs-test.dubstack.live/settings/deployment/addons"
+          },
+          "reader_email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 320,
+            "description": "Optional reader email. Stored only when reader email collection is enabled for page feedback.",
+            "example": "reader@example.com"
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Optional string metadata. Keys are truncated to 80 characters, values to 400 characters, and only the first 20 string entries are stored.",
+            "example": {
+              "feedback_surface": "agent",
+              "mcp_tool": "submit_feedback"
+            }
+          }
+        },
+        "required": [
+          "rating",
+          "message"
+        ],
+        "description": "Feedback payload accepted by published docs sites."
+      },
+      "FeedbackResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "description": "Whether the feedback event was accepted.",
+            "example": true
+          },
+          "id": {
+            "type": "string",
+            "description": "Feedback event identifier.",
+            "example": "ckz8y7x6w0000abc123def456"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO timestamp when the feedback event was recorded.",
+            "example": "2026-07-05T01:30:00.000Z"
+          }
+        },
+        "required": [
+          "ok",
+          "id",
+          "created_at"
+        ],
+        "description": "Acknowledgement returned after feedback is recorded."
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Human-readable error message.",
+            "example": "Message is required"
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "description": "Standard error response returned by public docs runtime endpoints."
       }
     }
   }
