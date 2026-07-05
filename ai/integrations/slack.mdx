@@ -87,6 +87,8 @@ Use direct messages for private questions. Mention the agent in a channel when t
 
 If the request is only a docs question, the agent answers from the selected deployment's published docs index and includes source links when relevant.
 
+If Jira is connected, Slack answers can include Jira issue context when your prompt explicitly asks for Jira context, includes a Jira issue key, or includes a `jql:` query.
+
 ## Draft documentation from Slack
 
 When your request asks for a documentation change, the agent follows this lifecycle:
@@ -178,7 +180,7 @@ Workflow notifications are separate from authoring requests. Connecting Slack do
   </Accordion>
 
   <Accordion title="The agent says the deployment is protected">
-    Protected baseline deployments are intentionally read-only for Slack authoring. Use a disposable test deployment or an unprotected production deployment for authoring tests.
+    Some deployments are intentionally read-only for agent authoring. Choose a deployment with repository authoring access, or ask an admin to confirm that repository mutations are allowed for the selected deployment.
   </Accordion>
 
   <Accordion title="Attachments are rejected">

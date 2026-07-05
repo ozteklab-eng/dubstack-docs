@@ -17,7 +17,7 @@ Jira can provide:
 - issue context for automations that support integrations
 - bounded JQL-based context for recurring documentation workflows
 
-Jira does not write documentation by itself. The agent writes docs changes through the connected Git provider.
+Jira is a read-only context source. It does not write documentation or update issues by itself. The agent writes docs changes through the connected Git provider.
 
 ## Requirements
 
@@ -45,6 +45,8 @@ The dashboard stores the selected workspace and granted scopes for that organiza
 
 Ask for Jira context when the issue tracker contains the source details.
 
+The agent collects Jira context when your request includes an issue key, explicitly asks for Jira, or includes an inline `jql:` query.
+
 Examples:
 
 ```text
@@ -55,7 +57,13 @@ Use Jira context for PROJ-123 and draft a migration note for the docs.
 Summarize the open documentation issues for the billing project.
 ```
 
+```text
+Use Jira context with jql: project = DOCS AND statusCategory != Done ORDER BY updated DESC, then draft a docs backlog summary.
+```
+
 If the request needs precise issue selection, include the issue key, project, or a clear filter.
+
+If you ask for Jira context without an issue key or `jql:` query, the agent asks for a more specific issue or filter instead of guessing.
 
 ## Use Jira context in automations
 
@@ -83,4 +91,3 @@ project = DOCS AND statusCategory != Done ORDER BY updated DESC
 3. Choose **Disconnect**.
 
 Disconnecting Jira stops new Jira context collection. Existing docs, pull requests, and previous run records are not removed.
-
