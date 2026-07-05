@@ -38,7 +38,10 @@ Examples:
 docs.example.com
 api.example.com
 *.support.example.com
+docs.example.com/api
 ```
+
+Use path-level entries when only one area of a site should be available to the assistant. Domains must be public and readable without a browser-only login flow.
 
 ## Bot protection
 
@@ -62,9 +65,25 @@ The dashboard supports up to three starter questions for the public assistant.
 
 Enterprise deployments can add site-specific assistant instructions from the dashboard.
 
-These instructions are additive to platform safety rules and repository-backed assistant guidance. Use them for style, domain vocabulary, and response preferences.
+These instructions are additive to platform safety rules and repository-backed assistant guidance. Use them for style, domain vocabulary, support escalation preferences, and response focus.
+
+When no dashboard instructions are saved, the deployment uses the platform default. Dashboard instructions are limited to 4,000 characters.
+
+Repository-backed assistant instructions can also be stored at:
+
+```text
+.dubstack/Assistant.md
+```
+
+Use the repository file when you want assistant behavior to travel with the docs source. Use dashboard instructions when an Enterprise workspace needs deployment-specific behavior without changing the repository.
 
 Do not put credentials, customer secrets, or private incident details in assistant instructions.
+
+## Usage and credits
+
+Assistant requests can be recorded in the AI usage ledger with source, status, profile, token, and credit-estimate metadata.
+
+If a workspace reaches its allowance or the assistant profile is unavailable, the assistant can be paused until usage is increased or the configuration is corrected.
 
 ## Readiness checks
 
