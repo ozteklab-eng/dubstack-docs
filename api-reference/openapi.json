@@ -65,7 +65,19 @@
               }
             }
           }
-        }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "bash",
+            "label": "Fetch the discovery document",
+            "source": "curl --request GET \\\n  --url https://dubstack-docs-test.dubstack.live/mcp"
+          },
+          {
+            "lang": "javascript",
+            "label": "Load tools from the discovery document",
+            "source": "const response = await fetch(\"https://dubstack-docs-test.dubstack.live/mcp\");\nconst discovery = await response.json();\n\nconsole.log(discovery.capabilities.tools);"
+          }
+        ]
       },
       "post": {
         "operationId": "callMcpServer",

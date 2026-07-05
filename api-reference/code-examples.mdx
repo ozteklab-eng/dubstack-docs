@@ -98,11 +98,41 @@ Use placeholder values for credentials, customer identifiers, and environment-sp
 
 Do not commit real customer data or live credentials to a public OpenAPI file.
 
-## When to write manual examples
+## Add endpoint SDK examples
 
 Generated examples are best for direct HTTP requests.
 
-Write manual MDX examples near the endpoint when you need to explain:
+Use `x-codeSamples` on an OpenAPI operation when readers should see SDK, CLI, or workflow examples directly on the generated endpoint page.
+
+```yaml
+paths:
+  /mcp:
+    get:
+      summary: Get MCP discovery
+      x-codeSamples:
+        - lang: bash
+          label: Fetch the discovery document
+          source: |
+            curl --request GET \
+              --url https://dubstack-docs-test.dubstack.live/mcp
+        - lang: javascript
+          label: Load tools from the discovery document
+          source: |
+            const response = await fetch('https://dubstack-docs-test.dubstack.live/mcp');
+            const discovery = await response.json();
+
+            console.log(discovery.capabilities.tools);
+```
+
+Each sample supports:
+
+| Field | Required | Purpose |
+| --- | --- | --- |
+| `lang` | Yes | Syntax highlighting language or alias. |
+| `label` | No | Human-readable title for the sample. |
+| `source` | Yes | Copyable source code. |
+
+Use endpoint SDK examples when you need to explain:
 
 - SDK usage
 - retry behavior
@@ -111,6 +141,8 @@ Write manual MDX examples near the endpoint when you need to explain:
 - long-running jobs
 - error handling patterns
 
+Use regular MDX examples when the content belongs in the surrounding guide instead of the endpoint page.
+
 ````mdx
 ```javascript Node.js SDK
 const project = await client.projects.create({
@@ -118,8 +150,6 @@ const project = await client.projects.create({
 });
 ```
 ````
-
-Manual SDK examples are regular docs content today. Endpoint-side SDK sample extensions are tracked separately from the generated playground snippets.
 
 ## Troubleshooting snippets
 
