@@ -1,0 +1,59 @@
+---
+title: Related topics
+description: Link readers and AI tools to adjacent or manually selected pages.
+icon: file-search
+---
+
+Related topics help readers continue from the current page to the next useful page.
+
+They also improve search, assistant retrieval, and public MCP results because connected pages give agents clearer context about how your docs are organized.
+
+## Automatic related topics
+
+Published pages can show generated related topics when the page does not already include an authored related topics section.
+
+Generated suggestions are selected from the same active navigation area when possible. DubStack avoids duplicating the previous and next page links, then shows up to three related pages.
+
+For generated API endpoint pages, API overview pages are preferred before adjacent pages.
+
+## Authored related topics
+
+Use an authored `RelatedTopics` block when you want full control over the links.
+
+<RelatedTopics>
+  <a href="/configuration/navigation">Navigation</a>
+  <a href="/writing-content/cards">Cards</a>
+  <a href="/optimize/search">Search</a>
+</RelatedTopics>
+
+```mdx
+<RelatedTopics>
+  <a href="/configuration/navigation">Navigation</a>
+  <a href="/writing-content/cards">Cards</a>
+  <a href="/optimize/search">Search</a>
+</RelatedTopics>
+```
+
+An authored `RelatedTopics` block replaces generated suggestions for that page.
+
+## Markdown fallback
+
+You can also use a normal heading and list when you want a simple Markdown-only section.
+
+```mdx
+## Related topics
+
+- [Navigation](/configuration/navigation)
+- [Cards](/writing-content/cards)
+- [Search](/optimize/search)
+```
+
+The authored heading prevents duplicate generated related topics at the bottom of the page.
+
+## Guidelines
+
+- Use related topics for pages that are part of the same workflow or concept.
+- Prefer three to five links.
+- Use descriptive link text, not generic phrases like "learn more".
+- Keep core next steps in the page body; related topics are supporting navigation.
+- Link to stable canonical pages instead of temporary preview URLs.
