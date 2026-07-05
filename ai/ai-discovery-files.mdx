@@ -73,6 +73,8 @@ The generated skill points agents at:
 - recommended starting pages from navigation
 - feedback instructions when agent feedback is enabled
 
+If your repository includes custom skill files, DubStack serves those instead of relying only on the generated skill. See [Custom skill files](/ai/custom-skill-files).
+
 ## MCP resources
 
 The public MCP server exposes `skill.md` as a resource. MCP clients that support resources can discover the skill without asking the user to install it separately.
@@ -85,7 +87,7 @@ The agent-skills manifest is the preferred way for tools to discover hosted skil
 https://your-docs-domain.com/.well-known/agent-skills/index.json
 ```
 
-It includes a `sha256` digest for each generated skill file so clients can verify the content they fetch.
+It includes a `sha256` digest for each skill file so clients can verify the content they fetch.
 
 The compatibility skills index remains available for clients that use the original skills discovery format.
 
@@ -93,7 +95,7 @@ The compatibility skills index remains available for clients that use the origin
 https://your-docs-domain.com/.well-known/skills/index.json
 ```
 
-Both indexes point to the generated skill file for the site. Use the URL returned by the index instead of guessing the final skill path.
+Both indexes point to the available skill files for the site. Use the URL returned by the index instead of guessing the final skill path.
 
 ## Agent card
 
@@ -103,7 +105,7 @@ DubStack also publishes an agent card.
 https://your-docs-domain.com/.well-known/agent-card.json
 ```
 
-The agent card describes the docs site, the canonical documentation URL, the supported text modes, and the generated skill files available for the site.
+The agent card describes the docs site, the canonical documentation URL, the supported text modes, and the skill files available for the site.
 
 ## Disable public AI discovery
 
@@ -137,5 +139,6 @@ For access-control setup, see [Docs authentication](/deployment/docs-authenticat
 ## Related
 
 - [MCP](/ai/mcp)
+- [Custom skill files](/ai/custom-skill-files)
 - [Contextual actions](/ai/contextual-actions)
 - [SEO and search](/configuration/seo-search)

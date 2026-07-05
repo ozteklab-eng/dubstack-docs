@@ -4,7 +4,7 @@ description: Use the generated skill.md file to help agents understand your docs
 icon: badge-check
 ---
 
-DubStack publishes a generated `skill.md` file for public docs sites.
+DubStack publishes a generated `skill.md` file for public docs sites when the docs repository does not provide a custom skill file.
 
 The skill file gives agents a concise description of how to use the docs site, where to connect to the public MCP server, and which pages are good starting points.
 
@@ -57,11 +57,11 @@ Useful paths include:
 
 | Path | Purpose |
 | --- | --- |
-| `/skill.md` | Main generated skill file. |
+| `/skill.md` | Main generated or custom skill file. |
 | `/.well-known/agent-skills/index.json` | Recommended agent-skills discovery manifest with integrity metadata. |
-| `/.well-known/agent-skills/<skill-id>/skill.md` | Generated skill URL listed by the agent-skills manifest. |
+| `/.well-known/agent-skills/<skill-id>/skill.md` | Skill URL listed by the agent-skills manifest. |
 | `/.well-known/skills/index.json` | Compatibility skills index for clients that use the original skills discovery format. |
-| `/.well-known/skills/<skill-id>/SKILL.md` | Generated skill URL listed by the compatibility skills index. |
+| `/.well-known/skills/<skill-id>/SKILL.md` | Skill URL listed by the compatibility skills index. |
 | `/.well-known/agent-card.json` | Agent card that describes the docs site and links to the available skills. |
 
 Use the URLs returned by the discovery manifests as the canonical skill-file URLs. DubStack keeps compatibility aliases available for common `skill.md` and `SKILL.md` casing, but clients should not depend on a guessed path.
@@ -111,7 +111,7 @@ The card includes:
 - the canonical documentation URL
 - supported text input and output modes
 - non-streaming capability metadata
-- a `skills` array that points to the generated skill file
+- a `skills` array that points to the available skill files
 
 For custom domains or reverse proxies, discovery URLs are generated from the public request host and route mount. Make sure your proxy forwards the public host and protocol headers described in [Reverse proxy](/deployment/reverse-proxy).
 
@@ -123,9 +123,13 @@ Use MCP when the agent needs to search or read exact published pages.
 
 Use `llms.txt` when the agent only needs a page directory.
 
-## Current customization model
+## Custom skill files
 
-DubStack currently generates `skill.md` from the published docs site and MCP server metadata. Custom repository-supplied skill files are not currently supported.
+To override the generated skill, add a root `skill.md` file to your docs repository.
+
+To publish multiple topic-specific skills, add `SKILL.md` files under `.mintlify/skills/<skill-name>/`.
+
+For setup details, see [Custom skill files](/ai/custom-skill-files).
 
 ## Troubleshooting
 
@@ -143,5 +147,6 @@ If the skill file references stale pages, publish the latest navigation changes 
 ## Related
 
 - [MCP](/ai/mcp)
+- [Custom skill files](/ai/custom-skill-files)
 - [AI index files](/ai/llms-indexes)
 - [AI discovery files](/ai/ai-discovery-files)

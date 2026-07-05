@@ -675,6 +675,10 @@
                 "icon": "badge-check"
               },
               {
+                "slug": "ai/custom-skill-files",
+                "icon": "file-cog"
+              },
+              {
                 "slug": "ai/ai-discovery-files",
                 "icon": "file-search"
               },

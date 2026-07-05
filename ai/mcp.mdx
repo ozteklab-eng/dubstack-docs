@@ -148,23 +148,23 @@ All public MCP tools operate against the current published docs site, not the op
 
 ## Skill file
 
-Your docs site also serves a generated skill file:
+Your docs site also serves a skill file:
 
 ```text
 https://your-docs-domain.com/skill.md
 ```
 
-Agents connected to your MCP server can discover the same skill through MCP resources. The skill tells agents to use your current published docs as the source of truth and points them at your public MCP server.
+Agents connected to your MCP server can discover the same skill through MCP resources. The skill tells agents to use your current published docs as the source of truth and points them at your public MCP server. If your repository defines custom skill files, those files are exposed through the same discovery paths.
 
 For the rest of the AI-readable docs files, see [AI discovery files](/ai/ai-discovery-files).
 
 ## MCP resources
 
-The public MCP server exposes generated skill files as MCP resources when the client supports resource discovery.
+The public MCP server exposes skill files as MCP resources when the client supports resource discovery.
 
 Use resources for durable agent instructions, then use tools for live retrieval:
 
-1. Read the generated skill resource to understand how the docs site wants agents to behave.
+1. Read the skill resource to understand how the docs site wants agents to behave.
 2. Use `search` to find candidate pages.
 3. Use `query_docs_filesystem` to read exact published page content.
 4. If `submit_feedback` is available, use it only for substantive documentation issues.

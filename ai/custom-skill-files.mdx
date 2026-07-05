@@ -1,0 +1,158 @@
+---
+title: Custom skill files
+description: Add repository-defined skill.md files so AI agents get product-specific guidance from your published docs site.
+icon: file-cog
+---
+
+Custom skill files let you control the instructions that AI agents discover from your published docs site.
+
+DubStack generates a default `skill.md` file when you do not provide one. Add custom skill files when your product needs more specific agent guidance, stronger source-of-truth rules, or separate skills for different docs areas.
+
+## Single skill file
+
+Add `skill.md` to the root of your docs repository.
+
+```text
+skill.md
+dubstack.json
+quickstart.mdx
+api-reference/
+```
+
+The root `skill.md` replaces the generated skill for the site.
+
+```md title="skill.md"
+---
+name: Acme docs
+description: Use when answering questions about Acme setup, API reference, deployment, and troubleshooting.
+---
+
+# Acme docs skill
+
+Use this skill when a user asks how to build, configure, or operate Acme.
+
+## Source of truth
+
+- Public docs: https://docs.acme.com
+- Public MCP server: https://docs.acme.com/mcp
+- API reference: https://docs.acme.com/api-reference/introduction
+
+## Rules
+
+- Search the public MCP server before answering broad product questions.
+- Read exact docs pages before giving setup steps.
+- Do not invent dashboard settings, API endpoints, plan limits, or authentication behavior.
+```
+
+## Multiple skill files
+
+Add topic-specific skill files under the compatible skills directory.
+
+Each skill lives in its own directory and must be named `SKILL.md`.
+
+```text
+.mintlify/
+  skills/
+    api-reference/
+      SKILL.md
+    migrations/
+      SKILL.md
+skill.md
+```
+
+You can use a root `skill.md` and multiple topic skills together. The discovery indexes include all available skills.
+
+Use multiple skills when you want agents to load focused instructions for specific work, such as API reference setup, migration support, or release-note authoring.
+
+## Frontmatter
+
+Each custom skill file should start with YAML frontmatter.
+
+DubStack uses these fields for discovery:
+
+| Field | Required | Purpose |
+| --- | --- | --- |
+| `name` | Recommended | Human-readable skill name. DubStack converts it into a URL-safe skill ID for discovery. |
+| `description` | Recommended | Short routing description that tells agents when to use the skill. |
+
+The Markdown body contains the actual instructions.
+
+Keep descriptions specific. Agents use the description to choose the right skill before reading the full file.
+
+## Published endpoints
+
+After publishing, DubStack exposes custom skills through the same AI discovery endpoints as generated skills.
+
+| Path | Behavior |
+| --- | --- |
+| `/skill.md` | Returns the root skill when there is one skill. Redirects to `/.well-known/skills/index.json` when multiple skills are available. |
+| `/.well-known/agent-skills/index.json` | Recommended discovery manifest with `sha256` digests. |
+| `/.well-known/agent-skills/<skill-id>/skill.md` | Direct URL for a specific skill. |
+| `/.well-known/skills/index.json` | Compatibility skills index. |
+| `/.well-known/skills/<skill-id>/skill.md` | Compatibility direct skill URL. |
+| `/.well-known/agent-card.json` | Agent card that lists the published skills. |
+
+Use the URLs returned by the discovery indexes instead of guessing the final skill URL.
+
+## Publishing flow
+
+Custom skills are loaded from the published branch.
+
+1. Add or edit the skill files in your docs repository.
+2. Commit and push the changes to the branch connected to the deployment.
+3. Run a manual update or wait for the Git webhook sync.
+4. Open `/.well-known/agent-skills/index.json` and confirm the expected skills are listed.
+5. Fetch each listed `url` and confirm it returns the expected Markdown.
+
+## Security boundary
+
+Custom skill files are public on public docs sites.
+
+Do not put these values in a custom skill file:
+
+- API keys or access tokens
+- private customer details
+- unreleased roadmap commitments
+- internal incident notes
+- magic links, passwords, or temporary credentials
+
+Docs authentication protects skill files the same way it protects rendered pages and other AI-readable files. Public agents cannot use `/skill.md` to bypass protected docs.
+
+## Reverse proxies and subpaths
+
+If your site is mounted under `/docs`, the skill paths stay under that mount:
+
+```text
+https://example.com/docs/skill.md
+https://example.com/docs/.well-known/agent-skills/index.json
+```
+
+If you use a reverse proxy, forward these paths to DubStack:
+
+- `/skill.md`
+- `/.well-known/agent-skills/*`
+- `/.well-known/skills/*`
+- `/.well-known/agent-card.json`
+
+For proxy setup, see [Reverse proxy](/deployment/reverse-proxy) and [Docs subpath](/deployment/docs-subpath).
+
+## Troubleshooting
+
+If a custom skill is missing from discovery:
+
+1. Confirm the file is on the published branch.
+2. Confirm root skill files are named exactly `skill.md`.
+3. Confirm directory skills use `.mintlify/skills/<skill-name>/SKILL.md`.
+4. Confirm the skill directory name only uses letters, numbers, dots, underscores, or hyphens.
+5. Run a manual update from the dashboard.
+6. Open `/.well-known/agent-skills/index.json` again.
+
+If `/skill.md` redirects, more than one skill is available. Open `/.well-known/skills/index.json` to list the available skill IDs.
+
+If the discovery index still returns the generated skill, DubStack has not seen a custom root or directory skill on the published branch.
+
+## Related
+
+- [Generated skill file](/ai/generated-skill-file)
+- [AI discovery files](/ai/ai-discovery-files)
+- [MCP](/ai/mcp)
