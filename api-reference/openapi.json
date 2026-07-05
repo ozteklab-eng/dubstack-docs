@@ -34,7 +34,7 @@
       "get": {
         "operationId": "getMcpDiscovery",
         "summary": "Get MCP discovery",
-        "description": "Returns the public Model Context Protocol discovery document for the current docs site. Use this endpoint to confirm that the site exposes a read-only MCP server, discover the supported transport, and find the tools available to agents. The endpoint is tenant-scoped by the request host, so it only describes the published documentation for the current site.",
+        "description": "Returns the public Model Context Protocol discovery document for the current docs site. Use this endpoint to find the public MCP server URL and confirm that the site exposes unauthenticated, read-only docs access for agents. The endpoint is tenant-scoped by the request host, so it only describes the published documentation for the current site.",
         "tags": [
           "AI Access"
         ],
@@ -50,19 +50,19 @@
                   "discovery": {
                     "summary": "Discovery response",
                     "value": {
-                      "name": "DubStack Docs MCP",
-                      "description": "Read-only MCP server for this published documentation site.",
-                      "transport": "streamable-http",
-                      "endpoint": "https://dubstack-docs-test.dubstack.live/mcp",
-                      "capabilities": {
-                        "tools": [
-                          "search",
-                          "query_docs_filesystem"
-                        ],
-                        "resources": [
-                          "skill.md"
-                        ]
-                      }
+                      "version": "1.0.0",
+                      "transport": "http",
+                      "url": "https://dubstack-docs-test.dubstack.live/mcp",
+                      "servers": [
+                        {
+                          "name": "public",
+                          "title": "dubstack docs",
+                          "description": "API documentation platform",
+                          "url": "https://dubstack-docs-test.dubstack.live/mcp",
+                          "transport": "http",
+                          "authentication": "none"
+                        }
+                      ]
                     }
                   }
                 }
@@ -73,13 +73,13 @@
         "x-codeSamples": [
           {
             "lang": "bash",
-            "label": "Fetch the discovery document",
+            "label": "Fetch MCP discovery",
             "source": "curl --request GET \\\n  --url https://dubstack-docs-test.dubstack.live/mcp"
           },
           {
             "lang": "javascript",
-            "label": "Load tools from the discovery document",
-            "source": "const response = await fetch(\"https://dubstack-docs-test.dubstack.live/mcp\");\nconst discovery = await response.json();\n\nconsole.log(discovery.capabilities.tools);"
+            "label": "Read the public MCP URL",
+            "source": "const discovery = await fetch(\"https://dubstack-docs-test.dubstack.live/mcp\").then((response) => response.json());\n\nconsole.log(discovery.servers[0].url);"
           }
         ]
       },
@@ -772,73 +772,361 @@
         },
         "x-hidden": true
       }
+    },
+    "/.well-known/mcp.json": {
+      "get": {
+        "operationId": "getWellKnownMcpJson",
+        "summary": "Get well-known MCP discovery",
+        "description": "Compatibility discovery route that returns the same public MCP discovery document as GET /mcp.",
+        "tags": [
+          "AI Access"
+        ],
+        "responses": {
+          "200": {
+            "description": "Get well-known MCP discovery response for the current docs site.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/McpDiscovery"
+                },
+                "examples": {
+                  "response": {
+                    "summary": "Get well-known MCP discovery",
+                    "value": {
+                      "version": "1.0.0",
+                      "transport": "http",
+                      "url": "https://dubstack-docs-test.dubstack.live/mcp",
+                      "servers": [
+                        {
+                          "name": "public",
+                          "title": "dubstack docs",
+                          "description": "API documentation platform",
+                          "url": "https://dubstack-docs-test.dubstack.live/mcp",
+                          "transport": "http",
+                          "authentication": "none"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Public AI discovery files are disabled for the current site.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-hidden": true
+      }
+    },
+    "/.well-known/mcp": {
+      "get": {
+        "operationId": "getWellKnownMcp",
+        "summary": "Get well-known MCP discovery alias",
+        "description": "Compatibility discovery route that returns the same public MCP discovery document as GET /mcp.",
+        "tags": [
+          "AI Access"
+        ],
+        "responses": {
+          "200": {
+            "description": "Get well-known MCP discovery alias response for the current docs site.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/McpDiscovery"
+                },
+                "examples": {
+                  "response": {
+                    "summary": "Get well-known MCP discovery alias",
+                    "value": {
+                      "version": "1.0.0",
+                      "transport": "http",
+                      "url": "https://dubstack-docs-test.dubstack.live/mcp",
+                      "servers": [
+                        {
+                          "name": "public",
+                          "title": "dubstack docs",
+                          "description": "API documentation platform",
+                          "url": "https://dubstack-docs-test.dubstack.live/mcp",
+                          "transport": "http",
+                          "authentication": "none"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Public AI discovery files are disabled for the current site.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-hidden": true
+      }
+    },
+    "/.well-known/agent-card.json": {
+      "get": {
+        "operationId": "getAgentCard",
+        "summary": "Get agent card",
+        "description": "Returns the public agent-card document for the current docs site. Agent clients use it to discover the generated docs skill and the site-level metadata associated with that skill.",
+        "tags": [
+          "AI Access"
+        ],
+        "responses": {
+          "200": {
+            "description": "Get agent card response for the current docs site.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentCard"
+                },
+                "examples": {
+                  "response": {
+                    "summary": "Get agent card",
+                    "value": {
+                      "name": "dubstack docs",
+                      "description": "API documentation platform",
+                      "url": "https://dubstack-docs-test.dubstack.live/",
+                      "version": "1.0.0",
+                      "protocolVersion": "0.3",
+                      "preferredTransport": "HTTP+JSON",
+                      "skills": [
+                        {
+                          "id": "dubstack-docs-test",
+                          "name": "dubstack docs",
+                          "description": "Use when answering questions about dubstack docs and working with its published documentation.",
+                          "tags": [],
+                          "url": "https://dubstack-docs-test.dubstack.live/.well-known/agent-skills/dubstack-docs-test/skill.md"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Public AI discovery files are disabled for the current site.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/.well-known/agent-skills/index.json": {
+      "get": {
+        "operationId": "listAgentSkills",
+        "summary": "List agent skills",
+        "description": "Returns the generated agent-skill discovery index for the current docs site. Each entry points to a skill.md file that tells compatible agents how to use the public docs MCP and feedback surfaces.",
+        "tags": [
+          "AI Access"
+        ],
+        "responses": {
+          "200": {
+            "description": "List agent skills response for the current docs site.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentSkillsIndex"
+                },
+                "examples": {
+                  "response": {
+                    "summary": "List agent skills",
+                    "value": {
+                      "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+                      "skills": [
+                        {
+                          "name": "dubstack-docs-test",
+                          "type": "skill-md",
+                          "description": "Use when answering questions about dubstack docs and working with its published documentation.",
+                          "url": "https://dubstack-docs-test.dubstack.live/.well-known/agent-skills/dubstack-docs-test/skill.md",
+                          "digest": "sha256:f28f07eb865d04c11dc7cce4111301c1136dd41894c9c46fcf54981a99f572ce"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Public AI discovery files are disabled for the current site.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/skill.md": {
+      "get": {
+        "operationId": "getSkillMarkdown",
+        "summary": "Get generated skill file",
+        "description": "Returns the generated skill.md file for the current docs site. The skill tells compatible agents to use the public MCP server, cite docs URLs, and submit structured feedback only for substantive documentation-quality issues when feedback is enabled.",
+        "tags": [
+          "AI Access"
+        ],
+        "responses": {
+          "200": {
+            "description": "Generated skill.md content for the current docs site.",
+            "content": {
+              "text/markdown": {
+                "schema": {
+                  "type": "string",
+                  "description": "Markdown skill document containing YAML frontmatter, MCP instructions, feedback instructions when enabled, and starting-page links."
+                },
+                "examples": {
+                  "skill": {
+                    "summary": "Generated skill file",
+                    "value": "---\nname: \"dubstack docs\"\ndescription: \"Use when answering questions about dubstack docs.\"\n---\n\n# dubstack docs skill\n\nUse this skill when answering questions about dubstack docs."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested skill does not exist or public AI discovery files are disabled for the current site.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "bash",
+            "label": "Fetch generated skill.md",
+            "source": "curl --request GET \\\n  --url https://dubstack-docs-test.dubstack.live/skill.md"
+          }
+        ]
+      }
+    },
+    "/.well-known/agent-skills/{skillId}/skill.md": {
+      "get": {
+        "operationId": "getAgentSkillMarkdown",
+        "summary": "Get agent skill file",
+        "description": "Returns a generated skill.md file by skill identifier. Use the skill URL from the agent-card or agent-skills index rather than guessing the identifier.",
+        "tags": [
+          "AI Access"
+        ],
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "required": true,
+            "description": "Skill identifier from the agent-card or agent-skills index.",
+            "schema": {
+              "type": "string",
+              "example": "dubstack-docs-test"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Generated skill.md content for the current docs site.",
+            "content": {
+              "text/markdown": {
+                "schema": {
+                  "type": "string",
+                  "description": "Markdown skill document containing YAML frontmatter, MCP instructions, feedback instructions when enabled, and starting-page links."
+                },
+                "examples": {
+                  "skill": {
+                    "summary": "Generated skill file",
+                    "value": "---\nname: \"dubstack docs\"\ndescription: \"Use when answering questions about dubstack docs.\"\n---\n\n# dubstack docs skill\n\nUse this skill when answering questions about dubstack docs."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested skill does not exist or public AI discovery files are disabled for the current site.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "bash",
+            "label": "Fetch skill by id",
+            "source": "curl --request GET \\\n  --url https://dubstack-docs-test.dubstack.live/.well-known/agent-skills/dubstack-docs-test/skill.md"
+          }
+        ]
+      }
     }
   },
   "components": {
     "schemas": {
       "McpDiscovery": {
         "type": "object",
-        "additionalProperties": true,
+        "additionalProperties": false,
         "properties": {
-          "name": {
+          "version": {
             "type": "string",
-            "description": "Human-readable name for the docs MCP server.",
-            "example": "DubStack Docs MCP"
-          },
-          "description": {
-            "type": "string",
-            "description": "Short description of what the MCP server exposes.",
-            "example": "Read-only MCP server for the published docs site."
+            "description": "Discovery document version.",
+            "example": "1.0.0"
           },
           "transport": {
             "type": "string",
-            "description": "MCP transport supported by this endpoint.",
+            "description": "Transport family advertised by this discovery document.",
             "enum": [
-              "streamable-http"
+              "http"
             ],
-            "example": "streamable-http"
+            "example": "http"
           },
-          "endpoint": {
+          "url": {
             "type": "string",
             "format": "uri",
-            "description": "Absolute URL clients should use for MCP requests.",
+            "description": "Absolute URL of the primary public MCP endpoint for the current docs site.",
             "example": "https://dubstack-docs-test.dubstack.live/mcp"
           },
-          "capabilities": {
-            "type": "object",
-            "description": "High-level list of public read-only MCP capabilities advertised by this docs site.",
-            "additionalProperties": true,
-            "properties": {
-              "tools": {
-                "type": "array",
-                "description": "Tool names available to MCP clients. Public docs tools are read-only and scoped to published documentation.",
-                "items": {
-                  "type": "string"
-                },
-                "example": [
-                  "search",
-                  "query_docs_filesystem"
-                ]
-              },
-              "resources": {
-                "type": "array",
-                "description": "Static resources advertised to MCP clients, such as the generated skill file when enabled.",
-                "items": {
-                  "type": "string"
-                },
-                "example": [
-                  "skill.md"
-                ]
-              }
+          "servers": {
+            "type": "array",
+            "description": "MCP servers advertised by the current docs site.",
+            "items": {
+              "$ref": "#/components/schemas/McpDiscoveryServer"
             }
           }
         },
         "required": [
-          "name",
+          "version",
           "transport",
-          "endpoint"
+          "url",
+          "servers"
         ],
-        "description": "Discovery document describing the public read-only MCP server exposed by a published docs site."
+        "description": "Discovery document describing the public read-only MCP endpoint exposed by a published docs site."
       },
       "McpServerCard": {
         "type": "object",
@@ -1258,6 +1546,217 @@
           "error"
         ],
         "description": "Standard error response returned by public docs runtime endpoints."
+      },
+      "McpDiscoveryServer": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Stable server name.",
+            "example": "public"
+          },
+          "title": {
+            "type": "string",
+            "description": "Human-readable docs site title.",
+            "example": "dubstack docs"
+          },
+          "description": {
+            "type": "string",
+            "description": "Short description of the docs site.",
+            "example": "API documentation platform"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Absolute URL clients should use for MCP requests.",
+            "example": "https://dubstack-docs-test.dubstack.live/mcp"
+          },
+          "transport": {
+            "type": "string",
+            "enum": [
+              "http"
+            ],
+            "description": "Transport protocol used by the MCP endpoint.",
+            "example": "http"
+          },
+          "authentication": {
+            "type": "string",
+            "enum": [
+              "none"
+            ],
+            "description": "Authentication requirement for this public MCP endpoint.",
+            "example": "none"
+          }
+        },
+        "required": [
+          "name",
+          "title",
+          "url",
+          "transport",
+          "authentication"
+        ],
+        "description": "Single public MCP server entry in the discovery document."
+      },
+      "AgentCard": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Docs site name exposed to agent clients.",
+            "example": "dubstack docs"
+          },
+          "description": {
+            "type": "string",
+            "description": "Short docs site description.",
+            "example": "API documentation platform"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Canonical docs site URL.",
+            "example": "https://dubstack-docs-test.dubstack.live/"
+          },
+          "version": {
+            "type": "string",
+            "description": "Agent-card version emitted by the docs site.",
+            "example": "1.0.0"
+          },
+          "protocolVersion": {
+            "type": "string",
+            "description": "Agent protocol version advertised by the card.",
+            "example": "0.3"
+          },
+          "preferredTransport": {
+            "type": "string",
+            "description": "Preferred protocol binding for agent interactions.",
+            "example": "HTTP+JSON"
+          },
+          "skills": {
+            "type": "array",
+            "description": "Skills advertised by the docs site.",
+            "items": {
+              "$ref": "#/components/schemas/AgentCardSkill"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "url",
+          "version",
+          "skills"
+        ],
+        "description": "Public agent-card document describing the docs site and its generated documentation skill."
+      },
+      "AgentCardSkill": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Stable skill identifier for the docs site.",
+            "example": "dubstack-docs-test"
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable skill name.",
+            "example": "dubstack docs"
+          },
+          "description": {
+            "type": "string",
+            "description": "When an agent should use this skill.",
+            "example": "Use when answering questions about dubstack docs and working with its published documentation."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Optional skill tags.",
+            "example": []
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Absolute URL of the generated skill.md file.",
+            "example": "https://dubstack-docs-test.dubstack.live/.well-known/agent-skills/dubstack-docs-test/skill.md"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "url"
+        ],
+        "description": "Skill entry advertised inside the public agent-card document."
+      },
+      "AgentSkillsIndex": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "type": "string",
+            "format": "uri",
+            "description": "Schema URL for the agent skills discovery document.",
+            "example": "https://schemas.agentskills.io/discovery/0.2.0/schema.json"
+          },
+          "skills": {
+            "type": "array",
+            "description": "Generated skills available for the current docs site.",
+            "items": {
+              "$ref": "#/components/schemas/AgentSkillIndexEntry"
+            }
+          }
+        },
+        "required": [
+          "$schema",
+          "skills"
+        ],
+        "description": "Discovery index for generated agent skills exposed by a published docs site."
+      },
+      "AgentSkillIndexEntry": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Stable skill identifier.",
+            "example": "dubstack-docs-test"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "skill-md"
+            ],
+            "description": "Skill document format.",
+            "example": "skill-md"
+          },
+          "description": {
+            "type": "string",
+            "description": "When an agent should use this skill.",
+            "example": "Use when answering questions about dubstack docs and working with its published documentation."
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Absolute URL of the generated skill.md file.",
+            "example": "https://dubstack-docs-test.dubstack.live/.well-known/agent-skills/dubstack-docs-test/skill.md"
+          },
+          "digest": {
+            "type": "string",
+            "description": "Digest of the generated skill document.",
+            "example": "sha256:f28f07eb865d04c11dc7cce4111301c1136dd41894c9c46fcf54981a99f572ce"
+          }
+        },
+        "required": [
+          "name",
+          "type",
+          "description",
+          "url",
+          "digest"
+        ],
+        "description": "Single generated skill descriptor in the agent skills index."
       }
     }
   }
