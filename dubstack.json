@@ -655,6 +655,10 @@
                 "icon": "file-search"
               },
               {
+                "slug": "ai/agent-readiness-checklist",
+                "icon": "list-checks"
+              },
+              {
                 "slug": "ai/mcp",
                 "icon": "plug"
               }

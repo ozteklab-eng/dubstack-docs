@@ -1,0 +1,173 @@
+---
+title: Agent readiness checklist
+description: Verify the AI-readable files, MCP server, Markdown export, sitemap, robots.txt, structured data, and OpenAPI discovery paths for a published docs site.
+icon: list-checks
+---
+
+Use this checklist after publishing a docs site or changing indexing, API reference, custom domain, or reverse proxy settings.
+
+Run the checks against the public docs domain that readers and agents use.
+
+```bash
+export DOCS_URL="https://your-docs-domain.com"
+```
+
+## Core AI files
+
+Verify the site-level files first.
+
+```bash
+curl -I "$DOCS_URL/llms.txt"
+curl -I "$DOCS_URL/llms-full.txt"
+curl -I "$DOCS_URL/skill.md"
+```
+
+Expected result:
+
+| File | Expected response |
+| --- | --- |
+| `/llms.txt` | `200` with `text/plain`. |
+| `/llms-full.txt` | `200` with `text/plain`. |
+| `/skill.md` | `200` with `text/markdown`. |
+
+If any file returns `404`, check whether public indexing is disabled for the deployment.
+
+## Markdown export
+
+Verify page-level Markdown export through both URL and content negotiation.
+
+```bash
+curl -I "$DOCS_URL/quickstart.md"
+curl -I -H "Accept: text/markdown" "$DOCS_URL/quickstart"
+curl -I -H "Accept: text/plain" "$DOCS_URL/quickstart"
+```
+
+Expected result:
+
+- `.md` URLs return `text/markdown`.
+- `Accept: text/markdown` returns `text/markdown`.
+- `Accept: text/plain` returns the same exported content with `text/plain`.
+
+## MCP discovery
+
+Verify the public MCP server and discovery metadata.
+
+```bash
+curl -s "$DOCS_URL/.well-known/mcp" | jq
+curl -s "$DOCS_URL/.well-known/mcp/server-card.json" | jq
+curl -s "$DOCS_URL/.well-known/mcp/server-cards.json" | jq
+```
+
+Expected result:
+
+- `/.well-known/mcp` and `/.well-known/mcp.json` point to `$DOCS_URL/mcp`.
+- The server card lists the available MCP tools.
+- Public docs sites use unauthenticated access for the public search MCP server.
+
+## Skill discovery
+
+Verify agent skill discovery metadata.
+
+```bash
+curl -s "$DOCS_URL/.well-known/agent-skills/index.json" | jq
+curl -s "$DOCS_URL/.well-known/skills/index.json" | jq
+curl -s "$DOCS_URL/.well-known/agent-card.json" | jq
+```
+
+Expected result:
+
+- The agent-skills manifest includes a `sha256` digest.
+- The compatibility skills index lists `SKILL.md`.
+- The agent card links to the generated skill file.
+
+Use the skill URL returned by the discovery manifest instead of guessing the skill path.
+
+## Search and crawl discovery
+
+Verify search and crawler files.
+
+```bash
+curl -I "$DOCS_URL/robots.txt"
+curl -I "$DOCS_URL/sitemap.xml"
+```
+
+Expected result:
+
+- Public, indexable sites return a sitemap with page URLs.
+- Sites with public indexing disabled return an empty sitemap and crawler-blocking robots directives.
+
+For page-level exclusions, set `noindex: true` or `hidden: true` in page frontmatter and republish.
+
+## Structured data
+
+Verify the homepage includes JSON-LD.
+
+```bash
+curl -s "$DOCS_URL" | grep 'application/ld+json'
+```
+
+Expected result:
+
+- The page includes a JSON-LD block with `Organization` and `WebSite` entries derived from the published site metadata.
+
+## OpenAPI discovery
+
+If the site publishes an API reference, verify the raw OpenAPI aliases.
+
+```bash
+curl -I "$DOCS_URL/openapi.json"
+curl -I "$DOCS_URL/api/openapi.json"
+curl -I "$DOCS_URL/api-reference/openapi.json"
+```
+
+Expected result:
+
+- Each alias returns the raw OpenAPI document with `application/json`.
+- The response contains top-level `openapi`, `info`, and `paths`.
+
+The browser playground metadata endpoint is separate:
+
+```bash
+curl -s "$DOCS_URL/api/playground/spec" | jq
+```
+
+That endpoint returns the published spec plus playground display metadata.
+
+## Reverse proxy and `/docs` subpath checks
+
+If the site is mounted under a subpath such as `example.com/docs`, run the same checks with the subpath included:
+
+```bash
+export DOCS_URL="https://example.com/docs"
+```
+
+Confirm your proxy forwards:
+
+- `$DOCS_URL/llms.txt`
+- `$DOCS_URL/skill.md`
+- `$DOCS_URL/mcp`
+- `$DOCS_URL/.well-known/mcp`
+- `$DOCS_URL/.well-known/agent-card.json`
+- `$DOCS_URL/.well-known/agent-skills/index.json`
+- `$DOCS_URL/openapi.json`, if the site has an API reference
+
+See [Reverse proxy](/deployment/reverse-proxy) for route and header requirements.
+
+## Troubleshooting
+
+| Symptom | Check |
+| --- | --- |
+| AI files return `404` | Public indexing may be disabled, or the deployment has not finished updating. |
+| `.well-known` paths work on the origin but not the custom domain | Forward `.well-known` routes through the reverse proxy or CDN. |
+| Markdown export returns HTML | Check the `Accept` header and make sure the request is for a docs page, not a protected app route. |
+| OpenAPI aliases return `404` | Confirm the site has a published OpenAPI spec configured in `dubstack.json`. |
+| Sitemap is empty | Check deployment indexing controls and page-level `hidden` or `noindex` frontmatter. |
+
+## Related
+
+- [AI discovery files](/ai/ai-discovery-files)
+- [Markdown export](/ai/markdown-export)
+- [Generated skill file](/ai/generated-skill-file)
+- [MCP](/ai/mcp)
+- [OpenAPI setup](/api-reference/openapi-setup)
+- [Reverse proxy](/deployment/reverse-proxy)
