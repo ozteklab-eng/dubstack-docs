@@ -1,0 +1,130 @@
+---
+title: Columns
+description: Arrange related MDX content in responsive columns.
+icon: columns-3
+---
+
+Use `Columns` when several short blocks belong side by side: comparisons, grouped examples, or compact feature explanations.
+
+Columns collapse on narrower screens, so the same content stays readable on tablets and phones.
+
+## Basic columns
+
+<Columns cols={2}>
+  <Column>
+    ### Git-backed content
+
+    Keep pages, assets, and configuration in the same repository so previews and production stay aligned.
+  </Column>
+
+  <Column>
+    ### Published artifacts
+
+    DubStack reads the synchronized published artifacts for fast public docs rendering.
+  </Column>
+</Columns>
+
+```mdx
+<Columns cols={2}>
+  <Column>
+    ### Git-backed content
+
+    Keep pages, assets, and configuration in the same repository.
+  </Column>
+
+  <Column>
+    ### Published artifacts
+
+    DubStack reads synchronized published artifacts for public docs.
+  </Column>
+</Columns>
+```
+
+## Cards in columns
+
+Use `Columns` for mixed MDX content and `CardGroup` for pure navigation cards. If every item is a link card, prefer [cards](/writing-content/cards).
+
+<Columns cols={2}>
+  <Card title="Preview deployments" href="/deployment/preview-deployments" icon="git-pull-request">
+    Review branch-specific docs before merging.
+  </Card>
+
+  <Card title="Manual updates" href="/deployment/manual-updates-history" icon="refresh-cw">
+    Trigger and review publish jobs from the dashboard.
+  </Card>
+</Columns>
+
+```mdx
+<Columns cols={2}>
+  <Card title="Preview deployments" href="/deployment/preview-deployments" icon="git-pull-request">
+    Review branch-specific docs before merging.
+  </Card>
+
+  <Card title="Manual updates" href="/deployment/manual-updates-history" icon="refresh-cw">
+    Trigger and review publish jobs from the dashboard.
+  </Card>
+</Columns>
+```
+
+## Three columns
+
+Use three columns for very short summaries. Avoid long paragraphs, wide tables, or large code blocks in three-column layouts.
+
+<Columns cols={3}>
+  <Column>
+    **Write**
+
+    Edit MDX and `dubstack.json` in Git.
+  </Column>
+
+  <Column>
+    **Preview**
+
+    Review changes in branch previews.
+  </Column>
+
+  <Column>
+    **Publish**
+
+    Merge and sync published artifacts.
+  </Column>
+</Columns>
+
+```mdx
+<Columns cols={3}>
+  <Column>
+    **Write**
+
+    Edit MDX and `dubstack.json` in Git.
+  </Column>
+
+  <Column>
+    **Preview**
+
+    Review changes in branch previews.
+  </Column>
+
+  <Column>
+    **Publish**
+
+    Merge and sync published artifacts.
+  </Column>
+</Columns>
+```
+
+## Properties
+
+<ResponseField name="cols" type="number" default="2">
+  Number of columns on wide screens. Use `2` for most layouts and `3` only for short content.
+</ResponseField>
+
+<ResponseField name="children" type="MDX content" required>
+  The content rendered inside the column grid. Use `Column` wrappers when each column contains multiple blocks.
+</ResponseField>
+
+## Guidelines
+
+- Keep each column short and scannable.
+- Do not put wide tables or large API examples inside columns.
+- Use `CardGroup` when every child is a navigation card.
+- Test the page at mobile width when using three columns.

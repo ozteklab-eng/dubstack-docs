@@ -259,6 +259,10 @@
                 "icon": "puzzle-piece"
               },
               {
+                "slug": "writing-content/columns",
+                "icon": "columns-3"
+              },
+              {
                 "slug": "writing-content/cards",
                 "icon": "panels-top-left"
               },
@@ -341,6 +345,10 @@
               {
                 "slug": "writing-content/media-embeds",
                 "icon": "image"
+              },
+              {
+                "slug": "writing-content/mermaid-diagrams",
+                "icon": "workflow"
               },
               {
                 "slug": "writing-content/reusable-snippets",

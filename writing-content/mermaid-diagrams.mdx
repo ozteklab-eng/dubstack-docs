@@ -1,0 +1,95 @@
+---
+title: Mermaid diagrams
+description: Add rendered flowcharts, sequences, and architecture diagrams with Mermaid code fences.
+icon: workflow
+---
+
+Use Mermaid diagrams for flows that are easier to understand visually: deployment pipelines, data flow, auth handoffs, and service relationships.
+
+DubStack renders fenced `mermaid` blocks as diagrams and keeps the original source in Git.
+
+## Flowchart
+
+```mermaid
+flowchart LR
+  Author[Author changes docs] --> Git[Git repository]
+  Git --> Sync[Git sync]
+  Sync --> R2[Published artifacts]
+  R2 --> Site[Docs site]
+```
+
+````mdx
+```mermaid
+flowchart LR
+  Author[Author changes docs] --> Git[Git repository]
+  Git --> Sync[Git sync]
+  Sync --> R2[Published artifacts]
+  R2 --> Site[Docs site]
+```
+````
+
+## Sequence diagram
+
+```mermaid
+sequenceDiagram
+  participant Browser
+  participant Docs as Docs site
+  participant API as Content API
+
+  Browser->>Docs: Open page
+  Docs->>API: Fetch published content
+  API-->>Docs: Return page and theme
+  Docs-->>Browser: Render documentation
+```
+
+````mdx
+```mermaid
+sequenceDiagram
+  participant Browser
+  participant Docs as Docs site
+  participant API as Content API
+
+  Browser->>Docs: Open page
+  Docs->>API: Fetch published content
+  API-->>Docs: Return page and theme
+  Docs-->>Browser: Render documentation
+```
+````
+
+## Diagram controls
+
+Large diagrams show pan and zoom controls automatically. You can force controls on or off with fence metadata.
+
+````mdx
+```mermaid controls=show placement=top-right
+flowchart TD
+  Start[Start] --> Validate[Validate]
+  Validate --> Publish[Publish]
+```
+````
+
+Use `controls=hide` for small diagrams that should stay static.
+
+````mdx
+```mermaid controls=hide
+flowchart LR
+  A --> B
+```
+````
+
+## Metadata
+
+<ResponseField name="controls" type="string" default="auto">
+  Controls visibility. Supported values are `auto`, `show`, and `hide`.
+</ResponseField>
+
+<ResponseField name="placement" type="string" default="bottom-right">
+  Controls position. Supported values are `top-left`, `top-right`, `bottom-left`, and `bottom-right`.
+</ResponseField>
+
+## Guidelines
+
+- Prefer diagrams for process and architecture, not decoration.
+- Keep node labels short so diagrams remain readable on mobile.
+- Put long explanations before or after the diagram instead of inside nodes.
+- Use sequence diagrams for request flows and flowcharts for lifecycle steps.
