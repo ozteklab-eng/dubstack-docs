@@ -107,13 +107,13 @@ Use named examples when the same endpoint has several valid shapes.
 
 ## Keep examples safe
 
-Do not include real tokens, private customer IDs, production secrets, or sensitive payloads in public specs.
+Do not include real credentials, private customer IDs, or sensitive payloads in public specs.
 
 Use placeholders instead:
 
 ```json
 {
-  "authorization": "Bearer <token>",
+  "authorization": "Bearer <credential>",
   "projectId": "proj_123"
 }
 ```
@@ -121,5 +121,6 @@ Use placeholders instead:
 ## Related
 
 - [Playground authentication](/api-reference/playground-authentication)
+- [Code examples](/api-reference/code-examples)
 - [API playground overview](/api-reference/playground-overview)
 - [OpenAPI setup](/api-reference/openapi-setup)

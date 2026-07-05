@@ -691,6 +691,10 @@
                 "icon": "panel-top"
               },
               {
+                "slug": "api-reference/code-examples",
+                "icon": "code"
+              },
+              {
                 "slug": "api-reference/live-requests",
                 "icon": "send"
               },

@@ -1,0 +1,139 @@
+---
+title: Code examples
+description: Generate request examples from OpenAPI endpoint metadata and playground inputs.
+icon: code
+---
+
+Code examples give readers a copyable starting point for calling each endpoint.
+
+DubStack generates examples from the same request state used by the interactive playground, so the snippets stay aligned with the method, URL, inputs, headers, authorization, and body shown on the page.
+
+## How examples are generated
+
+Generated examples come from the published OpenAPI operation and the current playground inputs.
+
+| Source | Example behavior |
+| --- | --- |
+| `servers` | Sets the base URL used in snippets. |
+| Path parameters | Replaces path placeholders such as `{projectId}`. |
+| Query parameters | Adds URL query strings. |
+| Header parameters | Adds request headers. |
+| Security schemes | Adds the authorization header or field shown in the playground. |
+| Request body | Adds a JSON payload when the operation accepts a body. |
+| Examples and defaults | Provides safer starting values when the spec includes them. |
+
+When a reader edits a playground input, the generated example updates to match that request.
+
+## Supported generated languages
+
+Generated examples are available from public endpoint pages in these languages:
+
+| Language | Public endpoint pages | Dashboard playground |
+| --- | --- | --- |
+| cURL | Supported | Supported |
+| Python | Supported | Supported |
+| JavaScript | Supported | Supported |
+| PHP | Supported | Supported |
+| Go | Supported | Supported |
+| Java | Supported | Supported |
+| Ruby | Supported | Not shown in the dashboard playground yet |
+
+Use the public endpoint page as the source of truth for what readers see in your published docs.
+
+## Add useful request examples
+
+The best generated examples start with a useful OpenAPI spec.
+
+Add examples to request bodies when an endpoint accepts JSON.
+
+```yaml
+paths:
+  /v1/projects:
+    post:
+      summary: Create project
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectRequest'
+            examples:
+              minimal:
+                summary: Minimal project
+                value:
+                  name: Developer docs
+```
+
+Field-level examples are also useful when a full request example is not available.
+
+```yaml
+components:
+  schemas:
+    CreateProjectRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: Developer docs
+        visibility:
+          type: string
+          enum:
+            - public
+            - private
+          example: public
+```
+
+## Keep examples safe
+
+Use placeholder values for credentials, customer identifiers, and environment-specific data.
+
+```json
+{
+  "projectId": "proj_123",
+  "name": "Developer docs"
+}
+```
+
+Do not commit real customer data or live credentials to a public OpenAPI file.
+
+## When to write manual examples
+
+Generated examples are best for direct HTTP requests.
+
+Write manual MDX examples near the endpoint when you need to explain:
+
+- SDK usage
+- retry behavior
+- pagination loops
+- webhook verification
+- long-running jobs
+- error handling patterns
+
+````mdx
+```javascript Node.js SDK
+const project = await client.projects.create({
+  name: 'Developer docs',
+});
+```
+````
+
+Manual SDK examples are regular docs content today. Endpoint-side SDK sample extensions are tracked separately from the generated playground snippets.
+
+## Troubleshooting snippets
+
+If a generated example looks wrong:
+
+1. Check the operation method and path in the OpenAPI spec.
+2. Check `servers` for the correct base URL.
+3. Confirm required path and query parameters have descriptions and schemas.
+4. Add request body examples for complex payloads.
+5. Confirm the endpoint page is mapped to the intended OpenAPI operation.
+
+## Related
+
+- [API playground overview](/api-reference/playground-overview)
+- [Request builder](/api-reference/request-builder)
+- [Live API requests](/api-reference/live-requests)
+- [Response examples](/api-reference/response-examples)
