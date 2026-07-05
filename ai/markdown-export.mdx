@@ -6,7 +6,7 @@ icon: file-text
 
 Markdown export gives readers a clean text version of the current page so they can reuse docs content in AI tools, support workflows, and internal notes without copying the rendered site chrome.
 
-DubStack exposes Markdown through page contextual actions today. Site-level AI indexes are available through [`llms.txt`](/ai/llms-indexes) and [`llms-full.txt`](/ai/llms-indexes).
+DubStack exposes Markdown through page contextual actions, page-level `.md` URLs, and `Accept: text/markdown` requests. Site-level AI indexes are available through [`llms.txt`](/ai/llms-indexes) and [`llms-full.txt`](/ai/llms-indexes).
 
 ## Copy a page as Markdown
 
@@ -26,6 +26,31 @@ The copied content comes from the published page content. It does not include da
 The **View as Markdown** action opens the current page content as a Markdown document in the browser.
 
 This is useful when you want to inspect the raw text shape that an AI tool receives before copying or sharing it.
+
+## Open a page as Markdown
+
+Append `.md` to any published documentation page URL to fetch the clean Markdown version of that page.
+
+```txt
+https://docs.example.com/getting-started.md
+https://docs.example.com/api-reference/endpoint/create-user.md
+```
+
+The response uses `text/markdown; charset=utf-8` and includes a documentation-index note that points agents to `/llms.txt` before they explore individual pages.
+
+You can also request Markdown from the normal page URL by sending an `Accept: text/markdown` header.
+
+```bash
+curl -H "Accept: text/markdown" https://docs.example.com/getting-started
+```
+
+Root pages are available at `/.md`.
+
+```txt
+https://docs.example.com/.md
+```
+
+API reference endpoint pages include an `OpenAPI` section for the current operation so AI tools can read the method, path, parameters, request body, responses, and schemas without loading the visual API playground.
 
 ## Configure Markdown actions
 
@@ -65,10 +90,6 @@ For whole-site ingestion, use the generated AI index files instead of copying pa
 
 See [AI index files](/ai/llms-indexes) and [Generated skill file](/ai/generated-skill-file) for the generated file behavior.
 
-## Current server behavior
-
-DubStack currently supports contextual Markdown copy/view actions and generated AI index files. Dedicated server-rendered page `.md` URLs are not required for these actions.
-
 ## Troubleshooting
 
 If Markdown actions are missing:
@@ -79,6 +100,12 @@ If Markdown actions are missing:
 4. Refresh the published page after the update completes.
 
 If copied Markdown is stale, run a manual update from the dashboard and wait for the deployment activity to complete.
+
+If a `.md` URL returns `404`, check whether:
+
+1. The page exists in the published deployment.
+2. Public indexing is enabled for the deployment.
+3. The page does not set `noindex: true` in frontmatter.
 
 ## Related
 
