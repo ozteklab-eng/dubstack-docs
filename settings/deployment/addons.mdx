@@ -67,7 +67,9 @@ Use advisory mode while tuning a check. Use required mode only when the check is
 
 Preview deployments are enabled by default when the deployment supports previews.
 
-Preview authentication restricts preview access to authenticated organization members.
+Preview authentication is available only when the selected deployment reports preview-auth support. When unavailable, the dashboard disables the card and shows the missing capability reason.
+
+Do not rely on preview authentication unless the add-on is enabled and the preview URL enforces member access.
 
 ## Visibility
 
@@ -90,4 +92,4 @@ Examples:
 - Git-backed add-ons require a connected repository.
 - Issue and edit workflows can depend on the Git provider and repository visibility.
 - Agent feedback requires the public MCP and AI discovery surfaces to remain available.
-- Preview authentication requires preview deployments to be available for the selected deployment.
+- Preview authentication requires preview deployments and preview-auth runtime enforcement to be available for the selected deployment.
