@@ -21,25 +21,23 @@ Dashboard font changes are stored in the same site configuration that powers the
 
 ## Configure fonts in source
 
-Set `theme.fonts` in `dubstack.json`.
+Set `fonts` in `dubstack.json`.
 
 ```json
 {
-  "theme": {
-    "fonts": {
-      "heading": "Space Grotesk",
-      "body": "Inter",
-      "code": "JetBrains Mono"
-    }
+  "fonts": {
+    "heading": "Space Grotesk",
+    "body": "Inter",
+    "code": "JetBrains Mono"
   }
 }
 ```
 
 | Field | Purpose |
 | --- | --- |
-| `theme.fonts.heading` | Font used by page titles, section headings, and prominent labels. |
-| `theme.fonts.body` | Font used by normal body text, navigation labels, tables, and most UI copy. |
-| `theme.fonts.code` | Font used by code blocks, inline code, API examples, and terminal snippets. |
+| `fonts.heading` | Font used by page titles, section headings, and prominent labels. |
+| `fonts.body` | Font used by normal body text, navigation labels, tables, and most UI copy. |
+| `fonts.code` | Font used by code blocks, inline code, API examples, and terminal snippets. |
 
 If `heading` is omitted, dubstack uses the body font for headings. If `code` is omitted, dubstack uses the theme default monospace font.
 
@@ -70,28 +68,24 @@ You can also provide a full CSS font stack when you need controlled fallbacks.
 
 ```json
 {
-  "theme": {
-    "fonts": {
-      "body": "Inter, system-ui, sans-serif",
-      "code": "JetBrains Mono, SFMono-Regular, Menlo, monospace"
-    }
+  "fonts": {
+    "body": "Inter, system-ui, sans-serif",
+    "code": "JetBrains Mono, SFMono-Regular, Menlo, monospace"
   }
 }
 ```
 
 ## Custom font loading
 
-The standard docs shell preloads the supported dashboard font set. A custom family name can be written into `theme.fonts`, but the browser must still be able to load that font.
+The standard docs shell preloads the supported dashboard font set. A custom family name can be written into `fonts`, but the browser must still be able to load that font.
 
 For font files that are not part of the standard set, use custom CSS only when your workspace has custom CSS enabled.
 
 ```json
 {
-  "theme": {
-    "custom_css": "@font-face { font-family: 'Acme Sans'; src: url('/assets/fonts/acme-sans.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }",
-    "fonts": {
-      "body": "Acme Sans, Inter, sans-serif"
-    }
+  "custom_css": "@font-face { font-family: 'Acme Sans'; src: url('/assets/fonts/acme-sans.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }",
+  "fonts": {
+    "body": "Acme Sans, Inter, sans-serif"
   }
 }
 ```

@@ -1,0 +1,128 @@
+---
+title: Custom CSS
+description: Add advanced CSS overrides for eligible docs sites.
+icon: paintbrush
+---
+
+Custom CSS lets eligible workspaces apply advanced visual overrides to the published docs shell.
+
+Use this only when standard theme settings, palette tokens, fonts, and component options are not enough.
+
+<Warning>
+  Custom CSS is an advanced Enterprise feature. Keep overrides small, source-reviewed, and tied to stable hooks. Do not use custom CSS for normal theme changes that already have first-class settings.
+</Warning>
+
+## Configure custom CSS
+
+Set `custom_css` in `dubstack.json`.
+
+```json
+{
+  "custom_css": "#content-area { max-width: 980px; }"
+}
+```
+
+When published, dubstack injects the CSS into the docs shell for that site.
+
+## Use stable hooks
+
+Prefer documented IDs and data attributes. Avoid targeting generated class names because they can change during deploys.
+
+### Page layout
+
+| Hook | Purpose |
+| --- | --- |
+| `#background-color` | Outermost docs shell background wrapper. |
+| `#content-area` | Main content area. |
+| `#content` | Rendered MDX page content. |
+| `#sidebar-content` | Sidebar column container. |
+| `#table-of-contents-content` | Table of contents content wrapper. |
+| `[data-docs-shell-scroll-root]` | Main scroll root for docs pages. |
+
+### Header and assistant
+
+| Hook | Purpose |
+| --- | --- |
+| `#assistant-entry` | Desktop assistant entry button. |
+| `#assistant-entry-mobile` | Mobile assistant entry button. |
+| `[data-docs-theme-preset]` | Current theme shell preset. |
+| `[data-docs-color-preset]` | Current palette preset. |
+| `[data-docs-theme-layout]` | Current docs shell layout. |
+| `[data-docs-language-nav]` | Present when a language selector is configured. |
+
+### Feedback
+
+| Hook | Purpose |
+| --- | --- |
+| `#feedback-thumbs-up` | Positive page feedback button. |
+| `#feedback-thumbs-down` | Negative page feedback button. |
+| `#feedback-form` | Feedback form wrapper. |
+| `#feedback-form-input` | Feedback message input. |
+| `#feedback-form-email` | Optional feedback email input. |
+| `#feedback-form-cancel` | Feedback cancel action. |
+| `#feedback-form-submit` | Feedback submit action. |
+
+## Scope overrides by theme
+
+Use data attributes when an override should only apply to one shell or palette.
+
+```css
+[data-docs-theme-preset="prism"] #content-area {
+  max-width: 1040px;
+}
+
+[data-docs-color-preset="classic"] #assistant-entry {
+  border-radius: 999px;
+}
+```
+
+## Custom fonts
+
+Custom CSS can load font files that are stored in the docs repository when your workspace has custom CSS enabled.
+
+```json
+{
+  "custom_css": "@font-face { font-family: 'Acme Sans'; src: url('/assets/fonts/acme-sans.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }",
+  "fonts": {
+    "body": "Acme Sans, Inter, sans-serif"
+  }
+}
+```
+
+See [Fonts](/configuration/fonts) for typography configuration and fallback guidance.
+
+## What custom CSS should not do
+
+Do not use custom CSS to:
+
+- hide required platform attribution on plans where attribution is required
+- hide consent, feedback, billing, or security controls
+- rely on generated class names
+- load third-party JavaScript
+- inject tracking scripts
+- make content unreadable in light or dark mode
+
+<Note>
+  dubstack supports CSS overrides here, not arbitrary JavaScript execution. Use approved integrations for analytics, assistant behavior, and external tooling.
+</Note>
+
+## Review checklist
+
+Before publishing a custom CSS change:
+
+- Test the page in light and dark mode.
+- Test desktop and mobile widths.
+- Check API reference pages, regular MDX pages, search, assistant, and feedback surfaces.
+- Keep a rollback commit ready.
+- Prefer theme tokens or dashboard settings when they can express the same change.
+
+## Related topics
+
+<CardGroup cols={2}>
+  <Card title="Theming" icon="palette" href="/configuration/theming">
+    Configure first-class theme, palette, color, logo, and code block settings.
+  </Card>
+  <Card title="Fonts" icon="text-cursor-input" href="/configuration/fonts">
+    Configure heading, body, and code typography.
+  </Card>
+</CardGroup>

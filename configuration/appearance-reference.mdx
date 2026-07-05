@@ -87,18 +87,16 @@ Asset paths are resolved from the published docs repository. Keep the files in s
 
 | Field | Type | Purpose |
 | --- | --- | --- |
-| `theme.fonts.heading` | string | Heading font family. |
-| `theme.fonts.body` | string | Body text font family. |
-| `theme.fonts.code` | string | Code and inline-code font family. |
+| `fonts.heading` | string | Heading font family. |
+| `fonts.body` | string | Body text font family. |
+| `fonts.code` | string | Code and inline-code font family. |
 
 ```json
 {
-  "theme": {
-    "fonts": {
-      "heading": "Inter",
-      "body": "Inter",
-      "code": "JetBrains Mono"
-    }
+  "fonts": {
+    "heading": "Inter",
+    "body": "Inter",
+    "code": "JetBrains Mono"
   }
 }
 ```
@@ -134,14 +132,14 @@ Advanced code block fields are useful for theme authors. Most sites should keep 
 
 | Field | Type | Purpose |
 | --- | --- | --- |
-| `styles.custom` | string | Optional stylesheet path from the docs repository. |
+| `custom_css` | string | Inline custom CSS for advanced docs-shell overrides. Enterprise feature. |
 
 ```json
 {
-  "styles": {
-    "custom": "/custom.css"
-  }
+  "custom_css": "#content-area { max-width: 980px; }"
 }
 ```
 
 Use custom CSS sparingly. Prefer source-backed theme settings first so previews, generated screenshots, and AI-readable pages remain predictable.
+
+See [Custom CSS](/configuration/custom-css) for stable hooks, review guidance, and boundaries.

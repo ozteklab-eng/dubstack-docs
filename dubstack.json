@@ -421,6 +421,10 @@
                 "icon": "text-cursor-input"
               },
               {
+                "slug": "configuration/custom-css",
+                "icon": "paintbrush"
+              },
+              {
                 "slug": "configuration/redirects",
                 "icon": "corner-up-right"
               },
