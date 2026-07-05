@@ -219,6 +219,10 @@
                 "icon": "gallery-horizontal-end"
               },
               {
+                "slug": "writing-content/visibility",
+                "icon": "eye"
+              },
+              {
                 "slug": "writing-content/fields-expandables",
                 "icon": "list-tree"
               },

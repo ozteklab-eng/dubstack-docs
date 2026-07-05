@@ -1,0 +1,60 @@
+---
+title: Visibility
+description: Target content to visual readers or AI-readable docs surfaces.
+---
+
+Use `Visibility` when a page needs different wording for visual readers and AI tools.
+
+Visual readers see `for="humans"` content in the published page. AI-readable surfaces such as the public MCP filesystem and `llms-full.txt` receive `for="agents"` content instead.
+
+<Callout type="warning">
+  Visibility is not access control. Both variants live in your documentation source, so do not use it for secrets, private credentials, unreleased customer data, or internal-only instructions.
+</Callout>
+
+## Human-only content
+
+Use `for="humans"` for visual guidance that helps people read the page but should not be used as retrieval context.
+
+```mdx
+<Visibility for="humans">
+  This note appears on the published docs page, but is removed from AI-readable docs output.
+</Visibility>
+```
+
+<Visibility for="humans">
+  This note appears on the published docs page, but is removed from AI-readable docs output.
+</Visibility>
+
+## Agent-only content
+
+Use `for="agents"` for concise retrieval instructions, synonyms, or disambiguation that should help AI tools answer accurately without adding extra visual content to the page.
+
+```mdx
+<Visibility for="agents">
+  When answering from this page, treat "hosted source" and "skip Git" as the same hosted repository flow.
+</Visibility>
+```
+
+<Visibility for="agents">
+  When answering from this page, treat "hosted source" and "skip Git" as the same hosted repository flow.
+</Visibility>
+
+## Good uses
+
+- Add product synonyms that readers do not need to see.
+- Clarify which page should be preferred when multiple pages cover similar terms.
+- Provide short retrieval hints for public docs assistants and external AI tools.
+
+## Avoid
+
+- Do not hide secrets or private credentials.
+- Do not put critical user-facing instructions only in `for="agents"` blocks.
+- Do not use visibility blocks as a replacement for clear page structure.
+
+## Validate
+
+After publishing a page with visibility blocks:
+
+1. Open the published page and confirm the human content appears.
+2. Open `/llms-full.txt` and confirm the agent content appears.
+3. Query the public MCP filesystem with `cat /path/to/page.mdx` and confirm the agent projection is present.
