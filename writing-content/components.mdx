@@ -8,6 +8,23 @@ Components make documentation easier to scan and easier for AI tools to interpre
 
 Use components when structure matters. Use plain Markdown when a paragraph or list is enough.
 
+## Component catalog
+
+Use the focused component pages when you need exact props and examples.
+
+| Goal | Components | Guide |
+| --- | --- | --- |
+| Structure content | `Tabs`, `Steps`, `Columns`, `CodeGroup` | [Tabs and steps](/writing-content/tabs-and-steps), [Code groups](/writing-content/code-groups) |
+| Highlight important details | `Callout`, `Badge`, `Frame` | [Callouts](/writing-content/callouts), [Badges](/writing-content/badges), [Frames](/writing-content/frames) |
+| Link to related pages | `Card`, `CardGroup`, `Tile` | [Cards](/writing-content/cards), [Tiles](/writing-content/tiles) |
+| Hide optional detail | `Accordion`, `AccordionGroup`, `Expandable`, `View`, `Visibility` | [Accordions](/writing-content/accordions), [Fields and expandables](/writing-content/fields-expandables), [Views](/writing-content/views), [Visibility](/writing-content/visibility) |
+| Document APIs | `ParamField`, `ResponseField`, `RequestExample`, `ResponseExample` | [Fields and expandables](/writing-content/fields-expandables), [Request and response examples](/writing-content/request-response-examples) |
+| Add visual context | `Icon`, `Tooltip`, `Color`, `FileTree`, media components | [Icons](/writing-content/icons), [Tooltips](/writing-content/tooltips), [Colors](/writing-content/colors), [File trees](/writing-content/file-trees), [Media, embeds, and diagrams](/writing-content/media-embeds) |
+| Share reusable content | `Snippet` | [Reusable snippets](/writing-content/reusable-snippets) |
+| Share AI prompts | `Prompt` | [Prompts](/writing-content/prompts) |
+
+If you are not sure which component to use, start with the simplest one that communicates the structure clearly.
+
 ## Callouts
 
 Callouts highlight important information:
@@ -194,7 +211,7 @@ Use request and response examples when API-focused guides need code samples in t
 <RequestExample>
 ```bash cURL
 curl https://api.example.com/v1/sites \
-  -H "Authorization: Bearer $API_TOKEN"
+  -H "Authorization: Bearer <credential>"
 ```
 </RequestExample>
 ````
