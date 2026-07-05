@@ -42,6 +42,19 @@ Use the changed-file list before publishing to confirm that the edit only touche
 
 If a pending edit is wrong, use **Undo all changes** or revert the individual file before publishing. Reopen the editor page after undoing a temporary edit to confirm the source content is clean.
 
+## Branch selector and feature branches
+
+Use the branch selector in the editor toolbar to switch between the deployment branch and feature branches. The selector shows the default branch, available feature branches, and a **Create new branch** action.
+
+When you switch to a feature branch, the toolbar action changes from **Publish** to **Create PR**.
+
+| Feature branch state | What the menu shows |
+| --- | --- |
+| No pending changes | The **Create pull request** menu shows **No pending changes**. |
+| Pending changes | The menu shows the feature branch name, changed-file count, **Undo all changes**, each changed file with status, and the **Create PR** action. |
+
+Use this menu to review branch-scoped changes before opening a pull request. Do not create a pull request until the changed-file list only contains the intended edits.
+
 ## Source-backed publishing
 
 Use this flow when your site is connected to a customer-owned Git repository.
