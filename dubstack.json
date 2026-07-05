@@ -483,6 +483,10 @@
                 "icon": "shield-check"
               },
               {
+                "slug": "ai/connector-capabilities",
+                "icon": "plug-zap"
+              },
+              {
                 "slug": "ai/integrations/slack",
                 "icon": "message-circle"
               },

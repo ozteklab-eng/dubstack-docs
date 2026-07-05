@@ -1,0 +1,103 @@
+---
+title: Connector capabilities
+description: Understand how agent integrations map to stable capabilities such as chat context, issue context, notifications, and docs authoring.
+icon: plug-zap
+---
+
+Connector capabilities describe what a connected provider is allowed to do inside dubstack.
+
+They are capability-first rather than provider-first. This means a messaging provider, issue tracker, or knowledge-base provider plugs into a stable product contract instead of every agent and automation feature learning provider-specific behavior separately.
+
+## Why capabilities matter
+
+Capabilities keep integrations predictable:
+
+- The dashboard can show why a provider is available, blocked, or coming soon.
+- The agent can use only the tools that are connected, scoped, and allowed for the current user.
+- Automations can validate integrations before a run starts.
+- Future equivalent providers can reuse the same behavior without changing the authoring boundary.
+
+<Callout type="info">
+  Integrations provide context or notifications. Documentation changes still write through the connected Git provider and should produce reviewable repository changes unless a workflow is explicitly configured for direct updates.
+</Callout>
+
+## Current capability families
+
+| Family | What it provides | Current shipped providers |
+| --- | --- | --- |
+| Conversation | Slack messages, threads, direct messages, and follow-up context. | Slack |
+| Notification | Workflow run notifications and agent progress updates. | Slack |
+| Issue tracking | Issue metadata and recent issue comments for selected work items. | Jira |
+| Knowledge base and files | External pages, docs, or files that can be used as bounded context. | Catalog only |
+| Calendar | User-specific event context for docs and workflow tasks. | Catalog only |
+| CRM and support | Customer, ticket, or account context for docs updates. | Catalog only |
+| Repository context | Source repositories used as read-only context. | Connected Git provider |
+| Docs authoring | Reviewable documentation updates through the docs repository. | Connected Git provider plus authoring agent |
+
+Catalog-only means the provider can appear as planned surface area, but it cannot be selected for a run or used by the agent until its authorization, scopes, access control, collectors, and tests are active.
+
+## Active providers
+
+| Provider | Scope | Capabilities |
+| --- | --- | --- |
+| Slack | Organization | Agent conversation surface, bounded chat context, thread follow-ups, progress updates, deployment selection, approval prompts, and workflow notifications. |
+| Jira | Organization | Bounded issue-tracker context for dashboard agent requests and supported automations. |
+
+The exact providers you see in the dashboard can depend on plan, environment configuration, and organization permissions.
+
+## Shared and personal scope
+
+Integrations can be scoped in two ways.
+
+| Scope | Meaning |
+| --- | --- |
+| Organization | One authorized installation is available to permitted workspace members and supported workflows. |
+| Personal | Each teammate authorizes their own account, and the agent can only use that provider on behalf of that teammate. |
+
+Current shipped providers are organization-scoped. Personal provider support is reserved for providers where user-specific data should not be shared across the whole organization.
+
+## How the agent chooses integrations
+
+The agent or workflow runner can use an integration only when all checks pass:
+
+1. The provider is active for the environment.
+2. The provider is connected for the organization or deployment scope.
+3. The current user or workflow has permission to use it.
+4. The integration has the required OAuth scopes or app permissions.
+5. The request or workflow explicitly needs that provider context.
+6. The selected workflow supports that capability family.
+
+If any check fails, the provider is not used. The dashboard should show a blocking reason instead of silently running with missing context.
+
+## Equivalent providers
+
+Equivalent providers should map to the same capability family.
+
+Examples:
+
+| Capability family | Current provider | Future equivalent shape |
+| --- | --- | --- |
+| Conversation and notifications | Slack | A self-hosted chat provider can reuse chat context, thread follow-up, and notification capabilities. |
+| Issue tracking | Jira | Another issue tracker can reuse bounded issue context and, later, guarded issue actions. |
+| Knowledge base and files | Catalog only | A file or wiki provider can reuse file context once pagination, access labels, and redaction are implemented. |
+
+This model lets dubstack add provider choice without changing how users reason about agent safety.
+
+## Safety boundaries
+
+Integration context follows these boundaries:
+
+- Source repositories and external tools are read-only context unless a specific write capability is implemented and approved.
+- Docs authoring writes only to the connected docs repository.
+- Viewers can ask questions but cannot request documentation changes.
+- Editors and admins can request documentation changes when the deployment is authoring-ready.
+- Third-party write actions require explicit approval before execution.
+- Integration content should not be stored as durable raw transcripts unless the product explicitly says it is saved.
+
+## Related
+
+- [Agent integrations](/ai/integrations)
+- [Integration permissions and scopes](/ai/integration-permissions)
+- [Slack integration](/ai/integrations/slack)
+- [Jira integration](/ai/integrations/jira)
+- [Configure automation runs](/automations/configuration)
