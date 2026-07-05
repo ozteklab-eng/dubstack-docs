@@ -23,6 +23,21 @@ The checklist is calculated from live dashboard state, not from a static counter
 
 Some items only appear when your role can perform them. For example, repository and custom domain setup require owner or admin access, while editor-level setup items are shown to owners, admins, and editors.
 
+## Visible items and destinations
+
+The checklist only shows actions that are relevant to the current site, role, and deployment capability state.
+
+| Item | Who sees it | Opens |
+| --- | --- | --- |
+| Connect GitHub or enable automatic updates | Owners and admins | **Settings > Deployment > Git settings** |
+| Make an update | Owners, admins, and editors | **Editor** |
+| Invite a teammate | Owners, admins, and editors | **Settings > Organization > Members** |
+| Add custom domain | Owners and admins | **Settings > Deployment > Custom domain** |
+| Create an automation | Owners, admins, and editors | **Automations** |
+| Install Slack app | Owners, admins, and editors when Slack is configured and eligible | **Agent** or Slack install flow |
+
+Deployments that are not eligible for repository or Slack authoring can hide those setup items.
+
 ## Open a setup item
 
 1. Open the dashboard for the site.
@@ -37,15 +52,19 @@ The checklist links directly to the relevant dashboard area, such as Git setting
 
 Progress is based on completed items divided by visible checklist items.
 
-If your role cannot complete an item, that item is not included in your visible checklist. If the site is a protected baseline used for internal smoke testing, repository and Slack authoring setup are not treated like normal customer setup tasks.
+If your role cannot complete an item, that item is not included in your visible checklist. If a deployment is not eligible for repository or Slack authoring, those setup items are not included in the progress calculation.
 
-You can hide the checklist from the toolbar. Hiding is stored in your browser for the current organization and site.
+The top toolbar shows the same progress as a small pie indicator. The expanded checklist shows the numeric percentage.
+
+You can hide the checklist from the toolbar. Hiding is stored in your browser for the current organization and site, so hiding it for one site does not hide it for every deployment.
 
 ## Troubleshooting
 
 ### Progress still shows zero
 
 Check that you are on the intended site, not another site in the same organization. Then open the checklist and follow the linked actions.
+
+If the dashboard was open while you completed a setup action, refresh the page so the checklist refetches repository, deployment, member, Slack, and automation state.
 
 ### Repository setup does not complete
 
