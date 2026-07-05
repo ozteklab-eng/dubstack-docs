@@ -529,6 +529,10 @@
                 "icon": "list-checks"
               },
               {
+                "slug": "automations/manage",
+                "icon": "toggle-right"
+              },
+              {
                 "slug": "automations/configuration",
                 "icon": "settings-2"
               },

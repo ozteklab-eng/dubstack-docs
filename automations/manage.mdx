@@ -1,0 +1,97 @@
+---
+title: Manage automations
+description: Enable, disable, run, inspect, and notify on automation runs from the dashboard.
+icon: toggle-right
+---
+
+Manage automations from **Automate > Workflows** in the dashboard.
+
+Use this page to turn built-in automations on or off, run a configured automation once, inspect recent run history, and send Slack notifications for completed or failed runs.
+
+## Enable an automation
+
+1. Open the dashboard.
+2. Select the organization and deployment.
+3. Go to **Automate > Workflows**.
+4. Choose an automation card.
+5. Fill in any required configuration.
+6. Select an update mode.
+7. Click **Turn on automation**.
+
+If the automation can run with defaults, the toggle can enable it directly. If setup is incomplete, the configuration drawer shows the blocking requirement.
+
+## Readiness checks
+
+The dashboard checks each automation before it can run.
+
+| Check | What it protects |
+| --- | --- |
+| Docs repository | Ensures there is a connected docs repository to update. |
+| Repository write access | Ensures the agent can create a provider-native review request or commit. |
+| Authoring model | Ensures the workflow authoring profile can run. |
+| Runner support | Ensures the current environment can execute the automation type. |
+| Setup requirement | Ensures workflow-specific fields are present, such as source repositories, target languages, or style guide instructions. |
+| RBAC | Ensures the signed-in user can view, configure, or run the workflow for the selected deployment. |
+
+A workflow can show **Configured** when its settings are saved but the runner is not enabled. It shows **Enabled** when it is ready for scheduled, event-based, or manual runs.
+
+## Run once
+
+Use **Run once** to enqueue an enabled automation immediately.
+
+Manual runs use the automation's current configuration, selected context repositories, enabled integrations, notification settings, and update mode. They appear in the run history with the `manual` trigger source.
+
+Manual runs still enforce readiness checks and the daily run limit.
+
+## Run history
+
+Open the run history view to inspect recent automation runs.
+
+Each run records:
+
+- workflow name
+- trigger source
+- trigger type
+- update mode
+- selected context repositories
+- enabled integrations
+- queued, started, and completed timestamps
+- result link, such as a provider-native review request or commit
+- error message when the run fails
+- Slack notification delivery status when notifications are enabled
+
+Click a run to inspect its output and open the generated branch in the editor when an editor review link is available.
+
+## Slack notifications
+
+When Slack is connected, automations can post run updates to one or more selected channels.
+
+Notification modes:
+
+| Mode | Behavior |
+| --- | --- |
+| All results | Notify when runs succeed or fail. |
+| Failures only | Notify only when a run fails. |
+
+Pull-request workflows can also send lifecycle notifications when a generated pull request has been waiting for review and when it is merged.
+
+Invite the app to each target Slack channel before selecting it in the workflow drawer.
+
+## Disable an automation
+
+Use the automation toggle or the drawer header to disable an automation.
+
+Disabling stops future scheduled and event-based runs. It does not remove previous run history or delete custom automation definitions.
+
+## Delete a custom automation
+
+Only custom automations can be deleted.
+
+Deleting a custom automation removes the configuration from the dashboard. Existing run records remain available for audit and review.
+
+## Related
+
+- [Automations](/automations)
+- [Configure automation runs](/automations/configuration)
+- [Automation reference](/automations/reference)
+- [Create automations](/automations/create)

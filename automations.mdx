@@ -4,7 +4,7 @@ description: Configure documentation automations that keep your site accurate as
 icon: workflow
 ---
 
-Automations run the dashboard agent against a clear trigger, repository context, and update mode.
+Automations run the dashboard agent from a clear trigger, bounded context, and update mode.
 
 Use them for recurring documentation maintenance and for drafting updates when product code, API behavior, feedback, or assistant conversations show that content needs attention.
 
@@ -12,27 +12,30 @@ Use them for recurring documentation maintenance and for drafting updates when p
 
 ```text
 Trigger
--> collect bounded context
+-> snapshot repository and integration context
 -> run the dashboard agent
 -> create a documentation update
--> open a pull request or apply the update directly
+-> open a provider-native review request or direct commit
+-> record the run and notify Slack if configured
 ```
 
-The docs repository remains the write source of truth. Automations write through the connected Git provider and published docs continue to render from synced artifacts.
+The docs repository remains the write source of truth. Automations write through the connected Git provider, and published docs continue to render from synced artifacts.
 
 ## Requirements
 
 Before enabling automations, connect:
 
 - a Git-backed docs repository
-- an authoring-capable Git integration
+- write access for the docs repository through a supported Git provider
 - an authoring model profile
 
 Some automations require additional signals:
 
-- Feedback-driven improvements require feedback collection to be enabled.
-- Assistant conversation improvements require assistant analytics.
-- Translation requires language routing and translation policy support.
+- **Update from code changes** requires at least one selected source repository.
+- **Draft improvements from user feedback** requires feedback collection.
+- **Draft improvements from assistant conversations** requires assistant analytics.
+- **Apply style guide** requires saved style guide instructions.
+- **Translate content** appears in the catalog, but it is blocked until translation routing and policy support are available for the deployment.
 
 ## Available automation types
 
@@ -51,26 +54,26 @@ Some automations require additional signals:
   </Card>
 </CardGroup>
 
-## Triggers
+## Trigger types
 
 Automations can run from supported trigger types:
 
 | Trigger | Use case |
 | --- | --- |
-| Content update | Run after published docs content changes. |
-| Code change | Run after selected source repository changes are merged. |
-| Custom schedule | Run on a recurring schedule such as daily or weekly. |
+| Content update | Run after docs content changes are synced from the connected docs repository. |
+| Code change | Run after a selected supported source repository change is merged. |
+| Custom schedule | Run on a recurring schedule such as daily, weekly, or twice weekly. |
 
-Each automation only exposes trigger types it can safely support.
+Each automation exposes only the trigger types it can safely support. One automation run has exactly one trigger source.
 
 ## Update modes
 
 | Mode | Behavior |
 | --- | --- |
-| Require review | Open a pull request for a teammate to review before merge. |
+| Require review | Open a pull request or merge request for a teammate to review before merge. |
 | Automatically | Apply the update directly when the automation is allowed to write. |
 
-Use review mode for production docs unless you have a very narrow automation and clear rollback expectations.
+Use review mode for production docs unless you have a narrow automation, predictable output, and clear rollback expectations.
 
 ## Context
 
@@ -79,13 +82,42 @@ Automations can read bounded context from:
 - the connected docs repository
 - selected source repositories
 - connected agent integrations such as Slack or Jira
-- published docs and analytics signals when the automation requires them
+- published docs, assistant analytics, and feedback signals when the automation requires them
 
-Context stays scoped to the current organization, deployment, and enabled integration settings.
+Context stays scoped to the current organization, deployment, and enabled integration settings. Context repositories are read-only; automation writes always target the connected docs repository.
+
+## Run lifecycle
+
+Runs are queued and processed by the automation runner.
+
+| Status | Meaning |
+| --- | --- |
+| Queued | The run is waiting for a worker. |
+| Running | The agent is collecting context and preparing an update. |
+| Succeeded | The run completed and recorded a review request or commit result. |
+| Failed | The run could not complete. Failed runs do not count toward the daily run limit. |
+
+A workflow can be configured while the runner is disabled, but it only becomes runnable when repository access, model routing, setup requirements, and runner support are all ready.
+
+## Usage limits
+
+Each automation is limited to 500 queued, running, or succeeded runs per UTC day by default. Failed runs do not count toward that limit.
+
+Runs also record AI usage metadata so credit reporting can attribute cost to the workflow, selected model profile, writer connector, context connectors, trigger type, and update mode.
 
 ## Next steps
 
-- Review the [automation reference](/automations/reference).
-- Configure [automation runs](/automations/configuration).
-- Create a [custom automation](/automations/create).
-- Configure repository access from [Git settings](/deployment/forgejo-github-gitlab).
+<CardGroup cols={2}>
+  <Card title="Automation reference" icon="list-checks" href="/automations/reference">
+    Review built-in automations, default triggers, and setup requirements.
+  </Card>
+  <Card title="Manage automations" icon="toggle-right" href="/automations/manage">
+    Enable automations, run them manually, review run history, and configure notifications.
+  </Card>
+  <Card title="Configure runs" icon="settings-2" href="/automations/configuration">
+    Configure triggers, schedules, context repositories, integrations, and update modes.
+  </Card>
+  <Card title="Create automations" icon="plus" href="/automations/create">
+    Build a custom automation with your own instructions and context.
+  </Card>
+</CardGroup>

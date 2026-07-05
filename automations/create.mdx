@@ -12,7 +12,7 @@ Use them when the built-in automations are close, but your trigger, prompt, cont
 
 1. Open the dashboard.
 2. Select the deployment you want to configure.
-3. Go to **Automate > Automations**.
+3. Go to **Automate > Workflows**.
 4. Choose **Create a custom automation**.
 5. Add a name and summary.
 6. Select the trigger.
@@ -33,9 +33,11 @@ Choose the narrowest trigger that fits the workflow. Broad triggers can create n
 
 ## Add context repositories
 
-Context repositories are cloned into the automation environment so the agent can read code while drafting docs.
+Context repositories are cloned into the workflow environment so the agent can read code while it runs.
 
 They do not automatically trigger the automation unless you also choose a code-change trigger and the repository is selected as a trigger source.
+
+You can add up to 10 context repositories. Keep the list focused on repositories the automation actually needs.
 
 ## Add integration context
 
@@ -65,11 +67,24 @@ Avoid instructions that are too broad:
 Improve the docs.
 ```
 
+### Strong instruction pattern
+
+Use this structure for reliable custom automations:
+
+```text
+Goal: describe the exact outcome.
+Scope: list the pages, directories, repositories, or issue filters to inspect.
+Procedure: list the steps the agent should follow.
+Constraints: define terms, tone, file naming, and what not to change.
+Output: say whether to open a review request or direct update.
+Review notes: describe what reviewers should check.
+```
+
 ## Pick an update mode
 
 | Mode | Behavior |
 | --- | --- |
-| Require review | Open a pull request and wait for review. |
+| Require review | Open a provider-native review request and wait for review. |
 | Automatically | Apply the update directly when the automation is allowed to write. |
 
 Prefer review mode for new automations. Move to automatic updates only after the automation has produced predictable output across several runs.
@@ -81,10 +96,15 @@ After saving:
 1. Run it manually if the automation is runnable.
 2. Check the run history.
 3. Review collected context sources.
-4. Review the created pull request or direct update.
+4. Review the created review request or direct update.
 5. Adjust instructions if the output is too broad or too narrow.
 
 <Callout type="warning">
   Automations can change documentation. Keep production workflows in review mode until the prompt, context, and output pattern are well understood.
 </Callout>
 
+## Related
+
+- [Manage automations](/automations/manage)
+- [Configure automation runs](/automations/configuration)
+- [Automation reference](/automations/reference)
