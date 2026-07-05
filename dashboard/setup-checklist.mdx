@@ -1,0 +1,71 @@
+---
+title: Setup checklist
+description: Understand how dashboard setup progress is calculated and where each setup action goes.
+icon: list-checks
+---
+
+The setup checklist helps new sites finish the core steps that make the docs workspace useful.
+
+It appears in the top toolbar when there are setup actions available for your role and site. The progress icon fills as each action is completed.
+
+## What the checklist tracks
+
+The checklist is calculated from live dashboard state, not from a static counter.
+
+| Item | Completed when |
+| --- | --- |
+| Connect GitHub or enable automatic updates | A supported repository is connected and ready for authoring updates. |
+| Make an update | A non-initial deployment or content update has run for the current site. |
+| Invite a teammate | The organization has more than one member or at least one pending invite. |
+| Add custom domain | The current site has a custom domain configured. |
+| Create an automation | At least one workflow is configured or enabled for the site. |
+| Install Slack app | Slack is eligible for the site and the installation has the required scopes. |
+
+Some items only appear when your role can perform them. For example, repository and custom domain setup require owner or admin access, while editor-level setup items are shown to owners, admins, and editors.
+
+## Open a setup item
+
+1. Open the dashboard for the site.
+2. Click **Complete your setup** in the top toolbar.
+3. Select the setup item you want to finish.
+4. Complete the linked flow.
+5. Return to the dashboard and refresh if the status has not updated yet.
+
+The checklist links directly to the relevant dashboard area, such as Git settings, the editor, members, custom domain settings, automations, or the agent page.
+
+## Progress behavior
+
+Progress is based on completed items divided by visible checklist items.
+
+If your role cannot complete an item, that item is not included in your visible checklist. If the site is a protected baseline used for internal smoke testing, repository and Slack authoring setup are not treated like normal customer setup tasks.
+
+You can hide the checklist from the toolbar. Hiding is stored in your browser for the current organization and site.
+
+## Troubleshooting
+
+### Progress still shows zero
+
+Check that you are on the intended site, not another site in the same organization. Then open the checklist and follow the linked actions.
+
+### Repository setup does not complete
+
+Open **Settings > Deployment > Git settings** and confirm the provider, repository owner, repository name, deployment branch, and app installation are present.
+
+GitHub requires the app installation to be available. GitLab requires authoring readiness to be healthy.
+
+### Make an update is not complete
+
+Initial onboarding deployments do not count as a user update. Edit a page, update configuration, merge a content change, or run a manual update after source changes are present.
+
+### Slack does not appear
+
+Slack only appears when the site is eligible for agent Slack setup and the current role can edit the site. Open [Agent integrations](/ai/integrations) if you need to review the agent integration status.
+
+## Related
+
+- [Dashboard](/dashboard/overview)
+- [Git essentials](/editor/git-essentials)
+- [Manual updates](/deployment/manual-updates-history)
+- [Team members](/dashboard/team-members)
+- [Automations](/automations)
+- [Agent integrations](/ai/integrations)
