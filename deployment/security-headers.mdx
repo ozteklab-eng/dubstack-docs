@@ -1,0 +1,97 @@
+---
+title: Security headers
+description: Understand the baseline browser security headers on hosted dubstack docs sites.
+icon: shield-check
+---
+
+Hosted dubstack documentation sites include baseline browser security headers on public responses.
+
+These headers reduce accidental data exposure and limit access to sensitive browser capabilities without blocking dashboard previews or custom-domain proxy setups.
+
+## Default hosted headers
+
+Public docs pages, API-readable text files, and markdown exports include these headers:
+
+| Header | Default value | Purpose |
+| --- | --- | --- |
+| `X-Content-Type-Options` | `nosniff` | Prevents browsers from treating a response as a different content type. |
+| `Referrer-Policy` | `strict-origin-when-cross-origin` | Sends full referrer paths on same-origin navigation and only the origin across sites. |
+| `Permissions-Policy` | `camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), browsing-topics=()` | Disables browser features that documentation pages do not need by default. |
+| `X-Permitted-Cross-Domain-Policies` | `none` | Prevents legacy cross-domain policy files from expanding access. |
+
+These defaults apply to normal docs pages and agent-readable surfaces such as `/llms.txt`, `/llms-full.txt`, `/skill.md`, and page-level `.md` exports.
+
+## Static asset hardening
+
+SVG and other proxied static assets keep their upstream content type and caching headers.
+
+For SVG assets served through the hosted static asset route, dubstack also preserves a locked-down content security policy from the asset service:
+
+```text
+Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; sandbox
+```
+
+This keeps uploaded SVG assets displayable while preventing them from loading scripts, external resources, or privileged browser APIs.
+
+## Embedding and dashboard previews
+
+dubstack does not set `X-Frame-Options` globally on hosted docs pages.
+
+This is intentional. The dashboard preview, deployment screenshot system, and some customer-owned preview flows need to embed documentation pages from a different host.
+
+If your organization needs strict iframe control, apply a `Content-Security-Policy` with a `frame-ancestors` directive at your own reverse proxy or edge layer after confirming your dashboard and preview workflows still work.
+
+## Custom domain and proxy headers
+
+When you mount docs behind your own reverse proxy, keep these rules in mind:
+
+- Forward the response headers from dubstack unless you have a stricter policy.
+- Do not overwrite `Content-Type` for markdown, text, JSON, or SVG responses.
+- Keep `/docs/api/*`, assistant, feedback, and MCP requests uncached.
+- Avoid adding a global `X-Frame-Options: DENY` header unless you are certain you do not need dashboard or internal previews.
+
+## Content security policy
+
+A full site-wide CSP depends on your chosen fonts, analytics, custom scripts, images, embeds, assistant features, and API playground endpoints.
+
+dubstack does not currently expose a dashboard setting for a custom site-wide CSP. If you terminate traffic through your own proxy, configure CSP there and include only the domains your docs actually use.
+
+A conservative starting point for a proxy-owned CSP is:
+
+```text
+default-src 'self';
+img-src 'self' data: https:;
+font-src 'self' https://fonts.gstatic.com;
+style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+script-src 'self';
+connect-src 'self' https://<your-api-host> https://*.dubstack.live;
+frame-ancestors 'self';
+base-uri 'self';
+form-action 'self'
+```
+
+Adjust the policy for your production API host, custom analytics, embedded content, and any third-party services you intentionally use.
+
+## Validate headers
+
+Use `curl` to inspect the live headers for a page:
+
+```bash
+curl -I https://docs.example.com/quickstart
+```
+
+Check markdown and AI-readable surfaces separately:
+
+```bash
+curl -I https://docs.example.com/llms.txt
+curl -I https://docs.example.com/quickstart.md
+```
+
+## Troubleshooting
+
+| Issue | What to check |
+| --- | --- |
+| Dashboard preview is blank | Remove global `X-Frame-Options` or relax your proxy `frame-ancestors` policy for trusted dashboard hosts. |
+| Fonts or icons are missing | Your custom CSP may be missing the font or stylesheet host. |
+| Assistant or search cannot connect | Your CSP `connect-src` may be missing the docs host, API host, or assistant endpoint. |
+| SVG logos do not render | Confirm the SVG response keeps `Content-Type: image/svg+xml` and is not rewritten as HTML. |

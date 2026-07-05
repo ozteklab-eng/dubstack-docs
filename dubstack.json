@@ -574,6 +574,10 @@
                 "icon": "globe"
               },
               {
+                "slug": "deployment/security-headers",
+                "icon": "shield-check"
+              },
+              {
                 "slug": "deployment/docs-subpath",
                 "icon": "folder-tree"
               },
