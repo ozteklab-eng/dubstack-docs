@@ -36,6 +36,20 @@ The deployment token and OAuth connection are intentionally different.
 
 Use both when you want GitLab-backed authoring. A deployment token alone can keep content connected, but authoring actions need OAuth so dubstack can act with an authorized GitLab user and respect the user's GitLab permissions.
 
+## Which connection should you check?
+
+Use the failing action to decide which GitLab credential to inspect.
+
+| Failing action | Check |
+| --- | --- |
+| Manual update cannot read the repository | GitLab deployment token, project ID or path, instance URL, branch, and repository file permissions. |
+| Copy docs into GitLab fails | GitLab deployment token, write permission for the target project, branch protection, and configured target branch. |
+| Agent, Slack, or workflow cannot create a merge request | GitLab OAuth authoring access, connected user permissions, branch protection, and authoring readiness. |
+| Workflow cannot read recent merge request context | GitLab OAuth authoring access and selected workflow repository context. |
+| Pushes to GitLab do not update the live site | Whether GitLab is the active deployment source, whether webhooks are configured, and whether manual update succeeds. |
+
+Do not rotate OAuth when a deployment token is expired, and do not rotate the deployment token when only authoring is missing. They unlock different paths.
+
 ## Connect GitLab as a copy target
 
 1. Open the dashboard.
@@ -87,7 +101,7 @@ After OAuth is connected, eligible authoring actions can:
 - read bounded merge request context for workflow runs
 
 <Callout type="warning">
-  GitLab authoring is not enabled for hosted starter repositories or protected internal baseline sites. Connect a customer-owned GitLab repository before using GitLab merge-request authoring.
+  GitLab authoring is not enabled for hosted starter repositories or deployments protected from repository mutations. Connect a customer-owned GitLab repository before using GitLab merge-request authoring.
 </Callout>
 
 ## Dashboard states
@@ -141,7 +155,7 @@ When GitLab active-source mode is enabled, use the dashboard's manual update and
 GitLab authoring is ready when all of these are true:
 
 - the site has an active GitLab docs repository connection
-- the repository is not a hosted fallback or protected internal baseline
+- the repository is not a hosted fallback and the deployment is not protected from repository mutations
 - GitLab OAuth authoring access is connected for the site or organization
 - the connected GitLab user can read the project and create branches or merge requests
 - the authoring model is enabled for the workspace
