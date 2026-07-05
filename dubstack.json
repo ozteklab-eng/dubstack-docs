@@ -381,6 +381,10 @@
                 "icon": "layout-list"
               },
               {
+                "slug": "configuration/banners",
+                "icon": "megaphone"
+              },
+              {
                 "slug": "configuration/api-settings-reference",
                 "icon": "terminal"
               },

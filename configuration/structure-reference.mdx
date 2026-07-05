@@ -116,8 +116,8 @@ Use object entries when you need icons, titles, or external links. Use string en
 | Field | Type | Purpose |
 | --- | --- | --- |
 | `banner.content` | string | Short announcement text shown above the docs shell. |
-| `banner.type` | `info` \| `warning` \| `success` \| `error` | Banner treatment. |
-| `banner.color` | string | Optional accent color. |
+| `banner.type` | `info` \| `warning` \| `critical` | Banner treatment. |
+| `banner.color` | string \| object | Optional background color. Use a hex string or `{ "light": "...", "dark": "..." }`. |
 | `banner.dismissible` | boolean | Allows visitors to hide the banner locally. |
 
 ```json
@@ -129,6 +129,8 @@ Use object entries when you need icons, titles, or external links. Use string en
   }
 }
 ```
+
+See [Banners](/configuration/banners) for examples and dismissal behavior.
 
 ## Contextual actions
 

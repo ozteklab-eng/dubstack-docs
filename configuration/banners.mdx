@@ -1,0 +1,103 @@
+---
+title: Banners
+description: Add a site-wide announcement banner from dubstack.json.
+icon: megaphone
+---
+
+Banners show a short announcement above the docs shell.
+
+Use them for launch notices, maintenance windows, migration warnings, or other messages that should be visible across the published site.
+
+## Add a banner
+
+Set the top-level `banner` object in `dubstack.json`.
+
+```json
+{
+  "banner": {
+    "content": "API v2 is now available. Review the migration guide before upgrading.",
+    "type": "info",
+    "dismissible": true
+  }
+}
+```
+
+After publishing, the banner appears above the page header.
+
+## Banner types
+
+| Type | Use it for |
+| --- | --- |
+| `info` | General announcements, launches, and release notes. |
+| `warning` | Scheduled maintenance, upcoming deprecations, or temporary limitations. |
+| `critical` | Urgent notices that need immediate attention. |
+
+If `type` is omitted, the banner uses `info`.
+
+## Custom colors
+
+Use `color` when the banner should not use the default type color.
+
+```json
+{
+  "banner": {
+    "content": "Join the developer preview before July 31.",
+    "dismissible": true,
+    "color": {
+      "light": "#0F766E",
+      "dark": "#14B8A6"
+    }
+  }
+}
+```
+
+You can also pass a single hex string when the same color should be used in both light and dark mode.
+
+```json
+{
+  "banner": {
+    "content": "Status update: all systems are operational.",
+    "color": "#15803D"
+  }
+}
+```
+
+## Dismissible banners
+
+Set `dismissible` to `true` when readers should be able to hide the banner.
+
+```json
+{
+  "banner": {
+    "content": "We are updating examples this week.",
+    "type": "warning",
+    "dismissible": true
+  }
+}
+```
+
+Dismissal is local to the reader's browser and keyed to the banner content. If you change the banner text, the updated banner appears again.
+
+## Properties
+
+<ResponseField name="content" type="string" required>
+  Text shown in the banner. Keep it short and link to a full page when the message needs more detail.
+</ResponseField>
+
+<ResponseField name="type" type="string" default="info">
+  Banner treatment. Supported values are `info`, `warning`, and `critical`.
+</ResponseField>
+
+<ResponseField name="dismissible" type="boolean" default="false">
+  Whether readers can close the banner locally.
+</ResponseField>
+
+<ResponseField name="color" type="string | object">
+  Optional custom background color. Use a hex string for one color, or an object with `light` and `dark` keys for mode-specific colors.
+</ResponseField>
+
+## When to avoid banners
+
+Avoid banners for normal navigation links, permanent marketing copy, or messages that only apply to one page.
+
+For page-specific notices, use a [Callout](/writing-content/callouts) inside the page content instead.
