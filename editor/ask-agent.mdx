@@ -1,0 +1,59 @@
+---
+title: Ask Agent in the editor
+description: Use the editor toolbar agent to ask questions about the current docs site while you write.
+icon: sparkles
+---
+
+Ask Agent opens a deployment-scoped chat panel from the editor toolbar.
+
+Use it when you are already editing a page and need help understanding the current docs, finding relevant content, or planning a small documentation change.
+
+## Open Ask Agent
+
+1. Open the dashboard.
+2. Go to **Editor**.
+3. Open a page.
+4. Click **Ask Agent** in the editor toolbar.
+
+The toolbar also shows the keyboard shortcut for your platform.
+
+When the panel opens, it keeps you in the editor and shows the selected deployment context. Agent responses are generated with AI and may contain mistakes, so review suggestions before applying them.
+
+## What to ask
+
+Good editor-agent prompts are focused and tied to the page or docs area you are editing.
+
+Examples:
+
+```text
+Find the page that explains custom domains.
+```
+
+```text
+What should I add to this quickstart before publishing?
+```
+
+```text
+Summarize the current API reference setup so I can improve this page.
+```
+
+## Write access
+
+Ask Agent in the editor follows the same authoring boundary as the dashboard agent.
+
+It can help with writing and planning, but documentation changes still need to be reviewed and published through the source-backed editor flow.
+
+For authoring readiness, repository requirements, integration context, and usage tracking, see [Agent](/ai/agent).
+
+## Keep the context safe
+
+- Do not paste secrets or private credentials into prompts.
+- Keep prompts specific to the selected deployment.
+- Review generated content before publishing.
+- Use pull request review for changes that affect production docs.
+
+## Related
+
+- [Editor](/editor/overview)
+- [Publishing](/editor/publishing)
+- [Agent](/ai/agent)

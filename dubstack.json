@@ -547,6 +547,10 @@
                 "icon": "eye"
               },
               {
+                "slug": "editor/ask-agent",
+                "icon": "sparkles"
+              },
+              {
                 "slug": "editor/site-configurations",
                 "icon": "sliders-horizontal"
               },
