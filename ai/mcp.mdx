@@ -16,6 +16,18 @@ https://your-docs-domain.com/mcp
 
 Use this endpoint when you want AI tools to read and search your public docs. It does not require authentication and does not grant dashboard access.
 
+## Public MCP compared to admin MCP
+
+DubStack has separate MCP surfaces for separate jobs.
+
+| Surface | Audience | Access | Endpoint |
+| --- | --- | --- | --- |
+| Public docs MCP | Readers, support teams, customers, and public AI tools | Read and search published public docs, submit documentation feedback | `/mcp` on the docs site |
+| Authenticated search MCP | Readers who need protected docs access | Planned: read docs scoped to the signed-in user's access | `/authed/mcp` on the docs site |
+| Admin MCP | Trusted team members and authoring agents | Planned: edit docs, work on branches, update navigation, and open pull requests | Hosted dashboard MCP endpoint |
+
+Use the public `/mcp` endpoint for reader-facing documentation search. Do not use it for private docs, branch edits, dashboard settings, or pull-request workflows.
+
 The public server exposes tools for reading public docs and reporting documentation issues:
 
 | Tool | What it does |
@@ -95,6 +107,20 @@ DubStack publishes MCP discovery documents automatically:
 
 Server-card responses include tool metadata and safety annotations so MCP clients can inspect available tools before connecting.
 
+The public server reserves `/mcp` and `/authed/mcp` for MCP. Do not create docs pages or redirects at those paths.
+
+## Tool safety annotations
+
+The server card describes tool behavior so MCP clients can show the right approval prompts:
+
+| Tool | Read-only | Idempotent | Notes |
+| --- | --- | --- | --- |
+| `search` | Yes | Yes | Searches indexed public docs content only. |
+| `query_docs_filesystem` | Yes | Yes | Reads a virtual filesystem generated from published docs. |
+| `submit_feedback` | No | No | Creates a feedback record for a documentation-quality issue. |
+
+All public MCP tools operate against the current published docs site, not the open web.
+
 ## Skill file
 
 Your docs site also serves a generated skill file:
@@ -106,6 +132,17 @@ https://your-docs-domain.com/skill.md
 Agents connected to your MCP server can discover the same skill through MCP resources. The skill tells agents to use your current published docs as the source of truth and points them at your public MCP server.
 
 For the rest of the AI-readable docs files, see [AI discovery files](/ai/ai-discovery-files).
+
+## MCP resources
+
+The public MCP server exposes generated skill files as MCP resources when the client supports resource discovery.
+
+Use resources for durable agent instructions, then use tools for live retrieval:
+
+1. Read the generated skill resource to understand how the docs site wants agents to behave.
+2. Use `search` to find candidate pages.
+3. Use `query_docs_filesystem` to read exact published page content.
+4. Use `submit_feedback` only for substantive documentation issues.
 
 ## Connect from an MCP client
 
@@ -134,6 +171,15 @@ Codex TOML config:
 [mcp_servers.my-docs]
 url = "https://your-docs-domain.com/mcp"
 ```
+
+For clients with a UI connector form, use:
+
+| Field | Value |
+| --- | --- |
+| Name | A short name for the docs site |
+| URL | `https://your-docs-domain.com/mcp` |
+| Transport | HTTP |
+| Authentication | None for public docs |
 
 ## Authenticated MCP
 
