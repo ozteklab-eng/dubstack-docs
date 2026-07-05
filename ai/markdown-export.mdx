@@ -6,7 +6,7 @@ icon: file-text
 
 Markdown export gives readers a clean text version of the current page so they can reuse docs content in AI tools, support workflows, and internal notes without copying the rendered site chrome.
 
-DubStack exposes Markdown through page contextual actions, page-level `.md` URLs, and `Accept: text/markdown` requests. Site-level AI indexes are available through [`llms.txt`](/ai/llms-indexes) and [`llms-full.txt`](/ai/llms-indexes).
+DubStack exposes Markdown through page contextual actions, page-level `.md` URLs, and content negotiation with `Accept: text/markdown` or `Accept: text/plain`. Site-level AI indexes are available through [`llms.txt`](/ai/llms-indexes) and [`llms-full.txt`](/ai/llms-indexes).
 
 ## Copy a page as Markdown
 
@@ -38,11 +38,14 @@ https://docs.example.com/api-reference/endpoint/create-user.md
 
 The response uses `text/markdown; charset=utf-8` and includes a documentation-index note that points agents to `/llms.txt` before they explore individual pages.
 
-You can also request Markdown from the normal page URL by sending an `Accept: text/markdown` header.
+You can also request exported content from the normal page URL with an `Accept` header.
 
 ```bash
 curl -H "Accept: text/markdown" https://docs.example.com/getting-started
+curl -H "Accept: text/plain" https://docs.example.com/getting-started
 ```
+
+`Accept: text/markdown` returns `text/markdown; charset=utf-8`. `Accept: text/plain` returns the same exported page content with `text/plain; charset=utf-8` for clients that only request plain text.
 
 Root pages are available at `/.md`.
 
