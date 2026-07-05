@@ -1,0 +1,123 @@
+---
+title: Analytics
+description: Track visitors, page views, searches, assistant activity, and feedback for a deployment.
+icon: chart-no-axes-combined
+---
+
+Analytics helps you understand how readers use your published docs and where content needs improvement.
+
+Open **Analytics** from the dashboard after selecting a deployment. Analytics are scoped to the selected deployment, so switching deployments changes the data shown.
+
+<Callout type="info">
+  Analytics panels only populate after the relevant events are received. If a data source is not configured or has no events yet, the dashboard shows an unavailable or empty state instead of estimated data.
+</Callout>
+
+## Traffic source and date range
+
+Use the source and date controls at the top of Analytics to narrow the view.
+
+- **Human traffic** shows reader activity from the public docs site.
+- **Agent traffic** appears only when the deployment has agent analytics available.
+- **Date range** controls the reporting window for the visible tabs.
+
+Assistant analytics can use the nearest supported trailing-day window when an exact custom range is not available.
+
+## Visitors
+
+The visitors tab shows daily visitor counts for the selected range.
+
+Use it to review:
+
+- traffic changes after publishing docs updates
+- pages that attract the most readers
+- referral sources that send readers to your docs
+
+If a site has no page traffic yet, the visitors tab stays empty until the edge analytics events arrive.
+
+## Views
+
+The views tab shows page view volume over time and the top pages by views.
+
+Use views to prioritize maintenance for high-traffic docs:
+
+- update pages that receive the most visits
+- check launch or release pages after announcements
+- compare traffic before and after navigation or content changes
+
+## Searches
+
+The searches tab shows search activity from the docs search UI.
+
+The dashboard can show:
+
+- daily search volume
+- top search queries
+- query counts
+- click-through indicators
+- the top clicked page for matching queries
+
+Search analytics help you find content gaps. Repeated searches with weak click-through often mean a page title, description, heading, or navigation label needs to be clearer.
+
+## Assistant
+
+The assistant tab shows public assistant usage for the selected deployment when assistant analytics are available.
+
+The dashboard can show:
+
+- assistant request volume
+- request breakdowns by surface
+- request breakdowns by model
+- caller breakdowns
+- recent assistant events
+- usage and cost estimates
+- stack allowance for the billing window
+
+Use assistant analytics to decide whether docs need clearer setup steps, more examples, or better API descriptions. Assistant activity should be treated as a signal, not as a replacement for reviewing the underlying page content.
+
+## Feedback
+
+The feedback tab shows ratings and comments submitted from public docs surfaces.
+
+Use it to review:
+
+- feedback volume over time
+- positive and negative ratings
+- pages with submitted feedback
+- feedback source
+- recent feedback entries
+- optional reader email addresses when collection is enabled
+
+Feedback requires the relevant deployment add-ons. See [Feedback](/optimize/feedback) and [Add-ons](/settings/deployment/addons) for setup.
+
+## Export assistant analytics
+
+When assistant analytics are available, use **Export to CSV** from the assistant tab to download usage data for offline review.
+
+Exports are useful when you want to:
+
+- group repeated assistant issues
+- review usage by model or caller
+- estimate support and documentation trends
+- keep an archive for reporting
+
+## Troubleshooting
+
+If analytics are empty or unavailable:
+
+1. Confirm the correct deployment is selected.
+2. Check the selected date range.
+3. Open the public site and generate a real page view or search.
+4. Confirm the relevant add-on is enabled for feedback data.
+5. Refresh Analytics after events have had time to ingest.
+6. Check whether the panel says the data source is not configured for the environment.
+
+Analytics must not block the docs experience. Public pages continue loading even when analytics ingestion is unavailable.
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/optimize/search">Search</a>
+  <a href="/optimize/feedback">Feedback</a>
+  <a href="/dashboard/feedback-analytics">Feedback analytics</a>
+  <a href="/settings/deployment/addons">Deployment add-ons</a>
+</RelatedTopics>

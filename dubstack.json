@@ -319,6 +319,10 @@
             "icon": "chart-no-axes-combined",
             "pages": [
               {
+                "slug": "optimize/analytics",
+                "icon": "chart-no-axes-combined"
+              },
+              {
                 "slug": "optimize/seo",
                 "icon": "search-check"
               },
