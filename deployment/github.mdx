@@ -20,14 +20,39 @@ The dashboard shows the active repository, branch, last sync time, and app insta
 
 ## Connect GitHub
 
-1. Open the dashboard.
-2. Go to **Settings > Deployment > Git settings**.
-3. Choose **GitHub**.
-4. Install or manage the dubstack GitHub App.
-5. Grant access to the documentation repository.
-6. Select the repository and branch that should publish the live site.
-7. Save the connection.
-8. Run a manual update to verify the first sync.
+<Steps>
+  <Step title="Open Git settings">
+    In the dashboard, go to **Settings > Deployment > Git settings**.
+  </Step>
+
+  <Step title="Choose GitHub">
+    Select **GitHub** from the provider cards.
+  </Step>
+
+  <Step title="Install or manage the GitHub App">
+    Click **Install GitHub App** or **Grant Repository Access**.
+
+    GitHub opens the app installation flow. Choose the account or organization that owns the docs repository.
+  </Step>
+
+  <Step title="Select repository access">
+    Grant access to the docs repository.
+
+    You can choose all repositories, but the safer default is **Only select repositories** and then selecting the docs repository plus any repositories you intentionally want the agent or workflows to read as context.
+  </Step>
+
+  <Step title="Select the source">
+    Back in Git settings, select the repository, deployment branch, and docs root.
+
+    Enable **Docs are in a subdirectory** only when `dubstack.json` is below the repository root.
+  </Step>
+
+  <Step title="Save and verify">
+    Save the connection, then run a manual update.
+
+    The manual update verifies that DubStack can read the selected repository and publish artifacts for the live site.
+  </Step>
+</Steps>
 
 ## Recommended repository structure
 
@@ -59,6 +84,63 @@ The GitHub App is used for:
 - updating docs files from the dashboard editor where allowed
 
 If your organization uses branch protection, keep it enabled. Agent and editor changes should still follow the repository's review rules.
+
+## Permissions
+
+GitHub shows the permissions requested by the app during installation or when permissions change.
+
+| Permission | Why DubStack uses it |
+| --- | --- |
+| `metadata: read` | Identify repositories and installation ownership. |
+| `contents: read` | Read source files during sync, preview, search, assistant, and MCP indexing. |
+| `contents: write` | Commit editor, agent, and workflow changes when authoring is enabled. |
+| `pull_requests: write` | Create draft pull requests for agent and workflow updates. |
+| `checks` or deployment-related permissions | Attach provider-native status signals for supported preview and deployment flows. |
+
+<Callout type="info">
+  GitHub sources use the GitHub App installation. Do not paste personal access tokens for GitHub source sync.
+</Callout>
+
+If authoring is not ready, the readiness panel may report missing GitHub write permissions. Update the app installation in GitHub, then return to Git settings and run a manual update.
+
+## Dashboard states
+
+Use the Git settings card to confirm the active source.
+
+| State | Meaning |
+| --- | --- |
+| Hosted repository | DubStack manages the starter source for you. A separate GitHub App install is not required until you move to your own repository. |
+| Active GitHub repository | The site publishes from the listed repository and branch. |
+| GitHub app not installed | The source points to GitHub, but DubStack does not have a usable installation for the repository. |
+| Last synced | The most recent successful sync time for the active provider. |
+
+Use **Settings > Deployment > GitHub app** to install the app, open GitHub installation settings, or grant access to additional repositories.
+
+Use **Settings > Account** to confirm whether your user has GitHub authorization connected for account-level authoring flows.
+
+## Revalidate after repository changes
+
+Revalidate the connection after any external GitHub change that affects access or source layout.
+
+Common triggers:
+
+- repository rename or transfer
+- branch rename
+- GitHub App uninstall or reinstall
+- installation repository-access change
+- organization ownership or repository-admin permission change
+- branch protection change
+- moving `dubstack.json` into or out of a subdirectory
+
+Recommended recovery path:
+
+1. Open **Settings > Deployment > GitHub app**.
+2. Confirm the correct GitHub account or organization is installed.
+3. Open the GitHub installation settings and confirm the repository is selected.
+4. Return to **Settings > Deployment > Git settings**.
+5. Confirm the repository, branch, and subdirectory settings.
+6. Run a manual update.
+7. Check the activity feed or deployment history for the resulting sync status.
 
 ## Hosted starter to GitHub
 
