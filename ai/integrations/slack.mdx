@@ -8,6 +8,8 @@ The Slack integration adds the DubStack agent to your Slack workspace.
 
 After it is connected, authorized workspace members can ask the agent questions from Slack and request draft documentation changes for the selected deployment.
 
+Use Slack when the context for a docs update already lives in a team conversation, release thread, incident follow-up, or short attached text file.
+
 ## What Slack can do
 
 Slack can be used for:
@@ -15,6 +17,7 @@ Slack can be used for:
 - asking questions about published docs
 - starting documentation update requests from Slack
 - opening draft pull requests when the deployment has authoring-ready Git access
+- updating the same draft pull request from follow-up replies in the same thread
 - using bounded Slack thread or channel context in agent and automation runs
 - sending workflow notifications to selected channels
 
@@ -29,6 +32,8 @@ Before connecting Slack, confirm:
 - your plan and organization are eligible for the agent surface
 - the docs repository is connected if you want the agent to create pull requests
 - Slack scopes are complete after installation
+- the connected Git provider can create review branches and pull requests or merge requests
+- the authoring agent is enabled for the environment
 
 If Slack was installed before new permissions were added, reconnect the app from the dashboard so the missing scopes are granted.
 
@@ -43,6 +48,22 @@ If Slack was installed before new permissions were added, reconnect the app from
 7. Confirm the Slack app row says the agent is connected.
 
 You can also manage the connection from **Settings > Organization > Agent integrations**.
+
+## Choose a deployment
+
+A Slack workspace can be connected to more than one deployment.
+
+When the agent cannot safely infer the deployment, it asks you to choose one before answering or creating documentation changes.
+
+Use the deployment buttons in Slack, or reply with:
+
+```text
+@dub use docs-production
+```
+
+The saved deployment choice is personal to your Slack user in that workspace. Other teammates can choose a different deployment.
+
+You can switch later by sending another `@dub use <deployment>` message.
 
 ## Use the agent in Slack
 
@@ -62,13 +83,61 @@ Examples:
 @dub explain where our API authentication docs mention token rotation.
 ```
 
-When more than one deployment is connected to the same Slack workspace, choose the deployment before asking the agent to act.
+Use direct messages for private questions. Mention the agent in a channel when the answer or update should stay attached to a team discussion.
+
+If the request is only a docs question, the agent answers from the selected deployment's published docs index and includes source links when relevant.
+
+## Draft documentation from Slack
+
+When your request asks for a documentation change, the agent follows this lifecycle:
+
+1. Checks the selected deployment.
+2. Checks repository authoring access.
+3. Reads repository authoring instructions when present.
+4. Drafts an MDX update from your request and bounded Slack context.
+5. Creates a branch in the connected Git provider.
+6. Writes the generated page or update.
+7. Opens a draft pull request or merge request for review.
+
+Example:
 
 ```text
-@dub use docs-production
+@dub draft a short troubleshooting page from this release thread and open a draft pull request.
 ```
 
-## Repository authoring
+The agent posts progress in the Slack thread while it works. The final response includes the created branch, changed file, review link, and editor link when available.
+
+## Follow up on a draft
+
+Keep follow-up requests in the same Slack thread when you want to revise the draft.
+
+For example:
+
+```text
+@dub make the troubleshooting steps shorter and add a warning about protected branches.
+```
+
+When the thread already has an active authoring session, the agent loads the existing draft file from the review branch and updates the same pull request or merge request instead of creating a separate one.
+
+If the connected repository changes after the thread starts, the agent stops instead of updating the wrong repository.
+
+## Attach files as context
+
+You can attach small text-like files to an authoring request.
+
+Supported examples include:
+
+- Markdown and MDX files
+- JSON and YAML files
+- CSV and TSV files
+- JavaScript, TypeScript, HTML, XML, and log files
+- plain text files
+
+Unsupported or unreadable files are not used as context. If all attachments are unsupported, the agent asks you to provide text context instead.
+
+Keep attachments focused. Large files may be truncated, and binary files are ignored.
+
+## Repository authoring readiness
 
 For Slack requests that create documentation changes, the deployment needs an authoring-ready Git integration.
 
@@ -76,11 +145,50 @@ GitHub-backed deployments should have the GitHub app installed on the repository
 
 GitLab-backed deployments should have GitLab authoring access connected before merge requests are created.
 
+Slack authoring is unavailable when:
+
+- the deployment is a protected baseline
+- the deployment uses a hosted fallback repository
+- no docs repository is connected
+- the connected provider does not support authoring
+- the GitHub app is missing required repository permissions
+- GitLab authoring access is not connected
+- the authoring model is not configured
+- Slack authoring is disabled for the environment
+
+When authoring is unavailable, the agent can still answer docs questions if the published docs index is ready.
+
 ## Workflow notifications
 
 Automations can send run results to Slack when Slack is connected.
 
 Use notification settings in the automation drawer to choose the channel and whether to notify on all runs or only failures.
+
+Workflow notifications are separate from authoring requests. Connecting Slack does not automatically send every workflow run to a channel; choose the notification target in the workflow settings.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="The agent asks me to choose a deployment">
+    More than one deployment is connected to the Slack workspace. Use the buttons in Slack or reply with `@dub use <deployment>` before asking the agent to answer or draft changes.
+  </Accordion>
+
+  <Accordion title="The agent answers questions but will not open a pull request">
+    Check repository authoring readiness. The deployment needs a connected GitHub or GitLab repository, write-capable provider access, and an enabled authoring model.
+  </Accordion>
+
+  <Accordion title="The agent says the deployment is protected">
+    Protected baseline deployments are intentionally read-only for Slack authoring. Use a disposable test deployment or an unprotected production deployment for authoring tests.
+  </Accordion>
+
+  <Accordion title="Attachments are rejected">
+    Attachments must be text-like and small enough to read safely. Paste the important excerpt into the thread, or attach a Markdown, JSON, YAML, CSV, log, or code file instead.
+  </Accordion>
+
+  <Accordion title="A follow-up creates the wrong result">
+    Keep follow-up requests in the same Slack thread as the original draft. Starting a new direct message or channel thread starts a new authoring session.
+  </Accordion>
+</AccordionGroup>
 
 ## Disconnect Slack
 
@@ -89,4 +197,3 @@ Use notification settings in the automation drawer to choose the channel and whe
 3. Choose **Disconnect**.
 
 Disconnecting Slack stops new Slack agent interactions for that organization or deployment scope. Existing pull requests and published docs are not removed.
-
