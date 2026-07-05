@@ -149,6 +149,7 @@ https://example.com/docs
 https://example.com/docs/quickstart
 https://example.com/docs/api/theme
 https://example.com/docs/llms.txt
+https://example.com/docs/robots.txt
 ```
 
 Then open browser dev tools and confirm:
@@ -157,6 +158,7 @@ Then open browser dev tools and confirm:
 - Static assets load from `/docs/_next/...`.
 - API calls load from `/docs/api/...`.
 - Search and assistant requests are not blocked by cache or firewall rules.
+- The final `robots.txt` body contains the crawler policy you expect. Disable or adjust managed edge robots settings if they inject rules that conflict with your docs indexing or AI-readiness policy.
 
 ## Common issues
 
