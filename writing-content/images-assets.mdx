@@ -11,16 +11,16 @@ This keeps previews, pull requests, and published docs reproducible.
 ## Recommended structure
 
 ```text
-images/
-  dashboard-preview.png
-  editor-navigation.png
-  api-playground.png
+assets/
+  logo-light.svg
+  logo-dark.svg
+  favicon.svg
 ```
 
 Reference images from MDX:
 
 ```mdx
-![Dashboard preview](/images/dashboard-preview.png)
+![DubStack light logo](/assets/logo-light.svg)
 ```
 
 ## Alt text
@@ -28,7 +28,7 @@ Reference images from MDX:
 Write alt text that explains the image content:
 
 ```mdx
-![The dashboard home page showing the live preview card and recent activity](/images/dashboard-home.png)
+![DubStack logo mark with the wordmark](/assets/logo-dark.svg)
 ```
 
 Avoid alt text like `screenshot` or `image` because it does not help readers or AI tools.
@@ -39,7 +39,7 @@ Use a frame when the image benefits from a visual boundary:
 
 ```mdx
 <Frame>
-  <img src="/images/editor-navigation.png" alt="Editor navigation pane" />
+  <img src="/assets/logo-light.svg" alt="DubStack light logo" />
 </Frame>
 ```
 
