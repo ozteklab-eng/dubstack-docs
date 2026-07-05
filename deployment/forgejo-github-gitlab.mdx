@@ -13,7 +13,7 @@ A connected provider lets dubstack read source content, receive update signals, 
 | Provider | Current role |
 | --- | --- |
 | GitHub | Primary connected-source provider for production docs, previews, editor commits, and agent draft pull requests. |
-| GitLab | Copy target and authoring integration for backup, migration, and GitLab-aware workflows. Production-source activation is rollout-controlled. |
+| GitLab | Copy target plus OAuth authoring integration for backup, migration, GitLab-aware workflows, and merge-request authoring. Production-source activation is rollout-controlled. |
 | Forgejo | Self-hosted provider support for existing configured deployments. New setup availability depends on workspace configuration. |
 
 Provider availability can depend on your plan, workspace configuration, and rollout state.
@@ -24,6 +24,7 @@ Provider availability can depend on your plan, workspace configuration, and roll
 | --- | --- |
 | Production docs from your own repository | [GitHub](/deployment/github) |
 | Keep a GitLab copy or prepare a migration | [GitLab](/deployment/gitlab) |
+| Draft GitLab merge requests from agents or workflows | [GitLab](/deployment/gitlab) with OAuth authoring access |
 | Review generic provider concepts | This page |
 | Configure a custom self-hosted provider | Contact support or your dubstack operator until the setup is enabled in your workspace. |
 
@@ -64,6 +65,8 @@ Grant the smallest provider scope that supports your intended workflow:
 | Dashboard edits | Write access to content files and configuration. |
 | Agent draft PRs | Branch and pull request creation access. |
 | Webhook-driven updates | Webhook delivery from the provider. |
+
+For GitLab, repository read/copy access and authoring access are separate. The deployment token keeps the GitLab repository connection readable. GitLab OAuth authoring access lets automations create branches, commits, and merge requests as an authorized GitLab user.
 
 ## First-sync troubleshooting
 

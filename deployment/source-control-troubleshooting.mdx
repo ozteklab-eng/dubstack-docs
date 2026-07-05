@@ -125,6 +125,14 @@ Check:
 
 GitLab OAuth and GitLab deployment tokens serve different purposes. OAuth connects a user account for authoring and context. The deployment token or provider credential is what lets DubStack read repository files for sync/copy operations.
 
+If a Slack request, agent action, or workflow cannot open a GitLab merge request, check the authoring side specifically:
+
+- GitLab OAuth authoring access is connected in Git settings
+- the connected GitLab user can create branches and merge requests in the project
+- the site is not using a hosted starter repository or protected internal baseline
+- the workflow has GitLab repository context selected when it needs merge request context
+- the authoring model is enabled for the workspace
+
 See [GitLab](/deployment/gitlab) for provider-specific setup.
 
 ## Hosted starter repository checks

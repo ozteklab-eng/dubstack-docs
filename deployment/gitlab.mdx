@@ -1,10 +1,13 @@
 ---
 title: GitLab
-description: Mirror docs into GitLab and connect GitLab authoring access for workflows.
+description: Mirror docs into GitLab and connect GitLab authoring access for automations.
 icon: gitlab
 ---
 
-GitLab support lets teams keep a copy of their docs in GitLab and use GitLab context for authoring workflows.
+GitLab support has two separate connections:
+
+- a deployment token that lets dubstack read or copy repository content
+- GitLab OAuth authoring access that lets automations act as an authorized GitLab user
 
 <Callout type="info">
   GitHub is the primary production deployment source in the current setup path. GitLab can be connected as a copy target and authoring integration. Production-source activation for GitLab is controlled by workspace rollout and should be verified in Git settings before switching a live site.
@@ -16,9 +19,22 @@ GitLab support lets teams keep a copy of their docs in GitLab and use GitLab con
 | --- | --- |
 | Copy docs from the active deployment source into GitLab | Supported |
 | Use GitLab as a backup or migration target | Supported |
-| Connect GitLab OAuth for workflow and authoring context | Supported |
+| Connect GitLab OAuth for agent and workflow authoring | Supported |
+| Create branches, commits, and merge requests from authorized automations | Supported when GitLab OAuth is connected |
+| Collect bounded merge request context for workflow runs | Supported when GitLab OAuth and repository context are connected |
 | Use GitLab as the active production deployment source | Rollout-controlled; verify in the dashboard |
 | Self-hosted GitLab instance URL | Supported where the instance is reachable by dubstack |
+
+## Deployment token versus OAuth
+
+The deployment token and OAuth connection are intentionally different.
+
+| Connection | What it is used for |
+| --- | --- |
+| GitLab deployment token | Reading repository files, validating branches, and keeping a GitLab copy target connected. |
+| GitLab OAuth authoring access | Creating branches, commits, and merge requests from agent, Slack, and workflow authoring actions. |
+
+Use both when you want GitLab-backed authoring. A deployment token alone can keep content connected, but authoring actions need OAuth so dubstack can act with an authorized GitLab user and respect the user's GitLab permissions.
 
 ## Connect GitLab as a copy target
 
@@ -46,11 +62,11 @@ Recommended token settings:
 
 If project access tokens are unavailable, use a personal access token owned by a service account. Avoid using a personal employee token for long-running production workflows.
 
-## Optional GitLab OAuth
+## Connect GitLab authoring access
 
-The deployment token keeps the repository copy target connected. GitLab OAuth is separate.
+GitLab OAuth is optional for read/copy workflows and required for GitLab authoring workflows.
 
-Connect GitLab OAuth when automations or agent workflows need repository-aware authoring context, merge request access, or user-scoped GitLab actions.
+Connect GitLab OAuth when agents, Slack requests, or scheduled workflows need to draft docs changes in GitLab.
 
 To connect OAuth:
 
@@ -59,6 +75,18 @@ To connect OAuth:
 3. Click **Connect GitLab** for hosted GitLab or **Connect Self-Hosted GitLab** for a reachable self-hosted instance.
 4. Complete the GitLab authorization flow.
 5. Return to Git settings and confirm the GitLab account is connected.
+
+After OAuth is connected, eligible authoring actions can:
+
+- create a feature branch
+- write or update MDX files
+- commit generated documentation changes
+- open a merge request against the configured branch
+- read bounded merge request context for workflow runs
+
+<Callout type="warning">
+  GitLab authoring is not enabled for hosted starter repositories or protected internal baseline sites. Connect a customer-owned GitLab repository before using GitLab merge-request authoring.
+</Callout>
 
 ## Copy behavior
 
@@ -74,6 +102,18 @@ Use this for:
 
 Keep one active production source at a time. Do not edit the source repository and GitLab copy target independently unless you are intentionally migrating.
 
+## Authoring readiness
+
+GitLab authoring is ready when all of these are true:
+
+- the site has an active GitLab docs repository connection
+- the repository is not a hosted fallback or protected internal baseline
+- GitLab OAuth authoring access is connected for the site or organization
+- the connected GitLab user can read the project and create branches or merge requests
+- the authoring model is enabled for the workspace
+
+If GitLab authoring is not ready, dashboard workflows and Slack requests return a setup message instead of creating repository changes.
+
 ## Self-hosted GitLab
 
 For self-hosted GitLab, the instance must be reachable by dubstack over HTTPS.
@@ -83,6 +123,7 @@ Before connecting:
 - confirm the public base URL is correct
 - confirm the project ID or path resolves through the GitLab API
 - confirm the token can access the project
+- confirm GitLab OAuth is configured if automations need to write changes
 - confirm outbound webhook/API traffic is allowed by your network policy
 
 ## Troubleshooting
@@ -98,6 +139,14 @@ Check the active deployment source first. GitLab copy depends on a valid source 
 ### OAuth connects but copy still fails
 
 OAuth and deployment tokens serve different purposes. Confirm the deployment token is still present and valid.
+
+### Agent or Slack says GitLab authoring is not connected
+
+Connect GitLab OAuth in Git settings. The deployment token is not enough for merge-request authoring because authoring actions need a user-scoped OAuth connection.
+
+### Workflow context skips GitLab merge requests
+
+Confirm the workflow has GitLab repository context selected, GitLab OAuth is connected, and the run type supports bounded merge request context. Scheduled runs and manual source-context runs can collect bounded merge request metadata when the connection is healthy.
 
 ### Self-hosted instance cannot connect
 
