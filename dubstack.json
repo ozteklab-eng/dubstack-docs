@@ -575,6 +575,10 @@
                 "icon": "panels-top-left"
               },
               {
+                "slug": "ai/credits-usage",
+                "icon": "gauge"
+              },
+              {
                 "slug": "ai/assistant",
                 "icon": "bot"
               },

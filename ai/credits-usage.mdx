@@ -1,0 +1,100 @@
+---
+title: AI credits and usage
+description: Understand how assistant, agent, Slack, and automation activity is tracked for usage reporting.
+icon: gauge
+---
+
+AI usage reporting helps teams understand how assistant, agent, Slack, and automation activity contributes to their workspace allowance.
+
+The dashboard is the source of truth for your current plan, allowance, billable status, and upgrade options.
+
+## What counts as AI usage
+
+AI usage can be recorded from these surfaces:
+
+| Surface | Example activity |
+| --- | --- |
+| Public assistant | A reader asks a question from the published docs assistant. |
+| Dashboard agent | A teammate asks the dashboard agent to answer, draft, or inspect docs. |
+| Slack agent | A teammate mentions the agent in Slack and receives a docs answer or draft. |
+| Automations | A configured workflow drafts docs updates, changelog entries, link fixes, or audits. |
+
+Public MCP search and filesystem reads are tracked separately from generation-heavy assistant or agent runs.
+
+## Usage ledger
+
+Each AI run can record:
+
+| Field | Meaning |
+| --- | --- |
+| `interaction_source` | Where the request came from, such as public assistant, dashboard, Slack, or workflow. |
+| `run_type` | The kind of action being performed. |
+| `billing_unit` | The reporting unit used for credit estimation. |
+| `status` | Run outcome, such as started, succeeded, failed, skipped, cancelled, or no answer. |
+| `profile_id` | The assistant or agent profile used for routing. |
+| `provider` and `model` | Model route information shown to authorized admins where available. |
+| `input_tokens`, `output_tokens`, `total_tokens` | Token usage reported by the model provider when available. |
+| `credits_estimated` | Estimated credit usage for reporting. |
+| `credits_charged` | Charged credits when billing is active for the run. |
+
+Usage metadata is sanitized before storage. Prompt text, answers, secrets, API keys, cookies, authorization values, and email addresses are not stored as usage metadata fields.
+
+## Credit estimates
+
+Credit estimates are reporting units. They help compare different AI surfaces before final billing or overage behavior is applied.
+
+Current estimate units include:
+
+| Usage unit | Typical source |
+| --- | --- |
+| `assistant_response` | Public assistant responses. |
+| `editor_agent_run` | Dashboard agent runs. |
+| `slack_agent_run` | Slack agent interactions. |
+| `workflow_update_from_code_changes` | Code-change documentation workflows. |
+| `workflow_update_from_assistant_conversations` | Assistant-conversation improvement workflows. |
+| `workflow_changelog` | Changelog draft workflows. |
+| `workflow_seo_audit` | SEO audit workflows. |
+| `workflow_translations` | Translation workflows when enabled for the deployment. |
+| `workflow_typo_check` | Grammar and typo workflows. |
+| `workflow_writing_style` | Style-guide workflows. |
+
+Exact allowance, charging, and overage behavior can depend on your plan and workspace configuration.
+
+## Plan availability
+
+AI features are plan-gated.
+
+| Plan state | Expected behavior |
+| --- | --- |
+| Free | AI assistant and agent usage may be unavailable unless a trial or entitlement enables it. |
+| Pro | AI assistant, agent, and workflow usage can draw from the workspace allowance. |
+| Enterprise | AI usage can use custom allowances, model routing, and enterprise controls configured for the workspace. |
+
+If a feature is locked, check the dashboard reason before assuming the site is misconfigured.
+
+## Review usage
+
+Use dashboard analytics and product pages to review usage:
+
+- **Analytics > Assistant** shows assistant usage and related reader behavior when available.
+- **Products > Assistant** shows assistant readiness, retrieval diagnostics, and recent usage paths.
+- **Products > Workflows** shows workflow runs, status, and usage-related metadata.
+- **Billing** shows the current plan and allowance state.
+
+## Reduce unnecessary usage
+
+- Ask focused questions instead of broad multi-page requests.
+- Scope automations to specific repositories, labels, branches, or schedules.
+- Prefer review-mode workflows for production docs.
+- Disable automations that are no longer needed.
+- Use feedback and analytics to prioritize high-impact docs changes.
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/ai/assistant">Assistant</a>
+  <a href="/ai/agent">Agent</a>
+  <a href="/automations">Automations</a>
+  <a href="/optimize/analytics">Analytics</a>
+  <a href="/dashboard/billing-plans">Billing and plans</a>
+</RelatedTopics>
