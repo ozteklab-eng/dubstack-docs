@@ -417,6 +417,10 @@
                 "icon": "palette"
               },
               {
+                "slug": "configuration/fonts",
+                "icon": "text-cursor-input"
+              },
+              {
                 "slug": "configuration/redirects",
                 "icon": "corner-up-right"
               },

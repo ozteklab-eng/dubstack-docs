@@ -1,0 +1,135 @@
+---
+title: Fonts
+description: Configure heading, body, and code typography for your docs site.
+icon: text-cursor-input
+---
+
+Fonts control the typography used by your published docs site.
+
+Use the dashboard when you want a visual preview. Use `dubstack.json` when your team reviews configuration changes through Git.
+
+## Configure fonts from the dashboard
+
+1. Open the dashboard.
+2. Go to **Editor**.
+3. Open **Site configuration**.
+4. Go to the appearance or styling section.
+5. Select heading, body, and code fonts.
+6. Preview the docs site before publishing.
+
+Dashboard font changes are stored in the same site configuration that powers the published docs shell.
+
+## Configure fonts in source
+
+Set `theme.fonts` in `dubstack.json`.
+
+```json
+{
+  "theme": {
+    "fonts": {
+      "heading": "Space Grotesk",
+      "body": "Inter",
+      "code": "JetBrains Mono"
+    }
+  }
+}
+```
+
+| Field | Purpose |
+| --- | --- |
+| `theme.fonts.heading` | Font used by page titles, section headings, and prominent labels. |
+| `theme.fonts.body` | Font used by normal body text, navigation labels, tables, and most UI copy. |
+| `theme.fonts.code` | Font used by code blocks, inline code, API examples, and terminal snippets. |
+
+If `heading` is omitted, dubstack uses the body font for headings. If `code` is omitted, dubstack uses the theme default monospace font.
+
+## Supported font values
+
+Use one of the dashboard font family names for predictable rendering across local preview, branch previews, screenshots, and production.
+
+### Sans-serif fonts
+
+- `Inter`
+- `Manrope`
+- `Plus Jakarta Sans`
+- `DM Sans`
+- `Space Grotesk`
+- `IBM Plex Sans`
+- `Merriweather Sans`
+- `Public Sans`
+
+### Monospace fonts
+
+- `JetBrains Mono`
+- `Fragment Mono`
+- `IBM Plex Mono`
+- `Fira Code`
+- `Source Code Pro`
+
+You can also provide a full CSS font stack when you need controlled fallbacks.
+
+```json
+{
+  "theme": {
+    "fonts": {
+      "body": "Inter, system-ui, sans-serif",
+      "code": "JetBrains Mono, SFMono-Regular, Menlo, monospace"
+    }
+  }
+}
+```
+
+## Custom font loading
+
+The standard docs shell preloads the supported dashboard font set. A custom family name can be written into `theme.fonts`, but the browser must still be able to load that font.
+
+For font files that are not part of the standard set, use custom CSS only when your workspace has custom CSS enabled.
+
+```json
+{
+  "theme": {
+    "custom_css": "@font-face { font-family: 'Acme Sans'; src: url('/assets/fonts/acme-sans.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }",
+    "fonts": {
+      "body": "Acme Sans, Inter, sans-serif"
+    }
+  }
+}
+```
+
+<Warning>
+  Keep custom font files in the docs repository and load only assets you control. Custom CSS is advanced configuration and may be gated by your workspace plan.
+</Warning>
+
+## Recommended pairings
+
+| Use case | Heading | Body | Code |
+| --- | --- | --- | --- |
+| Clean developer docs | `Space Grotesk` | `Inter` | `JetBrains Mono` |
+| Enterprise knowledge base | `Manrope` | `Manrope` | `IBM Plex Mono` |
+| Dense API reference | `Inter` | `Inter` | `Source Code Pro` |
+| Editorial product guide | `Merriweather Sans` | `Public Sans` | `JetBrains Mono` |
+
+## Troubleshooting
+
+### The font did not change
+
+Check that `dubstack.json` was published and that the page is not still showing an older preview build.
+
+### The font falls back to a system font
+
+The family name may not be part of the standard preloaded font set, or a custom font file may not be loading. Use a dashboard font name or add an explicit fallback stack.
+
+### Code examples look too wide
+
+Use a narrower monospace font such as `JetBrains Mono` or `IBM Plex Mono`, then check API reference pages and regular code blocks in both light and dark mode.
+
+## Related topics
+
+<CardGroup cols={2}>
+  <Card title="Theming" icon="palette" href="/configuration/theming">
+    Configure theme, palette, logo, favicon, and code block tokens.
+  </Card>
+  <Card title="Appearance reference" icon="list-checks" href="/configuration/appearance-reference">
+    Review every supported appearance field in `dubstack.json`.
+  </Card>
+</CardGroup>
