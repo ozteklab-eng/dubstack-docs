@@ -29,6 +29,18 @@ Agent authoring requires:
 
 The dashboard shows readiness checks for the docs index, managed index, advanced answers, Slack, and repository access.
 
+## Agent page sections
+
+The Agent page changes based on what is connected for the selected deployment.
+
+| Section | What to check |
+| --- | --- |
+| Agent settings | Shows whether the Slack app is connected and which workspace it is connected to. |
+| Enabled integrations | Shows connected providers that can supply context to the agent. |
+| Available to your team | Lists provider cards that are not connected yet. Cards marked as coming soon are catalog entries, not active context sources. |
+| Repository access | Shows whether the docs repository can be used for authoring and links to Git settings. |
+| Agent readiness | Shows the published docs index, managed docs index, and advanced answer path used by the agent. |
+
 ## Usage reporting
 
 Agent runs can record usage metadata such as source, run type, profile, model route, connector context, status, token counts, and credit estimates.
@@ -53,6 +65,22 @@ Connected integrations can provide scoped context to the agent:
 | Jira | Read selected issue metadata from a bounded JQL query. |
 
 Only connected integrations that support the requested action are made available to the agent.
+
+Provider cards that are visible but marked as coming soon cannot be selected for agent runs or automations yet. Use connected providers only when testing or documenting a production workflow.
+
+## Readiness checks
+
+Use **Sync index** when the published docs changed and the managed retrieval index should be refreshed. Use **Refresh** when you only need to re-check the current readiness state.
+
+The readiness panel separates three paths:
+
+| Path | Meaning |
+| --- | --- |
+| Published docs | The fast path backed by the published docs snapshot. |
+| Managed docs index | The managed retrieval index built for deeper answers. |
+| Advanced answers | The answer profile, retrieval route, fallback route, and prompt configuration for the selected site. |
+
+If any path is not ready, fix the blocking repository, indexing, or profile issue before asking the agent to draft documentation changes.
 
 ## Protected baselines
 
