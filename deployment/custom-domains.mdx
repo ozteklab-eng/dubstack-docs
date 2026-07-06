@@ -25,6 +25,8 @@ docs.example.com -> your dubstack site
 
 This mode is DNS-driven. You add the domain in the dubstack dashboard, configure the DNS record shown by the setup screen, then verify the domain.
 
+For the safest migration, add the verification records first and wait for the dashboard to show the hostname and certificate as verified before you route visitor traffic with the CNAME record.
+
 ### `/docs` subpath
 
 Use a `/docs` subpath when your main website already owns the root domain.
@@ -52,7 +54,26 @@ The dashboard shows the active platform URL, the custom URL, and the origin targ
 
 ## DNS for host-based domains
 
-For a host-based domain such as `docs.example.com`, create the DNS record shown in the dashboard.
+For a host-based domain such as `docs.example.com`, the dashboard shows two groups of DNS records:
+
+- Verification records that prove domain ownership and allow TLS certificate provisioning.
+- A traffic record that routes visitors to dubstack.
+
+Add the verification records first.
+
+Typical verification setup:
+
+```text
+Type:  TXT
+Name:  _cf-custom-hostname.docs.example.com
+Value: <value shown in the dashboard>
+
+Type:  TXT
+Name:  _acme-challenge.docs.example.com
+Value: <value shown in the dashboard>
+```
+
+After the verification records are active, add the traffic record shown in the dashboard.
 
 Typical setup:
 
@@ -63,6 +84,10 @@ Value: cname.dubstack.live
 ```
 
 If your DNS provider proxies traffic, keep the record mode recommended by the dashboard. Some providers require DNS-only mode during verification and can be switched back after the certificate is active.
+
+<Note>
+  Hostname ownership and TLS certificate validation are separate checks. A domain is production-ready only after the dashboard shows the hostname, certificate, and traffic routing as ready.
+</Note>
 
 ## Origin hostnames for subpath domains
 
@@ -85,6 +110,14 @@ Do not send visitors directly to the `--origin` hostname. It exists for your roo
 
 Domain verification checks that the domain reaches the expected dubstack site. This prevents a domain from verifying against the wrong tenant if a DNS or proxy rule points to the wrong origin.
 
+For host-based domains, verification expects:
+
+- The ownership TXT record exists at the hostname shown in the dashboard.
+- The certificate TXT record exists at the hostname shown in the dashboard.
+- The traffic CNAME points to the dubstack SaaS target after validation is ready.
+
+The dashboard stores the provider status and shows the latest hostname, certificate, and verification states.
+
 For `/docs` subpaths, verification expects:
 
 - `/docs` reaches the generated origin.
@@ -97,6 +130,14 @@ For `/docs` subpaths, verification expects:
 ### The domain verifies against the wrong site
 
 Check that your DNS record or proxy target points to the origin shown for the same site in the dashboard.
+
+### The hostname is verified but HTTPS is still pending
+
+Check the certificate TXT record in your DNS provider. Hostname ownership can verify before the TLS certificate is issued.
+
+### The certificate is active but visitors still see the old site
+
+Check the traffic CNAME. Verification records prove control of the hostname, but visitor traffic does not move until the CNAME points to the dubstack target.
 
 ### `/docs` loads, but assets fail
 
