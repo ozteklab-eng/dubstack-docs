@@ -117,8 +117,16 @@
                 "icon": "house"
               },
               {
+                "slug": "what-is-dubstack",
+                "icon": "circle-help"
+              },
+              {
                 "slug": "quickstart",
                 "icon": "zap"
+              },
+              {
+                "slug": "guides/index",
+                "icon": "map"
               },
               {
                 "slug": "getting-started/overview",

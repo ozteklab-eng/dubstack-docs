@@ -1,0 +1,70 @@
+---
+title: What is dubstack?
+description: Learn what dubstack does and how its dashboard, docs shell, API reference, AI surfaces, and Git workflows fit together.
+icon: circle-help
+---
+
+dubstack is a documentation platform for technical products.
+
+It combines a Git-backed docs source, a dashboard editor, generated API references, production docs hosting, and AI surfaces that can read and act on your documentation workflow.
+
+## What dubstack helps you ship
+
+Use dubstack when you need to publish and maintain:
+
+- developer documentation
+- API references from OpenAPI specs
+- product guides and changelogs
+- internal or partner-facing knowledge bases
+- AI-readable docs through search, markdown export, and public MCP
+
+## Core surfaces
+
+| Surface | Purpose |
+| --- | --- |
+| Dashboard | Manage sites, source control, billing, team access, analytics, and deployment settings. |
+| Editor | Edit MDX pages, navigation, assets, and site configuration from the browser. |
+| Docs shell | Render your published documentation site from Git-backed content and `dubstack.json`. |
+| API reference | Generate endpoint docs and interactive request builders from OpenAPI specs. |
+| Assistant | Answer reader questions from published docs with linked sources. |
+| Agent | Help maintain docs from dashboard and integration workflows. |
+| Public MCP | Let AI tools search and read published docs through a read-only MCP server. |
+| Theme Studio | Customize advanced docs experiences on Enterprise plans. |
+
+## Source of truth
+
+The docs source lives in Git.
+
+`dubstack.json` controls the site structure, theme, API reference setup, widgets, redirects, and other site behavior. MDX files hold the actual content.
+
+When content changes, dubstack syncs the source into the publish pipeline and serves the rendered site from the latest published content.
+
+## How teams use it
+
+Common workflows include:
+
+- connect a GitHub or GitLab repository
+- start with a hosted starter repository
+- edit pages and navigation from the dashboard
+- publish preview deployments for branches
+- generate API endpoint pages from OpenAPI specs
+- attach a custom domain
+- enable reader feedback, analytics, assistant, and MCP
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="zap" href="/quickstart">
+    Create, edit, and publish your first docs site.
+  </Card>
+  <Card title="Guides" icon="map" href="/guides">
+    Pick the right implementation path for your team.
+  </Card>
+  <Card title="API reference" icon="terminal" href="/api-reference/introduction">
+    Add OpenAPI specs and publish endpoint docs.
+  </Card>
+  <Card title="AI surfaces" icon="sparkles" href="/ai/ai-surfaces">
+    Understand assistant, agent, contextual actions, and MCP.
+  </Card>
+</CardGroup>
+
