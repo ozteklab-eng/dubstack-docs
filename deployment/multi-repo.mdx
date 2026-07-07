@@ -1,0 +1,184 @@
+---
+title: Multiple repositories
+description: Understand how to use more than one repository with a docs site without confusing the production source.
+icon: git-fork
+---
+
+Many teams keep documentation-related content in more than one repository.
+
+DubStack supports several multi-repository workflows, but the production docs source for a site should stay explicit.
+
+## Current boundary
+
+For a standard docs deployment, one active repository and branch is the production source for each docs site.
+
+That source contains:
+
+- `dubstack.json`
+- MDX pages
+- images and assets
+- reusable snippets
+- OpenAPI specs when the site has an API reference
+
+When the deployment branch changes, the sync worker publishes that source into the artifacts used by the public site.
+
+<Callout type="warning">
+  Do not connect multiple repositories as competing production sources for the same docs content type. Keep one active source for the live site, then use branches, pull requests, mirrors, or additional context repositories for related workflows.
+</Callout>
+
+## Choose the right pattern
+
+| Goal | Recommended pattern |
+| --- | --- |
+| Docs live in a subdirectory of a larger product repo | Use [Monorepo setup](/deployment/monorepo). |
+| Product docs, API specs, and SDK guides live in separate repos but should publish as one site | Choose one production docs source and import or mirror the other content into that source until combined multi-source deployment is enabled for your workspace. |
+| Keep a copy of docs in another provider | Use Git provider mirroring or sync rules where available. |
+| Give the agent or workflows extra repository context | Grant repository access as context, but keep the production docs source unchanged. |
+| Publish separate docs sites from separate repos | Create separate sites, each with its own source repository and custom domain or path strategy. |
+
+## One production source
+
+The production source is the repository, branch, and optional docs directory configured in **Settings > Deployment > Git settings**.
+
+Use this source for:
+
+- page content
+- navigation
+- theme and site settings
+- API reference specs
+- public MCP and AI discovery content
+- assistant indexing
+- search indexing
+
+The dashboard shows the active source, branch, and last sync time. Manual update re-reads the active source and republishes artifacts.
+
+## Monorepo setup
+
+Use monorepo setup when all docs files live in one repository but not at the repository root.
+
+Example:
+
+```text
+product-platform/
+├── apps/
+├── packages/
+└── docs/
+    ├── dubstack.json
+    ├── index.mdx
+    └── api-reference/
+```
+
+Configure the docs path as `docs`. Published URLs do not include the source directory name unless your navigation includes it.
+
+See [Monorepo setup](/deployment/monorepo) for the full setup.
+
+## Mirroring and provider copies
+
+Mirroring copies content between Git providers or repositories for backup, migration, or provider evaluation.
+
+Use mirroring when you want to:
+
+- keep a GitLab copy while GitHub remains the production source
+- migrate a docs source from one provider to another
+- preserve source history during a provider transition
+- test provider-specific authoring flows without changing the live source immediately
+
+Mirroring is not the same as multi-source deployment. A mirror target is a copy target unless you explicitly make it the active source in Git settings.
+
+## Context repositories
+
+Agent and workflow features may use extra repositories as context.
+
+Context repositories can help with:
+
+- explaining product behavior from source code
+- drafting docs updates from API or SDK changes
+- reviewing release notes or changelog inputs
+- checking related implementation files before opening a documentation pull request
+
+Context repositories do not automatically become published docs content. The agent still writes reviewed documentation changes to the active docs source.
+
+## Separate sites
+
+Use separate sites when different repositories should have independent docs experiences.
+
+Examples:
+
+```text
+docs.example.com        -> product docs repository
+api.example.com         -> API reference repository
+sdk.example.com         -> SDK docs repository
+```
+
+You can also use path-based hosting in front of separate origins when you need URLs such as:
+
+```text
+example.com/docs
+example.com/api
+example.com/sdk
+```
+
+Each site keeps its own source, sync history, settings, and deployment checks.
+
+## Combined multi-source deployments
+
+Combined multi-source deployment means several repositories are merged into one rendered site, with each source mounted at a dedicated URL path.
+
+That is a separate Enterprise deployment model from the standard single-source site. It requires clear ownership for:
+
+- the base site configuration
+- path collision rules
+- cross-source links
+- source-specific navigation
+- sync failure handling when one source fails and another succeeds
+- assistant, search, MCP, and analytics scope
+
+If your team needs a combined multi-source deployment, contact your DubStack operator so the workspace can be reviewed before launch.
+
+## Avoid path collisions
+
+If you are designing a future multi-source layout, keep paths unique.
+
+Good:
+
+```text
+/product
+/api
+/sdks
+```
+
+Risky:
+
+```text
+/docs
+/docs/api
+```
+
+Overlapping paths make redirects, search indexing, source-specific previews, and assistant citations harder to reason about.
+
+## Troubleshooting
+
+### Updates are coming from the wrong repository
+
+Open **Settings > Deployment > Git settings** and confirm the active repository, branch, and docs path.
+
+### A mirror updated but the live site did not
+
+Confirm whether the mirror target is the active production source. If it is only a copy target, it will not update the public site until you make it active.
+
+### Agent changes appear in a different repository
+
+Check the agent readiness panel and repository access settings. Agent authoring should target the active docs source unless a workflow explicitly targets another repository.
+
+### Content from another repository is missing
+
+If the content should be published, move or mirror it into the active docs source, or use a separate site for that repository.
+
+## Related
+
+- [Monorepo setup](/deployment/monorepo)
+- [Git providers](/deployment/forgejo-github-gitlab)
+- [Git sync](/deployment/git-sync)
+- [GitHub](/deployment/github)
+- [GitLab](/deployment/gitlab)
+- [Branching and publishing](/editor/branching-and-publishing)
