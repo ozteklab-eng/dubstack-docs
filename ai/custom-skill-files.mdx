@@ -33,9 +33,9 @@ Use this skill when a user asks how to build, configure, or operate Acme.
 
 ## Source of truth
 
-- Public docs: https://docs.acme.com
-- Public MCP server: https://docs.acme.com/mcp
-- API reference: https://docs.acme.com/api-reference/introduction
+- Public docs: {{site.url}}
+- Public MCP server: {{site.mcp_url}}
+- API reference: {{site.api_reference_url}}
 
 ## Rules
 
@@ -48,7 +48,7 @@ Use this skill when a user asks how to build, configure, or operate Acme.
 
 Add topic-specific skill files under the compatible skills directory.
 
-Each skill lives in its own directory and must be named `SKILL.md`.
+Each skill lives in its own directory and must be named `SKILE�md`.
 
 ```text
 .mintlify/
@@ -79,13 +79,26 @@ The Markdown body contains the actual instructions.
 
 Keep descriptions specific. Agents use the description to choose the right skill before reading the full file.
 
+## Runtime URL tokens
+
+Custom skill files can include runtime tokens for URLs that depend on the published docs host.
+
+| Token | Expands to |
+| --- | --- |
+| `{{site.url}}` | Current public docs URL, including a route mount such as `/docs`. |
+| `{{site.mcp_url}}` | Current public MCP endpoint. |
+| `{{site.skill_url}}` | Current root skill file URL. |
+| `{{site.api_reference_url}}` | API reference introduction URL for the current public host. |
+
+Use these tokens instead of hardcoding a preview or origin URL. This keeps skill files correct when a site is accessed through a custom domain, reverse proxy, or `/docs` subpath.
+
 ## Published endpoints
 
 After publishing, DubStack exposes custom skills through the same AI discovery endpoints as generated skills.
 
 | Path | Behavior |
 | --- | --- |
-| `/skill.md` | Returns the root skill when there is one skill. Redirects to `/.well-known/skills/index.json` when multiple skills are available. |
+| `/skill.md` | Returns the root skill when there is one skill. Redirects to `/.well-known/skills/index.json  when multiple skills are available. |
 | `/.well-known/agent-skills/index.json` | Recommended discovery manifest with `sha256` digests. |
 | `/.well-known/agent-skills/<skill-id>/skill.md` | Direct URL for a specific skill. |
 | `/.well-known/skills/index.json` | Compatibility skills index. |
@@ -145,7 +158,7 @@ If a custom skill is missing from discovery:
 3. Confirm directory skills use `.mintlify/skills/<skill-name>/SKILL.md`.
 4. Confirm the skill directory name only uses letters, numbers, dots, underscores, or hyphens.
 5. Run a manual update from the dashboard.
-6. Open `/.well-known/agent-skills/index.json` again.
+6. Open `/.well-known/agent-skills/index.json  again.
 
 If `/skill.md` redirects, more than one skill is available. Open `/.well-known/skills/index.json` to list the available skill IDs.
 
