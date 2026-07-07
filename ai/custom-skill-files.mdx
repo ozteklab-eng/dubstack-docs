@@ -33,9 +33,9 @@ Use this skill when a user asks how to build, configure, or operate Acme.
 
 ## Source of truth
 
-- Public docs: {{site.url}}
-- Public MCP server: {{site.mcp_url}}
-- API reference: {{site.api_reference_url}}
+- Public docs: https://docs.acme.com
+- Public MCP server: https://docs.acme.com/mcp
+- API reference: https://docs.acme.com/api-reference/introduction
 
 ## Rules
 
@@ -51,7 +51,7 @@ Add topic-specific skill files under the compatible skills directory.
 Each skill lives in its own directory and must be named `SKILL.md`.
 
 ```text
-.mintlify/
+.dubstack/
   skills/
     api-reference/
       SKILL.md
@@ -63,6 +63,10 @@ skill.md
 You can use a root `skill.md` and multiple topic skills together. The discovery indexes include all available skills.
 
 Use multiple skills when you want agents to load focused instructions for specific work, such as API reference setup, migration support, or release-note authoring.
+
+<Note>
+  DubStack also accepts `.mintlify/skills/<skill-name>/SKILL.md` as a compatibility path for migrated repositories. Prefer `.dubstack/skills` for new sites.
+</Note>
 
 ## Frontmatter
 
@@ -78,19 +82,6 @@ DubStack uses these fields for discovery:
 The Markdown body contains the actual instructions.
 
 Keep descriptions specific. Agents use the description to choose the right skill before reading the full file.
-
-## Runtime URL tokens
-
-Custom skill files can include runtime tokens for URLs that depend on the published docs host.
-
-| Token | Expands to |
-| --- | --- |
-| `{{site.url}}` | Current public docs URL, including a route mount such as `/docs`. |
-| `{{site.mcp_url}}` | Current public MCP endpoint. |
-| `{{site.skill_url}}` | Current root skill file URL. |
-| `{{site.api_reference_url}}` | API reference introduction URL for the current public host. |
-
-Use these tokens instead of hardcoding a preview or origin URL. This keeps skill files correct when a site is accessed through a custom domain, reverse proxy, or `/docs` subpath.
 
 ## Published endpoints
 
@@ -155,7 +146,7 @@ If a custom skill is missing from discovery:
 
 1. Confirm the file is on the published branch.
 2. Confirm root skill files are named exactly `skill.md`.
-3. Confirm directory skills use `.mintlify/skills/<skill-name>/SKILL.md`.
+3. Confirm directory skills use `.dubstack/skills/<skill-name>/SKILL.md`.
 4. Confirm the skill directory name only uses letters, numbers, dots, underscores, or hyphens.
 5. Run a manual update from the dashboard.
 6. Open `/.well-known/agent-skills/index.json` again.

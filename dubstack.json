@@ -58,42 +58,11 @@
     {
       "source": "/integrations",
       "destination": "/ai/integrations"
-    },
-    {
-      "source": "/api",
-      "destination": "/api-reference/introduction"
-    },
-    {
-      "source": "/billing",
-      "destination": "/dashboard/billing-plans"
-    },
-    {
-      "source": "/sso",
-      "destination": "/dashboard/sso"
-    },
-    {
-      "source": "/custom-domains",
-      "destination": "/deployment/custom-domains"
-    },
-    {
-      "source": "/git",
-      "destination": "/deployment/github"
-    },
-    {
-      "source": "/github",
-      "destination": "/deployment/github"
-    },
-    {
-      "source": "/gitlab",
-      "destination": "/deployment/gitlab"
     }
   ],
-  "navbar": {
-    "primary": {
-      "type": "button",
-      "label": "Get Started",
-      "href": "https://dubstack.ai/#register"
-    }
+  "topbarCtaButton": {
+    "label": "Get started",
+    "href": "/quickstart"
   },
   "contextual": {
     "enabled": true,
@@ -135,8 +104,7 @@
       "source_card_background_color": "color-mix(in srgb, var(--assistant-bg) 94%, var(--foreground) 6%)",
       "source_card_border_color": "color-mix(in srgb, var(--assistant-border) 70%, transparent)",
       "source_card_text_color": "var(--assistant-text)",
-      "source_card_muted_color": "var(--docs-muted-text, var(--gray-400))",
-      "enabled": true
+      "source_card_muted_color": "var(--docs-muted-text, var(--gray-400))"
     }
   },
   "navigation": {
@@ -990,29 +958,5 @@
   "seo": {
     "title_template": "%s | dubstack docs",
     "description": "Product documentation for DubStack, the developer documentation platform for docs, API references, AI workflows, and Theme Studio."
-  },
-  "assistant": {
-    "enabled": true,
-    "prompt": "",
-    "response_handling": {
-      "deflection_enabled": false,
-      "support_email": "",
-      "show_help_button": false
-    },
-    "search_domains": {
-      "enabled": false,
-      "domains": []
-    },
-    "bot_protection": {
-      "invisible_captcha_enabled": true
-    },
-    "starter_questions": {
-      "enabled": true,
-      "questions": [
-        "What features does it offer?",
-        "How do I get started?",
-        "What is DubStack?"
-      ]
-    }
   }
 }
