@@ -63,8 +63,8 @@
   "navbar": {
     "primary": {
       "type": "button",
-      "label": "Get started",
-      "href": "/quickstart"
+      "label": "Get Started",
+      "href": "https://dubstack.ai/#register"
     }
   },
   "contextual": {
