@@ -38,6 +38,36 @@ boost: 2
 
 Keep boosts modest. Search should still return the most specific page for specific queries.
 
+## Boost a navigation group
+
+Set `boost` on a navigation group in `dubstack.json` to apply the multiplier to every page under that group.
+
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Getting started",
+            "boost": 5,
+            "pages": [
+              "quickstart",
+              "getting-started/create-site"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+A page inherits the boost from its nearest parent group. Nested groups can override parent boosts, and a page's own frontmatter `boost` always wins over inherited navigation boost.
+
+Use group boosts for a small number of high-signal sections. Avoid boosting an entire docs site, because that removes the ranking signal.
+
 ## Exclude utility pages from search
 
 Use `searchable: false` when a page should stay published and directly reachable but should not appear in search or public AI retrieval.
