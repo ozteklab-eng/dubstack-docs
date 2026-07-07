@@ -1,0 +1,178 @@
+---
+title: Branching and publishing
+description: Understand how branches, pull requests, previews, and publishing work in the dashboard editor.
+icon: git-pull-request
+---
+
+Branching controls where an edit is saved. Publishing controls when the edit becomes part of the source that powers your live docs.
+
+The editor works with the same Git-backed source as your repository workflow:
+
+```text
+Editor change
+-> branch, commit, or pull request
+-> deployment branch
+-> sync job
+-> published docs site
+```
+
+## Saving versus publishing
+
+| Action | What happens |
+| --- | --- |
+| Edit | You change content, navigation, assets, OpenAPI specs, or `dubstack.json` settings in the editor. |
+| Save | The dashboard keeps the current editor state and prepares it for the source-backed publish flow. |
+| Publish | The change is written to the configured source as a commit, branch update, pull request, or merge request depending on your repository setup. |
+| Sync | The configured deployment branch is synchronized into published artifacts. |
+| Live | The public docs site reads the latest published artifacts. |
+
+Dashboard preview is useful while editing, but the live site is the final verification target.
+
+## Branch types
+
+| Branch type | Use it for |
+| --- | --- |
+| Deployment branch | Small direct edits when your repository policy allows direct publishing. This branch powers the live site. |
+| Feature branch | Larger changes, team review, agent-authored drafts, OpenAPI updates, and changes that should be previewed before becoming live. |
+
+Many teams use `main` as the deployment branch, but the active branch is the one configured in **Settings > Deployment > Git settings**.
+
+## Publish actions
+
+The actions visible in the editor depend on the selected branch, connected provider, repository permissions, and branch protection rules.
+
+| Situation | Expected path |
+| --- | --- |
+| Deployment branch allows direct writes | Publish directly to the deployment branch. |
+| Deployment branch requires review | Create or switch to a feature branch, then open a pull request or merge request. |
+| Feature branch has pending changes | Save the branch or create a pull request / merge request. |
+| No pending changes | Publish actions are disabled until there is something to commit. |
+
+If an action is disabled, check the branch, repository access, provider connection, and your role in the dashboard.
+
+## Create a branch
+
+Use a branch when a change needs review before it goes live.
+
+1. Open the editor.
+2. Use the branch selector in the toolbar.
+3. Create or select a feature branch.
+4. Make the content, navigation, configuration, or asset change.
+5. Review the changed-file list before publishing.
+6. Create a pull request or merge request when the change is ready for review.
+
+Use descriptive branch names so reviewers can understand the change before opening the diff.
+
+## Review changes
+
+Before publishing, inspect the changed-file list.
+
+Review these files carefully:
+
+- `dubstack.json`, when navigation, redirects, theme, contextual actions, OpenAPI settings, or add-ons changed
+- OpenAPI specs, when endpoint pages or playground behavior changed
+- media files under `images/` or `videos/`
+- snippets that are reused across multiple pages
+- deleted pages, because navigation and redirects may need updates too
+
+Keep each branch focused. Avoid mixing a content rewrite, navigation refactor, and theme change in the same review unless they are part of one release.
+
+## Preview before merging
+
+Preview deployments let reviewers inspect a branch before it becomes live.
+
+Use previews to check:
+
+- new, renamed, or deleted pages
+- sidebar and header navigation
+- code blocks, callouts, accordions, tabs, cards, and tables
+- API reference pages and generated endpoint pages
+- search results
+- assistant answers and source links
+- public MCP discovery after source updates
+- custom-domain or `/docs` path behavior when relevant
+
+Preview URLs are review surfaces. The deployment branch remains the source for the production docs site.
+
+## Pull request and merge request workflow
+
+Use your Git provider review flow when a change needs approval.
+
+1. Create a pull request or merge request from the feature branch.
+2. Ask reviewers to inspect the diff and preview deployment.
+3. Resolve requested changes on the same branch.
+4. Merge into the deployment branch when approved.
+5. Wait for the sync job to finish.
+6. Open the live site and verify the published page directly.
+
+For GitHub and GitLab repositories, the dashboard can create review branches and authoring pull requests when the connected app or token has the required repository access.
+
+## Local Git and dashboard editing
+
+You can use local Git and the dashboard editor on the same docs project.
+
+| Workflow | Good for |
+| --- | --- |
+| Dashboard editor | Fast browser edits, visual editing, non-developer authoring, and source-backed publishing without local setup. |
+| Local Git | IDE workflows, code review, CI checks, bulk edits, generated files, and repository-native automation. |
+
+Both workflows write to the configured source. After an external push or merge, the sync job updates the published artifacts. If the webhook does not arrive, use manual update from the dashboard.
+
+See [Local Git workflow](/deployment/local-git-workflow) for the command-line path.
+
+## Hosted starter sources
+
+If you skipped Git during onboarding, your site can start from a hosted source.
+
+Hosted sources are useful for getting started quickly, but customer-owned repositories are better when you need:
+
+- branch protection
+- pull request or merge request review
+- local editing
+- external CI checks
+- repository ownership in your organization
+- source portability
+- agent-authored pull requests against your own repository
+
+You can move to a connected Git repository later from deployment settings.
+
+## Branching decisions
+
+| Situation | Recommended path |
+| --- | --- |
+| Small typo and no branch protection | Publish directly if your repository policy allows it. |
+| New guide, migration page, or API reference change | Use a feature branch and review. |
+| Agent-authored documentation update | Review the generated branch and draft pull request. |
+| Change touches `dubstack.json` | Use a branch and preview unless the change is trivial. |
+| OpenAPI spec update | Use a branch and verify generated endpoint pages in preview. |
+| Emergency correction | Publish directly only when your repository policy allows it. |
+
+## Troubleshooting
+
+### Publish is disabled
+
+Check that there are pending changes, your account can write to the source, and the selected branch allows the action you are trying to perform.
+
+### A pull request is required
+
+Your deployment branch is protected. Use a feature branch and open a pull request or merge request.
+
+### The preview works but the live site does not
+
+Confirm the change was merged into the deployment branch configured in Git settings.
+
+### The live site still shows old content
+
+Check deployment history. If no sync ran, use manual update and confirm the provider webhook is still configured.
+
+### A generated API page is missing
+
+Confirm the OpenAPI spec path is configured, committed to the source, and included in the branch that triggered the sync.
+
+## Related
+
+- [Publishing](/editor/publishing)
+- [Git essentials](/editor/git-essentials)
+- [Preview deployments](/deployment/preview-deployments)
+- [Manual updates and history](/deployment/manual-updates-history)
+- [Local Git workflow](/deployment/local-git-workflow)

@@ -612,12 +612,16 @@
                 "icon": "git-branch"
               },
               {
+                "slug": "editor/branching-and-publishing",
+                "icon": "git-pull-request"
+              },
+              {
                 "slug": "editor/keyboard-shortcuts",
                 "icon": "keyboard"
               },
               {
                 "slug": "editor/publishing",
-                "icon": "git-pull-request"
+                "icon": "upload-cloud"
               }
             ]
           },
