@@ -41,12 +41,50 @@ order: 2
   Set to `true` or `"true"` to keep a page out of generated navigation and workflow scans that skip hidden pages.
 </ResponseField>
 
+<ResponseField name="searchable" type="boolean | string">
+  Set to `false` or `"false"` to keep a published page reachable and navigable while excluding it from in-site search, public MCP search, the public MCP filesystem, and assistant retrieval indexes.
+</ResponseField>
+
+<ResponseField name="boost" type="number | string">
+  Positive relevance multiplier for search and assistant retrieval. Use it sparingly for canonical overview, quickstart, and migration pages that should rank above narrower pages for broad queries.
+</ResponseField>
+
+<ResponseField name="noindex" type="boolean | string">
+  Set to `true` or `"true"` to exclude a page from public indexing surfaces such as sitemap output and AI-readable indexes. Use this when the page should not be discoverable by crawlers or public AI tools.
+</ResponseField>
+
+## Search tuning frontmatter
+
+Use `searchable: false` when a page should stay visible by direct URL or navigation, but should not appear in search or public MCP retrieval.
+
+```mdx
+---
+title: Legal terms
+description: Terms that readers can open from the footer.
+searchable: false
+---
+```
+
+Use `boost` when a page is the best answer for broad queries.
+
+```mdx
+---
+title: Quickstart
+description: Create and publish your first docs site.
+boost: 2
+---
+```
+
+Keep boosts modest. Large boosts can make one page outrank more specific pages.
+
 ## Authoring rules
 
 - Keep frontmatter at the very top of the file.
 - Use simple scalar values for fields that the sync worker reads.
 - Prefer explicit `title` and `description` for every public page.
 - Use `hidden: true` only when the page should not appear in generated navigation.
+- Use `searchable: false` for public utility pages that should not appear in search.
+- Use `noindex: true` when the page should be excluded from public crawler and AI-readable indexing surfaces.
 
 <Callout type="warning">
   Frontmatter is source-controlled content. Do not put API keys, passwords, private tokens, or internal secrets in page frontmatter.

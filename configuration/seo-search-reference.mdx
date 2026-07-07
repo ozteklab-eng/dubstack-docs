@@ -32,12 +32,15 @@ Use page frontmatter for page-specific titles and descriptions. Use global site 
 | `description` | string | Page summary used by metadata, search snippets, and AI-readable indexes. |
 | `icon` | string | Page icon when supported by navigation. |
 | `noindex` | boolean | Excludes the page from public indexing surfaces. |
+| `searchable` | boolean | Set to `false` to exclude a published page from in-site search, public MCP search, the public MCP filesystem, and assistant retrieval indexes without removing the page from navigation. |
+| `boost` | number | Positive relevance multiplier for search and assistant retrieval ranking. |
 
 ```mdx
 ---
 title: Quickstart
 description: Create and publish your first docs site.
 icon: zap
+boost: 2
 ---
 ```
 
@@ -50,6 +53,7 @@ Write descriptions as reader-facing summaries. They are reused by search, AI dis
 | `addons.visibility.noindex` | boolean | `false` | Site-level switch to disable public indexing and AI discovery. |
 | Page `noindex` frontmatter | boolean | `false` | Page-level switch to exclude a page from sitemap and public AI surfaces. |
 | Page `hidden` frontmatter | boolean | `false` | Removes a page from navigation and public sitemap output. |
+| Page `searchable` frontmatter | boolean | `true` | Set to `false` to keep the page published but remove it from search and public MCP retrieval. |
 
 ```json
 {
@@ -61,13 +65,15 @@ Write descriptions as reader-facing summaries. They are reused by search, AI dis
 }
 ```
 
-Published indexing is based on public navigation. Pages marked `hidden` or `noindex` are excluded from public sitemap output and public AI-readable surfaces.
+Published indexing is based on public navigation. Pages marked `hidden` or `noindex` are excluded from public sitemap output and public AI-readable surfaces. Pages marked `searchable: false` stay navigable and directly reachable, but are omitted from in-site search, public MCP search, the public MCP filesystem, and assistant retrieval indexes.
 
 ## Search controls
 
 | Field | Type | Default | Purpose |
 | --- | --- | --- | --- |
 | `widgets.search.placeholder` | string | Theme default | Placeholder text in the search box. |
+| Page `boost` frontmatter | number | `1` | Raises the ranking weight for that page in search and assistant retrieval. |
+| Page `searchable` frontmatter | boolean | `true` | Removes a page from search and retrieval when set to `false`. |
 
 ```json
 {
@@ -80,6 +86,26 @@ Published indexing is based on public navigation. Pages marked `hidden` or `noin
 ```
 
 Search results are built from published content. If a page is missing from search, check navigation, frontmatter, and indexing policy first.
+
+```mdx
+---
+title: Quickstart
+description: Create and publish your first docs site.
+boost: 2
+---
+```
+
+Use boosts for canonical pages that should win broad queries, such as quickstarts, migration guides, and primary API overview pages. Keep boosts modest so specific pages can still rank for specific queries.
+
+```mdx
+---
+title: Terms of service
+description: Legal terms linked from the footer.
+searchable: false
+---
+```
+
+Use `searchable: false` for utility pages that should remain public but should not appear in search or public AI retrieval.
 
 ## AI discovery surfaces
 
@@ -123,7 +149,7 @@ Feedback settings can be managed from the dashboard add-ons page. Keep source-ba
 
 | Symptom | Check |
 | --- | --- |
-| Page is not searchable | Confirm it is in navigation and does not set `hidden` or `noindex`. |
+| Page is not searchable | Confirm it is in navigation and does not set `hidden`, `noindex`, or `searchable: false`. |
 | AI tools cannot read docs | Confirm `addons.visibility.noindex` is `false`. |
 | Metadata looks generic | Add page `title` and `description` frontmatter. |
 | Feedback is missing | Enable `addons.feedback.thumbs_rating` and publish the config. |
