@@ -220,6 +220,10 @@
                 "icon": "server"
               },
               {
+                "slug": "deployment/ci",
+                "icon": "check-circle"
+              },
+              {
                 "slug": "deployment/webhooks-ci",
                 "icon": "workflow"
               },
@@ -821,6 +825,10 @@
               {
                 "slug": "deployment/source-control-troubleshooting",
                 "icon": "circle-alert"
+              },
+              {
+                "slug": "deployment/ci",
+                "icon": "check-circle"
               },
               {
                 "slug": "deployment/webhooks-ci",

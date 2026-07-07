@@ -1,0 +1,111 @@
+---
+title: CI/CD checks
+sidebarTitle: CI/CD checks
+description: Configure documentation checks that run before changes reach your live deployment branch.
+icon: check-circle
+---
+
+CI/CD checks help teams catch documentation issues before changes are published.
+
+Use them with a pull request workflow: contributors change docs on a branch, checks run against the proposed change, and the deployment branch publishes only after review.
+
+<Info>
+  CI/CD checks are configured per deployment from **Settings > Deployment > Add-ons**. If a check is unavailable, the dashboard shows the current capability reason on the add-on card.
+</Info>
+
+## How CI fits into publishing
+
+```text
+Docs branch
+-> pull request
+-> CI/CD checks
+-> merge to deployment branch
+-> Git provider event
+-> DubStack sync
+-> live docs site
+```
+
+CI/CD checks validate the repository before publishing. The Git provider event and sync worker still handle the final deployment after the change reaches the configured deployment branch.
+
+## Configure checks
+
+Open **Settings > Deployment > Add-ons**, then choose the mode for each available CI/CD check.
+
+| Mode | Behavior |
+| --- | --- |
+| Disabled | The check does not run for this deployment. |
+| Advisory | The check reports issues without blocking the pull request. |
+| Required | The check reports issues and should block the pull request until fixed. |
+
+Start in advisory mode while tuning a check. Move to required mode only when the check is reliable enough for your repository and team workflow.
+
+## Available checks
+
+### Broken links
+
+The broken link check validates links between documentation pages in your site.
+
+Use it to catch deleted pages, renamed routes, and navigation links that no longer resolve.
+
+<Callout type="warning">
+  External websites can change or rate-limit requests. Keep external link validation separate from your required internal documentation checks unless your team is ready to maintain allowlists and retries.
+</Callout>
+
+### Grammar linter
+
+The grammar linter checks prose quality and consistency before a change is merged.
+
+Use advisory mode first so the team can tune wording rules, terminology, and false positives without blocking everyday documentation work.
+
+## Capability gates
+
+CI/CD add-ons depend on the deployment, Git provider, repository access, and runtime support.
+
+If a check is disabled in the dashboard, read the card reason. The reason comes from the current deployment capability check and is not a static UI-only state.
+
+Common reasons include:
+
+- the deployment is not connected to a supported Git provider
+- the repository connection cannot create check results
+- the selected check is not enabled for the deployment yet
+- the repository or branch configuration needs to be refreshed
+
+## Recommended workflow
+
+1. Connect the documentation repository.
+2. Set one branch as the deployment branch.
+3. Enable CI/CD checks in advisory mode.
+4. Open a documentation pull request and inspect the check output.
+5. Fix noisy rules or false positives.
+6. Move stable checks to required mode.
+7. Merge into the deployment branch after checks pass.
+
+## Troubleshooting
+
+### Checks do not appear on a pull request
+
+Confirm that:
+
+- the repository is connected in deployment settings
+- the pull request targets the configured deployment branch
+- the check is enabled in **Settings > Deployment > Add-ons**
+- the add-on card does not show a capability warning
+- the Git provider app or token still has repository access
+
+### A check passed but the live site did not update
+
+CI/CD checks validate the pull request. They do not replace the publishing path.
+
+After merge, confirm that the provider event reached DubStack and that the activity feed shows a successful sync. If no event arrived, use [Manual updates](/deployment/manual-updates-history) to retry from the configured deployment branch.
+
+### A required check is too noisy
+
+Switch the check back to advisory mode, tune the repository rules, and re-enable required mode after the results are stable.
+
+## Related
+
+- [Add-ons](/settings/deployment/addons)
+- [Webhooks and CI](/deployment/webhooks-ci)
+- [Git sync](/deployment/git-sync)
+- [Preview deployments](/deployment/preview-deployments)
+- [Manual updates](/deployment/manual-updates-history)
