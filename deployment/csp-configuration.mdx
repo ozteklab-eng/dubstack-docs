@@ -1,0 +1,189 @@
+---
+title: Content Security Policy
+description: Configure CSP headers for reverse proxies, /docs subpaths, assistant, search, and API playground requests.
+icon: shield
+---
+
+Content Security Policy (CSP) controls which resources a browser can load for your documentation site.
+
+Hosted DubStack sites serve baseline security headers. You usually only need a custom CSP when your own proxy, CDN, firewall, or root application overrides response headers for a custom domain or `/docs` subpath.
+
+## When to configure CSP
+
+Configure CSP at your proxy or edge layer when:
+
+- your docs are served through a reverse proxy
+- your root website already sets a site-wide CSP
+- your company firewall requires explicit domain allowlists
+- fonts, images, search, assistant, feedback, or the API playground stop working after adding security headers
+
+If DubStack hosts the entire docs hostname directly, start with the hosted defaults and only add a custom policy when you have a specific requirement.
+
+## CSP directives
+
+| Directive | Controls |
+| --- | --- |
+| `default-src` | Fallback source list for resource types not covered by a more specific directive. |
+| `script-src` | JavaScript loaded by the docs shell, analytics, embeds, and optional protection widgets. |
+| `style-src` | Stylesheets and inline style attributes used by the docs renderer. |
+| `font-src` | Fonts used by the active theme. |
+| `img-src` | Logos, favicons, screenshots, icons, SVGs, and MDX images. |
+| `connect-src` | Search, assistant, feedback, analytics, API playground, MCP, and other HTTP requests. |
+| `frame-src` | Embedded content and third-party iframes used by your docs. |
+| `frame-ancestors` | Which origins may embed your docs in an iframe. |
+
+## Domain allowlist
+
+Only include domains your site actually uses.
+
+| Source | Purpose | Directive | Required |
+| --- | --- | --- | --- |
+| `'self'` | Docs pages, assets, search, assistant, feedback, API routes, MCP, and LLM files on the public docs host. | Most directives | Required |
+| `*.dubstack.live` | Default hosted docs domains and generated `/docs` origins. | `connect-src`, `frame-src`, `img-src` | Required when using DubStack-hosted origins |
+| `api.dubstack.ai` | Platform API requests when a deployment uses platform-hosted API endpoints directly. | `connect-src` | Optional |
+| `fonts.googleapis.com` | Google Fonts stylesheets if selected by the site theme. | `style-src` | Optional |
+| `fonts.gstatic.com` | Google Fonts font files if selected by the site theme. | `font-src` | Optional |
+| Your API host | API playground live requests. | `connect-src` | Required for live playground requests |
+| Your image or asset CDN | External MDX images, favicons, or logos. | `img-src` | Optional |
+| Your analytics providers | Analytics scripts and ingestion endpoints. | `script-src`, `connect-src`, `img-src` | Optional |
+| Your embed providers | Video, demos, widgets, or iframes embedded in MDX. | `frame-src`, `script-src`, `connect-src` | Optional |
+| CAPTCHA or bot-protection provider shown in dashboard settings | Assistant or feedback abuse protection when enabled. | `script-src`, `frame-src`, `style-src`, `connect-src` | Optional |
+
+## Starting policy
+
+Use this as a starting point for a proxy-owned CSP:
+
+```text
+Content-Security-Policy:
+default-src 'self';
+script-src 'self' 'unsafe-inline';
+style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+font-src 'self' https://fonts.gstatic.com;
+img-src 'self' data: blob: https:;
+connect-src 'self' https://*.dubstack.live https://api.dubstack.ai https:;
+frame-src 'self' https:;
+frame-ancestors 'self';
+base-uri 'self';
+form-action 'self'
+```
+
+Then remove optional domains you do not use.
+
+<Callout type="warning">
+  Do not copy a broad CSP into production without testing search, assistant, feedback, the API playground, OpenAPI examples, custom fonts, and embedded content.
+</Callout>
+
+## /docs subpath policy
+
+When docs are mounted at `example.com/docs`, the browser sees the public origin as `example.com`.
+
+Your CSP should allow same-origin `/docs` traffic:
+
+```text
+connect-src 'self' https://*.dubstack.live https://api.dubstack.ai;
+img-src 'self' data: blob: https:;
+font-src 'self' https://fonts.gstatic.com;
+style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+```
+
+If your root website rewrites assets or proxies fonts, include those paths and domains in the root site's CSP too.
+
+## Assistant, search, feedback, and MCP
+
+The public docs shell normally calls same-origin routes:
+
+| Feature | Typical route |
+| --- | --- |
+| Search | `/api/search` or same-origin docs search endpoints |
+| Assistant | `/api/chat` |
+| Feedback | `/api/feedback` or `/feedback` |
+| MCP | `/mcp` or `/docs/mcp` |
+| LLM index | `/llms.txt` and `/llms-full.txt` |
+| Skill file | `/skill.md` |
+
+For `/docs` subpaths, the same routes are mounted below `/docs`.
+
+Make sure your CSP and proxy rules allow these routes and do not cache assistant, feedback, or MCP requests.
+
+## API playground requests
+
+Live API playground requests connect to the API servers defined by your OpenAPI spec.
+
+Add those hosts to `connect-src`:
+
+```text
+connect-src 'self' https://api.example.com https://sandbox.example.com;
+```
+
+Do not use `connect-src *` unless your security team explicitly accepts that policy.
+
+## Cloudflare example
+
+Create a response header transform rule that applies only to your docs route.
+
+For a `/docs` subpath, scope the rule to:
+
+```text
+http.request.uri.path eq "/docs" or starts_with(http.request.uri.path, "/docs/")
+```
+
+Set the `Content-Security-Policy` response header to your approved policy.
+
+## CloudFront example
+
+Attach a response headers policy to the behavior that serves your docs route.
+
+Use a separate behavior for `/docs*` when the root site has a different CSP. This avoids breaking your main application while keeping docs-specific directives explicit.
+
+## Vercel example
+
+Add a route-scoped header in `vercel.json`:
+
+```json
+{
+  "headers": [
+    {
+      "source": "/docs/:path*",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.dubstack.live https://api.dubstack.ai https:; frame-src 'self' https:; frame-ancestors 'self'; base-uri 'self'; form-action 'self'"
+        }
+      ]
+    }
+  ]
+}
+```
+
+## Validate CSP
+
+After deploying the policy:
+
+1. Open the docs homepage.
+2. Open a nested page directly.
+3. Run search.
+4. Ask the assistant a simple docs question.
+5. Submit feedback if feedback is enabled.
+6. Open an API endpoint page and try a playground request.
+7. Check `/llms.txt`, `/skill.md`, and `/mcp` if AI discovery is enabled.
+8. Review browser console CSP violations.
+
+## Troubleshooting
+
+| Issue | What to check |
+| --- | --- |
+| Search or assistant fails | Add the docs host and API host to `connect-src`. |
+| API playground cannot send requests | Add the OpenAPI server host to `connect-src`. |
+| Fonts are missing | Add the configured font provider to `style-src` and `font-src`. |
+| Images or logos do not load | Add the asset host to `img-src`. |
+| Embedded videos or demos are blank | Add the provider to `frame-src` and any required script/connect directives. |
+| Dashboard preview is blank | Avoid a global `frame-ancestors 'none'`; allow the trusted dashboard preview context where required. |
+
+<CardGroup cols={2}>
+  <Card title="Security headers" icon="shield-check" href="/deployment/security-headers">
+    Review the hosted security headers DubStack applies by default.
+  </Card>
+  <Card title="/docs subpath" icon="folder-tree" href="/deployment/docs-subpath">
+    Configure routing for docs hosted below a root domain path.
+  </Card>
+</CardGroup>

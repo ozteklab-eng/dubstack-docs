@@ -228,6 +228,10 @@
                 "icon": "shield-check"
               },
               {
+                "slug": "deployment/csp-configuration",
+                "icon": "shield"
+              },
+              {
                 "slug": "deployment/forgejo-github-gitlab",
                 "icon": "git-branch"
               },
@@ -777,6 +781,10 @@
               {
                 "slug": "deployment/security-headers",
                 "icon": "shield-check"
+              },
+              {
+                "slug": "deployment/csp-configuration",
+                "icon": "shield"
               },
               {
                 "slug": "deployment/docs-authentication",
