@@ -72,6 +72,7 @@ Published indexing is based on public navigation. Pages marked `hidden` or `noin
 | Field | Type | Default | Purpose |
 | --- | --- | --- | --- |
 | `widgets.search.placeholder` | string | Theme default | Placeholder text in the search box. |
+| Navigation group `boost` | number | `1` | Applies a ranking multiplier to every page under the group unless a child group or page overrides it. |
 | Page `boost` frontmatter | number | `1` | Raises the ranking weight for that page in search and assistant retrieval. |
 | Page `searchable` frontmatter | boolean | `true` | Removes a page from search and retrieval when set to `false`. |
 
@@ -86,6 +87,30 @@ Published indexing is based on public navigation. Pages marked `hidden` or `noin
 ```
 
 Search results are built from published content. If a page is missing from search, check navigation, frontmatter, and indexing policy first.
+
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Getting started",
+            "boost": 5,
+            "pages": [
+              "quickstart",
+              "getting-started/create-site"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+A page inherits boost from its nearest parent group. A nested group can override the parent group value. Page frontmatter always has the highest precedence.
 
 ```mdx
 ---
