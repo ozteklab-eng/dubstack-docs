@@ -184,6 +184,10 @@
                 "icon": "folder-tree"
               },
               {
+                "slug": "deployment/multi-repo",
+                "icon": "git-fork"
+              },
+              {
                 "slug": "deployment/preview-deployments",
                 "icon": "git-pull-request"
               },
