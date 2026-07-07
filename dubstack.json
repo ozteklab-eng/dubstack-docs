@@ -462,6 +462,10 @@
                 "icon": "languages"
               },
               {
+                "slug": "configuration/internationalization",
+                "icon": "languages"
+              },
+              {
                 "slug": "configuration/theming",
                 "icon": "palette"
               },
