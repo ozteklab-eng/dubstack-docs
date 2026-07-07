@@ -580,6 +580,10 @@
                 "icon": "file-text"
               },
               {
+                "slug": "editor/media",
+                "icon": "image"
+              },
+              {
                 "slug": "editor/navigation",
                 "icon": "map"
               },
