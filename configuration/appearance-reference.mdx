@@ -138,6 +138,42 @@ For examples, supported family names, and fallback guidance, see [Fonts](/config
 
 Advanced code block fields are useful for theme authors. Most sites should keep `styling.codeblocks` on `system` so light and dark mode stay coherent.
 
+## Assistant appearance
+
+| Field | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| `widgets.assistant.title` | string | `Assistant` | Label shown in the assistant header. |
+| `widgets.assistant.welcome_title` | string | Site-aware default | Empty-state heading before the reader asks a question. |
+| `widgets.assistant.welcome_subtitle` | string | Theme default | Empty-state helper text. |
+| `widgets.assistant.user_bubble_color` | string | Theme token | Background for reader messages. |
+| `widgets.assistant.user_bubble_text_color` | string | Theme token | Text color for reader messages. |
+| `widgets.assistant.ai_bubble_color` | string | Theme token | Assistant message background for layouts that render assistant bubbles. Docs-shell answers can stay unboxed. |
+| `widgets.assistant.ai_bubble_text_color` | string | Theme token | Assistant answer text color. |
+| `widgets.assistant.source_card_background_color` | string | Theme token | Background for assistant source cards. |
+| `widgets.assistant.source_card_border_color` | string | Theme token | Border for assistant source cards. |
+| `widgets.assistant.source_card_text_color` | string | Theme token | Source title text color. |
+| `widgets.assistant.source_card_muted_color` | string | Theme token | Source path and snippet text color. |
+
+```json
+{
+  "widgets": {
+    "assistant": {
+      "title": "Assistant",
+      "welcome_title": "How can I help with Acme?",
+      "welcome_subtitle": "Ask about setup, publishing, and API workflows.",
+      "user_bubble_color": "color-mix(in srgb, var(--assistant-bg) 86%, var(--foreground) 14%)",
+      "user_bubble_text_color": "var(--assistant-text)",
+      "source_card_background_color": "color-mix(in srgb, var(--assistant-bg) 94%, var(--foreground) 6%)",
+      "source_card_border_color": "color-mix(in srgb, var(--assistant-border) 70%, transparent)",
+      "source_card_text_color": "var(--assistant-text)",
+      "source_card_muted_color": "var(--docs-muted-text, var(--gray-400))"
+    }
+  }
+}
+```
+
+Prefer theme variables or `color-mix(...)` values when the same configuration should adapt across light and dark mode.
+
 ## Custom CSS
 
 | Field | Type | Purpose |
