@@ -9,6 +9,8 @@ GitLab support has two separate connections:
 - a deployment token that lets dubstack read or copy repository content
 - GitLab OAuth authoring access that lets automations act as an authorized GitLab user
 
+Developers can still use normal GitLab workflows. Clone the connected project, edit MDX files or `dubstack.json`, commit, push, and review changes through merge requests.
+
 <Callout type="info">
   GitHub is the primary production deployment source in the default setup path. GitLab can be connected as a copy target and authoring integration today. GitLab production-source activation is workspace-controlled and should be verified in Git settings before switching a live site.
 </Callout>
@@ -63,6 +65,25 @@ Do not rotate OAuth when a deployment token is expired, and do not rotate the de
 9. Copy docs from the active source into GitLab.
 
 After saving, the dashboard should show GitLab as a configured copy target. If another provider is still active, GitLab is not serving production docs yet.
+
+## Publish from a local checkout
+
+Use this when GitLab is the active deployment source for the site.
+
+```bash
+git clone https://gitlab.com/your-group/your-docs-project.git
+cd your-docs-project
+git checkout -b docs/update-guide
+git add .
+git commit -m "docs: update guide"
+git push -u origin docs/update-guide
+```
+
+Open a merge request and merge it into the configured deployment branch after review.
+
+If GitLab is only configured as a copy target, pushes to GitLab do not publish the live site. The active deployment source still drives production updates.
+
+See [Local Git workflow](/deployment/local-git-workflow) for the provider-neutral flow.
 
 ## Deployment token requirements
 
@@ -209,6 +230,7 @@ Confirm the instance URL is externally reachable and uses a trusted TLS certific
 ## Related
 
 - [Source control troubleshooting](/deployment/source-control-troubleshooting)
+- [Local Git workflow](/deployment/local-git-workflow)
 - [Self-hosted GitLab OAuth](/deployment/gitlab-self-hosted-oauth)
 - [Git providers](/deployment/forgejo-github-gitlab)
 - [GitHub](/deployment/github)
