@@ -1,0 +1,160 @@
+---
+title: Internationalization
+sidebarTitle: Internationalization
+description: Plan and publish translated documentation with locale-prefixed routes and language switching.
+icon: languages
+---
+
+Internationalization lets one docs site publish translated pages while keeping a single repository and deployment workflow.
+
+Use it when your team maintains translated MDX files in source control and wants readers to switch between language versions from the docs shell.
+
+<Info>
+  Language routing is source-backed. DubStack serves translated pages that exist in your repository; it does not silently generate translations at request time.
+</Info>
+
+## Recommended structure
+
+Keep the default language at the root of the repository. Put translated pages in directories named with language codes.
+
+```text
+index.mdx
+quickstart.mdx
+configuration/navigation.mdx
+fr/
+  index.mdx
+  quickstart.mdx
+  configuration/navigation.mdx
+es/
+  index.mdx
+  quickstart.mdx
+  configuration/navigation.mdx
+```
+
+Use the same slug structure across languages where possible. Matching slugs let the language selector keep readers on the equivalent translated page.
+
+## Configure language options
+
+Add language options to `navigation.languages` in `dubstack.json`.
+
+```json
+{
+  "navigation": {
+    "languages": [
+      {
+        "code": "en",
+        "label": "English",
+        "href": "/"
+      },
+      {
+        "code": "fr",
+        "label": "French",
+        "href": "/fr"
+      },
+      {
+        "code": "es",
+        "label": "Spanish",
+        "href": "/es"
+      }
+    ]
+  }
+}
+```
+
+The published site shows a language selector when at least one language option is configured.
+
+For field-level details, see [Languages](/configuration/languages).
+
+## Route behavior
+
+The default language usually stays at root paths:
+
+| File | Public path |
+| --- | --- |
+| `index.mdx` | `/` |
+| `quickstart.mdx` | `/quickstart` |
+| `configuration/navigation.mdx` | `/configuration/navigation` |
+
+Translated pages use the language directory as the URL prefix:
+
+| File | Public path |
+| --- | --- |
+| `fr/index.mdx` | `/fr` |
+| `fr/quickstart.mdx` | `/fr/quickstart` |
+| `fr/configuration/navigation.mdx` | `/fr/configuration/navigation` |
+
+When a reader switches languages, DubStack tries to preserve the current page path. If the matching translated page is missing, the reader falls back to the configured language home.
+
+## Localized banners
+
+Use language-specific banners when a launch notice, migration warning, or region-specific message differs by language.
+
+```json
+{
+  "navigation": {
+    "languages": [
+      {
+        "code": "en",
+        "label": "English",
+        "href": "/",
+        "banner": {
+          "content": "Version 2.0 is live. See the changelog for details.",
+          "dismissible": true
+        }
+      },
+      {
+        "code": "fr",
+        "label": "French",
+        "href": "/fr",
+        "banner": {
+          "content": "La version 2.0 est disponible. Consultez le changelog.",
+          "dismissible": true
+        }
+      }
+    ]
+  }
+}
+```
+
+If a language does not define a banner, the site-level [banner](/configuration/banners) is used when configured.
+
+## Translation workflow
+
+A reliable translation workflow should keep source content and translated content reviewable in Git.
+
+1. Choose the default language.
+2. Add `navigation.languages` with the languages you are ready to publish.
+3. Create locale directories for translated pages.
+4. Keep translated filenames aligned with default-language filenames.
+5. Review links inside translated pages so they point to translated routes when available.
+6. Run a preview or manual update before announcing the localized docs.
+7. Publish from the deployment branch after review.
+
+## Automation boundary
+
+Translation automation is listed in the workflow catalog, but it depends on deployment capabilities such as repository write access, translation routing, policy configuration, and an authoring model.
+
+If translation automation is unavailable for your deployment, maintain translated files manually or through your own translation workflow, then publish the translated MDX files through Git.
+
+## Search and public MCP
+
+After publishing language changes, search and public MCP use the current synced content.
+
+Agents can read translated pages when those pages exist in the published repository. If a translation is missing, the public MCP cannot infer or create it from another language.
+
+## Checklist
+
+- Keep one default language at root.
+- Add only languages with enough translated content to be useful.
+- Keep slug structure aligned across languages.
+- Add a localized banner only when the message differs by language.
+- Preview language switching before publishing.
+- Re-sync after changing `navigation.languages` so search and public MCP reflect the new language set.
+
+## Related
+
+- [Languages](/configuration/languages)
+- [Navigation](/configuration/navigation)
+- [Publishing](/editor/publishing)
+- [Preview deployments](/deployment/preview-deployments)
+- [Automations reference](/automations/reference)
