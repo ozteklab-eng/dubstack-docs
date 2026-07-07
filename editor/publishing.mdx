@@ -1,12 +1,12 @@
 ---
-title: Branching and publishing
-description: Review, preview, and publish documentation changes through Git-backed workflows.
-icon: git-pull-request
+title: Publishing
+description: Review pending changes, publish to source, run sync jobs, and verify live documentation updates.
+icon: upload-cloud
 ---
 
 Publishing moves source changes into the public docs runtime.
 
-The exact flow depends on your connected source, branch, and repository rules. The contract is consistent: source changes are written to Git, synced into published artifacts, and then served by the live site.
+The exact flow depends on your connected source, selected branch, repository permissions, and branch protection rules. The contract is consistent: source changes are written to Git, synced into published artifacts, and then served by the live site.
 
 ```text
 Editor or Git change
@@ -42,18 +42,7 @@ Use the changed-file list before publishing to confirm that the edit only touche
 
 If a pending edit is wrong, use **Undo all changes** or revert the individual file before publishing. Reopen the editor page after undoing a temporary edit to confirm the source content is clean.
 
-## Branch selector and feature branches
-
-Use the branch selector in the editor toolbar to switch between the deployment branch and feature branches. The selector shows the default branch, available feature branches, and a **Create new branch** action.
-
-When you switch to a feature branch, the toolbar action changes from **Publish** to **Create PR**.
-
-| Feature branch state | What the menu shows |
-| --- | --- |
-| No pending changes | The **Create pull request** menu shows **No pending changes**. |
-| Pending changes | The menu shows the feature branch name, changed-file count, **Undo all changes**, each changed file with status, and the **Create PR** action. |
-
-Use this menu to review branch-scoped changes before opening a pull request. Do not create a pull request until the changed-file list only contains the intended edits.
+For branch creation, pull requests, merge requests, and review flows, see [Branching and publishing](/editor/branching-and-publishing).
 
 ## Source-backed publishing
 
@@ -117,17 +106,6 @@ Use this flow when the site was created with the hosted starter source during on
 
 You can move from a hosted source to a customer-owned Git repository later. See [Git essentials](/editor/git-essentials) and [GitHub](/deployment/github).
 
-## Branching decisions
-
-| Situation | Recommended path |
-| --- | --- |
-| Small typo and no branch protection | Publish directly to the deployment branch |
-| New guide, migration, or API reference change | Create a feature branch and pull request |
-| Agent-authored docs update | Review the generated branch and draft pull request |
-| Change touches `dubstack.json` | Use a branch and preview unless the change is trivial |
-| OpenAPI spec update | Use a branch and verify generated endpoint pages in preview |
-| Emergency correction | Publish directly only if your repository policy allows it |
-
 ## Publish from local Git
 
 Developers can publish without opening the dashboard editor.
@@ -158,6 +136,8 @@ Use previews to check:
 
 Preview URLs are temporary review surfaces. The deployment branch remains the source for the production docs site.
 
+For the full branch review workflow, see [Branching and publishing](/editor/branching-and-publishing).
+
 ## Manual update
 
 Use manual update when:
@@ -184,6 +164,13 @@ After publishing, check:
 <Callout type="warning">
   Do not rely on dashboard preview alone for production verification. Always open the live URL after the publish finishes.
 </Callout>
+
+## Related
+
+- [Branching and publishing](/editor/branching-and-publishing)
+- [Git essentials](/editor/git-essentials)
+- [Preview deployments](/deployment/preview-deployments)
+- [Manual updates and history](/deployment/manual-updates-history)
 
 ## Troubleshooting
 
