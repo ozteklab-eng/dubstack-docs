@@ -60,9 +60,12 @@
       "destination": "/ai/integrations"
     }
   ],
-  "topbarCtaButton": {
-    "label": "Get started",
-    "href": "/quickstart"
+  "navbar": {
+    "primary": {
+      "type": "button",
+      "label": "Get Started",
+      "href": "https://dubstack.ai/#register"
+    }
   },
   "contextual": {
     "enabled": true,

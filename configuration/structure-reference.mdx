@@ -93,8 +93,9 @@ Use object entries when you need icons, titles, or external links. Use string en
 | --- | --- | --- | --- |
 | `topbar.showTabs` | boolean | `true` | Shows navigation tabs in the header. |
 | `topbar.showSearch` | boolean | `true` | Shows search in the header. |
-| `topbarCtaButton.label` | string | None | Header CTA label. |
-| `topbarCtaButton.href` | string | None | Header CTA destination. |
+| `navbar.primary.label` | string | None | Header CTA label. |
+| `navbar.primary.href` | string | None | Header CTA destination. |
+| `navbar.primary.type` | string | `button` | Header CTA type. |
 | `anchors` | boolean | `true` | Shows anchor links on page headings. |
 
 ```json
@@ -103,9 +104,12 @@ Use object entries when you need icons, titles, or external links. Use string en
     "showTabs": true,
     "showSearch": true
   },
-  "topbarCtaButton": {
-    "label": "Get started",
-    "href": "/quickstart"
+  "navbar": {
+    "primary": {
+      "type": "button",
+      "label": "Get Started",
+      "href": "https://example.com/signup"
+    }
   },
   "anchors": true
 }
