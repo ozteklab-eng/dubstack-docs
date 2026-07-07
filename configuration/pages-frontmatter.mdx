@@ -38,7 +38,7 @@ order: 2
 </ResponseField>
 
 <ResponseField name="hidden" type="boolean | string">
-  Set to `true` or `"true"` to keep a page out of generated navigation and workflow scans that skip hidden pages.
+  Set to `true` or `"true"` to keep a page out of generated navigation and workflow scans that skip hidden pages. A hidden page is excluded from search, sitemap output, public MCP, AI-readable indexes, and assistant retrieval unless site-wide hidden indexing is enabled with `seo.indexing: "all"`.
 </ResponseField>
 
 <ResponseField name="searchable" type="boolean | string">
@@ -79,6 +79,28 @@ Keep boosts modest. Large boosts can make one page outrank more specific pages.
 
 Use navigation group `boost` in `dubstack.json` when an entire section needs a shared ranking multiplier. Page frontmatter `boost` overrides any boost inherited from navigation.
 
+Use a hidden navigation group with `searchable: true` when descendant pages should remain out of navigation but still be discoverable.
+
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Migration helpers",
+            "hidden": true,
+            "searchable": true,
+            "pages": ["migration/legacy-api"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
 ## Authoring rules
 
 - Keep frontmatter at the very top of the file.
@@ -87,6 +109,7 @@ Use navigation group `boost` in `dubstack.json` when an entire section needs a s
 - Use `hidden: true` only when the page should not appear in generated navigation.
 - Use `searchable: false` for public utility pages that should not appear in search.
 - Use `noindex: true` when the page should be excluded from public crawler and AI-readable indexing surfaces.
+- Use `seo.indexing: "all"` only when hidden pages are direct-link content that should still be discoverable.
 
 <Callout type="warning">
   Frontmatter is source-controlled content. Do not put API keys, passwords, private tokens, or internal secrets in page frontmatter.
