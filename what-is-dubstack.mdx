@@ -39,6 +39,15 @@ The docs source lives in Git.
 
 When content changes, dubstack syncs the source into the publish pipeline and serves the rendered site from the latest published content.
 
+## Editing content
+
+There are two supported editing paths, and teams can use both.
+
+- Use the dashboard editor to edit and publish pages in the browser. Dashboard publishing writes changes back to the connected source when the source allows editor writes.
+- Use a local editor and Git when developers want to clone the repository, edit MDX or `dubstack.json`, commit, push, and review changes through the Git provider.
+
+Anyone who can write to the connected repository can update documentation through the repository workflow. Dashboard permissions and Git provider permissions are managed separately.
+
 ## How teams use it
 
 Common workflows include:
@@ -46,6 +55,7 @@ Common workflows include:
 - connect a GitHub or GitLab repository
 - start with a hosted starter repository
 - edit pages and navigation from the dashboard
+- clone the repository and push docs changes from a local editor
 - publish preview deployments for branches
 - generate API endpoint pages from OpenAPI specs
 - attach a custom domain
@@ -67,4 +77,3 @@ Common workflows include:
     Understand assistant, agent, contextual actions, and MCP.
   </Card>
 </CardGroup>
-

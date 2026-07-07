@@ -8,6 +8,8 @@ GitHub is the primary connected-source provider for dubstack docs.
 
 Use the GitHub App when your documentation source lives in a GitHub repository and you want automatic updates, preview deployments, editor commits, agent draft pull requests, and workflow-driven documentation changes.
 
+Developers can still use the normal GitHub workflow. Clone the connected repository, edit MDX files or `dubstack.json`, commit, and push. The GitHub App receives the repository event and starts the same sync path used by dashboard publishing.
+
 ## When you need the GitHub App
 
 | Repository type | GitHub App required? |
@@ -70,6 +72,23 @@ For richer sites, include:
 - image and asset files used by pages
 - reusable snippets
 - folders that match the slugs in `dubstack.json`
+
+## Publish from a local checkout
+
+Use this when your team prefers GitHub branches, pull requests, code review, or CI.
+
+```bash
+git clone https://github.com/your-org/your-docs-repo.git
+cd your-docs-repo
+git checkout -b docs/update-guide
+git add .
+git commit -m "docs: update guide"
+git push -u origin docs/update-guide
+```
+
+Open a pull request and merge it into the deployment branch after review.
+
+For small changes, you can push directly to the deployment branch if your repository policy allows it. See [Local Git workflow](/deployment/local-git-workflow) for the full flow.
 
 ## GitHub App access
 
@@ -182,6 +201,7 @@ Reinstall or reauthorize the GitHub App, then run another manual update to verif
 ## Related
 
 - [Source control troubleshooting](/deployment/source-control-troubleshooting)
+- [Local Git workflow](/deployment/local-git-workflow)
 - [Git providers](/deployment/forgejo-github-gitlab)
 - [Preview deployments](/deployment/preview-deployments)
 - [Deployment permissions](/dashboard/deployment-permissions)

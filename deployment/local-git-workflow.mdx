@@ -1,0 +1,149 @@
+---
+title: Local Git workflow
+description: Edit docs locally, push to the connected repository, and let dubstack publish from the deployment branch.
+icon: terminal
+---
+
+Developers can keep using their normal Git workflow with dubstack.
+
+Use the dashboard editor when you want to edit in the browser. Use local Git when your team prefers an IDE, command line, pull requests, CI checks, or repository-native review.
+
+Both paths update the same docs source.
+
+```text
+Dashboard editor
+  -> Git repository -> sync worker -> live docs site
+Local Git push
+  -> Git repository -> sync worker -> live docs site
+```
+
+## Before you start
+
+Confirm the site has a connected source repository.
+
+1. Open the dashboard.
+2. Go to **Settings > Deployment > Git settings**.
+3. Confirm the provider, repository, branch, and docs root.
+4. Confirm the repository contains `dubstack.json`.
+
+For GitHub, the dubstack GitHub App must have access to the repository. For GitLab, the GitLab project, token, and active-source settings must be valid for the workspace.
+
+## Clone the repository
+
+Clone the same repository shown in Git settings.
+
+```bash
+git clone https://github.com/your-org/your-docs-repo.git
+cd your-docs-repo
+```
+
+If your docs live in a subdirectory, move into that directory before editing.
+
+```bash
+cd docs
+```
+
+## Make a docs change
+
+Edit the files in your normal editor.
+
+Common files include:
+
+- `dubstack.json` for navigation, theme, API reference, redirects, widgets, and site behavior
+- `*.mdx` files for docs pages
+- `api-reference/openapi.json` or another configured OpenAPI spec path
+- images, snippets, and other assets referenced by pages
+
+Keep the deployment branch reproducible. Do not store API keys, passwords, customer credentials, or private tokens in the repository.
+
+## Push directly to the deployment branch
+
+Use this for small changes when your repository policy allows direct publishing.
+
+```bash
+git checkout main
+git pull
+git add .
+git commit -m "docs: update quickstart"
+git push
+```
+
+When the push reaches the configured deployment branch, dubstack syncs the source and updates the live site after the publish job completes.
+
+## Use a branch and pull request
+
+Use this for larger changes, protected branches, API reference updates, navigation changes, and anything that needs review.
+
+```bash
+git checkout -b docs/update-quickstart
+git add .
+git commit -m "docs: update quickstart"
+git push -u origin docs/update-quickstart
+```
+
+Open a pull request or merge request in your Git provider.
+
+After review, merge into the deployment branch. The merge triggers the normal sync path.
+
+## What syncs back into the dashboard
+
+External pushes and merged pull requests update the same source the dashboard editor reads.
+
+After a successful sync:
+
+- published pages update on the live site
+- navigation follows the latest `dubstack.json`
+- search, assistant, public MCP, and AI discovery files use the latest published artifacts
+- the dashboard editor should show the latest repository content for the active branch
+
+If the editor appears stale, run a manual update and reload the editor.
+
+## Manual update
+
+Use **Manual update** when a provider webhook is delayed, missed, or disabled.
+
+Manual update does not replace Git. It re-runs the sync job from the configured repository and branch.
+
+1. Open the dashboard.
+2. Go to the site overview or deployment history.
+3. Click **Manual update**.
+4. Wait for the activity item to complete.
+5. Open the live page and verify the change.
+
+## Recommended checks before pushing
+
+Before pushing a docs change, check:
+
+- `dubstack.json` is valid JSON
+- changed pages have valid frontmatter
+- new pages are linked from navigation when they should appear in the sidebar
+- renamed pages have redirects
+- image and snippet paths resolve from the docs root
+- OpenAPI specs are valid when API reference pages changed
+- no secrets were committed
+
+## Troubleshooting
+
+### Push succeeded but the live site did not update
+
+Check that you pushed to the branch configured in Git settings. If the branch is correct, run a manual update and check deployment history.
+
+### The dashboard editor shows older content
+
+Run a manual update, then reload the editor. If it still looks stale, confirm the dashboard is viewing the same branch you pushed.
+
+### A page exists in Git but is missing from the sidebar
+
+Add the page slug to `dubstack.json` navigation, then push again.
+
+### A pull request preview differs from production
+
+Preview deployments render the branch being reviewed. Production renders the deployment branch after merge and sync.
+
+## Related
+
+- [Git essentials](/editor/git-essentials)
+- [Branching and publishing](/editor/publishing)
+- [GitHub](/deployment/github)
+- [GitLab](/deployment/gitlab)
+- [Manual updates and history](/deployment/manual-updates-history)
