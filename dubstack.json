@@ -98,7 +98,13 @@
     "assistant": {
       "title": "Assistant",
       "welcome_title": "How can I help with DubStack?",
-      "welcome_subtitle": "Ask about configuration, publishing, migration, and docs workflows."
+      "welcome_subtitle": "Ask about configuration, publishing, migration, and docs workflows.",
+      "user_bubble_color": "color-mix(in srgb, var(--assistant-bg) 86%, var(--foreground) 14%)",
+      "user_bubble_text_color": "var(--assistant-text)",
+      "source_card_background_color": "color-mix(in srgb, var(--assistant-bg) 94%, var(--foreground) 6%)",
+      "source_card_border_color": "color-mix(in srgb, var(--assistant-border) 70%, transparent)",
+      "source_card_text_color": "var(--assistant-text)",
+      "source_card_muted_color": "var(--docs-muted-text, var(--gray-400))"
     }
   },
   "navigation": {
