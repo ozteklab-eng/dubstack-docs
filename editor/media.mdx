@@ -1,0 +1,117 @@
+---
+title: Media in the editor
+sidebarTitle: Media
+description: Upload, choose, and maintain repository-backed images, galleries, videos, and embeds from the editor.
+icon: image
+---
+
+Use editor media tools to add visual context without leaving the dashboard.
+
+Media files are still source-backed docs files. Uploads, image references, gallery settings, and video posters should be reviewed and published with the page that uses them.
+
+## Insert an image
+
+Use the slash command menu on a page.
+
+1. Open a page in **Editor**.
+2. Type `/image`.
+3. Choose an existing image or upload a new one.
+4. Add descriptive alt text.
+5. Adjust framing, alignment, caption, light-mode image, or dark-mode image when needed.
+
+New image uploads from the page editor are stored under `images/`.
+
+<Callout type="tip">
+  Use separate light and dark image variants when screenshots contain UI surfaces that need to match the reader's theme.
+</Callout>
+
+## Insert a gallery
+
+Use `/gallery` when several images belong together, such as a setup sequence or before-and-after comparison.
+
+A gallery should have a focused purpose. If each screenshot needs its own explanation, use separate image blocks instead.
+
+## Insert a video
+
+Use `/video` to choose or upload a repository-backed video.
+
+Supported editor uploads:
+
+| Type | Notes |
+| --- | --- |
+| `.mp4` | Supported for uploaded videos. |
+| `.webm` | Supported for uploaded videos. |
+| Poster image | Generated automatically when possible, or chosen manually. |
+
+Video uploads from the page editor are stored under `videos/`. Uploaded videos must be 25 MB or smaller.
+
+After adding a video, use the video toolbar to choose or replace the poster image. You can pick an existing image, upload a poster, or select a frame from the video when browser support allows it.
+
+## Embed hosted media
+
+Use slash commands for hosted media when the source should remain outside the docs repository.
+
+| Command | Use for |
+| --- | --- |
+| `/youtube` | Public YouTube videos. |
+| `/loom` | Product walkthroughs and recordings. |
+| `/vimeo` | Hosted videos. |
+| `/embed` | Trusted iframe embeds. |
+
+<Callout type="warning">
+  Only embed content you trust. Embedded content can load scripts from the provider and may be unavailable to readers behind strict network policies.
+</Callout>
+
+## Use the Assets pane
+
+The **Assets** pane helps you browse and upload static files without leaving the editor.
+
+1. Open the editor toolbar options.
+2. Open **Assets**.
+3. Choose a known asset folder such as `images`, `img`, or `logo`.
+4. Select an existing asset, upload a file, or create a folder.
+5. Publish the asset change with the page or config that references it.
+
+The Assets pane also exposes other repository folders when they contain static files. Keep media folders predictable so authors can find reusable screenshots and logos quickly.
+
+## Upload folders
+
+The editor uses conventional folders for new media inserted from a page:
+
+| Media | Default folder |
+| --- | --- |
+| Images | `images/` |
+| Videos | `videos/` |
+| Video posters | `videos/` |
+
+Existing assets can also live in folders such as `assets/`, `media/`, `static/`, `logo/`, or `img/` when your repository already uses those names.
+
+## Publishing behavior
+
+Media changes are part of the same source-backed publish flow as page edits.
+
+The publish menu should show changed files for:
+
+- the page that references the media
+- uploaded image or video files
+- generated or uploaded poster images
+- configuration files when branding assets change
+
+Review the changed-file list before publishing. If an upload was accidental, revert the asset file and the page reference before creating a pull request or publishing directly.
+
+## Maintenance practices
+
+- Use descriptive file names such as `quickstart-create-site-light.png` instead of `screenshot-1.png`.
+- Keep screenshots tightly cropped to the UI area being explained.
+- Replace an image at the same path only when it represents the same concept.
+- Use a new file name when the image shows a different product area.
+- Add alt text for every image.
+- Avoid committing large raw recordings when an external video host is more appropriate.
+- Keep media updates in the same pull request as the page change that needs them.
+
+## Related
+
+- [Pages and files](/editor/pages)
+- [Branching and publishing](/editor/publishing)
+- [Images and assets](/writing-content/images-assets)
+- [Media, embeds, and diagrams](/writing-content/media-embeds)
