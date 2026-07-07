@@ -48,7 +48,7 @@ Use this skill when a user asks how to build, configure, or operate Acme.
 
 Add topic-specific skill files under the compatible skills directory.
 
-Each skill lives in its own directory and must be named `SKILE�md`.
+Each skill lives in its own directory and must be named `SKILL.md`.
 
 ```text
 .mintlify/
@@ -98,7 +98,7 @@ After publishing, DubStack exposes custom skills through the same AI discovery e
 
 | Path | Behavior |
 | --- | --- |
-| `/skill.md` | Returns the root skill when there is one skill. Redirects to `/.well-known/skills/index.json  when multiple skills are available. |
+| `/skill.md` | Returns the root skill when there is one skill. Redirects to `/.well-known/skills/index.json` when multiple skills are available. |
 | `/.well-known/agent-skills/index.json` | Recommended discovery manifest with `sha256` digests. |
 | `/.well-known/agent-skills/<skill-id>/skill.md` | Direct URL for a specific skill. |
 | `/.well-known/skills/index.json` | Compatibility skills index. |
@@ -158,7 +158,7 @@ If a custom skill is missing from discovery:
 3. Confirm directory skills use `.mintlify/skills/<skill-name>/SKILL.md`.
 4. Confirm the skill directory name only uses letters, numbers, dots, underscores, or hyphens.
 5. Run a manual update from the dashboard.
-6. Open `/.well-known/agent-skills/index.json  again.
+6. Open `/.well-known/agent-skills/index.json` again.
 
 If `/skill.md` redirects, more than one skill is available. Open `/.well-known/skills/index.json` to list the available skill IDs.
 
