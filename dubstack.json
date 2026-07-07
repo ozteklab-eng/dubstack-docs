@@ -64,10 +64,6 @@
       "destination": "/api-reference/introduction"
     },
     {
-      "source": "/feedback",
-      "destination": "/optimize/feedback"
-    },
-    {
       "source": "/billing",
       "destination": "/dashboard/billing-plans"
     },
