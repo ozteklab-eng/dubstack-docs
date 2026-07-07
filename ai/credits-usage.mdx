@@ -72,6 +72,37 @@ AI features are plan-gated.
 
 If a feature is locked, check the dashboard reason before assuming the site is misconfigured.
 
+## Allowance model
+
+AI credits are a workspace-level allowance shared across assistant, agent, Slack, and automation surfaces.
+
+This means the same monthly allowance can be consumed by:
+
+- public assistant answers
+- dashboard agent requests
+- Slack agent questions and draft pull requests
+- scheduled or event-driven automations
+
+Free workspaces can use eligible trial or preview entitlements when available, but ongoing AI usage is intended for Pro and Enterprise workspaces. Enterprise workspaces can receive custom allowances, routing, and operational controls.
+
+<Callout type="info">
+  Credits are reporting and billing units, not raw model tokens. Token usage, retrieval cost, model route, and workflow complexity can all contribute to the credit estimate.
+</Callout>
+
+## Automation cost expectations
+
+Automation runs vary more than assistant answers because they may inspect multiple files, retrieve repository context, draft changes, and prepare a pull request.
+
+Typical run cost depends on:
+
+- the automation type
+- the number of files or pages inspected
+- the amount of context pulled from connected tools
+- whether the run drafts content, only audits, or exits with no suggested change
+- the assistant profile and model route selected for the workspace
+
+For predictable usage, schedule automations deliberately and keep their scope narrow. For example, run broad maintenance workflows weekly, but run targeted link or typo checks after relevant content changes.
+
 ## Review usage
 
 Use dashboard analytics and product pages to review usage:
