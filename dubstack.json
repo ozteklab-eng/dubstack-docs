@@ -470,6 +470,10 @@
                 "icon": "corner-up-right"
               },
               {
+                "slug": "configuration/custom-404-page",
+                "icon": "file-question"
+              },
+              {
                 "slug": "configuration/seo-search",
                 "icon": "search"
               }

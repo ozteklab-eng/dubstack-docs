@@ -34,6 +34,7 @@ This reference covers fields currently used by the public renderer, sync worker,
 | `api.playground.display` | string | API playground display mode. |
 | `addons.feedback` | object | Reader feedback controls. |
 | `navbar.primary` | object | Optional primary header CTA. |
+| `errors.404` | object | Custom not-found page text and optional fallback redirect. |
 
 ## Site
 
@@ -129,6 +130,22 @@ The OpenAPI file is synced with the rest of the docs repository. Generated endpo
   ]
 }
 ```
+
+## Custom 404 page
+
+```json
+{
+  "errors": {
+    "404": {
+      "title": "Page not found",
+      "description": "This page may have moved. Use search or return to the docs homepage.",
+      "redirect": ""
+    }
+  }
+}
+```
+
+Leave `redirect` empty to render the not-found page. Set it to a root-relative path only when all missing pages should use the same fallback.
 
 ## Contextual actions
 

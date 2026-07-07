@@ -1,0 +1,89 @@
+---
+title: Custom 404 page
+description: Configure the message or fallback redirect used when readers open a missing docs page.
+icon: file-question
+---
+
+Use the 404 page settings to control what readers see when a docs URL does not match a published page.
+
+You can either show a branded not-found page or redirect missing pages to a known fallback location.
+
+## Configure the 404 page
+
+Add `errors.404` to `dubstack.json`:
+
+```json
+{
+  "errors": {
+    "404": {
+      "title": "Page not found",
+      "description": "This page may have moved. Use search or return to the docs homepage.",
+      "redirect": ""
+    }
+  }
+}
+```
+
+Leave `redirect` empty when you want DubStack to render the 404 page.
+
+## 404 fields
+
+| Field | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| `errors.404.title` | string | `Page not found` | Heading shown on the not-found page. |
+| `errors.404.description` | string | `The page you requested could not be found.` | Supporting text shown below the heading. |
+| `errors.404.redirect` | string | None | Optional fallback path for missing pages. |
+
+## Redirect missing pages
+
+Set `errors.404.redirect` when every missing page should land in one place:
+
+```json
+{
+  "errors": {
+    "404": {
+      "redirect": "/"
+    }
+  }
+}
+```
+
+Use a root-relative path for a page on the same docs site.
+
+<Callout type="warning">
+  A 404 redirect is a broad fallback. Use explicit [redirects](/configuration/redirects) for renamed pages so readers and search engines land on the closest matching destination.
+</Callout>
+
+## When to use redirects instead
+
+Use `redirects` instead of a global 404 redirect when:
+
+- a page was renamed
+- a section moved
+- you are migrating from another URL structure
+- an external link points to an old page
+- a high-traffic page needs a precise replacement
+
+Use the custom 404 message for everything else.
+
+## Dashboard configuration
+
+You can edit these fields from the dashboard site configuration page:
+
+1. Open the dashboard.
+2. Select the deployment.
+3. Open **Editor**.
+4. Open **Site configurations**.
+5. Select **404 page**.
+6. Save the title, description, or redirect path.
+
+Source-backed sites write the settings back to `dubstack.json` where supported.
+
+## Test the page
+
+After publishing the change:
+
+1. Open a path that does not exist.
+2. Confirm the title and description appear, or the redirect lands on the expected page.
+3. Confirm the missing path is not listed in navigation.
+4. Confirm any renamed pages use explicit redirects instead of relying on the fallback.
