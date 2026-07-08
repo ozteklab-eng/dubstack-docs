@@ -646,6 +646,28 @@
             ]
           },
           {
+            "group": "CLI",
+            "icon": "terminal",
+            "pages": [
+              {
+                "slug": "cli/index",
+                "icon": "terminal"
+              },
+              {
+                "slug": "cli/install",
+                "icon": "download"
+              },
+              {
+                "slug": "cli/commands",
+                "icon": "list"
+              },
+              {
+                "slug": "cli/preview",
+                "icon": "eye"
+              }
+            ]
+          },
+          {
             "group": "Theme Studio",
             "icon": "paintbrush",
             "pages": [
