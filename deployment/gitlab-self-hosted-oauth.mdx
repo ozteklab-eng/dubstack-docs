@@ -9,7 +9,7 @@ Self-hosted GitLab OAuth lets dubstack workflows act as an authorized GitLab use
 Use it when your docs repository lives on a self-hosted GitLab instance and you want agent, Slack, or workflow actions to create documentation changes as branches, commits, and merge requests.
 
 <Callout type="info">
-  Self-hosted GitLab OAuth is only the authoring connection. Configure the GitLab deployment token separately so dubstack can read or copy repository content. See [GitLab](/deployment/gitlab).
+  Self-hosted GitLab OAuth is only the authoring connection. Configure the GitLab repository access token separately so dubstack can read or copy repository content. See [GitLab](/deployment/gitlab).
 </Callout>
 
 ## What OAuth enables
@@ -32,7 +32,7 @@ Before connecting, confirm:
 - the GitLab instance is reachable from dubstack over HTTPS
 - the instance uses a trusted TLS certificate
 - the docs repository exists on that instance
-- the deployment token connection is configured in [Git settings](/deployment/gitlab)
+- the repository access token connection is configured in [Git settings](/deployment/gitlab)
 - your dubstack workspace has self-hosted GitLab OAuth enabled
 - the GitLab user who authorizes OAuth can create branches and merge requests in the project
 
@@ -64,7 +64,7 @@ After the workspace is configured with the self-hosted GitLab OAuth application:
 2. Go to **Settings > Deployment > Git settings**.
 3. Choose **GitLab**.
 4. Enter the self-hosted GitLab instance URL.
-5. Confirm the GitLab deployment token and branch are saved.
+5. Confirm the GitLab repository access token and branch are saved.
 6. Click **Connect Self-Hosted GitLab**.
 7. Authorize the OAuth application in GitLab.
 8. Return to Git settings and confirm the GitLab OAuth status is connected.
@@ -105,7 +105,7 @@ Check the OAuth application's redirect URI, client ID, client secret, and scopes
 
 ### Authoring says GitLab OAuth is not connected
 
-Reconnect GitLab OAuth in Git settings. The deployment token alone cannot create branches, commits, or merge requests.
+Reconnect GitLab OAuth in Git settings. The repository access token alone cannot create branches, commits, or merge requests.
 
 ### Merge request creation fails
 

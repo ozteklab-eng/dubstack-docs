@@ -1,0 +1,41 @@
+---
+title: Agent
+description: Use the dashboard agent to draft, update, and maintain documentation with connected context.
+icon: sparkles
+---
+
+The dashboard agent helps trusted workspace members maintain documentation from the dashboard, Slack, workflows, and connected tools.
+
+Use the agent when the task should create or update documentation. Use the public assistant when readers only need answers from published docs.
+
+<CardGroup cols={2}>
+  <Card title="Agent overview" icon="sparkles" href="/ai/agent">
+    Learn what the dashboard agent can do, how it differs from the public assistant, and what readiness checks matter before authoring.
+  </Card>
+  <Card title="Agent use cases" icon="list-checks" href="/ai/agent-use-cases">
+    See common workflows for draft pull requests, repository context, issue context, and documentation maintenance.
+  </Card>
+  <Card title="Effective prompts" icon="message-square-text" href="/ai/effective-agent-prompts">
+    Write prompts that give the agent enough scope, source context, and review boundaries.
+  </Card>
+  <Card title="Integrations" icon="plug" href="/integrations">
+    Connect tools such as Slack and Jira so agent and workflow runs can use bounded team context.
+  </Card>
+</CardGroup>
+
+## Common setup path
+
+1. Connect a Git provider for the docs repository.
+2. Confirm the agent readiness panel shows a usable published docs index.
+3. Connect any integrations the agent needs for the task.
+4. Ask for a bounded documentation change.
+5. Review the generated pull request or merge request before publishing.
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/ai/agent">Agent overview</a>
+  <a href="/workflows">Workflows</a>
+  <a href="/deployment/github">GitHub setup</a>
+  <a href="/deployment/gitlab">GitLab setup</a>
+</RelatedTopics>

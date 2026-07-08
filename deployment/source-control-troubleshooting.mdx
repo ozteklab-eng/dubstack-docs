@@ -123,7 +123,7 @@ Check:
 - the configured branch exists
 - webhook settings are present if automatic updates are expected from GitLab
 
-GitLab OAuth and GitLab deployment tokens serve different purposes. OAuth connects a user account for authoring and context. The deployment token or provider credential is what lets DubStack read repository files for sync/copy operations.
+GitLab OAuth and GitLab repository access tokens serve different purposes. OAuth connects a user account for authoring and context. The repository access token or provider credential is what lets DubStack read repository files for sync/copy operations.
 
 If a Slack request, agent action, or workflow cannot open a GitLab merge request, check the authoring side specifically:
 

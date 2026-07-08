@@ -34,7 +34,7 @@ From the dashboard:
 
 1. Open **Settings > Deployment > Git settings**.
 2. Choose the provider.
-3. Authorize the provider app, deployment token, or OAuth flow required by that provider.
+3. Authorize the provider app, repository access token, or OAuth flow required by that provider.
 4. Select the repository and branch.
 5. Save the connection.
 6. Run a manual update to verify the first sync.
@@ -66,7 +66,7 @@ Grant the smallest provider scope that supports your intended workflow:
 | Agent draft PRs | Branch and pull request creation access. |
 | Webhook-driven updates | Webhook delivery from the provider. |
 
-For GitLab, repository read/copy access and authoring access are separate. The deployment token keeps the GitLab repository connection readable. GitLab OAuth authoring access lets workflows create branches, commits, and merge requests as an authorized GitLab user.
+For GitLab, repository read/copy access and authoring access are separate. The repository access token keeps the GitLab repository connection readable. GitLab OAuth authoring access lets workflows create branches, commits, and merge requests as an authorized GitLab user.
 
 ## First-sync troubleshooting
 

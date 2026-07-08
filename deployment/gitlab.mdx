@@ -6,7 +6,7 @@ icon: gitlab
 
 GitLab support has two separate connections:
 
-- a deployment token that lets dubstack read or copy repository content
+- a GitLab repository access token that lets dubstack read or copy repository content
 - GitLab OAuth authoring access that lets workflows act as an authorized GitLab user
 
 Developers can still use normal GitLab workflows. Clone the connected project, edit MDX files or `dubstack.json`, commit, push, and review changes through merge requests.
@@ -27,16 +27,16 @@ Developers can still use normal GitLab workflows. Clone the connected project, e
 | Use GitLab as the active production deployment source | Workspace-controlled; verify the dashboard shows it as the active deployment source |
 | Self-hosted GitLab instance URL | Supported where the instance is reachable by dubstack |
 
-## Deployment token versus OAuth
+## Repository access token versus OAuth
 
-The deployment token and OAuth connection are intentionally different.
+The repository access token and OAuth connection are intentionally different.
 
 | Connection | What it is used for |
 | --- | --- |
-| GitLab deployment token | Reading repository files, validating branches, and keeping a GitLab copy target connected. |
+| GitLab repository access token | Reading repository files, validating branches, and keeping a GitLab copy target connected. |
 | GitLab OAuth authoring access | Creating branches, commits, and merge requests from agent, Slack, and workflow authoring actions. |
 
-Use both when you want GitLab-backed authoring. A deployment token alone can keep content connected, but authoring actions need OAuth so dubstack can act with an authorized GitLab user and respect the user's GitLab permissions.
+Use both when you want GitLab-backed authoring. A repository access token alone can keep content connected, but authoring actions need OAuth so dubstack can act with an authorized GitLab user and respect the user's GitLab permissions.
 
 ## Which connection should you check?
 
@@ -44,13 +44,13 @@ Use the failing action to decide which GitLab credential to inspect.
 
 | Failing action | Check |
 | --- | --- |
-| Manual update cannot read the repository | GitLab deployment token, project ID or path, instance URL, branch, and repository file permissions. |
-| Copy docs into GitLab fails | GitLab deployment token, write permission for the target project, branch protection, and configured target branch. |
+| Manual update cannot read the repository | GitLab repository access token, project ID or path, instance URL, branch, and repository file permissions. |
+| Copy docs into GitLab fails | GitLab repository access token, write permission for the target project, branch protection, and configured target branch. |
 | Agent, Slack, or workflow cannot create a merge request | GitLab OAuth authoring access, connected user permissions, branch protection, and authoring readiness. |
 | Workflow cannot read recent merge request context | GitLab OAuth authoring access and selected workflow repository context. |
 | Pushes to GitLab do not update the live site | Whether GitLab is the active deployment source, whether webhooks are configured, and whether manual update succeeds. |
 
-Do not rotate OAuth when a deployment token is expired, and do not rotate the deployment token when only authoring is missing. They unlock different paths.
+Do not rotate OAuth when a repository access token is expired, and do not rotate the repository access token when only authoring is missing. They unlock different paths.
 
 ## Connect GitLab as a copy target
 
@@ -59,7 +59,7 @@ Do not rotate OAuth when a deployment token is expired, and do not rotate the de
 3. Choose **GitLab**.
 4. Enter the GitLab instance URL. Leave it as `https://gitlab.com` for hosted GitLab.
 5. Enter the numeric project ID or project path accepted by the dashboard.
-6. Enter a GitLab deployment token.
+6. Enter a GitLab repository access token.
 7. Choose the branch.
 8. Save the connection.
 9. Copy docs from the active source into GitLab.
@@ -85,7 +85,7 @@ If GitLab is only configured as a copy target, pushes to GitLab do not publish t
 
 See [Local Git workflow](/deployment/local-git-workflow) for the provider-neutral flow.
 
-## Deployment token requirements
+## Repository access token requirements
 
 Use a GitLab project access token where possible.
 
@@ -96,6 +96,8 @@ Recommended token settings:
 | Role | Maintainer |
 | Scopes | `api`, `read_api` |
 | Expiration | Use your organization's rotation policy |
+
+The dashboard field is named **GitLab deployment token** because it belongs to the deployment-source setup. The token still needs GitLab API access so dubstack can validate the project, validate branches, fetch repository archives, and copy content when enabled. A plain GitLab deploy token with only `read_repository` is not enough for this setup.
 
 If project access tokens are unavailable, use a personal access token owned by a service account. Avoid using a personal employee token for long-running production workflows.
 
@@ -135,14 +137,14 @@ Use the status in Git settings to confirm which GitLab capability is available.
 
 | Dashboard state | Meaning |
 | --- | --- |
-| GitLab copy target connected | The deployment token is valid and dubstack can copy docs into GitLab. |
+| GitLab copy target connected | The repository access token is valid and dubstack can copy docs into GitLab. |
 | GitLab OAuth connected | Workflows can request GitLab authoring access when the connected user has project permissions. |
 | GitLab project selected | The selected project can be used as workflow or agent repository context for GitLab authoring. |
 | Active deployment source | The site reads from GitLab for production docs. This state appears only when GitLab deployment-source activation is enabled for the workspace. |
 | Copy docs available | GitLab is configured as a target and can receive a fresh copy from the current active source. |
-| Authoring not ready | The deployment token may be connected, but OAuth, repository scope, or site eligibility is missing. |
+| Authoring not ready | The repository access token may be connected, but OAuth, repository scope, or site eligibility is missing. |
 
-If Git settings asks you to reconnect GitLab OAuth, reconnect the GitLab account before running agent, Slack, or workflow authoring actions. This usually means the OAuth grant was revoked, expired, or lost access to the selected project. Reconnecting OAuth does not replace the deployment token; keep the deployment token configured when GitLab is also used for sync or copy operations.
+If Git settings asks you to reconnect GitLab OAuth, reconnect the GitLab account before running agent, Slack, or workflow authoring actions. This usually means the OAuth grant was revoked, expired, or lost access to the selected project. Reconnecting OAuth does not replace the repository access token; keep the repository access token configured when GitLab is also used for sync or copy operations.
 
 ## Active deployment source
 
@@ -221,11 +223,11 @@ GitLab active-source activation is not enabled for the workspace. Use GitLab as 
 
 ### OAuth connects but copy still fails
 
-OAuth and deployment tokens serve different purposes. Confirm the deployment token is still present and valid.
+OAuth and repository access tokens serve different purposes. Confirm the repository access token is still present and valid.
 
 ### Agent or Slack says GitLab authoring is not connected
 
-Connect GitLab OAuth in Git settings. The deployment token is not enough for merge-request authoring because authoring actions need a user-scoped OAuth connection.
+Connect GitLab OAuth in Git settings. The repository access token is not enough for merge-request authoring because authoring actions need a user-scoped OAuth connection.
 
 ### GitLab OAuth needs to be reconnected
 
