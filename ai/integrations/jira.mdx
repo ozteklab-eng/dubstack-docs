@@ -12,12 +12,12 @@ Use it when a documentation update depends on product work tracked in Jira, such
 
 Jira can provide:
 
-- issue titles, descriptions, and selected metadata for dashboard agent answers
+- issue keys, summaries, status, issue type, project, updated timestamp, links, and recent comments for dashboard agent answers
 - issue context for Slack agent requests when Jira context is requested
 - issue context for automations that support integrations
 - bounded JQL-based context for recurring documentation workflows
 
-Jira is a read-only context source. It does not write documentation or update issues by itself. The agent writes docs changes through the connected Git provider.
+Jira is a read-only context source. It does not write documentation, update issues, read arbitrary Jira fields, or inspect issue attachments. The agent writes docs changes through the connected Git provider.
 
 ## Requirements
 
@@ -74,9 +74,11 @@ When configuring the automation, set:
 | Setting | Purpose |
 | --- | --- |
 | JQL | Narrows which issues the automation can read. |
-| Limit | Caps the number of issues included in a run. |
+| Limit | Caps the number of issues included in a run. The default is 5 and the maximum is 10. |
 
 Keep JQL narrow. Smaller context usually produces better documentation updates and reduces unnecessary token usage.
+
+For each issue, the automation can include the issue summary, status, issue type, project, updated timestamp, issue link, and up to two recent comments. It does not include issue attachments or arbitrary custom fields.
 
 Example JQL:
 
