@@ -21,14 +21,23 @@ They do not change the source of truth. Documentation changes still write throug
 
 ## Available integrations
 
-| Integration | Use it for |
-| --- | --- |
-| [Slack](/ai/integrations/slack) | Agent conversations in Slack, docs answers, draft PR requests, and workflow notifications. |
-| [Jira](/ai/integrations/jira) | Issue context for dashboard agent requests and workflows. |
+| Integration | Category | Use it for | Scope |
+| --- | --- | --- | --- |
+| [Slack](/ai/integrations/slack) | Communication | Agent conversations in Slack, docs answers, draft PR requests, and workflow notifications. | Shared |
+| [Jira](/ai/integrations/jira) | Project management | Issue context for dashboard agent requests and workflows. | Shared |
+| Notion | Documentation | Pages, docs, and knowledge-base context. | Shared |
+| Google Drive | Documentation | Files, folders, and shared-drive context. | Personal |
+| Google Calendar | Communication | Event, schedule, and meeting context. | Personal |
+| Linear | Project management | Issues, projects, and roadmap context. | Shared |
+| Plain | Customer support | Support conversations and customer records. | Shared |
+| Intercom | Customer support | Conversations, contacts, and help-center context. | Shared |
+| Salesforce | CRM | Accounts, contacts, and opportunity context. | Shared |
+| Confluence | Documentation | Pages, spaces, and attachments. | Shared |
+| HubSpot | CRM | Contacts, companies, deals, and tickets. | Shared |
 
-Availability can depend on plan, repository access, and workspace authorization.
+Only connected integrations are available to the agent and workflow runner. Catalog integrations appear in the dashboard so teams can see the planned context model, but a provider marked **Coming soon**, **Upgrade**, or **Unavailable** is not passed to runs.
 
-The dashboard can also show provider cards in an **Available to your team** catalog. A catalog card is not active until it can be configured and connected. Cards marked as coming soon are visible for planning only and are not passed to the agent or workflow runner.
+Availability can depend on plan, repository access, workspace authorization, and provider configuration.
 
 For scope, eligibility, missing scopes, and disconnect behavior, see [Integration permissions and scopes](/ai/integration-permissions). For the stable behavior model behind each provider, see [Connector capabilities](/ai/connector-capabilities).
 
@@ -42,6 +51,29 @@ For scope, eligibility, missing scopes, and disconnect behavior, see [Integratio
 6. Return to the dashboard and confirm the integration status is connected.
 
 Some integrations also appear inside the **Agent** setup flow when they are required for that surface.
+
+## Shared and personal connections
+
+Integrations connect in one of two ways:
+
+- **Shared integrations** are authorized once for the organization and can be used by eligible agent or workflow surfaces.
+- **Personal integrations** are authorized by individual teammates and stay scoped to the user who connected them.
+
+Use shared integrations for team-owned systems such as Slack, Jira, Linear, Notion, Confluence, and CRM or support platforms. Use personal integrations for user-specific systems such as calendar or drive context.
+
+## Use integrations in workflows
+
+Some workflows can include connected integrations as context sources or notification sinks.
+
+To enable integrations for a workflow:
+
+1. Open **Automate > Workflows**.
+2. Choose the workflow.
+3. Open the workflow settings drawer.
+4. Select the connected integrations in the available integrations section.
+5. Save the workflow.
+
+Only providers already connected for the organization or user appear as selectable workflow context. The workflow run fetches live context only when it needs that provider for the configured task.
 
 ## Scope and safety
 
@@ -57,3 +89,22 @@ The agent should only use integration context when:
 <Callout type="warning">
   Do not paste private credentials into prompts or docs. Use provider authorization and dashboard-managed integration settings instead.
 </Callout>
+
+## Reconnect or disconnect
+
+Reconnect an integration when the provider token expires, an admin revokes the app, or the required scopes change.
+
+1. Go to **Settings > Organization > Integrations**.
+2. Choose the provider.
+3. Disconnect or reconnect the provider.
+4. Complete the provider authorization flow again.
+
+Disconnecting a shared integration removes it for everyone in the organization. Disconnecting a personal integration removes only that user's connection. Existing docs, pull requests, merge requests, and historical run records remain in place.
+
+## Related
+
+- [Integration permissions and scopes](/ai/integration-permissions)
+- [Connector capabilities](/ai/connector-capabilities)
+- [Configure workflow runs](/workflows/configuration)
+- [Slack integration](/ai/integrations/slack)
+- [Jira integration](/ai/integrations/jira)
