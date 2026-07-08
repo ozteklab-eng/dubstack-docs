@@ -1,0 +1,58 @@
+---
+title: CLI
+description: Understand the planned dubstack CLI and the current source-backed alternatives for local documentation workflows.
+---
+
+The dubstack CLI is planned as a local companion for teams that prefer terminal-first documentation workflows.
+
+Today, production documentation changes should use one of the supported source-backed paths:
+
+- edit in the dashboard and publish through the connected repository
+- edit locally in your Git repository and push to the configured branch
+- use CI or webhooks to trigger sync after repository changes
+- use the Admin API for trusted automation
+
+<Note>
+  The CLI is not generally available yet. This section documents the intended shape so teams can plan their workflow without depending on unreleased commands.
+</Note>
+
+## Planned responsibilities
+
+The CLI is intended to help with tasks that are safe to run locally:
+
+- validate `dubstack.json`
+- preview documentation content before publishing
+- check OpenAPI references and linked files
+- inspect repository structure for common setup issues
+- trigger deployment syncs when authenticated
+
+## Current alternatives
+
+<CardGroup cols={2}>
+  <Card title="Local Git workflow" icon="terminal" href="/deployment/local-git-workflow">
+    Work directly in your docs repository and push to the branch configured in Git settings.
+  </Card>
+  <Card title="CI and webhooks" icon="workflow" href="/deployment/ci">
+    Run validation and sync actions from your existing CI system.
+  </Card>
+  <Card title="Admin API keys" icon="key-round" href="/dashboard/api-keys">
+    Create scoped keys for trusted automation that needs to trigger docs operations.
+  </Card>
+  <Card title="Preview deployments" icon="git-pull-request" href="/deployment/preview-deployments">
+    Review branch and pull-request changes before publishing to readers.
+  </Card>
+</CardGroup>
+
+## Release posture
+
+When the CLI ships, commands should map to the same source-backed model as the dashboard:
+
+```bash
+# planned shape, not yet generally available
+dubstack login
+dubstack preview
+dubstack validate
+dubstack deploy
+```
+
+Do not build production automation around these commands until this page marks them as generally available.
