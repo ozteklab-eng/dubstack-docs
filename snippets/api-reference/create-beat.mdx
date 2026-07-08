@@ -1,0 +1,86 @@
+---
+title: "Create a beat pattern"
+openapi: "POST /beats"
+method: "POST"
+path: "/beats"
+specName: "api-reference"
+operationId: "createBeat"
+description: "Creates a custom beat pattern and stores it in the current session. Each session can hold up to 10 custom beats. Custom beats are prefixed with `custom-` and persist until the session expires or is explicitly cleared via DELETE /sessions/me. Use DELETE /beats/{id} to remove individual custom beats."
+---
+
+Creates a custom beat pattern and stores it in the current session. Each session can hold up to 10 custom beats. Custom beats are prefixed with `custom-` and persist until the session expires or is explicitly cleared via DELETE /sessions/me. Use DELETE /beats/{id} to remove individual custom beats.
+
+> `POST /beats`
+
+### Request Body
+Beat pattern to create. Each track must contain exactly 16 steps where 1 = hit and 0 = silence.
+
+```json
+{
+  "name": "My Custom Beat",
+  "bpm": 120,
+  "kit": "tr-808",
+  "tracks": {
+    "kick": [
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0
+    ],
+    "snare": [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    "hihat": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  }
+}
+```
+
+### Responses
+- `201` Beat pattern created successfully (ephemeral).
+- `400` Invalid beat pattern.
+
+<PlaygroundEmbed specName="api-reference" method="POST" path="/beats" operationId="createBeat" />

@@ -1,0 +1,23 @@
+---
+title: "Delete a custom beat"
+openapi: "DELETE /beats/{id}"
+method: "DELETE"
+path: "/beats/{id}"
+specName: "api-reference"
+operationId: "deleteBeat"
+description: "Deletes a custom beat pattern from the current session. Only session-created beats (prefixed with `custom-`) can be deleted. Pre-seeded demo beats (boom-bap, trap, etc.) return 403 Forbidden. All custom beats are automatically deleted when the session expires or on logout."
+---
+
+Deletes a custom beat pattern from the current session. Only session-created beats (prefixed with `custom-`) can be deleted. Pre-seeded demo beats (boom-bap, trap, etc.) return 403 Forbidden. All custom beats are automatically deleted when the session expires or on logout.
+
+> `DELETE /beats/{id}`
+
+### Parameters
+- `id` (path, string, required) · Beat pattern ID to delete. Must be a custom beat (custom-* prefix). · example: `custom-my-custom-beat`
+
+### Responses
+- `200` Custom beat deleted from session.
+- `403` Cannot delete pre-seeded demo beats. Only custom beats (custom-* prefix) can be deleted.
+- `404` Beat not found in current session.
+
+<PlaygroundEmbed specName="api-reference" method="DELETE" path="/beats/{id}" operationId="deleteBeat" />

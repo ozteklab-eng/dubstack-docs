@@ -1,0 +1,33 @@
+---
+title: "Change playback tempo"
+openapi: "PUT /beats/{id}/tempo"
+method: "PUT"
+path: "/beats/{id}/tempo"
+specName: "api-reference"
+operationId: "setTempo"
+description: "Adjusts the BPM (beats per minute) for an active beat session. Supports gradual tempo ramping over a configurable number of bars for smooth transitions between tempos."
+---
+
+Adjusts the BPM (beats per minute) for an active beat session. Supports gradual tempo ramping over a configurable number of bars for smooth transitions between tempos.
+
+> `PUT /beats/{id}/tempo`
+
+### Parameters
+- `id` (path, string, required) · Beat pattern ID · example: `four-on-floor`
+
+### Request Body
+Tempo configuration with optional ramp transition.
+
+```json
+{
+  "bpm": 135,
+  "ramp": true,
+  "ramp_bars": 4
+}
+```
+
+### Responses
+- `200` Tempo changed. Returns updated timing calculations.
+- `400` Invalid tempo configuration.
+
+<PlaygroundEmbed specName="api-reference" method="PUT" path="/beats/{id}/tempo" operationId="setTempo" />

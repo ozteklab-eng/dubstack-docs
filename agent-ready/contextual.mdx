@@ -1,0 +1,67 @@
+---
+title: "Contextual actions"
+description: "Configure copy, Markdown view, and AI handoff actions for each docs page"
+icon: "bolt"
+---
+
+The contextual menu gives readers quick actions for the page they are viewing. Use it to copy content, view Markdown, or hand the page to an AI assistant.
+
+## Configure actions
+
+Set `contextual.options` in `dubstack.json`.
+
+```json dubstack.json
+{
+  "contextual": {
+    "enabled": true,
+    "options": ["copy", "view", "claude", "chatgpt", "perplexity"],
+    "default": "copy"
+  }
+}
+```
+
+## Supported starter actions
+
+| Option | What it does |
+| --- | --- |
+| `copy` | Copies the current page as Markdown |
+| `view` | Opens a Markdown view for the current page |
+| `claude` | Opens the page context in Claude |
+| `chatgpt` | Opens the page context in ChatGPT |
+| `perplexity` | Opens the page context in Perplexity |
+
+## Labels
+
+Use labels when your audience needs clearer action names.
+
+```json dubstack.json
+{
+  "contextual": {
+    "enabled": true,
+    "options": ["copy", "view", "claude"],
+    "labels": {
+      "copy": "Copy page",
+      "view": "View as Markdown",
+      "claude": "Ask Claude"
+    }
+  }
+}
+```
+
+## Writing for contextual actions
+
+<Steps>
+  <Step title="Make the page self-contained">
+    A copied page should include enough context for a reader or assistant to understand it without the sidebar.
+  </Step>
+  <Step title="Use descriptive headings">
+    Headings become the fastest way for AI tools and readers to navigate the copied Markdown.
+  </Step>
+  <Step title="Keep examples complete">
+    Commands, payloads, and responses should be usable without guessing missing fields.
+  </Step>
+</Steps>
+
+<Tip>
+Add agent-ready context sections to pages where AI handoff is important.
+</Tip>

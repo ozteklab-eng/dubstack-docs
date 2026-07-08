@@ -1,0 +1,39 @@
+---
+title: "Export a beat pattern"
+openapi: "POST /beats/{id}/export"
+method: "POST"
+path: "/beats/{id}/export"
+specName: "api-reference"
+operationId: "exportBeat"
+description: "Exports a beat pattern in the specified format. Supports MIDI (for DAW import), WAV (audio bounce), JSON (raw data), and stems (individual track files). Optionally select specific tracks to include. Demonstrates string enum, boolean, and array of strings parameter types."
+---
+
+Exports a beat pattern in the specified format. Supports MIDI (for DAW import), WAV (audio bounce), JSON (raw data), and stems (individual track files). Optionally select specific tracks to include. Demonstrates string enum, boolean, and array of strings parameter types.
+
+> `POST /beats/{id}/export`
+
+### Parameters
+- `id` (path, string, required) · Beat pattern ID to export · example: `classic-rock`
+
+### Request Body
+Export configuration with format selection, track filtering, and output options.
+
+```json
+{
+  "format": "midi",
+  "tracks": [
+    "kick",
+    "snare",
+    "hihat"
+  ],
+  "include_metadata": true,
+  "normalize": false,
+  "filename": "classic-rock-beat"
+}
+```
+
+### Responses
+- `200` Export generated successfully. Returns download link with expiry.
+- `400` Invalid export configuration.
+
+<PlaygroundEmbed specName="api-reference" method="POST" path="/beats/{id}/export" operationId="exportBeat" />

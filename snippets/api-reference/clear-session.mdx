@@ -1,0 +1,18 @@
+---
+title: "Clear session (logout)"
+openapi: "DELETE /sessions/me"
+method: "DELETE"
+path: "/sessions/me"
+specName: "api-reference"
+operationId: "clearSession"
+description: "Explicitly clears all session data including custom beats, mixes, and playback state. This is equivalent to logging out - all custom-created resources are permanently deleted. Sessions also auto-expire after the TTL (default 1 hour of inactivity)."
+---
+
+Explicitly clears all session data including custom beats, mixes, and playback state. This is equivalent to logging out - all custom-created resources are permanently deleted. Sessions also auto-expire after the TTL (default 1 hour of inactivity).
+
+> `DELETE /sessions/me`
+
+### Responses
+- `200` Session cleared. All custom data deleted.
+
+<PlaygroundEmbed specName="api-reference" method="DELETE" path="/sessions/me" operationId="clearSession" />

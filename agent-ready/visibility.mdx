@@ -1,0 +1,61 @@
+---
+title: "Agent visibility"
+description: "Structure docs so humans and AI agents can both use them correctly"
+icon: "eye"
+---
+
+Agent-ready documentation needs two layers: readable guidance for humans and explicit context for AI tools.
+
+DubStack exposes docs through rendered pages and AI-readable indexes. Write pages so both surfaces carry the right information without duplicating entire guides.
+
+## Human-first structure
+
+Human readers need orientation, steps, and visible confirmation points.
+
+<Steps>
+  <Step title="Start with the goal">
+    Explain what the reader will accomplish before showing commands.
+  </Step>
+  <Step title="List prerequisites">
+    Call out accounts, keys, permissions, and local tools before the workflow starts.
+  </Step>
+  <Step title="Show verification">
+    End with a command, screenshot, or expected response that proves the flow worked.
+  </Step>
+</Steps>
+
+## Agent-friendly context
+
+AI tools need exact names, constraints, and paths. Add a compact context section when a page has important implementation details.
+
+```markdown
+## Agent context
+
+- Config file: `dubstack.json`
+- Source of truth: Git repository synced to R2
+- Publish path: Git push -> sync worker -> R2 -> frontend cache invalidation
+- Do not write generated docs directly to R2
+```
+
+## Avoid hidden assumptions
+
+<Warning>
+Do not rely on screenshots or visual-only instructions for critical setup. If an agent needs the information, write it as text too.
+</Warning>
+
+## Suggested page pattern
+
+<Columns cols={2}>
+  <Card title="Overview" icon="book-open">
+    Human-readable purpose and outcome.
+  </Card>
+  <Card title="Procedure" icon="list-checks">
+    Ordered steps with commands and expected output.
+  </Card>
+  <Card title="Agent context" icon="bot">
+    Concise facts an AI assistant should preserve.
+  </Card>
+  <Card title="Troubleshooting" icon="wrench">
+    Known failures and safe recovery steps.
+  </Card>
+</Columns>

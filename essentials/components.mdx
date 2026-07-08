@@ -1,0 +1,194 @@
+---
+title: "Components"
+description: "Callouts, cards, steps, tabs, accordions, and other reusable MDX blocks"
+icon: "puzzle-piece"
+---
+
+DubStack components let you turn plain Markdown into structured, readable documentation without leaving MDX.
+
+Use components when prose alone would make the page harder to scan. Keep the content real, keep examples short, and use each block for one job.
+
+## Callouts
+
+Use callouts for information that should stand apart from the surrounding text.
+
+<Note>A note adds helpful context without interrupting the main flow.</Note>
+
+<Tip>A tip highlights a shortcut, pattern, or best practice.</Tip>
+
+<Warning>A warning calls out risk, ordering, or breaking behavior.</Warning>
+
+<Info>An info callout adds supporting detail.</Info>
+
+```mdx
+<Note>A note adds helpful context without interrupting the main flow.</Note>
+
+<Tip>A tip highlights a shortcut, pattern, or best practice.</Tip>
+
+<Warning>A warning calls out risk, ordering, or breaking behavior.</Warning>
+
+<Info>An info callout adds supporting detail.</Info>
+```
+
+## Cards
+
+Use cards for navigation and compact feature summaries.
+
+<Columns cols={2}>
+  <Card title="API reference" icon="terminal" href="/api-reference/introduction">
+    Explore the BeatBox API reference and playground.
+  </Card>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Launch the starter docs and make your first change.
+  </Card>
+</Columns>
+
+```mdx
+<Columns cols={2}>
+  <Card title="API reference" icon="terminal" href="/api-reference/introduction">
+    Explore the BeatBox API reference and playground.
+  </Card>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Launch the starter docs and make your first change.
+  </Card>
+</Columns>
+```
+
+## Steps
+
+Use steps for ordered procedures.
+
+<Steps>
+  <Step title="Install dependencies">
+    ```bash
+    npm install
+    ```
+  </Step>
+  <Step title="Run the preview">
+    ```bash
+    npm run dev
+    ```
+  </Step>
+  <Step title="Publish intentionally">
+    Commit the docs changes after you review the rendered output.
+  </Step>
+</Steps>
+
+````mdx
+<Steps>
+  <Step title="Install dependencies">
+    ```bash
+    npm install
+    ```
+  </Step>
+  <Step title="Run the preview">
+    ```bash
+    npm run dev
+    ```
+  </Step>
+</Steps>
+````
+
+## Tabs
+
+Use tabs when readers need to choose between package managers, platforms, or environments.
+
+<Tabs>
+  <Tab title="npm">
+    ```bash
+    npm install @dubstack/sdk
+    ```
+  </Tab>
+  <Tab title="pnpm">
+    ```bash
+    pnpm add @dubstack/sdk
+    ```
+  </Tab>
+  <Tab title="yarn">
+    ```bash
+    yarn add @dubstack/sdk
+    ```
+  </Tab>
+</Tabs>
+
+````mdx
+<Tabs>
+  <Tab title="npm">
+    ```bash
+    npm install @dubstack/sdk
+    ```
+  </Tab>
+  <Tab title="pnpm">
+    ```bash
+    pnpm add @dubstack/sdk
+    ```
+  </Tab>
+</Tabs>
+````
+
+## Accordions
+
+Use accordions for optional details, FAQs, and troubleshooting notes.
+
+<AccordionGroup>
+  <Accordion title="When should I use an accordion?">
+    Use it when the reader may not need the detail on the first pass.
+  </Accordion>
+  <Accordion title="When should I avoid one?">
+    Avoid hiding required setup steps or important warnings.
+  </Accordion>
+</AccordionGroup>
+
+```mdx
+<AccordionGroup>
+  <Accordion title="When should I use an accordion?">
+    Use it when the reader may not need the detail on the first pass.
+  </Accordion>
+</AccordionGroup>
+```
+
+## Frames
+
+Use frames to give screenshots and embeds a clear boundary.
+
+<Frame>
+  <img src="/images/hero-light.png" alt="DubStack starter homepage" />
+</Frame>
+
+```mdx
+<Frame>
+  <img src="/images/hero-light.png" alt="DubStack starter homepage" />
+</Frame>
+```
+
+## Code groups
+
+Use code groups to show the same example in multiple languages.
+
+<CodeGroup>
+  ```typescript TypeScript
+  const response = await fetch('https://api.example.com/beats');
+  const beats = await response.json();
+  ```
+
+  ```python Python
+  import requests
+  beats = requests.get('https://api.example.com/beats').json()
+  ```
+
+  ```bash cURL
+  curl https://api.example.com/beats
+  ```
+</CodeGroup>
+
+````mdx
+<CodeGroup>
+  ```typescript TypeScript
+  const response = await fetch('https://api.example.com/beats');
+  ```
+
+  ```python Python
+  beats = requests.get('https://api.example.com/beats').json()
+  ```
+</CodeGroup>
+````

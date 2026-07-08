@@ -1,8 +1,8 @@
 {
   "$schema": "https://dubstack.ai/dubstack.json",
   "site": {
-    "name": "dubstack docs",
-    "tagline": "Build, publish, and scale developer documentation with DubStack.",
+    "name": "dubstack",
+    "tagline": "Beautiful, AI-powered documentation for modern teams",
     "logo": {
       "light": "/logo/light.svg",
       "dark": "/logo/dark.svg"
@@ -10,111 +10,124 @@
     "favicon": "/img/favicon.ico",
     "timezone": "UTC"
   },
-  "api": {
-    "openapi": "api-reference/openapi.json",
-    "playground": {
-      "display": "interactive"
-    }
+  "topbarCtaButton": {
+    "label": "Get Started",
+    "href": "/quickstart"
   },
-  "theme": "prism",
-  "palette": "classic",
-  "styling": {
-    "codeblocks": "system"
-  },
-  "colors": {
-    "primary": "#15803D",
-    "light": "#07C983",
-    "dark": "#15803D"
-  },
-  "addons": {
-    "feedback": {
-      "thumbs_rating": true,
-      "edit_suggestions": false,
-      "raise_issues": false,
-      "contextual_feedback": false,
-      "code_snippet_feedback": false,
-      "agent_feedback": true,
-      "collect_reader_emails": false,
-      "reader_email_disclaimer": ""
-    }
-  },
-  "redirects": [
-    {
-      "source": "/agent",
-      "destination": "/ai/agent"
-    },
-    {
-      "source": "/assistant",
-      "destination": "/ai/assistant"
-    },
-    {
-      "source": "/workflows",
-      "destination": "/automations"
-    },
-    {
-      "source": "/workflow",
-      "destination": "/automations"
-    },
-    {
-      "source": "/integrations",
-      "destination": "/ai/integrations"
-    }
-  ],
-  "navbar": {
-    "primary": {
-      "type": "button",
-      "label": "Get Started",
-      "href": "https://dubstack.ai/#register"
-    }
-  },
-  "contextual": {
-    "enabled": true,
-    "options": [
-      "copy",
-      "view",
-      "mcp",
-      "add-mcp",
-      "cursor",
-      "vscode",
-      "claude",
-      "chatgpt",
-      "perplexity"
-    ],
-    "default": "copy",
-    "labels": {
-      "copy": "Copy page",
-      "view": "View as Markdown",
-      "mcp": "Copy MCP server URL",
-      "add-mcp": "Copy MCP install command",
-      "cursor": "Connect to Cursor",
-      "vscode": "Connect to VS Code",
-      "claude": "Ask Claude",
-      "chatgpt": "Ask ChatGPT",
-      "perplexity": "Ask Perplexity"
-    }
-  },
+  "theme": "groove",
   "widgets": {
     "search": {
       "enabled": true,
-      "placeholder": "Search docs..."
+      "placeholder": "Search...",
+      "position": "sidebar",
+      "background_color": "#18171A",
+      "text_color": "#f3f4f6",
+      "border_color": "#ffffff14",
+      "border_radius": 8,
+      "height": 48,
+      "width": 400,
+      "blur_background": true,
+      "blur_amount": 12,
+      "overlay_opacity": 0.6,
+      "animation_style": "fade"
     },
     "assistant": {
       "title": "Assistant",
-      "welcome_title": "How can I help with DubStack?",
-      "welcome_subtitle": "Ask about configuration, publishing, migration, and docs workflows.",
-      "user_bubble_color": "color-mix(in srgb, var(--assistant-bg) 86%, var(--foreground) 14%)",
-      "user_bubble_text_color": "var(--assistant-text)",
-      "source_card_background_color": "color-mix(in srgb, var(--assistant-bg) 94%, var(--foreground) 6%)",
-      "source_card_border_color": "color-mix(in srgb, var(--assistant-border) 70%, transparent)",
-      "source_card_text_color": "var(--assistant-text)",
-      "source_card_muted_color": "var(--docs-muted-text, var(--gray-400))"
+      "welcome_title": "Hi! How can I help you today?",
+      "welcome_subtitle": "Ask me anything about the docs, code samples, or best practices.",
+      "logo_url": "/img/assistant-star.svg",
+      "watermark_logo_url": "/logo/light.svg",
+      "background_color": "#0e0e10",
+      "width": 300,
+      "enabled": true
     }
+  },
+  "layout": {
+    "sidebar": {
+      "width": 250,
+      "position": "left",
+      "collapsible": true
+    },
+    "header": {
+      "height": 70,
+      "sticky": true
+    },
+    "content": {
+      "max_width": 900
+    }
+  },
+  "canvas_layout": {
+    "components": [
+      {
+        "instanceId": "default-header",
+        "componentId": "site-header",
+        "x": 0,
+        "y": 0,
+        "width": 1200,
+        "height": 56,
+        "zIndex": 3,
+        "locked": true
+      },
+      {
+        "instanceId": "default-sidebar",
+        "componentId": "sidebar-nav",
+        "x": 0,
+        "y": 56,
+        "width": 250,
+        "height": 844,
+        "zIndex": 1,
+        "locked": true
+      },
+      {
+        "instanceId": "main-content",
+        "componentId": "main-content",
+        "x": 274,
+        "y": 56,
+        "width": 926,
+        "height": 844,
+        "zIndex": 0,
+        "locked": true
+      },
+      {
+        "instanceId": "default-toc",
+        "componentId": "table-of-contents",
+        "x": 1000,
+        "y": 56,
+        "width": 200,
+        "height": 400,
+        "zIndex": 1,
+        "locked": true
+      },
+      {
+        "instanceId": "default-assistant",
+        "componentId": "assistant-widget",
+        "x": 900,
+        "y": 56,
+        "width": 300,
+        "height": 844,
+        "zIndex": 2,
+        "locked": true
+      }
+    ],
+    "last_updated": "2026-01-30T08:30:00.000Z"
   },
   "navigation": {
     "auto_generate": false,
+    "anchors": [
+      {
+        "name": "Documentation",
+        "url": "https://docs.dubstack.ai",
+        "icon": "book"
+      },
+      {
+        "name": "Blog",
+        "url": "https://blogs.dubstack.ai",
+        "icon": "newspaper"
+      }
+    ],
     "tabs": [
       {
-        "tab": "Documentation",
+        "tab": "Guides",
         "default": true,
         "groups": [
           {
@@ -126,156 +139,26 @@
                 "icon": "house"
               },
               {
-                "slug": "what-is-dubstack",
-                "icon": "circle-help"
-              },
-              {
                 "slug": "quickstart",
                 "icon": "zap"
               },
               {
-                "slug": "guides/index",
-                "icon": "map"
-              },
-              {
-                "slug": "getting-started/overview",
-                "icon": "book-open"
-              },
-              {
-                "slug": "getting-started/create-site",
-                "icon": "plus"
-              },
-              {
-                "slug": "getting-started/connect-git",
-                "icon": "git-branch"
-              },
-              {
-                "slug": "getting-started/skip-git-hosted-repo",
-                "icon": "cloud"
-              },
-              {
-                "slug": "getting-started/deploy",
-                "icon": "upload-cloud"
-              }
-            ]
-          },
-          {
-            "group": "Deployment",
-            "icon": "cloud",
-            "pages": [
-              {
-                "slug": "deployment/github",
-                "icon": "github"
-              },
-              {
-                "slug": "deployment/gitlab",
-                "icon": "gitlab"
-              },
-              {
-                "slug": "deployment/gitlab-self-hosted-oauth",
-                "icon": "key-round"
-              },
-              {
-                "slug": "deployment/local-git-workflow",
+                "slug": "development",
                 "icon": "terminal"
-              },
-              {
-                "slug": "deployment/monorepo",
-                "icon": "folder-tree"
-              },
-              {
-                "slug": "deployment/multi-repo",
-                "icon": "git-fork"
-              },
-              {
-                "slug": "deployment/preview-deployments",
-                "icon": "git-pull-request"
-              },
-              {
-                "slug": "deployment/docs-authentication",
-                "icon": "lock-keyhole"
-              },
-              {
-                "slug": "deployment/manual-updates-history",
-                "icon": "refresh-cw"
-              },
-              {
-                "slug": "deployment/custom-domains",
-                "icon": "globe"
-              },
-              {
-                "slug": "deployment/docs-subpath",
-                "icon": "route"
-              },
-              {
-                "slug": "deployment/cloudflare",
-                "icon": "cloud"
-              },
-              {
-                "slug": "deployment/vercel-rewrites",
-                "icon": "split"
-              },
-              {
-                "slug": "deployment/reverse-proxy",
-                "icon": "network"
-              },
-              {
-                "slug": "deployment/route53-cloudfront",
-                "icon": "server"
-              },
-              {
-                "slug": "deployment/ci",
-                "icon": "check-circle"
-              },
-              {
-                "slug": "deployment/webhooks-ci",
-                "icon": "workflow"
-              },
-              {
-                "slug": "deployment/security-headers",
-                "icon": "shield-check"
-              },
-              {
-                "slug": "deployment/csp-configuration",
-                "icon": "shield"
-              },
-              {
-                "slug": "deployment/forgejo-github-gitlab",
-                "icon": "git-branch"
-              },
-              {
-                "slug": "deployment/git-sync",
-                "icon": "refresh-cw"
-              },
-              {
-                "slug": "deployment/source-control-troubleshooting",
-                "icon": "wrench"
               }
             ]
           },
           {
-            "group": "Migration",
-            "icon": "git-pull-request-arrow",
+            "group": "Customization",
+            "icon": "gear",
             "pages": [
               {
-                "slug": "migration/overview",
+                "slug": "essentials/settings",
+                "icon": "gear"
+              },
+              {
+                "slug": "essentials/navigation",
                 "icon": "map"
-              },
-              {
-                "slug": "migration/public-wiki-previews",
-                "icon": "globe"
-              },
-              {
-                "slug": "migration/generated-reconstruction",
-                "icon": "sparkles"
-              },
-              {
-                "slug": "migration/authored-config-import",
-                "icon": "file-cog"
-              },
-              {
-                "slug": "migration/claim-adopt-flow",
-                "icon": "badge-check"
               }
             ]
           },
@@ -284,718 +167,291 @@
             "icon": "file-text",
             "pages": [
               {
-                "slug": "writing-content/mdx",
-                "icon": "file-code"
+                "slug": "essentials/markdown",
+                "icon": "file-text"
               },
               {
-                "slug": "writing-content/pages-files",
-                "icon": "files"
+                "slug": "essentials/mdx-components",
+                "icon": "shapes"
               },
               {
-                "slug": "writing-content/text-formatting",
-                "icon": "pilcrow"
-              },
-              {
-                "slug": "writing-content/headings-anchors",
-                "icon": "heading"
-              },
-              {
-                "slug": "writing-content/changelog-updates",
-                "icon": "history"
-              },
-              {
-                "slug": "writing-content/components",
-                "icon": "puzzle-piece"
-              },
-              {
-                "slug": "writing-content/columns",
-                "icon": "columns-3"
-              },
-              {
-                "slug": "writing-content/cards",
-                "icon": "panels-top-left"
-              },
-              {
-                "slug": "writing-content/related-topics",
-                "icon": "file-search"
-              },
-              {
-                "slug": "writing-content/callouts",
-                "icon": "badge-alert"
-              },
-              {
-                "slug": "writing-content/accordions",
-                "icon": "list-collapse"
-              },
-              {
-                "slug": "writing-content/tabs-and-steps",
-                "icon": "list-ordered"
-              },
-              {
-                "slug": "writing-content/code-groups",
-                "icon": "square-terminal"
-              },
-              {
-                "slug": "writing-content/request-response-examples",
-                "icon": "panel-right"
-              },
-              {
-                "slug": "writing-content/frames",
-                "icon": "scan"
-              },
-              {
-                "slug": "writing-content/badges",
-                "icon": "badge"
-              },
-              {
-                "slug": "writing-content/icons",
-                "icon": "icons"
-              },
-              {
-                "slug": "writing-content/tooltips",
-                "icon": "message-circle-question"
-              },
-              {
-                "slug": "writing-content/colors",
-                "icon": "palette"
-              },
-              {
-                "slug": "writing-content/tiles",
-                "icon": "panels-top-left"
-              },
-              {
-                "slug": "writing-content/panels",
-                "icon": "panel-right"
-              },
-              {
-                "slug": "writing-content/views",
-                "icon": "gallery-horizontal-end"
-              },
-              {
-                "slug": "writing-content/prompts",
-                "icon": "sparkles"
-              },
-              {
-                "slug": "writing-content/visibility",
-                "icon": "eye"
-              },
-              {
-                "slug": "writing-content/fields-expandables",
-                "icon": "list-tree"
-              },
-              {
-                "slug": "writing-content/file-trees",
-                "icon": "folder-tree"
-              },
-              {
-                "slug": "writing-content/code-blocks",
+                "slug": "essentials/code",
                 "icon": "code"
               },
               {
-                "slug": "writing-content/images-assets",
+                "slug": "essentials/tables",
+                "icon": "table"
+              },
+              {
+                "slug": "essentials/images",
                 "icon": "image"
               },
               {
-                "slug": "writing-content/media-embeds",
-                "icon": "image"
-              },
-              {
-                "slug": "writing-content/mermaid-diagrams",
-                "icon": "workflow"
-              },
-              {
-                "slug": "writing-content/reusable-snippets",
+                "slug": "essentials/reusable-snippets",
                 "icon": "recycle"
               },
               {
-                "slug": "writing-content/tables",
-                "icon": "table"
+                "slug": "essentials/twoslash-demo",
+                "icon": "code"
               }
             ]
           },
           {
-            "group": "Configuration",
-            "icon": "settings",
-            "pages": [
-              {
-                "slug": "configuration/dubstack-json",
-                "icon": "braces"
-              },
-              {
-                "slug": "configuration/settings-reference",
-                "icon": "list-checks"
-              },
-              {
-                "slug": "configuration/appearance-reference",
-                "icon": "palette"
-              },
-              {
-                "slug": "configuration/structure-reference",
-                "icon": "layout-list"
-              },
-              {
-                "slug": "configuration/banners",
-                "icon": "megaphone"
-              },
-              {
-                "slug": "configuration/api-settings-reference",
-                "icon": "terminal"
-              },
-              {
-                "slug": "configuration/seo-search-reference",
-                "icon": "search-check"
-              },
-              {
-                "slug": "configuration/pages-frontmatter",
-                "icon": "file-cog"
-              },
-              {
-                "slug": "configuration/hidden-pages",
-                "icon": "eye-off"
-              },
-              {
-                "slug": "configuration/dubstackignore",
-                "icon": "file-x"
-              },
-              {
-                "slug": "configuration/navigation",
-                "icon": "map"
-              },
-              {
-                "slug": "configuration/languages",
-                "icon": "languages"
-              },
-              {
-                "slug": "configuration/internationalization",
-                "icon": "languages"
-              },
-              {
-                "slug": "configuration/theming",
-                "icon": "palette"
-              },
-              {
-                "slug": "configuration/fonts",
-                "icon": "text-cursor-input"
-              },
-              {
-                "slug": "configuration/custom-css",
-                "icon": "paintbrush"
-              },
-              {
-                "slug": "configuration/redirects",
-                "icon": "corner-up-right"
-              },
-              {
-                "slug": "configuration/custom-404-page",
-                "icon": "file-question"
-              },
-              {
-                "slug": "configuration/seo-search",
-                "icon": "search"
-              }
-            ]
-          },
-          {
-            "group": "Optimize",
-            "icon": "chart-no-axes-combined",
-            "pages": [
-              {
-                "slug": "optimize/analytics",
-                "icon": "chart-no-axes-combined"
-              },
-              {
-                "slug": "optimize/seo",
-                "icon": "search-check"
-              },
-              {
-                "slug": "optimize/search",
-                "icon": "search"
-              },
-              {
-                "slug": "optimize/feedback",
-                "icon": "thumbs-up"
-              }
-            ]
-          },
-          {
-            "group": "Dashboard",
-            "icon": "layout-dashboard",
-            "pages": [
-              {
-                "slug": "dashboard/overview",
-                "icon": "layout-dashboard"
-              },
-              {
-                "slug": "dashboard/setup-checklist",
-                "icon": "list-checks"
-              },
-              {
-                "slug": "settings/deployment/addons",
-                "icon": "sliders-horizontal"
-              },
-              {
-                "slug": "dashboard/feedback-analytics",
-                "icon": "chart-no-axes-combined"
-              },
-              {
-                "slug": "dashboard/team-members",
-                "icon": "users"
-              },
-              {
-                "slug": "dashboard/roles",
-                "icon": "shield-check"
-              },
-              {
-                "slug": "dashboard/deployment-permissions",
-                "icon": "lock-keyhole"
-              },
-              {
-                "slug": "dashboard/api-keys",
-                "icon": "key-round"
-              },
-              {
-                "slug": "dashboard/sso",
-                "icon": "building-2"
-              },
-              {
-                "slug": "dashboard/audit-logs",
-                "icon": "clipboard-list"
-              },
-              {
-                "slug": "dashboard/billing-plans",
-                "icon": "credit-card"
-              }
-            ]
-          },
-          {
-            "group": "Editor",
-            "icon": "pencil-ruler",
-            "pages": [
-              {
-                "slug": "editor/overview",
-                "icon": "pencil"
-              },
-              {
-                "slug": "editor/tutorial",
-                "icon": "graduation-cap"
-              },
-              {
-                "slug": "editor/pages",
-                "icon": "file-text"
-              },
-              {
-                "slug": "editor/media",
-                "icon": "image"
-              },
-              {
-                "slug": "editor/navigation",
-                "icon": "map"
-              },
-              {
-                "slug": "editor/live-preview",
-                "icon": "eye"
-              },
-              {
-                "slug": "editor/ask-agent",
-                "icon": "sparkles"
-              },
-              {
-                "slug": "editor/site-configurations",
-                "icon": "sliders-horizontal"
-              },
-              {
-                "slug": "editor/settings",
-                "icon": "settings"
-              },
-              {
-                "slug": "editor/slash-commands",
-                "icon": "command"
-              },
-              {
-                "slug": "editor/git-essentials",
-                "icon": "git-branch"
-              },
-              {
-                "slug": "editor/branching-and-publishing",
-                "icon": "git-pull-request"
-              },
-              {
-                "slug": "editor/keyboard-shortcuts",
-                "icon": "keyboard"
-              },
-              {
-                "slug": "editor/publishing",
-                "icon": "upload-cloud"
-              }
-            ]
-          },
-          {
-            "group": "Theme Studio",
-            "icon": "paintbrush",
-            "pages": [
-              {
-                "slug": "theme-studio/overview",
-                "icon": "paintbrush"
-              },
-              {
-                "slug": "theme-studio/canvas-layout",
-                "icon": "layout-template"
-              },
-              {
-                "slug": "theme-studio/enterprise-gating",
-                "icon": "shield"
-              }
-            ]
-          },
-          {
-            "group": "AI",
+            "group": "AI tools",
             "icon": "sparkles",
             "pages": [
               {
-                "slug": "ai/ai-surfaces",
-                "icon": "panels-top-left"
+                "slug": "ai-tools/cursor",
+                "icon": "arrow-pointer"
               },
               {
-                "slug": "ai/credits-usage",
-                "icon": "gauge"
+                "slug": "ai-tools/claude-code",
+                "icon": "terminal"
               },
               {
-                "slug": "ai/assistant",
-                "icon": "bot"
-              },
-              {
-                "slug": "ai/assistant-usage",
-                "icon": "messages-square"
-              },
-              {
-                "slug": "ai/assistant-settings",
-                "icon": "settings"
-              },
-              {
-                "slug": "ai/agent",
-                "icon": "sparkles"
-              },
-              {
-                "slug": "ai/effective-agent-prompts",
-                "icon": "pen-line"
-              },
-              {
-                "slug": "ai/agent-use-cases",
-                "icon": "list-checks"
-              },
-              {
-                "slug": "ai/agent-instructions",
-                "icon": "file-cog"
-              },
-              {
-                "slug": "ai/integrations",
-                "icon": "plug"
-              },
-              {
-                "slug": "ai/integration-permissions",
-                "icon": "shield-check"
-              },
-              {
-                "slug": "ai/connector-capabilities",
-                "icon": "plug-zap"
-              },
-              {
-                "slug": "ai/integrations/slack",
-                "icon": "message-circle"
-              },
-              {
-                "slug": "ai/integrations/jira",
-                "icon": "panels-top-left"
-              },
-              {
-                "slug": "ai/contextual-actions",
-                "icon": "mouse-pointer-click"
-              },
-              {
-                "slug": "ai/markdown-export",
-                "icon": "file-text"
-              },
-              {
-                "slug": "ai/llms-indexes",
-                "icon": "list-tree"
-              },
-              {
-                "slug": "ai/generated-skill-file",
-                "icon": "badge-check"
-              },
-              {
-                "slug": "ai/custom-skill-files",
-                "icon": "file-cog"
-              },
-              {
-                "slug": "ai/ai-discovery-files",
-                "icon": "file-search"
-              },
-              {
-                "slug": "ai/agent-readiness-checklist",
-                "icon": "list-checks"
-              },
-              {
-                "slug": "ai/mcp",
-                "icon": "plug"
-              }
-            ]
-          },
-          {
-            "group": "Automations",
-            "icon": "workflow",
-            "pages": [
-              {
-                "slug": "automations",
-                "icon": "workflow"
-              },
-              {
-                "slug": "automations/reference",
-                "icon": "list-checks"
-              },
-              {
-                "slug": "automations/manage",
-                "icon": "toggle-right"
-              },
-              {
-                "slug": "automations/configuration",
-                "icon": "settings-2"
-              },
-              {
-                "slug": "automations/create",
-                "icon": "plus"
-              }
-            ]
-          },
-          {
-            "group": "Reference",
-            "icon": "list-checks",
-            "pages": [
-              {
-                "slug": "reference/tiers",
-                "icon": "layers"
-              },
-              {
-                "slug": "reference/limits",
-                "icon": "gauge"
-              },
-              {
-                "slug": "reference/troubleshooting",
-                "icon": "wrench"
+                "slug": "ai-tools/windsurf",
+                "icon": "wind"
               }
             ]
           }
         ]
       },
       {
-        "tab": "Guides",
+        "tab": "API reference",
         "groups": [
           {
-            "group": "Deployment",
-            "icon": "rocket",
-            "pages": [
-              {
-                "slug": "deployment/custom-domains",
-                "icon": "globe"
-              },
-              {
-                "slug": "deployment/security-headers",
-                "icon": "shield-check"
-              },
-              {
-                "slug": "deployment/csp-configuration",
-                "icon": "shield"
-              },
-              {
-                "slug": "deployment/docs-authentication",
-                "icon": "lock-keyhole"
-              },
-              {
-                "slug": "deployment/docs-subpath",
-                "icon": "folder-tree"
-              },
-              {
-                "slug": "deployment/reverse-proxy",
-                "icon": "route"
-              },
-              {
-                "slug": "deployment/cloudflare",
-                "icon": "cloud"
-              },
-              {
-                "slug": "deployment/vercel-rewrites",
-                "icon": "triangle"
-              },
-              {
-                "slug": "deployment/route53-cloudfront",
-                "icon": "cloud-cog"
-              },
-              {
-                "slug": "deployment/preview-deployments",
-                "icon": "eye"
-              },
-              {
-                "slug": "deployment/manual-updates-history",
-                "icon": "refresh-cw"
-              },
-              {
-                "slug": "deployment/source-control-troubleshooting",
-                "icon": "circle-alert"
-              },
-              {
-                "slug": "deployment/ci",
-                "icon": "check-circle"
-              },
-              {
-                "slug": "deployment/webhooks-ci",
-                "icon": "workflow"
-              },
-              {
-                "slug": "deployment/git-sync",
-                "icon": "refresh-cw"
-              },
-              {
-                "slug": "deployment/forgejo-github-gitlab",
-                "icon": "git-merge"
-              },
-              {
-                "slug": "deployment/github",
-                "icon": "github"
-              },
-              {
-                "slug": "deployment/gitlab",
-                "icon": "gitlab"
-              },
-              {
-                "slug": "deployment/gitlab-self-hosted-oauth",
-                "icon": "key-round"
-              }
-            ]
-          },
-          {
-            "group": "Migration",
-            "icon": "repeat",
-            "pages": [
-              {
-                "slug": "migration/overview",
-                "icon": "route"
-              },
-              {
-                "slug": "migration/public-wiki-previews",
-                "icon": "scan-search"
-              },
-              {
-                "slug": "migration/authored-config-import",
-                "icon": "file-json"
-              },
-              {
-                "slug": "migration/generated-reconstruction",
-                "icon": "wand-sparkles"
-              },
-              {
-                "slug": "migration/claim-adopt-flow",
-                "icon": "badge-check"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API Reference",
-        "groups": [
-          {
-            "group": "API reference",
+            "group": "API documentation",
             "icon": "book",
+            "openapi": "api-reference/openapi.json",
             "pages": [
               {
                 "slug": "api-reference/introduction",
                 "icon": "book"
               },
               {
-                "slug": "api-reference/playground-overview",
-                "icon": "terminal"
-              },
-              {
-                "slug": "api-reference/request-builder",
-                "icon": "panel-top"
-              },
-              {
-                "slug": "api-reference/code-examples",
-                "icon": "code"
-              },
-              {
-                "slug": "api-reference/live-requests",
-                "icon": "send"
-              },
-              {
-                "slug": "api-reference/base-url-authentication",
-                "icon": "shield-check"
-              },
-              {
-                "slug": "api-reference/nested-schemas",
-                "icon": "brackets"
-              },
-              {
-                "slug": "api-reference/openapi-setup",
-                "icon": "file-json"
-              },
-              {
-                "slug": "api-reference/spec-management",
-                "icon": "file-json"
-              },
-              {
-                "slug": "api-reference/playground-authentication",
-                "icon": "key"
-              },
-              {
-                "slug": "api-reference/endpoint-visibility",
-                "icon": "eye-off"
-              },
-              {
-                "slug": "api-reference/response-examples",
-                "icon": "braces"
-              },
-              {
-                "slug": "api-reference/troubleshooting",
-                "icon": "wrench"
+                "slug": "api-reference/openapi",
+                "icon": "brackets-curly"
               }
             ]
           },
           {
-            "group": "Docs runtime API",
-            "icon": "terminal",
-            "openapi": "api-reference/openapi.json"
+            "group": "Beat patterns",
+            "icon": "play",
+            "openapi": "api-reference/openapi.json",
+            "pages": [
+              "GET /beats",
+              "POST /beats",
+              "GET /beats/{id}",
+              "DELETE /beats/{id}",
+              "POST /beats/{id}/play",
+              "POST /beats/{id}/stop",
+              "PUT /beats/{id}/volume",
+              "PUT /beats/{id}/tempo",
+              "POST /beats/{id}/export"
+            ]
+          },
+          {
+            "group": "Drum kits",
+            "icon": "music",
+            "openapi": "api-reference/openapi.json",
+            "pages": [
+              "GET /kits",
+              "GET /kits/{id}",
+              "GET /kits/{id}/sounds",
+              "PUT /kits/{id}/sounds/{soundId}",
+              "POST /kits/{id}/mix"
+            ]
+          },
+          {
+            "group": "Sessions",
+            "icon": "user",
+            "openapi": "api-reference/openapi.json",
+            "pages": [
+              "GET /sessions/me",
+              "DELETE /sessions/me"
+            ]
+          }
+        ],
+        "openapi": "api-reference/openapi.json"
+      }
+    ],
+    "header": [
+      {
+        "label": "Home",
+        "href": "/"
+      },
+      {
+        "label": "Quickstart",
+        "href": "/quickstart"
+      },
+      {
+        "label": "API reference",
+        "href": "/api-reference"
+      }
+    ],
+    "sidebar": [
+      {
+        "group": "Getting started",
+        "icon": "rocket"
+      },
+      {
+        "group": "Customization",
+        "icon": "gear"
+      },
+      {
+        "group": "Writing content",
+        "icon": "file-text"
+      },
+      {
+        "group": "AI tools",
+        "icon": "sparkles"
+      },
+      {
+        "group": "API documentation",
+        "icon": "book",
+        "openapi": "api-reference/openapi.json"
+      },
+      {
+        "group": "Endpoint examples",
+        "icon": "code",
+        "openapi": "api-reference/openapi.json"
+      }
+    ]
+  },
+  "homepage": {
+    "type": "docs",
+    "landing_page": null,
+    "hero": {
+      "title": "Welcome to dubstack",
+      "tagline": "Beautiful, AI-powered documentation for modern teams",
+      "cta": {
+        "label": "Get Started",
+        "href": "/quickstart"
+      }
+    }
+  },
+  "sections": {},
+  "footer": {
+    "use_theme_studio": false,
+    "style": "none",
+    "socials": {
+      "x": "",
+      "github": "https://github.com/dubstack-ai",
+      "linkedin": ""
+    },
+    "columns": [
+      {
+        "header": "Resources",
+        "links": [
+          {
+            "label": "Documentation",
+            "url": "/quickstart"
+          },
+          {
+            "label": "API Reference",
+            "url": "/api-reference"
           }
         ]
       },
       {
-        "tab": "Changelog",
-        "groups": [
+        "header": "Company",
+        "links": [
           {
-            "group": "Changelog",
-            "icon": "history",
-            "pages": [
-              {
-                "slug": "changelog",
-                "icon": "history"
-              }
-            ]
+            "label": "About",
+            "url": "/about"
+          },
+          {
+            "label": "Blog",
+            "url": "/blogs"
+          }
+        ]
+      },
+      {
+        "header": "Legal",
+        "links": [
+          {
+            "label": "Privacy",
+            "url": "/privacy"
+          },
+          {
+            "label": "Terms",
+            "url": "/terms"
           }
         ]
       }
-    ]
-  },
-  "footer": {
-    "style": "default",
-    "socials": {
-      "github": "https://github.com/dubstack-ai"
-    },
+    ],
     "branding": {
       "show_powered_by": true
+    },
+    "logo": {
+      "dark": "/logo/starter-dark.svg",
+      "light": "/logo/starter-light.svg"
     }
   },
   "seo": {
-    "title_template": "%s | dubstack docs",
-    "description": "Product documentation for DubStack, the developer documentation platform for docs, API references, AI workflows, and Theme Studio."
+    "title_template": "%s | dubstack",
+    "description": "Beautiful, AI-powered documentation platform for modern teams. Create stunning docs with OpenAPI support, Theme Studio, and MCP server integration.",
+    "og_image": "/images/checks-passed.png"
+  },
+  "integrations": {
+    "analytics": {
+      "google": null,
+      "plausible": null
+    },
+    "ai": {
+      "provider": null,
+      "api_key_env": "OPENAI_API_KEY"
+    }
+  },
+  "auth": {
+    "enabled": false,
+    "provider": "oidc",
+    "provider_name": "SSO",
+    "provider_icon_url": "",
+    "oidc": {
+      "issuer": "",
+      "client_id": "",
+      "scopes": "openid profile email",
+      "token_proxy": ""
+    },
+    "feature_tier": "free",
+    "require_auth_for_admin": true,
+    "require_auth_for_docs": false
+  },
+  "theme_config": {
+    "fonts": {
+      "heading": "Inter",
+      "body": "Inter",
+      "code": "JetBrains Mono"
+    },
+    "code_block": {
+      "header_height": 32,
+      "radius": 18,
+      "syntax_theme": "github-dark"
+    },
+    "scrollbar": {
+      "width": 6,
+      "radius": 999
+    }
+  },
+  "assistant": {
+    "enabled": true,
+    "prompt": "",
+    "response_handling": {
+      "deflection_enabled": false,
+      "support_email": "",
+      "show_help_button": false
+    },
+    "search_domains": {
+      "enabled": false,
+      "domains": []
+    },
+    "bot_protection": {
+      "invisible_captcha_enabled": true
+    },
+    "starter_questions": {
+      "enabled": false,
+      "questions": []
+    }
   }
 }

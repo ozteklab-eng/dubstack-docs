@@ -1,0 +1,93 @@
+---
+title: "Local Development"
+description: "Preview changes locally before deploying to production"
+icon: "code"
+---
+
+<Callout type="info">
+**Prerequisites**:
+- Node.js 18 or higher
+- A documentation repository with a `dubstack.json` file
+</Callout>
+
+Follow these steps to install and run DubStack on your machine.
+
+<Steps>
+<Step title="Install the DubStack CLI">
+
+```bash
+npm i -g @dubstack/cli
+```
+</Step>
+
+<Step title="Preview locally">
+
+Navigate to your docs directory where your `dubstack.json` file is located, and run:
+
+```bash
+dubstack dev
+```
+
+A local preview of your documentation will be available at `http://localhost:3000`.
+
+</Step>
+</Steps>
+
+## Custom ports
+
+By default, DubStack uses port 3000. You can customize the port using the `--port` flag:
+
+```bash
+dubstack dev --port 3333
+```
+
+If port 3000 is already in use, DubStack will use the next available port:
+
+```md
+Port 3000 is already in use. Trying 3001 instead.
+```
+
+## CLI versions
+
+Each CLI release is associated with a specific version of DubStack. If your local preview does not align with production, update the CLI:
+
+```bash
+npm update -g @dubstack/cli
+```
+
+## Validating links
+
+The CLI can assist with validating links in your documentation. To identify broken links, use:
+
+```bash
+dubstack check-links
+```
+
+## Deployment
+
+If the deployment is successful, you should see the following:
+
+<Frame>
+  <img src="/images/checks-passed.png" alt="Deployment confirmation showing all checks have passed" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+## Code formatting
+
+We suggest using IDE extensions that recognize and format MDX. If you're a VS Code user, consider the [MDX extension](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx) for syntax highlighting, and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) for code formatting.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Error: Cannot find module 'sharp'">
+
+    This may be due to an outdated version of Node.js. Try the following:
+    1. Remove the currently installed version of the CLI: `npm remove -g @dubstack/cli`
+    2. Upgrade to Node.js 18 or higher.
+    3. Reinstall the CLI: `npm i -g @dubstack/cli`
+  </Accordion>
+
+  <Accordion title="Issue: Encountering an unknown error">
+
+    Solution: delete the `~/.dubstack` folder, then run `dubstack dev` again.
+  </Accordion>
+</AccordionGroup>

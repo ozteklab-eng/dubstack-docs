@@ -1,0 +1,22 @@
+---
+title: "Get a beat pattern"
+openapi: "GET /beats/{id}"
+method: "GET"
+path: "/beats/{id}"
+specName: "api-reference"
+operationId: "getBeat"
+description: "Returns a specific pre-seeded demo beat pattern by ID."
+---
+
+Returns a specific pre-seeded demo beat pattern by ID.
+
+> `GET /beats/{id}`
+
+### Parameters
+- `id` (path, string, required) · Beat pattern ID · example: `dembow`
+
+### Responses
+- `200` Beat pattern found.
+- `404` Beat pattern not found.
+
+<PlaygroundEmbed specName="api-reference" method="GET" path="/beats/{id}" operationId="getBeat" />

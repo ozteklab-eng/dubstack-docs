@@ -1,0 +1,74 @@
+---
+title: "Prompt-ready docs"
+description: "Write pages that give AI tools clear, copyable task context"
+icon: "bot"
+---
+
+Prompt-ready docs make it easy for readers and AI assistants to act on your content. The goal is simple: every page should give enough context for a useful next action.
+
+## Add a reusable prompt
+
+Use a clearly labeled code block when you want readers to copy a prompt into their editor or assistant.
+
+```text Generate a typed API client
+You are an expert TypeScript developer. Read this API documentation and generate a typed fetch client.
+
+Include:
+- A base client with configurable baseUrl and auth headers
+- One method per endpoint
+- Typed request parameters and response payloads
+- Short JSDoc comments for public methods
+
+Do not use third-party HTTP clients.
+```
+
+## Place prompts near the task
+
+A prompt should appear next to the workflow it supports. Do not create a separate prompt dump at the bottom of the page.
+
+<Steps>
+  <Step title="Explain the user goal">
+    Start with what the reader is trying to accomplish.
+  </Step>
+  <Step title="Show the exact context">
+    Include endpoint names, configuration keys, or file paths the assistant needs.
+  </Step>
+  <Step title="Give a copyable prompt">
+    Keep the prompt direct and bounded so the output is predictable.
+  </Step>
+</Steps>
+
+## Good prompt shape
+
+<Columns cols={2}>
+  <Card title="Specific" icon="target">
+    Name the endpoint, file, or workflow the assistant should use.
+  </Card>
+  <Card title="Bounded" icon="box">
+    Tell the assistant what to include and what to avoid.
+  </Card>
+  <Card title="Actionable" icon="play">
+    Ask for an output the reader can use immediately.
+  </Card>
+  <Card title="Reviewable" icon="check-circle">
+    Prefer structured output over broad prose.
+  </Card>
+</Columns>
+
+## Example
+
+```text Debug an authentication failure
+Read the authentication section and help me debug a 401 response.
+
+Ask me for missing values before assuming the cause. Check these first:
+- Whether the Authorization header is present
+- Whether the token is expired
+- Whether the environment points to production or preview
+- Whether the endpoint requires a different scope
+
+Return a short checklist and one minimal cURL command to verify the fix.
+```
+
+<Tip>
+Prompts work best when the surrounding page already contains accurate prerequisites, expected outputs, and troubleshooting notes.
+</Tip>

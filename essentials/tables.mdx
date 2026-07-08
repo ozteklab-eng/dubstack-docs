@@ -1,0 +1,69 @@
+---
+title: "Tables"
+description: "Structure tabular content with markdown tables and editor-friendly defaults"
+icon: "table"
+---
+
+Tables are best when you need people to compare properties quickly without reading long paragraphs. DubStack supports standard markdown tables, so what you author in Git is what renders in the site.
+
+## Write a basic table
+
+Use pipes to separate columns and a divider row under the header:
+
+| Item | Purpose | Default |
+| --- | --- | --- |
+| API key | Authenticates requests from the playground | Required |
+| Theme preset | Sets the base visual direction for the site | Groove |
+| Assistant panel | Adds Ask AI to the docs shell | Optional |
+
+```markdown
+| Item | Purpose | Default |
+| --- | --- | --- |
+| API key | Authenticates requests from the playground | Required |
+| Theme preset | Sets the base visual direction for the site | Groove |
+| Assistant panel | Adds Ask AI to the docs shell | Optional |
+```
+
+## Control alignment
+
+You can align columns with colons in the separator row:
+
+| Left aligned | Centered | Right aligned |
+| :--- | :---: | ---: |
+| Label | State | 12 req/s |
+| Rate limit | Active | 250 req/min |
+
+```markdown
+| Left aligned | Centered | Right aligned |
+| :--- | :---: | ---: |
+| Label | State | 12 req/s |
+| Rate limit | Active | 250 req/min |
+```
+
+## Use the slash command
+
+In the editor, type `/table` for a clean starter table, `/properties table` for spec and config fields, or `/comparison table` when you want side-by-side tradeoffs. Each one creates a real table block for quick editing, then saves back to markdown table syntax when you publish.
+
+<Callout type="note">
+Use tables for comparisons, properties, and compact operational data. If the content needs long prose or nested layouts, use cards, accordions, or steps instead.
+</Callout>
+
+## Keep tables readable
+
+| Pattern | Better choice |
+| --- | --- |
+| 3 to 5 columns | Good fit for a table |
+| Short labels and values | Good fit for a table |
+| Long explanations in every cell | Use sections or accordions instead |
+| Images or complex embeds in cells | Use cards or gallery blocks instead |
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Code blocks" icon="code" href="/essentials/code">
+    Pair tables with syntax-highlighted examples and response payloads.
+  </Card>
+  <Card title="Images and media" icon="image" href="/essentials/images">
+    Move to media blocks when a table stops being the right structure.
+  </Card>
+</CardGroup>

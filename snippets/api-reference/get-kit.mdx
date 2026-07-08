@@ -1,0 +1,22 @@
+---
+title: "Get a drum kit"
+openapi: "GET /kits/{id}"
+method: "GET"
+path: "/kits/{id}"
+specName: "api-reference"
+operationId: "getKit"
+description: "Returns a specific drum kit with its full sound definitions and control parameters for tuning and decay adjustments."
+---
+
+Returns a specific drum kit with its full sound definitions and control parameters for tuning and decay adjustments.
+
+> `GET /kits/{id}`
+
+### Parameters
+- `id` (path, string, required) · Kit ID · example: `tr-808`
+
+### Responses
+- `200` Drum kit found with full details and controls.
+- `404` Kit not found.
+
+<PlaygroundEmbed specName="api-reference" method="GET" path="/kits/{id}" operationId="getKit" />

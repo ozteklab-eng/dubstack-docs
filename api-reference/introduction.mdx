@@ -1,51 +1,40 @@
 ---
-title: API reference
-description: Publish interactive API documentation from OpenAPI specs and MDX endpoint pages.
-icon: book
+title: "Introduction"
+description: "Explore the BeatBox API with an interactive playground and endpoint pages"
+icon: "code"
 ---
 
-DubStack can render API documentation from OpenAPI specs, manually authored MDX endpoint pages, or a mix of both.
-
-Use this section for two related tasks:
-
-- learning how to document your own product APIs inside a DubStack docs site
-- exploring the public runtime endpoints that every published DubStack docs site exposes for MCP, LLM indexes, assistant chat, and API playground execution
-
-## Supported API documentation paths
-
-| Path | Use it when |
-| --- | --- |
-| OpenAPI-generated pages | You already have an OpenAPI 3.x JSON spec and want DubStack to generate endpoint pages from it. |
-| Manual MDX endpoint pages | You want full control over page copy while still attaching each page to an API operation. |
-| Embedded playgrounds | You want to place a runnable endpoint example inside a guide or tutorial. |
-| Docs runtime API | You want to inspect the public endpoints that power AI access and playground behavior on a published docs site. |
-
-## Source of truth
-
-Keep API specs in the same Git repository as the rest of your docs.
-
-The canonical location for the main spec is:
-
-```text
-api-reference/openapi.json
-```
-
-You can also store named specs under:
-
-```text
-api-reference/openapi/payments.json
-api-reference/openapi/admin.json
-```
-
-After the repo syncs, DubStack stores the spec with the published docs artifacts and uses it to render API reference pages and playgrounds.
-
-## What to read next
-
-- [OpenAPI setup](/api-reference/openapi-setup): add a spec and generate endpoint pages.
-- [Manage API specifications](/api-reference/spec-management): upload, refresh, and control endpoint visibility from the dashboard.
-- [Playground authentication](/api-reference/playground-authentication): configure how users try requests from the docs site.
-- Docs runtime API: open any generated endpoint under this section to inspect the MCP, assistant, LLM index, or playground endpoint contract.
-
 <Callout type="info">
-  The generated runtime endpoints are public docs-site endpoints. Dashboard management APIs are separate and should only be published after the corresponding token-authenticated API surface is available.
+The starter kit ships with the BeatBox API so you can see a full OpenAPI workflow immediately. Replace the sample spec later if you want to document your own API.
+</Callout>
+
+## Explore the API
+
+Use the interactive playground to inspect every operation, test requests manually, and generate language snippets.
+
+<CardGroup cols={2}>
+  <Card title="Full API playground" icon="play" href="/api-reference/openapi">
+    Browse every BeatBox endpoint, authenticate with a token, and try requests directly from the docs.
+  </Card>
+  <Card title="Reusable snippets" icon="recycle" href="/essentials/reusable-snippets">
+    Generate endpoint snippets once and embed them into guides or onboarding flows.
+  </Card>
+</CardGroup>
+
+## What ships in the starter
+
+The default starter includes three API sections:
+
+- **Beat patterns** for creating, playing, exporting, and controlling beats
+- **Drum kits** for inspecting kits, sounds, and custom mixes
+- **Sessions** for checking and clearing the active session
+
+## How to customize this
+
+1. Replace `api-reference/openapi.json` with your own OpenAPI spec
+2. Use the dashboard to generate snippets when you need them
+3. Publish only the endpoint pages you want visible in navigation
+
+<Callout type="success">
+DubStack keeps the uploaded spec as the source of truth. The playground reads from the spec, while endpoint pages stay explicit and controllable.
 </Callout>

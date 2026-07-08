@@ -1,0 +1,36 @@
+---
+title: "Configure a kit sound"
+openapi: "PUT /kits/{id}/sounds/{soundId}"
+method: "PUT"
+path: "/kits/{id}/sounds/{soundId}"
+specName: "api-reference"
+operationId: "configureSound"
+description: "Adjusts parameters for an individual sound within a kit. Supports pitch tuning (semitones), decay envelope, stereo panning, mute state, and velocity. Demonstrates integer, string enum, boolean, and float parameter types in a single request body."
+---
+
+Adjusts parameters for an individual sound within a kit. Supports pitch tuning (semitones), decay envelope, stereo panning, mute state, and velocity. Demonstrates integer, string enum, boolean, and float parameter types in a single request body.
+
+> `PUT /kits/{id}/sounds/{soundId}`
+
+### Parameters
+- `id` (path, string, required) · Kit ID · example: `tr-808`
+- `soundId` (path, string, required) · Sound/instrument ID within the kit (e.g. kick, snare, hihat) · example: `kick`
+
+### Request Body
+Sound parameter configuration. All fields are optional - only provided fields will be updated.
+
+```json
+{
+  "tune": 3,
+  "decay": 65,
+  "pan": "left",
+  "mute": false,
+  "velocity": 0.85
+}
+```
+
+### Responses
+- `200` Sound parameters updated successfully.
+- `404` Kit or sound not found.
+
+<PlaygroundEmbed specName="api-reference" method="PUT" path="/kits/{id}/sounds/{soundId}" operationId="configureSound" />

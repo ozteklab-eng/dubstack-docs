@@ -1,0 +1,117 @@
+---
+title: "TypeScript Hover Types"
+description: "Hover over code to see inferred types - like having an IDE in your docs!"
+---
+
+# TypeScript Hover Types
+
+Hover over any **underlined identifier** to see its type. It's like having VS Code intelligence right in your documentation! 🎉
+
+## Meet the Pets 🐕 🐈
+
+TypeScript infers complex nested types. Hover over `dog` to see the full type:
+
+```typescript twoslash
+interface Dog {
+  name: string;
+  breed: string;
+  age: number;
+  favoriteToy: string;
+  owner: {
+    name: string;
+    phone: string;
+  };
+}
+
+const dog: Dog = {
+  name: "Buddy",
+  breed: "Golden Retriever",
+  age: 3,
+  favoriteToy: "tennis ball 🎾",
+  owner: {
+    name: "Alice",
+    phone: "555-1234"
+  }
+};
+
+console.log(`${dog.name} wants to play! 🐕`);
+console.log(dog.owner.name);
+```
+
+## Function Signatures
+
+Hover over the function name to see its complete signature:
+
+```typescript twoslash
+interface Cat {
+  name: string;
+  color: "orange" | "black" | "white" | "tabby";
+  meowVolume: "quiet" | "normal" | "LOUD";
+  favoriteSpot: string;
+}
+
+function feedCat(cat: Cat, food: string): string {
+  return `${cat.name} ate ${food} and says meow! 🐈`;
+}
+
+const whiskers: Cat = {
+  name: "Whiskers",
+  color: "orange",
+  meowVolume: "LOUD",
+  favoriteSpot: "sunny windowsill ☀️"
+};
+
+const result = feedCat(whiskers, "tuna");
+console.log(result);
+console.log(whiskers.favoriteSpot);
+```
+
+## Generic Types
+
+See how generics resolve to concrete types:
+
+```typescript twoslash
+type PetResponse<T> = {
+  success: boolean;
+  pet: T;
+  message: string;
+};
+
+function adoptPet<T>(pet: T): PetResponse<T> {
+  return {
+    success: true,
+    pet: pet,
+    message: "Congratulations on your new friend! 🎊"
+  };
+}
+
+interface Puppy {
+  name: string;
+  cuteness: number;
+}
+
+const adoption = adoptPet<Puppy>({ name: "Max", cuteness: 100 });
+console.log(adoption.message);
+console.log(adoption.pet.name);
+```
+
+## Array Transformations
+
+Watch how array methods transform types:
+
+```typescript twoslash
+const pets = ["Buddy 🐕", "Whiskers 🐈", "Goldie 🐠", "Tweety 🐦"];
+
+const petLengths = pets.map(pet => pet.length);
+console.log(petLengths);
+
+const longNames = pets.filter(pet => pet.length > 10);
+console.log(longNames);
+
+const allPets = pets.join(", ");
+console.log(allPets);
+```
+
+---
+
+**Pro tip:** This works with any TypeScript code! Your users can explore types without leaving the documentation. 🚀

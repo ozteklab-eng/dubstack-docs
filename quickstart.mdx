@@ -1,165 +1,63 @@
 ---
 title: Quickstart
-description: Create, edit, and publish your first dubstack documentation site.
-icon: zap
+description: "Start building polished docs in minutes"
 ---
 
-This quickstart takes you from an empty workspace to a published documentation site with real source control, navigation, and a live docs URL.
+# Quickstart
 
-You can connect your own Git repository, or use the hosted repository flow when you want dubstack to create the starter source for you.
+Start with a working docs site, make one real customization, and get your first publish out without detouring into setup debt.
 
-## What you will build
+## Get started in three steps
 
-By the end, you will have:
+Get your documentation running locally and make your first meaningful change.
 
-- a docs site with a `dubstack.live` URL
-- a source repository or hosted starter source
-- a `dubstack.json` configuration file
-- at least one edited MDX page
-- a completed publish activity
-- a live page you can open and verify
-
-## Before you start
-
-You need:
-
-- a dubstack account
-- a workspace or organization for the site
-- a GitHub or GitLab account if you want to connect your own repository
-- DNS access only if you plan to attach a custom domain later
-
-## 1. Create a site
-
-Open the dashboard and start the new site flow.
-
-Choose the kind of docs you are building, then pick a source option.
-
-| Source option | Use it when |
-| --- | --- |
-| Connect Git | You already have a docs repository, or your team wants the repository under its own Git provider account from day one. |
-| Hosted repository | You want a working starter immediately and plan to edit from the dashboard first. |
-
-After setup finishes, the dashboard opens on the site's overview page.
-
-## 2. Review the starter source
-
-The starter source includes MDX pages, assets, and `dubstack.json`.
-
-A minimal source usually looks like this:
-
-```text
-.
-├── dubstack.json
-├── index.mdx
-├── quickstart.mdx
-├── api-reference/
-│   └── openapi.json
-└── assets/
-    ├── logo-dark.svg
-    └── logo-light.svg
-```
-
-The exact files depend on the starter profile and whether your site includes an API reference.
-
-## 3. Check `dubstack.json`
-
-`dubstack.json` controls navigation, theme, API reference setup, widgets, redirects, and footer behavior.
-
-A small config can start like this:
-
-```json
-{
-  "site": {
-    "name": "Product Docs"
-  },
-  "navigation": {
-    "tabs": [
-      {
-        "tab": "Guides",
-        "default": true,
-        "groups": [
-          {
-            "group": "Getting started",
-            "pages": [
-              { "slug": "index" },
-              { "slug": "quickstart" }
-            ]
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-Keep the config committed with the docs source so every publish is reproducible.
-
-## 4. Make your first edit
-
-Open the editor from the dashboard.
-
-A good first change is to edit `quickstart.mdx` or create a short page under a getting-started section.
-
-Use the editor to:
-
-1. update MDX content
-2. insert supported components with slash commands
-3. preview the rendered page
-4. save the file back to the connected source
-
-For example, add a callout to a page:
-
-```mdx
-<Callout type="info">
-  This page is now managed through dubstack.
-</Callout>
-```
-
-## 5. Publish
-
-When you publish, dubstack follows the same production path used for normal updates.
-
-```text
-Git commit
--> sync worker
--> published content artifacts
--> docs frontend
-```
-
-Use the Activity panel on the dashboard to confirm the update completed.
-
-If your source changed outside the normal webhook path, use Manual update from the overview page.
-
-## 6. Verify the live site
-
-After the publish finishes, check:
-
-- the live site opens on the `dubstack.live` domain
-- the edited page is visible after a hard refresh
-- sidebar navigation matches `dubstack.json`
-- search opens from the header
-- the assistant opens and shows the reader notice
-- no draft-only content is visible on the public site
-
-## 7. Connect the next production pieces
-
-Once the first publish works, continue with the pieces your site needs:
+### Step 1: Set up your local environment
 
 <CardGroup cols={2}>
-  <Card title="Connect Git" icon="git-branch" href="/getting-started/connect-git">
-    Attach a GitHub or GitLab repository as the long-term source of truth.
+  <Card title="Clone your docs locally" icon="github">
+    Pull your docs repository down so you can edit MDX, config, and assets in one place.
   </Card>
-  <Card title="Configure navigation" icon="map" href="/configuration/navigation">
-    Organize tabs, groups, pages, and OpenAPI-generated endpoints.
-  </Card>
-  <Card title="Add an API reference" icon="terminal" href="/api-reference/openapi-setup">
-    Commit an OpenAPI spec and publish endpoint pages with an interactive playground.
-  </Card>
-  <Card title="Use a custom domain" icon="globe" href="/deployment/custom-domains">
-    Attach your own hostname after the site is ready for production traffic.
+  <Card title="Start the preview server" icon="monitor">
+    Run the local preview so you can iterate on content and layout before publishing.
   </Card>
 </CardGroup>
 
-<Callout type="info">
-  Git is the write source of truth. Published docs are rendered from synchronized content artifacts, not from local files or dashboard-only state.
+### Step 2: Configure your site
+
+<CardGroup cols={2}>
+  <Card title="Connect your repository" icon="link">
+    Link the repository in the dashboard so saves and publishes flow through the real Git-backed path.
+  </Card>
+  <Card title="Update site name and colors" icon="palette">
+    Adjust your site metadata and theme tokens so the docs reflect your product from the start.
+  </Card>
+</CardGroup>
+
+### Step 3: Go live
+
+<Card title="Publish your docs" icon="rocket">
+  Save your changes, trigger a publish, and confirm the live site reflects your latest content and navigation.
+</Card>
+
+## Next steps
+
+Now that your docs are running, use these pages to deepen the site instead of keeping the starter content unchanged.
+
+<CardGroup cols={2}>
+  <Card title="Write content" icon="file-text" href="/essentials/markdown">
+    Learn the core Markdown syntax and start replacing starter copy with product-specific docs.
+  </Card>
+  <Card title="Customize style" icon="palette" href="/essentials/settings">
+    Tune colors, typography, and layout choices so the site matches your brand and tier.
+  </Card>
+  <Card title="Add code examples" icon="code-2" href="/essentials/code">
+    Publish syntax-highlighted snippets, request samples, and response examples that stay readable.
+  </Card>
+  <Card title="API documentation" icon="code" href="/api-reference/introduction">
+    Connect an OpenAPI spec and expose a real API reference with interactive playground flows.
+  </Card>
+</CardGroup>
+
+<Callout type="note">
+  Need help? Start with the [Introduction](/), then move into [Local Development](/development) once the first docs pass is in place.
 </Callout>

@@ -1,0 +1,113 @@
+---
+title: "Markdown syntax"
+description: "Text, titles, links, quotes, and code formatting in standard Markdown"
+icon: "file-text"
+---
+
+Use standard Markdown to structure headings, prose, links, quotes, and inline code.
+
+## Titles
+
+Use `##` for section headings.
+
+```md
+## Titles
+```
+
+## Subtitles
+
+Use `###` for subsection headings.
+
+```md
+### Subtitles
+```
+
+## Text formatting
+
+Combine emphasis, strong text, lists, and inline code inside normal prose.
+
+```md
+**Bold text** and *italic text*
+
+- Bullet list
+- Another item
+
+1. Numbered list
+2. Another item
+
+Use `inline code` inside a sentence.
+```
+
+## Linking to pages
+
+Link to other docs pages with relative paths.
+
+```md
+[Quickstart](/quickstart)
+[Code blocks](/essentials/code)
+```
+
+## Blockquotes
+
+Use blockquotes for quoted text or highlighted notes.
+
+### Singleline
+
+```md
+> A single-line blockquote.
+```
+
+### Multiline
+
+```md
+> First line of the quote.
+>
+> Second line of the quote.
+```
+
+## Code fences
+
+Use triple backticks for fenced code blocks.
+
+### Singleline
+
+````md
+```md
+`inline example`
+```
+````
+
+### Multiline
+
+````md
+```md
+# Heading 1
+## Heading 2
+
+Paragraph text with `inline code`.
+```
+````
+
+## LaTeX
+
+Use inline and block math when your page needs equations.
+
+````md
+Inline math: $E = mc^2$
+
+Block math:
+$$
+a^2 + b^2 = c^2
+$$
+````
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="MDX Components" icon="shapes" href="/essentials/mdx-components">
+    Move beyond plain Markdown when you need tabs, cards, steps, and richer layouts.
+  </Card>
+  <Card title="Code blocks" icon="code" href="/essentials/code">
+    Learn how fenced code blocks, filenames, and highlighted examples render.
+  </Card>
+</CardGroup>
