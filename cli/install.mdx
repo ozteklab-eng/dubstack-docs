@@ -1,0 +1,35 @@
+---
+title: Install the CLI
+description: Track the planned installation path for the dubstack CLI and use current alternatives until it is generally available.
+---
+
+The dubstack CLI is not generally available yet.
+
+For now, use the dashboard, Git, CI, and Admin API workflows documented below:
+
+- [Local Git workflow](/deployment/local-git-workflow)
+- [CI](/deployment/ci)
+- [Webhooks and CI](/deployment/webhooks-ci)
+- [Admin API keys](/dashboard/api-keys)
+
+<Warning>
+  Do not install unofficial packages named like dubstack. CLI installation instructions will appear here only after the official package name, release channel, and signing posture are finalized.
+</Warning>
+
+## Planned install channels
+
+The initial CLI release is expected to support a package-manager install path and a version check command.
+
+```bash
+# planned shape, not yet generally available
+dubstack --version
+```
+
+## What to prepare now
+
+Before adopting the CLI, make sure your docs project already works through Git:
+
+1. Connect a Git provider in [Git settings](/deployment/github).
+2. Keep `dubstack.json` at the repository root or configure the docs subdirectory.
+3. Confirm that pushes to the production branch deploy successfully.
+4. Add CI validation for OpenAPI specs and MDX content where possible.
