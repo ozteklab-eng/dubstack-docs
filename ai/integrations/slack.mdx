@@ -37,6 +37,10 @@ Before connecting Slack, confirm:
 
 If Slack was installed before new permissions were added, reconnect the app from the dashboard so the missing scopes are granted.
 
+If your Slack workspace requires app approval, ask a workspace owner or admin to approve the DubStack app before connecting it from the dashboard.
+
+For Slack Enterprise Grid, make sure the app is installed in the specific workspace where teammates will mention the agent. An organization-level app approval is not always enough for the bot to respond inside a workspace.
+
 ## Connect Slack
 
 1. Open the dashboard.
@@ -48,6 +52,17 @@ If Slack was installed before new permissions were added, reconnect the app from
 7. Confirm the Slack app row says the agent is connected.
 
 You can also manage the connection from **Settings > Organization > Agent integrations**.
+
+## Reconnect Slack
+
+Reconnect the Slack app when:
+
+- Slack scopes changed after the original installation
+- the bot token was revoked
+- a workspace admin reapproved the app
+- the app appears installed but the dashboard reports missing permissions
+
+Reinstalling from the dashboard refreshes the stored Slack connection. Existing channels, threads, and draft pull requests are not deleted.
 
 ## Choose a deployment
 
@@ -88,6 +103,18 @@ Use direct messages for private questions. Mention the agent in a channel when t
 If the request is only a docs question, the agent answers from the selected deployment's published docs index and includes source links when relevant.
 
 If Jira is connected, Slack answers can include Jira issue context when your prompt explicitly asks for Jira context, includes a Jira issue key, or includes a `jql:` query.
+
+## Roles and permissions
+
+Slack agent permissions follow the teammate's DubStack role for the selected organization and deployment.
+
+| Role | Slack behavior |
+| --- | --- |
+| Owner or admin | Can connect and disconnect Slack, ask docs questions, and request documentation changes when Git authoring is ready. |
+| Editor | Can ask docs questions and request documentation changes when Git authoring is ready. |
+| Viewer | Can ask docs questions. Write actions are blocked. |
+
+If a teammate cannot create a draft pull request from Slack, check their DubStack role, the selected deployment, and repository authoring readiness.
 
 ## Draft documentation from Slack
 
@@ -137,7 +164,7 @@ Supported examples include:
 
 Unsupported or unreadable files are not used as context. If all attachments are unsupported, the agent asks you to provide text context instead.
 
-Keep attachments focused. Large files may be truncated, and binary files are ignored.
+Keep attachments focused. By default the agent reads up to three text-like files, up to 64 KB per file. Large files may be truncated, and binary files are ignored.
 
 ## Repository authoring readiness
 
