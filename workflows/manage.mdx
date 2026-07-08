@@ -1,35 +1,35 @@
 ---
-title: Manage automations
-description: Enable, disable, run, inspect, and notify on automation runs from the dashboard.
+title: Manage workflows
+description: Enable, disable, run, inspect, and notify on workflow runs from the dashboard.
 icon: toggle-right
 ---
 
-Manage automations from **Automate > Workflows** in the dashboard.
+Manage workflows from **Automate > Workflows** in the dashboard.
 
-Use this page to turn built-in automations on or off, run a configured automation once, inspect recent run history, and send Slack notifications for completed or failed runs.
+Use this page to turn built-in workflows on or off, run a configured workflow once, inspect recent run history, and send Slack notifications for completed or failed runs.
 
-## Enable an automation
+## Enable a workflow
 
 1. Open the dashboard.
 2. Select the organization and deployment.
 3. Go to **Automate > Workflows**.
-4. Choose an automation card.
+4. Choose a workflow card.
 5. Fill in any required configuration.
 6. Select an update mode.
-7. Click **Turn on automation**.
+7. Click **Turn on workflow**.
 
-If the automation can run with defaults, the toggle can enable it directly. If setup is incomplete, the configuration drawer shows the blocking requirement.
+If the workflow can run with defaults, the toggle can enable it directly. If setup is incomplete, the configuration drawer shows the blocking requirement.
 
 ## Readiness checks
 
-The dashboard checks each automation before it can run.
+The dashboard checks each workflow before it can run.
 
 | Check | What it protects |
 | --- | --- |
 | Docs repository | Ensures there is a connected docs repository to update. |
 | Repository write access | Ensures the agent can create a provider-native review request or commit. |
 | Authoring model | Ensures the workflow authoring profile can run. |
-| Runner support | Ensures the current environment can execute the automation type. |
+| Runner support | Ensures the current environment can execute the workflow type. |
 | Setup requirement | Ensures workflow-specific fields are present, such as source repositories, target languages, or style guide instructions. |
 | RBAC | Ensures the signed-in user can view, configure, or run the workflow for the selected deployment. |
 
@@ -37,9 +37,9 @@ A workflow can show **Configured** when its settings are saved but the runner is
 
 ## Run once
 
-Use **Run once** to enqueue an enabled automation immediately.
+Use **Run once** to enqueue an enabled workflow immediately.
 
-Manual runs use the automation's current configuration, selected context repositories, enabled integrations, notification settings, and update mode. They appear in the run history with the `manual` trigger source.
+Manual runs use the workflow's current configuration, selected context repositories, enabled integrations, notification settings, and update mode. They appear in the run history with the `manual` trigger source.
 
 Manual runs still enforce readiness checks and the daily run limit.
 
@@ -53,7 +53,7 @@ Only workflows configured with the **Custom schedule** trigger are API-triggerab
 
 ## Run history
 
-Open the run history view to inspect recent automation runs.
+Open the run history view to inspect recent workflow runs.
 
 Each run records:
 
@@ -72,7 +72,7 @@ Click a run to inspect its output and open the generated branch in the editor wh
 
 ## Slack notifications
 
-When Slack is connected, automations can post run updates to one or more selected channels.
+When Slack is connected, workflows can post run updates to one or more selected channels.
 
 Notification modes:
 
@@ -85,21 +85,21 @@ Pull-request workflows can also send lifecycle notifications when a generated pu
 
 Invite the app to each target Slack channel before selecting it in the workflow drawer.
 
-## Disable an automation
+## Disable a workflow
 
-Use the automation toggle or the drawer header to disable an automation.
+Use the workflow toggle or the drawer header to disable a workflow.
 
-Disabling stops future scheduled and event-based runs. It does not remove previous run history or delete custom automation definitions.
+Disabling stops future scheduled and event-based runs. It does not remove previous run history or delete custom workflow definitions.
 
-## Delete a custom automation
+## Delete a custom workflow
 
-Only custom automations can be deleted.
+Only custom workflows can be deleted.
 
-Deleting a custom automation removes the configuration from the dashboard. Existing run records remain available for audit and review.
+Deleting a custom workflow removes the configuration from the dashboard. Existing run records remain available for audit and review.
 
 ## Related
 
-- [Automations](/automations)
-- [Configure automation runs](/automations/configuration)
-- [Automation reference](/automations/reference)
-- [Create automations](/automations/create)
+- [Workflows](/workflows)
+- [Configure workflow runs](/workflows/configuration)
+- [Workflow reference](/workflows/reference)
+- [Create workflows](/workflows/create)

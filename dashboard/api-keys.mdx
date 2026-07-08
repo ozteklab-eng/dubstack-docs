@@ -1,12 +1,12 @@
 ---
 title: API keys
-description: Create scoped Admin API keys for trusted automation.
+description: Create scoped Admin API keys for trusted workflow triggers.
 icon: key-round
 ---
 
 API keys give trusted backend systems a controlled way to call dubstack without using a browser session.
 
-Use **Settings > Security > API keys** for server-side automation such as triggering enabled workflows from CI, cron, release tooling, or an internal platform job.
+Use **Settings > Security > API keys** for server-side workflow triggers such as CI, cron, release tooling, or an internal platform job.
 
 <Callout type="warning">
   Admin API keys are secrets. Store them in a secret manager, never in your docs repository, public pages, screenshots, or client-side code.
@@ -20,10 +20,10 @@ Use them when a trusted system needs to call dubstack on behalf of your organiza
 
 - triggering an enabled workflow from CI or a release pipeline
 - running a scheduled backend job from your own scheduler
-- integrating internal platform tooling with documentation automation
+- integrating internal platform tooling with documentation workflows
 - rotating access without sharing a personal dashboard session
 
-The first supported scope is `workflows:run`, which allows a key to trigger eligible automation runs through the Admin API.
+The first supported scope is `workflows:run`, which allows a key to trigger eligible workflow runs through the Admin API.
 
 ## Create a key
 
@@ -103,7 +103,7 @@ Revocation is immediate. Existing clients using the key will stop working on the
 
 - Prefer site-scoped keys.
 - Use one key per external system so rotation is targeted.
-- Set expiries for temporary or project-specific automation.
+- Set expiries for temporary or project-specific workflow.
 - Rotate keys after team or vendor changes.
 - Store keys only in backend secret stores.
 - Review `Last used` before revoking a key so you understand which client still depends on it.
@@ -133,7 +133,7 @@ Open **Automate > Workflows**, inspect the run history, and check the runner sta
 
 ## Related
 
-- [Configure automation runs](/automations/configuration)
-- [Manage automations](/automations/manage)
-- [Automation reference](/automations/reference)
+- [Configure workflow runs](/workflows/configuration)
+- [Manage workflows](/workflows/manage)
+- [Workflow reference](/workflows/reference)
 - [Roles](/dashboard/roles)

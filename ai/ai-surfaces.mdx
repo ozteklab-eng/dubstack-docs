@@ -1,7 +1,7 @@
 ---
 title: AI surfaces
 sidebarTitle: AI surfaces
-description: Choose between the public assistant, public MCP, dashboard agent, integrations, and automations based on trust boundary and write access.
+description: Choose between the public assistant, public MCP, dashboard agent, integrations, and workflows based on trust boundary and write access.
 icon: panels-top-left
 ---
 
@@ -16,8 +16,8 @@ Use this page to choose the right surface before connecting tools, enabling assi
 | Public assistant | Docs readers | Published docs site | No |
 | Public MCP | External AI tools reading public docs | Published docs site `/mcp` | No |
 | Dashboard agent | Trusted workspace members | Dashboard | Yes, through reviewable repository changes when authoring is ready |
-| Agent integrations | Trusted workspace members and configured workflows | Dashboard-authorized providers | Indirectly, through the dashboard agent or automations |
-| Automations | Workspace members with workflow access | Dashboard and configured triggers | Yes, when the workflow has repository authoring access |
+| Agent integrations | Trusted workspace members and configured workflows | Dashboard-authorized providers | Indirectly, through the dashboard agent or workflows |
+| Workflows | Workspace members with workflow access | Dashboard and configured triggers | Yes, when the workflow has repository authoring access |
 
 ## Public assistant
 
@@ -73,13 +73,13 @@ The agent should open reviewable changes instead of silently editing the product
 
 Agent integrations add scoped context from tools such as Slack and Jira.
 
-Integrations do not write docs by themselves. They provide context that the agent or an automation can use when a user asks for a docs answer or documentation update.
+Integrations do not write docs by themselves. They provide context that the agent or a workflow can use when a user asks for a docs answer or documentation update.
 
 Keep integration scope narrow. Connect only providers that contain source context you are comfortable using for documentation work.
 
-## Automations
+## Workflows
 
-Automations use the same authoring boundary as the dashboard agent.
+Workflows use the same authoring boundary as the dashboard agent.
 
 They can run from manual, scheduled, repository, or content-update triggers depending on the workflow. Workflows that create documentation changes need repository authoring access and should produce reviewable changes unless explicitly configured otherwise.
 
@@ -89,7 +89,7 @@ Use repository instructions when you want the authoring agent and assistant to f
 
 | File | Used by | Notes |
 | --- | --- | --- |
-| `.dubstack/AGENTS.md` | Dashboard agent, Slack authoring, automations | Preferred private path for authoring rules. |
+| `.dubstack/AGENTS.md` | Dashboard agent, Slack authoring, workflows | Preferred private path for authoring rules. |
 | `.dubstack/Assistant.md` | Public assistant, when Enterprise custom instructions are enabled | Preferred private path for reader-assistant guidance. |
 
 Keep instruction files out of public navigation. Do not put credentials, API keys, or private incident details in them.
@@ -99,4 +99,4 @@ Keep instruction files out of public navigation. Do not put credentials, API key
 - [Assistant](/ai/assistant)
 - [Agent](/ai/agent)
 - [MCP](/ai/mcp)
-- [Automations](/automations)
+- [Workflows](/workflows)

@@ -48,12 +48,28 @@
       "destination": "/ai/assistant"
     },
     {
-      "source": "/workflows",
-      "destination": "/automations"
+      "source": "/automations",
+      "destination": "/workflows"
     },
     {
-      "source": "/workflow",
-      "destination": "/automations"
+      "source": "/automation",
+      "destination": "/workflows"
+    },
+    {
+      "source": "/automations/reference",
+      "destination": "/workflows/reference"
+    },
+    {
+      "source": "/automations/manage",
+      "destination": "/workflows/manage"
+    },
+    {
+      "source": "/automations/configuration",
+      "destination": "/workflows/configuration"
+    },
+    {
+      "source": "/automations/create",
+      "destination": "/workflows/create"
     },
     {
       "source": "/integrations",
@@ -742,27 +758,27 @@
             ]
           },
           {
-            "group": "Automations",
+            "group": "Workflows",
             "icon": "workflow",
             "pages": [
               {
-                "slug": "automations",
+                "slug": "workflows",
                 "icon": "workflow"
               },
               {
-                "slug": "automations/reference",
+                "slug": "workflows/reference",
                 "icon": "list-checks"
               },
               {
-                "slug": "automations/manage",
+                "slug": "workflows/manage",
                 "icon": "toggle-right"
               },
               {
-                "slug": "automations/configuration",
+                "slug": "workflows/configuration",
                 "icon": "settings-2"
               },
               {
-                "slug": "automations/create",
+                "slug": "workflows/create",
                 "icon": "plus"
               }
             ]

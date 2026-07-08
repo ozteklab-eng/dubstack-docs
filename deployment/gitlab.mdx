@@ -1,13 +1,13 @@
 ---
 title: GitLab
-description: Mirror docs into GitLab and connect GitLab authoring access for automations.
+description: Mirror docs into GitLab and connect GitLab authoring access for workflows.
 icon: gitlab
 ---
 
 GitLab support has two separate connections:
 
 - a deployment token that lets dubstack read or copy repository content
-- GitLab OAuth authoring access that lets automations act as an authorized GitLab user
+- GitLab OAuth authoring access that lets workflows act as an authorized GitLab user
 
 Developers can still use normal GitLab workflows. Clone the connected project, edit MDX files or `dubstack.json`, commit, push, and review changes through merge requests.
 
@@ -22,7 +22,7 @@ Developers can still use normal GitLab workflows. Clone the connected project, e
 | Copy docs from the active deployment source into GitLab | Supported |
 | Use GitLab as a backup or migration target | Supported |
 | Connect GitLab OAuth for agent and workflow authoring | Supported |
-| Create branches, commits, and merge requests from authorized automations | Supported when GitLab OAuth is connected |
+| Create branches, commits, and merge requests from authorized workflows | Supported when GitLab OAuth is connected |
 | Collect bounded merge request context for workflow runs | Supported when GitLab OAuth and repository context are connected |
 | Use GitLab as the active production deployment source | Workspace-controlled; verify the dashboard shows it as the active deployment source |
 | Self-hosted GitLab instance URL | Supported where the instance is reachable by dubstack |
@@ -132,7 +132,7 @@ Use the status in Git settings to confirm which GitLab capability is available.
 | Dashboard state | Meaning |
 | --- | --- |
 | GitLab copy target connected | The deployment token is valid and dubstack can copy docs into GitLab. |
-| GitLab OAuth connected | Automations can request GitLab authoring access when the connected user has project permissions. |
+| GitLab OAuth connected | Workflows can request GitLab authoring access when the connected user has project permissions. |
 | Active deployment source | The site reads from GitLab for production docs. This state appears only when GitLab deployment-source activation is enabled for the workspace. |
 | Copy docs available | GitLab is configured as a target and can receive a fresh copy from the current active source. |
 | Authoring not ready | The deployment token may be connected, but OAuth, repository scope, or site eligibility is missing. |
@@ -192,7 +192,7 @@ Before connecting:
 - confirm the public base URL is correct
 - confirm the project ID or path resolves through the GitLab API
 - confirm the token can access the project
-- confirm GitLab OAuth is configured if automations need to write changes
+- confirm GitLab OAuth is configured if workflows need to write changes
 - confirm outbound webhook/API traffic is allowed by your network policy
 
 For the authoring OAuth setup path, see [Self-hosted GitLab OAuth](/deployment/gitlab-self-hosted-oauth).

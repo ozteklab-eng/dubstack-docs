@@ -1,10 +1,10 @@
 ---
 title: AI credits and usage
-description: Understand how assistant, agent, Slack, and automation activity is tracked for usage reporting.
+description: Understand how assistant, agent, Slack, and workflow activity is tracked for usage reporting.
 icon: gauge
 ---
 
-AI usage reporting helps teams understand how assistant, agent, Slack, and automation activity contributes to their workspace allowance.
+AI usage reporting helps teams understand how assistant, agent, Slack, and workflow activity contributes to their workspace allowance.
 
 The dashboard is the source of truth for your current plan, allowance, billable status, and upgrade options.
 
@@ -17,7 +17,7 @@ AI usage can be recorded from these surfaces:
 | Public assistant | A reader asks a question from the published docs assistant. |
 | Dashboard agent | A teammate asks the dashboard agent to answer, draft, or inspect docs. |
 | Slack agent | A teammate mentions the agent in Slack and receives a docs answer or draft. |
-| Automations | A configured workflow drafts docs updates, changelog entries, link fixes, or audits. |
+| Workflows | A configured workflow drafts docs updates, changelog entries, link fixes, or audits. |
 
 Public MCP search and filesystem reads are tracked separately from generation-heavy assistant or agent runs.
 
@@ -74,14 +74,14 @@ If a feature is locked, check the dashboard reason before assuming the site is m
 
 ## Allowance model
 
-AI credits are a workspace-level allowance shared across assistant, agent, Slack, and automation surfaces.
+AI credits are a workspace-level allowance shared across assistant, agent, Slack, and workflow surfaces.
 
 This means the same monthly allowance can be consumed by:
 
 - public assistant answers
 - dashboard agent requests
 - Slack agent questions and draft pull requests
-- scheduled or event-driven automations
+- scheduled or event-driven workflows
 
 Free workspaces can use eligible trial or preview entitlements when available, but ongoing AI usage is intended for Pro and Enterprise workspaces. Enterprise workspaces can receive custom allowances, routing, and operational controls.
 
@@ -89,19 +89,19 @@ Free workspaces can use eligible trial or preview entitlements when available, b
   Credits are reporting and billing units, not raw model tokens. Token usage, retrieval cost, model route, and workflow complexity can all contribute to the credit estimate.
 </Callout>
 
-## Automation cost expectations
+## Workflow cost expectations
 
-Automation runs vary more than assistant answers because they may inspect multiple files, retrieve repository context, draft changes, and prepare a pull request.
+Workflow runs vary more than assistant answers because they may inspect multiple files, retrieve repository context, draft changes, and prepare a pull request.
 
 Typical run cost depends on:
 
-- the automation type
+- the workflow type
 - the number of files or pages inspected
 - the amount of context pulled from connected tools
 - whether the run drafts content, only audits, or exits with no suggested change
 - the assistant profile and model route selected for the workspace
 
-For predictable usage, schedule automations deliberately and keep their scope narrow. For example, run broad maintenance workflows weekly, but run targeted link or typo checks after relevant content changes.
+For predictable usage, schedule workflows deliberately and keep their scope narrow. For example, run broad maintenance workflows weekly, but run targeted link or typo checks after relevant content changes.
 
 ## Review usage
 
@@ -115,9 +115,9 @@ Use dashboard analytics and product pages to review usage:
 ## Reduce unnecessary usage
 
 - Ask focused questions instead of broad multi-page requests.
-- Scope automations to specific repositories, labels, branches, or schedules.
+- Scope workflows to specific repositories, labels, branches, or schedules.
 - Prefer review-mode workflows for production docs.
-- Disable automations that are no longer needed.
+- Disable workflows that are no longer needed.
 - Use feedback and analytics to prioritize high-impact docs changes.
 
 ## Related topics
@@ -125,7 +125,7 @@ Use dashboard analytics and product pages to review usage:
 <RelatedTopics>
   <a href="/ai/assistant">Assistant</a>
   <a href="/ai/agent">Agent</a>
-  <a href="/automations">Automations</a>
+  <a href="/workflows">Workflows</a>
   <a href="/optimize/analytics">Analytics</a>
   <a href="/dashboard/billing-plans">Billing and plans</a>
 </RelatedTopics>

@@ -22,7 +22,7 @@ If your site is mounted under a `/docs` subpath, use the mounted endpoint:
 https://your-domain.com/docs/mcp
 ```
 
-If docs authentication is enabled, unauthenticated MCP clients cannot read protected content. Readers must unlock the docs site first, and authoring agents should use dashboard, Git, Slack, or workflow surfaces instead of the public docs MCP.
+If docs authentication is enabled, unauthenticated MCP clients cannot read protected content. Readers must unlock the docs site first, and authoring agents should use dashboard, Git, Slack, or configured workflows instead of the public docs MCP.
 
 ## Public MCP compared to authoring surfaces
 
@@ -32,7 +32,7 @@ DubStack has separate MCP surfaces for separate jobs.
 | --- | --- | --- | --- |
 | Public docs MCP | Available | Readers, support teams, customers, and public AI tools | Read and search published public docs; submit documentation feedback when enabled. |
 | Protected docs MCP | Reserved | Readers who need signed-in access to protected docs | Not currently available for public sites. |
-| Authoring MCP | Reserved | Trusted team members and authoring agents | Not currently available from public docs sites. Authoring actions stay inside the dashboard, Git provider, Slack agent, and automation workflows. |
+| Authoring MCP | Reserved | Trusted team members and authoring agents | Not currently available from public docs sites. Authoring actions stay inside the dashboard, Git provider, Slack agent, and configured workflows. |
 
 Use the public `/mcp` endpoint for reader-facing documentation search. Do not use it for private docs, branch edits, dashboard settings, or pull-request workflows.
 
@@ -309,7 +309,7 @@ Do not use the public `/mcp` endpoint for private docs or dashboard write access
 
 Password-protected docs use the same reader session as the rendered site. Public MCP clients without that reader session cannot access protected pages, Markdown exports, `llms.txt`, `skill.md`, or discovery files that expose protected content.
 
-Dashboard content-management MCP is a separate product surface. Until that surface is available, use the dashboard, connected Git provider, Slack agent, and automation workflows for authenticated authoring tasks.
+Dashboard content-management MCP is a separate product surface. Until that surface is available, use the dashboard, connected Git provider, Slack agent, and configured workflows for authenticated authoring tasks.
 
 ## Troubleshooting
 

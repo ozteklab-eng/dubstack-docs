@@ -46,7 +46,7 @@ Treat the published docs site and its MCP server as the source of truth for curr
 - Public MCP: /ai/mcp
 - Assistant: /ai/assistant
 - Agent: /ai/agent
-- Workflows: /automations
+- Workflows: /workflows
 - Team roles: /dashboard/roles
 
 ## Feedback

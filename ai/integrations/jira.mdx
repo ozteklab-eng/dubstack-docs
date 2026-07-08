@@ -1,6 +1,6 @@
 ---
 title: Jira integration
-description: Connect Jira so the dashboard agent and automations can use scoped issue context.
+description: Connect Jira so the dashboard agent and workflows can use scoped issue context.
 icon: panels-top-left
 ---
 
@@ -14,7 +14,7 @@ Jira can provide:
 
 - issue keys, summaries, status, issue type, project, updated timestamp, links, and recent comments for dashboard agent answers
 - issue context for Slack agent requests when Jira context is requested
-- issue context for automations that support integrations
+- issue context for workflows that support integrations
 - bounded JQL-based context for recurring documentation workflows
 
 Jira is a read-only context source. It does not write documentation, update issues, read arbitrary Jira fields, or inspect issue attachments. The agent writes docs changes through the connected Git provider.
@@ -65,20 +65,20 @@ If the request needs precise issue selection, include the issue key, project, or
 
 If you ask for Jira context without an issue key or `jql:` query, the agent asks for a more specific issue or filter instead of guessing.
 
-## Use Jira context in automations
+## Use Jira context in workflows
 
-Automations that support integrations can enable Jira context.
+Workflows that support integrations can enable Jira context.
 
-When configuring the automation, set:
+When configuring the workflow, set:
 
 | Setting | Purpose |
 | --- | --- |
-| JQL | Narrows which issues the automation can read. |
+| JQL | Narrows which issues the workflow can read. |
 | Limit | Caps the number of issues included in a run. The default is 5 and the maximum is 10. |
 
 Keep JQL narrow. Smaller context usually produces better documentation updates and reduces unnecessary token usage.
 
-For each issue, the automation can include the issue summary, status, issue type, project, updated timestamp, issue link, and up to two recent comments. It does not include issue attachments or arbitrary custom fields.
+For each issue, the workflow can include the issue summary, status, issue type, project, updated timestamp, issue link, and up to two recent comments. It does not include issue attachments or arbitrary custom fields.
 
 Example JQL:
 

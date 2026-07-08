@@ -1,16 +1,16 @@
 ---
-title: Automation reference
-description: Review built-in automation triggers, requirements, and behavior.
+title: Workflow reference
+description: Review built-in workflow triggers, requirements, and behavior.
 icon: list-checks
 ---
 
-This page describes the built-in automations available from the dashboard.
+This page describes the built-in workflows available from the dashboard.
 
 Availability depends on your connected repository, authoring permissions, enabled add-ons, and runtime capabilities.
 
 ## At a glance
 
-| Automation | Default trigger | Default update mode | Context repos | Required setup |
+| Workflow | Default trigger | Default update mode | Context repos | Required setup |
 | --- | --- | --- | --- | --- |
 | Update from code changes | Custom schedule, twice weekly | Require review | Supported | At least one source repository |
 | Draft changelog | Custom schedule, weekly | Require review | Supported | None |
@@ -42,7 +42,7 @@ Updates content when source code for products, features, or APIs changes.
 | Context repositories | Supported |
 | Integrations | Supported |
 
-Use this automation when product source changes should produce a docs draft. Add selected source repositories as context so the agent can inspect relevant code while it runs.
+Use this workflow when product source changes should produce a docs draft. Add selected source repositories as context so the agent can inspect relevant code while it runs.
 
 Scheduled runs read bounded source change context since the previous comparable scheduled run. Code-change runs are queued from validated merged source repository events.
 
@@ -58,7 +58,7 @@ Drafts a changelog entry from recent product updates on a recurring schedule.
 | Required capabilities | Docs repository, repository write access, authoring model |
 | Context repositories | Supported |
 
-Use this automation to keep release notes and changelog pages fresh without requiring a manual first draft.
+Use this workflow to keep release notes and changelog pages fresh without requiring a manual first draft.
 
 ### Draft improvements from assistant conversations
 
@@ -71,7 +71,7 @@ Reviews assistant question trends and opens targeted content updates on a schedu
 | Update modes | Require review, automatically |
 | Required capabilities | Docs repository, repository write access, authoring model, assistant analytics |
 
-Use this automation when repeated reader questions show gaps in the docs.
+Use this workflow when repeated reader questions show gaps in the docs.
 
 ### Draft improvements from user feedback
 
@@ -84,7 +84,7 @@ Reviews page feedback and opens targeted updates on a schedule.
 | Update modes | Require review, automatically |
 | Required capabilities | Docs repository, repository write access, authoring model, feedback collection |
 
-Enable feedback collection before using this automation.
+Enable feedback collection before using this workflow.
 
 ## Maintenance workflows
 
@@ -100,7 +100,7 @@ Keeps selected languages in sync whenever content changes.
 | Required setup | At least one target language |
 | Current runner status | Blocked until translation routing and policy support are available |
 
-Use this automation after language routing is configured for the deployment.
+Use this workflow after language routing is configured for the deployment.
 
 ### Fix broken links
 
@@ -124,7 +124,7 @@ Audits titles, meta descriptions, headings, and canonical tags whenever content 
 | Default update mode | Require review |
 | Required capabilities | Docs repository, repository write access, authoring model |
 
-Use this automation to catch missing titles, weak descriptions, duplicate heading structures, and canonical issues.
+Use this workflow to catch missing titles, weak descriptions, duplicate heading structures, and canonical issues.
 
 ### Fix grammar & typos
 
@@ -136,7 +136,7 @@ Finds and fixes typos, spelling mistakes, and grammar errors whenever content ch
 | Default update mode | Require review |
 | Required capabilities | Docs repository, repository write access, authoring model |
 
-This automation is useful as a low-risk first automation because changes are usually small and easy to review.
+This workflow is useful as a low-risk first workflow because changes are usually small and easy to review.
 
 ### Apply style guide
 
@@ -149,11 +149,11 @@ Enforces your style guide's voice, tone, and rules whenever content changes.
 | Required capabilities | Docs repository, repository write access, authoring model |
 | Required setup | Style guide instructions |
 
-Add style guide rules before enabling this automation.
+Add style guide rules before enabling this workflow.
 
-## Custom automations
+## Custom workflows
 
-Custom automations let you define the trigger, instructions, context repositories, integrations, and update mode.
+Custom workflows let you define the trigger, instructions, context repositories, integrations, and update mode.
 
 | Setting | Value |
 | --- | --- |
@@ -163,18 +163,18 @@ Custom automations let you define the trigger, instructions, context repositorie
 | Context repositories | Supported |
 | Integrations | Supported |
 
-See [Create automations](/automations/create) for setup guidance.
+See [Create workflows](/workflows/create) for setup guidance.
 
 ## Slack notifications
 
-When Slack is connected, automations can post run results to selected channels.
+When Slack is connected, workflows can post run results to selected channels.
 
 Notification modes:
 
 | Mode | Behavior |
 | --- | --- |
-| All run results | Post when automation runs complete or fail. |
-| Failures only | Post only when an automation fails. |
+| All run results | Post when workflow runs complete or fail. |
+| Failures only | Post only when a workflow fails. |
 
 Pull-request workflows can also send review reminders and merged pull request updates.
 
