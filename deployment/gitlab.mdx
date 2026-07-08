@@ -137,6 +137,8 @@ Use the status in Git settings to confirm which GitLab capability is available.
 | Copy docs available | GitLab is configured as a target and can receive a fresh copy from the current active source. |
 | Authoring not ready | The deployment token may be connected, but OAuth, repository scope, or site eligibility is missing. |
 
+If Git settings asks you to reconnect GitLab OAuth, reconnect the GitLab account before running agent, Slack, or workflow authoring actions. This usually means the OAuth grant was revoked, expired, or lost access to the selected project. Reconnecting OAuth does not replace the deployment token; keep the deployment token configured when GitLab is also used for sync or copy operations.
+
 ## Active deployment source
 
 GitLab active-source mode means the site reads its production docs from GitLab instead of treating GitLab as a copy target.
@@ -218,6 +220,10 @@ OAuth and deployment tokens serve different purposes. Confirm the deployment tok
 ### Agent or Slack says GitLab authoring is not connected
 
 Connect GitLab OAuth in Git settings. The deployment token is not enough for merge-request authoring because authoring actions need a user-scoped OAuth connection.
+
+### GitLab OAuth needs to be reconnected
+
+Reconnect the GitLab account from Git settings, then expand the GitLab OAuth section and confirm the expected projects are visible. If projects are missing after reconnecting, check that the connected GitLab user still has access to the project and can create branches or merge requests.
 
 ### Workflow context skips GitLab merge requests
 
