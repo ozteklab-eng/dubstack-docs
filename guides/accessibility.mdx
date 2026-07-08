@@ -1,0 +1,134 @@
+---
+title: Accessibility
+description: Make your docs easier to read, navigate, search, and use with assistive technology.
+icon: accessibility
+---
+
+Accessible docs help every reader complete the same task with less effort. Treat accessibility as part of the writing and review workflow, not as a final pass before launch.
+
+## Start with page structure
+
+Use headings to describe the shape of the page.
+
+| Do | Avoid |
+| --- | --- |
+| Use one `#` heading for the page title. | Skipping from `##` to `####` because it looks smaller. |
+| Use `##` sections for the main task steps. | Using headings only for visual styling. |
+| Keep headings specific and action-oriented. | Repeating generic headings such as "Overview" several times. |
+| Put prerequisites before instructions. | Hiding important requirements inside a paragraph. |
+
+Good headings make the page easier to scan, improve search results, and create useful anchor links.
+
+See [Headings and anchors](/writing-content/headings-anchors) for heading behavior.
+
+## Write descriptive links
+
+Link text should explain where the reader will go.
+
+| Good | Weak |
+| --- | --- |
+| [Configure navigation](/configuration/navigation) | [Click here](/configuration/navigation) |
+| [GitHub setup](/deployment/github) | Read more |
+| [Troubleshoot publishing](/deployment/source-control-troubleshooting) | This page |
+
+Avoid using the full URL as visible link text unless the URL itself is the information the reader needs.
+
+## Add useful image text
+
+Images should have alt text that explains the purpose of the image.
+
+```mdx
+![Git settings page showing the connected repository and deployment branch](/images/git-settings.png)
+```
+
+Use empty alt text only for decorative images that add no meaning.
+
+```mdx
+![](/images/divider.png)
+```
+
+For complex screenshots, explain the important details in the surrounding text instead of relying on the image alone.
+
+See [Images and assets](/writing-content/images-assets) for asset paths and image syntax.
+
+## Keep instructions keyboard-friendly
+
+When documenting UI steps:
+
+- Name the control the reader should use.
+- Mention visible labels, not only colors or positions.
+- Avoid instructions that require hover-only behavior.
+- Include keyboard shortcuts only when they are optional or clearly supported.
+
+Example:
+
+```mdx
+Open **Settings > Deployment > Git settings**, then select the deployment branch.
+```
+
+This is better than:
+
+```mdx
+Click the green button on the right.
+```
+
+## Do not rely on color alone
+
+Use color as a reinforcement, not the only signal.
+
+| Pattern | Better pattern |
+| --- | --- |
+| "The red value means failed." | "The **Failed** status means the sync did not complete." |
+| "Choose the green option." | "Choose **Enable feedback**." |
+| "Warnings are yellow." | Use a warning callout with clear text. |
+
+Use [Callouts](/writing-content/callouts), [Badges](/writing-content/badges), and clear labels together.
+
+## Make code examples readable
+
+Code examples should be easy to copy and understand.
+
+- Include the filename or context before a code block when it matters.
+- Keep examples short enough to scan.
+- Use comments only when they explain a non-obvious decision.
+- Do not put secrets, private tokens, or real customer data in examples.
+- Provide the expected result after a command when it helps the reader verify success.
+
+See [Code blocks](/writing-content/code-blocks) and [Code groups](/writing-content/code-groups).
+
+## Use tables carefully
+
+Tables are useful for comparisons, but they are hard to read on small screens when they are too wide.
+
+Use tables for:
+
+- feature comparisons
+- short field descriptions
+- status meanings
+- required configuration values
+
+Avoid tables for long procedures. Use steps or headings instead.
+
+See [Tables](/writing-content/tables).
+
+## Review accessibility before publishing
+
+Before publishing a page, check:
+
+- The title and description explain the page outcome.
+- Heading order is logical.
+- Links are descriptive.
+- Images have useful alt text.
+- UI instructions do not rely on color or position alone.
+- Code examples are copyable and do not contain secrets.
+- Tables stay readable on mobile.
+- The page appears in navigation only when readers should find it there.
+- Search and assistant answers can cite the page clearly.
+
+## Related
+
+- [Text formatting](/writing-content/text-formatting)
+- [Headings and anchors](/writing-content/headings-anchors)
+- [Images and assets](/writing-content/images-assets)
+- [Callouts](/writing-content/callouts)
+- [Search optimization](/optimize/search)

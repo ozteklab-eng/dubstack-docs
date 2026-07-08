@@ -1,0 +1,172 @@
+---
+title: Style and tone
+description: Write docs that are direct, useful, and consistent across product, API, and workflow pages.
+icon: pen-line
+---
+
+Good documentation is specific about the reader's goal, honest about product behavior, and consistent across pages.
+
+Use this guide when writing or reviewing product docs, API guides, migration pages, assistant instructions, and workflow docs.
+
+## Writing principles
+
+| Principle | What it means |
+| --- | --- |
+| Be direct | Tell the reader what to do and why it matters. |
+| Be concrete | Use real product terms, page names, file paths, and expected outcomes. |
+| Be honest | Do not document features that are not shipped or validated. |
+| Be consistent | Use the same names for the same concepts across the docs. |
+| Be scannable | Use short sections, tables, and lists when they reduce effort. |
+
+## Prefer task outcomes
+
+Start pages with the outcome the reader gets.
+
+Good:
+
+```mdx
+Use this guide to connect a GitHub repository and publish docs from your deployment branch.
+```
+
+Weak:
+
+```mdx
+This page explains GitHub.
+```
+
+Readers should know within a few seconds whether they are on the right page.
+
+## Use consistent product terms
+
+Use these terms consistently:
+
+| Use | Meaning |
+| --- | --- |
+| Site | A published docs site managed from the dashboard. |
+| Workspace | The team/account area that owns sites, members, billing, and integrations. |
+| Deployment branch | The Git branch used to publish the live docs site. |
+| Published artifacts | The built content served by the public docs frontend. |
+| Assistant | The reader-facing docs assistant on the public site. |
+| Agent | The dashboard or Slack authoring agent that can draft docs changes. |
+| Workflow | A scheduled or event-driven automation that reviews or updates docs. |
+| Public MCP | The read-only MCP surface for published docs. |
+
+Avoid switching between multiple names for the same thing.
+
+## Be clear about availability
+
+If a feature depends on plan, provider, repository access, or product state, say so near the top of the page.
+
+Examples:
+
+- "Custom domains require a paid plan."
+- "Self-hosted GitLab must be reachable over HTTPS."
+- "Agent-authored pull requests require repository authoring access."
+- "Enterprise SSO requires an Enterprise workspace."
+
+Do not bury availability in troubleshooting sections.
+
+## Write procedures as steps
+
+Use numbered steps when order matters.
+
+```mdx
+1. Open **Settings > Deployment > Git settings**.
+2. Select the provider.
+3. Choose the repository and branch.
+4. Save changes.
+5. Run a manual update if the site does not sync automatically.
+```
+
+Use bullets when order does not matter.
+
+## Keep examples realistic
+
+Use examples that look like real docs projects without exposing secrets.
+
+Good placeholder values:
+
+- `your-org`
+- `your-docs-repo`
+- `docs.example.com`
+- `api.example.com`
+- `<token>`
+
+Avoid real customer domains, private tokens, personal email addresses, or internal hostnames in public docs.
+
+## Structure product pages
+
+Most product pages should follow this shape:
+
+1. Outcome summary.
+2. Prerequisites.
+3. Setup steps.
+4. What happens after setup.
+5. Troubleshooting.
+6. Related pages.
+
+Short reference pages can use a simpler structure, but they should still explain when to use the feature.
+
+## Structure API pages
+
+API pages should make the request and response clear before asking readers to try it.
+
+Include:
+
+- base URL and authentication context
+- method and path
+- required parameters
+- request body fields
+- success response
+- common errors
+- example request
+- related endpoints
+
+See [API reference introduction](/api-reference/introduction) and [Request builder](/api-reference/request-builder).
+
+## Write troubleshooting sections carefully
+
+Troubleshooting should identify the likely failing boundary.
+
+Good:
+
+```mdx
+If manual update succeeds but automatic updates do not run, check the provider webhook.
+```
+
+Weak:
+
+```mdx
+If it does not work, try again later.
+```
+
+Use the source-control path when debugging publishing issues:
+
+```text
+Git repository
+-> webhook or manual update
+-> sync worker
+-> published artifacts
+-> public docs site, search, assistant, and MCP
+```
+
+## Match docs to shipped behavior
+
+Before publishing a page, verify:
+
+- The feature exists in the product.
+- The UI labels in the docs match the dashboard.
+- The plan or permission requirements are accurate.
+- Links resolve on the live docs site.
+- Commands and code examples are copyable.
+- The assistant and public MCP can cite the page after sync.
+
+If a feature is planned but not shipped, keep it in internal planning docs instead of public docs.
+
+## Related
+
+- [Accessibility](/guides/accessibility)
+- [Pages and files](/writing-content/pages-files)
+- [Branching and publishing](/editor/branching-and-publishing)
+- [Source control troubleshooting](/deployment/source-control-troubleshooting)
+- [Public MCP](/ai/mcp)

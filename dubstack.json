@@ -829,6 +829,24 @@
         "tab": "Guides",
         "groups": [
           {
+            "group": "Writing and quality",
+            "icon": "pen-line",
+            "pages": [
+              {
+                "slug": "guides/index",
+                "icon": "map"
+              },
+              {
+                "slug": "guides/accessibility",
+                "icon": "accessibility"
+              },
+              {
+                "slug": "guides/style-and-tone",
+                "icon": "pen-line"
+              }
+            ]
+          },
+          {
             "group": "Deployment",
             "icon": "rocket",
             "pages": [
