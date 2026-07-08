@@ -172,8 +172,7 @@
               {
                 "slug": "getting-started/deploy",
                 "icon": "upload-cloud"
-              },
-              "cli"
+              }
             ]
           },
           {
