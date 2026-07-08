@@ -16,7 +16,7 @@ Use this page to choose the right surface before connecting tools, enabling assi
 | Public assistant | Docs readers | Published docs site | No |
 | Public MCP | External AI tools reading public docs | Published docs site `/mcp` | No |
 | Dashboard agent | Trusted workspace members | Dashboard | Yes, through reviewable repository changes when authoring is ready |
-| Agent integrations | Trusted workspace members and configured workflows | Dashboard-authorized providers | Indirectly, through the dashboard agent or workflows |
+| Integrations | Trusted workspace members and configured workflows | Dashboard-authorized providers | Indirectly, through the dashboard agent or workflows |
 | Workflows | Workspace members with workflow access | Dashboard and configured triggers | Yes, when the workflow has repository authoring access |
 
 ## Public assistant
@@ -69,9 +69,9 @@ Authoring actions require:
 
 The agent should open reviewable changes instead of silently editing the production branch.
 
-## Agent integrations
+## Integrations
 
-Agent integrations add scoped context from tools such as Slack and Jira.
+Integrations add scoped context from tools such as Slack and Jira.
 
 Integrations do not write docs by themselves. They provide context that the agent or a workflow can use when a user asks for a docs answer or documentation update.
 
