@@ -1,10 +1,10 @@
 ---
 title: Integrations
-description: Connect collaboration and issue-tracking tools so the dashboard agent can use bounded team context.
+description: Connect collaboration, issue-tracking, and workspace tools so agents and workflows can use bounded team context.
 icon: plug
 ---
 
-Integrations let the dashboard agent use context from the tools where product work already happens.
+Integrations let agents and workflows pull live context from the tools where product work already happens.
 
 Use integrations when a documentation update depends on a conversation, issue, release plan, or support signal that is not already in the published docs.
 
@@ -18,6 +18,8 @@ Integrations can help the agent:
 - notify teams when workflow runs finish
 
 They do not change the source of truth. Documentation changes still write through the connected Git provider.
+
+Connected providers are used as tools for a specific agent or workflow run. dubstack does not proactively read connected apps in the background, and the run should only fetch provider context when that context is relevant to the task.
 
 ## Available integrations
 
@@ -43,6 +45,8 @@ For scope, eligibility, missing scopes, and disconnect behavior, see [Integratio
 
 ## Connect an integration
 
+Admins and editors can connect shared integrations on behalf of the organization. Viewers can use enabled read-only surfaces when their role allows it, but they cannot configure provider access.
+
 1. Open the dashboard.
 2. Select the deployment.
 3. Go to **Settings > Organization > Integrations**.
@@ -51,6 +55,8 @@ For scope, eligibility, missing scopes, and disconnect behavior, see [Integratio
 6. Return to the dashboard and confirm the integration status is connected.
 
 Some integrations also appear inside the **Agent** setup flow when they are required for that surface.
+
+Some providers need an additional configuration step before authorization completes. For example, issue-tracking or knowledge-base providers can ask for a workspace URL, site subdomain, project, or API key before the provider connection is saved.
 
 ## Shared and personal connections
 
@@ -73,7 +79,7 @@ To enable integrations for a workflow:
 4. Select the connected integrations in the available integrations section.
 5. Save the workflow.
 
-Only providers already connected for the organization or user appear as selectable workflow context. The workflow run fetches live context only when it needs that provider for the configured task.
+Only providers already connected for the organization or user appear as selectable workflow context. The workflow run fetches live context only when it needs that provider for the configured task; it does not scan connected apps outside the selected workflow scope.
 
 ## Scope and safety
 
@@ -99,7 +105,9 @@ Reconnect an integration when the provider token expires, an admin revokes the a
 3. Disconnect or reconnect the provider.
 4. Complete the provider authorization flow again.
 
-Disconnecting a shared integration removes it for everyone in the organization. Disconnecting a personal integration removes only that user's connection. Existing docs, pull requests, merge requests, and historical run records remain in place.
+Disconnecting a shared integration removes it for everyone in the organization. Disconnecting a personal integration removes only that user's connection.
+
+Disconnecting cuts off future live reads from that provider. Existing docs, pull requests, merge requests, and historical run records remain in place because they are separate review or audit artifacts.
 
 ## Related
 

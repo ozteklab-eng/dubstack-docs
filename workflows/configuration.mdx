@@ -90,6 +90,8 @@ Slack context requires a selected channel. A thread timestamp can narrow the con
 
 Jira context requires a JQL query. The workflow reads a bounded number of issues, capped at 10 per run.
 
+The workflow uses integration context as a live tool for the run. It does not proactively read from connected apps, and it does not use providers that were not selected for the workflow.
+
 ## Translation settings
 
 Translation workflows require at least one target language and deployment-level translation routing.

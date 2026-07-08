@@ -64,6 +64,13 @@ To narrow access, limit the permissions of the connected account in the source a
 
 Connecting or disconnecting integrations requires permission to configure integrations for the current organization or deployment.
 
+| Role | Configure shared integrations | Use connected read-only context |
+| --- | --- | --- |
+| Viewer | No | Yes, when the surface allows read-only questions. |
+| Editor | Yes | Yes. |
+| Admin | Yes | Yes. |
+| Owner | Yes | Yes. |
+
 Integration context should only be used when:
 
 - the provider is connected
@@ -90,7 +97,7 @@ Disconnecting does not remove:
 - historical run records
 - already-published docs content
 
-The agent fetches provider content when a run needs it. dubstack does not use disconnected integrations for future context retrieval after the disconnect completes.
+The agent fetches provider content when a run needs it. dubstack does not proactively read connected apps, and it does not use disconnected integrations for future context retrieval after the disconnect completes.
 
 ## Troubleshooting
 
