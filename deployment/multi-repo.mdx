@@ -23,7 +23,7 @@ That source contains:
 When the deployment branch changes, the sync worker publishes that source into the artifacts used by the public site.
 
 <Callout type="warning">
-  Do not connect multiple repositories as competing production sources for the same docs content type. Keep one active source for the live site, then use branches, pull requests, mirrors, or additional context repositories for related workflows.
+  Do not connect multiple repositories as competing production sources for the same docs content type. Keep one active source for the live site, then use branches, pull requests, repository copies, or additional context repositories for related workflows.
 </Callout>
 
 ## Choose the right pattern
@@ -31,8 +31,8 @@ When the deployment branch changes, the sync worker publishes that source into t
 | Goal | Recommended pattern |
 | --- | --- |
 | Docs live in a subdirectory of a larger product repo | Use [Monorepo setup](/deployment/monorepo). |
-| Product docs, API specs, and SDK guides live in separate repos but should publish as one site | Choose one production docs source and import or mirror the other content into that source until combined multi-source deployment is enabled for your workspace. |
-| Keep a copy of docs in another provider | Use Git provider mirroring or sync rules where available. |
+| Product docs, API specs, and SDK guides live in separate repos but should publish as one site | Choose one production docs source and import or copy the other content into that source until combined multi-source deployment is enabled for your workspace. |
+| Keep a copy of docs in another provider | Use a repository copy target where available. Treat it as a copy until you explicitly make that provider the active source. |
 | Give the agent or workflows extra repository context | Grant repository access as context, but keep the production docs source unchanged. |
 | Publish separate docs sites from separate repos | Create separate sites, each with its own source repository and custom domain or path strategy. |
 
@@ -72,18 +72,22 @@ Configure the docs path as `docs`. Published URLs do not include the source dire
 
 See [Monorepo setup](/deployment/monorepo) for the full setup.
 
-## Mirroring and provider copies
+## Repository copies
 
-Mirroring copies content between Git providers or repositories for backup, migration, or provider evaluation.
+Repository copies move content between Git providers or repositories for backup, migration, or provider evaluation.
 
-Use mirroring when you want to:
+Use a repository copy when you want to:
 
 - keep a GitLab copy while GitHub remains the production source
 - migrate a docs source from one provider to another
 - preserve source history during a provider transition
 - test provider-specific authoring flows without changing the live source immediately
 
-Mirroring is not the same as multi-source deployment. A mirror target is a copy target unless you explicitly make it the active source in Git settings.
+Repository copies are not the same as multi-source deployment. A copy target does not publish the live site unless you explicitly make that provider the active source in Git settings.
+
+<Callout type="info">
+  Copy targets are on-demand unless your workspace has an explicit continuous copy worker enabled. If you need continuous provider-to-provider copying, confirm that capability with your dubstack operator before using it as part of a production runbook.
+</Callout>
 
 ## Context repositories
 
@@ -162,9 +166,9 @@ Overlapping paths make redirects, search indexing, source-specific previews, and
 
 Open **Settings > Deployment > Git settings** and confirm the active repository, branch, and docs path.
 
-### A mirror updated but the live site did not
+### A repository copy updated but the live site did not
 
-Confirm whether the mirror target is the active production source. If it is only a copy target, it will not update the public site until you make it active.
+Confirm whether the copy target is the active production source. If it is only a copy target, it will not update the public site until you make it active.
 
 ### Agent changes appear in a different repository
 
@@ -172,7 +176,7 @@ Check the agent readiness panel and repository access settings. Agent authoring 
 
 ### Content from another repository is missing
 
-If the content should be published, move or mirror it into the active docs source, or use a separate site for that repository.
+If the content should be published, move or copy it into the active docs source, or use a separate site for that repository.
 
 ## Related
 
