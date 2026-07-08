@@ -1,0 +1,33 @@
+---
+title: CLI preview
+description: Understand the planned local preview workflow and current preview options.
+---
+
+CLI preview is planned but not generally available yet.
+
+Today, use the supported preview paths:
+
+- dashboard live preview while editing content
+- preview deployments for branch and pull-request review
+- public wiki previews for migration and acquisition previews
+
+## Planned preview behavior
+
+The CLI preview command should eventually render docs locally from the same source files used in production:
+
+```bash
+# planned shape, not yet generally available
+dubstack preview
+```
+
+A useful local preview must check more than page rendering. It should also surface:
+
+- missing files referenced by navigation
+- invalid `dubstack.json` structure
+- unresolved internal links
+- OpenAPI parsing errors
+- assets that are too large or missing from the repository
+
+## Use preview deployments today
+
+For source-backed review today, use [preview deployments](/deployment/preview-deployments). They keep validation close to the production rendering path and make it easier for teammates to review docs changes in a browser.
