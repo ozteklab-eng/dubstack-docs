@@ -112,6 +112,10 @@ To connect OAuth:
 3. Click **Connect GitLab** for hosted GitLab or **Connect Self-Hosted GitLab** for a reachable self-hosted instance.
 4. Complete the GitLab authorization flow.
 5. Return to Git settings and confirm the GitLab account is connected.
+6. Expand the connected GitLab account.
+7. Expand **Personal projects** or a GitLab group.
+8. Search for the repositories that workflows should use as authoring context.
+9. Select each project that should be available to workflow and agent authoring.
 
 After OAuth is connected, eligible authoring actions can:
 
@@ -133,6 +137,7 @@ Use the status in Git settings to confirm which GitLab capability is available.
 | --- | --- |
 | GitLab copy target connected | The deployment token is valid and dubstack can copy docs into GitLab. |
 | GitLab OAuth connected | Workflows can request GitLab authoring access when the connected user has project permissions. |
+| GitLab project selected | The selected project can be used as workflow or agent repository context for GitLab authoring. |
 | Active deployment source | The site reads from GitLab for production docs. This state appears only when GitLab deployment-source activation is enabled for the workspace. |
 | Copy docs available | GitLab is configured as a target and can receive a fresh copy from the current active source. |
 | Authoring not ready | The deployment token may be connected, but OAuth, repository scope, or site eligibility is missing. |
@@ -180,6 +185,7 @@ GitLab authoring is ready when all of these are true:
 - the site has an active GitLab docs repository connection
 - the repository is not a hosted fallback and the deployment is not protected from repository mutations
 - GitLab OAuth authoring access is connected for the site or organization
+- the GitLab account has the relevant personal or group project selected in Git settings
 - the connected GitLab user can read the project and create branches or merge requests
 - the authoring model is enabled for the workspace
 
