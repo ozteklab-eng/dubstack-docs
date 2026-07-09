@@ -69,10 +69,37 @@ The feedback view shows:
 - sentiment breakdown for positive and negative ratings
 - top pages with submitted feedback
 - source breakdown across pages, assistant answers, and agent actions
+- review status counts for collected feedback
 - recent feedback entries with page path and source metadata
 - optional reader email addresses when collection is enabled
 
 Feedback is scoped to the selected deployment. Switch deployments to review a different docs site.
+
+## Manage feedback status
+
+Use review status to track feedback from triage through completion.
+
+| Status | Use it when |
+| --- | --- |
+| Pending | The feedback is new and has not been reviewed yet. |
+| In progress | Someone is actively updating docs or investigating the report. |
+| Resolved | The docs change is complete or the reported issue is fixed. |
+| Dismissed | The feedback is duplicate, no longer relevant, or not actionable. |
+
+Open **Analytics > Feedback**, then use the status selector beside a recent feedback entry. Status changes are saved for the selected deployment and appear in the **Review status** panel.
+
+## Add internal notes
+
+Internal notes help your team track follow-up without exposing details to readers.
+
+Use notes to:
+
+- assign ownership
+- link support tickets or engineering issues
+- record why feedback was dismissed
+- summarize the docs change that resolved the report
+
+Internal notes are only visible inside the dashboard.
 
 ## Turn feedback into fixes
 

@@ -136,6 +136,12 @@ Server-card responses include tool metadata and safety annotations so MCP client
 
 The public server reserves `/mcp` for MCP. Do not create docs pages or redirects at that path.
 
+## Caching
+
+Do not cache `/mcp`. It is the MCP transport endpoint and can reflect current site state, add-on settings, and session behavior.
+
+The discovery documents under `/.well-known/mcp*` and the server-card responses are metadata documents and may be cached by normal edge caches. If you use a reverse proxy, preserve the cache headers returned by dubstack.
+
 ## Tool safety annotations
 
 The server card describes tool behavior so MCP clients can show the right approval prompts:

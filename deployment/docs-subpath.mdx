@@ -68,6 +68,8 @@ GET /docs/.well-known/* -> dubstack origin discovery metadata
 
 Do not strip `/docs` before forwarding to dubstack. The origin is designed to receive the `/docs` prefix and render public links, assets, assistant calls, search, MCP metadata, and LLM indexes under that same prefix.
 
+Preserve dubstack response cache headers. In particular, do not cache `/docs/mcp`; it is the MCP transport endpoint. Discovery metadata under `/docs/.well-known/mcp*` can be cached normally.
+
 ## Cloudflare Worker example
 
 Use this when your root domain is already routed through Cloudflare Workers.
