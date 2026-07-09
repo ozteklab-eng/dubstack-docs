@@ -734,7 +734,7 @@
                 "icon": "file-cog"
               },
               {
-                "slug": "ai/integrations",
+                "slug": "ai/integrations/index",
                 "icon": "plug"
               },
               {
