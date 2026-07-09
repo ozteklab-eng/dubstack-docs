@@ -800,6 +800,10 @@
                 "icon": "settings-2"
               },
               {
+                "slug": "workflows/integrations",
+                "icon": "plug-zap"
+              },
+              {
                 "slug": "workflows/create",
                 "icon": "plus"
               }

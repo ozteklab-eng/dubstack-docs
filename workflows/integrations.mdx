@@ -1,0 +1,131 @@
+---
+title: Workflow integrations
+description: Use connected integrations as bounded context and notification channels for workflow runs.
+icon: plug-zap
+---
+
+Workflow integrations let a workflow use selected external context while it drafts documentation updates.
+
+Use integrations when the source of truth for a docs update lives outside the docs repository, such as a Slack thread, Jira issue, release discussion, or support handoff.
+
+<Callout type="info">
+  Integrations provide context or notifications. They do not become the documentation source of truth. Workflow changes still write through the connected Git provider.
+</Callout>
+
+## Requirements
+
+Before a workflow can use an integration, confirm:
+
+- the integration is connected from **Settings > Organization > Integrations**
+- the current deployment is eligible for workflows
+- the workflow supports integration context
+- the workflow configuration selects the integration
+- the connected account has access to the source data
+- repository authoring is ready for any workflow that creates docs changes
+
+If any requirement is missing, the workflow should show a blocking reason instead of running with incomplete context.
+
+## Supported integration context
+
+| Integration | Workflow use | Required setup |
+| --- | --- | --- |
+| Slack | Read selected channel or thread context and send workflow notifications. | Connect Slack, invite the app to private channels if needed, and select the channel or thread in workflow settings. |
+| Jira | Read bounded issue context from a JQL query. | Connect Jira and configure a JQL query plus an issue limit. |
+
+Other providers can appear as catalog items before they are available. Catalog-only providers cannot be selected for a run until authorization, scopes, collectors, access checks, and workflow support are active.
+
+## Shared and personal integrations
+
+Workflow integrations can be shared or personal.
+
+| Scope | Behavior |
+| --- | --- |
+| Shared | One organization-level connection is available to permitted workflows and workspace members. Use this for team systems such as Slack, Jira, issue trackers, knowledge bases, support tools, and CRM systems. |
+| Personal | Each user authorizes their own account. Use this for user-specific context such as calendar or drive data when that context should not be shared across the whole organization. |
+
+Current shipped workflow integrations are shared. Personal integrations are reserved for providers where the data naturally belongs to one user.
+
+## Select integrations for a workflow
+
+1. Open **Automate > Workflows**.
+2. Choose a workflow.
+3. Open the configuration drawer.
+4. Find the integration context section.
+5. Select the connected integrations the workflow should use.
+6. Fill in provider-specific fields, such as Slack channel, Slack thread timestamp, Jira JQL, or issue limit.
+7. Save the workflow.
+
+Only integrations that are connected and supported by that workflow appear as selectable options.
+
+## Keep context bounded
+
+Use the narrowest context that can answer the workflow's task.
+
+Good examples:
+
+```text
+Use Slack thread 1719400000.000000 from #release-notes and draft a changelog entry.
+```
+
+```text
+Use Jira context with jql: project = DOCS AND fixVersion = "2026.07" ORDER BY updated DESC, limit 5.
+```
+
+Avoid broad context:
+
+```text
+Read everything in Slack and update the docs.
+```
+
+Broad context increases cost, makes the output harder to review, and can include irrelevant source material.
+
+## Notifications
+
+Slack can also be used as a notification sink.
+
+When Slack notifications are enabled for a workflow, choose:
+
+| Mode | Behavior |
+| --- | --- |
+| All results | Send a message when a run succeeds or fails. |
+| Failures only | Send a message only when a run fails. |
+
+Pull-request workflows can also send review reminders and merged pull request updates when that lifecycle notification is enabled.
+
+Notification configuration is separate from Slack context. A workflow can notify Slack without reading Slack context, or read Slack context without sending run notifications.
+
+## Safety boundaries
+
+Workflow integration access follows these rules:
+
+- integrations are read-only context unless a provider-specific write capability is explicitly implemented
+- docs updates are written through the connected Git provider
+- connected providers are used only when the workflow requests that capability
+- workflow runs should record which connectors were used for audit and usage reporting
+- disconnecting an integration stops future workflow access to that provider
+
+## Troubleshooting
+
+### Integration does not appear in workflow settings
+
+Confirm the integration is connected, the workflow supports that integration family, and the deployment is eligible for workflows.
+
+### Slack channel is missing
+
+Invite the app to the channel. Private channels only appear after the app has been added.
+
+### Jira query returns no context
+
+Check that the connected Jira account can see the issues returned by the JQL query. Keep the issue limit low while testing.
+
+### Workflow runs without expected context
+
+Open the run details and check the selected integrations, collected context count, and readiness messages. If the integration was disconnected or missing scopes, reconnect it from **Settings > Organization > Integrations**.
+
+## Related
+
+- [Configure workflow runs](/workflows/configuration)
+- [Connector capabilities](/ai/connector-capabilities)
+- [Integration permissions and scopes](/ai/integration-permissions)
+- [Slack integration](/ai/integrations/slack)
+- [Jira integration](/ai/integrations/jira)
