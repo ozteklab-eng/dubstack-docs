@@ -25,6 +25,18 @@ Use them when a trusted system needs to call dubstack on behalf of your organiza
 
 The first supported scope is `workflows:run`, which allows a key to trigger eligible workflow runs through the Admin API.
 
+## Key types
+
+DubStack uses different credentials for different trust boundaries.
+
+| Credential | Where it is managed | Who uses it | Use it for |
+| --- | --- | --- | --- |
+| Admin API key | **Settings > Security > API keys** | Your backend systems, CI jobs, schedulers, and trusted automation | Calling DubStack Admin API routes such as workflow triggers. |
+| Playground credential | API playground and your OpenAPI security scheme | Docs readers trying your documented API | Supplying a bearer token, API key, or other credential for your own API at request time. |
+| Reader session | Docs authentication | Signed-in docs readers | Unlocking protected documentation pages. |
+
+Do not reuse one credential type for another. Admin API keys are for DubStack automation only. Playground credentials belong to your API and should be entered by readers only when they intentionally send a request from the API reference.
+
 ## Create a key
 
 1. Open the dashboard.
