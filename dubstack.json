@@ -180,6 +180,10 @@
             "icon": "cloud",
             "pages": [
               {
+                "slug": "deployment/git-settings",
+                "icon": "settings"
+              },
+              {
                 "slug": "deployment/github",
                 "icon": "github"
               },
@@ -917,6 +921,10 @@
               {
                 "slug": "deployment/forgejo-github-gitlab",
                 "icon": "git-merge"
+              },
+              {
+                "slug": "deployment/git-settings",
+                "icon": "settings"
               },
               {
                 "slug": "deployment/github",

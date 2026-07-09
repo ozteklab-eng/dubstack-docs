@@ -1,0 +1,210 @@
+---
+title: Git settings
+description: Configure the repository, branch, provider access, and authoring connections used by a dubstack site.
+---
+
+Git settings control where a site reads documentation from and which Git provider actions are available for publishing, previews, editor saves, agents, and workflows.
+
+Open **Settings > Deployment > Git settings** from the dashboard.
+
+## What Git settings controls
+
+Git settings has three separate jobs:
+
+| Job | What it controls |
+| --- | --- |
+| Deployment source | The repository, branch, and optional docs directory used to publish the live docs site. |
+| Provider access | The GitHub App or GitLab token that lets dubstack read source files and receive repository events. |
+| Authoring access | OAuth or app permissions that let approved agents, Slack requests, editor saves, and workflows create reviewable documentation changes. |
+
+Keep these jobs separate when troubleshooting. A site can read from a repository while authoring is blocked, and an OAuth connection can be healthy while the deployment source still points somewhere else.
+
+<Callout type="info">
+  The docs repository remains the source of truth. Dashboard publishing, agents, Slack, and workflows write through the configured Git provider instead of bypassing repository review.
+</Callout>
+
+## Active deployment source
+
+The active source card shows the repository that publishes the site.
+
+Check these fields before debugging content updates:
+
+- provider
+- organization or namespace
+- repository or project
+- branch
+- docs directory, if docs are in a subdirectory
+- last sync time
+- latest manual update result
+
+If the wrong branch is selected, pushes to the expected branch will not update the live docs site.
+
+## Provider picker
+
+Use the Git provider picker to choose the provider you want to configure.
+
+Changing the visible provider does not automatically migrate production traffic. Save and validate the source before treating a new provider as active.
+
+| Provider | Typical use |
+| --- | --- |
+| GitHub | Primary repository source with GitHub App access, preview deployments, editor commits, and pull-request authoring. |
+| GitLab | Repository copy target, GitLab-backed source where enabled, and merge-request authoring through GitLab OAuth. |
+| Self-hosted GitLab | OAuth authoring against a reachable self-hosted GitLab instance after the workspace is configured. |
+
+Forgejo and additional providers can be enabled for selected workspaces as provider support matures. When a provider is not enabled, do not rely on it for a production deployment.
+
+## GitHub setup
+
+GitHub source sync uses the dubstack GitHub App.
+
+Use the GitHub App section to:
+
+- install the app into an organization
+- grant repository access
+- open provider-side installation settings
+- verify which organizations and repositories are installed
+
+Grant access only to the docs repository and any repositories intentionally used as agent or workflow context.
+
+<Callout type="warning">
+  Do not use personal access tokens for GitHub deployment source sync. GitHub source sync should use the GitHub App installation so repository access, events, and pull-request actions remain auditable.
+</Callout>
+
+See [GitHub](/deployment/github) for the full setup and permission model.
+
+## GitLab setup
+
+GitLab has two connections that serve different purposes.
+
+| Connection | Purpose |
+| --- | --- |
+| GitLab deployment token | Reads or copies repository content, validates branches, and supports GitLab source configuration where enabled. |
+| GitLab OAuth | Lets agents and workflows act as an authorized GitLab user to create branches, commits, and merge requests. |
+
+Use the GitLab deployment settings when you need to configure the project, branch, token, or instance URL.
+
+Use the GitLab OAuth section when workflows, Slack, or the dashboard agent need to create GitLab merge requests or use selected GitLab projects as repository context.
+
+If GitLab is configured only as a copy target, pushes to GitLab do not publish the live site. The active deployment source still controls production publishing.
+
+See [GitLab](/deployment/gitlab) and [Self-hosted GitLab OAuth](/deployment/gitlab-self-hosted-oauth) for setup details.
+
+## Docs in a subdirectory
+
+Enable **Docs are in a subdirectory** when `dubstack.json` is not at the repository root.
+
+Example:
+
+```text
+product-repo/
+|-- apps/
+|-- packages/
+`-- docs/
+    |-- dubstack.json
+    |-- index.mdx
+    `-- quickstart.mdx
+```
+
+Set the docs directory to `docs` for that structure.
+
+Do not include a leading or trailing slash. The path should be relative to the repository root.
+
+For monorepo guidance, see [Monorepo setup](/deployment/monorepo).
+
+## Manual update
+
+Use manual update when you want to re-read the active source without waiting for another Git provider event.
+
+Manual update is useful after:
+
+- changing the repository, branch, or docs directory
+- granting repository access to the GitHub App
+- rotating a GitLab token
+- fixing a webhook delivery issue
+- importing or copying docs between providers
+
+After the update finishes, confirm the public site and MCP/search surfaces reflect the latest content.
+
+See [Manual updates and history](/deployment/manual-updates-history).
+
+## Authoring readiness
+
+Authoring readiness is separate from source readability.
+
+Agent, Slack, editor, and workflow authoring can require:
+
+- repository write access through the configured provider
+- permission to create branches
+- permission to open pull requests or merge requests
+- branch protection that allows reviewable changes
+- OAuth authoring access where the provider requires a user grant
+- workflow eligibility for the current site
+
+If authoring is blocked, keep the live deployment source intact and fix the missing authoring permission shown by the readiness panel.
+
+## Repository copy targets
+
+A copy target is a secondary repository used for backup, migration, or provider evaluation.
+
+Copy targets are not the same as the active deployment source.
+
+Use a copy target when you want to:
+
+- keep a backup in another Git provider
+- test a provider migration before switching production
+- validate GitLab or Forgejo flows without disrupting a GitHub-backed site
+- preserve a clean escape path if a provider changes terms or availability
+
+Before switching production to a copy target, confirm the target repository has `dubstack.json`, all MDX pages, assets, OpenAPI specs, and a valid deployment branch.
+
+## Protected deployments
+
+Some deployments are intentionally protected from repository mutation.
+
+Protected deployments can still be read and indexed, but authoring actions should not create branches, commits, pull requests, or merge requests from Slack, agents, or workflows.
+
+Use disposable test deployments for authoring smoke tests.
+
+## Troubleshooting
+
+### Repository list is empty
+
+Check that the provider account is connected and that the app or token has access to the repository owner.
+
+For GitHub, open the app installation and confirm the repository is selected.
+
+For GitLab, confirm the token can read the project and the project ID or path is correct.
+
+### Branch list is missing the expected branch
+
+Confirm the provider credential can read branches and that the branch exists in the selected repository.
+
+If the branch was just created, revalidate Git settings or run a manual update.
+
+### Live docs do not update after a push
+
+Check that the push went to the active deployment branch. Then check provider event delivery and run a manual update.
+
+If manual update works but automatic sync does not, the provider event or webhook path needs attention.
+
+### Agent or workflow cannot create a pull request
+
+Check authoring readiness, not only source sync.
+
+For GitHub, verify the GitHub App has write and pull request permissions for the repository.
+
+For GitLab, verify OAuth is connected, the selected project is enabled for workflow context, and the connected user can create branches and merge requests.
+
+### GitLab OAuth is connected but production still reads GitHub
+
+This is expected when GitHub remains the active deployment source. GitLab OAuth enables authoring/context capabilities. It does not automatically switch production publishing to GitLab.
+
+## Related
+
+- [GitHub](/deployment/github)
+- [GitLab](/deployment/gitlab)
+- [Self-hosted GitLab OAuth](/deployment/gitlab-self-hosted-oauth)
+- [Git providers](/deployment/forgejo-github-gitlab)
+- [Local Git workflow](/deployment/local-git-workflow)
+- [Manual updates and history](/deployment/manual-updates-history)
+- [Source control troubleshooting](/deployment/source-control-troubleshooting)
