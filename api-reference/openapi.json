@@ -7,8 +7,8 @@
   },
   "servers": [
     {
-      "url": "https://dubstack-docs-test.dubstack.live",
-      "description": "Published docs site origin for this example deployment"
+      "url": "https://dubstack.ai/docs",
+      "description": "Published docs site for this deployment"
     }
   ],
   "tags": [
@@ -52,13 +52,13 @@
                     "value": {
                       "version": "1.0.0",
                       "transport": "http",
-                      "url": "https://dubstack-docs-test.dubstack.live/mcp",
+                      "url": "https://dubstack.ai/docs/mcp",
                       "servers": [
                         {
                           "name": "public",
                           "title": "dubstack docs",
                           "description": "API documentation platform",
-                          "url": "https://dubstack-docs-test.dubstack.live/mcp",
+                          "url": "https://dubstack.ai/docs/mcp",
                           "transport": "http",
                           "authentication": "none"
                         }
@@ -74,12 +74,12 @@
           {
             "lang": "bash",
             "label": "Fetch MCP discovery",
-            "source": "curl --request GET \\\n  --url https://dubstack-docs-test.dubstack.live/mcp"
+            "source": "curl --request GET \\\n  --url https://dubstack.ai/docs/mcp"
           },
           {
             "lang": "javascript",
             "label": "Read the public MCP URL",
-            "source": "const discovery = await fetch(\"https://dubstack-docs-test.dubstack.live/mcp\").then((response) => response.json());\n\nconsole.log(discovery.servers[0].url);"
+            "source": "const discovery = await fetch(\"https://dubstack.ai/docs/mcp\").then((response) => response.json());\n\nconsole.log(discovery.servers[0].url);"
           }
         ]
       },
@@ -238,7 +238,7 @@
                     "value": {
                       "name": "DubStack Docs MCP",
                       "description": "Read-only MCP access to the published docs site.",
-                      "url": "https://dubstack-docs-test.dubstack.live/mcp",
+                      "url": "https://dubstack.ai/docs/mcp",
                       "transport": "streamable-http"
                     }
                   }
@@ -284,7 +284,7 @@
                         {
                           "name": "DubStack Docs MCP",
                           "description": "Read-only MCP access to the published docs site.",
-                          "url": "https://dubstack-docs-test.dubstack.live/mcp",
+                          "url": "https://dubstack.ai/docs/mcp",
                           "transport": "streamable-http"
                         }
                       ]
@@ -317,7 +317,7 @@
                 "examples": {
                   "index": {
                     "summary": "Compact LLM index",
-                    "value": "# DubStack Docs\n\n> Product documentation for building, publishing, and operating DubStack docs sites.\n\n## Pages\n- [Quickstart](https://dubstack-docs-test.dubstack.live/quickstart)\n- [MCP](https://dubstack-docs-test.dubstack.live/ai/mcp)\n- [API reference](https://dubstack-docs-test.dubstack.live/api-reference/introduction)"
+                    "value": "# DubStack Docs\n\n> Product documentation for building, publishing, and operating DubStack docs sites.\n\n## Pages\n- [Quickstart](https://dubstack.ai/docs/quickstart)\n- [MCP](https://dubstack.ai/docs/ai/mcp)\n- [API reference](https://dubstack.ai/docs/api-reference/introduction)"
                   }
                 }
               }
@@ -399,7 +399,7 @@
                       "sources": [
                         {
                           "title": "Custom domains",
-                          "url": "https://dubstack-docs-test.dubstack.live/deployment/custom-domains",
+                          "url": "https://dubstack.ai/docs/deployment/custom-domains",
                           "path": "/deployment/custom-domains"
                         }
                       ]
@@ -458,7 +458,7 @@
                     "value": {
                       "name": "api-reference",
                       "display_name": "DubStack Docs Runtime API",
-                      "base_url": "https://dubstack-docs-test.dubstack.live",
+                      "base_url": "https://dubstack.ai/docs",
                       "spec_content": {
                         "openapi": "3.1.0",
                         "info": {
@@ -504,7 +504,7 @@
                 "call": {
                   "summary": "Proxy a documented endpoint request",
                   "value": {
-                    "url": "https://dubstack-docs-test.dubstack.live/mcp",
+                    "url": "https://dubstack.ai/docs/mcp",
                     "method": "GET",
                     "headers": {
                       "Accept": "application/json"
@@ -535,7 +535,7 @@
                       "body": {
                         "name": "DubStack Docs MCP",
                         "transport": "streamable-http",
-                        "endpoint": "https://dubstack-docs-test.dubstack.live/mcp"
+                        "endpoint": "https://dubstack.ai/docs/mcp"
                       }
                     }
                   }
@@ -574,7 +574,7 @@
                     "message": "Positive page rating for OpenAPI setup",
                     "session_id": "page-feedback-01JZ9K9W8Q2F3S8S7H6N5M4P3A",
                     "page_path": "/api-reference/openapi-setup",
-                    "page_url": "https://dubstack-docs-test.dubstack.live/api-reference/openapi-setup",
+                    "page_url": "https://dubstack.ai/docs/api-reference/openapi-setup",
                     "metadata": {
                       "feedback_surface": "page",
                       "page_title": "OpenAPI setup"
@@ -589,7 +589,7 @@
                     "message": "The page mentions a settings item that is not present in the current dashboard.",
                     "session_id": "mcp-feedback-1780825618877",
                     "page_path": "/settings/deployment/addons",
-                    "page_url": "https://dubstack-docs-test.dubstack.live/settings/deployment/addons",
+                    "page_url": "https://dubstack.ai/docs/settings/deployment/addons",
                     "metadata": {
                       "feedback_surface": "agent",
                       "mcp_tool": "submit_feedback"
@@ -719,12 +719,12 @@
           {
             "lang": "bash",
             "label": "Submit page feedback",
-            "source": "curl --request POST \\\n  --url https://dubstack-docs-test.dubstack.live/feedback \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n    \"source\": \"page-feedback\",\n    \"rating\": \"up\",\n    \"message\": \"This page answered my setup question.\",\n    \"page_path\": \"/api-reference/openapi-setup\",\n    \"page_url\": \"https://dubstack-docs-test.dubstack.live/api-reference/openapi-setup\"\n  }'"
+            "source": "curl --request POST \\\n  --url https://dubstack.ai/docs/feedback \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n    \"source\": \"page-feedback\",\n    \"rating\": \"up\",\n    \"message\": \"This page answered my setup question.\",\n    \"page_path\": \"/api-reference/openapi-setup\",\n    \"page_url\": \"https://dubstack.ai/docs/api-reference/openapi-setup\"\n  }'"
           },
           {
             "lang": "javascript",
             "label": "Report an agent-discovered issue",
-            "source": "await fetch(\"https://dubstack-docs-test.dubstack.live/feedback\", {\n  method: \"POST\",\n  headers: { \"Content-Type\": \"application/json\" },\n  body: JSON.stringify({\n    source: \"agent-feedback\",\n    rating: \"down\",\n    message: \"The page links to a dashboard screen that no longer exists.\",\n    page_path: \"/settings/deployment/addons\",\n    page_url: \"https://dubstack-docs-test.dubstack.live/settings/deployment/addons\",\n    metadata: { feedback_surface: \"agent\" }\n  })\n});"
+            "source": "await fetch(\"https://dubstack.ai/docs/feedback\", {\n  method: \"POST\",\n  headers: { \"Content-Type\": \"application/json\" },\n  body: JSON.stringify({\n    source: \"agent-feedback\",\n    rating: \"down\",\n    message: \"The page links to a dashboard screen that no longer exists.\",\n    page_path: \"/settings/deployment/addons\",\n    page_url: \"https://dubstack.ai/docs/settings/deployment/addons\",\n    metadata: { feedback_surface: \"agent\" }\n  })\n});"
           }
         ]
       },
@@ -795,13 +795,13 @@
                     "value": {
                       "version": "1.0.0",
                       "transport": "http",
-                      "url": "https://dubstack-docs-test.dubstack.live/mcp",
+                      "url": "https://dubstack.ai/docs/mcp",
                       "servers": [
                         {
                           "name": "public",
                           "title": "dubstack docs",
                           "description": "API documentation platform",
-                          "url": "https://dubstack-docs-test.dubstack.live/mcp",
+                          "url": "https://dubstack.ai/docs/mcp",
                           "transport": "http",
                           "authentication": "none"
                         }
@@ -848,13 +848,13 @@
                     "value": {
                       "version": "1.0.0",
                       "transport": "http",
-                      "url": "https://dubstack-docs-test.dubstack.live/mcp",
+                      "url": "https://dubstack.ai/docs/mcp",
                       "servers": [
                         {
                           "name": "public",
                           "title": "dubstack docs",
                           "description": "API documentation platform",
-                          "url": "https://dubstack-docs-test.dubstack.live/mcp",
+                          "url": "https://dubstack.ai/docs/mcp",
                           "transport": "http",
                           "authentication": "none"
                         }
@@ -901,17 +901,17 @@
                     "value": {
                       "name": "dubstack docs",
                       "description": "API documentation platform",
-                      "url": "https://dubstack-docs-test.dubstack.live/",
+                      "url": "https://dubstack.ai/docs/",
                       "version": "1.0.0",
                       "protocolVersion": "0.3",
                       "preferredTransport": "HTTP+JSON",
                       "skills": [
                         {
-                          "id": "dubstack-docs-test",
+                          "id": "dubstack-docs",
                           "name": "dubstack docs",
                           "description": "Use when answering questions about dubstack docs and working with its published documentation.",
                           "tags": [],
-                          "url": "https://dubstack-docs-test.dubstack.live/.well-known/agent-skills/dubstack-docs-test/skill.md"
+                          "url": "https://dubstack.ai/docs/.well-known/agent-skills/dubstack-docs/skill.md"
                         }
                       ]
                     }
@@ -956,10 +956,10 @@
                       "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
                       "skills": [
                         {
-                          "name": "dubstack-docs-test",
+                          "name": "dubstack-docs",
                           "type": "skill-md",
                           "description": "Use when answering questions about dubstack docs and working with its published documentation.",
-                          "url": "https://dubstack-docs-test.dubstack.live/.well-known/agent-skills/dubstack-docs-test/skill.md",
+                          "url": "https://dubstack.ai/docs/.well-known/agent-skills/dubstack-docs/skill.md",
                           "digest": "sha256:f28f07eb865d04c11dc7cce4111301c1136dd41894c9c46fcf54981a99f572ce"
                         }
                       ]
@@ -1023,7 +1023,7 @@
           {
             "lang": "bash",
             "label": "Fetch generated skill.md",
-            "source": "curl --request GET \\\n  --url https://dubstack-docs-test.dubstack.live/skill.md"
+            "source": "curl --request GET \\\n  --url https://dubstack.ai/docs/skill.md"
           }
         ]
       }
@@ -1044,7 +1044,7 @@
             "description": "Skill identifier from the agent-card or agent-skills index.",
             "schema": {
               "type": "string",
-              "example": "dubstack-docs-test"
+              "example": "dubstack-docs"
             }
           }
         ],
@@ -1081,7 +1081,7 @@
           {
             "lang": "bash",
             "label": "Fetch skill by id",
-            "source": "curl --request GET \\\n  --url https://dubstack-docs-test.dubstack.live/.well-known/agent-skills/dubstack-docs-test/skill.md"
+            "source": "curl --request GET \\\n  --url https://dubstack.ai/docs/.well-known/agent-skills/dubstack-docs/skill.md"
           }
         ]
       }
@@ -1305,7 +1305,7 @@
             "type": "string",
             "format": "uri",
             "description": "Absolute URL of the primary public MCP endpoint for the current docs site.",
-            "example": "https://dubstack-docs-test.dubstack.live/mcp"
+            "example": "https://dubstack.ai/docs/mcp"
           },
           "servers": {
             "type": "array",
@@ -1341,7 +1341,7 @@
             "type": "string",
             "format": "uri",
             "description": "Absolute MCP endpoint URL.",
-            "example": "https://dubstack-docs-test.dubstack.live/mcp"
+            "example": "https://dubstack.ai/docs/mcp"
           },
           "transport": {
             "type": "string",
@@ -1505,7 +1505,7 @@
           "sources": [
             {
               "title": "Preview deployments",
-              "url": "https://dubstack-docs-test.dubstack.live/deployment/preview-deployments",
+              "url": "https://dubstack.ai/docs/deployment/preview-deployments",
               "path": "/deployment/preview-deployments"
             }
           ]
@@ -1544,7 +1544,7 @@
         "example": {
           "name": "api-reference",
           "display_name": "DubStack Docs Runtime API",
-          "base_url": "https://dubstack-docs-test.dubstack.live",
+          "base_url": "https://dubstack.ai/docs",
           "spec_content": {
             "openapi": "3.1.0",
             "info": {
@@ -1592,7 +1592,7 @@
         ],
         "description": "Browser playground request scoped to a URL allowed by the published OpenAPI spec.",
         "example": {
-          "url": "https://dubstack-docs-test.dubstack.live/mcp",
+          "url": "https://dubstack.ai/docs/mcp",
           "method": "GET",
           "headers": {
             "Accept": "application/json"
@@ -1672,7 +1672,7 @@
             "format": "uri",
             "maxLength": 1000,
             "description": "Absolute docs page URL related to the feedback.",
-            "example": "https://dubstack-docs-test.dubstack.live/settings/deployment/addons"
+            "example": "https://dubstack.ai/docs/settings/deployment/addons"
           },
           "reader_email": {
             "type": "string",
@@ -1765,7 +1765,7 @@
             "type": "string",
             "format": "uri",
             "description": "Absolute URL clients should use for MCP requests.",
-            "example": "https://dubstack-docs-test.dubstack.live/mcp"
+            "example": "https://dubstack.ai/docs/mcp"
           },
           "transport": {
             "type": "string",
@@ -1811,7 +1811,7 @@
             "type": "string",
             "format": "uri",
             "description": "Canonical docs site URL.",
-            "example": "https://dubstack-docs-test.dubstack.live/"
+            "example": "https://dubstack.ai/docs/"
           },
           "version": {
             "type": "string",
@@ -1851,7 +1851,7 @@
           "id": {
             "type": "string",
             "description": "Stable skill identifier for the docs site.",
-            "example": "dubstack-docs-test"
+            "example": "dubstack-docs"
           },
           "name": {
             "type": "string",
@@ -1875,7 +1875,7 @@
             "type": "string",
             "format": "uri",
             "description": "Absolute URL of the generated skill.md file.",
-            "example": "https://dubstack-docs-test.dubstack.live/.well-known/agent-skills/dubstack-docs-test/skill.md"
+            "example": "https://dubstack.ai/docs/.well-known/agent-skills/dubstack-docs/skill.md"
           }
         },
         "required": [
@@ -1917,7 +1917,7 @@
           "name": {
             "type": "string",
             "description": "Stable skill identifier.",
-            "example": "dubstack-docs-test"
+            "example": "dubstack-docs"
           },
           "type": {
             "type": "string",
@@ -1936,7 +1936,7 @@
             "type": "string",
             "format": "uri",
             "description": "Absolute URL of the generated skill.md file.",
-            "example": "https://dubstack-docs-test.dubstack.live/.well-known/agent-skills/dubstack-docs-test/skill.md"
+            "example": "https://dubstack.ai/docs/.well-known/agent-skills/dubstack-docs/skill.md"
           },
           "digest": {
             "type": "string",

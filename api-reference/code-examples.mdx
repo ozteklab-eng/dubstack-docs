@@ -114,11 +114,11 @@ paths:
           label: Fetch the discovery document
           source: |
             curl --request GET \
-              --url https://dubstack-docs-test.dubstack.live/mcp
+              --url https://dubstack.ai/docs/mcp
         - lang: javascript
           label: Load tools from the discovery document
           source: |
-            const response = await fetch('https://dubstack-docs-test.dubstack.live/mcp');
+            const response = await fetch('https://dubstack.ai/docs/mcp');
             const discovery = await response.json();
 
             console.log(discovery.capabilities.tools);

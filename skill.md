@@ -14,9 +14,9 @@ Use this skill when a user asks how to build, configure, publish, migrate, or op
 
 Treat the published docs site and its MCP server as the source of truth for current product behavior:
 
-- Public docs: https://dubstack-docs-test.dubstack.live
-- Public MCP server: https://dubstack-docs-test.dubstack.live/mcp
-- API reference: https://dubstack-docs-test.dubstack.live/api-reference/introduction
+- Public docs: https://dubstack.ai/docs
+- Public MCP server: https://dubstack.ai/docs/mcp
+- API reference: https://dubstack.ai/docs/api-reference/introduction
 
 ## How to answer
 
