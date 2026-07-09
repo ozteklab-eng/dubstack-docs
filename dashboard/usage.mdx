@@ -1,0 +1,86 @@
+---
+title: Usage
+description: Review AI credits, model usage, retrieval activity, and recent AI runs from dashboard settings.
+icon: gauge
+---
+
+The Usage page shows how AI-powered dubstack surfaces consume workspace credits and retrieval resources.
+
+Use it to understand what is driving AI usage before changing workflows, assistant settings, or billing allowances.
+
+## Open usage settings
+
+Workspace admins can open **Settings > Workspace > Usage** from the dashboard.
+
+The page is scoped to the selected site and uses the same workspace identity as the rest of the dashboard. If you manage multiple sites, confirm the current site in the sidebar before comparing usage.
+
+## Summary metrics
+
+The usage summary includes:
+
+| Metric | Meaning |
+| --- | --- |
+| AI runs | Count of assistant, agent, Slack, and workflow AI runs in the selected period. |
+| Credits used | Charged credits when billing is active, with estimated credits as the reporting fallback. |
+| Tokens | Input, output, and total tokens reported by the model provider when available. |
+| Model cost | Provider cost estimate for internal cost monitoring. |
+| Retrieval requests | Retrieval calls made by assistant or agent surfaces. |
+| Average latency | Average retrieval latency for the selected period. |
+
+The period selector lets you review the last 7, 30, or 90 days.
+
+## Breakdowns
+
+Usage can be grouped by:
+
+- product surface
+- run type
+- provider
+- model
+- retrieval mode
+- retrieval surface
+
+These breakdowns help identify whether usage is coming from public assistant traffic, dashboard agent work, Slack requests, or workflows.
+
+## Activity log
+
+The activity log lists recent AI runs and retrieval calls for the selected period.
+
+Each AI run can show:
+
+- source and run type
+- model or provider
+- status
+- credits
+- tokens
+- created time
+
+Each retrieval call can show:
+
+- retrieval surface
+- resolved retrieval mode
+- provider or model
+- outcome
+- source count
+- latency
+
+## Usage and billing
+
+Credits are reporting and billing units, not raw tokens. Token count, model route, retrieval work, and workflow complexity can all contribute to a credit estimate.
+
+If usage looks higher than expected:
+
+1. Check which product surface is consuming the most credits.
+2. Review workflow schedules and scopes.
+3. Check whether broad repository or integration context is being pulled unnecessarily.
+4. Adjust assistant or workflow settings before changing the billing plan.
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/ai/credits-usage">AI credits and usage</a>
+  <a href="/dashboard/billing-plans">Billing and plans</a>
+  <a href="/workflows">Workflows</a>
+  <a href="/ai/assistant">Assistant</a>
+  <a href="/ai/agent">Agent</a>
+</RelatedTopics>

@@ -584,6 +584,10 @@
               {
                 "slug": "dashboard/billing-plans",
                 "icon": "credit-card"
+              },
+              {
+                "slug": "dashboard/usage",
+                "icon": "gauge"
               }
             ]
           },
