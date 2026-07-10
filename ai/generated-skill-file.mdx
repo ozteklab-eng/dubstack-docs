@@ -138,7 +138,7 @@ If `/skill.md` returns `404`:
 1. Confirm the docs site is public.
 2. Confirm AI discovery/indexing is enabled.
 3. Run a manual update from the dashboard.
-4. Check that `/mcp` returns discovery metadata.
+4. Check that `/.well-known/mcp` returns discovery metadata and points to the expected `/mcp` endpoint.
 
 If `/skill.md` redirects to a login page or returns an authentication response, docs authentication is enabled. Unlock the site first, or use an authenticated authoring surface if the agent needs private docs context.
 

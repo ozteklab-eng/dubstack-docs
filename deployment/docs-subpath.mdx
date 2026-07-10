@@ -26,6 +26,7 @@ To use a subpath, you need:
 - A route that forwards `/docs` and all nested paths to the dubstack origin.
 - The ability to preserve the original request method, query string, body, and response headers.
 - The ability to forward `X-Forwarded-Host`, `X-Public-Host`, and `X-Forwarded-Proto`.
+- The ability to forward `X-Docs-Base-Path` and `X-Public-Mcp-Url` when public MCP is enabled.
 
 ## Enable subpath hosting
 
@@ -68,7 +69,16 @@ GET /docs/.well-known/* -> dubstack origin discovery metadata
 
 Do not strip `/docs` before forwarding to dubstack. The origin is designed to receive the `/docs` prefix and render public links, assets, assistant calls, search, MCP metadata, and LLM indexes under that same prefix.
 
-Preserve dubstack response cache headers. In particular, do not cache `/docs/mcp`; it is the MCP transport endpoint. Discovery metadata under `/docs/.well-known/mcp*` can be cached normally.
+For public MCP, the client-facing endpoint must stay mounted at `/docs/mcp`. Your proxy should also forward:
+
+```text
+X-Docs-Base-Path: /docs
+X-Public-Mcp-Url: https://example.com/docs/mcp
+```
+
+These headers let dubstack generate public mounted URLs and let MCP discovery and server cards advertise the public mounted URL instead of the raw `--origin.dubstack.live` hostname.
+
+Preserve dubstack response cache headers. In particular, do not cache `/docs/mcp`; it is the MCP Streamable HTTP transport endpoint. Discovery metadata under `/docs/.well-known/mcp*` can be cached normally.
 
 ## Cloudflare Worker example
 
@@ -94,6 +104,8 @@ function buildProxyRequest(request) {
   proxyRequest.headers.set('X-Forwarded-Host', PUBLIC_HOST);
   proxyRequest.headers.set('X-Public-Host', PUBLIC_HOST);
   proxyRequest.headers.set('X-Forwarded-Proto', 'https');
+  proxyRequest.headers.set('X-Docs-Base-Path', DOCS_PREFIX);
+  proxyRequest.headers.set('X-Public-Mcp-Url', `https://${PUBLIC_HOST}${DOCS_PREFIX}/mcp`);
   return proxyRequest;
 }
 
@@ -163,7 +175,8 @@ After the route is configured, check:
 - `/docs/api/theme` returns site theme data.
 - `/docs/llms.txt` lists docs URLs under `/docs`.
 - `/docs/skill.md` returns Markdown.
-- `/docs/.well-known/mcp` returns the MCP discovery document.
+- `/docs/.well-known/mcp` returns a discovery document whose `url` is `https://example.com/docs/mcp`.
+- `/docs/.well-known/mcp/server-card.json` lists the public MCP tools.
 - `/docs/.well-known/agent-skills/index.json` returns the agent-skills manifest.
 - `/docs/.well-known/agent-card.json` returns the agent card.
 - Search, assistant, API playground, and page navigation work from the mounted path.
@@ -186,6 +199,12 @@ Forward `X-Forwarded-Host`, `X-Public-Host`, and `X-Forwarded-Proto`. These head
 ### The origin hostname appears in search results
 
 Do not link users to `https://<site>--origin.dubstack.live`. That hostname is for proxy traffic only. Direct origin responses are marked `noindex`, but your public links and sitemap should use your mounted domain.
+
+### Claude or another MCP client connects but shows no tools
+
+Check `/docs/.well-known/mcp/server-card.json` and confirm the `url` field points to `https://example.com/docs/mcp`, not the `--origin` hostname. If it points to the origin, forward `X-Public-Mcp-Url` from the proxy and clear any CDN cache for `/docs/.well-known/mcp*`.
+
+If the connector adds successfully but shows no tools or tool calls fail, also confirm the proxy forwards `X-Docs-Base-Path: /docs` and does not cache `/docs/mcp`.
 
 ## When to use a subdomain instead
 

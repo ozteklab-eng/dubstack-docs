@@ -124,7 +124,7 @@ DubStack publishes MCP discovery documents automatically:
 
 | Path | Purpose |
 | --- | --- |
-| `/mcp` | Public MCP server and GET discovery response. |
+| `/mcp` | Public MCP Streamable HTTP transport endpoint. MCP clients send JSON-RPC requests here. |
 | `/.well-known/mcp` | Discovery document. |
 | `/.well-known/mcp.json` | JSON discovery document alias. |
 | `/.well-known/mcp/server-card.json` | Single server card. |
@@ -135,6 +135,16 @@ DubStack publishes MCP discovery documents automatically:
 Server-card responses include tool metadata and safety annotations so MCP clients can inspect available tools before connecting.
 
 The public server reserves `/mcp` for MCP. Do not create docs pages or redirects at that path.
+
+For `/docs` subpath deployments, the same public paths live under the mounted prefix:
+
+```text
+/docs/mcp
+/docs/.well-known/mcp
+/docs/.well-known/mcp/server-card.json
+```
+
+Discovery and server-card `url` fields should point to the public mounted endpoint, for example `https://example.com/docs/mcp`.
 
 ## Caching
 
@@ -199,6 +209,8 @@ For clients with a connector form, use:
 | URL | `https://your-docs-domain.com/mcp` |
 | Transport | HTTP |
 | Authentication | None for public docs |
+
+For `/docs` subpath deployments, use `https://your-domain.com/docs/mcp` in the connector URL field.
 
 ### Claude
 
@@ -322,11 +334,13 @@ Dashboard content-management MCP is a separate product surface. Until that surfa
 If an MCP client cannot connect:
 
 1. Confirm the public docs site loads.
-2. Open `/mcp` in a browser and verify it returns discovery JSON.
+2. Open `/.well-known/mcp` and verify it returns discovery JSON.
 3. Open `/.well-known/mcp/server-card.json` and confirm the expected tools are listed.
 4. Check that AI discovery/indexing is not disabled for the deployment.
 5. Republish the site if the latest docs content or add-on settings have not synced yet.
 
 If the site is mounted under `/docs`, test `/docs/mcp`, `/docs/.well-known/mcp`, and `/docs/.well-known/mcp/server-card.json`. A proxy that forwards pages but not `/docs/.well-known/*` or `/docs/api/*` can make rendered pages work while MCP discovery fails.
+
+If a connector adds successfully but shows no tools, inspect `/docs/.well-known/mcp/server-card.json`. The response should list tools and its `url` should point to the same public URL you entered in the client. For `/docs` subpath sites, that means `https://your-domain.com/docs/mcp`, not the `--origin.dubstack.live` hostname.
 
 If the site is password protected, unlock the docs site in the same browser or client context before testing protected MCP access. For machine-to-machine authoring, use an authenticated authoring surface instead of the public docs MCP.

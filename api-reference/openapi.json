@@ -31,62 +31,10 @@
   ],
   "paths": {
     "/mcp": {
-      "get": {
-        "operationId": "getMcpDiscovery",
-        "summary": "Get MCP discovery",
-        "description": "Returns the public Model Context Protocol discovery document for the current docs site. Use this endpoint to find the public MCP server URL and confirm that the site exposes unauthenticated, read-only docs access for agents. The endpoint is tenant-scoped by the request host, so it only describes the published documentation for the current site.",
-        "tags": [
-          "AI Access"
-        ],
-        "responses": {
-          "200": {
-            "description": "Discovery metadata for the current site's public read-only MCP server.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/McpDiscovery"
-                },
-                "examples": {
-                  "discovery": {
-                    "summary": "Discovery response",
-                    "value": {
-                      "version": "1.0.0",
-                      "transport": "http",
-                      "url": "https://dubstack.ai/docs/mcp",
-                      "servers": [
-                        {
-                          "name": "public",
-                          "title": "dubstack docs",
-                          "description": "API documentation platform",
-                          "url": "https://dubstack.ai/docs/mcp",
-                          "transport": "http",
-                          "authentication": "none"
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "x-codeSamples": [
-          {
-            "lang": "bash",
-            "label": "Fetch MCP discovery",
-            "source": "curl --request GET \\\n  --url https://dubstack.ai/docs/mcp"
-          },
-          {
-            "lang": "javascript",
-            "label": "Read the public MCP URL",
-            "source": "const discovery = await fetch(\"https://dubstack.ai/docs/mcp\").then((response) => response.json());\n\nconsole.log(discovery.servers[0].url);"
-          }
-        ]
-      },
       "post": {
         "operationId": "callMcpServer",
-        "summary": "Call MCP server",
-        "description": "Handles Streamable HTTP JSON-RPC requests for the public docs MCP server. Clients use this endpoint to list tools and call read-only tools such as documentation search or virtual filesystem reads. Tool execution is scoped to published docs content for the current site and should not be used for authoring or dashboard administration.",
+        "summary": "Call public MCP transport",
+        "description": "Handles Streamable HTTP JSON-RPC requests for the public docs MCP server. MCP clients use this endpoint to initialize the connection, list tools, and call tools such as documentation search or virtual filesystem reads. The endpoint is stateless, public, and scoped to published docs content for the current site.",
         "tags": [
           "AI Access"
         ],
@@ -138,12 +86,24 @@
               }
             }
           },
-          "description": "Streamable HTTP JSON-RPC request sent by an MCP client."
+          "description": "Streamable HTTP JSON-RPC request sent by an MCP client. Clients should send Accept: application/json, text/event-stream."
         },
         "responses": {
           "200": {
-            "description": "JSON-RPC response from the public MCP server. Successful tool calls return method-specific results; invalid requests return JSON-RPC error objects.",
+            "description": "JSON-RPC response from the public MCP server. Streamable HTTP clients typically receive text/event-stream responses; JSON-capable clients may receive application/json.",
             "content": {
+              "text/event-stream": {
+                "schema": {
+                  "type": "string",
+                  "description": "Server-sent event stream containing JSON-RPC response messages."
+                },
+                "examples": {
+                  "tools": {
+                    "summary": "Tool list event",
+                    "value": "event: message\\ndata: {\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"tools\":[{\"name\":\"search\"},{\"name\":\"query_docs_filesystem\"}]}}\\n\\n"
+                  }
+                }
+              },
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/JsonRpcResponse"
@@ -171,47 +131,26 @@
                 }
               }
             }
-          }
-        }
-      },
-      "delete": {
-        "operationId": "closeMcpSession",
-        "summary": "Close MCP session",
-        "description": "Closes a Streamable HTTP MCP session when a client no longer needs the connection. Stateless clients may not need to call this endpoint, but session-aware clients can use it to release server-side session state cleanly.",
-        "tags": [
-          "AI Access"
-        ],
-        "responses": {
-          "200": {
-            "description": "Session close acknowledgement with a JSON response body.",
+          },
+          "405": {
+            "description": "The MCP transport endpoint does not serve browser GET discovery. Use /.well-known/mcp or /.well-known/mcp.json for discovery metadata.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "ok": {
-                      "type": "boolean",
-                      "description": "Whether the session close request was accepted.",
-                      "example": true
-                    }
-                  },
-                  "required": [
-                    "ok"
-                  ]
-                },
-                "examples": {
-                  "closed": {
-                    "summary": "Session closed",
-                    "value": {
-                      "ok": true
-                    }
-                  }
+                  "$ref": "#/components/schemas/JsonRpcResponse"
                 }
               }
             }
           },
-          "204": {
-            "description": "Session close acknowledgement without a response body."
+          "406": {
+            "description": "The request did not advertise support for both application/json and text/event-stream.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonRpcResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -777,7 +716,7 @@
       "get": {
         "operationId": "getWellKnownMcpJson",
         "summary": "Get well-known MCP discovery",
-        "description": "Compatibility discovery route that returns the same public MCP discovery document as GET /mcp.",
+        "description": "Compatibility discovery route that returns the public MCP discovery document for the current docs site. The document advertises the public MCP transport endpoint, such as https://example.com/docs/mcp for path-mounted deployments.",
         "tags": [
           "AI Access"
         ],
@@ -830,7 +769,7 @@
       "get": {
         "operationId": "getWellKnownMcp",
         "summary": "Get well-known MCP discovery alias",
-        "description": "Compatibility discovery route that returns the same public MCP discovery document as GET /mcp.",
+        "description": "Compatibility discovery route that returns the public MCP discovery document for the current docs site. The document advertises the public MCP transport endpoint, such as https://example.com/docs/mcp for path-mounted deployments.",
         "tags": [
           "AI Access"
         ],
@@ -1347,9 +1286,9 @@
             "type": "string",
             "description": "Transport protocol used by the MCP endpoint.",
             "enum": [
-              "streamable-http"
+              "http"
             ],
-            "example": "streamable-http"
+            "example": "http"
           }
         },
         "required": [
