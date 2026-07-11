@@ -77,9 +77,9 @@ For **Update from code changes**, a selected source repository has two roles:
 
 The source repository does not become the docs repository. Generated changes still target the connected docs source and use the workflow update mode you selected.
 
-If a source provider webhook is unavailable, use a scheduled run or run the workflow manually after the source change has merged.
+If a source provider webhook is unavailable or pending, use a scheduled run or run the workflow manually after the source change has merged.
 
-In Git settings, source repository cards show the selected scope, supported event types, and the last configuration time. Use those fields to confirm that the repository is connected for the workflow you expect before debugging the workflow runner.
+In Git settings, source repository cards show the selected scope, supported event types, webhook status, and the last configuration time. Use those fields to confirm that the repository is connected for the workflow you expect before debugging the workflow runner.
 
 <Callout type="info">
   Source repository events queue eligible workflow runs. They do not publish pages directly. The generated docs update must still be committed to, or merged into, the active docs source.
@@ -93,7 +93,7 @@ Source repository support follows the provider connection that owns the reposito
 | --- | --- |
 | GitHub | Uses the GitHub App installation to read selected repositories and receive pull request events. |
 | GitLab | Uses the GitLab project connection and OAuth authoring access when merge request context or merge-request authoring is required. |
-| Forgejo | Uses the configured Forgejo instance, repository, branch, and token. When the source webhook is active, merged review events can queue code-change runs. |
+| Forgejo | Uses the configured Forgejo instance, repository, branch, and token. When the source webhook is active, merged review events can queue code-change runs. If the webhook is pending, scheduled and manual runs can still use the repository as context. |
 
 For self-hosted providers, the instance must be reachable from dubstack over HTTPS for API reads and webhook delivery. If inbound webhooks are blocked by your network, keep the repository selected for scheduled or manual workflow runs and trigger the workflow after the source change is merged.
 
@@ -187,7 +187,7 @@ If the repository is self-hosted, confirm the instance URL is reachable from dub
 
 ### Code-change trigger does not run
 
-Confirm the source repository card shows the expected event support and that the change was merged through a pull request or merge request. Direct pushes can be inspected by scheduled or manual runs, but code-change workflow triggers are review-event driven.
+Confirm the source repository card shows the expected event support, the webhook is active when you expect reactive runs, and the change was merged through a pull request or merge request. Direct pushes can be inspected by scheduled or manual runs, but code-change workflow triggers are review-event driven.
 
 ### Slack channel is missing
 

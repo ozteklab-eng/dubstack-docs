@@ -220,7 +220,7 @@ The source repository card shows operational metadata for each connected context
 | Events | Which provider events can queue workflow runs, such as pull requests or merge requests. |
 | Configured | When dubstack last configured or refreshed the source repository event subscription. |
 
-If the card shows an active webhook, the repository can queue supported code-change workflows from review events. If it does not, scheduled and manual workflow runs can still use the repository as read-only context when the repository credential is valid.
+If the card shows **Webhook active**, the repository can queue supported code-change workflows from review events. If the card shows **Webhook pending** or the connection reports a webhook setup warning, the repository is still connected as read-only workflow context, but event-driven runs need the webhook path fixed before merged review events can queue runs automatically.
 
 ### Forgejo source repositories
 
@@ -240,7 +240,7 @@ When adding a Forgejo source repository, provide:
 - branch
 - a token with read access to the source repository, unless existing Forgejo access can read it
 
-If the source card shows event support, merged pull request events can queue code-change workflow runs. If event support is unavailable or blocked by your network, keep the repository selected and use scheduled or manual workflow runs after the source change is merged.
+If the source card shows **Webhook active**, merged pull request events can queue code-change workflow runs. If event support is unavailable, pending, or blocked by your network, keep the repository selected and use scheduled or manual workflow runs after the source change is merged.
 
 ### Path-scoped source context
 
@@ -314,6 +314,18 @@ If the branch was just created, revalidate Git settings or run a manual update.
 Check that the push went to the active deployment branch. Then check provider event delivery and run a manual update.
 
 If manual update works but automatic sync does not, the provider event or webhook path needs attention.
+
+### Source repository shows webhook pending
+
+The repository can still be used as workflow context when the saved credential is valid.
+
+Webhook pending means dubstack could not confirm the provider event subscription for that source repository. For Forgejo, check that:
+
+- the instance is reachable from dubstack over HTTPS
+- the repository token can manage webhooks for that repository
+- the dashboard did not show a webhook setup warning when the source repository was saved
+
+After fixing the provider or network setting, save the source repository again to refresh the webhook configuration.
 
 ### Agent or workflow cannot create a pull request
 
