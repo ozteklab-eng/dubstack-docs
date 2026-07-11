@@ -61,6 +61,15 @@ Only integrations that are connected and supported by that workflow appear as se
 
 Some workflows can use source repositories as read-only context.
 
+Source repositories are product or code repositories. They are not the docs
+repository unless you deliberately select the same repository for both jobs.
+
+| Repository role | What it does |
+| --- | --- |
+| Docs repository | Publishes the docs site and receives generated documentation changes. |
+| Source repository | Provides code, product, API, or changelog context to a workflow. |
+| Copy target | Receives an explicit repository copy for migration or backup testing. |
+
 For **Update from code changes**, a selected source repository has two roles:
 
 - scheduled runs can inspect recent repository activity as bounded context
@@ -75,6 +84,34 @@ In Git settings, source repository cards show the selected scope, supported even
 <Callout type="info">
   Source repository events queue eligible workflow runs. They do not publish pages directly. The generated docs update must still be committed to, or merged into, the active docs source.
 </Callout>
+
+### Provider behavior
+
+Source repository support follows the provider connection that owns the repository.
+
+| Provider | Source repository behavior |
+| --- | --- |
+| GitHub | Uses the GitHub App installation to read selected repositories and receive pull request events. |
+| GitLab | Uses the GitLab project connection and OAuth authoring access when merge request context or merge-request authoring is required. |
+| Forgejo | Uses the configured Forgejo instance, repository, branch, and token. When the source webhook is active, merged review events can queue code-change runs. |
+
+For self-hosted providers, the instance must be reachable from dubstack over HTTPS for API reads and webhook delivery. If inbound webhooks are blocked by your network, keep the repository selected for scheduled or manual workflow runs and trigger the workflow after the source change is merged.
+
+### Add a code repository as context
+
+Use this flow when your docs live in one repository and your product code lives in another.
+
+1. Open **Settings > Deployment > Git settings**.
+2. Confirm the active deployment source points to the docs repository.
+3. Add or select the code repository as a workflow source repository.
+4. Choose the provider, repository, branch, and optional path scope.
+5. Save and confirm the source repository card validates successfully.
+6. Open **Automate > Workflows**.
+7. Configure **Update from code changes**.
+8. Select the source repository in the workflow's context section.
+9. Keep **Require review** enabled until the workflow output is trusted.
+
+After setup, merged review events can queue code-change runs where the provider integration supports them. Scheduled and manual runs can still read the selected repository as bounded context.
 
 ### Narrow source context
 
@@ -140,6 +177,16 @@ Workflow integration access follows these rules:
 ### Integration does not appear in workflow settings
 
 Confirm the integration is connected, the workflow supports that integration family, and the deployment is eligible for workflows.
+
+### Source repository does not appear
+
+Confirm the repository was added in Git settings as a source repository, not only as a copy target. Copy targets are used for migration or backup checks and do not automatically become workflow context.
+
+If the repository is self-hosted, confirm the instance URL is reachable from dubstack and the saved token can read the repository.
+
+### Code-change trigger does not run
+
+Confirm the source repository card shows the expected event support and that the change was merged through a pull request or merge request. Direct pushes can be inspected by scheduled or manual runs, but code-change workflow triggers are review-event driven.
 
 ### Slack channel is missing
 

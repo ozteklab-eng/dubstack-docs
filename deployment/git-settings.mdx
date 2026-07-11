@@ -16,6 +16,8 @@ Git settings has three separate jobs:
 | Deployment source | The repository, branch, and optional docs directory used to publish the live docs site. |
 | Provider access | The GitHub App, GitLab token, or Forgejo token that lets dubstack read source files and receive repository events where the provider supports them. |
 | Authoring access | OAuth or app permissions that let approved agents, Slack requests, editor saves, and workflows create reviewable documentation changes. |
+| Source repositories | Additional code or product repositories that workflows can read as bounded context. |
+| Copy targets | Secondary repositories used for migration, backup, or provider evaluation. |
 
 Keep these jobs separate when troubleshooting. A site can read from a repository while authoring is blocked, and an OAuth connection can be healthy while the deployment source still points somewhere else.
 
@@ -192,6 +194,16 @@ They are separate from the active deployment source:
 
 Use source repositories when the product code and docs live in different repositories, or when you want a workflow to watch a code repository without making that repository the docs source of truth.
 
+Example setup:
+
+| Role | Example |
+| --- | --- |
+| Active deployment source | `acme/docs` publishes the docs site. |
+| Source repository | `acme/api` provides source context for code-change workflows. |
+| Workflow write target | Generated updates open a pull request or merge request against `acme/docs`. |
+
+This lets developers keep normal code workflows in the product repository while documentation updates remain reviewable in the docs repository.
+
 The source repository card shows operational metadata for each connected context repository.
 
 | Field | Meaning |
@@ -201,6 +213,27 @@ The source repository card shows operational metadata for each connected context
 | Configured | When dubstack last configured or refreshed the source repository event subscription. |
 
 If the card shows an active webhook, the repository can queue supported code-change workflows from review events. If it does not, scheduled and manual workflow runs can still use the repository as read-only context when the repository credential is valid.
+
+### Forgejo source repositories
+
+Forgejo source repositories use the same instance URL model as Forgejo deployment sources.
+
+Use Forgejo source repositories when:
+
+- the docs repository is on another provider, but the code repository is hosted in Forgejo
+- the docs and code repositories are on the same Forgejo instance
+- you want **Update from code changes** to inspect a self-hosted code repository without moving the docs source
+
+When adding a Forgejo source repository, provide:
+
+- instance URL
+- owner
+- repository
+- branch
+- optional path scope
+- a token with read access to the source repository, unless existing Forgejo access can read it
+
+If the source card shows event support, merged pull request events can queue code-change workflow runs. If event support is unavailable or blocked by your network, keep the repository selected and use scheduled or manual workflow runs after the source change is merged.
 
 ### Path-scoped source context
 

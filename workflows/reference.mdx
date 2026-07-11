@@ -50,6 +50,16 @@ Code-change events are review-event driven. Configure the source repositories th
 
 If the source repository is a monorepo, add a path scope in the workflow configuration so the run focuses on the relevant app, package, or service. When changed-file metadata is available, code-change events outside that path scope are skipped. Path scope does not change the docs repository that receives generated updates.
 
+Supported source repositories can be on a different provider from the docs repository. For example, a GitHub-backed docs site can use a Forgejo code repository as source context while generated documentation changes still open against the GitHub docs repository.
+
+Before enabling automatic updates, run this workflow in **Require review** mode and confirm:
+
+- the source repository card validates in Git settings
+- the workflow has the expected source repository selected
+- the path scope excludes unrelated code
+- the generated change targets the docs repository, not the source repository
+- the provider event is a merged pull request or merge request when using the code-change trigger
+
 ### Draft changelog
 
 Drafts a changelog entry from recent product updates on a recurring schedule.

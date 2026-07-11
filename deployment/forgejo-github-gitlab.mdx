@@ -30,7 +30,10 @@ Keep these states separate:
 | --- | --- |
 | Active deployment source | The repository and branch currently powering the site. |
 | Repository copy target | A connected repository that can receive an on-demand copy of docs files. |
-| Authoring source | A code repository that workflows can read for context and use to draft documentation updates. |
+| Source repository | A code or product repository that workflows can read for context and use to draft documentation updates. |
+| Authoring access | The provider permission path used to create branches, commits, pull requests, or merge requests in the docs repository. |
+
+Source repositories are read-only context. They do not publish pages and they do not receive generated docs changes unless they are also the active docs repository.
 
 ## Choose a provider path
 
@@ -40,6 +43,7 @@ Keep these states separate:
 | Keep a GitLab copy or prepare a migration | [GitLab](/deployment/gitlab) |
 | Draft GitLab merge requests from agents or workflows | [GitLab](/deployment/gitlab) with OAuth authoring access |
 | Publish from a self-hosted Forgejo repository | Configure Forgejo in [Git settings](/deployment/git-settings) |
+| Use a self-hosted Forgejo code repository for workflows | Add it as a source repository in [Git settings](/deployment/git-settings), then select it in [workflow configuration](/workflows/configuration). |
 | Review generic provider concepts | This page |
 | Configure an unsupported custom provider | Contact support or your dubstack operator before relying on it for production publishing. |
 
@@ -80,10 +84,31 @@ Grant the smallest provider scope that supports your intended workflow:
 | Dashboard edits | Write access to content files and configuration. |
 | Agent draft PRs | Branch and pull request creation access. |
 | Webhook-driven updates | Webhook delivery from the provider. |
+| Workflow source context | Read access to the selected source repository. |
 
 For GitLab, repository read/copy access and authoring access are separate. The repository access token keeps the GitLab repository connection readable. GitLab OAuth authoring access lets workflows create branches, commits, and merge requests as an authorized GitLab user.
 
 For Forgejo, the repository token must cover the source repository and the actions you want dubstack to perform. Read-only tokens can publish existing content. Authoring workflows need permission to create branches and pull requests.
+
+## Source repositories for autodocs workflows
+
+Autodocs workflows use source repositories as context when product implementation changes should produce documentation updates.
+
+Use this pattern when:
+
+- API or SDK code lives outside the docs repository
+- a monorepo contains several services and only one path should influence a workflow
+- a self-hosted Forgejo repository should remain internal source control while dubstack drafts docs changes in the connected docs repository
+
+The workflow reads the selected source repository, applies the workflow prompt and path scope, then writes generated documentation changes to the active docs repository through the configured update mode.
+
+For a safe first rollout:
+
+1. Add the code repository as a source repository in Git settings.
+2. Select a narrow path scope, such as `services/api` or `apps/marketing`.
+3. Configure **Update from code changes** with **Require review**.
+4. Merge a small source pull request or merge request.
+5. Review the generated docs pull request before enabling broader coverage.
 
 ## First-sync troubleshooting
 
