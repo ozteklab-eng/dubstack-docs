@@ -154,6 +154,10 @@
                 "icon": "map"
               },
               {
+                "slug": "guides/draft-docs-from-code",
+                "icon": "git-pull-request"
+              },
+              {
                 "slug": "getting-started/overview",
                 "icon": "book-open"
               },
