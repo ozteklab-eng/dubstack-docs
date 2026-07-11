@@ -234,14 +234,13 @@ When adding a Forgejo source repository, provide:
 - owner
 - repository
 - branch
-- optional path scope
 - a token with read access to the source repository, unless existing Forgejo access can read it
 
 If the source card shows event support, merged pull request events can queue code-change workflow runs. If event support is unavailable or blocked by your network, keep the repository selected and use scheduled or manual workflow runs after the source change is merged.
 
 ### Path-scoped source context
 
-For large repositories, set an optional path scope on a workflow source repository.
+For large repositories, set an optional path scope in the workflow configuration after the source repository is connected.
 
 The path scope must be a relative repository path, such as:
 

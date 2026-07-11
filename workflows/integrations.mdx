@@ -104,12 +104,13 @@ Use this flow when your docs live in one repository and your product code lives 
 1. Open **Settings > Deployment > Git settings**.
 2. Confirm the active deployment source points to the docs repository.
 3. Add or select the code repository as a workflow source repository.
-4. Choose the provider, repository, branch, and optional path scope.
+4. Choose the provider, repository, and branch.
 5. Save and confirm the source repository card validates successfully.
 6. Open **Automate > Workflows**.
 7. Configure **Update from code changes**.
 8. Select the source repository in the workflow's context section.
-9. Keep **Require review** enabled until the workflow output is trusted.
+9. Add a path scope in the workflow configuration if the source repository is broad.
+10. Keep **Require review** enabled until the workflow output is trusted.
 
 After setup, merged review events can queue code-change runs where the provider integration supports them. Scheduled and manual runs can still read the selected repository as bounded context.
 
