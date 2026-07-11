@@ -18,6 +18,20 @@ A connected provider lets dubstack read source content, receive update signals, 
 
 Provider availability can depend on your plan, workspace configuration, and rollout state.
 
+## Active source vs copy target
+
+One repository is the active deployment source for a site. That source powers published docs, previews, and normal update checks.
+
+Additional connected repositories can be used as copy targets. A copy target is useful for backup, provider testing, or migration rehearsal, but it does not become an automatic mirror and it does not power the live site unless you explicitly switch the deployment source.
+
+Keep these states separate:
+
+| State | What it means |
+| --- | --- |
+| Active deployment source | The repository and branch currently powering the site. |
+| Repository copy target | A connected repository that can receive an on-demand copy of docs files. |
+| Authoring source | A code repository that workflows can read for context and use to draft documentation updates. |
+
 ## Choose a provider path
 
 | Goal | Recommended path |
