@@ -89,6 +89,8 @@ Repository copies are not the same as multi-source deployment. A copy target doe
   Copy targets are on-demand. They do not create an automatic provider-to-provider mirror.
 </Callout>
 
+After a copy completes, keep treating the active deployment source as the only repository that publishes production until you deliberately switch the source in Git settings and run a successful manual update.
+
 ## Context repositories
 
 Agent and workflow features may use extra repositories as context.
@@ -112,6 +114,8 @@ path scope: services/billing
 ```
 
 Path scope is a workflow context boundary. It does not make that subdirectory a separate production docs source.
+
+When context repositories are connected through a provider webhook, review-event activity can queue eligible workflows. The workflow output still lands as a draft branch or pull request against the active docs source.
 
 ## Separate sites
 
@@ -180,6 +184,10 @@ Open **Settings > Deployment > Git settings** and confirm the active repository,
 ### A repository copy updated but the live site did not
 
 Confirm whether the copy target is the active production source. If it is only a copy target, it will not update the public site until you make it active.
+
+### A context repository changed but no page changed
+
+Confirm that a workflow was eligible to run, that the repository was selected as workflow context, and that the generated docs change was reviewed and merged into the active docs source.
 
 ### Agent changes appear in a different repository
 

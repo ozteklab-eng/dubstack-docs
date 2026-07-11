@@ -192,6 +192,16 @@ They are separate from the active deployment source:
 
 Use source repositories when the product code and docs live in different repositories, or when you want a workflow to watch a code repository without making that repository the docs source of truth.
 
+The source repository card shows operational metadata for each connected context repository.
+
+| Field | Meaning |
+| --- | --- |
+| Scope | Whether the source repository is connected for the current site or broader workspace context. |
+| Events | Which provider events can queue workflow runs, such as pull requests or merge requests. |
+| Configured | When dubstack last configured or refreshed the source repository event subscription. |
+
+If the card shows an active webhook, the repository can queue supported code-change workflows from review events. If it does not, scheduled and manual workflow runs can still use the repository as read-only context when the repository credential is valid.
+
 ### Path-scoped source context
 
 For large repositories, set an optional path scope on a workflow source repository.
@@ -226,6 +236,10 @@ Use a copy target when you want to:
 - preserve a clean escape path if a provider changes terms or availability
 
 Before switching production to a copy target, confirm the target repository has `dubstack.json`, all MDX pages, assets, OpenAPI specs, and a valid deployment branch.
+
+Repository copy targets are currently explicit actions. A successful copy proves that dubstack can read the active source and write to the target provider, but it does not create continuous mirroring, provider failover, or webhook replication.
+
+Use the active deployment source card to confirm what is serving production before telling teammates to push to a different repository.
 
 ## Protected deployments
 
@@ -272,6 +286,10 @@ For Forgejo, verify the repository token can create branches and pull requests o
 ### GitLab OAuth is connected but production still reads GitHub
 
 This is expected when GitHub remains the active deployment source. GitLab OAuth enables authoring/context capabilities. It does not automatically switch production publishing to GitLab.
+
+### A source repository webhook is active but the live site did not change
+
+This is expected. Source repository webhooks queue eligible workflows and provide context. They do not publish docs content directly. Check the workflow run, review the generated branch or pull request, and merge the change into the active docs repository before expecting the public site to change.
 
 ## Related
 

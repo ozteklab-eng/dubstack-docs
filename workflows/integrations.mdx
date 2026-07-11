@@ -70,6 +70,12 @@ The source repository does not become the docs repository. Generated changes sti
 
 If a source provider webhook is unavailable, use a scheduled run or run the workflow manually after the source change has merged.
 
+In Git settings, source repository cards show the selected scope, supported event types, and the last configuration time. Use those fields to confirm that the repository is connected for the workflow you expect before debugging the workflow runner.
+
+<Callout type="info">
+  Source repository events queue eligible workflow runs. They do not publish pages directly. The generated docs update must still be committed to, or merged into, the active docs source.
+</Callout>
+
 ### Narrow source context
 
 When a source repository is broad, add a path scope in the workflow configuration.
