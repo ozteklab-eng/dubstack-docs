@@ -6,7 +6,7 @@ icon: file-cog
 
 Frontmatter is the metadata block at the top of an `.mdx` or `.md` file.
 
-dubstack reads frontmatter during sync and stores page metadata in the published pages index. The public renderer, navigation, search, workflows, and public MCP use that metadata where relevant.
+DubStack reads frontmatter during sync and stores page metadata in the published pages index. The public renderer, navigation, search, workflows, and public MCP use that metadata where relevant.
 
 ## Basic frontmatter
 
@@ -22,7 +22,7 @@ order: 2
 ## Supported fields
 
 <ResponseField name="title" type="string">
-  Page title used in navigation, page headers, browser titles, search results, and public MCP responses. If omitted, dubstack derives a title from the file path.
+  Page title used in navigation, page headers, browser titles, search results, and public MCP responses. If omitted, DubStack derives a title from the file path.
 </ResponseField>
 
 <ResponseField name="description" type="string">
@@ -38,68 +38,8 @@ order: 2
 </ResponseField>
 
 <ResponseField name="hidden" type="boolean | string">
-  Set to `true` or `"true"` to keep a page out of generated navigation and workflow scans that skip hidden pages. A hidden page is excluded from search, sitemap output, public MCP, AI-readable indexes, and assistant retrieval unless site-wide hidden indexing is enabled with `seo.indexing: "all"`.
+  Set to `true` or `"true"` to keep a page out of generated navigation and workflow scans that skip hidden pages.
 </ResponseField>
-
-<ResponseField name="searchable" type="boolean | string">
-  Set to `false` or `"false"` to keep a published page reachable and navigable while excluding it from in-site search, public MCP search, the public MCP filesystem, and assistant retrieval indexes.
-</ResponseField>
-
-<ResponseField name="boost" type="number | string">
-  Positive relevance multiplier for search and assistant retrieval. Use it sparingly for canonical overview, quickstart, and migration pages that should rank above narrower pages for broad queries.
-</ResponseField>
-
-<ResponseField name="noindex" type="boolean | string">
-  Set to `true` or `"true"` to exclude a page from public indexing surfaces such as sitemap output and AI-readable indexes. Use this when the page should not be discoverable by crawlers or public AI tools.
-</ResponseField>
-
-## Search tuning frontmatter
-
-Use `searchable: false` when a page should stay visible by direct URL or navigation, but should not appear in search or public MCP retrieval.
-
-```mdx
----
-title: Legal terms
-description: Terms that readers can open from the footer.
-searchable: false
----
-```
-
-Use `boost` when a page is the best answer for broad queries.
-
-```mdx
----
-title: Quickstart
-description: Create and publish your first docs site.
-boost: 2
----
-```
-
-Keep boosts modest. Large boosts can make one page outrank more specific pages.
-
-Use navigation group `boost` in `dubstack.json` when an entire section needs a shared ranking multiplier. Page frontmatter `boost` overrides any boost inherited from navigation.
-
-Use a hidden navigation group with `searchable: true` when descendant pages should remain out of navigation but still be discoverable.
-
-```json
-{
-  "navigation": {
-    "tabs": [
-      {
-        "tab": "Documentation",
-        "groups": [
-          {
-            "group": "Migration helpers",
-            "hidden": true,
-            "searchable": true,
-            "pages": ["migration/legacy-api"]
-          }
-        ]
-      }
-    ]
-  }
-}
-```
 
 ## Authoring rules
 
@@ -107,9 +47,6 @@ Use a hidden navigation group with `searchable: true` when descendant pages shou
 - Use simple scalar values for fields that the sync worker reads.
 - Prefer explicit `title` and `description` for every public page.
 - Use `hidden: true` only when the page should not appear in generated navigation.
-- Use `searchable: false` for public utility pages that should not appear in search.
-- Use `noindex: true` when the page should be excluded from public crawler and AI-readable indexing surfaces.
-- Use `seo.indexing: "all"` only when hidden pages are direct-link content that should still be discoverable.
 
 <Callout type="warning">
   Frontmatter is source-controlled content. Do not put API keys, passwords, private tokens, or internal secrets in page frontmatter.

@@ -10,11 +10,11 @@ This is useful for sandbox APIs, onboarding flows, and endpoints where readers h
 
 ## Request flow
 
-When a reader clicks **Send** or **Try it**, dubstack uses this flow:
+When a reader clicks **Send** or **Try it**, DubStack uses this flow:
 
 1. The public endpoint page loads the published OpenAPI spec for the current site.
 2. The request builder creates a URL, method, headers, and body from the selected operation.
-3. The browser sends the request payload to the dubstack playground proxy.
+3. The browser sends the request payload to the DubStack playground proxy.
 4. The proxy validates the target URL and origin against the published spec.
 5. The proxy forwards the request and returns the upstream status and response body to the page.
 

@@ -6,7 +6,7 @@ icon: languages
 
 Language routing lets one docs site serve translated pages from locale-prefixed paths.
 
-Use it when you maintain translated MDX files in the same docs repository and want readers to switch between language versions from the docs shell. For the end-to-end publishing workflow, see [Internationalization](/configuration/internationalization).
+Use it when you maintain translated MDX files in the same docs repository and want readers to switch between language versions from the docs shell.
 
 ## File structure
 
@@ -26,7 +26,7 @@ zh/
   quickstart.mdx
 ```
 
-dubstack detects translated pages from two-letter locale prefixes such as `fr`, `es`, and `zh`.
+DubStack detects translated pages from two-letter locale prefixes such as `fr`, `es`, and `zh`.
 
 ## Configure the selector
 
@@ -72,7 +72,7 @@ The selector appears when at least one language is configured.
 
 ## Page matching
 
-When a reader switches languages, dubstack keeps the same page path when the translated file exists.
+When a reader switches languages, DubStack keeps the same page path when the translated file exists.
 
 For example:
 
@@ -123,11 +123,11 @@ If a language does not define a banner, the site-level [banner](/configuration/b
 </ResponseField>
 
 <ResponseField name="label" type="string">
-  Human-readable label shown in the language selector. If omitted, dubstack derives a label from the language code.
+  Human-readable label shown in the language selector. If omitted, DubStack derives a label from the language code.
 </ResponseField>
 
 <ResponseField name="flag" type="string">
-  Optional flag or icon label shown beside the language. If omitted, dubstack uses the default flag for known language codes.
+  Optional flag or icon label shown beside the language. If omitted, DubStack uses the default flag for known language codes.
 </ResponseField>
 
 <ResponseField name="href" type="string">

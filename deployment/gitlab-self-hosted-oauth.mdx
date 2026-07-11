@@ -4,17 +4,17 @@ description: Connect a reachable self-hosted GitLab instance for agent and workf
 icon: gitlab
 ---
 
-Self-hosted GitLab OAuth lets dubstack workflows act as an authorized GitLab user on a reachable GitLab instance.
+Self-hosted GitLab OAuth lets dubstack automations act as an authorized GitLab user on a reachable GitLab instance.
 
-Use it when your docs repository or workflow context repositories live on a self-hosted GitLab instance and you want agent, Slack, or workflow actions to create documentation changes as branches, commits, and merge requests.
+Use it when your docs repository lives on a self-hosted GitLab instance and you want agent, Slack, or workflow actions to create documentation changes as branches, commits, and merge requests.
 
 <Callout type="info">
-  Self-hosted GitLab OAuth is only the authoring connection. Configure the GitLab repository access token separately so dubstack can read or copy repository content. See [GitLab](/deployment/gitlab).
+  Self-hosted GitLab OAuth is only the authoring connection. Configure the GitLab deployment token separately so dubstack can read or copy repository content. See [GitLab](/deployment/gitlab).
 </Callout>
 
 ## What OAuth enables
 
-When self-hosted GitLab OAuth is connected, eligible workflows can:
+When self-hosted GitLab OAuth is connected, eligible automations can:
 
 - read GitLab user and project metadata
 - create a feature branch
@@ -32,15 +32,11 @@ Before connecting, confirm:
 - the GitLab instance is reachable from dubstack over HTTPS
 - the instance uses a trusted TLS certificate
 - the docs repository exists on that instance
-- the repository access token connection is configured in [Git settings](/deployment/gitlab)
+- the deployment token connection is configured in [Git settings](/deployment/gitlab)
 - your dubstack workspace has self-hosted GitLab OAuth enabled
 - the GitLab user who authorizes OAuth can create branches and merge requests in the project
 
 If you do not see **Connect Self-Hosted GitLab** in Git settings, contact your dubstack operator or support team to enable the workspace configuration.
-
-<Callout type="warning">
-  Instances behind a VPN, private network, or firewall that blocks inbound HTTPS cannot complete OAuth or project API calls. The instance URL you enter must be reachable by dubstack using the same public base URL that GitLab advertises.
-</Callout>
 
 ## Register the OAuth application
 
@@ -54,13 +50,11 @@ Use these settings:
 | Redirect URI | Use the redirect URI provided for your dubstack workspace. |
 | Confidential | Enabled |
 | Trusted | Disabled unless your security team intentionally wants to skip user consent |
-| Scopes | `api`, `read_repository`, `write_repository` |
+| Scopes | `api`, `read_user` |
 
 <Callout type="warning">
   Keep the application secret outside the docs repository. OAuth client secrets should be stored only in the workspace's secret configuration.
 </Callout>
-
-Use the scopes above for authoring. The `api` scope lets dubstack inspect project metadata and manage merge requests, while repository read/write scopes let authorized workflow runs clone, branch, and push documentation changes.
 
 ## Connect authoring access
 
@@ -70,32 +64,12 @@ After the workspace is configured with the self-hosted GitLab OAuth application:
 2. Go to **Settings > Deployment > Git settings**.
 3. Choose **GitLab**.
 4. Enter the self-hosted GitLab instance URL.
-5. Confirm the GitLab repository access token and branch are saved.
+5. Confirm the GitLab deployment token and branch are saved.
 6. Click **Connect Self-Hosted GitLab**.
 7. Authorize the OAuth application in GitLab.
 8. Return to Git settings and confirm the GitLab OAuth status is connected.
 
 The OAuth connection can be scoped to the current site or used as an organization fallback, depending on how your workspace is configured.
-
-## Select projects
-
-After OAuth is connected, expand the GitLab account in Git settings and select the projects that should be available to workflows and agents.
-
-Use project selection to control authoring scope:
-
-- select only the docs repository when workflows should update documentation but not inspect product code
-- select product code repositories when **Update from code changes** should use them as context
-- select repositories from the same self-hosted instance that the OAuth user can access
-
-Selecting a project does not make that project the active deployment source. The active deployment source is still configured by the repository and branch fields in Git settings.
-
-## Event and webhook behavior
-
-For selected workflow source repositories, dubstack can register or refresh the provider event subscription when the instance supports it and the connected user has permission.
-
-Use provider events for reactive workflows such as code-change documentation updates. Manual and scheduled workflow runs can still use selected repositories as read-only context when events are not available.
-
-If your GitLab instance restricts outbound webhooks, allow HTTPS callbacks from GitLab to the dubstack API endpoint configured for your workspace. Keep webhook secrets in the dashboard or secret manager; do not paste them into docs repositories.
 
 ## Validate the connection
 
@@ -131,7 +105,7 @@ Check the OAuth application's redirect URI, client ID, client secret, and scopes
 
 ### Authoring says GitLab OAuth is not connected
 
-Reconnect GitLab OAuth in Git settings. The repository access token alone cannot create branches, commits, or merge requests.
+Reconnect GitLab OAuth in Git settings. The deployment token alone cannot create branches, commits, or merge requests.
 
 ### Merge request creation fails
 
@@ -146,4 +120,4 @@ Confirm the workflow has GitLab repository context selected, the GitLab OAuth co
 - [GitLab](/deployment/gitlab)
 - [Git providers](/deployment/forgejo-github-gitlab)
 - [Source control troubleshooting](/deployment/source-control-troubleshooting)
-- [Workflows](/workflows)
+- [Automations](/automations)

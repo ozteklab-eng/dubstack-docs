@@ -1,0 +1,197 @@
+---
+title: Automation reference
+description: Review built-in automation triggers, requirements, and behavior.
+icon: list-checks
+---
+
+This page describes the built-in automations available from the dashboard.
+
+Availability depends on your connected repository, authoring permissions, enabled add-ons, and runtime capabilities.
+
+In this reference, **pull request** means the provider-native review request for the connected Git provider, including GitLab merge requests and Forgejo pull requests.
+
+## At a glance
+
+| Automation | Default trigger | Default update mode | Context repos | Required setup |
+| --- | --- | --- | --- | --- |
+| Update from code changes | Custom schedule, twice weekly | Require review | Supported | At least one source repository |
+| Draft changelog | Custom schedule, weekly | Require review | Supported | None |
+| Draft improvements from assistant conversations | Custom schedule, weekly | Require review | Not supported | Assistant analytics |
+| Draft improvements from user feedback | Custom schedule, weekly | Require review | Not supported | Feedback collection |
+| Translate content | Content update | Automatically | Not supported | Target languages and translation routing |
+| Fix broken links | Content update | Require review | Not supported | None |
+| Audit SEO metadata | Content update | Require review | Not supported | None |
+| Fix grammar & typos | Content update | Require review | Not supported | None |
+| Apply style guide | Content update | Require review | Not supported | Style guide instructions |
+
+<Callout type="warning">
+  Translation is listed in the catalog, but it is blocked until translation routing and policy support are available for the selected deployment.
+</Callout>
+
+## Self-updating content workflows
+
+### Update from code changes
+
+Updates content when source code for products, features, or APIs changes.
+
+| Setting | Value |
+| --- | --- |
+| Triggers | Custom schedule, code change |
+| Default schedule | Twice weekly |
+| Update modes | Require review, automatically |
+| Required capabilities | Docs repository, repository write access, authoring model |
+| Required setup | At least one source repository |
+| Context repositories | Supported |
+| Integrations | Supported |
+
+Use this automation when product source changes should produce a docs draft. Add selected source repositories as context so the agent can inspect relevant code while it runs.
+
+Scheduled runs read bounded source change context since the previous comparable scheduled run. Code-change runs are queued from validated merged source repository events.
+
+Code-change events are review-event driven. Configure the source repositories that should act as context, then merge a pull request or merge request in that source repository. Direct pushes can still be inspected by a scheduled run, but they do not replace the review-event trigger path.
+
+If the source repository is a monorepo, add a path scope in the workflow configuration so the run focuses on the relevant app, package, or service. Path scope does not change the docs repository that receives generated updates.
+
+Supported source repositories can be on a different provider from the docs repository. For example, a GitHub-backed docs site can use a Forgejo code repository as source context while generated documentation changes still open against the GitHub docs repository.
+
+Before enabling automatic updates, run this automation in **Require review** mode and confirm:
+
+- the source repository card validates in Git settings
+- the automation has the expected source repository selected
+- the path scope excludes unrelated code
+- the generated change targets the docs repository, not the source repository
+- the provider event is a merged pull request or merge request when using the code-change trigger
+
+### Draft changelog
+
+Drafts a changelog entry from recent product updates on a recurring schedule.
+
+| Setting | Value |
+| --- | --- |
+| Triggers | Custom schedule |
+| Default schedule | Weekly |
+| Update modes | Require review, automatically |
+| Required capabilities | Docs repository, repository write access, authoring model |
+| Context repositories | Supported |
+
+Use this automation to keep release notes and changelog pages fresh without requiring a manual first draft.
+
+### Draft improvements from assistant conversations
+
+Reviews assistant question trends and opens targeted content updates on a schedule.
+
+| Setting | Value |
+| --- | --- |
+| Triggers | Custom schedule |
+| Default schedule | Weekly |
+| Update modes | Require review, automatically |
+| Required capabilities | Docs repository, repository write access, authoring model, assistant analytics |
+
+Use this automation when repeated reader questions show gaps in the docs.
+
+### Draft improvements from user feedback
+
+Reviews page feedback and opens targeted updates on a schedule.
+
+| Setting | Value |
+| --- | --- |
+| Triggers | Custom schedule |
+| Default schedule | Weekly |
+| Update modes | Require review, automatically |
+| Required capabilities | Docs repository, repository write access, authoring model, feedback collection |
+
+Enable feedback collection before using this automation.
+
+## Maintenance workflows
+
+### Translate content
+
+Keeps selected languages in sync whenever content changes.
+
+| Setting | Value |
+| --- | --- |
+| Triggers | Content update, custom schedule |
+| Default update mode | Automatically |
+| Required capabilities | Docs repository, repository write access, authoring model, language routing |
+| Required setup | At least one target language |
+| Current runner status | Blocked until translation routing and policy support are available |
+
+Use this automation after language routing is configured for the deployment.
+
+### Fix broken links
+
+Finds and fixes broken internal and external links whenever content changes.
+
+| Setting | Value |
+| --- | --- |
+| Triggers | Content update, custom schedule |
+| Default update mode | Require review |
+| Required capabilities | Docs repository, repository write access, authoring model |
+
+Use review mode when external link behavior may require human judgment.
+
+### Audit SEO metadata
+
+Audits titles, meta descriptions, headings, and canonical tags whenever content changes.
+
+| Setting | Value |
+| --- | --- |
+| Triggers | Content update, custom schedule |
+| Default update mode | Require review |
+| Required capabilities | Docs repository, repository write access, authoring model |
+
+Use this automation to catch missing titles, weak descriptions, duplicate heading structures, and canonical issues.
+
+### Fix grammar & typos
+
+Finds and fixes typos, spelling mistakes, and grammar errors whenever content changes.
+
+| Setting | Value |
+| --- | --- |
+| Triggers | Content update, custom schedule |
+| Default update mode | Require review |
+| Required capabilities | Docs repository, repository write access, authoring model |
+
+This automation is useful as a low-risk first automation because changes are usually small and easy to review.
+
+### Apply style guide
+
+Enforces your style guide's voice, tone, and rules whenever content changes.
+
+| Setting | Value |
+| --- | --- |
+| Triggers | Content update, custom schedule |
+| Default update mode | Require review |
+| Required capabilities | Docs repository, repository write access, authoring model |
+| Required setup | Style guide instructions |
+
+Add style guide rules before enabling this automation.
+
+## Custom automations
+
+Custom automations let you define the trigger, instructions, context repositories, integrations, and update mode.
+
+| Setting | Value |
+| --- | --- |
+| Triggers | Content update, code change, custom schedule |
+| Update modes | Require review, automatically |
+| Required capabilities | Docs repository, repository write access, authoring model |
+| Context repositories | Supported |
+| Integrations | Supported |
+
+See [Create automations](/automations/create) for setup guidance.
+
+## Slack notifications
+
+When Slack is connected, automations can post run results to selected channels.
+
+Notification modes:
+
+| Mode | Behavior |
+| --- | --- |
+| All run results | Post when automation runs complete or fail. |
+| Failures only | Post only when an automation fails. |
+
+Pull-request workflows can also send review reminders and merged pull request updates.
+
+Invite the app to a channel before selecting that channel for workflow notifications.

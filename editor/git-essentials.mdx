@@ -10,7 +10,7 @@ You can use the dashboard without memorizing Git commands, but understanding the
 
 ## Source of truth
 
-dubstack uses a Git-backed publishing model.
+DubStack uses a Git-backed publishing model.
 
 ```text
 Authoring change
@@ -20,17 +20,6 @@ Authoring change
 ```
 
 Git remains the write source of truth. Published artifacts are the read path used by the live docs site.
-
-## Dashboard and local workflows
-
-You can edit the same site from the dashboard or from a local Git checkout.
-
-| Workflow | Use when |
-| --- | --- |
-| Dashboard editor | You want browser-based editing, visual previews, and publish controls without using Git commands. |
-| Local Git workflow | Developers want to use an IDE, command line, CI checks, pull requests, or merge requests. |
-
-Both workflows write to the configured source. External pushes sync back into published artifacts and should be visible in the editor after the source sync completes.
 
 ## Core concepts
 
@@ -89,14 +78,14 @@ Both workflows write to the configured source. External pushes sync back into pu
 | Create a pull request | Opens a review from the feature branch to the deployment branch |
 | Merge a pull request | Moves the approved changes into the deployment branch |
 | Manual update | Re-syncs the configured source into published artifacts |
-| External Git push | Triggers a sync when the provider webhook is configured, or can be pulled through manual update |
+| External Git push | Triggers a sync when the provider webhook is configured |
 | Agent draft | Creates a branch and draft pull request when repository access is enabled |
 
 The exact actions visible in the editor depend on your connected provider, branch protection, repository permissions, and feature access.
 
 ## Hosted starter repositories
 
-If you skip Git during onboarding, dubstack can start with a hosted source. This lets you edit and publish without connecting your own Git provider immediately.
+If you skip Git during onboarding, DubStack can start with a hosted source. This lets you edit and publish without connecting your own Git provider immediately.
 
 Move to a customer-owned repository when you want:
 
@@ -122,8 +111,6 @@ The live site updates when:
 
 Use [Manual updates and history](/deployment/manual-updates-history) when a webhook is delayed or you need to re-sync the current branch.
 
-For the command-line flow, see [Local Git workflow](/deployment/local-git-workflow).
-
 ## Branch protection
 
 Branch protection should stay enabled for production docs repositories.
@@ -141,13 +128,6 @@ Keep generated and authored content separated.
 - Keep OpenAPI specs in a predictable path such as `api-reference/openapi.json`.
 - Store images and reusable snippets in folders committed to the same source.
 - Avoid editing the same file independently from multiple disconnected sources.
-
-## Related
-
-- [Local Git workflow](/deployment/local-git-workflow)
-- [Branching and publishing](/editor/branching-and-publishing)
-- [GitHub](/deployment/github)
-- [GitLab](/deployment/gitlab)
 
 ## Troubleshooting
 

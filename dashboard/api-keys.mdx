@@ -6,7 +6,7 @@ icon: key-round
 
 API keys give trusted backend systems a controlled way to call dubstack without using a browser session.
 
-Use **Settings > Security > API keys** for server-side automation such as CI deployment triggers, cron jobs, release tooling, or an internal platform job.
+Use **Settings > Security > API keys** for server-side automation such as triggering enabled workflows from CI, cron, release tooling, or an internal platform job.
 
 <Callout type="warning">
   Admin API keys are secrets. Store them in a secret manager, never in your docs repository, public pages, screenshots, or client-side code.
@@ -18,44 +18,23 @@ Admin API keys are separate from reader-facing playground credentials.
 
 Use them when a trusted system needs to call dubstack on behalf of your organization:
 
-- triggering a deployment update from CI or a release pipeline
-- creating a branch preview deployment from a pull request pipeline
-- triggering an enabled workflow from CI or release tooling
+- triggering an enabled workflow from CI or a release pipeline
 - running a scheduled backend job from your own scheduler
-- integrating internal platform tooling with documentation workflows
+- integrating internal platform tooling with documentation automation
 - rotating access without sharing a personal dashboard session
 
-Scopes control which Admin API capabilities a key can use:
-
-| Scope | Allows |
-| --- | --- |
-| `deployments:trigger` | Queue live deployment updates and branch preview deployments. |
-| `deployments:read` | Read deployment status and logs. |
-| `workflows:run` | Trigger eligible workflow runs. |
-
-## Key types
-
-dubstack uses different credentials for different trust boundaries.
-
-| Credential | Where it is managed | Who uses it | Use it for |
-| --- | --- | --- | --- |
-| Admin API key | **Settings > Security > API keys** | Your backend systems, CI jobs, schedulers, and trusted automation | Calling dubstack admin API routes such as deployment or workflow triggers. |
-| Playground credential | API playground and your OpenAPI security scheme | Docs readers trying your documented API | Supplying a bearer token, API key, or other credential for your own API at request time. |
-| Reader session | Docs authentication | Signed-in docs readers | Unlocking protected documentation pages. |
-
-Do not reuse one credential type for another. Admin API keys are for dubstack automation only. Playground credentials belong to your API and should be entered by readers only when they intentionally send a request from the API reference.
+The first supported scope is `workflows:run`, which allows a key to trigger eligible automation runs through the Admin API.
 
 ## Create a key
 
 1. Open the dashboard.
 2. Select the organization and deployment.
 3. Go to **Settings > Security > API keys**.
-4. Enter a clear name, such as `Release deployment trigger`.
+4. Enter a clear name, such as `Release workflow trigger`.
 5. Optionally set an expiry date.
-6. Select the scopes the key needs.
-7. Keep **Restrict this key to this deployment** enabled unless a backend job must operate across multiple deployments.
-8. Click **Create key**.
-9. Store the raw key immediately. dubstack only shows the raw key once.
+6. Keep **Restrict this key to this deployment** enabled unless a backend job must operate across multiple deployments.
+7. Click **Create key**.
+8. Store the raw key immediately. dubstack only shows the raw key once.
 
 After you leave the page, only the key prefix, scope, status, and audit metadata remain visible.
 
@@ -64,47 +43,11 @@ After you leave the page, only the key prefix, scope, status, and audit metadata
 | Field | Purpose |
 | --- | --- |
 | Name | Human-readable label shown in the dashboard. |
-| Scope | The allowed Admin API capabilities. Select the minimum set the external system needs. |
+| Scope | The allowed Admin API capability. The initial scope is `workflows:run`. |
 | Site scope | Restricts the key to one deployment. Site-scoped keys are the safest default. |
 | Expires at | Optional expiry timestamp. Expired keys stop authenticating. |
 | Last used | Timestamp from the latest successful use. |
 | Status | Shows whether the key is active, expired, or revoked. |
-
-## Trigger a deployment
-
-Use a key with the `deployments:trigger` scope to queue a live update from the configured deployment branch.
-
-```bash
-curl --request POST \
-  --url "https://api.dubstack.ai/api/project/update/{siteId}" \
-  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY"
-```
-
-Successful requests return `202 Accepted` with a `statusId`. Use that value to poll deployment status.
-
-```bash
-curl --request GET \
-  --url "https://api.dubstack.ai/api/project/update-status/{statusId}" \
-  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY"
-```
-
-Use a key with either `deployments:trigger` or `deployments:read` to poll status.
-
-## Trigger a preview deployment
-
-Use a key with the `deployments:trigger` scope to create or refresh a preview deployment for a branch.
-
-```bash
-curl --request POST \
-  --url "https://api.dubstack.ai/api/project/preview/{siteId}" \
-  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY" \
-  --header "Content-Type: application/json" \
-  --data '{
-    "branch": "feature/docs-update"
-  }'
-```
-
-Successful requests return `202 Accepted` with a `statusId` and `previewUrl`.
 
 ## Trigger a workflow
 
@@ -160,7 +103,7 @@ Revocation is immediate. Existing clients using the key will stop working on the
 
 - Prefer site-scoped keys.
 - Use one key per external system so rotation is targeted.
-- Set expiries for temporary or project-specific workflow.
+- Set expiries for temporary or project-specific automation.
 - Rotate keys after team or vendor changes.
 - Store keys only in backend secret stores.
 - Review `Last used` before revoking a key so you understand which client still depends on it.
@@ -190,7 +133,7 @@ Open **Automate > Workflows**, inspect the run history, and check the runner sta
 
 ## Related
 
-- [Configure workflow runs](/workflows/configuration)
-- [Manage workflows](/workflows/manage)
-- [Workflow reference](/workflows/reference)
+- [Configure automation runs](/automations/configuration)
+- [Manage automations](/automations/manage)
+- [Automation reference](/automations/reference)
 - [Roles](/dashboard/roles)

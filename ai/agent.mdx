@@ -15,7 +15,7 @@ It is separate from the public assistant. The public assistant answers reader qu
 - Use connected integration context such as Slack or Jira when enabled.
 - Draft documentation changes.
 - Open pull requests through an authoring-capable Git provider.
-- Support workflows that run on schedules, code changes, or content updates.
+- Support automations that run on schedules, code changes, or content updates.
 
 ## Requirements
 
@@ -66,7 +66,7 @@ Connected integrations can provide scoped context to the agent:
 
 Only connected integrations that support the requested action are made available to the agent.
 
-Provider cards that are visible but marked as coming soon cannot be selected for agent runs or workflows yet. Use connected providers only when testing or documenting a production workflow.
+Provider cards that are visible but marked as coming soon cannot be selected for agent runs or automations yet. Use connected providers only when testing or documenting a production workflow.
 
 ## Readiness checks
 
@@ -86,7 +86,7 @@ If any path is not ready, fix the blocking repository, indexing, or profile issu
 
 Some managed deployments stay readable but disable authoring controls to prevent accidental repository changes.
 
-Create a disposable deployment when testing Slack, Git, or workflow authoring.
+Create a disposable deployment when testing Slack, Git, or automation authoring.
 
 ## Safety boundaries
 
@@ -96,5 +96,5 @@ Create a disposable deployment when testing Slack, Git, or workflow authoring.
 - Secrets and private tokens should not be committed to documentation.
 
 <Callout type="info">
-  Use [Workflows](/workflows) when you want the agent to run from a recurring trigger or repository event.
+  Use [Automations](/automations) when you want the agent to run from a recurring trigger or repository event.
 </Callout>

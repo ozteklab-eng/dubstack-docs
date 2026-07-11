@@ -4,7 +4,7 @@ description: Connect Slack so the agent can answer docs questions, draft documen
 icon: message-circle
 ---
 
-The Slack integration adds the dubstack agent to your Slack workspace.
+The Slack integration adds the DubStack agent to your Slack workspace.
 
 After it is connected, authorized workspace members can ask the agent questions from Slack and request draft documentation changes for the selected deployment.
 
@@ -18,7 +18,7 @@ Slack can be used for:
 - starting documentation update requests from Slack
 - opening draft pull requests when the deployment has authoring-ready Git access
 - updating the same draft pull request from follow-up replies in the same thread
-- using bounded Slack thread or channel context in agent and workflow runs
+- using bounded Slack thread or channel context in agent and automation runs
 - sending workflow notifications to selected channels
 
 Slack does not replace repository review. Documentation changes still go through the connected Git provider.
@@ -37,10 +37,6 @@ Before connecting Slack, confirm:
 
 If Slack was installed before new permissions were added, reconnect the app from the dashboard so the missing scopes are granted.
 
-If your Slack workspace requires app approval, ask a workspace owner or admin to approve the dubstack app before connecting it from the dashboard.
-
-For Slack Enterprise Grid, make sure the app is installed in the specific workspace where teammates will mention the agent. An organization-level app approval is not always enough for the bot to respond inside a workspace.
-
 ## Connect Slack
 
 1. Open the dashboard.
@@ -51,18 +47,7 @@ For Slack Enterprise Grid, make sure the app is installed in the specific worksp
 6. Return to the Agent page.
 7. Confirm the Slack app row says the agent is connected.
 
-You can also manage the connection from **Settings > Workspace > Integrations**.
-
-## Reconnect Slack
-
-Reconnect the Slack app when:
-
-- Slack scopes changed after the original installation
-- the bot token was revoked
-- a workspace admin reapproved the app
-- the app appears installed but the dashboard reports missing permissions
-
-Reinstalling from the dashboard refreshes the stored Slack connection. Existing channels, threads, and draft pull requests are not deleted.
+You can also manage the connection from **Settings > Organization > Agent integrations**.
 
 ## Choose a deployment
 
@@ -103,42 +88,6 @@ Use direct messages for private questions. Mention the agent in a channel when t
 If the request is only a docs question, the agent answers from the selected deployment's published docs index and includes source links when relevant.
 
 If Jira is connected, Slack answers can include Jira issue context when your prompt explicitly asks for Jira context, includes a Jira issue key, or includes a `jql:` query.
-
-## Reference source repositories
-
-Slack requests can reference connected source repositories when the documentation change depends on product code, API behavior, or implementation details outside the docs repository.
-
-Source repositories are read-only context. The agent can inspect bounded files, pull requests, or merge requests from the connected source repository, but the generated documentation change still targets the active docs repository.
-
-Examples:
-
-```text
-@dub update the authentication guide based on the changes in acme/api-server#1234 and open a draft pull request.
-```
-
-```text
-@dub review the source repository context under services/billing and draft a docs update for the new invoice webhook behavior.
-```
-
-Use source repository references when:
-
-- product code lives outside the docs repository
-- a monorepo path should drive a focused documentation update
-- a merged pull request or merge request explains behavior that the docs need to capture
-
-If the repository is not connected in Git settings, the agent asks an admin or editor to connect it before using it as source context.
-
-## Roles and permissions
-
-Slack agent permissions follow the teammate's dubstack role for the selected organization and deployment.
-
-| Role | Slack behavior |
-| --- | --- |
-| Owner or admin | Can connect and disconnect Slack, ask docs questions, and request documentation changes when Git authoring is ready. |
-| Editor | Can ask docs questions and request documentation changes when Git authoring is ready. |
-| Viewer | Can ask docs questions. Write actions are blocked. |
-
-If a teammate cannot create a draft pull request from Slack, check their dubstack role, the selected deployment, and repository authoring readiness.
 
 ## Draft documentation from Slack
 
@@ -188,7 +137,7 @@ Supported examples include:
 
 Unsupported or unreadable files are not used as context. If all attachments are unsupported, the agent asks you to provide text context instead.
 
-Keep attachments focused. By default the agent reads up to three text-like files, up to 64 KB per file. Large files may be truncated, and binary files are ignored.
+Keep attachments focused. Large files may be truncated, and binary files are ignored.
 
 ## Repository authoring readiness
 
@@ -213,9 +162,9 @@ When authoring is unavailable, the agent can still answer docs questions if the 
 
 ## Workflow notifications
 
-Workflows can send run results to Slack when Slack is connected.
+Automations can send run results to Slack when Slack is connected.
 
-Use notification settings in the workflow drawer to choose the channel and whether to notify on all runs or only failures.
+Use notification settings in the automation drawer to choose the channel and whether to notify on all runs or only failures.
 
 Workflow notifications are separate from authoring requests. Connecting Slack does not automatically send every workflow run to a channel; choose the notification target in the workflow settings.
 
@@ -227,7 +176,7 @@ Workflow notifications are separate from authoring requests. Connecting Slack do
   </Accordion>
 
   <Accordion title="The agent answers questions but will not open a pull request">
-    Check repository authoring readiness. The deployment needs a connected Git provider, write-capable provider access, and an enabled authoring model.
+    Check repository authoring readiness. The deployment needs a connected GitHub or GitLab repository, write-capable provider access, and an enabled authoring model.
   </Accordion>
 
   <Accordion title="The agent says the deployment is protected">
@@ -245,7 +194,7 @@ Workflow notifications are separate from authoring requests. Connecting Slack do
 
 ## Disconnect Slack
 
-1. Open **Agent** or **Settings > Workspace > Integrations**.
+1. Open **Agent** or **Settings > Organization > Agent integrations**.
 2. Find Slack.
 3. Choose **Disconnect**.
 

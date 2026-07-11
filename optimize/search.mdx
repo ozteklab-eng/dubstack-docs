@@ -6,7 +6,7 @@ icon: search
 
 Search helps readers find the right page without knowing your navigation structure.
 
-dubstack builds search from published docs content. Good search quality starts with clear page metadata, strong headings, and navigation that reflects the way readers think about your product.
+DubStack builds search from published docs content. Good search quality starts with clear page metadata, strong headings, and navigation that reflects the way readers think about your product.
 
 ## What search uses
 
@@ -21,68 +21,6 @@ Search quality is influenced by:
 - published page paths
 
 Pages that are hidden from public indexing are not useful search candidates. Keep important pages visible in navigation and keep private content out of public docs.
-
-## Tune page ranking
-
-Use page frontmatter to tune search behavior when metadata and content structure are not enough.
-
-```mdx
----
-title: Quickstart
-description: Create and publish your first docs site.
-boost: 2
----
-```
-
-`boost` is a positive relevance multiplier. It affects in-site search, public MCP search, and assistant retrieval ranking. Use it for canonical pages that should rank highly for broad queries, such as quickstarts, migration guides, and API overview pages.
-
-Keep boosts modest. Search should still return the most specific page for specific queries.
-
-## Boost a navigation group
-
-Set `boost` on a navigation group in `dubstack.json` to apply the multiplier to every page under that group.
-
-```json
-{
-  "navigation": {
-    "tabs": [
-      {
-        "tab": "Documentation",
-        "groups": [
-          {
-            "group": "Getting started",
-            "boost": 5,
-            "pages": [
-              "quickstart",
-              "getting-started/create-site"
-            ]
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-A page inherits the boost from its nearest parent group. Nested groups can override parent boosts, and a page's own frontmatter `boost` always wins over inherited navigation boost.
-
-Use group boosts for a small number of high-signal sections. Avoid boosting an entire docs site, because that removes the ranking signal.
-
-## Exclude utility pages from search
-
-Use `searchable: false` when a page should stay published and directly reachable but should not appear in search or public AI retrieval.
-
-```mdx
----
-title: Terms of service
-description: Legal terms linked from the footer.
-searchable: false
----
-```
-
-This keeps the page out of in-site search, public MCP search, the public MCP filesystem, and assistant retrieval indexes. It does not remove the page from navigation if you explicitly list it there.
-
-Use `noindex: true` instead when the page should be excluded from sitemap and public indexing surfaces.
 
 ## Write searchable titles
 
@@ -131,7 +69,7 @@ For OpenAPI-backed pages, write clear operation summaries and descriptions in th
 ```json
 {
   "summary": "Create an API key",
-  "description": "Creates a scoped API key for a deployment so workflow can call the dubstack API."
+  "description": "Creates a scoped API key for a deployment so automation can call the DubStack API."
 }
 ```
 
@@ -147,7 +85,7 @@ If search results look stale:
 2. Trigger a manual update from the dashboard.
 3. Refresh the public docs page.
 4. Search for exact words from the page title or heading.
-5. Check whether the page is hidden, marked `noindex`, or marked `searchable: false`.
+5. Check whether the page is hidden or marked `noindex`.
 
 ## Related topics
 

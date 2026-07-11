@@ -21,8 +21,6 @@ hidden: true
 
 When the sync worker sees this field, the page metadata is marked as hidden.
 
-Page-level `hidden: true` wins over hidden navigation group search settings. If a page itself is hidden, it is excluded from search, sitemap output, AI-readable indexes, public MCP search, and assistant retrieval unless you enable site-wide hidden indexing.
-
 ## Remove a page from navigation
 
 A page that is not listed in `dubstack.json` navigation does not appear in the rendered sidebar.
@@ -46,66 +44,6 @@ A page that is not listed in `dubstack.json` navigation does not appear in the r
 ```
 
 In this example, only `index` and `quickstart` are listed in the Guides group.
-
-## Hide a group but keep it searchable
-
-Set `hidden: true` and `searchable: true` on a navigation group when pages should stay out of navigation but still appear in public discovery surfaces.
-
-```json
-{
-  "navigation": {
-    "tabs": [
-      {
-        "tab": "Documentation",
-        "groups": [
-          {
-            "group": "Migration helpers",
-            "hidden": true,
-            "searchable": true,
-            "pages": [
-              "migration/old-endpoints",
-              "migration/legacy-auth"
-            ]
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-Pages in a searchable hidden group are included in:
-
-- in-site search
-- sitemap output
-- `/llms.txt` and `/llms-full.txt`
-- public MCP search and filesystem reads
-- assistant retrieval context
-
-## Index all hidden pages
-
-Set `seo.indexing` to `all` when every hidden page should be discoverable by search, sitemap output, public MCP, AI-readable indexes, and assistant retrieval.
-
-```json
-{
-  "seo": {
-    "indexing": "all"
-  }
-}
-```
-
-Use this only when hidden pages are direct-link content, not private content.
-
-## Exclude a page from discovery
-
-Use `searchable: false` when a page should remain reachable but should not appear in search or retrieval. Use `noindex: true` when a page should be excluded from sitemap output and public AI discovery surfaces.
-
-```mdx
----
-title: Internal redirect helper
-searchable: false
----
-```
 
 ## Hidden is not private
 

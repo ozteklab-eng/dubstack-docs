@@ -8,8 +8,6 @@ GitHub is the primary connected-source provider for dubstack docs.
 
 Use the GitHub App when your documentation source lives in a GitHub repository and you want automatic updates, preview deployments, editor commits, agent draft pull requests, and workflow-driven documentation changes.
 
-Developers can still use the normal GitHub workflow. Clone the connected repository, edit MDX files or `dubstack.json`, commit, and push. The GitHub App receives the repository event and starts the same sync path used by dashboard publishing.
-
 ## When you need the GitHub App
 
 | Repository type | GitHub App required? |
@@ -52,7 +50,7 @@ The dashboard shows the active repository, branch, last sync time, and app insta
   <Step title="Save and verify">
     Save the connection, then run a manual update.
 
-    The manual update verifies that dubstack can read the selected repository and publish artifacts for the live site.
+    The manual update verifies that DubStack can read the selected repository and publish artifacts for the live site.
   </Step>
 </Steps>
 
@@ -73,23 +71,6 @@ For richer sites, include:
 - reusable snippets
 - folders that match the slugs in `dubstack.json`
 
-## Publish from a local checkout
-
-Use this when your team prefers GitHub branches, pull requests, code review, or CI.
-
-```bash
-git clone https://github.com/your-org/your-docs-repo.git
-cd your-docs-repo
-git checkout -b docs/update-guide
-git add .
-git commit -m "docs: update guide"
-git push -u origin docs/update-guide
-```
-
-Open a pull request and merge it into the deployment branch after review.
-
-For small changes, you can push directly to the deployment branch if your repository policy allows it. See [Local Git workflow](/deployment/local-git-workflow) for the full flow.
-
 ## GitHub App access
 
 Grant access only to the repositories dubstack needs.
@@ -104,34 +85,11 @@ The GitHub App is used for:
 
 If your organization uses branch protection, keep it enabled. Agent and editor changes should still follow the repository's review rules.
 
-## Additional repository context
-
-You can grant the GitHub App access to repositories that are not the active docs repository.
-
-Use additional repository access when:
-
-- product code lives outside the docs repository
-- a workflow should inspect API, SDK, or application changes
-- the agent needs source context before drafting a documentation update
-- a monorepo has a narrow package or service path that should inform one workflow
-
-Additional repositories are context repositories. They do not publish pages and they do not become copy targets automatically.
-
-| Repository role | Behavior |
-| --- | --- |
-| Active docs repository | Publishes the live site and receives editor, agent, and workflow changes. |
-| Additional repository access | Lets the agent or workflow read selected source files as context. |
-| Repository copy target | Receives an explicit one-time copy from the active docs source when configured. |
-
-Generated documentation changes should still be committed to, or opened as a pull request against, the active docs repository.
-
-For workflow setup, see [Draft docs from code changes](/guides/draft-docs-from-code) and [Workflow integrations](/workflows/integrations).
-
 ## Permissions
 
 GitHub shows the permissions requested by the app during installation or when permissions change.
 
-| Permission | Why dubstack uses it |
+| Permission | Why DubStack uses it |
 | --- | --- |
 | `metadata: read` | Identify repositories and installation ownership. |
 | `contents: read` | Read source files during sync, preview, search, assistant, and MCP indexing. |
@@ -151,9 +109,9 @@ Use the Git settings card to confirm the active source.
 
 | State | Meaning |
 | --- | --- |
-| Hosted repository | dubstack manages the starter source for you. A separate GitHub App install is not required until you move to your own repository. |
+| Hosted repository | DubStack manages the starter source for you. A separate GitHub App install is not required until you move to your own repository. |
 | Active GitHub repository | The site publishes from the listed repository and branch. |
-| GitHub app not installed | The source points to GitHub, but dubstack does not have a usable installation for the repository. |
+| GitHub app not installed | The source points to GitHub, but DubStack does not have a usable installation for the repository. |
 | Last synced | The most recent successful sync time for the active provider. |
 
 Use **Settings > Deployment > GitHub app** to install the app, open GitHub installation settings, or grant access to additional repositories.
@@ -224,7 +182,6 @@ Reinstall or reauthorize the GitHub App, then run another manual update to verif
 ## Related
 
 - [Source control troubleshooting](/deployment/source-control-troubleshooting)
-- [Local Git workflow](/deployment/local-git-workflow)
 - [Git providers](/deployment/forgejo-github-gitlab)
 - [Preview deployments](/deployment/preview-deployments)
 - [Deployment permissions](/dashboard/deployment-permissions)

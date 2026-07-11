@@ -4,7 +4,7 @@ description: Understand the generated llms.txt, llms-full.txt, skill.md, and MCP
 icon: file-search
 ---
 
-dubstack publishes AI-readable files for every public docs site so agents can discover current documentation without scraping the site shell.
+DubStack publishes AI-readable files for every public docs site so agents can discover current documentation without scraping the site shell.
 
 These files are generated from the published docs navigation and content. They update when the site is republished.
 
@@ -15,7 +15,7 @@ These files are generated from the published docs navigation and content. They u
 | `/llms.txt` | Compact index of public docs pages, page descriptions, and declared OpenAPI specs. |
 | `/llms-full.txt` | Deduplicated full-page content bundle for tools that ingest larger text files. |
 | `/skill.md` | Agent instructions that describe how to use the docs site and its MCP server. |
-| `/mcp` | Public MCP Streamable HTTP transport endpoint. |
+| `/mcp` | Public MCP server endpoint and discovery response. |
 | `/.well-known/mcp` | MCP discovery document for tools that auto-detect servers. |
 | `/.well-known/mcp.json` | JSON alias for the MCP discovery document. |
 | `/.well-known/mcp/server-card.json` | Tool metadata and safety annotations for the public MCP server. |
@@ -73,7 +73,7 @@ The generated skill points agents at:
 - recommended starting pages from navigation
 - feedback instructions when agent feedback is enabled
 
-If your repository includes custom skill files, dubstack serves those instead of relying only on the generated skill. See [Custom skill files](/ai/custom-skill-files).
+If your repository includes custom skill files, DubStack serves those instead of relying only on the generated skill. See [Custom skill files](/ai/custom-skill-files).
 
 ## MCP resources
 
@@ -99,7 +99,7 @@ Both indexes point to the available skill files for the site. Use the URL return
 
 ## Agent card
 
-dubstack also publishes an agent card.
+DubStack also publishes an agent card.
 
 ```text
 https://your-docs-domain.com/.well-known/agent-card.json
@@ -134,7 +134,7 @@ For access-control setup, see [Docs authentication](/deployment/docs-authenticat
 - Keep page titles and descriptions specific so search and MCP results are useful.
 - Use redirects when moving established pages.
 - Republish after large navigation or OpenAPI changes.
-- Test `/llms.txt`, `/skill.md`, `/.well-known/mcp`, `/.well-known/mcp/server-card.json`, `/.well-known/agent-skills/index.json`, and `/.well-known/agent-card.json` after changing AI discovery settings. Use an MCP client to test `/mcp`.
+- Test `/llms.txt`, `/skill.md`, `/mcp`, `/.well-known/mcp`, `/.well-known/agent-skills/index.json`, and `/.well-known/agent-card.json` after changing AI discovery settings.
 
 ## Related
 

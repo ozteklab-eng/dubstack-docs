@@ -49,8 +49,6 @@ Static rewrites are the simplest option, but some setups need an edge function o
 Use an edge proxy when you need to:
 
 - Set `X-Forwarded-Host`, `X-Public-Host`, or `X-Forwarded-Proto` explicitly.
-- Set `X-Docs-Base-Path` to `/docs`.
-- Set `X-Public-Mcp-Url` so public MCP discovery points to the mounted `/docs/mcp` URL.
 - Proxy root-level AI discovery files such as `/llms.txt` or `/skill.md`.
 - Bypass cache for `/docs/api/*` and assistant requests.
 - Preserve custom request headers used by your gateway.
@@ -82,8 +80,6 @@ export function middleware(request: NextRequest) {
   headers.set('X-Forwarded-Host', PUBLIC_HOST);
   headers.set('X-Public-Host', PUBLIC_HOST);
   headers.set('X-Forwarded-Proto', 'https');
-  headers.set('X-Docs-Base-Path', DOCS_PREFIX);
-  headers.set('X-Public-Mcp-Url', `https://${PUBLIC_HOST}${DOCS_PREFIX}/mcp`);
 
   return fetch(url, {
     method: request.method,
@@ -98,7 +94,7 @@ export const config = {
 };
 ```
 
-The exact proxy implementation depends on your Next.js and Vercel runtime settings. The important behavior is that `/docs` remains the public route, the public host context is forwarded, and public MCP metadata advertises `https://example.com/docs/mcp`.
+The exact proxy implementation depends on your Next.js and Vercel runtime settings. The important behavior is that `/docs` remains in the upstream path and the public host context is forwarded.
 
 ## External proxy in front of Vercel
 

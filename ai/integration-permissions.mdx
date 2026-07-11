@@ -1,25 +1,16 @@
 ---
 title: Integration permissions and scopes
-description: Understand how integrations are scoped, authorized, and disconnected.
+description: Understand how agent integrations are scoped, authorized, and disconnected.
 icon: shield-check
 ---
 
-Integrations are connected through provider authorization flows and scoped to the current organization and deployment.
+Agent integrations are connected through provider authorization flows and scoped to the current organization and deployment.
 
-Use **Settings > Workspace > Integrations** to view connected and available providers.
+Use **Settings > Organization > Agent integrations** to view connected and available providers.
 
 ## Connection scope
 
-Integrations can be shared or personal.
-
-| Scope | Who authorizes it | Who can use it |
-| --- | --- | --- |
-| Shared | An admin or editor authorizes the provider for the organization. | Eligible agent and workflow surfaces in the organization. |
-| Personal | A teammate authorizes their own provider account. | Only that teammate's agent or workflow context, unless the provider explicitly supports shared delegation. |
-
-Most collaboration, project-management, CRM, support, and documentation integrations are shared. User-specific systems such as calendar and drive context are personal.
-
-Some shared records can also be associated with a selected deployment when the integration is used by deployment-specific agent or workflow surfaces.
+Most agent integrations are organization-scoped. Some records can also be associated with a selected deployment when the integration is used by deployment-specific agent or automation surfaces.
 
 The dashboard resolves the most specific connected installation for the current site before falling back to organization-level context.
 
@@ -40,36 +31,9 @@ Active providers can be connected when configuration, plan, and permissions allo
 
 Catalog providers are visible as planned integration categories but cannot be connected until the provider is enabled for the environment.
 
-## What the agent can read
-
-The agent inherits the access of the account that authorized the connection. It can only read content that the connected workspace account or connected user can already access in the provider.
-
-| Integration | Typical readable context |
-| --- | --- |
-| Slack | Channels and threads the app is allowed to read. Private channels require the app to be invited. |
-| Jira | Issues and comments visible to the connected account. |
-| Linear | Issues, projects, comments, and roadmap context visible to the connected account. |
-| Notion | Pages and databases shared with the integration. |
-| Google Drive | Files and folders visible to the connected user, including shared drives when authorized. |
-| Google Calendar | Events on calendars visible to the connected user. |
-| Confluence | Pages, spaces, and attachments visible to the connected account. |
-| Plain | Support conversations and customer records available to the provided API key. |
-| Intercom | Conversations, contacts, and help-center records visible to the connected account. |
-| Salesforce | Standard and custom objects visible to the connected account. |
-| HubSpot | Contacts, companies, deals, and tickets visible to the connected account. |
-
-To narrow access, limit the permissions of the connected account in the source app. For example, invite the Slack app only to the channels it should read, share only selected Notion pages, or use a provider service account with restricted project access.
-
 ## Authorization and roles
 
 Connecting or disconnecting integrations requires permission to configure integrations for the current organization or deployment.
-
-| Role | Configure shared integrations | Use connected read-only context |
-| --- | --- | --- |
-| Viewer | No | Yes, when the surface allows read-only questions. |
-| Editor | Yes | Yes. |
-| Admin | Yes | Yes. |
-| Owner | Yes | Yes. |
 
 Integration context should only be used when:
 
@@ -84,11 +48,9 @@ If a provider was connected before new scopes were added, the dashboard can show
 
 Reconnect the provider from the dashboard to approve the updated scope set.
 
-Missing scopes do not grant partial access silently. The dashboard should show a reconnect state, and workflows that require that provider should remain blocked until the required scope set is approved.
-
 ## Disconnect behavior
 
-Disconnecting an integration stops future agent and workflow runs from using that provider context.
+Disconnecting an integration stops future agent and automation runs from using that provider context.
 
 Disconnecting does not remove:
 
@@ -97,23 +59,8 @@ Disconnecting does not remove:
 - historical run records
 - already-published docs content
 
-The agent fetches provider content when a run needs it. dubstack does not proactively read connected apps, and it does not use disconnected integrations for future context retrieval after the disconnect completes.
-
-## Troubleshooting
-
-If an integration stops working:
-
-1. Check whether the provider card says **Connected**, **Needs reconnect**, **Unavailable**, or **Upgrade**.
-2. Confirm the connected account can still read the source content directly in the provider.
-3. Reconnect the provider if the OAuth token expired or the scope set changed.
-4. For API-key providers, rotate the provider key and update it in the dashboard.
-5. For workflow runs, confirm the workflow selected that integration in the settings drawer.
-6. For Slack, confirm the app is a member of the channel or private channel it needs to read.
-
-If reconnecting succeeds but a workflow still cannot use the provider, review the workflow run details for the selected context source and provider error.
-
 ## Related
 
-- [Integrations](/ai/integrations)
+- [Agent integrations](/ai/integrations)
 - [Slack integration](/ai/integrations/slack)
 - [Jira integration](/ai/integrations/jira)

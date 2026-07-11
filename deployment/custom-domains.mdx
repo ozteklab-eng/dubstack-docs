@@ -106,15 +106,6 @@ https://example.com/docs/... -> https://<site>--origin.dubstack.live/docs/...
 
 Do not send visitors directly to the `--origin` hostname. It exists for your root website, edge worker, or reverse proxy to fetch from.
 
-When public MCP is enabled, the proxy must also forward:
-
-```text
-X-Docs-Base-Path: /docs
-X-Public-Mcp-Url: https://example.com/docs/mcp
-```
-
-This ensures generated public URLs use the `/docs` mount and MCP discovery/server-card metadata advertise the mounted public endpoint instead of the raw origin hostname.
-
 ## Verification behavior
 
 Domain verification checks that the domain reaches the expected dubstack site. This prevents a domain from verifying against the wrong tenant if a DNS or proxy rule points to the wrong origin.
@@ -131,7 +122,6 @@ For `/docs` subpaths, verification expects:
 
 - `/docs` reaches the generated origin.
 - The proxy forwards the public host context.
-- MCP discovery, when enabled, points to the public `/docs/mcp` endpoint.
 - The rendered site remains mounted under `/docs`.
 - Static assets and API calls stay under the `/docs` prefix.
 
@@ -160,9 +150,3 @@ Make sure both `/docs` and `/docs/*` are proxied. A rule for only `/docs` will n
 ### The browser leaves `/docs`
 
 Check that the proxy forwards `X-Forwarded-Host`, `X-Public-Host`, and `X-Forwarded-Proto`. These headers let dubstack generate public URLs for the mounted domain instead of the raw origin.
-
-### MCP connects but no tools appear
-
-Check `/docs/.well-known/mcp/server-card.json`. If tools are listed but the `url` points to `--origin.dubstack.live`, forward `X-Public-Mcp-Url: https://example.com/docs/mcp` and clear CDN cache for `/docs/.well-known/mcp*`.
-
-If the connector adds but tools do not appear or tool calls fail, forward `X-Docs-Base-Path: /docs` as well and keep `/docs/mcp` uncached.

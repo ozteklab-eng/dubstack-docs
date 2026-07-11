@@ -26,26 +26,11 @@ Git sync publishes the docs config, navigation, page content, metadata, and vers
 
 `dubstack.json` is the canonical site configuration file. It controls docs navigation, theme tokens, header/footer behavior, widgets, contextual actions, and runtime docs settings.
 
-## Repository copies are not mirrors
-
-Git sync is the publish pipeline from the active docs source into deployed read artifacts. It is not the same thing as copying files between Git providers.
-
-Use **Repository copies** in Git settings when you want to run a one-time copy of the active docs source into another connected provider for backup, provider testing, or migration rehearsal.
-
-Repository copies:
-
-- copy the current docs files on demand
-- keep the current deployment source unchanged
-- do not create an automatic mirror
-- do not replace provider webhooks or deployment sync
-
-If you want another provider to become the live deployment source, configure that provider explicitly and switch the active deployment source after validating the copied repository.
-
 ## Cache behavior
 
 After a successful sync or deployment, caches should roll forward to the new artifact version.
 
-The accepted fallback is the previous known-good artifact for the same tenant or preview. dubstack should not use fake runtime defaults as a replacement for missing origin data.
+The accepted fallback is the previous known-good artifact for the same tenant or preview. DubStack should not use fake runtime defaults as a replacement for missing origin data.
 
 ## Cloudflare deploy cache purge
 

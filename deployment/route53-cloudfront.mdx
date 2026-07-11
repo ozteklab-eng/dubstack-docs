@@ -68,8 +68,6 @@ Forward or inject public context headers for the docs origin:
 | `X-Forwarded-Host` | `example.com` |
 | `X-Public-Host` | `example.com` |
 | `X-Forwarded-Proto` | `https` |
-| `X-Docs-Base-Path` | `/docs` |
-| `X-Public-Mcp-Url` | `https://example.com/docs/mcp` |
 
 If your CloudFront setup cannot inject these headers directly, use a CloudFront Function, Lambda@Edge, or an upstream edge proxy that can add them.
 
@@ -103,8 +101,6 @@ https://example.com/docs
 https://example.com/docs/quickstart
 https://example.com/docs/api/theme
 https://example.com/docs/llms.txt
-https://example.com/docs/.well-known/mcp
-https://example.com/docs/.well-known/mcp/server-card.json
 ```
 
 Then verify:
@@ -113,7 +109,6 @@ Then verify:
 - Assets load from `/docs/_next/...`.
 - Public links stay on `example.com/docs`.
 - The `--origin.dubstack.live` hostname is not exposed to visitors.
-- MCP discovery and server-card metadata point to `https://example.com/docs/mcp`.
 - Search, assistant, feedback, and API playground requests are not served from stale CDN cache.
 
 ## Troubleshooting

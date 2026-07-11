@@ -1,6 +1,6 @@
 # dubstack docs
 
-Canonical product documentation source for dubstack.
+Canonical product documentation source for DubStack.
 
 This repo is for customer-facing product documentation. Internal operations notes stay in Outline.
 
@@ -13,4 +13,4 @@ This repo is for customer-facing product documentation. Internal operations note
 
 ## Planned hosting
 
-This repo will be hosted as a real dubstack documentation tenant and attached to `docs.dubstack.ai` when ready.
+This repo will be hosted as a real DubStack documentation tenant and attached to `docs.dubstack.ai` when ready.

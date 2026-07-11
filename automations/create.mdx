@@ -1,0 +1,114 @@
+---
+title: Create automations
+description: Create custom automations with scoped triggers, context, and update behavior.
+icon: plus
+---
+
+Custom automations let you define a docs maintenance workflow for your team's specific process.
+
+Use them when the built-in automations are close, but your trigger, prompt, context, or notification rules need to be more specific.
+
+Custom automations use the same provider vocabulary as built-in automations: **Require review** opens a provider-native review request, such as a GitHub pull request, GitLab merge request, or Forgejo pull request.
+
+## Create a custom automation
+
+1. Open the dashboard.
+2. Select the deployment you want to configure.
+3. Go to **Automate > Workflows**.
+4. Choose **Create a custom automation**.
+5. Add a name and summary.
+6. Select the trigger.
+7. Add context repositories or integrations if needed.
+8. Write clear instructions.
+9. Choose the update mode.
+10. Save the automation.
+
+## Choose a trigger
+
+| Trigger | When to use it |
+| --- | --- |
+| Content update | Run when docs content changes. |
+| Code change | Run when selected source code changes merge. |
+| Custom schedule | Run on a recurring schedule. |
+
+Choose the narrowest trigger that fits the workflow. Broad triggers can create noisy updates.
+
+## Add context repositories
+
+Context repositories are cloned into the workflow environment so the agent can read code while it runs.
+
+They do not automatically trigger the automation unless you also choose a code-change trigger and the repository is selected as a trigger source.
+
+You can add up to 10 context repositories. Keep the list focused on repositories the automation actually needs.
+
+## Add integration context
+
+Connected integrations can provide bounded context for a run.
+
+Examples:
+
+- Use Slack context when the source discussion happened in a channel or thread.
+- Use Jira context when issues describe a feature, bug, or release scope.
+
+Only enable integrations that are relevant to the automation. This keeps prompts smaller and updates easier to review.
+
+## Write effective instructions
+
+Good instructions are specific:
+
+```text
+Draft a short troubleshooting page when the linked issue describes a recurring setup failure.
+Use the existing troubleshooting page structure.
+Keep code examples minimal.
+Open a pull request for review.
+```
+
+Avoid instructions that are too broad:
+
+```text
+Improve the docs.
+```
+
+### Strong instruction pattern
+
+Use this structure for reliable custom automations:
+
+```text
+Goal: describe the exact outcome.
+Scope: list the pages, directories, repositories, or issue filters to inspect.
+Procedure: list the steps the agent should follow.
+Constraints: define terms, tone, file naming, and what not to change.
+Output: say whether to open a review request or direct update.
+Review notes: describe what reviewers should check.
+```
+
+## Pick an update mode
+
+| Mode | Behavior |
+| --- | --- |
+| Require review | Open a provider-native review request and wait for review. |
+| Automatically | Apply the update directly when the automation is allowed to write. |
+
+Prefer review mode for new automations. Move to automatic updates only after the automation has produced predictable output across several runs.
+
+Automatic updates require the connected provider to allow direct commits to the target branch. If branch protection, rulesets, or repository policy block direct commits, keep the automation in review mode.
+
+## Validate a custom automation
+
+After saving:
+
+1. Run it manually if the automation is runnable.
+2. Check the run history.
+3. Review collected context sources.
+4. Review the created review request or direct update.
+5. Adjust instructions if the output is too broad or too narrow.
+
+<Callout type="warning">
+  Automations can change documentation. Keep production workflows in review mode until the prompt, context, and output pattern are well understood.
+</Callout>
+
+## Related
+
+- [Manage automations](/automations/manage)
+- [Configure automation runs](/automations/configuration)
+- [Automation reference](/automations/reference)

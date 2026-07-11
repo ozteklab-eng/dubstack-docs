@@ -8,20 +8,6 @@ Billing and plan settings show the workspace's current subscription state and en
 
 Use this page to understand how plan state affects product behavior.
 
-## Plans
-
-The dashboard is the source of truth for current plan names, prices, allowances, and trial state.
-
-Common workspace states include:
-
-| Plan state | Typical use |
-| --- | --- |
-| Free | Evaluate the docs site, editor, source connection, and baseline publishing flow. |
-| Pro | Use custom domains, AI assistant, agent workflows, Git-backed publishing, team access, and production docs features. |
-| Enterprise | Add custom commercial terms, SSO, advanced branding, Theme Studio controls, and larger or custom AI allowances. |
-
-Pro workspaces can be billed monthly or annually when both options are available for the workspace.
-
 ## What billing controls
 
 Billing can affect:
@@ -36,35 +22,7 @@ Billing can affect:
 
 The dashboard is the source of truth for your current plan, trial state, and available upgrade paths.
 
-For assistant, agent, Slack, and workflow usage details, see [Usage](/dashboard/usage) and [AI credits and usage](/ai/credits-usage).
-
-## Upgrade or manage a subscription
-
-Workspace admins can open **Settings > Workspace > Billing** to review available plans and start checkout.
-
-The upgrade flow uses a hosted checkout page. After checkout completes, dubstack updates the workspace subscription state and refreshes feature entitlements.
-
-Use the billing portal from the same page to:
-
-- update payment method
-- view invoices and receipts
-- update billing details
-- manage tax information when available
-- cancel or change the subscription when the workspace is eligible
-
-If the dashboard still shows the old plan after checkout, refresh the billing page. If the state does not update, contact support with the workspace slug and checkout time.
-
-<Callout type="info">
-  Billing checkout and subscription management are dashboard-only admin actions. They are not part of the public docs runtime API exposed from a published documentation site.
-</Callout>
-
-## Taxes and invoices
-
-Tax collection can depend on your billing country, business status, and tax details.
-
-When tax collection is enabled for checkout, enter accurate billing details before completing payment. Business customers should provide the correct company name and tax identifier where applicable.
-
-Invoices and receipts are available from the billing portal after a successful payment.
+For assistant, agent, Slack, and automation usage details, see [AI credits and usage](/ai/credits-usage).
 
 ## Trials
 
@@ -92,16 +50,3 @@ If a feature is locked:
 Only trusted workspace admins should manage billing, plan changes, and cancellation actions.
 
 Plan changes can affect public docs behavior when a feature depends on an entitlement.
-
-Editors and viewers should not need billing access for normal documentation work. See [Roles](/dashboard/roles) for the permissions model.
-
-## Related topics
-
-<RelatedTopics>
-  <a href="/credits">Credits</a>
-  <a href="/dashboard/usage">Usage</a>
-  <a href="/ai/credits-usage">AI credits and usage</a>
-  <a href="/dashboard/roles">Roles</a>
-  <a href="/dashboard/team-members">Team members</a>
-  <a href="/reference/tiers">Tiers</a>
-</RelatedTopics>
