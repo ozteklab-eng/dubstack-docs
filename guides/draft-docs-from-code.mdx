@@ -6,6 +6,8 @@ icon: git-pull-request
 
 Use this guide when product code changes should create reviewable documentation updates.
 
+In this guide, **pull request** means the review request used by the connected provider. GitLab calls this a merge request; Forgejo calls it a pull request.
+
 This pattern keeps two repositories separate:
 
 | Repository role | What it does |
@@ -92,6 +94,8 @@ Use a small source change for the first test.
 6. Merge the docs change only after confirming the content is correct.
 
 The workflow output should land in the docs repository, not the source repository.
+
+Direct pushes to a source repository are useful for scheduled or manual validation, but the code-change trigger path is review-event driven. Use a merged pull request or merge request when validating event-based automation.
 
 ## Troubleshooting
 

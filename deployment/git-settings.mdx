@@ -185,6 +185,10 @@ Agent, Slack, editor, and workflow authoring can require:
 
 If authoring is blocked, keep the live deployment source intact and fix the missing authoring permission shown by the readiness panel.
 
+Provider-native review requests use provider-specific names. GitHub and Forgejo use pull requests; GitLab uses merge requests. In dashboard workflow settings, **Require review** means dubstack should create that provider-native review request instead of committing directly.
+
+Automatic updates require the target branch to allow the connected provider identity to write. If repository policy blocks direct commits, keep workflows in **Require review** mode and merge the generated review request after approval.
+
 ## Source repositories for workflows
 
 Workflow source repositories are read-only context repositories selected by workflows such as **Update from code changes**.
