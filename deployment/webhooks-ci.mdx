@@ -5,9 +5,9 @@ description: Understand how Git provider events, CI checks, and deployment branc
 icon: workflow
 ---
 
-DubStack uses Git provider events to keep published docs in sync with your source repository.
+dubstack uses Git provider events to keep published docs in sync with your source repository.
 
-For most teams, the provider app or token integration handles updates automatically. CI can sit before DubStack in your repository workflow to validate docs before changes reach the deployment branch. See [CI/CD checks](/deployment/ci) for the dashboard add-on controls and check modes.
+For most teams, the provider app or token integration handles updates automatically. CI can sit before dubstack in your repository workflow to validate docs before changes reach the deployment branch. See [CI/CD checks](/deployment/ci) for the dashboard add-on controls and check modes.
 
 ## Update flow
 
@@ -37,7 +37,7 @@ Common patterns:
 
 Pushes to non-deployment branches should be reviewed through previews or pull requests before merging to the live branch.
 
-## Using CI with DubStack
+## Using CI with dubstack
 
 Run CI before merging into the deployment branch.
 
@@ -50,7 +50,7 @@ Useful checks include:
 - spellcheck or terminology checks
 - custom tests for generated snippets
 
-After CI passes and the change reaches the deployment branch, the Git provider update should trigger DubStack sync.
+After CI passes and the change reaches the deployment branch, the Git provider update should trigger dubstack sync.
 
 ## Recommended pull request flow
 
@@ -81,7 +81,7 @@ Check that preview deployments are available for the site and provider path, the
 
 ### CI passed but the site did not update
 
-CI only validates the repository. The provider event still needs to reach DubStack and the sync worker still needs repository access.
+CI only validates the repository. The provider event still needs to reach dubstack and the sync worker still needs repository access.
 
 Run a manual update to determine whether the issue is provider event delivery or repository sync itself.
 

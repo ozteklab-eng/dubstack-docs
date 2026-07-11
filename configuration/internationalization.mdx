@@ -10,7 +10,7 @@ Internationalization lets one docs site publish translated pages while keeping a
 Use it when your team maintains translated MDX files in source control and wants readers to switch between language versions from the docs shell.
 
 <Info>
-  Language routing is source-backed. DubStack serves translated pages that exist in your repository; it does not silently generate translations at request time.
+  Language routing is source-backed. dubstack serves translated pages that exist in your repository; it does not silently generate translations at request time.
 </Info>
 
 ## Recommended structure
@@ -83,7 +83,7 @@ Translated pages use the language directory as the URL prefix:
 | `fr/quickstart.mdx` | `/fr/quickstart` |
 | `fr/configuration/navigation.mdx` | `/fr/configuration/navigation` |
 
-When a reader switches languages, DubStack tries to preserve the current page path. If the matching translated page is missing, the reader falls back to the configured language home.
+When a reader switches languages, dubstack tries to preserve the current page path. If the matching translated page is missing, the reader falls back to the configured language home.
 
 ## Localized banners
 

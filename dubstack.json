@@ -2,7 +2,7 @@
   "$schema": "https://dubstack.ai/dubstack.json",
   "site": {
     "name": "dubstack docs",
-    "tagline": "Build, publish, and scale developer documentation with DubStack.",
+    "tagline": "Build, publish, and scale developer documentation with dubstack.",
     "logo": {
       "light": "/logo/light.svg",
       "dark": "/logo/dark.svg"
@@ -116,7 +116,7 @@
     },
     "assistant": {
       "title": "Assistant",
-      "welcome_title": "How can I help with DubStack?",
+      "welcome_title": "How can I help with dubstack?",
       "welcome_subtitle": "Ask about configuration, publishing, migration, and docs workflows.",
       "user_bubble_color": "color-mix(in srgb, var(--assistant-bg) 86%, var(--foreground) 14%)",
       "user_bubble_text_color": "var(--assistant-text)",
@@ -1072,6 +1072,6 @@
   },
   "seo": {
     "title_template": "%s | dubstack docs",
-    "description": "Product documentation for DubStack, the developer documentation platform for docs, API references, AI workflows, and Theme Studio."
+    "description": "Product documentation for dubstack, the developer documentation platform for docs, API references, AI workflows, and Theme Studio."
   }
 }

@@ -6,7 +6,7 @@ icon: shield
 
 Content Security Policy (CSP) controls which resources a browser can load for your documentation site.
 
-Hosted DubStack sites serve baseline security headers. You usually only need a custom CSP when your own proxy, CDN, firewall, or root application overrides response headers for a custom domain or `/docs` subpath.
+Hosted dubstack sites serve baseline security headers. You usually only need a custom CSP when your own proxy, CDN, firewall, or root application overrides response headers for a custom domain or `/docs` subpath.
 
 ## When to configure CSP
 
@@ -17,7 +17,7 @@ Configure CSP at your proxy or edge layer when:
 - your company firewall requires explicit domain allowlists
 - fonts, images, search, assistant, feedback, or the API playground stop working after adding security headers
 
-If DubStack hosts the entire docs hostname directly, start with the hosted defaults and only add a custom policy when you have a specific requirement.
+If dubstack hosts the entire docs hostname directly, start with the hosted defaults and only add a custom policy when you have a specific requirement.
 
 ## CSP directives
 
@@ -39,7 +39,7 @@ Only include domains your site actually uses.
 | Source | Purpose | Directive | Required |
 | --- | --- | --- | --- |
 | `'self'` | Docs pages, assets, search, assistant, feedback, API routes, MCP, and LLM files on the public docs host. | Most directives | Required |
-| `*.dubstack.live` | Default hosted docs domains and generated `/docs` origins. | `connect-src`, `frame-src`, `img-src` | Required when using DubStack-hosted origins |
+| `*.dubstack.live` | Default hosted docs domains and generated `/docs` origins. | `connect-src`, `frame-src`, `img-src` | Required when using dubstack-hosted origins |
 | `api.dubstack.ai` | Platform API requests when a deployment uses platform-hosted API endpoints directly. | `connect-src` | Optional |
 | `fonts.googleapis.com` | Google Fonts stylesheets if selected by the site theme. | `style-src` | Optional |
 | `fonts.gstatic.com` | Google Fonts font files if selected by the site theme. | `font-src` | Optional |
@@ -181,7 +181,7 @@ After deploying the policy:
 
 <CardGroup cols={2}>
   <Card title="Security headers" icon="shield-check" href="/deployment/security-headers">
-    Review the hosted security headers DubStack applies by default.
+    Review the hosted security headers dubstack applies by default.
   </Card>
   <Card title="/docs subpath" icon="folder-tree" href="/deployment/docs-subpath">
     Configure routing for docs hosted below a root domain path.

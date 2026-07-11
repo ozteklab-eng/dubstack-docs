@@ -6,13 +6,13 @@ icon: files
 
 Every published docs page starts as a source file in the connected docs repository.
 
-DubStack syncs the repository, publishes the content, and uses `dubstack.json` plus page frontmatter to decide how the page appears in navigation, search, assistant context, and public MCP tools.
+dubstack syncs the repository, publishes the content, and uses `dubstack.json` plus page frontmatter to decide how the page appears in navigation, search, assistant context, and public MCP tools.
 
 ## Supported page files
 
 | File type | Use it for |
 | --- | --- |
-| `.mdx` | Recommended format. Supports Markdown plus DubStack components. |
+| `.mdx` | Recommended format. Supports Markdown plus dubstack components. |
 | `.md` | Plain Markdown pages, useful during migrations or simple content imports. |
 
 Prefer `.mdx` for new pages so you can use cards, callouts, tabs, accordions, code groups, API fields, and changelog updates.
@@ -102,7 +102,7 @@ Use frontmatter for page-level metadata.
 ```mdx
 ---
 title: Webhooks
-description: Receive event notifications from DubStack.
+description: Receive event notifications from dubstack.
 icon: webhook
 noindex: false
 ---

@@ -1,9 +1,9 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "DubStack Docs Runtime API",
+    "title": "dubstack docs runtime API",
     "version": "2026-07-05",
-    "description": "Public runtime endpoints exposed by each published DubStack docs site. These endpoints let readers, API playgrounds, assistants, and MCP-capable clients inspect and query the published documentation for the current site. The surface is scoped to the site that serves it and does not expose dashboard administration APIs."
+    "description": "Public runtime endpoints exposed by each published dubstack docs site. These endpoints let readers, API playgrounds, assistants, and MCP-capable clients inspect and query the published documentation for the current site. The surface is scoped to the site that serves it and does not expose dashboard administration APIs."
   },
   "servers": [
     {
@@ -175,7 +175,7 @@
                   "serverCard": {
                     "summary": "Public docs MCP server card",
                     "value": {
-                      "name": "DubStack Docs MCP",
+                      "name": "dubstack docs MCP",
                       "description": "Read-only MCP access to the published docs site.",
                       "url": "https://dubstack.ai/docs/mcp",
                       "transport": "streamable-http"
@@ -221,7 +221,7 @@
                     "value": {
                       "servers": [
                         {
-                          "name": "DubStack Docs MCP",
+                          "name": "dubstack docs MCP",
                           "description": "Read-only MCP access to the published docs site.",
                           "url": "https://dubstack.ai/docs/mcp",
                           "transport": "streamable-http"
@@ -256,7 +256,7 @@
                 "examples": {
                   "index": {
                     "summary": "Compact LLM index",
-                    "value": "# DubStack Docs\n\n> Product documentation for building, publishing, and operating DubStack docs sites.\n\n## Pages\n- [Quickstart](https://dubstack.ai/docs/quickstart)\n- [MCP](https://dubstack.ai/docs/ai/mcp)\n- [API reference](https://dubstack.ai/docs/api-reference/introduction)"
+                    "value": "# dubstack docs\n\n> Product documentation for building, publishing, and operating dubstack docs sites.\n\n## Pages\n- [Quickstart](https://dubstack.ai/docs/quickstart)\n- [MCP](https://dubstack.ai/docs/ai/mcp)\n- [API reference](https://dubstack.ai/docs/api-reference/introduction)"
                   }
                 }
               }
@@ -285,7 +285,7 @@
                 "examples": {
                   "fullIndex": {
                     "summary": "Expanded LLM index",
-                    "value": "# DubStack Docs\n\n## Quickstart\nLaunch a docs site, connect Git, customize content, and publish.\n\n## Public MCP\nDubStack exposes read-only MCP tools so agents can search and inspect published docs."
+                    "value": "# dubstack docs\n\n## Quickstart\nLaunch a docs site, connect Git, customize content, and publish.\n\n## Public MCP\ndubstack exposes read-only MCP tools so agents can search and inspect published docs."
                   }
                 }
               }
@@ -396,12 +396,12 @@
                     "summary": "Loaded API reference spec",
                     "value": {
                       "name": "api-reference",
-                      "display_name": "DubStack Docs Runtime API",
+                      "display_name": "dubstack docs runtime API",
                       "base_url": "https://dubstack.ai/docs",
                       "spec_content": {
                         "openapi": "3.1.0",
                         "info": {
-                          "title": "DubStack Docs Runtime API",
+                          "title": "dubstack docs runtime API",
                           "version": "2026-06-25"
                         },
                         "paths": {
@@ -472,7 +472,7 @@
                         "content-type": "application/json"
                       },
                       "body": {
-                        "name": "DubStack Docs MCP",
+                        "name": "dubstack docs MCP",
                         "transport": "streamable-http",
                         "endpoint": "https://dubstack.ai/docs/mcp"
                       }
@@ -1068,7 +1068,7 @@
                     "value": {
                       "openapi": "3.1.0",
                       "info": {
-                        "title": "DubStack Docs Runtime API",
+                        "title": "dubstack docs runtime API",
                         "version": "2026-07-05"
                       },
                       "paths": {
@@ -1133,7 +1133,7 @@
                     "value": {
                       "openapi": "3.1.0",
                       "info": {
-                        "title": "DubStack Docs Runtime API",
+                        "title": "dubstack docs runtime API",
                         "version": "2026-07-05"
                       },
                       "paths": {
@@ -1198,7 +1198,7 @@
                     "value": {
                       "openapi": "3.1.0",
                       "info": {
-                        "title": "DubStack Docs Runtime API",
+                        "title": "dubstack docs runtime API",
                         "version": "2026-07-05"
                       },
                       "paths": {
@@ -1269,7 +1269,7 @@
           "name": {
             "type": "string",
             "description": "Display name for the public docs MCP server.",
-            "example": "DubStack Docs MCP"
+            "example": "dubstack docs MCP"
           },
           "description": {
             "type": "string",
@@ -1482,12 +1482,12 @@
         "description": "Wrapper returned by the playground spec loader, including display metadata, base URL fallback, and parsed OpenAPI content.",
         "example": {
           "name": "api-reference",
-          "display_name": "DubStack Docs Runtime API",
+          "display_name": "dubstack docs runtime API",
           "base_url": "https://dubstack.ai/docs",
           "spec_content": {
             "openapi": "3.1.0",
             "info": {
-              "title": "DubStack Docs Runtime API",
+              "title": "dubstack docs runtime API",
               "version": "2026-06-25"
             },
             "paths": {}
@@ -1564,7 +1564,7 @@
             "content-type": "application/json"
           },
           "body": {
-            "name": "DubStack Docs MCP",
+            "name": "dubstack docs MCP",
             "transport": "streamable-http"
           }
         }

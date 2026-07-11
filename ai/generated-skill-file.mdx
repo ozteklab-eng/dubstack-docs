@@ -4,7 +4,7 @@ description: Use the generated skill.md file to help agents understand your docs
 icon: badge-check
 ---
 
-DubStack publishes a generated `skill.md` file for public docs sites when the docs repository does not provide a custom skill file.
+dubstack publishes a generated `skill.md` file for public docs sites when the docs repository does not provide a custom skill file.
 
 The skill file gives agents a concise description of how to use the docs site, where to connect to the public MCP server, and which pages are good starting points.
 
@@ -51,7 +51,7 @@ This lets an agent use both the high-level skill file and the searchable docs fi
 
 ## Well-known discovery
 
-DubStack also publishes skill and agent discovery metadata under `.well-known` paths.
+dubstack also publishes skill and agent discovery metadata under `.well-known` paths.
 
 Useful paths include:
 
@@ -64,7 +64,7 @@ Useful paths include:
 | `/.well-known/skills/<skill-id>/SKILL.md` | Skill URL listed by the compatibility skills index. |
 | `/.well-known/agent-card.json` | Agent card that describes the docs site and links to the available skills. |
 
-Use the URLs returned by the discovery manifests as the canonical skill-file URLs. DubStack keeps compatibility aliases available for common `skill.md` and `SKILL.md` casing, but clients should not depend on a guessed path.
+Use the URLs returned by the discovery manifests as the canonical skill-file URLs. dubstack keeps compatibility aliases available for common `skill.md` and `SKILL.md` casing, but clients should not depend on a guessed path.
 
 ### Agent-skills manifest
 

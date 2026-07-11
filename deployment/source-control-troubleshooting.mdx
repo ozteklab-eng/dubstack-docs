@@ -6,7 +6,7 @@ icon: circle-alert
 
 Use this guide when a docs change was committed but the live site, preview deployment, editor, or assistant-readable content does not match what you expect.
 
-DubStack follows one source-control contract:
+dubstack follows one source-control contract:
 
 ```text
 Git repository
@@ -54,14 +54,14 @@ If manual update succeeds, the repository credentials and sync path are working.
 
 ## Check the activity and deployment history
 
-The activity panel and deployment history show what DubStack attempted to publish.
+The activity panel and deployment history show what dubstack attempted to publish.
 
 Look for:
 
 | Signal | What it usually means |
 | --- | --- |
-| No new activity after a push | Provider webhook did not reach DubStack, or the push was not to the deployment branch. |
-| Manual update failed | DubStack could not read, parse, or publish the repository. |
+| No new activity after a push | Provider webhook did not reach dubstack, or the push was not to the deployment branch. |
+| Manual update failed | dubstack could not read, parse, or publish the repository. |
 | Sync succeeded but page is missing | Navigation, file path, hidden/noindex, or generated API configuration needs checking. |
 | Preview failed but live works | The preview branch has invalid config or content not present on the live branch. |
 | Latest source appears in activity but not in browser | Browser/CDN cache may be stale; retry after cache invalidation completes. |
@@ -70,7 +70,7 @@ Use deployment logs before editing source files. Logs usually identify whether t
 
 ## Validate required source files
 
-Every docs repository should include the source files that DubStack needs to build the site.
+Every docs repository should include the source files that dubstack needs to build the site.
 
 Minimum source structure:
 
@@ -123,7 +123,7 @@ Check:
 - the configured branch exists
 - webhook settings are present if automatic updates are expected from GitLab
 
-GitLab OAuth and GitLab repository access tokens serve different purposes. OAuth connects a user account for authoring and context. The repository access token or provider credential is what lets DubStack read repository files for sync/copy operations.
+GitLab OAuth and GitLab repository access tokens serve different purposes. OAuth connects a user account for authoring and context. The repository access token or provider credential is what lets dubstack read repository files for sync/copy operations.
 
 If a Slack request, agent action, or workflow cannot open a GitLab merge request, check the authoring side specifically:
 
@@ -137,7 +137,7 @@ See [GitLab](/deployment/gitlab) for provider-specific setup.
 
 ## Hosted starter repository checks
 
-If the site was created with the hosted repository flow, DubStack manages the source repository for you.
+If the site was created with the hosted repository flow, dubstack manages the source repository for you.
 
 Check:
 
@@ -183,7 +183,7 @@ Use [Navigation](/configuration/navigation), [Hidden pages](/configuration/hidde
 
 ## Provider access changed
 
-Repository access can change outside DubStack.
+Repository access can change outside dubstack.
 
 Revalidate the connection after:
 
