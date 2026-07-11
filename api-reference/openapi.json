@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "dubstack docs runtime API",
-    "version": "2026-07-05",
-    "description": "Public runtime endpoints exposed by each published dubstack docs site. These endpoints let readers, API playgrounds, assistants, and MCP-capable clients inspect and query the published documentation for the current site. The surface is scoped to the site that serves it and does not expose dashboard administration APIs."
+    "version": "2026-07-12",
+    "description": "Public runtime endpoints exposed by each published dubstack docs site, plus selected server-side Admin API endpoints for trusted automation. Docs runtime endpoints are scoped to the site that serves them. Admin API endpoints use https://api.dubstack.ai and require server-side Admin API keys."
   },
   "servers": [
     {
@@ -27,6 +27,10 @@
     {
       "name": "API Playground",
       "description": "Runtime endpoints used by generated API reference pages and the browser request builder."
+    },
+    {
+      "name": "Admin API",
+      "description": "Server-side automation endpoints that require scoped Admin API keys."
     }
   ],
   "paths": {
@@ -1218,6 +1222,268 @@
           }
         }
       }
+    },
+    "/api/project/update/{siteId}": {
+      "post": {
+        "tags": [
+          "Admin API"
+        ],
+        "summary": "Trigger deployment update",
+        "description": "Queue a live deployment update from the configured deployment branch. Requires the deployments:trigger Admin API key scope.",
+        "operationId": "triggerDeploymentUpdate",
+        "servers": [
+          {
+            "url": "https://api.dubstack.ai",
+            "description": "dubstack Admin API"
+          }
+        ],
+        "security": [
+          {
+            "AdminApiBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "siteId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The deployment site ID. Site-scoped keys can only use their assigned site."
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Deployment update queued.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeploymentTriggerResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Admin API key is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Admin API key is not allowed to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested site or deployment was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The site is not ready for deployment updates.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/project/preview/{siteId}": {
+      "post": {
+        "tags": [
+          "Admin API"
+        ],
+        "summary": "Trigger preview deployment",
+        "description": "Create or refresh a preview deployment for a Git branch. Requires the deployments:trigger Admin API key scope.",
+        "operationId": "triggerPreviewDeployment",
+        "servers": [
+          {
+            "url": "https://api.dubstack.ai",
+            "description": "dubstack Admin API"
+          }
+        ],
+        "security": [
+          {
+            "AdminApiBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "siteId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The deployment site ID. Site-scoped keys can only use their assigned site."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreviewDeploymentTriggerRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Preview deployment queued.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreviewDeploymentTriggerResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The branch value is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Admin API key is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Admin API key is not allowed to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested site or deployment was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The site or branch is not ready for preview deployments.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/project/update-status/{statusId}": {
+      "get": {
+        "tags": [
+          "Admin API"
+        ],
+        "summary": "Get deployment status",
+        "description": "Read deployment status and logs by status ID. Requires either deployments:read or deployments:trigger.",
+        "operationId": "getDeploymentStatus",
+        "servers": [
+          {
+            "url": "https://api.dubstack.ai",
+            "description": "dubstack Admin API"
+          }
+        ],
+        "security": [
+          {
+            "AdminApiBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "statusId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The deployment status ID returned by a deployment trigger endpoint."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deployment status.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeploymentStatus"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Admin API key is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Admin API key is not allowed to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested site or deployment was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1936,6 +2202,319 @@
           }
         },
         "additionalProperties": true
+      },
+      "AdminApiError": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "DeploymentSummary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Deployment status ID."
+          },
+          "status": {
+            "type": "string",
+            "description": "Internal deployment status."
+          },
+          "deployment_target": {
+            "type": "string",
+            "enum": [
+              "live",
+              "preview"
+            ]
+          },
+          "triggered_by": {
+            "type": "string"
+          },
+          "branch": {
+            "type": "string"
+          },
+          "commit_sha": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "preview_url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri"
+          },
+          "repo_owner": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "repo_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "repo_provider": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "DeploymentTriggerResponse": {
+        "type": "object",
+        "required": [
+          "statusId"
+        ],
+        "properties": {
+          "statusId": {
+            "type": "string",
+            "description": "Deployment status ID for polling."
+          },
+          "deployment": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DeploymentSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "PreviewDeploymentTriggerRequest": {
+        "type": "object",
+        "required": [
+          "branch"
+        ],
+        "properties": {
+          "branch": {
+            "type": "string",
+            "description": "Git branch to preview."
+          }
+        }
+      },
+      "PreviewDeploymentTriggerResponse": {
+        "type": "object",
+        "required": [
+          "statusId",
+          "previewUrl"
+        ],
+        "properties": {
+          "statusId": {
+            "type": "string",
+            "description": "Deployment status ID for polling."
+          },
+          "previewUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "Preview deployment URL."
+          },
+          "deployment": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DeploymentSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "DeploymentStatus": {
+        "type": "object",
+        "required": [
+          "_id",
+          "statusId",
+          "siteId",
+          "projectId",
+          "status"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Deployment status ID."
+          },
+          "statusId": {
+            "type": "string",
+            "description": "Deployment status ID."
+          },
+          "siteId": {
+            "type": "string",
+            "description": "Deployment site ID."
+          },
+          "projectId": {
+            "type": "string",
+            "description": "Alias for siteId for API compatibility."
+          },
+          "createdAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "endedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "in_progress",
+              "success",
+              "failure"
+            ]
+          },
+          "summary": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "logs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subdomain": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "screenshot": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri"
+          },
+          "screenshotLight": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri"
+          },
+          "screenshotDark": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri"
+          },
+          "author": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "avatarUrl": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "uri"
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "commit": {
+            "type": "object",
+            "properties": {
+              "sha": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "ref": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "message": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "filesChanged": {
+                "type": "object",
+                "properties": {
+                  "added": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "modified": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "removed": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          },
+          "source": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "AdminApiBearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Server-side Admin API key created from Settings > Security > API keys."
       }
     }
   }
