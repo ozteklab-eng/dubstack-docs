@@ -46,6 +46,10 @@ Use this workflow when product source changes should produce a docs draft. Add s
 
 Scheduled runs read bounded source change context since the previous comparable scheduled run. Code-change runs are queued from validated merged source repository events.
 
+Code-change events are review-event driven. Configure the source repositories that should act as context, then merge a pull request or merge request in that source repository. Direct pushes can still be inspected by a scheduled run, but they do not replace the review-event trigger path.
+
+If the source repository is a monorepo, add a path scope in the workflow configuration so the run focuses on the relevant app, package, or service. When changed-file metadata is available, code-change events outside that path scope are skipped. Path scope does not change the docs repository that receives generated updates.
+
 ### Draft changelog
 
 Drafts a changelog entry from recent product updates on a recurring schedule.
@@ -59,6 +63,8 @@ Drafts a changelog entry from recent product updates on a recurring schedule.
 | Context repositories | Supported |
 
 Use this workflow to keep release notes and changelog pages fresh without requiring a manual first draft.
+
+When context repositories are selected, scheduled changelog runs can inspect recent source activity from those repositories. The docs repository remains the write target for the generated changelog draft.
 
 ### Draft improvements from assistant conversations
 

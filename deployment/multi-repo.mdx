@@ -102,6 +102,17 @@ Context repositories can help with:
 
 Context repositories do not automatically become published docs content. The agent still writes reviewed documentation changes to the active docs source.
 
+For monorepos, add a path scope to a context repository so workflow runs focus on the relevant app, package, or service.
+
+Example:
+
+```text
+source repository: product-platform
+path scope: services/billing
+```
+
+Path scope is a workflow context boundary. It does not make that subdirectory a separate production docs source.
+
 ## Separate sites
 
 Use separate sites when different repositories should have independent docs experiences.

@@ -57,6 +57,27 @@ Current shipped workflow integrations are shared. Personal integrations are rese
 
 Only integrations that are connected and supported by that workflow appear as selectable options.
 
+## Source repositories and code-change triggers
+
+Some workflows can use source repositories as read-only context.
+
+For **Update from code changes**, a selected source repository has two roles:
+
+- scheduled runs can inspect recent repository activity as bounded context
+- code-change runs can be queued from validated merged pull request or merge request events
+
+The source repository does not become the docs repository. Generated changes still target the connected docs source and use the workflow update mode you selected.
+
+If a source provider webhook is unavailable, use a scheduled run or run the workflow manually after the source change has merged.
+
+### Narrow source context
+
+When a source repository is broad, add a path scope in the workflow configuration.
+
+Use a relative path such as `apps/web`, `services/api`, or `packages/sdk`. This keeps the workflow focused on the service, package, or app that should influence the draft.
+
+Path scope is most useful for monorepos and platform repositories where unrelated code changes would add noise to the run.
+
 ## Keep context bounded
 
 Use the narrowest context that can answer the workflow's task.
@@ -69,6 +90,10 @@ Use Slack thread 1719400000.000000 from #release-notes and draft a changelog ent
 
 ```text
 Use Jira context with jql: project = DOCS AND fixVersion = "2026.07" ORDER BY updated DESC, limit 5.
+```
+
+```text
+Use the source repository context under services/api and update the API reference only when public endpoint behavior changed.
 ```
 
 Avoid broad context:

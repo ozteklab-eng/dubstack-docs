@@ -106,6 +106,21 @@ Use Forgejo when your docs repository is hosted on a Forgejo instance your team 
 
 Forgejo works best when the instance is available over HTTPS and can send provider events to the configured sync endpoint. If provider events are not available, use manual update after pushing changes.
 
+### Reuse Forgejo access for workflow source repositories
+
+If the active deployment source already uses Forgejo, source repositories for workflows can reuse the same Forgejo access when they are on the same instance.
+
+Use this when the docs repository and product code repository live on the same Forgejo server and the existing token has permission to read the source repository.
+
+When adding a Forgejo source repository:
+
+- keep the instance URL the same as the active Forgejo deployment source
+- enter the owner, repository, and branch for the source repository
+- leave the token blank only when the active Forgejo token can read that repository
+- save the source repository and confirm the dashboard validates it
+
+If validation fails, provide a repository-specific token with the required read access, or update the active Forgejo token so it can read both repositories.
+
 <Callout type="warning">
   One-time repository copy targets are not automatic mirrors. Use copy targets for migration, backup checks, or provider evaluation, then keep one active production source.
 </Callout>
@@ -163,6 +178,39 @@ Agent, Slack, editor, and workflow authoring can require:
 - workflow eligibility for the current site
 
 If authoring is blocked, keep the live deployment source intact and fix the missing authoring permission shown by the readiness panel.
+
+## Source repositories for workflows
+
+Workflow source repositories are read-only context repositories selected by workflows such as **Update from code changes**.
+
+They are separate from the active deployment source:
+
+- the active deployment source publishes the live docs site
+- source repositories provide code or product context for workflow runs
+- generated documentation changes still target the docs repository
+- code-change runs are queued from validated merged pull request or merge request events where the provider integration supports them
+
+Use source repositories when the product code and docs live in different repositories, or when you want a workflow to watch a code repository without making that repository the docs source of truth.
+
+### Path-scoped source context
+
+For large repositories, set an optional path scope on a workflow source repository.
+
+The path scope must be a relative repository path, such as:
+
+```text
+apps/web
+services/api
+packages/sdk
+```
+
+Do not include a leading slash, `..`, or a full URL.
+
+Path scope tells the workflow which part of the repository is relevant to the docs task. The workflow still writes generated documentation changes to the connected docs repository, not to the source repository.
+
+<Callout type="info">
+  When a provider event includes changed-file metadata, code-change workflows skip events that do not touch the configured path scope. If the provider event does not include changed paths, the workflow falls back to repository-level matching and still uses the path scope to bound run context.
+</Callout>
 
 ## Repository copy targets
 

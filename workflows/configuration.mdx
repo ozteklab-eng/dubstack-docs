@@ -75,6 +75,28 @@ Keep context focused:
 
 Context repositories are read-only. The workflow always writes to the connected docs repository.
 
+### Scope repository context by path
+
+For large repositories, add a path scope to keep workflow context focused on the part of the repository that matters.
+
+Examples:
+
+```text
+apps/marketing
+services/content-service
+packages/sdk
+```
+
+The path must be relative to the repository root. Do not include a leading slash, `..`, or a full URL.
+
+Use path scope when:
+
+- the repository is a monorepo
+- only one service, package, or app should influence the docs task
+- you want run details and prompts to show the intended source boundary
+
+Path scope bounds the context and instructions for the workflow. When a provider event includes changed-file metadata, code-change workflows skip events that do not touch the configured path scope. If changed paths are not available from the event, the workflow falls back to repository-level matching.
+
 ## Integration context
 
 Supported workflows can use connected integrations.
