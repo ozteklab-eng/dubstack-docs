@@ -24,6 +24,8 @@ One repository is the active deployment source for a site. That source powers pu
 
 Additional connected repositories can be used as copy targets. A copy target is useful for backup, provider testing, or migration rehearsal, but it does not become an automatic mirror and it does not power the live site unless you explicitly switch the deployment source.
 
+When a GitLab or Forgejo repository is promoted from a secondary provider to the active deployment source, dubstack first copies the current docs files into that repository. If the copy fails, the previous active deployment source stays active.
+
 Keep these states separate:
 
 | State | What it means |
@@ -57,6 +59,8 @@ From the dashboard:
 4. Select the repository and branch.
 5. Save the connection.
 6. Run a manual update to verify the first sync.
+
+If another provider was already active, wait for the initial repository copy to finish before treating the new provider as the production source.
 
 ## Repository requirements
 

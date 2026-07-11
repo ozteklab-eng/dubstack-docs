@@ -56,6 +56,8 @@ Changing the visible provider does not automatically migrate production traffic.
 
 For self-hosted providers, the instance must be reachable from dubstack and the configured token must have the repository permissions needed for the selected workflow.
 
+When you connect GitLab or Forgejo while another provider is already active, dubstack copies the current docs source into the new repository before switching the deployment source. If that initial copy fails, the existing active source remains in place and the dashboard shows the copy error.
+
 ## GitHub setup
 
 GitHub source sync uses the dubstack GitHub App.
@@ -107,6 +109,8 @@ Use Forgejo when your docs repository is hosted on a Forgejo instance your team 
 7. Run a manual update and confirm the active deployment source card shows the expected Forgejo repository.
 
 Forgejo works best when the instance is available over HTTPS and can send provider events to the configured sync endpoint. If provider events are not available, use manual update after pushing changes.
+
+If the site already has an active docs source, save the Forgejo connection first and let dubstack copy the current docs into Forgejo before the source switches. Do not tell teammates to push to Forgejo until the active deployment source card confirms Forgejo is serving the site.
 
 ### Reuse Forgejo access for workflow source repositories
 
@@ -271,6 +275,8 @@ Use a copy target when you want to:
 Before switching production to a copy target, confirm the target repository has `dubstack.json`, all MDX pages, assets, OpenAPI specs, and a valid deployment branch.
 
 Repository copy targets are currently explicit actions. A successful copy proves that dubstack can read the active source and write to the target provider, but it does not create continuous mirroring, provider failover, or webhook replication.
+
+Provider switching uses the same copy pipeline. A failed copy blocks the switch so the live site keeps publishing from the previous active source.
 
 Use the active deployment source card to confirm what is serving production before telling teammates to push to a different repository.
 
