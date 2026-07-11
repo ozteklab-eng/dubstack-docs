@@ -41,6 +41,7 @@ Proxy these routes to the origin hostname shown in the dubstack dashboard.
 | `/docs/llms-full.txt` | `https://<site>--origin.dubstack.live/docs/llms-full.txt` | If AI discovery is enabled |
 | `/docs/skill.md` | `https://<site>--origin.dubstack.live/docs/skill.md` | If agent skill discovery is enabled |
 | `/docs/mcp` | `https://<site>--origin.dubstack.live/docs/mcp` | If public MCP is enabled |
+| `/docs/feedback` | `https://<site>--origin.dubstack.live/docs/feedback` | If page or agent feedback is enabled |
 | `/docs/.well-known/mcp` | `https://<site>--origin.dubstack.live/docs/.well-known/mcp` | If public MCP is enabled |
 | `/docs/.well-known/mcp.json` | `https://<site>--origin.dubstack.live/docs/.well-known/mcp.json` | If public MCP is enabled |
 | `/docs/.well-known/mcp/*` | `https://<site>--origin.dubstack.live/docs/.well-known/mcp/*` | If public MCP is enabled |
@@ -48,7 +49,7 @@ Proxy these routes to the origin hostname shown in the dubstack dashboard.
 | `/docs/.well-known/agent-skills/*` | `https://<site>--origin.dubstack.live/docs/.well-known/agent-skills/*` | If agent skill discovery is enabled |
 | `/docs/.well-known/skills/*` | `https://<site>--origin.dubstack.live/docs/.well-known/skills/*` | If agent skill discovery is enabled |
 
-Do not strip the `/docs` prefix before sending the request upstream. The origin renders links, assets, search, assistant requests, MCP discovery, and LLM indexes under that prefix.
+Do not strip the `/docs` prefix before sending the request upstream. The origin renders links, assets, search, assistant requests, feedback submissions, MCP discovery, and LLM indexes under that prefix.
 
 Some edge-worker snippets map runtime endpoints such as `/docs/mcp`, `/docs/api/*`, and `/docs/_next/*` to canonical origin paths without the `/docs` prefix. That is also valid when the snippet forwards the public mount headers below. The important contract is that the public URL remains under `/docs` and discovery metadata advertises the public mounted MCP URL.
 
@@ -133,6 +134,7 @@ Use conservative caching for proxied docs traffic until the route is verified.
 
 - Do not cache `/docs/api/*`.
 - Do not cache `/docs/mcp`.
+- Do not cache `/docs/feedback`.
 - Do not cache `/docs/llms.txt`, `/docs/llms-full.txt`, or `/docs/skill.md` while testing.
 - Static assets under `/docs/_next/static/*` can be cached by the browser or CDN after the site is stable.
 
@@ -148,6 +150,7 @@ https://example.com/docs/quickstart
 https://example.com/docs/api/theme
 https://example.com/docs/llms.txt
 https://example.com/docs/skill.md
+https://example.com/docs/feedback
 https://example.com/docs/.well-known/mcp
 https://example.com/docs/.well-known/mcp/server-card.json
 https://example.com/docs/.well-known/agent-card.json
@@ -162,6 +165,7 @@ Also check the browser network panel:
 - Links keep users inside `/docs`.
 - The public site does not expose the `--origin.dubstack.live` URL.
 - MCP discovery and server-card `url` values point to `https://example.com/docs/mcp`.
+- Feedback submissions, if enabled, post to `/docs/feedback`.
 
 ## Troubleshooting
 
@@ -185,6 +189,8 @@ Make sure `/docs/api/*` is routed to the origin and not cached by the root appli
 
 Proxy the AI discovery files under `/docs`, including `/docs/llms.txt`, `/docs/llms-full.txt`, `/docs/skill.md`, `/docs/mcp`, `/docs/.well-known/mcp*`, `/docs/.well-known/agent-card.json`, `/docs/.well-known/agent-skills/*`, and `/docs/.well-known/skills/*` when those features are enabled.
 
+If agent feedback fails through a mounted docs path, also proxy `/docs/feedback` and keep it uncached.
+
 ### MCP client connects but shows no tools
 
-Fetch `/docs/.well-known/mcp/server-card.json`. If the response lists tools but the `url` points to the `--origin` hostname, forward `X-Public-Mcp-Url: https://example.com/docs/mcp` and purge cached discovery responses. If the `url` is correct but tools do not appear or tool calls fail, forward `X-Docs-Base-Path: /docs`, check that `/docs/mcp` accepts `POST` requests, and keep it uncached.
+Fetch `/docs/.well-known/mcp/server-card.json`. If the response lists tools but the `url` points to the `--origin` hostname, forward `X-Public-Mcp-Url: https://example.com/docs/mcp` and purge cached discovery responses. If the `url` is correct but tools do not appear or tool calls fail, forward `X-Docs-Base-Path: /docs`, check that `/docs/mcp` accepts `POST` requests, route `/docs/feedback` when feedback is enabled, and keep both paths uncached.
