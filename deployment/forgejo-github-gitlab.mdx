@@ -12,9 +12,9 @@ A connected provider lets dubstack read source content, receive update signals, 
 
 | Provider | Current role |
 | --- | --- |
-| GitHub | Primary connected-source provider for production docs, previews, editor commits, and agent draft pull requests. |
-| GitLab | Connected-source provider, copy target, OAuth authoring integration, GitLab-aware workflows, and merge-request authoring. |
-| Forgejo | Self-hosted source provider, copy target, and reviewable authoring path for teams that host docs in Forgejo. |
+| GitHub | Primary active deployment source for production docs, previews, editor commits, and agent draft pull requests. |
+| GitLab | Copy target, optional active deployment source where enabled, OAuth authoring integration, GitLab-aware workflows, and merge-request authoring. |
+| Forgejo | Self-hosted active deployment source where enabled, workflow source repository, copy target, and reviewable authoring path. |
 
 Provider availability can depend on your plan, workspace configuration, and rollout state.
 
@@ -39,10 +39,10 @@ Source repositories are read-only context. They do not publish pages and they do
 
 | Goal | Recommended path |
 | --- | --- |
-| Production docs from your own repository | [GitHub](/deployment/github) |
+| Production docs from your own hosted GitHub repository | [GitHub](/deployment/github) |
 | Keep a GitLab copy or prepare a migration | [GitLab](/deployment/gitlab) |
 | Draft GitLab merge requests from agents or workflows | [GitLab](/deployment/gitlab) with OAuth authoring access |
-| Publish from a self-hosted Forgejo repository | Configure Forgejo in [Git settings](/deployment/git-settings) |
+| Publish from a self-hosted Forgejo docs repository | Configure Forgejo as the active deployment source in [Git settings](/deployment/git-settings) |
 | Use a self-hosted Forgejo code repository for workflows | Add it as a source repository in [Git settings](/deployment/git-settings), then select it in [workflow configuration](/workflows/configuration). |
 | Review generic provider concepts | This page |
 | Configure an unsupported custom provider | Contact support or your dubstack operator before relying on it for production publishing. |

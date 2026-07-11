@@ -8,7 +8,7 @@ Developers can keep using their normal Git workflow with dubstack.
 
 Use the dashboard editor when you want to edit in the browser. Use local Git when your team prefers an IDE, command line, pull requests, CI checks, or repository-native review.
 
-Both paths update the same docs source.
+Both paths update the same active docs source.
 
 ```text
 Dashboard editor
@@ -19,14 +19,14 @@ Local Git push
 
 ## Before you start
 
-Confirm the site has a connected source repository.
+Confirm the site has an active deployment source repository.
 
 1. Open the dashboard.
 2. Go to **Settings > Deployment > Git settings**.
 3. Confirm the provider, repository, branch, and docs root.
 4. Confirm the repository contains `dubstack.json`.
 
-For GitHub, the dubstack GitHub App must have access to the repository. For GitLab, the GitLab project, token, and active-source settings must be valid for the workspace.
+For GitHub, the dubstack GitHub App must have access to the repository. If GitLab is the active deployment source, the GitLab project, token, and active-source settings must be valid for the workspace.
 
 ## Clone the repository
 
@@ -87,7 +87,7 @@ After review, merge into the deployment branch. The merge triggers the normal sy
 
 ## What syncs back into the dashboard
 
-External pushes and merged pull requests update the same source the dashboard editor reads.
+External pushes and merged pull requests update the same active docs source the dashboard editor reads.
 
 After a successful sync:
 
