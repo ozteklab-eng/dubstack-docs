@@ -9,7 +9,7 @@ Open **Settings > Deployment > Git settings** from the dashboard.
 
 ## What Git settings controls
 
-Git settings has three separate jobs:
+Git settings has five separate jobs:
 
 | Job | What it controls |
 | --- | --- |
@@ -56,7 +56,7 @@ Changing the visible provider does not automatically migrate production traffic.
 
 For self-hosted providers, the instance must be reachable from dubstack and the configured token must have the repository permissions needed for the selected workflow.
 
-When you connect GitLab or Forgejo while another provider is already active, dubstack copies the current docs source into the new repository before switching the deployment source. If that initial copy fails, the existing active source remains in place and the dashboard shows the copy error.
+When you explicitly switch the active deployment source to GitLab or Forgejo while another provider is already active, dubstack copies the current docs source into the new repository before the switch completes. If that initial copy fails, the existing active source remains in place and the dashboard shows the copy error. If you only configure a copy target, production stays on the current active source.
 
 ## GitHub setup
 
