@@ -14,7 +14,7 @@ Git settings has three separate jobs:
 | Job | What it controls |
 | --- | --- |
 | Deployment source | The repository, branch, and optional docs directory used to publish the live docs site. |
-| Provider access | The GitHub App or GitLab token that lets dubstack read source files and receive repository events. |
+| Provider access | The GitHub App, GitLab token, or Forgejo token that lets dubstack read source files and receive repository events where the provider supports them. |
 | Authoring access | OAuth or app permissions that let approved agents, Slack requests, editor saves, and workflows create reviewable documentation changes. |
 
 Keep these jobs separate when troubleshooting. A site can read from a repository while authoring is blocked, and an OAuth connection can be healthy while the deployment source still points somewhere else.
@@ -50,8 +50,9 @@ Changing the visible provider does not automatically migrate production traffic.
 | GitHub | Primary repository source with GitHub App access, preview deployments, editor commits, and pull-request authoring. |
 | GitLab | Repository copy target, GitLab-backed source where enabled, and merge-request authoring through GitLab OAuth. |
 | Self-hosted GitLab | OAuth authoring against a reachable self-hosted GitLab instance after the workspace is configured. |
+| Forgejo | Self-hosted repository source, copy target, and reviewable authoring path for teams that run Forgejo. |
 
-Forgejo and additional providers can be enabled for selected workspaces as provider support matures. When a provider is not enabled, do not rely on it for a production deployment.
+For self-hosted providers, the instance must be reachable from dubstack and the configured token must have the repository permissions needed for the selected workflow.
 
 ## GitHub setup
 
@@ -89,6 +90,26 @@ If GitLab is configured only as a copy target, pushes to GitLab do not publish t
 
 See [GitLab](/deployment/gitlab) and [Self-hosted GitLab OAuth](/deployment/gitlab-self-hosted-oauth) for setup details.
 
+## Forgejo setup
+
+Forgejo source sync uses a Forgejo instance URL and repository token.
+
+Use Forgejo when your docs repository is hosted on a Forgejo instance your team controls.
+
+1. Open the Git provider picker.
+2. Choose Forgejo.
+3. Enter the Forgejo instance URL.
+4. Enter the repository owner, repository name, branch, and optional docs directory.
+5. Enter a token that can read the repository and write branches or pull requests when authoring is enabled.
+6. Save the connection.
+7. Run a manual update and confirm the active deployment source card shows the expected Forgejo repository.
+
+Forgejo works best when the instance is available over HTTPS and can send provider events to the configured sync endpoint. If provider events are not available, use manual update after pushing changes.
+
+<Callout type="warning">
+  One-time repository copy targets are not automatic mirrors. Use copy targets for migration, backup checks, or provider evaluation, then keep one active production source.
+</Callout>
+
 ## Docs in a subdirectory
 
 Enable **Docs are in a subdirectory** when `dubstack.json` is not at the repository root.
@@ -120,6 +141,7 @@ Manual update is useful after:
 - changing the repository, branch, or docs directory
 - granting repository access to the GitHub App
 - rotating a GitLab token
+- rotating a Forgejo token
 - fixing a webhook delivery issue
 - importing or copying docs between providers
 
@@ -175,6 +197,8 @@ For GitHub, open the app installation and confirm the repository is selected.
 
 For GitLab, confirm the token can read the project and the project ID or path is correct.
 
+For Forgejo, confirm the instance URL is reachable from dubstack and the token can read the selected repository.
+
 ### Branch list is missing the expected branch
 
 Confirm the provider credential can read branches and that the branch exists in the selected repository.
@@ -194,6 +218,8 @@ Check authoring readiness, not only source sync.
 For GitHub, verify the GitHub App has write and pull request permissions for the repository.
 
 For GitLab, verify OAuth is connected, the selected project is enabled for workflow context, and the connected user can create branches and merge requests.
+
+For Forgejo, verify the repository token can create branches and pull requests on the selected repository.
 
 ### GitLab OAuth is connected but production still reads GitHub
 

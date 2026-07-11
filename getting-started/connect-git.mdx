@@ -12,14 +12,15 @@ You can edit from the dashboard or from a local Git checkout. Dashboard publishi
 
 ## Supported providers
 
-dubstack currently focuses on GitHub and GitLab for production setup.
+dubstack supports GitHub, GitLab, and Forgejo source setup.
 
 | Provider | Use case |
 | --- | --- |
 | GitHub | Recommended for GitHub App installation, repository access, preview deployments, and pull-request based authoring. |
 | GitLab | Use when your docs repository lives in GitLab and your team reviews changes through merge requests. |
+| Forgejo | Use when your docs repository lives on a self-hosted Forgejo instance and your team wants that instance to remain the source of truth. |
 
-Other provider surfaces may appear in the dashboard, but GitHub and GitLab are the primary production paths to validate first.
+Additional provider surfaces may appear in the dashboard when they are enabled for a workspace. Keep one active production source at a time.
 
 ## Repository requirements
 
@@ -53,6 +54,17 @@ After connection, the Git settings page shows the repository, branch, sync statu
 6. Run a manual update to sync the first content artifacts.
 
 GitLab authoring features may require an additional authoring OAuth connection so dubstack can create merge requests on behalf of the connected user.
+
+## Connect Forgejo
+
+1. Open the site's Git settings.
+2. Choose Forgejo.
+3. Enter the Forgejo instance URL.
+4. Enter the repository owner, repository, branch, and token.
+5. Confirm the connection.
+6. Run a manual update to sync the first content artifacts.
+
+Forgejo instances must be reachable from dubstack. If provider events are not configured, use manual update after pushing changes.
 
 ## What happens after connection
 
@@ -90,6 +102,7 @@ Check these after connecting:
 
 - [Local Git workflow](/deployment/local-git-workflow)
 - [Branching and publishing](/editor/publishing)
+- [Git providers](/deployment/forgejo-github-gitlab)
 - [Source control troubleshooting](/deployment/source-control-troubleshooting)
 
 <Callout type="warning">

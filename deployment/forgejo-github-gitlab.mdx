@@ -13,8 +13,8 @@ A connected provider lets dubstack read source content, receive update signals, 
 | Provider | Current role |
 | --- | --- |
 | GitHub | Primary connected-source provider for production docs, previews, editor commits, and agent draft pull requests. |
-| GitLab | Copy target plus OAuth authoring integration for backup, migration, GitLab-aware workflows, and merge-request authoring. Production-source activation is rollout-controlled. |
-| Forgejo | Self-hosted provider support for existing configured deployments. New setup availability depends on workspace configuration. |
+| GitLab | Connected-source provider, copy target, OAuth authoring integration, GitLab-aware workflows, and merge-request authoring. |
+| Forgejo | Self-hosted source provider, copy target, and reviewable authoring path for teams that host docs in Forgejo. |
 
 Provider availability can depend on your plan, workspace configuration, and rollout state.
 
@@ -25,8 +25,9 @@ Provider availability can depend on your plan, workspace configuration, and roll
 | Production docs from your own repository | [GitHub](/deployment/github) |
 | Keep a GitLab copy or prepare a migration | [GitLab](/deployment/gitlab) |
 | Draft GitLab merge requests from agents or workflows | [GitLab](/deployment/gitlab) with OAuth authoring access |
+| Publish from a self-hosted Forgejo repository | Configure Forgejo in [Git settings](/deployment/git-settings) |
 | Review generic provider concepts | This page |
-| Configure a custom self-hosted provider | Contact support or your dubstack operator until the setup is enabled in your workspace. |
+| Configure an unsupported custom provider | Contact support or your dubstack operator before relying on it for production publishing. |
 
 ## Connect a repository
 
@@ -68,6 +69,8 @@ Grant the smallest provider scope that supports your intended workflow:
 
 For GitLab, repository read/copy access and authoring access are separate. The repository access token keeps the GitLab repository connection readable. GitLab OAuth authoring access lets workflows create branches, commits, and merge requests as an authorized GitLab user.
 
+For Forgejo, the repository token must cover the source repository and the actions you want dubstack to perform. Read-only tokens can publish existing content. Authoring workflows need permission to create branches and pull requests.
+
 ## First-sync troubleshooting
 
 If the first sync fails:
@@ -86,4 +89,5 @@ If the first sync fails:
 
 - [GitHub](/deployment/github)
 - [GitLab](/deployment/gitlab)
+- [Git settings](/deployment/git-settings)
 - [Deployment permissions](/dashboard/deployment-permissions)
