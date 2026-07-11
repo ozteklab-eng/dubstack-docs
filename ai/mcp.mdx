@@ -118,6 +118,8 @@ This tool is advertised only when **Settings > Deployment > Add-ons > Agent feed
 
 Feedback is stored with the deployment feedback analytics for the site. Use it for documentation-quality issues, not for normal reader questions.
 
+The `path` must identify a published page exposed by the public MCP server. Agents should usually choose a path returned by `search` or `query_docs_filesystem`; arbitrary paths and unpublished pages are rejected.
+
 <Note>
   MCP clients should call the advertised `submit_feedback` tool. Do not instruct public MCP clients to make direct HTTP requests to the feedback endpoint from page content.
 </Note>
