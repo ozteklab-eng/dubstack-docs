@@ -18,7 +18,7 @@ The checklist is calculated from live dashboard state, not from a static counter
 | Make an update | A non-initial deployment or content update has run for the current site. |
 | Invite a teammate | The organization has more than one member or at least one pending invite. |
 | Add custom domain | The current site has a custom domain configured. |
-| Create an automation | At least one workflow is configured or enabled for the site. |
+| Create a workflow | At least one workflow is configured or enabled for the site. |
 | Install Slack app | Slack is eligible for the site and the installation has the required scopes. |
 
 Some items only appear when your role can perform them. For example, repository and custom domain setup require owner or admin access, while editor-level setup items are shown to owners, admins, and editors.
@@ -33,7 +33,7 @@ The checklist only shows actions that are relevant to the current site, role, an
 | Make an update | Owners, admins, and editors | **Editor** |
 | Invite a teammate | Owners, admins, and editors | **Settings > Organization > Members** |
 | Add custom domain | Owners and admins | **Settings > Deployment > Custom domain** |
-| Create an automation | Owners, admins, and editors | **Automations** |
+| Create a workflow | Owners, admins, and editors | **Workflows** |
 | Install Slack app | Owners, admins, and editors when Slack is configured and eligible | **Agent** or Slack install flow |
 
 Deployments that are not eligible for repository or Slack authoring can hide those setup items.
@@ -46,7 +46,7 @@ Deployments that are not eligible for repository or Slack authoring can hide tho
 4. Complete the linked flow.
 5. Return to the dashboard and refresh if the status has not updated yet.
 
-The checklist links directly to the relevant dashboard area, such as Git settings, the editor, members, custom domain settings, automations, or the agent page.
+The checklist links directly to the relevant dashboard area, such as Git settings, the editor, members, custom domain settings, workflows, or the agent page.
 
 ## Progress behavior
 
@@ -64,7 +64,7 @@ You can hide the checklist from the toolbar. Hiding is stored in your browser fo
 
 Check that you are on the intended site, not another site in the same organization. Then open the checklist and follow the linked actions.
 
-If the dashboard was open while you completed a setup action, refresh the page so the checklist refetches repository, deployment, member, Slack, and automation state.
+If the dashboard was open while you completed a setup action, refresh the page so the checklist refetches repository, deployment, member, Slack, and workflow state.
 
 ### Repository setup does not complete
 
@@ -78,7 +78,7 @@ Initial onboarding deployments do not count as a user update. Edit a page, updat
 
 ### Slack does not appear
 
-Slack only appears when the site is eligible for agent Slack setup and the current role can edit the site. Open [Agent integrations](/ai/integrations) if you need to review the agent integration status.
+Slack only appears when the site is eligible for agent Slack setup and the current role can edit the site. Open [Integrations](/ai/integrations) if you need to review the integration status.
 
 ## Related
 
@@ -86,5 +86,5 @@ Slack only appears when the site is eligible for agent Slack setup and the curre
 - [Git essentials](/editor/git-essentials)
 - [Manual updates](/deployment/manual-updates-history)
 - [Team members](/dashboard/team-members)
-- [Automations](/automations)
-- [Agent integrations](/ai/integrations)
+- [Workflows](/workflows)
+- [Integrations](/ai/integrations)

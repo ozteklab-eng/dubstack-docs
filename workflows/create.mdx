@@ -8,6 +8,8 @@ Custom workflows let you define a docs maintenance workflow for your team's spec
 
 Use them when the built-in workflows are close, but your trigger, prompt, context, or notification rules need to be more specific.
 
+Custom workflows use the same provider vocabulary as built-in workflows: **Require review** opens a provider-native review request, such as a GitHub pull request, GitLab merge request, or Forgejo pull request.
+
 ## Create a custom workflow
 
 1. Open the dashboard.
@@ -88,6 +90,8 @@ Review notes: describe what reviewers should check.
 | Automatically | Apply the update directly when the workflow is allowed to write. |
 
 Prefer review mode for new workflows. Move to automatic updates only after the workflow has produced predictable output across several runs.
+
+Automatic updates require the connected provider to allow direct commits to the target branch. If branch protection, rulesets, or repository policy block direct commits, keep the workflow in review mode.
 
 ## Validate a custom workflow
 

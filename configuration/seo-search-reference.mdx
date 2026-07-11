@@ -32,12 +32,15 @@ Use page frontmatter for page-specific titles and descriptions. Use global site 
 | `description` | string | Page summary used by metadata, search snippets, and AI-readable indexes. |
 | `icon` | string | Page icon when supported by navigation. |
 | `noindex` | boolean | Excludes the page from public indexing surfaces. |
+| `searchable` | boolean | Set to `false` to exclude a published page from in-site search, public MCP search, the public MCP filesystem, and assistant retrieval indexes without removing the page from navigation. |
+| `boost` | number | Positive relevance multiplier for search and assistant retrieval ranking. |
 
 ```mdx
 ---
 title: Quickstart
 description: Create and publish your first docs site.
 icon: zap
+boost: 2
 ---
 ```
 
@@ -48,8 +51,11 @@ Write descriptions as reader-facing summaries. They are reused by search, AI dis
 | Field | Type | Default | Purpose |
 | --- | --- | --- | --- |
 | `addons.visibility.noindex` | boolean | `false` | Site-level switch to disable public indexing and AI discovery. |
+| `seo.indexing` | string | Navigation-driven | Set to `all` to include every hidden page in public search, sitemap output, AI-readable indexes, MCP, and assistant retrieval. |
 | Page `noindex` frontmatter | boolean | `false` | Page-level switch to exclude a page from sitemap and public AI surfaces. |
-| Page `hidden` frontmatter | boolean | `false` | Removes a page from navigation and public sitemap output. |
+| Page `hidden` frontmatter | boolean | `false` | Removes a page from navigation. It is excluded from public discovery unless `seo.indexing` is `all`. |
+| Page `searchable` frontmatter | boolean | `true` | Set to `false` to keep the page published but remove it from search and public MCP retrieval. |
+| Hidden navigation group `searchable` | boolean | `false` | Set to `true` to keep a hidden group out of navigation while including descendant pages in public discovery surfaces. |
 
 ```json
 {
@@ -61,13 +67,18 @@ Write descriptions as reader-facing summaries. They are reused by search, AI dis
 }
 ```
 
-Published indexing is based on public navigation. Pages marked `hidden` or `noindex` are excluded from public sitemap output and public AI-readable surfaces.
+Published indexing is based on visible navigation plus explicit hidden indexing settings. Hidden navigation groups stay out of the sidebar. Add `searchable: true` to a hidden group when its descendant pages should still appear in search, sitemap output, public MCP, AI-readable indexes, and assistant retrieval. Add `seo.indexing: "all"` when every hidden page should be included.
+
+`noindex: true` and `searchable: false` are exclusion controls. Use `noindex: true` to remove a page from sitemap output and public AI discovery. Use `searchable: false` to keep a page reachable but exclude it from in-site search, public MCP search/filesystem, and assistant retrieval.
 
 ## Search controls
 
 | Field | Type | Default | Purpose |
 | --- | --- | --- | --- |
 | `widgets.search.placeholder` | string | Theme default | Placeholder text in the search box. |
+| Navigation group `boost` | number | `1` | Applies a ranking multiplier to every page under the group unless a child group or page overrides it. |
+| Page `boost` frontmatter | number | `1` | Raises the ranking weight for that page in search and assistant retrieval. |
+| Page `searchable` frontmatter | boolean | `true` | Removes a page from search and retrieval when set to `false`. |
 
 ```json
 {
@@ -81,9 +92,75 @@ Published indexing is based on public navigation. Pages marked `hidden` or `noin
 
 Search results are built from published content. If a page is missing from search, check navigation, frontmatter, and indexing policy first.
 
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Getting started",
+            "boost": 5,
+            "pages": [
+              "quickstart",
+              "getting-started/create-site"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+A page inherits boost from its nearest parent group. A nested group can override the parent group value. Page frontmatter always has the highest precedence.
+
+```mdx
+---
+title: Quickstart
+description: Create and publish your first docs site.
+boost: 2
+---
+```
+
+Use boosts for canonical pages that should win broad queries, such as quickstarts, migration guides, and primary API overview pages. Keep boosts modest so specific pages can still rank for specific queries.
+
+```mdx
+---
+title: Terms of service
+description: Legal terms linked from the footer.
+searchable: false
+---
+```
+
+Use `searchable: false` for utility pages that should remain public but should not appear in search or public AI retrieval.
+
+Use hidden navigation group search settings when a page should be discoverable without appearing in navigation.
+
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Migration helpers",
+            "hidden": true,
+            "searchable": true,
+            "pages": ["migration/legacy-api"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
 ## AI discovery surfaces
 
-DubStack exposes AI-readable docs through public routes when indexing is enabled:
+dubstack exposes AI-readable docs through public routes when indexing is enabled:
 
 | Route | Purpose |
 | --- | --- |
@@ -123,7 +200,7 @@ Feedback settings can be managed from the dashboard add-ons page. Keep source-ba
 
 | Symptom | Check |
 | --- | --- |
-| Page is not searchable | Confirm it is in navigation and does not set `hidden` or `noindex`. |
+| Page is not searchable | Confirm it is visible in navigation, under a hidden group with `searchable: true`, or covered by `seo.indexing: "all"`. Also confirm the page does not set `noindex: true` or `searchable: false`. |
 | AI tools cannot read docs | Confirm `addons.visibility.noindex` is `false`. |
 | Metadata looks generic | Add page `title` and `description` frontmatter. |
 | Feedback is missing | Enable `addons.feedback.thumbs_rating` and publish the config. |

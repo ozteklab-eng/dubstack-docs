@@ -41,6 +41,20 @@ Prepare these values before configuring SSO:
 
 Exact field availability depends on the enabled provider and workspace entitlement.
 
+## SCIM provisioning status
+
+SCIM provisioning is part of the Enterprise identity roadmap, but it is not currently a self-service dashboard flow.
+
+Today, use SSO for sign-in control and manage team access from **Dashboard > Team members**. When SCIM is enabled for an Enterprise workspace, it should remain separate from sign-in configuration:
+
+| Control | Purpose |
+| --- | --- |
+| SSO | Controls how members authenticate into the dashboard. |
+| Team members | Controls current workspace membership and roles. |
+| SCIM | Will provision, update, and deprovision members from an identity provider when enabled for the workspace. |
+
+Until SCIM is enabled for your workspace, continue to remove users from both dubstack membership and connected systems during offboarding.
+
 ## Configure SSO
 
 1. Open the dashboard.
@@ -69,7 +83,7 @@ Removing a user from the identity provider should stop future sign-ins through S
 
 - dubstack organization membership
 - Git provider repository access
-- Slack or Jira workspace access used by agent integrations
+- Slack or Jira workspace access used by integrations
 - pending invites
 - active API keys the user created or managed
 

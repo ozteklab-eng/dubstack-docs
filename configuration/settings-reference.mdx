@@ -4,7 +4,7 @@ description: Reference for the dubstack.json fields used by the docs renderer an
 icon: list-checks
 ---
 
-`dubstack.json` is the source-backed settings file for a DubStack docs site.
+`dubstack.json` is the source-backed settings file for a dubstack docs site.
 
 This reference covers fields currently used by the public renderer, sync worker, dashboard settings, and public AI surfaces.
 
@@ -26,6 +26,7 @@ This reference covers fields currently used by the public renderer, sync worker,
 | `styling.codeblocks` | string | Code block theme mode. |
 | `navigation.tabs` | array | Top-level docs navigation tabs. |
 | `navigation.groups` | array | Grouped navigation when tabs are not used. |
+| `navigation.languages` | array | Language selector and locale-prefixed routing options. |
 | `redirects` | array | Source-to-destination redirects. |
 | `contextual.options` | array | Page action menu options. |
 | `widgets.search.enabled` | boolean | Enables site search. |
@@ -33,7 +34,8 @@ This reference covers fields currently used by the public renderer, sync worker,
 | `api.openapi` | string | Default OpenAPI spec path. |
 | `api.playground.display` | string | API playground display mode. |
 | `addons.feedback` | object | Reader feedback controls. |
-| `topbarCtaButton` | object | Optional header CTA. |
+| `navbar.primary` | object | Optional primary header CTA. |
+| `errors.404` | object | Custom not-found page text and optional fallback redirect. |
 
 ## Site
 
@@ -129,6 +131,22 @@ The OpenAPI file is synced with the rest of the docs repository. Generated endpo
   ]
 }
 ```
+
+## Custom 404 page
+
+```json
+{
+  "errors": {
+    "404": {
+      "title": "Page not found",
+      "description": "This page may have moved. Use search or return to the docs homepage.",
+      "redirect": ""
+    }
+  }
+}
+```
+
+Leave `redirect` empty to render the not-found page. Set it to a root-relative path only when all missing pages should use the same fallback.
 
 ## Contextual actions
 

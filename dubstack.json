@@ -2,7 +2,7 @@
   "$schema": "https://dubstack.ai/dubstack.json",
   "site": {
     "name": "dubstack docs",
-    "tagline": "Build, publish, and scale developer documentation with DubStack.",
+    "tagline": "Build, publish, and scale developer documentation with dubstack.",
     "logo": {
       "light": "/logo/light.svg",
       "dark": "/logo/dark.svg"
@@ -48,21 +48,40 @@
       "destination": "/ai/assistant"
     },
     {
-      "source": "/workflows",
-      "destination": "/automations"
+      "source": "/automations",
+      "destination": "/workflows"
     },
     {
-      "source": "/workflow",
-      "destination": "/automations"
+      "source": "/automation",
+      "destination": "/workflows"
+    },
+    {
+      "source": "/automations/reference",
+      "destination": "/workflows/reference"
+    },
+    {
+      "source": "/automations/manage",
+      "destination": "/workflows/manage"
+    },
+    {
+      "source": "/automations/configuration",
+      "destination": "/workflows/configuration"
+    },
+    {
+      "source": "/automations/create",
+      "destination": "/workflows/create"
     },
     {
       "source": "/integrations",
       "destination": "/ai/integrations"
     }
   ],
-  "topbarCtaButton": {
-    "label": "Get started",
-    "href": "/quickstart"
+  "navbar": {
+    "primary": {
+      "type": "button",
+      "label": "Get Started",
+      "href": "https://dubstack.ai/#register"
+    }
   },
   "contextual": {
     "enabled": true,
@@ -97,8 +116,14 @@
     },
     "assistant": {
       "title": "Assistant",
-      "welcome_title": "How can I help with DubStack?",
-      "welcome_subtitle": "Ask about configuration, publishing, migration, and docs workflows."
+      "welcome_title": "How can I help with dubstack?",
+      "welcome_subtitle": "Ask about configuration, publishing, migration, and docs workflows.",
+      "user_bubble_color": "color-mix(in srgb, var(--assistant-bg) 86%, var(--foreground) 14%)",
+      "user_bubble_text_color": "var(--assistant-text)",
+      "source_card_background_color": "color-mix(in srgb, var(--assistant-bg) 94%, var(--foreground) 6%)",
+      "source_card_border_color": "color-mix(in srgb, var(--assistant-border) 70%, transparent)",
+      "source_card_text_color": "var(--assistant-text)",
+      "source_card_muted_color": "var(--docs-muted-text, var(--gray-400))"
     }
   },
   "navigation": {
@@ -129,6 +154,10 @@
                 "icon": "map"
               },
               {
+                "slug": "guides/draft-docs-from-code",
+                "icon": "git-pull-request"
+              },
+              {
                 "slug": "getting-started/overview",
                 "icon": "book-open"
               },
@@ -155,6 +184,10 @@
             "icon": "cloud",
             "pages": [
               {
+                "slug": "deployment/git-settings",
+                "icon": "settings"
+              },
+              {
                 "slug": "deployment/github",
                 "icon": "github"
               },
@@ -167,8 +200,16 @@
                 "icon": "key-round"
               },
               {
+                "slug": "deployment/local-git-workflow",
+                "icon": "terminal"
+              },
+              {
                 "slug": "deployment/monorepo",
                 "icon": "folder-tree"
+              },
+              {
+                "slug": "deployment/multi-repo",
+                "icon": "git-fork"
               },
               {
                 "slug": "deployment/preview-deployments",
@@ -207,12 +248,20 @@
                 "icon": "server"
               },
               {
+                "slug": "deployment/ci",
+                "icon": "check-circle"
+              },
+              {
                 "slug": "deployment/webhooks-ci",
                 "icon": "workflow"
               },
               {
                 "slug": "deployment/security-headers",
                 "icon": "shield-check"
+              },
+              {
+                "slug": "deployment/csp-configuration",
+                "icon": "shield"
               },
               {
                 "slug": "deployment/forgejo-github-gitlab",
@@ -441,6 +490,10 @@
                 "icon": "languages"
               },
               {
+                "slug": "configuration/internationalization",
+                "icon": "languages"
+              },
+              {
                 "slug": "configuration/theming",
                 "icon": "palette"
               },
@@ -455,6 +508,10 @@
               {
                 "slug": "configuration/redirects",
                 "icon": "corner-up-right"
+              },
+              {
+                "slug": "configuration/custom-404-page",
+                "icon": "file-question"
               },
               {
                 "slug": "configuration/seo-search",
@@ -531,6 +588,10 @@
               {
                 "slug": "dashboard/billing-plans",
                 "icon": "credit-card"
+              },
+              {
+                "slug": "dashboard/usage",
+                "icon": "gauge"
               }
             ]
           },
@@ -549,6 +610,10 @@
               {
                 "slug": "editor/pages",
                 "icon": "file-text"
+              },
+              {
+                "slug": "editor/media",
+                "icon": "image"
               },
               {
                 "slug": "editor/navigation",
@@ -579,12 +644,38 @@
                 "icon": "git-branch"
               },
               {
+                "slug": "editor/branching-and-publishing",
+                "icon": "git-pull-request"
+              },
+              {
                 "slug": "editor/keyboard-shortcuts",
                 "icon": "keyboard"
               },
               {
                 "slug": "editor/publishing",
-                "icon": "git-pull-request"
+                "icon": "upload-cloud"
+              }
+            ]
+          },
+          {
+            "group": "CLI",
+            "icon": "terminal",
+            "pages": [
+              {
+                "slug": "cli/index",
+                "icon": "terminal"
+              },
+              {
+                "slug": "cli/install",
+                "icon": "download"
+              },
+              {
+                "slug": "cli/commands",
+                "icon": "list"
+              },
+              {
+                "slug": "cli/preview",
+                "icon": "eye"
               }
             ]
           },
@@ -647,7 +738,7 @@
                 "icon": "file-cog"
               },
               {
-                "slug": "ai/integrations",
+                "slug": "ai/integrations/index",
                 "icon": "plug"
               },
               {
@@ -701,27 +792,31 @@
             ]
           },
           {
-            "group": "Automations",
+            "group": "Workflows",
             "icon": "workflow",
             "pages": [
               {
-                "slug": "automations",
+                "slug": "workflows",
                 "icon": "workflow"
               },
               {
-                "slug": "automations/reference",
+                "slug": "workflows/reference",
                 "icon": "list-checks"
               },
               {
-                "slug": "automations/manage",
+                "slug": "workflows/manage",
                 "icon": "toggle-right"
               },
               {
-                "slug": "automations/configuration",
+                "slug": "workflows/configuration",
                 "icon": "settings-2"
               },
               {
-                "slug": "automations/create",
+                "slug": "workflows/integrations",
+                "icon": "plug-zap"
+              },
+              {
+                "slug": "workflows/create",
                 "icon": "plus"
               }
             ]
@@ -750,6 +845,24 @@
         "tab": "Guides",
         "groups": [
           {
+            "group": "Writing and quality",
+            "icon": "pen-line",
+            "pages": [
+              {
+                "slug": "guides/index",
+                "icon": "map"
+              },
+              {
+                "slug": "guides/accessibility",
+                "icon": "accessibility"
+              },
+              {
+                "slug": "guides/style-and-tone",
+                "icon": "pen-line"
+              }
+            ]
+          },
+          {
             "group": "Deployment",
             "icon": "rocket",
             "pages": [
@@ -760,6 +873,10 @@
               {
                 "slug": "deployment/security-headers",
                 "icon": "shield-check"
+              },
+              {
+                "slug": "deployment/csp-configuration",
+                "icon": "shield"
               },
               {
                 "slug": "deployment/docs-authentication",
@@ -798,6 +915,10 @@
                 "icon": "circle-alert"
               },
               {
+                "slug": "deployment/ci",
+                "icon": "check-circle"
+              },
+              {
                 "slug": "deployment/webhooks-ci",
                 "icon": "workflow"
               },
@@ -808,6 +929,10 @@
               {
                 "slug": "deployment/forgejo-github-gitlab",
                 "icon": "git-merge"
+              },
+              {
+                "slug": "deployment/git-settings",
+                "icon": "settings"
               },
               {
                 "slug": "deployment/github",
@@ -947,6 +1072,6 @@
   },
   "seo": {
     "title_template": "%s | dubstack docs",
-    "description": "Product documentation for DubStack, the developer documentation platform for docs, API references, AI workflows, and Theme Studio."
+    "description": "Product documentation for dubstack, the developer documentation platform for docs, API references, AI workflows, and Theme Studio."
   }
 }

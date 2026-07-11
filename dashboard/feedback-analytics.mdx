@@ -18,7 +18,9 @@ The feedback view can include:
 - sentiment breakdown
 - pages where feedback was submitted
 - feedback source breakdown
+- review status breakdown
 - recent feedback entries
+- internal review notes
 - optional reader email addresses when collection is enabled
 
 Feedback is scoped to the current deployment. Switching deployments changes the analytics scope.
@@ -31,7 +33,36 @@ Feedback is scoped to the current deployment. Switching deployments changes the 
 | Sentiment | Compare positive and negative ratings. |
 | Top pages | Find pages that receive the most feedback. |
 | Sources | Separate page feedback, assistant feedback, and agent feedback. |
-| Recent feedback | Review the latest detailed submissions, page paths, sources, and optional reader emails. |
+| Review status | See how many feedback entries are pending, in progress, resolved, or dismissed. |
+| Recent feedback | Review the latest detailed submissions, page paths, sources, optional reader emails, review status, and internal notes. |
+
+## Review statuses
+
+Every feedback entry starts as **Pending**.
+
+Use statuses to keep the feedback queue actionable:
+
+| Status | Meaning |
+| --- | --- |
+| Pending | Awaiting review. |
+| In progress | A docs or product follow-up is underway. |
+| Resolved | The issue has been addressed. |
+| Dismissed | The feedback is not actionable, duplicate, or no longer relevant. |
+
+Change the status from the selector beside a recent feedback entry. The **Review status** panel updates with the latest counts for the selected date range.
+
+## Internal notes
+
+Use internal notes to track team-only context for a feedback entry.
+
+Examples:
+
+- `Assigned to docs owner`
+- `Duplicate of Jira DOC-42`
+- `Resolved by PR #128`
+- `Dismissed because the page already documents this behavior`
+
+Notes are stored with the feedback event and are only visible to dashboard users with access to the deployment.
 
 ## Enable page feedback
 
@@ -70,11 +101,11 @@ Reader emails are not collected for page feedback unless the deployment add-on i
 
 Not every source is available on every plan or deployment. Use the Add-ons page to see the current capability state.
 
-Agent feedback appears only when the **Agent feedback** add-on is enabled and the submitting surface sends a documentation-quality issue through the public feedback path.
+Agent feedback appears only when the **Agent feedback** add-on is enabled and the submitting surface sends a documentation-quality issue through an advertised agent surface, such as the public MCP `submit_feedback` tool.
 
-## Use feedback with automations
+## Use feedback with workflows
 
-Feedback can power documentation improvement automations when the workflow and required capabilities are available.
+Feedback can power documentation improvement workflows when the workflow and required capabilities are available.
 
 For best results:
 
@@ -86,5 +117,5 @@ For best results:
 ## Related
 
 - [Add-ons](/settings/deployment/addons)
-- [Automation reference](/automations/reference)
-- [Configure automation runs](/automations/configuration)
+- [Workflow reference](/workflows/reference)
+- [Configure workflow runs](/workflows/configuration)

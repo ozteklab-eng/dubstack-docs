@@ -1,14 +1,14 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "DubStack Docs Runtime API",
-    "version": "2026-07-05",
-    "description": "Public runtime endpoints exposed by each published DubStack docs site. These endpoints let readers, API playgrounds, assistants, and MCP-capable clients inspect and query the published documentation for the current site. The surface is scoped to the site that serves it and does not expose dashboard administration APIs."
+    "title": "dubstack docs runtime API",
+    "version": "2026-07-12",
+    "description": "Public runtime endpoints exposed by each published dubstack docs site, plus selected server-side Admin API endpoints for trusted automation. Docs runtime endpoints are scoped to the site that serves them. Admin API endpoints use https://api.dubstack.ai and require server-side Admin API keys."
   },
   "servers": [
     {
-      "url": "https://dubstack-docs-test.dubstack.live",
-      "description": "Published docs site origin for this example deployment"
+      "url": "https://dubstack.ai/docs",
+      "description": "Published docs site for this deployment"
     }
   ],
   "tags": [
@@ -27,66 +27,18 @@
     {
       "name": "API Playground",
       "description": "Runtime endpoints used by generated API reference pages and the browser request builder."
+    },
+    {
+      "name": "Admin API",
+      "description": "Server-side automation endpoints that require scoped Admin API keys."
     }
   ],
   "paths": {
     "/mcp": {
-      "get": {
-        "operationId": "getMcpDiscovery",
-        "summary": "Get MCP discovery",
-        "description": "Returns the public Model Context Protocol discovery document for the current docs site. Use this endpoint to find the public MCP server URL and confirm that the site exposes unauthenticated, read-only docs access for agents. The endpoint is tenant-scoped by the request host, so it only describes the published documentation for the current site.",
-        "tags": [
-          "AI Access"
-        ],
-        "responses": {
-          "200": {
-            "description": "Discovery metadata for the current site's public read-only MCP server.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/McpDiscovery"
-                },
-                "examples": {
-                  "discovery": {
-                    "summary": "Discovery response",
-                    "value": {
-                      "version": "1.0.0",
-                      "transport": "http",
-                      "url": "https://dubstack-docs-test.dubstack.live/mcp",
-                      "servers": [
-                        {
-                          "name": "public",
-                          "title": "dubstack docs",
-                          "description": "API documentation platform",
-                          "url": "https://dubstack-docs-test.dubstack.live/mcp",
-                          "transport": "http",
-                          "authentication": "none"
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "x-codeSamples": [
-          {
-            "lang": "bash",
-            "label": "Fetch MCP discovery",
-            "source": "curl --request GET \\\n  --url https://dubstack-docs-test.dubstack.live/mcp"
-          },
-          {
-            "lang": "javascript",
-            "label": "Read the public MCP URL",
-            "source": "const discovery = await fetch(\"https://dubstack-docs-test.dubstack.live/mcp\").then((response) => response.json());\n\nconsole.log(discovery.servers[0].url);"
-          }
-        ]
-      },
       "post": {
         "operationId": "callMcpServer",
-        "summary": "Call MCP server",
-        "description": "Handles Streamable HTTP JSON-RPC requests for the public docs MCP server. Clients use this endpoint to list tools and call read-only tools such as documentation search or virtual filesystem reads. Tool execution is scoped to published docs content for the current site and should not be used for authoring or dashboard administration.",
+        "summary": "Call public MCP transport",
+        "description": "Handles Streamable HTTP JSON-RPC requests for the public docs MCP server. MCP clients use this endpoint to initialize the connection, list tools, and call tools such as documentation search or virtual filesystem reads. The endpoint is stateless, public, and scoped to published docs content for the current site.",
         "tags": [
           "AI Access"
         ],
@@ -138,12 +90,24 @@
               }
             }
           },
-          "description": "Streamable HTTP JSON-RPC request sent by an MCP client."
+          "description": "Streamable HTTP JSON-RPC request sent by an MCP client. Clients should send Accept: application/json, text/event-stream."
         },
         "responses": {
           "200": {
-            "description": "JSON-RPC response from the public MCP server. Successful tool calls return method-specific results; invalid requests return JSON-RPC error objects.",
+            "description": "JSON-RPC response from the public MCP server. Streamable HTTP clients typically receive text/event-stream responses; JSON-capable clients may receive application/json.",
             "content": {
+              "text/event-stream": {
+                "schema": {
+                  "type": "string",
+                  "description": "Server-sent event stream containing JSON-RPC response messages."
+                },
+                "examples": {
+                  "tools": {
+                    "summary": "Tool list event",
+                    "value": "event: message\\ndata: {\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"tools\":[{\"name\":\"search\"},{\"name\":\"query_docs_filesystem\"}]}}\\n\\n"
+                  }
+                }
+              },
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/JsonRpcResponse"
@@ -171,47 +135,26 @@
                 }
               }
             }
-          }
-        }
-      },
-      "delete": {
-        "operationId": "closeMcpSession",
-        "summary": "Close MCP session",
-        "description": "Closes a Streamable HTTP MCP session when a client no longer needs the connection. Stateless clients may not need to call this endpoint, but session-aware clients can use it to release server-side session state cleanly.",
-        "tags": [
-          "AI Access"
-        ],
-        "responses": {
-          "200": {
-            "description": "Session close acknowledgement with a JSON response body.",
+          },
+          "405": {
+            "description": "The MCP transport endpoint does not serve browser GET discovery. Use /.well-known/mcp or /.well-known/mcp.json for discovery metadata.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "ok": {
-                      "type": "boolean",
-                      "description": "Whether the session close request was accepted.",
-                      "example": true
-                    }
-                  },
-                  "required": [
-                    "ok"
-                  ]
-                },
-                "examples": {
-                  "closed": {
-                    "summary": "Session closed",
-                    "value": {
-                      "ok": true
-                    }
-                  }
+                  "$ref": "#/components/schemas/JsonRpcResponse"
                 }
               }
             }
           },
-          "204": {
-            "description": "Session close acknowledgement without a response body."
+          "406": {
+            "description": "The request did not advertise support for both application/json and text/event-stream.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonRpcResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -236,9 +179,9 @@
                   "serverCard": {
                     "summary": "Public docs MCP server card",
                     "value": {
-                      "name": "DubStack Docs MCP",
-                      "description": "Read-only MCP access to the published docs site.",
-                      "url": "https://dubstack-docs-test.dubstack.live/mcp",
+                      "name": "dubstack docs MCP",
+                      "description": "MCP access to the published docs site. Retrieval tools are read-only; feedback may be submitted when enabled.",
+                      "url": "https://dubstack.ai/docs/mcp",
                       "transport": "streamable-http"
                     }
                   }
@@ -253,7 +196,7 @@
       "get": {
         "operationId": "getMcpServerCards",
         "summary": "List MCP server cards",
-        "description": "Returns the collection of MCP server cards advertised by the current docs site. Most sites expose one public read-only docs MCP server, but the collection form lets discovery clients handle multiple advertised servers consistently.",
+        "description": "Returns the collection of MCP server cards advertised by the current docs site. Most sites expose one public docs MCP server for retrieval and optional feedback, but the collection form lets discovery clients handle multiple advertised servers consistently.",
         "tags": [
           "AI Access"
         ],
@@ -282,9 +225,9 @@
                     "value": {
                       "servers": [
                         {
-                          "name": "DubStack Docs MCP",
-                          "description": "Read-only MCP access to the published docs site.",
-                          "url": "https://dubstack-docs-test.dubstack.live/mcp",
+                          "name": "dubstack docs MCP",
+                          "description": "MCP access to the published docs site. Retrieval tools are read-only; feedback may be submitted when enabled.",
+                          "url": "https://dubstack.ai/docs/mcp",
                           "transport": "streamable-http"
                         }
                       ]
@@ -317,7 +260,7 @@
                 "examples": {
                   "index": {
                     "summary": "Compact LLM index",
-                    "value": "# DubStack Docs\n\n> Product documentation for building, publishing, and operating DubStack docs sites.\n\n## Pages\n- [Quickstart](https://dubstack-docs-test.dubstack.live/quickstart)\n- [MCP](https://dubstack-docs-test.dubstack.live/ai/mcp)\n- [API reference](https://dubstack-docs-test.dubstack.live/api-reference/introduction)"
+                    "value": "# dubstack docs\n\n> Product documentation for building, publishing, and operating dubstack docs sites.\n\n## Pages\n- [Quickstart](https://dubstack.ai/docs/quickstart)\n- [MCP](https://dubstack.ai/docs/ai/mcp)\n- [API reference](https://dubstack.ai/docs/api-reference/introduction)"
                   }
                 }
               }
@@ -346,7 +289,7 @@
                 "examples": {
                   "fullIndex": {
                     "summary": "Expanded LLM index",
-                    "value": "# DubStack Docs\n\n## Quickstart\nLaunch a docs site, connect Git, customize content, and publish.\n\n## Public MCP\nDubStack exposes read-only MCP tools so agents can search and inspect published docs."
+                    "value": "# dubstack docs\n\n## Quickstart\nLaunch a docs site, connect Git, customize content, and publish.\n\n## Public MCP\ndubstack exposes read-only retrieval tools so agents can search and inspect published docs. When enabled, agents can also submit documentation-quality feedback."
                   }
                 }
               }
@@ -399,7 +342,7 @@
                       "sources": [
                         {
                           "title": "Custom domains",
-                          "url": "https://dubstack-docs-test.dubstack.live/deployment/custom-domains",
+                          "url": "https://dubstack.ai/docs/deployment/custom-domains",
                           "path": "/deployment/custom-domains"
                         }
                       ]
@@ -457,12 +400,12 @@
                     "summary": "Loaded API reference spec",
                     "value": {
                       "name": "api-reference",
-                      "display_name": "DubStack Docs Runtime API",
-                      "base_url": "https://dubstack-docs-test.dubstack.live",
+                      "display_name": "dubstack docs runtime API",
+                      "base_url": "https://dubstack.ai/docs",
                       "spec_content": {
                         "openapi": "3.1.0",
                         "info": {
-                          "title": "DubStack Docs Runtime API",
+                          "title": "dubstack docs runtime API",
                           "version": "2026-06-25"
                         },
                         "paths": {
@@ -504,7 +447,7 @@
                 "call": {
                   "summary": "Proxy a documented endpoint request",
                   "value": {
-                    "url": "https://dubstack-docs-test.dubstack.live/mcp",
+                    "url": "https://dubstack.ai/docs/mcp",
                     "method": "GET",
                     "headers": {
                       "Accept": "application/json"
@@ -533,9 +476,9 @@
                         "content-type": "application/json"
                       },
                       "body": {
-                        "name": "DubStack Docs MCP",
+                        "name": "dubstack docs MCP",
                         "transport": "streamable-http",
-                        "endpoint": "https://dubstack-docs-test.dubstack.live/mcp"
+                        "endpoint": "https://dubstack.ai/docs/mcp"
                       }
                     }
                   }
@@ -553,7 +496,7 @@
       "post": {
         "operationId": "submitFeedback",
         "summary": "Submit feedback",
-        "description": "Records feedback for the current published docs site. Use this endpoint for page ratings, assistant answer ratings, and structured agent feedback when the corresponding deployment add-on is enabled. Requests are tenant-scoped by the docs site host and rate-limited per site and client IP.",
+        "description": "Records feedback for the current published docs site. Use this endpoint for page ratings, assistant answer ratings, and trusted application feedback integrations when the corresponding deployment add-on is enabled. Public MCP clients should call the advertised submit_feedback MCP tool instead of posting to this HTTP endpoint directly. Requests are tenant-scoped by the docs site host and rate-limited per site and client IP.",
         "tags": [
           "Feedback"
         ],
@@ -574,25 +517,24 @@
                     "message": "Positive page rating for OpenAPI setup",
                     "session_id": "page-feedback-01JZ9K9W8Q2F3S8S7H6N5M4P3A",
                     "page_path": "/api-reference/openapi-setup",
-                    "page_url": "https://dubstack-docs-test.dubstack.live/api-reference/openapi-setup",
+                    "page_url": "https://dubstack.ai/docs/api-reference/openapi-setup",
                     "metadata": {
                       "feedback_surface": "page",
                       "page_title": "OpenAPI setup"
                     }
                   }
                 },
-                "agentIssue": {
-                  "summary": "Agent-reported docs issue",
+                "assistantAnswer": {
+                  "summary": "Assistant answer rating",
                   "value": {
-                    "source": "agent-feedback",
+                    "source": "assistant-feedback",
                     "rating": "down",
-                    "message": "The page mentions a settings item that is not present in the current dashboard.",
-                    "session_id": "mcp-feedback-1780825618877",
+                    "message": "The assistant answer linked to a dashboard screen that has moved.",
+                    "session_id": "assistant-feedback-01JZ9K9W8Q2F3S8S7H6N5M4P3B",
                     "page_path": "/settings/deployment/addons",
-                    "page_url": "https://dubstack-docs-test.dubstack.live/settings/deployment/addons",
+                    "page_url": "https://dubstack.ai/docs/settings/deployment/addons",
                     "metadata": {
-                      "feedback_surface": "agent",
-                      "mcp_tool": "submit_feedback"
+                      "feedback_surface": "assistant"
                     }
                   }
                 }
@@ -719,12 +661,12 @@
           {
             "lang": "bash",
             "label": "Submit page feedback",
-            "source": "curl --request POST \\\n  --url https://dubstack-docs-test.dubstack.live/feedback \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n    \"source\": \"page-feedback\",\n    \"rating\": \"up\",\n    \"message\": \"This page answered my setup question.\",\n    \"page_path\": \"/api-reference/openapi-setup\",\n    \"page_url\": \"https://dubstack-docs-test.dubstack.live/api-reference/openapi-setup\"\n  }'"
+            "source": "curl --request POST \\\n  --url https://dubstack.ai/docs/feedback \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n    \"source\": \"page-feedback\",\n    \"rating\": \"up\",\n    \"message\": \"This page answered my setup question.\",\n    \"page_path\": \"/api-reference/openapi-setup\",\n    \"page_url\": \"https://dubstack.ai/docs/api-reference/openapi-setup\"\n  }'"
           },
           {
             "lang": "javascript",
-            "label": "Report an agent-discovered issue",
-            "source": "await fetch(\"https://dubstack-docs-test.dubstack.live/feedback\", {\n  method: \"POST\",\n  headers: { \"Content-Type\": \"application/json\" },\n  body: JSON.stringify({\n    source: \"agent-feedback\",\n    rating: \"down\",\n    message: \"The page links to a dashboard screen that no longer exists.\",\n    page_path: \"/settings/deployment/addons\",\n    page_url: \"https://dubstack-docs-test.dubstack.live/settings/deployment/addons\",\n    metadata: { feedback_surface: \"agent\" }\n  })\n});"
+            "label": "Submit assistant feedback",
+            "source": "await fetch(\"https://dubstack.ai/docs/feedback\", {\n  method: \"POST\",\n  headers: { \"Content-Type\": \"application/json\" },\n  body: JSON.stringify({\n    source: \"assistant-feedback\",\n    rating: \"down\",\n    message: \"The answer linked to a dashboard screen that has moved.\",\n    page_path: \"/settings/deployment/addons\",\n    page_url: \"https://dubstack.ai/docs/settings/deployment/addons\",\n    metadata: { feedback_surface: \"assistant\" }\n  })\n});"
           }
         ]
       },
@@ -777,7 +719,7 @@
       "get": {
         "operationId": "getWellKnownMcpJson",
         "summary": "Get well-known MCP discovery",
-        "description": "Compatibility discovery route that returns the same public MCP discovery document as GET /mcp.",
+        "description": "Compatibility discovery route that returns the public MCP discovery document for the current docs site. The document advertises the public MCP transport endpoint, such as https://example.com/docs/mcp for path-mounted deployments.",
         "tags": [
           "AI Access"
         ],
@@ -795,13 +737,13 @@
                     "value": {
                       "version": "1.0.0",
                       "transport": "http",
-                      "url": "https://dubstack-docs-test.dubstack.live/mcp",
+                      "url": "https://dubstack.ai/docs/mcp",
                       "servers": [
                         {
                           "name": "public",
                           "title": "dubstack docs",
                           "description": "API documentation platform",
-                          "url": "https://dubstack-docs-test.dubstack.live/mcp",
+                          "url": "https://dubstack.ai/docs/mcp",
                           "transport": "http",
                           "authentication": "none"
                         }
@@ -830,7 +772,7 @@
       "get": {
         "operationId": "getWellKnownMcp",
         "summary": "Get well-known MCP discovery alias",
-        "description": "Compatibility discovery route that returns the same public MCP discovery document as GET /mcp.",
+        "description": "Compatibility discovery route that returns the public MCP discovery document for the current docs site. The document advertises the public MCP transport endpoint, such as https://example.com/docs/mcp for path-mounted deployments.",
         "tags": [
           "AI Access"
         ],
@@ -848,13 +790,13 @@
                     "value": {
                       "version": "1.0.0",
                       "transport": "http",
-                      "url": "https://dubstack-docs-test.dubstack.live/mcp",
+                      "url": "https://dubstack.ai/docs/mcp",
                       "servers": [
                         {
                           "name": "public",
                           "title": "dubstack docs",
                           "description": "API documentation platform",
-                          "url": "https://dubstack-docs-test.dubstack.live/mcp",
+                          "url": "https://dubstack.ai/docs/mcp",
                           "transport": "http",
                           "authentication": "none"
                         }
@@ -901,17 +843,17 @@
                     "value": {
                       "name": "dubstack docs",
                       "description": "API documentation platform",
-                      "url": "https://dubstack-docs-test.dubstack.live/",
+                      "url": "https://dubstack.ai/docs/",
                       "version": "1.0.0",
                       "protocolVersion": "0.3",
                       "preferredTransport": "HTTP+JSON",
                       "skills": [
                         {
-                          "id": "dubstack-docs-test",
+                          "id": "dubstack-docs",
                           "name": "dubstack docs",
                           "description": "Use when answering questions about dubstack docs and working with its published documentation.",
                           "tags": [],
-                          "url": "https://dubstack-docs-test.dubstack.live/.well-known/agent-skills/dubstack-docs-test/skill.md"
+                          "url": "https://dubstack.ai/docs/.well-known/agent-skills/dubstack-docs/skill.md"
                         }
                       ]
                     }
@@ -956,10 +898,10 @@
                       "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
                       "skills": [
                         {
-                          "name": "dubstack-docs-test",
+                          "name": "dubstack-docs",
                           "type": "skill-md",
                           "description": "Use when answering questions about dubstack docs and working with its published documentation.",
-                          "url": "https://dubstack-docs-test.dubstack.live/.well-known/agent-skills/dubstack-docs-test/skill.md",
+                          "url": "https://dubstack.ai/docs/.well-known/agent-skills/dubstack-docs/skill.md",
                           "digest": "sha256:f28f07eb865d04c11dc7cce4111301c1136dd41894c9c46fcf54981a99f572ce"
                         }
                       ]
@@ -1023,7 +965,7 @@
           {
             "lang": "bash",
             "label": "Fetch generated skill.md",
-            "source": "curl --request GET \\\n  --url https://dubstack-docs-test.dubstack.live/skill.md"
+            "source": "curl --request GET \\\n  --url https://dubstack.ai/docs/skill.md"
           }
         ]
       }
@@ -1044,7 +986,7 @@
             "description": "Skill identifier from the agent-card or agent-skills index.",
             "schema": {
               "type": "string",
-              "example": "dubstack-docs-test"
+              "example": "dubstack-docs"
             }
           }
         ],
@@ -1081,7 +1023,7 @@
           {
             "lang": "bash",
             "label": "Fetch skill by id",
-            "source": "curl --request GET \\\n  --url https://dubstack-docs-test.dubstack.live/.well-known/agent-skills/dubstack-docs-test/skill.md"
+            "source": "curl --request GET \\\n  --url https://dubstack.ai/docs/.well-known/agent-skills/dubstack-docs/skill.md"
           }
         ]
       }
@@ -1129,7 +1071,7 @@
                     "value": {
                       "openapi": "3.1.0",
                       "info": {
-                        "title": "DubStack Docs Runtime API",
+                        "title": "dubstack docs runtime API",
                         "version": "2026-07-05"
                       },
                       "paths": {
@@ -1194,7 +1136,7 @@
                     "value": {
                       "openapi": "3.1.0",
                       "info": {
-                        "title": "DubStack Docs Runtime API",
+                        "title": "dubstack docs runtime API",
                         "version": "2026-07-05"
                       },
                       "paths": {
@@ -1259,7 +1201,7 @@
                     "value": {
                       "openapi": "3.1.0",
                       "info": {
-                        "title": "DubStack Docs Runtime API",
+                        "title": "dubstack docs runtime API",
                         "version": "2026-07-05"
                       },
                       "paths": {
@@ -1277,6 +1219,268 @@
           },
           "404": {
             "description": "No published OpenAPI spec exists for the current site, spec name, or preview branch."
+          }
+        }
+      }
+    },
+    "/api/project/update/{siteId}": {
+      "post": {
+        "tags": [
+          "Admin API"
+        ],
+        "summary": "Trigger deployment update",
+        "description": "Queue a live deployment update from the configured deployment branch. Requires the deployments:trigger Admin API key scope.",
+        "operationId": "triggerDeploymentUpdate",
+        "servers": [
+          {
+            "url": "https://api.dubstack.ai",
+            "description": "dubstack Admin API"
+          }
+        ],
+        "security": [
+          {
+            "AdminApiBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "siteId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The deployment site ID. Site-scoped keys can only use their assigned site."
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Deployment update queued.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeploymentTriggerResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Admin API key is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Admin API key is not allowed to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested site or deployment was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The site is not ready for deployment updates.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/project/preview/{siteId}": {
+      "post": {
+        "tags": [
+          "Admin API"
+        ],
+        "summary": "Trigger preview deployment",
+        "description": "Create or refresh a preview deployment for a Git branch. Requires the deployments:trigger Admin API key scope.",
+        "operationId": "triggerPreviewDeployment",
+        "servers": [
+          {
+            "url": "https://api.dubstack.ai",
+            "description": "dubstack Admin API"
+          }
+        ],
+        "security": [
+          {
+            "AdminApiBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "siteId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The deployment site ID. Site-scoped keys can only use their assigned site."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreviewDeploymentTriggerRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Preview deployment queued.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreviewDeploymentTriggerResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The branch value is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Admin API key is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Admin API key is not allowed to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested site or deployment was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The site or branch is not ready for preview deployments.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/project/update-status/{statusId}": {
+      "get": {
+        "tags": [
+          "Admin API"
+        ],
+        "summary": "Get deployment status",
+        "description": "Read deployment status and logs by status ID. Requires either deployments:read or deployments:trigger.",
+        "operationId": "getDeploymentStatus",
+        "servers": [
+          {
+            "url": "https://api.dubstack.ai",
+            "description": "dubstack Admin API"
+          }
+        ],
+        "security": [
+          {
+            "AdminApiBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "statusId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The deployment status ID returned by a deployment trigger endpoint."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deployment status.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeploymentStatus"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Admin API key is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Admin API key is not allowed to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested site or deployment was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
           }
         }
       }
@@ -1305,7 +1509,7 @@
             "type": "string",
             "format": "uri",
             "description": "Absolute URL of the primary public MCP endpoint for the current docs site.",
-            "example": "https://dubstack-docs-test.dubstack.live/mcp"
+            "example": "https://dubstack.ai/docs/mcp"
           },
           "servers": {
             "type": "array",
@@ -1321,7 +1525,7 @@
           "url",
           "servers"
         ],
-        "description": "Discovery document describing the public read-only MCP endpoint exposed by a published docs site."
+        "description": "Discovery document describing the public docs MCP endpoint exposed by a published docs site."
       },
       "McpServerCard": {
         "type": "object",
@@ -1330,26 +1534,26 @@
           "name": {
             "type": "string",
             "description": "Display name for the public docs MCP server.",
-            "example": "DubStack Docs MCP"
+            "example": "dubstack docs MCP"
           },
           "description": {
             "type": "string",
             "description": "Short explanation of the server purpose.",
-            "example": "Read-only MCP access to the published docs site."
+            "example": "MCP access to the published docs site. Retrieval tools are read-only; feedback may be submitted when enabled."
           },
           "url": {
             "type": "string",
             "format": "uri",
             "description": "Absolute MCP endpoint URL.",
-            "example": "https://dubstack-docs-test.dubstack.live/mcp"
+            "example": "https://dubstack.ai/docs/mcp"
           },
           "transport": {
             "type": "string",
             "description": "Transport protocol used by the MCP endpoint.",
             "enum": [
-              "streamable-http"
+              "http"
             ],
-            "example": "streamable-http"
+            "example": "http"
           }
         },
         "required": [
@@ -1505,7 +1709,7 @@
           "sources": [
             {
               "title": "Preview deployments",
-              "url": "https://dubstack-docs-test.dubstack.live/deployment/preview-deployments",
+              "url": "https://dubstack.ai/docs/deployment/preview-deployments",
               "path": "/deployment/preview-deployments"
             }
           ]
@@ -1543,12 +1747,12 @@
         "description": "Wrapper returned by the playground spec loader, including display metadata, base URL fallback, and parsed OpenAPI content.",
         "example": {
           "name": "api-reference",
-          "display_name": "DubStack Docs Runtime API",
-          "base_url": "https://dubstack-docs-test.dubstack.live",
+          "display_name": "dubstack docs runtime API",
+          "base_url": "https://dubstack.ai/docs",
           "spec_content": {
             "openapi": "3.1.0",
             "info": {
-              "title": "DubStack Docs Runtime API",
+              "title": "dubstack docs runtime API",
               "version": "2026-06-25"
             },
             "paths": {}
@@ -1592,7 +1796,7 @@
         ],
         "description": "Browser playground request scoped to a URL allowed by the published OpenAPI spec.",
         "example": {
-          "url": "https://dubstack-docs-test.dubstack.live/mcp",
+          "url": "https://dubstack.ai/docs/mcp",
           "method": "GET",
           "headers": {
             "Accept": "application/json"
@@ -1625,7 +1829,7 @@
             "content-type": "application/json"
           },
           "body": {
-            "name": "DubStack Docs MCP",
+            "name": "dubstack docs MCP",
             "transport": "streamable-http"
           }
         }
@@ -1652,8 +1856,8 @@
           },
           "source": {
             "type": "string",
-            "description": "Feedback source. Page ratings use page-feedback. Agent-submitted docs issues use agent-feedback. Assistant answer ratings may omit the value or use an assistant-specific source.",
-            "example": "agent-feedback"
+            "description": "Feedback source. Page ratings use page-feedback. Assistant answer ratings may use assistant-feedback. MCP clients should use the submit_feedback MCP tool instead of setting agent feedback sources directly.",
+            "example": "page-feedback"
           },
           "session_id": {
             "type": "string",
@@ -1672,7 +1876,7 @@
             "format": "uri",
             "maxLength": 1000,
             "description": "Absolute docs page URL related to the feedback.",
-            "example": "https://dubstack-docs-test.dubstack.live/settings/deployment/addons"
+            "example": "https://dubstack.ai/docs/settings/deployment/addons"
           },
           "reader_email": {
             "type": "string",
@@ -1688,8 +1892,7 @@
             },
             "description": "Optional string metadata. Keys are truncated to 80 characters, values to 400 characters, and only the first 20 string entries are stored.",
             "example": {
-              "feedback_surface": "agent",
-              "mcp_tool": "submit_feedback"
+              "feedback_surface": "assistant"
             }
           }
         },
@@ -1765,7 +1968,7 @@
             "type": "string",
             "format": "uri",
             "description": "Absolute URL clients should use for MCP requests.",
-            "example": "https://dubstack-docs-test.dubstack.live/mcp"
+            "example": "https://dubstack.ai/docs/mcp"
           },
           "transport": {
             "type": "string",
@@ -1811,7 +2014,7 @@
             "type": "string",
             "format": "uri",
             "description": "Canonical docs site URL.",
-            "example": "https://dubstack-docs-test.dubstack.live/"
+            "example": "https://dubstack.ai/docs/"
           },
           "version": {
             "type": "string",
@@ -1851,7 +2054,7 @@
           "id": {
             "type": "string",
             "description": "Stable skill identifier for the docs site.",
-            "example": "dubstack-docs-test"
+            "example": "dubstack-docs"
           },
           "name": {
             "type": "string",
@@ -1875,7 +2078,7 @@
             "type": "string",
             "format": "uri",
             "description": "Absolute URL of the generated skill.md file.",
-            "example": "https://dubstack-docs-test.dubstack.live/.well-known/agent-skills/dubstack-docs-test/skill.md"
+            "example": "https://dubstack.ai/docs/.well-known/agent-skills/dubstack-docs/skill.md"
           }
         },
         "required": [
@@ -1917,7 +2120,7 @@
           "name": {
             "type": "string",
             "description": "Stable skill identifier.",
-            "example": "dubstack-docs-test"
+            "example": "dubstack-docs"
           },
           "type": {
             "type": "string",
@@ -1936,7 +2139,7 @@
             "type": "string",
             "format": "uri",
             "description": "Absolute URL of the generated skill.md file.",
-            "example": "https://dubstack-docs-test.dubstack.live/.well-known/agent-skills/dubstack-docs-test/skill.md"
+            "example": "https://dubstack.ai/docs/.well-known/agent-skills/dubstack-docs/skill.md"
           },
           "digest": {
             "type": "string",
@@ -1999,6 +2202,319 @@
           }
         },
         "additionalProperties": true
+      },
+      "AdminApiError": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "DeploymentSummary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Deployment status ID."
+          },
+          "status": {
+            "type": "string",
+            "description": "Internal deployment status."
+          },
+          "deployment_target": {
+            "type": "string",
+            "enum": [
+              "live",
+              "preview"
+            ]
+          },
+          "triggered_by": {
+            "type": "string"
+          },
+          "branch": {
+            "type": "string"
+          },
+          "commit_sha": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "preview_url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri"
+          },
+          "repo_owner": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "repo_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "repo_provider": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "DeploymentTriggerResponse": {
+        "type": "object",
+        "required": [
+          "statusId"
+        ],
+        "properties": {
+          "statusId": {
+            "type": "string",
+            "description": "Deployment status ID for polling."
+          },
+          "deployment": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DeploymentSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "PreviewDeploymentTriggerRequest": {
+        "type": "object",
+        "required": [
+          "branch"
+        ],
+        "properties": {
+          "branch": {
+            "type": "string",
+            "description": "Git branch to preview."
+          }
+        }
+      },
+      "PreviewDeploymentTriggerResponse": {
+        "type": "object",
+        "required": [
+          "statusId",
+          "previewUrl"
+        ],
+        "properties": {
+          "statusId": {
+            "type": "string",
+            "description": "Deployment status ID for polling."
+          },
+          "previewUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "Preview deployment URL."
+          },
+          "deployment": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DeploymentSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "DeploymentStatus": {
+        "type": "object",
+        "required": [
+          "_id",
+          "statusId",
+          "siteId",
+          "projectId",
+          "status"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Deployment status ID."
+          },
+          "statusId": {
+            "type": "string",
+            "description": "Deployment status ID."
+          },
+          "siteId": {
+            "type": "string",
+            "description": "Deployment site ID."
+          },
+          "projectId": {
+            "type": "string",
+            "description": "Alias for siteId for API compatibility."
+          },
+          "createdAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "endedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "in_progress",
+              "success",
+              "failure"
+            ]
+          },
+          "summary": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "logs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subdomain": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "screenshot": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri"
+          },
+          "screenshotLight": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri"
+          },
+          "screenshotDark": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri"
+          },
+          "author": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "avatarUrl": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "uri"
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "commit": {
+            "type": "object",
+            "properties": {
+              "sha": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "ref": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "message": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "filesChanged": {
+                "type": "object",
+                "properties": {
+                  "added": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "modified": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "removed": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          },
+          "source": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "AdminApiBearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Server-side Admin API key created from Settings > Security > API keys."
       }
     }
   }

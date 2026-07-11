@@ -8,6 +8,10 @@ The API playground lets readers try endpoints from a docs page.
 
 Authentication behavior is controlled by your OpenAPI spec and site configuration.
 
+<Callout type="warning">
+  Playground credentials authenticate requests to your documented API. They are not dubstack admin API keys. Never ask readers to paste a dubstack admin API key into a public playground.
+</Callout>
+
 ## Define security in OpenAPI
 
 Use standard OpenAPI security schemes for bearer tokens, API keys, or basic auth.
@@ -46,9 +50,11 @@ curl https://api.example.com/v1/projects \
 
 Readers enter their own value in the playground before sending a request.
 
+If your team also uses dubstack admin API keys for workflow automation, keep those keys in backend secret storage and use them only with trusted server-side jobs. See [Admin API keys](/dashboard/api-keys) for the separate automation key model.
+
 ## Proxy behavior
 
-For browser safety, the playground can send requests through the DubStack docs backend instead of directly from the reader's browser.
+For browser safety, the playground can send requests through the dubstack docs backend instead of directly from the reader's browser.
 
 This helps avoid common CORS issues, but your API still decides whether the supplied credentials are valid.
 

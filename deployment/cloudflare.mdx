@@ -52,6 +52,8 @@ function buildProxyRequest(request) {
   headers.set('X-Forwarded-Host', PUBLIC_HOST);
   headers.set('X-Public-Host', PUBLIC_HOST);
   headers.set('X-Forwarded-Proto', 'https');
+  headers.set('X-Docs-Base-Path', DOCS_PREFIX);
+  headers.set('X-Public-Mcp-Url', `https://${PUBLIC_HOST}${DOCS_PREFIX}/mcp`);
 
   const clientIp = request.headers.get('CF-Connecting-IP');
   if (clientIp) headers.set('X-Forwarded-For', clientIp);
@@ -78,6 +80,8 @@ export default {
 ```
 
 Keep the `/docs` prefix in the upstream request. The origin uses that prefix to generate correct links and asset URLs.
+
+`X-Docs-Base-Path` tells dubstack that this site is mounted under `/docs`. `X-Public-Mcp-Url` is required when public MCP is enabled. It ensures MCP discovery and server-card metadata point to `https://example.com/docs/mcp` instead of the generated `--origin.dubstack.live` hostname.
 
 ## Route the Worker
 
@@ -149,6 +153,9 @@ https://example.com/docs
 https://example.com/docs/quickstart
 https://example.com/docs/api/theme
 https://example.com/docs/llms.txt
+https://example.com/docs/mcp
+https://example.com/docs/.well-known/mcp
+https://example.com/docs/.well-known/mcp/server-card.json
 https://example.com/docs/robots.txt
 ```
 
@@ -158,6 +165,7 @@ Then open browser dev tools and confirm:
 - Static assets load from `/docs/_next/...`.
 - API calls load from `/docs/api/...`.
 - Search and assistant requests are not blocked by cache or firewall rules.
+- MCP discovery and server-card responses point to `https://example.com/docs/mcp`.
 - The final `robots.txt` body contains the crawler policy you expect. Disable or adjust managed edge robots settings if they inject rules that conflict with your docs indexing or AI-readiness policy.
 
 ## Common issues
@@ -173,6 +181,10 @@ The Worker is rewriting paths too aggressively. Forward the same pathname to the
 ### The raw origin hostname appears in links
 
 Set `X-Forwarded-Host`, `X-Public-Host`, and `X-Forwarded-Proto` on the upstream request.
+
+### MCP connects but no tools appear
+
+Fetch `/docs/.well-known/mcp/server-card.json`. If the `url` points to the origin hostname, set `X-Public-Mcp-Url` to `https://example.com/docs/mcp` and purge cached discovery responses. If the URL is correct but tools do not appear or tool calls fail, set `X-Docs-Base-Path` to `/docs` and keep `/docs/mcp` uncached.
 
 ### Browser requests are cached during setup
 

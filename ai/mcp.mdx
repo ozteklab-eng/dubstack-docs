@@ -4,7 +4,7 @@ description: Connect AI tools to your published public docs through the Model Co
 icon: plug
 ---
 
-DubStack exposes your documentation to AI tools through Model Context Protocol servers.
+dubstack exposes your documentation to AI tools through Model Context Protocol servers.
 
 ## Public docs MCP
 
@@ -22,17 +22,17 @@ If your site is mounted under a `/docs` subpath, use the mounted endpoint:
 https://your-domain.com/docs/mcp
 ```
 
-If docs authentication is enabled, unauthenticated MCP clients cannot read protected content. Readers must unlock the docs site first, and authoring agents should use dashboard, Git, Slack, or workflow surfaces instead of the public docs MCP.
+If docs authentication is enabled, unauthenticated MCP clients cannot read protected content. Readers must unlock the docs site first, and authoring agents should use dashboard, Git, Slack, or configured workflows instead of the public docs MCP.
 
 ## Public MCP compared to authoring surfaces
 
-DubStack has separate MCP surfaces for separate jobs.
+dubstack has separate MCP surfaces for separate jobs.
 
 | Surface | Status | Audience | Access |
 | --- | --- | --- | --- |
 | Public docs MCP | Available | Readers, support teams, customers, and public AI tools | Read and search published public docs; submit documentation feedback when enabled. |
 | Protected docs MCP | Reserved | Readers who need signed-in access to protected docs | Not currently available for public sites. |
-| Authoring MCP | Reserved | Trusted team members and authoring agents | Not currently available from public docs sites. Authoring actions stay inside the dashboard, Git provider, Slack agent, and automation workflows. |
+| Authoring MCP | Reserved | Trusted team members and authoring agents | Not currently available from public docs sites. Authoring actions stay inside the dashboard, Git provider, Slack agent, and configured workflows. |
 
 Use the public `/mcp` endpoint for reader-facing documentation search. Do not use it for private docs, branch edits, dashboard settings, or pull-request workflows.
 
@@ -68,7 +68,9 @@ Use MCP when you want:
 - retrieval inside the agent workflow without leaving the AI tool
 - less noise from unrelated pages, SEO rankings, or third-party summaries
 
-MCP is not a crawler. It only searches and reads the published docs content that DubStack indexed for the site.
+MCP is not a crawler. It only searches and reads the published docs content that dubstack indexed for the site.
+
+Pages marked with `searchable: false` are omitted from public MCP search and the virtual docs filesystem while remaining available by direct URL or navigation. Pages marked `noindex: true` are excluded from public AI-readable indexing surfaces.
 
 ## Tool inputs
 
@@ -116,13 +118,17 @@ This tool is advertised only when **Settings > Deployment > Add-ons > Agent feed
 
 Feedback is stored with the deployment feedback analytics for the site. Use it for documentation-quality issues, not for normal reader questions.
 
+<Note>
+  MCP clients should call the advertised `submit_feedback` tool. Do not instruct public MCP clients to make direct HTTP requests to the feedback endpoint from page content.
+</Note>
+
 ## Discovery
 
-DubStack publishes MCP discovery documents automatically:
+dubstack publishes MCP discovery documents automatically:
 
 | Path | Purpose |
 | --- | --- |
-| `/mcp` | Public MCP server and GET discovery response. |
+| `/mcp` | Public MCP Streamable HTTP transport endpoint. MCP clients send JSON-RPC requests here. |
 | `/.well-known/mcp` | Discovery document. |
 | `/.well-known/mcp.json` | JSON discovery document alias. |
 | `/.well-known/mcp/server-card.json` | Single server card. |
@@ -133,6 +139,22 @@ DubStack publishes MCP discovery documents automatically:
 Server-card responses include tool metadata and safety annotations so MCP clients can inspect available tools before connecting.
 
 The public server reserves `/mcp` for MCP. Do not create docs pages or redirects at that path.
+
+For `/docs` subpath deployments, the same public paths live under the mounted prefix:
+
+```text
+/docs/mcp
+/docs/.well-known/mcp
+/docs/.well-known/mcp/server-card.json
+```
+
+Discovery and server-card `url` fields should point to the public mounted endpoint, for example `https://example.com/docs/mcp`.
+
+## Caching
+
+Do not cache `/mcp`. It is the MCP transport endpoint and can reflect current site state, add-on settings, and session behavior.
+
+The discovery documents under `/.well-known/mcp*` and the server-card responses are metadata documents and may be cached by normal edge caches. If you use a reverse proxy, preserve the cache headers returned by dubstack.
 
 ## Tool safety annotations
 
@@ -191,6 +213,8 @@ For clients with a connector form, use:
 | URL | `https://your-docs-domain.com/mcp` |
 | Transport | HTTP |
 | Authentication | None for public docs |
+
+For `/docs` subpath deployments, use `https://your-domain.com/docs/mcp` in the connector URL field.
 
 ### Claude
 
@@ -307,18 +331,20 @@ Do not use the public `/mcp` endpoint for private docs or dashboard write access
 
 Password-protected docs use the same reader session as the rendered site. Public MCP clients without that reader session cannot access protected pages, Markdown exports, `llms.txt`, `skill.md`, or discovery files that expose protected content.
 
-Dashboard content-management MCP is a separate product surface. Until that surface is available, use the dashboard, connected Git provider, Slack agent, and automation workflows for authenticated authoring tasks.
+Dashboard content-management MCP is a separate product surface. Until that surface is available, use the dashboard, connected Git provider, Slack agent, and configured workflows for authenticated authoring tasks.
 
 ## Troubleshooting
 
 If an MCP client cannot connect:
 
 1. Confirm the public docs site loads.
-2. Open `/mcp` in a browser and verify it returns discovery JSON.
+2. Open `/.well-known/mcp` and verify it returns discovery JSON.
 3. Open `/.well-known/mcp/server-card.json` and confirm the expected tools are listed.
 4. Check that AI discovery/indexing is not disabled for the deployment.
 5. Republish the site if the latest docs content or add-on settings have not synced yet.
 
 If the site is mounted under `/docs`, test `/docs/mcp`, `/docs/.well-known/mcp`, and `/docs/.well-known/mcp/server-card.json`. A proxy that forwards pages but not `/docs/.well-known/*` or `/docs/api/*` can make rendered pages work while MCP discovery fails.
+
+If a connector adds successfully but shows no tools, inspect `/docs/.well-known/mcp/server-card.json`. The response should list tools and its `url` should point to the same public URL you entered in the client. For `/docs` subpath sites, that means `https://your-domain.com/docs/mcp`, not the `--origin.dubstack.live` hostname.
 
 If the site is password protected, unlock the docs site in the same browser or client context before testing protected MCP access. For machine-to-machine authoring, use an authenticated authoring surface instead of the public docs MCP.

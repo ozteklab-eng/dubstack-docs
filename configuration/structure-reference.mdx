@@ -93,8 +93,9 @@ Use object entries when you need icons, titles, or external links. Use string en
 | --- | --- | --- | --- |
 | `topbar.showTabs` | boolean | `true` | Shows navigation tabs in the header. |
 | `topbar.showSearch` | boolean | `true` | Shows search in the header. |
-| `topbarCtaButton.label` | string | None | Header CTA label. |
-| `topbarCtaButton.href` | string | None | Header CTA destination. |
+| `navbar.primary.type` | `button` \| `github` \| `discord` | `button` | Header CTA style. |
+| `navbar.primary.label` | string | None | Header CTA label. Required for button CTAs. |
+| `navbar.primary.href` | string | None | Header CTA destination. |
 | `anchors` | boolean | `true` | Shows anchor links on page headings. |
 
 ```json
@@ -103,13 +104,20 @@ Use object entries when you need icons, titles, or external links. Use string en
     "showTabs": true,
     "showSearch": true
   },
-  "topbarCtaButton": {
-    "label": "Get started",
-    "href": "/quickstart"
+  "navbar": {
+    "primary": {
+      "type": "button",
+      "label": "Get started",
+      "href": "/quickstart"
+    }
   },
   "anchors": true
 }
 ```
+
+<Note>
+  Older repositories may still contain `topbarCtaButton`. dubstack continues to read it as a compatibility alias, but new configuration should use `navbar.primary`.
+</Note>
 
 ## Banner
 

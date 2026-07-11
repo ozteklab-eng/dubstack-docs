@@ -4,7 +4,7 @@ description: Use the generated skill.md file to help agents understand your docs
 icon: badge-check
 ---
 
-DubStack publishes a generated `skill.md` file for public docs sites when the docs repository does not provide a custom skill file.
+dubstack publishes a generated `skill.md` file for public docs sites when the docs repository does not provide a custom skill file.
 
 The skill file gives agents a concise description of how to use the docs site, where to connect to the public MCP server, and which pages are good starting points.
 
@@ -51,7 +51,7 @@ This lets an agent use both the high-level skill file and the searchable docs fi
 
 ## Well-known discovery
 
-DubStack also publishes skill and agent discovery metadata under `.well-known` paths.
+dubstack also publishes skill and agent discovery metadata under `.well-known` paths.
 
 Useful paths include:
 
@@ -64,7 +64,7 @@ Useful paths include:
 | `/.well-known/skills/<skill-id>/SKILL.md` | Skill URL listed by the compatibility skills index. |
 | `/.well-known/agent-card.json` | Agent card that describes the docs site and links to the available skills. |
 
-Use the URLs returned by the discovery manifests as the canonical skill-file URLs. DubStack keeps compatibility aliases available for common `skill.md` and `SKILL.md` casing, but clients should not depend on a guessed path.
+Use the URLs returned by the discovery manifests as the canonical skill-file URLs. dubstack keeps compatibility aliases available for common `skill.md` and `SKILL.md` casing, but clients should not depend on a guessed path.
 
 ### Agent-skills manifest
 
@@ -127,7 +127,7 @@ Use `llms.txt` when the agent only needs a page directory.
 
 To override the generated skill, add a root `skill.md` file to your docs repository.
 
-To publish multiple topic-specific skills, add `SKILL.md` files under `.mintlify/skills/<skill-name>/`.
+To publish multiple topic-specific skills, add `SKILL.md` files under `.dubstack/skills/<skill-name>/`.
 
 For setup details, see [Custom skill files](/ai/custom-skill-files).
 
@@ -138,7 +138,7 @@ If `/skill.md` returns `404`:
 1. Confirm the docs site is public.
 2. Confirm AI discovery/indexing is enabled.
 3. Run a manual update from the dashboard.
-4. Check that `/mcp` returns discovery metadata.
+4. Check that `/.well-known/mcp` returns discovery metadata and points to the expected `/mcp` endpoint.
 
 If `/skill.md` redirects to a login page or returns an authentication response, docs authentication is enabled. Unlock the site first, or use an authenticated authoring surface if the agent needs private docs context.
 

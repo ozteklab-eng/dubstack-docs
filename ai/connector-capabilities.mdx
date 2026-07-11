@@ -1,12 +1,12 @@
 ---
 title: Connector capabilities
-description: Understand how agent integrations map to stable capabilities such as chat context, issue context, notifications, and docs authoring.
+description: Understand how integrations map to stable capabilities such as chat context, issue context, notifications, and docs authoring.
 icon: plug-zap
 ---
 
 Connector capabilities describe what a connected provider is allowed to do inside dubstack.
 
-They are capability-first rather than provider-first. This means a messaging provider, issue tracker, or knowledge-base provider plugs into a stable product contract instead of every agent and automation feature learning provider-specific behavior separately.
+They are capability-first rather than provider-first. This means a messaging provider, issue tracker, or knowledge-base provider plugs into a stable product contract instead of every agent and workflow feature learning provider-specific behavior separately.
 
 ## Why capabilities matter
 
@@ -14,7 +14,7 @@ Capabilities keep integrations predictable:
 
 - The dashboard can show why a provider is available, blocked, or coming soon.
 - The agent can use only the tools that are connected, scoped, and allowed for the current user.
-- Automations can validate integrations before a run starts.
+- Workflows can validate integrations before a run starts.
 - Future equivalent providers can reuse the same behavior without changing the authoring boundary.
 
 <Callout type="info">
@@ -41,7 +41,7 @@ Catalog-only means the provider can appear as planned surface area, but it canno
 | Provider | Scope | Capabilities |
 | --- | --- | --- |
 | Slack | Organization | Agent conversation surface, bounded chat context, thread follow-ups, progress updates, deployment selection, approval prompts, and workflow notifications. |
-| Jira | Organization | Bounded issue-tracker context for dashboard agent requests and supported automations. |
+| Jira | Organization | Bounded issue-tracker context for dashboard agent requests and supported workflows. |
 
 The exact providers you see in the dashboard can depend on plan, environment configuration, and organization permissions.
 
@@ -96,8 +96,8 @@ Integration context follows these boundaries:
 
 ## Related
 
-- [Agent integrations](/ai/integrations)
+- [Integrations](/ai/integrations)
 - [Integration permissions and scopes](/ai/integration-permissions)
 - [Slack integration](/ai/integrations/slack)
 - [Jira integration](/ai/integrations/jira)
-- [Configure automation runs](/automations/configuration)
+- [Configure workflow runs](/workflows/configuration)

@@ -8,16 +8,19 @@ Git is the source of truth for published documentation content.
 
 When Git is connected, dubstack reads docs content from your repository, publishes synchronized artifacts, and creates documentation updates through the same review path your team already uses.
 
+You can edit from the dashboard or from a local Git checkout. Dashboard publishing writes back to the connected source where supported, while local pushes trigger the same sync path through provider events or manual update.
+
 ## Supported providers
 
-dubstack currently focuses on GitHub and GitLab for production setup.
+dubstack supports GitHub, GitLab, and Forgejo source setup.
 
 | Provider | Use case |
 | --- | --- |
 | GitHub | Recommended for GitHub App installation, repository access, preview deployments, and pull-request based authoring. |
 | GitLab | Use when your docs repository lives in GitLab and your team reviews changes through merge requests. |
+| Forgejo | Use when your docs repository lives on a self-hosted Forgejo instance and your team wants that instance to remain the source of truth. |
 
-Other provider surfaces may appear in the dashboard, but GitHub and GitLab are the primary production paths to validate first.
+Additional provider surfaces may appear in the dashboard when they are enabled for a workspace. Keep one active production source at a time.
 
 ## Repository requirements
 
@@ -52,6 +55,17 @@ After connection, the Git settings page shows the repository, branch, sync statu
 
 GitLab authoring features may require an additional authoring OAuth connection so dubstack can create merge requests on behalf of the connected user.
 
+## Connect Forgejo
+
+1. Open the site's Git settings.
+2. Choose Forgejo.
+3. Enter the Forgejo instance URL.
+4. Enter the repository owner, repository, branch, and token.
+5. Confirm the connection.
+6. Run a manual update to sync the first content artifacts.
+
+Forgejo instances must be reachable from dubstack. If provider events are not configured, use manual update after pushing changes.
+
 ## What happens after connection
 
 Once connected:
@@ -66,6 +80,14 @@ Repository update
 
 If a sync fails, the live site should keep serving the previous known-good content while the dashboard reports the failure.
 
+## Work locally after connection
+
+After Git is connected, developers can clone the repository, edit MDX files or `dubstack.json`, commit, and push.
+
+Use a feature branch and pull request for larger changes or protected branches. Push directly to the deployment branch only when your repository policy allows direct publishing.
+
+See [Local Git workflow](/deployment/local-git-workflow) for the full command-line flow.
+
 ## Verify the connection
 
 Check these after connecting:
@@ -75,6 +97,13 @@ Check these after connecting:
 - The live site shows the latest content.
 - Preview deployments work for non-production branches when enabled.
 - Agent or workflow authoring is only enabled for repositories where write access is configured.
+
+## Related
+
+- [Local Git workflow](/deployment/local-git-workflow)
+- [Branching and publishing](/editor/publishing)
+- [Git providers](/deployment/forgejo-github-gitlab)
+- [Source control troubleshooting](/deployment/source-control-troubleshooting)
 
 <Callout type="warning">
   Do not connect managed demo deployments to temporary repositories unless you are intentionally testing authoring. Keep production deployments connected to repositories your team controls.
