@@ -45,7 +45,9 @@ The dashboard stores the selected workspace and granted scopes for that organiza
 
 Ask for Jira context when the issue tracker contains the source details.
 
-The agent collects Jira context when your request includes an issue key, explicitly asks for Jira, or includes an inline `jql:` query.
+The agent collects Jira context only when your request includes a Jira issue key or an inline `jql:` query.
+
+If you mention Jira without a specific issue key or query, the agent asks for a more specific issue or filter instead of sweeping your workspace.
 
 Examples:
 
@@ -54,16 +56,14 @@ Use Jira context for PROJ-123 and draft a migration note for the docs.
 ```
 
 ```text
-Summarize the open documentation issues for the billing project.
+Use Jira context with jql: project = BILLING AND labels = docs ORDER BY updated DESC, then summarize the open documentation issues.
 ```
 
 ```text
 Use Jira context with jql: project = DOCS AND statusCategory != Done ORDER BY updated DESC, then draft a docs backlog summary.
 ```
 
-If the request needs precise issue selection, include the issue key, project, or a clear filter.
-
-If you ask for Jira context without an issue key or `jql:` query, the agent asks for a more specific issue or filter instead of guessing.
+Keep the query narrow. The agent does not infer projects, search arbitrary Jira fields, or inspect unrelated issues.
 
 ## Use Jira context in workflows
 
