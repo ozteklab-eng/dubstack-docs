@@ -1,18 +1,18 @@
 ---
 title: GitLab
-description: Copy docs into GitLab and connect GitLab authoring access for workflows.
+description: Use GitLab as a docs source, copy target, and authoring provider.
 icon: gitlab
 ---
 
 GitLab support has two separate connections:
 
-- a GitLab repository access token that lets dubstack read or copy repository content
+- a GitLab repository access token that lets dubstack read, validate, sync, or copy repository content
 - GitLab OAuth authoring access that lets workflows act as an authorized GitLab user
 
 Developers can still use normal GitLab workflows. Clone the connected project, edit MDX files or `dubstack.json`, commit, push, and review changes through merge requests.
 
 <Callout type="info">
-  GitHub is the primary production deployment source in the default setup path. GitLab can be connected as a copy target and authoring integration today. GitLab production-source activation is workspace-controlled and should be verified in Git settings before switching a live site.
+  Git settings is the source of truth for the current publishing provider. If the active deployment source card shows GitLab, pushes and manual updates should be validated against that GitLab project and branch. If GitLab is only shown as a copy target, the current active source still publishes the site.
 </Callout>
 
 ## What GitLab does today
@@ -24,7 +24,7 @@ Developers can still use normal GitLab workflows. Clone the connected project, e
 | Connect GitLab OAuth for agent and workflow authoring | Supported |
 | Create branches, commits, and merge requests from authorized workflows | Supported when GitLab OAuth is connected |
 | Collect bounded merge request context for workflow runs | Supported when GitLab OAuth and repository context are connected |
-| Use GitLab as the active production deployment source | Workspace-controlled; verify the dashboard shows it as the active deployment source |
+| Use GitLab as the active production deployment source | Supported when Git settings shows GitLab as the active deployment source |
 | Self-hosted GitLab instance URL | Supported where the instance is reachable by dubstack |
 
 ## Repository access token versus OAuth
@@ -33,7 +33,7 @@ The repository access token and OAuth connection are intentionally different.
 
 | Connection | What it is used for |
 | --- | --- |
-| GitLab repository access token | Reading repository files, validating branches, and keeping a GitLab copy target connected. |
+| GitLab repository access token | Reading repository files, validating branches, syncing an active GitLab source, and keeping a GitLab copy target connected. |
 | GitLab OAuth authoring access | Creating branches, commits, and merge requests from agent, Slack, and workflow authoring actions. |
 
 Use both when you want GitLab-backed authoring. A repository access token alone can keep content connected, but authoring actions need OAuth so dubstack can act with an authorized GitLab user and respect the user's GitLab permissions.
@@ -52,7 +52,7 @@ Use the failing action to decide which GitLab credential to inspect.
 
 Do not rotate OAuth when a repository access token is expired, and do not rotate the repository access token when only authoring is missing. They unlock different paths.
 
-## Connect GitLab as a copy target
+## Connect GitLab as a docs source or copy target
 
 1. Open the dashboard.
 2. Go to **Settings > Deployment > Git settings**.
@@ -62,9 +62,12 @@ Do not rotate OAuth when a repository access token is expired, and do not rotate
 6. Enter a GitLab repository access token.
 7. Choose the branch.
 8. Save the connection.
-9. Copy docs from the active source into GitLab.
+9. Confirm whether the dashboard shows GitLab as the active deployment source or as a repository copy target.
 
-After saving, the dashboard should show GitLab as a configured copy target. If another provider is still active, GitLab is not serving production docs yet.
+After saving, the dashboard state determines what happens next:
+
+- If GitLab is active, run a manual update and confirm the public site reflects the GitLab branch.
+- If another provider is active, use the repository copy action to copy docs into GitLab for backup, provider testing, or migration rehearsal.
 
 ## Publish from a local checkout
 
@@ -140,7 +143,7 @@ Use the status in Git settings to confirm which GitLab capability is available.
 | GitLab copy target connected | The repository access token is valid and dubstack can copy docs into GitLab. |
 | GitLab OAuth connected | Workflows can request GitLab authoring access when the connected user has project permissions. |
 | GitLab project selected | The selected project can be used as workflow or agent repository context for GitLab authoring. |
-| Active deployment source | The site reads from GitLab for production docs. This state appears only when GitLab deployment-source activation is enabled for the workspace. |
+| Active deployment source | The site reads from GitLab for production docs. |
 | Copy docs available | GitLab is configured as a target and can receive a fresh copy from the current active source. |
 | Authoring not ready | The repository access token may be connected, but OAuth, repository scope, or site eligibility is missing. |
 
@@ -152,13 +155,10 @@ GitLab active-source mode means the site reads its production docs from GitLab i
 
 Before enabling it on a live site, confirm:
 
-- the workspace has GitLab deployment-source activation enabled
 - the GitLab project and branch are validated in Git settings
 - a first manual update completes successfully
 - the active source badge points at the GitLab repository
 - your team understands which repository is now the source of truth
-
-If active-source activation is not available in your workspace, continue using GitLab as a copy target and authoring integration.
 
 ## Copy behavior
 
@@ -178,7 +178,7 @@ Keep one active production source at a time. Do not edit the source repository a
 
 GitLab copy-target mode does not make GitLab the live source. Pushes to the active deployment source continue to drive production updates.
 
-When GitLab active-source mode is enabled, use the dashboard's manual update and provider validation controls to confirm the first sync before relying on GitLab updates for a production site.
+When GitLab is active, use the dashboard's manual update and provider validation controls to confirm the first sync before relying on GitLab updates for a production site.
 
 ## Authoring readiness
 
@@ -217,9 +217,9 @@ Confirm the token has `api` and `read_api` scopes and can read the selected proj
 
 Check the active deployment source first. GitLab copy depends on a valid source repository and published docs files.
 
-### GitLab cannot be selected as the active source
+### GitLab is not publishing the live site
 
-GitLab active-source activation is not enabled for the workspace. Use GitLab as a copy target and authoring integration, or contact your dubstack operator before switching a live deployment source.
+Confirm Git settings shows GitLab as the active deployment source. If GitLab is only shown as a copy target, copy actions can update the GitLab repository but the current active provider still publishes production docs.
 
 ### OAuth connects but copy still fails
 
