@@ -176,7 +176,7 @@
                     "summary": "Public docs MCP server card",
                     "value": {
                       "name": "dubstack docs MCP",
-                      "description": "Read-only MCP access to the published docs site.",
+                      "description": "MCP access to the published docs site. Retrieval tools are read-only; feedback may be submitted when enabled.",
                       "url": "https://dubstack.ai/docs/mcp",
                       "transport": "streamable-http"
                     }
@@ -192,7 +192,7 @@
       "get": {
         "operationId": "getMcpServerCards",
         "summary": "List MCP server cards",
-        "description": "Returns the collection of MCP server cards advertised by the current docs site. Most sites expose one public read-only docs MCP server, but the collection form lets discovery clients handle multiple advertised servers consistently.",
+        "description": "Returns the collection of MCP server cards advertised by the current docs site. Most sites expose one public docs MCP server for retrieval and optional feedback, but the collection form lets discovery clients handle multiple advertised servers consistently.",
         "tags": [
           "AI Access"
         ],
@@ -222,7 +222,7 @@
                       "servers": [
                         {
                           "name": "dubstack docs MCP",
-                          "description": "Read-only MCP access to the published docs site.",
+                          "description": "MCP access to the published docs site. Retrieval tools are read-only; feedback may be submitted when enabled.",
                           "url": "https://dubstack.ai/docs/mcp",
                           "transport": "streamable-http"
                         }
@@ -285,7 +285,7 @@
                 "examples": {
                   "fullIndex": {
                     "summary": "Expanded LLM index",
-                    "value": "# dubstack docs\n\n## Quickstart\nLaunch a docs site, connect Git, customize content, and publish.\n\n## Public MCP\ndubstack exposes read-only MCP tools so agents can search and inspect published docs."
+                    "value": "# dubstack docs\n\n## Quickstart\nLaunch a docs site, connect Git, customize content, and publish.\n\n## Public MCP\ndubstack exposes read-only retrieval tools so agents can search and inspect published docs. When enabled, agents can also submit documentation-quality feedback."
                   }
                 }
               }
@@ -1259,7 +1259,7 @@
           "url",
           "servers"
         ],
-        "description": "Discovery document describing the public read-only MCP endpoint exposed by a published docs site."
+        "description": "Discovery document describing the public docs MCP endpoint exposed by a published docs site."
       },
       "McpServerCard": {
         "type": "object",
@@ -1273,7 +1273,7 @@
           "description": {
             "type": "string",
             "description": "Short explanation of the server purpose.",
-            "example": "Read-only MCP access to the published docs site."
+            "example": "MCP access to the published docs site. Retrieval tools are read-only; feedback may be submitted when enabled."
           },
           "url": {
             "type": "string",
