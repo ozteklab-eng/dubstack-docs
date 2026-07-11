@@ -104,6 +104,29 @@ The GitHub App is used for:
 
 If your organization uses branch protection, keep it enabled. Agent and editor changes should still follow the repository's review rules.
 
+## Additional repository context
+
+You can grant the GitHub App access to repositories that are not the active docs repository.
+
+Use additional repository access when:
+
+- product code lives outside the docs repository
+- a workflow should inspect API, SDK, or application changes
+- the agent needs source context before drafting a documentation update
+- a monorepo has a narrow package or service path that should inform one workflow
+
+Additional repositories are context repositories. They do not publish pages and they do not become copy targets automatically.
+
+| Repository role | Behavior |
+| --- | --- |
+| Active docs repository | Publishes the live site and receives editor, agent, and workflow changes. |
+| Additional repository access | Lets the agent or workflow read selected source files as context. |
+| Repository copy target | Receives an explicit one-time copy from the active docs source when configured. |
+
+Generated documentation changes should still be committed to, or opened as a pull request against, the active docs repository.
+
+For workflow setup, see [Draft docs from code changes](/guides/draft-docs-from-code) and [Workflow integrations](/workflows/integrations).
+
 ## Permissions
 
 GitHub shows the permissions requested by the app during installation or when permissions change.
