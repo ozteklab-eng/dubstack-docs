@@ -30,7 +30,7 @@ Treat the published docs site and its MCP server as the source of truth for curr
 
 - The dashboard is for site management, editor workflows, deployment settings, team access, billing, integrations, and analytics.
 - The published docs shell is for reader-facing documentation, API reference, search, assistant, feedback, and public MCP access.
-- The public MCP is read-only and unauthenticated; it lets agents search and inspect published docs.
+- The public MCP is unauthenticated and scoped to published docs. Its search and filesystem tools are read-only; when advertised, `submit_feedback` is a narrow documentation-feedback write for substantive docs issues.
 - Authoring agents and dashboard workflows require authenticated customer access and are separate from public MCP.
 - Enterprise-only functionality must be described as gated when the docs say it is gated.
 
