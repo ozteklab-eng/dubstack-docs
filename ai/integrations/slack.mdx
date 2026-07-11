@@ -104,6 +104,30 @@ If the request is only a docs question, the agent answers from the selected depl
 
 If Jira is connected, Slack answers can include Jira issue context when your prompt explicitly asks for Jira context, includes a Jira issue key, or includes a `jql:` query.
 
+## Reference source repositories
+
+Slack requests can reference connected source repositories when the documentation change depends on product code, API behavior, or implementation details outside the docs repository.
+
+Source repositories are read-only context. The agent can inspect bounded files, pull requests, or merge requests from the connected source repository, but the generated documentation change still targets the active docs repository.
+
+Examples:
+
+```text
+@dub update the authentication guide based on the changes in acme/api-server#1234 and open a draft pull request.
+```
+
+```text
+@dub review the source repository context under services/billing and draft a docs update for the new invoice webhook behavior.
+```
+
+Use source repository references when:
+
+- product code lives outside the docs repository
+- a monorepo path should drive a focused documentation update
+- a merged pull request or merge request explains behavior that the docs need to capture
+
+If the repository is not connected in Git settings, the agent asks an admin or editor to connect it before using it as source context.
+
 ## Roles and permissions
 
 Slack agent permissions follow the teammate's dubstack role for the selected organization and deployment.
