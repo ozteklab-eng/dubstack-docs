@@ -492,7 +492,7 @@
       "post": {
         "operationId": "submitFeedback",
         "summary": "Submit feedback",
-        "description": "Records feedback for the current published docs site. Use this endpoint for page ratings, assistant answer ratings, and structured agent feedback when the corresponding deployment add-on is enabled. Requests are tenant-scoped by the docs site host and rate-limited per site and client IP.",
+        "description": "Records feedback for the current published docs site. Use this endpoint for page ratings, assistant answer ratings, and trusted application feedback integrations when the corresponding deployment add-on is enabled. Public MCP clients should call the advertised submit_feedback MCP tool instead of posting to this HTTP endpoint directly. Requests are tenant-scoped by the docs site host and rate-limited per site and client IP.",
         "tags": [
           "Feedback"
         ],
@@ -520,18 +520,17 @@
                     }
                   }
                 },
-                "agentIssue": {
-                  "summary": "Agent-reported docs issue",
+                "assistantAnswer": {
+                  "summary": "Assistant answer rating",
                   "value": {
-                    "source": "agent-feedback",
+                    "source": "assistant-feedback",
                     "rating": "down",
-                    "message": "The page mentions a settings item that is not present in the current dashboard.",
-                    "session_id": "mcp-feedback-1780825618877",
+                    "message": "The assistant answer linked to a dashboard screen that has moved.",
+                    "session_id": "assistant-feedback-01JZ9K9W8Q2F3S8S7H6N5M4P3B",
                     "page_path": "/settings/deployment/addons",
                     "page_url": "https://dubstack.ai/docs/settings/deployment/addons",
                     "metadata": {
-                      "feedback_surface": "agent",
-                      "mcp_tool": "submit_feedback"
+                      "feedback_surface": "assistant"
                     }
                   }
                 }
@@ -662,8 +661,8 @@
           },
           {
             "lang": "javascript",
-            "label": "Report an agent-discovered issue",
-            "source": "await fetch(\"https://dubstack.ai/docs/feedback\", {\n  method: \"POST\",\n  headers: { \"Content-Type\": \"application/json\" },\n  body: JSON.stringify({\n    source: \"agent-feedback\",\n    rating: \"down\",\n    message: \"The page links to a dashboard screen that no longer exists.\",\n    page_path: \"/settings/deployment/addons\",\n    page_url: \"https://dubstack.ai/docs/settings/deployment/addons\",\n    metadata: { feedback_surface: \"agent\" }\n  })\n});"
+            "label": "Submit assistant feedback",
+            "source": "await fetch(\"https://dubstack.ai/docs/feedback\", {\n  method: \"POST\",\n  headers: { \"Content-Type\": \"application/json\" },\n  body: JSON.stringify({\n    source: \"assistant-feedback\",\n    rating: \"down\",\n    message: \"The answer linked to a dashboard screen that has moved.\",\n    page_path: \"/settings/deployment/addons\",\n    page_url: \"https://dubstack.ai/docs/settings/deployment/addons\",\n    metadata: { feedback_surface: \"assistant\" }\n  })\n});"
           }
         ]
       },
@@ -1591,8 +1590,8 @@
           },
           "source": {
             "type": "string",
-            "description": "Feedback source. Page ratings use page-feedback. Agent-submitted docs issues use agent-feedback. Assistant answer ratings may omit the value or use an assistant-specific source.",
-            "example": "agent-feedback"
+            "description": "Feedback source. Page ratings use page-feedback. Assistant answer ratings may use assistant-feedback. MCP clients should use the submit_feedback MCP tool instead of setting agent feedback sources directly.",
+            "example": "page-feedback"
           },
           "session_id": {
             "type": "string",
@@ -1627,8 +1626,7 @@
             },
             "description": "Optional string metadata. Keys are truncated to 80 characters, values to 400 characters, and only the first 20 string entries are stored.",
             "example": {
-              "feedback_surface": "agent",
-              "mcp_tool": "submit_feedback"
+              "feedback_surface": "assistant"
             }
           }
         },
