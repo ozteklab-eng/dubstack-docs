@@ -24,7 +24,7 @@ In this reference, **pull request** means the provider-native review request for
 | Audit SEO metadata | Content update | Require review | 422 | Not supported | None |
 | Fix grammar & typos | Content update | Require review | 330 | Not supported | None |
 | Apply style guide | Content update | Require review | 235 | Not supported | Style guide instructions |
-| Copy repository targets | Custom schedule | Copy targets | 35+ | Not supported | At least one repository copy target |
+| Copy repository targets | Custom schedule | Repository copy targets | 35+ | Not supported | At least one repository copy target |
 
 Credit estimates are planning baselines. Actual usage depends on how much content the run reads, how many repositories are selected as context, how many files change, and how long the run takes. Repository copy starts at 35 credits and can scale with target count and file volume.
 
@@ -203,7 +203,7 @@ Copies the active docs source into configured repository copy targets on a sched
 | Setting | Value |
 | --- | --- |
 | Triggers | Custom schedule |
-| Default update mode | Copy targets |
+| Default update mode | Repository copy targets |
 | Required capabilities | Docs repository |
 | Required setup | At least one repository copy target |
 | Context repositories | Not supported |
