@@ -18,6 +18,7 @@ In this reference, **pull request** means the provider-native review request for
 | Draft changelog | Custom schedule, weekly | Require review | Supported | None |
 | Draft improvements from assistant conversations | Custom schedule, weekly | Require review | Not supported | Assistant analytics |
 | Draft improvements from user feedback | Custom schedule, weekly | Require review | Not supported | Feedback collection |
+| Update from support feedback | Custom schedule | Require review | Supported | Support feedback integration |
 | Translate content | Content update | Automatically | Not supported | Target languages and translation routing |
 | Fix broken links | Content update | Require review | Not supported | None |
 | Audit SEO metadata | Content update | Require review | Not supported | None |
@@ -26,6 +27,10 @@ In this reference, **pull request** means the provider-native review request for
 
 <Callout type="warning">
   Translation is listed in the catalog, but it is blocked until translation routing and policy support are available for the selected deployment.
+</Callout>
+
+<Callout type="warning">
+  Support feedback is listed in the catalog, but it is blocked until support-feedback integration collectors are available for the selected deployment.
 </Callout>
 
 ## Self-updating content workflows
@@ -103,6 +108,25 @@ Reviews page feedback and opens targeted updates on a schedule.
 | Required capabilities | Docs repository, repository write access, authoring model, feedback collection |
 
 Enable feedback collection before using this workflow.
+
+### Update from support feedback
+
+Reviews support feedback and opens targeted content updates on a schedule.
+
+| Setting | Value |
+| --- | --- |
+| Triggers | Custom schedule |
+| Default update mode | Require review |
+| Required capabilities | Docs repository, repository write access, authoring model, support feedback integration |
+| Context repositories | Supported |
+| Integrations | Supported |
+| Current runner status | Blocked until support-feedback integration collectors are available |
+
+Use this workflow when recurring support conversations reveal missing or outdated documentation.
+
+The workflow is designed to read bounded support-feedback context, identify recurring themes, and open reviewable documentation updates against the connected docs repository. Source repositories can be selected as additional context when support themes need to be tied back to product or API behavior.
+
+The workflow remains visible in the dashboard so teams can see the intended configuration surface, but it cannot be enabled until the deployment has a supported support-feedback connector and runner.
 
 ## Maintenance workflows
 
