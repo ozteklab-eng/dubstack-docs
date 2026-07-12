@@ -62,6 +62,7 @@ Current estimate units include:
 | `workflow_translations` | Translation workflows when enabled for the deployment. | 913 credits |
 | `workflow_typo_check` | Grammar and typo workflows. | 330 credits |
 | `workflow_writing_style` | Style-guide workflows. | 235 credits |
+| `workflow_repository_copy` | Scheduled repository-copy workflows. | Starts at 35 credits; scales with target count and file volume |
 
 Catalog-only workflows do not charge credits until a runner is available and a run is actually queued.
 
@@ -109,6 +110,8 @@ Typical run cost depends on:
 - the assistant profile and model route selected for the workspace
 
 For predictable usage, schedule workflows deliberately and keep their scope narrow. For example, run broad maintenance workflows weekly, but run targeted link or typo checks after relevant content changes.
+
+Repository-copy workflow runs are deterministic file-copy runs rather than authoring-model runs. They still consume automation credits when scheduled or manually run from Workflows because they perform provider reads, provider writes, validation, and audit logging. One-time copies from Git settings remain separate from AI usage when they only move files on demand.
 
 ## Review usage
 
