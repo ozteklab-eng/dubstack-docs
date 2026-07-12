@@ -21,6 +21,8 @@ AI usage can be recorded from these surfaces:
 
 Public MCP search and filesystem reads are tracked separately from generation-heavy assistant or agent runs.
 
+Repository sync and explicit repository copy actions are not AI usage when they only move docs files between Git providers or published artifacts. They may be rate limited and audited, but they do not consume AI credits unless a configured workflow or agent run performs AI work around that repository action.
+
 ## Usage ledger
 
 Each AI run can record:
@@ -45,21 +47,21 @@ Credit estimates are reporting units. They help compare different AI surfaces be
 
 Current estimate units include:
 
-| Usage unit | Typical source |
-| --- | --- |
-| `assistant_response` | Public assistant responses. |
-| `editor_agent_run` | Dashboard agent runs. |
-| `slack_agent_run` | Slack agent interactions. |
-| `workflow_update_from_code_changes` | Code-change documentation workflows. |
-| `workflow_update_from_assistant_conversations` | Assistant-conversation improvement workflows. |
-| `workflow_user_feedback_improvements` | Page feedback improvement workflows. |
-| `workflow_support_feedback_improvements` | Support-feedback improvement workflows when enabled. |
-| `workflow_broken_link_detection` | Broken-link detection and repair workflows. |
-| `workflow_changelog` | Changelog draft workflows. |
-| `workflow_seo_audit` | SEO audit workflows. |
-| `workflow_translations` | Translation workflows when enabled for the deployment. |
-| `workflow_typo_check` | Grammar and typo workflows. |
-| `workflow_writing_style` | Style-guide workflows. |
+| Usage unit | Typical source | Average estimate |
+| --- | --- | --- |
+| `assistant_response` | Public assistant responses. | 23 credits |
+| `editor_agent_run` | Dashboard agent runs. | 115 credits |
+| `slack_agent_run` | Slack agent interactions. | 110 credits |
+| `workflow_update_from_code_changes` | Code-change documentation workflows. | 180 credits |
+| `workflow_update_from_assistant_conversations` | Assistant-conversation improvement workflows. | 212 credits |
+| `workflow_user_feedback_improvements` | Page feedback improvement workflows. | 245 credits |
+| `workflow_support_feedback_improvements` | Support-feedback improvement workflows when enabled. | 285 credits |
+| `workflow_broken_link_detection` | Broken-link detection and repair workflows. | 285 credits |
+| `workflow_changelog` | Changelog draft workflows. | 223 credits |
+| `workflow_seo_audit` | SEO audit workflows. | 422 credits |
+| `workflow_translations` | Translation workflows when enabled for the deployment. | 913 credits |
+| `workflow_typo_check` | Grammar and typo workflows. | 330 credits |
+| `workflow_writing_style` | Style-guide workflows. | 235 credits |
 
 Catalog-only workflows do not charge credits until a runner is available and a run is actually queued.
 

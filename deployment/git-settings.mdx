@@ -279,6 +279,8 @@ Before switching production to a copy target, confirm the target repository has 
 
 Repository copy targets are currently explicit actions. A successful copy proves that dubstack can read the active source and write to the target provider, but it does not create continuous mirroring, provider failover, or webhook replication.
 
+Repository copies do not consume AI credits when they only copy files. If a future workflow uses AI to inspect, transform, or summarize copied content, that workflow run will report its own AI usage separately.
+
 Provider switching uses the same copy pipeline. A failed copy blocks the switch so the live site keeps publishing from the previous active source.
 
 Use the active deployment source card to confirm what is serving production before telling teammates to push to a different repository.
