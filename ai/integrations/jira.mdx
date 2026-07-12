@@ -19,6 +19,14 @@ Jira can provide:
 
 Jira is a read-only context source. It does not write documentation, update issues, read arbitrary Jira fields, or inspect issue attachments. The agent writes docs changes through the connected Git provider.
 
+## Connection scope
+
+Jira is a shared integration. An admin or editor connects one Atlassian workspace for the organization, and eligible agent or workflow surfaces can use that connection when Jira context is explicitly requested or selected.
+
+The agent inherits the access of the Atlassian account that authorized the connection. It can read only issues and comments that account can already view in Jira.
+
+To narrow access, restrict the connected Atlassian account in Jira or connect an account that belongs only to the projects you want documentation workflows to inspect.
+
 ## Requirements
 
 Before connecting Jira, confirm:
