@@ -87,6 +87,8 @@ In Git settings, source repository cards show the selected scope, supported even
   Source repository events queue eligible workflow runs. They do not publish pages directly. The generated docs update must still be committed to, or merged into, the active docs source.
 </Callout>
 
+Copy targets can also be used by the **Copy repository targets** workflow. That workflow is scheduled or manual only; it does not create a continuous mirror. Use it when you want a recurring backup or a migration rehearsal without switching the active deployment source.
+
 ### Provider behavior
 
 Source repository support follows the provider connection that owns the repository.

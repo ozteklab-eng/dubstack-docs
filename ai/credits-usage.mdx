@@ -21,7 +21,7 @@ AI usage can be recorded from these surfaces:
 
 Public MCP search and filesystem reads are tracked separately from generation-heavy assistant or agent runs.
 
-Repository sync and explicit repository copy actions are not AI usage when they only move docs files between Git providers or published artifacts. They may be rate limited and audited, but they do not consume AI credits unless a configured workflow or agent run performs AI work around that repository action.
+Repository sync and one-time repository copy actions are not AI usage when they only move docs files between Git providers or published artifacts. They may be rate limited and audited, but they do not consume AI credits by themselves. Scheduled repository-copy workflows are workflow runs, so they consume automation credits and appear in the usage ledger.
 
 ## Usage ledger
 

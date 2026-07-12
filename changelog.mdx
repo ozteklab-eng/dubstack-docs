@@ -7,6 +7,14 @@ rss: true
 
 Follow this changelog for notable updates to the dubstack product documentation.
 
+<Update label="Repository copy workflows" description="Documented one-time repository copy workflows, copy targets, run results, and credit usage." tags={["workflows", "deployment"]}>
+  Repository copy workflows can copy the active docs source into a configured provider target for backup, provider testing, or migration rehearsal without changing the live deployment source.
+</Update>
+
+<Update label="Mounted docs MCP validation" description="Validated public MCP discovery, search, docs filesystem access, and feedback submission through a /docs route mount." tags={["mcp", "deployment"]}>
+  Public MCP endpoints now work through host-based docs sites and path-mounted custom domains when the proxy forwards the MCP, discovery, and feedback paths.
+</Update>
+
 <Update label="Custom-domain verification docs" description="Documented verification TXT records, traffic CNAME setup, TLS readiness, and /docs route-mount boundaries." tags={["deployment", "docs"]}>
   The custom-domain guide now explains why host-based domains use separate hostname ownership, certificate validation, and traffic routing records before a domain is production-ready.
 </Update>
