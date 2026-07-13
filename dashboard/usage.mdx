@@ -22,12 +22,17 @@ The usage summary includes:
 | --- | --- |
 | AI runs | Count of assistant, agent, Slack, and workflow AI runs in the selected period. |
 | Credits used | Charged credits when billing is active, with estimated credits as the reporting fallback. |
+| AI allowance | Remaining monthly workspace allowance, plus credits used against the monthly limit. |
 | Tokens | Input, output, and total tokens reported by the model provider when available. |
 | Model cost | Provider cost estimate for internal cost monitoring. |
 | Retrieval requests | Retrieval calls made by assistant or agent surfaces. |
 | Average latency | Average retrieval latency for the selected period. |
 
 The period selector lets you review the last 7, 30, or 90 days.
+
+<Callout type="info">
+  The usage period selector changes the activity rows and charts. The AI allowance card uses the current monthly workspace billing window so you can see remaining credits against the active allowance.
+</Callout>
 
 ## Breakdowns
 
@@ -75,6 +80,11 @@ Exports are generated in the browser from the data already loaded for your curre
 ## Usage and billing
 
 Credits are reporting and billing units, not raw tokens. Token count, model route, retrieval work, and workflow complexity can all contribute to a credit estimate.
+
+The AI allowance summary shows whether quota enforcement is currently passive or enforced for the workspace:
+
+- **Passive** means usage is tracked and reported, but requests are not blocked by the allowance.
+- **Enforced** means eligible AI requests are checked against the workspace allowance before the run starts.
 
 If usage looks higher than expected:
 
