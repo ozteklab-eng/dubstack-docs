@@ -113,6 +113,8 @@ For predictable usage, schedule workflows deliberately and keep their scope narr
 
 Repository-copy workflow runs are deterministic file-copy runs rather than authoring-model runs. They still consume automation credits when scheduled or manually run from Workflows because they perform provider reads, provider writes, validation, and audit logging. One-time copies from Git settings remain separate from AI usage when they only move files on demand.
 
+Repository-copy provider calls use the connected Git provider identity for each source or target. That means provider-side API quotas, token permissions, branch protection, and webhook/network policies can still affect a copy run even when no authoring model is used. If a provider rate-limits or rejects a copy, the run records the failed target in workflow history instead of silently switching the active deployment source.
+
 ## Review usage
 
 Use dashboard analytics and product pages to review usage:
