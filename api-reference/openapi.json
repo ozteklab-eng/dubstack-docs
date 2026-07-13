@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "dubstack docs runtime API",
-    "version": "2026-07-12",
+    "version": "2026-07-13",
     "description": "Public runtime endpoints exposed by each published dubstack docs site, plus selected server-side Admin API endpoints for trusted automation. Docs runtime endpoints are scoped to the site that serves them. Admin API endpoints use https://api.dubstack.ai and require server-side Admin API keys."
   },
   "servers": [
@@ -1484,6 +1484,152 @@
           }
         }
       }
+    },
+    "/api/agent/workflows/{workflowId}/api-trigger": {
+      "post": {
+        "tags": [
+          "Admin API"
+        ],
+        "summary": "Trigger workflow run",
+        "description": "Queue an enabled workflow run from trusted backend automation. Requires the workflows:run Admin API key scope. Only workflows configured with the Custom schedule trigger are API-triggerable.",
+        "operationId": "triggerWorkflowRun",
+        "servers": [
+          {
+            "url": "https://api.dubstack.ai",
+            "description": "dubstack Admin API"
+          }
+        ],
+        "security": [
+          {
+            "AdminApiBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workflowId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Built-in workflow ID, custom_workflow for the saved custom workflow configuration, or custom_workflow:{id} for a specific user-created custom workflow.",
+            "examples": {
+              "builtIn": {
+                "summary": "Built-in workflow",
+                "value": "fix_broken_links"
+              },
+              "custom": {
+                "summary": "Custom workflow record",
+                "value": "custom_workflow:workflow-id"
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkflowTriggerRequest"
+              },
+              "examples": {
+                "siteScopedKey": {
+                  "summary": "Site-scoped key",
+                  "value": {}
+                },
+                "unscopedKey": {
+                  "summary": "Unscoped organization key",
+                  "value": {
+                    "site_id": "site-id-for-unscoped-keys"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Workflow run queued.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkflowTriggerResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request is missing a required site_id for an unscoped key or contains invalid input.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Admin API key is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Admin API key does not have the workflows:run scope or is not scoped to the requested deployment.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Workflow, custom workflow, or site was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Workflow is not ready to run, is not API-triggerable, already has an active run, or the runner is unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily workflow run limit reached.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Workflow run could not be queued.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2508,6 +2654,79 @@
           }
         },
         "additionalProperties": false
+      },
+      "WorkflowTriggerRequest": {
+        "type": "object",
+        "properties": {
+          "site_id": {
+            "type": "string",
+            "description": "Deployment site ID. Required only when the Admin API key is organization-scoped instead of site-scoped."
+          }
+        },
+        "additionalProperties": false
+      },
+      "WorkflowRun": {
+        "type": "object",
+        "required": [
+          "id",
+          "workflow_id",
+          "status",
+          "trigger_source",
+          "trigger_type"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Workflow run ID."
+          },
+          "workflow_id": {
+            "type": "string",
+            "description": "Built-in workflow ID or custom_workflow."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "completed",
+              "failed",
+              "cancelled"
+            ],
+            "description": "Current run status."
+          },
+          "trigger_source": {
+            "type": "string",
+            "description": "Source that queued the run. Admin API triggered runs use api."
+          },
+          "trigger_type": {
+            "type": "string",
+            "description": "Workflow trigger type used for this run."
+          },
+          "update_mode": {
+            "type": "string",
+            "description": "How the workflow is allowed to apply output."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "queued_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": true
+      },
+      "WorkflowTriggerResponse": {
+        "type": "object",
+        "required": [
+          "run"
+        ],
+        "properties": {
+          "run": {
+            "$ref": "#/components/schemas/WorkflowRun"
+          }
+        }
       }
     },
     "securitySchemes": {
