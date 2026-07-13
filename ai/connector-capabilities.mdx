@@ -25,12 +25,12 @@ Capabilities keep integrations predictable:
 
 | Family | What it provides | Current shipped providers |
 | --- | --- | --- |
-| Conversation | Slack messages, threads, direct messages, and follow-up context. | Slack |
-| Notification | Workflow run notifications and agent progress updates. | Slack |
-| Issue tracking | Issue metadata and recent issue comments for selected work items. | Jira |
-| Knowledge base and files | External pages, docs, or files that can be used as bounded context. | Catalog only |
-| Calendar | User-specific event context for docs and workflow tasks. | Catalog only |
-| CRM and support | Customer, ticket, or account context for docs updates. | Catalog only |
+| Conversation | Slack messages, threads, direct messages, and follow-up context. | Slack; catalog-only: Mattermost |
+| Notification | Workflow run notifications and agent progress updates. | Slack; catalog-only: Mattermost |
+| Issue tracking | Issue metadata and recent issue comments for selected work items. | Jira; catalog-only: Linear, Plane |
+| Knowledge base and files | External pages, docs, or files that can be used as bounded context. | Catalog only: Notion, Google Drive, Nextcloud, Confluence |
+| Calendar | User-specific event context for docs and workflow tasks. | Catalog only: Google Calendar |
+| CRM and support | Customer, ticket, or account context for docs updates. | Catalog only: Plain, Intercom, Salesforce, HubSpot |
 | Repository context | Source repositories used as read-only context. | Connected Git provider |
 | Docs authoring | Reviewable documentation updates through the docs repository. | Connected Git provider plus authoring agent |
 
