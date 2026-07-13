@@ -27,22 +27,31 @@ Connected providers are used as tools for a specific agent or workflow run. dubs
 
 ## Available integrations
 
-| Integration | Category | Use it for | Scope |
-| --- | --- | --- | --- |
-| [Slack](/ai/integrations/slack) | Communication | Agent conversations in Slack, docs answers, draft PR requests, and workflow notifications. | Shared |
-| [Jira](/ai/integrations/jira) | Project management | Issue context for dashboard agent requests and workflows. | Shared |
-| Mattermost | Communication | Self-hosted workspace conversations, threads, and notifications. | Shared |
-| Notion | Documentation | Pages, docs, and knowledge-base context. | Shared |
-| Google Drive | Documentation | Files, folders, and shared-drive context. | Personal |
-| Nextcloud | Documentation | Self-hosted files, shared folders, and knowledge bases. | Shared |
-| Google Calendar | Communication | Event, schedule, and meeting context. | Personal |
-| Linear | Project management | Issues, projects, and roadmap context. | Shared |
-| Plane | Project management | Self-hosted issues, cycles, modules, and project context. | Shared |
-| Plain | Customer support | Support conversations and customer records. | Shared |
-| Intercom | Customer support | Conversations, contacts, and help-center context. | Shared |
-| Salesforce | CRM | Accounts, contacts, and opportunity context. | Shared |
-| Confluence | Documentation | Pages, spaces, and attachments. | Shared |
-| HubSpot | CRM | Contacts, companies, deals, and tickets. | Shared |
+The integration catalog separates providers that are ready for runs from providers that are visible for roadmap and capability planning.
+
+| Integration | Status | Category | Use it for | Scope |
+| --- | --- | --- | --- | --- |
+| [Slack](/ai/integrations/slack) | Active | Communication | Agent conversations in Slack, docs answers, draft PR requests, and workflow notifications. | Shared |
+| [Jira](/ai/integrations/jira) | Active | Project management | Issue context for dashboard agent requests and workflows. | Shared |
+| Mattermost | Catalog | Communication | Self-hosted workspace conversations, threads, and notifications. | Shared |
+| Notion | Catalog | Documentation | Pages, docs, and knowledge-base context. | Shared |
+| Google Drive | Catalog | Documentation | Files, folders, and shared-drive context. | Personal |
+| Nextcloud | Catalog | Documentation | Self-hosted files, shared folders, and knowledge bases. | Shared |
+| Google Calendar | Catalog | Communication | Event, schedule, and meeting context. | Personal |
+| Linear | Catalog | Project management | Issues, projects, and roadmap context. | Shared |
+| Plane | Catalog | Project management | Self-hosted issues, cycles, modules, and project context. | Shared |
+| Plain | Catalog | Customer support | Support conversations and customer records. | Shared |
+| Intercom | Catalog | Customer support | Conversations, contacts, and help-center context. | Shared |
+| Salesforce | Catalog | CRM | Accounts, contacts, and opportunity context. | Shared |
+| Confluence | Catalog | Documentation | Pages, spaces, and attachments. | Shared |
+| HubSpot | Catalog | CRM | Contacts, companies, deals, and tickets. | Shared |
+
+| Status | Meaning |
+| --- | --- |
+| Active | The provider can be connected and selected by supported agent or workflow surfaces when setup requirements are met. |
+| Catalog | The provider may appear in the catalog, but it is not passed to agent or workflow runs until authorization, scopes, collectors, and workflow support are available. |
+| Upgrade | The provider requires a plan, trial, or feature entitlement before setup can continue. |
+| Unavailable | The provider cannot be selected for the current deployment or environment. |
 
 Only connected integrations are available to the agent and workflow runner. Catalog integrations appear in the dashboard so teams can see the planned context model, but a provider marked **Coming soon**, **Upgrade**, or **Unavailable** is not passed to runs.
 

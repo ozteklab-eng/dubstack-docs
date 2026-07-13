@@ -58,6 +58,19 @@ For self-hosted providers, the instance must be reachable from dubstack and the 
 
 When you explicitly switch the active deployment source to another enabled provider while another provider is already active, dubstack copies the current docs source into the new repository before the switch completes. If that initial copy fails, the existing active source remains in place and the dashboard shows the copy error. If you only configure a copy target, production stays on the current active source.
 
+## Provider capability matrix
+
+Provider support is capability-based. A provider can be usable for one job while another job is still unavailable or gated.
+
+| Provider | Deployment source | Authoring | Source repository context | Repository copy target |
+| --- | --- | --- | --- | --- |
+| GitHub | Supported through the GitHub App | Supported through the GitHub App | Supported for selected repositories with app access | Supported where a copy target is configured |
+| GitLab | Supported where GitLab deployment source is enabled | Supported through GitLab OAuth | Supported for selected projects when GitLab access is healthy | Supported through a repository access token |
+| Self-hosted GitLab | Supported where the instance is reachable and GitLab deployment source is enabled | Supported through self-hosted GitLab OAuth | Supported when the instance and selected projects are reachable | Supported through a repository access token |
+| Forgejo | Feature-gated | Supported through a repository token where enabled | Supported for selected repositories and webhook-capable instances | Supported through a repository token |
+
+Use the labels in the dashboard to confirm the active job. For example, a provider marked **Copy target** is not publishing the live site, and a provider marked **Source repository** is read-only context for workflows.
+
 ## Read the status labels
 
 A site can have more than one provider connection, but only one provider is the active deployment source.
