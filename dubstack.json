@@ -74,6 +74,18 @@
     {
       "source": "/integrations",
       "destination": "/ai/integrations"
+    },
+    {
+      "source": "/api-reference/endpoint/get-mcp-discovery",
+      "destination": "/api-reference/endpoint/get-mcp-server-card"
+    },
+    {
+      "source": "/api-reference/endpoint/get-well-known-mcp-discovery",
+      "destination": "/api-reference/endpoint/get-mcp-server-card"
+    },
+    {
+      "source": "/api-reference/endpoint/get-well-known-mcp-discovery-alias",
+      "destination": "/api-reference/endpoint/get-mcp-server-card"
     }
   ],
   "navbar": {
