@@ -1,0 +1,117 @@
+---
+title: Notifications
+description: Review workflow notification readiness, configured Slack channels, and recent delivery history.
+icon: bell
+---
+
+The Notifications page gives workspace admins one place to review workflow notification health for the selected site.
+
+Use it to confirm whether Slack is ready, which workflows send notifications, and whether recent notification deliveries succeeded.
+
+## Open notifications
+
+Open **Settings > Workspace > Notifications** from the dashboard.
+
+The page is scoped to the current site. If you manage multiple sites, switch sites from the dashboard sidebar before comparing notification status.
+
+## What the page shows
+
+The Notifications page summarizes:
+
+| Area | What it tells you |
+| --- | --- |
+| Slack readiness | Whether the Slack integration is connected and available as a notification sink. |
+| Workflows notifying | How many workflows have Slack notification channels configured. |
+| Recent deliveries | Recent workflow notification sends, including success and failure status. |
+| Configured workflow notifications | The selected Slack channels, notification mode, schedule, and workflow status. |
+
+Notification settings remain configured inside each workflow. The Notifications page is a read-only operational view so the workflow drawer remains the source of truth for workflow behavior.
+
+## Slack readiness
+
+Workflow notifications use Slack as a notification sink.
+
+A ready Slack connection means:
+
+- Slack is connected for the workspace.
+- The integration exposes notification capability.
+- The app has access to the channels selected in workflow settings.
+
+If Slack is not connected, open **Settings > Workspace > Integrations** and connect Slack before configuring workflow notifications.
+
+<Callout type="info">
+  Private Slack channels usually require inviting the dubstack app to the channel before it can send notifications there.
+</Callout>
+
+## Configured workflow notifications
+
+The configured workflow notifications list is read from saved workflow configuration.
+
+Each row can show:
+
+- workflow name
+- workflow enabled state
+- selected notification mode
+- schedule
+- selected Slack channels
+
+Notification modes are:
+
+| Mode | Behavior |
+| --- | --- |
+| All outcomes | Sends notifications for successful and failed runs. |
+| Failures only | Sends notifications only when a run fails. |
+
+To change a workflow notification target, open **Automate > Workflows**, choose the workflow, and update notification settings in the workflow drawer.
+
+## Recent deliveries
+
+Recent notification deliveries are captured from workflow run results.
+
+A delivery can show:
+
+- workflow name
+- Slack channel
+- delivery time
+- delivery status
+- error message when a send failed
+
+Use this section when a workflow ran but a Slack channel did not receive the expected message.
+
+## Troubleshooting
+
+### Slack is connected but notifications are unavailable
+
+Open **Settings > Workspace > Integrations** and confirm Slack is connected for the same workspace and site scope.
+
+Then confirm the Slack integration has notification capability. If the capability is missing, reconnect Slack.
+
+### No workflows are listed
+
+Open **Automate > Workflows** and confirm at least one workflow has Slack notifications enabled.
+
+The Notifications page does not create notification settings by itself.
+
+### A delivery failed
+
+Check the error message in the recent delivery row, then verify:
+
+- the Slack app is still installed
+- the app is invited to the target channel
+- the channel has not been archived
+- the workflow still has a valid notification target
+
+### Repository-copy workflow notifications
+
+Repository-copy workflows can send Slack notifications like other workflows. Scheduled repository-copy runs consume automation credits, and delivery results appear in the same recent delivery list.
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/workflows/configuration">Configure workflow runs</a>
+  <a href="/workflows/manage">Manage workflows</a>
+  <a href="/workflows/reference">Workflow reference</a>
+  <a href="/workflows/integrations">Workflow integrations</a>
+  <a href="/ai/integrations/slack">Slack integration</a>
+  <a href="/dashboard/usage">Usage</a>
+</RelatedTopics>

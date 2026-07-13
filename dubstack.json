@@ -628,6 +628,10 @@
               {
                 "slug": "dashboard/usage",
                 "icon": "gauge"
+              },
+              {
+                "slug": "dashboard/notifications",
+                "icon": "bell"
               }
             ]
           },
