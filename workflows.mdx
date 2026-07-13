@@ -39,6 +39,8 @@ Some workflows require additional signals:
 
 ## Available workflow types
 
+### Self-updating content workflows
+
 <CardGroup cols={2}>
   <Card title="Update from code changes" icon="git-branch" href="/workflows/reference#update-from-code-changes">
     Draft content updates when source code, product features, or API behavior changes.
@@ -46,17 +48,45 @@ Some workflows require additional signals:
   <Card title="Draft changelog" icon="history" href="/workflows/reference#draft-changelog">
     Prepare changelog drafts from recent product updates on a schedule.
   </Card>
+  <Card title="Draft improvements from assistant conversations" icon="message-square" href="/workflows/reference#draft-improvements-from-assistant-conversations">
+    Review assistant question trends and open targeted docs updates.
+  </Card>
+  <Card title="Draft improvements from user feedback" icon="thumbs-up" href="/workflows/reference#draft-improvements-from-user-feedback">
+    Use page feedback trends to draft focused content improvements.
+  </Card>
+  <Card title="Update from support feedback" icon="mail" href="/workflows/reference#update-from-support-feedback">
+    Use recurring support themes as input for targeted documentation updates.
+  </Card>
+</CardGroup>
+
+### Maintenance workflows
+
+<CardGroup cols={2}>
+  <Card title="Translate content" icon="languages" href="/workflows/reference#translate-content">
+    Keep selected languages in sync when source content changes.
+  </Card>
   <Card title="Fix broken links" icon="link" href="/workflows/reference#fix-broken-links">
     Find and repair broken internal or external links before readers hit them.
   </Card>
   <Card title="Audit SEO metadata" icon="search" href="/workflows/reference#audit-seo-metadata">
     Audit titles, descriptions, headings, and canonical tags.
   </Card>
-  <Card title="Update from support feedback" icon="mail" href="/workflows/reference#update-from-support-feedback">
-    Use recurring support themes as input for targeted documentation updates.
+  <Card title="Fix grammar & typos" icon="text" href="/workflows/reference#fix-grammar-typos">
+    Find and fix spelling mistakes, typos, and grammar issues.
   </Card>
   <Card title="Apply style guide" icon="check-circle" href="/workflows/reference#apply-style-guide">
     Enforce voice, tone, terminology, and formatting rules across docs updates.
+  </Card>
+  <Card title="Copy repository targets" icon="copy" href="/workflows/reference#copy-repository-targets">
+    Copy the active docs source into configured repository copy targets on a schedule.
+  </Card>
+</CardGroup>
+
+### Custom workflows
+
+<CardGroup cols={2}>
+  <Card title="Create a custom workflow" icon="plus" href="/workflows/create">
+    Define custom triggers, instructions, context repositories, integrations, and update modes.
   </Card>
 </CardGroup>
 
