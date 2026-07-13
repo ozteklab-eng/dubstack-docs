@@ -12,12 +12,16 @@ Use integrations when the source of truth for a docs update lives outside the do
   Integrations provide context or notifications. They do not become the documentation source of truth. Workflow changes still write through the connected Git provider.
 </Callout>
 
+<Callout type="info">
+  Workflow integrations require Enterprise access or an active trial that includes integration features.
+</Callout>
+
 ## Requirements
 
 Before a workflow can use an integration, confirm:
 
 - the integration is connected from **Settings > Organization > Integrations**
-- the current deployment is eligible for workflows
+- the current deployment is eligible for workflows and integration features
 - the workflow supports integration context
 - the workflow configuration selects the integration
 - the connected account has access to the source data
