@@ -71,7 +71,7 @@ Use the status labels to identify which path a connection belongs to:
 | Needs reconnect | An authoring grant, OAuth token, or provider-side permission needs to be refreshed before authoring actions can use it. |
 | Copy target | The repository can receive an explicit copy from the active docs source for backup, provider testing, or migration rehearsal. |
 | Source repository | The repository can be selected as read-only context for workflows such as code-change documentation updates. |
-| Webhook active | The source repository can send supported review events to queue eligible workflow runs. |
+| Webhook configured | dubstack has configured the provider event subscription for the source repository. Verify delivery in workflow run history after a supported review event. |
 | Webhook pending | The repository remains usable as scheduled or manual context, but event-driven workflow runs need the webhook path fixed. |
 | Configured | The repository or connection has saved settings, but it might not be the active deployment source. |
 
@@ -245,7 +245,7 @@ The source repository card shows operational metadata for each connected context
 | Events | Which provider events can queue workflow runs, such as pull requests or merge requests. |
 | Configured | When dubstack last configured or refreshed the source repository event subscription. |
 
-If the card shows **Webhook active**, the repository can queue supported code-change workflows from review events. If the card shows **Webhook pending** or the connection reports a webhook setup warning, the repository is still connected as read-only workflow context, but event-driven runs need the webhook path fixed before merged review events can queue runs automatically.
+If the card shows **Webhook configured**, dubstack has saved the provider event subscription. Confirm event delivery by merging a small review event and checking workflow run history. If the card shows **Webhook pending** or the connection reports a webhook setup warning, the repository is still connected as read-only workflow context, but event-driven runs need the webhook path fixed before merged review events can queue runs automatically.
 
 ### Forgejo source repositories
 
@@ -265,7 +265,7 @@ When adding a Forgejo source repository, provide:
 - branch
 - a token with read access to the source repository, unless existing Forgejo access can read it
 
-If the source card shows **Webhook active**, merged pull request events can queue code-change workflow runs. If event support is unavailable, pending, or blocked by your network, keep the repository selected and use scheduled or manual workflow runs after the source change is merged.
+If the source card shows **Webhook configured**, merged pull request events should be able to queue code-change workflow runs, but the run history is the source of truth for delivery. If event support is unavailable, pending, or blocked by your network, keep the repository selected and use scheduled or manual workflow runs after the source change is merged.
 
 ### Path-scoped source context
 
@@ -368,7 +368,7 @@ For Forgejo, verify the repository token can create branches and pull requests o
 
 This is expected when GitHub remains the active deployment source. GitLab OAuth enables authoring/context capabilities. It does not automatically switch production publishing to GitLab.
 
-### A source repository webhook is active but the live site did not change
+### A source repository webhook is configured but the live site did not change
 
 This is expected. Source repository webhooks queue eligible workflows and provide context. They do not publish docs content directly. Check the workflow run, review the generated branch or pull request, and merge the change into the active docs repository before expecting the public site to change.
 
