@@ -58,6 +58,29 @@ For self-hosted providers, the instance must be reachable from dubstack and the 
 
 When you explicitly switch the active deployment source to another enabled provider while another provider is already active, dubstack copies the current docs source into the new repository before the switch completes. If that initial copy fails, the existing active source remains in place and the dashboard shows the copy error. If you only configure a copy target, production stays on the current active source.
 
+## Read the status labels
+
+A site can have more than one provider connection, but only one provider is the active deployment source.
+
+Use the status labels to identify which path a connection belongs to:
+
+| Status label | What it means |
+| --- | --- |
+| Active | This provider is the deployment source that publishes the live docs site. |
+| Installed | The provider app or OAuth grant is connected for the listed account or organization. |
+| Needs reconnect | An authoring grant, OAuth token, or provider-side permission needs to be refreshed before authoring actions can use it. |
+| Copy target | The repository can receive an explicit copy from the active docs source for backup, provider testing, or migration rehearsal. |
+| Source repository | The repository can be selected as read-only context for workflows such as code-change documentation updates. |
+| Webhook active | The source repository can send supported review events to queue eligible workflow runs. |
+| Webhook pending | The repository remains usable as scheduled or manual context, but event-driven workflow runs need the webhook path fixed. |
+| Configured | The repository or connection has saved settings, but it might not be the active deployment source. |
+
+These labels are intentionally independent. For example, a GitHub repository can remain **Active** for publishing while a GitLab copy target is configured and a GitLab OAuth account shows **Needs reconnect**. In that state, pushes to GitHub still publish the site, the GitLab repository copy can still be valid if its repository token is healthy, and only GitLab authoring actions need the OAuth reconnect.
+
+<Callout type="info">
+  Treat **Active deployment source**, **authoring access**, **source repository**, and **copy target** as separate jobs. Fix the job that is failing instead of rotating every provider credential.
+</Callout>
+
 ## GitHub setup
 
 GitHub source sync uses the dubstack GitHub App.
