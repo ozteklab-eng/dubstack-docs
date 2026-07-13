@@ -12,13 +12,13 @@ You can edit from the dashboard or from a local Git checkout. Dashboard publishi
 
 ## Supported providers
 
-dubstack supports GitHub, GitLab, and Forgejo source setup.
+dubstack supports GitHub source setup, GitLab source or copy-target setup where enabled, and Forgejo for self-hosted workflow context and repository-copy targets.
 
 | Provider | Use case |
 | --- | --- |
 | GitHub | Recommended for GitHub App installation, repository access, preview deployments, and pull-request based authoring. |
-| GitLab | Use when your docs repository lives in GitLab and your team reviews changes through merge requests. |
-| Forgejo | Use when your docs repository lives on a self-hosted Forgejo instance and your team wants that instance to remain the source of truth. |
+| GitLab | Use when your docs repository lives in GitLab, when you want a GitLab copy target, or when your team reviews changes through merge requests. |
+| Forgejo | Use when your team runs a self-hosted Forgejo instance for workflow source context or repository-copy targets. Active Forgejo deployment-source mode appears only when enabled for the workspace. |
 
 Additional provider surfaces may appear in the dashboard when they are enabled for a workspace. Keep one active production source at a time.
 
@@ -61,10 +61,12 @@ GitLab authoring features may require an additional authoring OAuth connection s
 2. Choose Forgejo.
 3. Enter the Forgejo instance URL.
 4. Enter the repository owner, repository, branch, and token.
-5. Confirm the connection.
-6. Run a manual update to sync the first content artifacts.
+5. Confirm whether the form is connecting a repository copy target or an active deployment source.
+6. Save the connection.
 
-Forgejo instances must be reachable from dubstack. If provider events are not configured, use manual update after pushing changes.
+Forgejo instances must be reachable from dubstack. When Forgejo is configured as a repository copy target, it receives explicit copies from the active docs source and does not publish the live site. When Forgejo is configured as a workflow source repository, it provides bounded code context for workflows without changing the docs deployment source.
+
+If Forgejo active deployment-source mode is enabled for your workspace, run a manual update after connecting it and confirm the active deployment source card shows the expected Forgejo repository before asking teammates to push docs changes there.
 
 ## What happens after connection
 

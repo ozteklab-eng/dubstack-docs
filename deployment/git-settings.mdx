@@ -52,11 +52,11 @@ Changing the visible provider does not automatically migrate production traffic.
 | GitHub | Primary repository source with GitHub App access, preview deployments, editor commits, and pull-request authoring. |
 | GitLab | Repository copy target, GitLab-backed source where enabled, and merge-request authoring through GitLab OAuth. |
 | Self-hosted GitLab | OAuth authoring against a reachable self-hosted GitLab instance after the workspace is configured. |
-| Forgejo | Self-hosted repository source, copy target, and reviewable authoring path for teams that run Forgejo. |
+| Forgejo | Self-hosted workflow source repository, repository copy target, and active deployment source where enabled. |
 
 For self-hosted providers, the instance must be reachable from dubstack and the configured token must have the repository permissions needed for the selected workflow.
 
-When you explicitly switch the active deployment source to GitLab or Forgejo while another provider is already active, dubstack copies the current docs source into the new repository before the switch completes. If that initial copy fails, the existing active source remains in place and the dashboard shows the copy error. If you only configure a copy target, production stays on the current active source.
+When you explicitly switch the active deployment source to another enabled provider while another provider is already active, dubstack copies the current docs source into the new repository before the switch completes. If that initial copy fails, the existing active source remains in place and the dashboard shows the copy error. If you only configure a copy target, production stays on the current active source.
 
 ## GitHub setup
 
@@ -96,9 +96,9 @@ See [GitLab](/deployment/gitlab) and [Self-hosted GitLab OAuth](/deployment/gitl
 
 ## Forgejo setup
 
-Forgejo source sync uses a Forgejo instance URL and repository token.
+Forgejo setup uses a Forgejo instance URL and repository token.
 
-Use Forgejo when your docs repository is hosted on a Forgejo instance your team controls.
+Use Forgejo when your team runs a self-hosted Forgejo instance and wants to use it for workflow source context, repository-copy targets, or an active deployment source where that mode is enabled.
 
 1. Open the Git provider picker.
 2. Choose Forgejo.
@@ -106,11 +106,13 @@ Use Forgejo when your docs repository is hosted on a Forgejo instance your team 
 4. Enter the repository owner, repository name, branch, and optional docs directory.
 5. Enter a token that can read the repository and write branches or pull requests when authoring is enabled.
 6. Save the connection.
-7. Run a manual update and confirm the active deployment source card shows the expected Forgejo repository.
+7. Confirm whether the dashboard shows Forgejo as a repository copy target or as the active deployment source.
 
-Forgejo works best when the instance is available over HTTPS and can send provider events to the configured sync endpoint. If provider events are not available, use manual update after pushing changes.
+Forgejo works best when the instance is available over HTTPS and can send provider events to the configured endpoint.
 
-If the site already has an active docs source, save the Forgejo connection first and let dubstack copy the current docs into Forgejo before the source switches. Do not tell teammates to push to Forgejo until the active deployment source card confirms Forgejo is serving the site.
+If Forgejo is configured as a repository copy target, it receives explicit repository copies from the active docs source. It does not publish the live site and pushes to Forgejo do not update production docs.
+
+If Forgejo active deployment-source mode is enabled for the workspace, save the Forgejo connection, run a manual update, and confirm the active deployment source card shows the expected Forgejo repository. Do not tell teammates to push docs changes to Forgejo until the active deployment source card confirms Forgejo is serving the site.
 
 ### Reuse Forgejo access for workflow source repositories
 

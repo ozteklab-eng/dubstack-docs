@@ -14,7 +14,7 @@ A connected provider lets dubstack read source content, receive update signals, 
 | --- | --- |
 | GitHub | Primary active deployment source for production docs, previews, editor commits, and agent draft pull requests. |
 | GitLab | Copy target, optional active deployment source where enabled, OAuth authoring integration, GitLab-aware workflows, and merge-request authoring. |
-| Forgejo | Self-hosted active deployment source where enabled, workflow source repository, copy target, and reviewable authoring path. |
+| Forgejo | Self-hosted workflow source repository, repository copy target, and active deployment source where enabled. |
 
 Provider availability can depend on your plan, workspace configuration, and rollout state.
 
@@ -44,7 +44,8 @@ Source repositories are read-only context. They do not publish pages and they do
 | Production docs from your own hosted GitHub repository | [GitHub](/deployment/github) |
 | Keep a GitLab copy or prepare a migration | [GitLab](/deployment/gitlab) |
 | Draft GitLab merge requests from agents or workflows | [GitLab](/deployment/gitlab) with OAuth authoring access |
-| Publish from a self-hosted Forgejo docs repository | Configure Forgejo as the active deployment source in [Git settings](/deployment/git-settings) |
+| Copy docs into a self-hosted Forgejo repository | Configure Forgejo as a repository copy target in [Git settings](/deployment/git-settings). |
+| Publish from a self-hosted Forgejo docs repository | Configure Forgejo as the active deployment source in [Git settings](/deployment/git-settings) when that mode is enabled for the workspace. |
 | Use a self-hosted Forgejo code repository for workflows | Add it as a source repository in [Git settings](/deployment/git-settings), then select it in [workflow configuration](/workflows/configuration). |
 | Review generic provider concepts | This page |
 | Configure an unsupported custom provider | Contact support or your dubstack operator before relying on it for production publishing. |
@@ -92,7 +93,7 @@ Grant the smallest provider scope that supports your intended workflow:
 
 For GitLab, repository read/copy access and authoring access are separate. The repository access token keeps the GitLab repository connection readable. GitLab OAuth authoring access lets workflows create branches, commits, and merge requests as an authorized GitLab user.
 
-For Forgejo, the repository token must cover the source repository and the actions you want dubstack to perform. Read-only tokens can publish existing content. Authoring workflows need permission to create branches and pull requests.
+For Forgejo, the repository token must cover the repository and the actions you want dubstack to perform. Copy targets need repository read/write access for docs files. Workflow source repositories need read access to the selected source repository. Active deployment-source and authoring modes require the workspace to expose those capabilities and the token to allow the relevant branch or pull request actions.
 
 ## Source repositories for autodocs workflows
 
