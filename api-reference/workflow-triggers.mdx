@@ -1,0 +1,124 @@
+---
+title: Workflow API triggers
+description: Trigger enabled workflows from trusted backend automation.
+icon: workflow
+---
+
+Use workflow API triggers when an external system should start an enabled workflow without a browser session.
+
+Common use cases include:
+
+- queueing a changelog workflow after a release is cut
+- running a broken-link check from CI
+- starting an SEO audit from an internal scheduler
+- triggering a custom workflow from release tooling
+
+<Callout type="warning">
+  Workflow API triggers use Admin API keys. Store keys in a backend secret manager and never expose them in client-side code, docs content, screenshots, or support threads.
+</Callout>
+
+## Endpoint
+
+```http
+POST https://api.dubstack.ai/api/agent/workflows/{workflowId}/api-trigger
+```
+
+The key must include the `workflows:run` scope.
+
+```bash
+curl --request POST \
+  --url "https://api.dubstack.ai/api/agent/workflows/{workflowId}/api-trigger" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY" \
+  --header "Content-Type: application/json" \
+  --data '{}'
+```
+
+If the Admin API key is restricted to a deployment, omit `site_id`. dubstack uses the key's deployment scope.
+
+If the key is organization-scoped, include the target deployment ID.
+
+```bash
+curl --request POST \
+  --url "https://api.dubstack.ai/api/agent/workflows/{workflowId}/api-trigger" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "site_id": "site-id-for-unscoped-keys"
+  }'
+```
+
+## Workflow IDs
+
+Use the workflow ID shown by the dashboard and API reference.
+
+| Workflow type | Route value |
+| --- | --- |
+| Built-in workflow | The built-in workflow ID, such as `fix_broken_links` or `audit_seo_metadata`. |
+| Saved custom workflow configuration | `custom_workflow` |
+| Specific user-created custom workflow | `custom_workflow:{id}` |
+
+## Required workflow state
+
+The Admin API does not bypass readiness checks.
+
+Before the trigger can queue a run:
+
+- the workflow runner must be enabled for the deployment
+- the workflow must be enabled
+- the selected trigger must be **Custom schedule**
+- the workflow must support the current update mode
+- repository authoring must be ready when the workflow writes docs changes
+- required setup fields must be complete
+- no run for the same workflow can already be queued or running
+- the daily workflow run limit must have remaining capacity
+
+If any check fails, the API returns an error response with a stable `reason` field.
+
+## Response
+
+Successful requests return `202 Accepted` with the queued workflow run.
+
+```json
+{
+  "run": {
+    "id": "workflow-run-id",
+    "workflow_id": "fix_broken_links",
+    "status": "queued",
+    "trigger_source": "api",
+    "trigger_type": "custom_schedule",
+    "update_mode": "pull_request"
+  }
+}
+```
+
+API-triggered runs appear in workflow history with the `api` trigger source. Usage reporting stores the Admin API key prefix for auditability, not the raw key.
+
+## Error reasons
+
+| Reason | Meaning |
+| --- | --- |
+| `workflow_runner_disabled` | The workflow runner is not enabled for the deployment. |
+| `workflow_runner_not_supported` | The selected workflow is visible but the runner cannot execute it yet. |
+| `site_required` | The key is not deployment-scoped and the request did not include `site_id`. |
+| `admin_api_key_site_scope_denied` | The key is restricted to a different deployment. |
+| `workflow_not_enabled` | Enable the workflow from the dashboard before triggering it. |
+| `workflow_not_api_triggerable` | Only workflows configured with **Custom schedule** can be triggered through the Admin API. |
+| `workflow_setup_incomplete` | Required setup, such as style guide instructions, is missing. |
+| `workflow_update_mode_not_supported` | The workflow runner does not support the selected update mode. |
+| `workflow_run_already_active` | A run for the same workflow is already queued or running. |
+| `workflow_daily_limit_exceeded` | The deployment reached its daily workflow run limit. |
+
+## Safe triggering
+
+- Use site-scoped keys unless a backend job must operate across multiple deployments.
+- Use one key per external system so rotation is targeted.
+- Trigger broad workflows on a deliberate schedule instead of every push.
+- Keep workflow context narrow with source repository and path-scope settings.
+- Review workflow history after the first few API-triggered runs before relying on them in release automation.
+
+## Related
+
+- [API keys](/dashboard/api-keys)
+- [Configure workflow runs](/workflows/configuration)
+- [Manage workflows](/workflows/manage)
+- [Workflow reference](/workflows/reference)

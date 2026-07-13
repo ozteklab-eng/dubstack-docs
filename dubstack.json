@@ -1016,6 +1016,10 @@
                 "icon": "send"
               },
               {
+                "slug": "api-reference/workflow-triggers",
+                "icon": "workflow"
+              },
+              {
                 "slug": "api-reference/base-url-authentication",
                 "icon": "shield-check"
               },
