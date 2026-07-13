@@ -105,6 +105,8 @@ rg -n "custom domain" /
 
 `query_docs_filesystem` is read-only. Commands run against a virtual docs filesystem generated from published pages, not against the source repository or server filesystem.
 
+Generated API endpoint pages are included in the virtual filesystem. When an endpoint page is generated from OpenAPI, MCP returns a concise REST endpoint summary with the method, path, operation description, parameters, request body fields, and responses. Use the Markdown export if you need the full operation-level OpenAPI JSON block.
+
 ### `submit_feedback`
 
 This tool is advertised only when **Settings > Deployment > Add-ons > Agent feedback** is enabled for the deployment.
