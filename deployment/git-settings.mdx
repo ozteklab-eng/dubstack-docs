@@ -244,8 +244,9 @@ The source repository card shows operational metadata for each connected context
 | Scope | Whether the source repository is connected for the current site or broader workspace context. |
 | Events | Which provider events can queue workflow runs, such as pull requests or merge requests. |
 | Configured | When dubstack last configured or refreshed the source repository event subscription. |
+| Last delivery | The most recent signed provider event received by dubstack for that source repository. |
 
-If the card shows **Webhook configured**, dubstack has saved the provider event subscription. Confirm event delivery by merging a small review event and checking workflow run history. If the card shows **Webhook pending** or the connection reports a webhook setup warning, the repository is still connected as read-only workflow context, but event-driven runs need the webhook path fixed before merged review events can queue runs automatically.
+If the card shows **Webhook configured**, dubstack has saved the provider event subscription. **Last delivery** confirms whether an event has actually reached dubstack. Confirm workflow behavior by merging a small review event and checking workflow run history. If the card shows **Webhook pending**, **No events received**, or the connection reports a webhook setup warning, the repository is still connected as read-only workflow context, but event-driven runs need the webhook path fixed before merged review events can queue runs automatically.
 
 ### Forgejo source repositories
 
@@ -265,7 +266,7 @@ When adding a Forgejo source repository, provide:
 - branch
 - a token with read access to the source repository, unless existing Forgejo access can read it
 
-If the source card shows **Webhook configured**, merged pull request events should be able to queue code-change workflow runs, but the run history is the source of truth for delivery. If event support is unavailable, pending, or blocked by your network, keep the repository selected and use scheduled or manual workflow runs after the source change is merged.
+If the source card shows **Webhook configured**, merged pull request events should be able to queue code-change workflow runs. Use **Last delivery** to confirm that Forgejo can reach dubstack, then use run history as the source of truth for whether the event matched a workflow. If event support is unavailable, pending, or blocked by your network, keep the repository selected and use scheduled or manual workflow runs after the source change is merged.
 
 ### Path-scoped source context
 
@@ -353,6 +354,19 @@ Webhook pending means dubstack could not confirm the provider event subscription
 - the dashboard did not show a webhook setup warning when the source repository was saved
 
 After fixing the provider or network setting, save the source repository again to refresh the webhook configuration.
+
+### Source repository shows no event deliveries
+
+The webhook may be configured, but the provider has not delivered an event to dubstack yet.
+
+Check that:
+
+- the source provider can reach the webhook URL over HTTPS
+- the provider webhook is active and subscribed to pull request or merge request events
+- the provider-side delivery history shows a recent success
+- the change was merged through a review event, not only pushed directly
+
+If delivery is blocked by your network, use a scheduled or manual workflow run after the source change is merged.
 
 ### Agent or workflow cannot create a pull request
 
