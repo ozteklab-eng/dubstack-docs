@@ -1,0 +1,85 @@
+---
+title: Content types
+description: Choose the right page type for guides, references, changelogs, snippets, assets, and hidden pages.
+icon: files
+---
+
+Use this guide when planning what to put in a docs repository.
+
+DubStack sites are source-backed. Most content is Markdown or MDX, with configuration in `dubstack.json` and supporting assets stored beside the pages.
+
+## Common content types
+
+| Type | File shape | Use it for |
+| --- | --- | --- |
+| Landing page | `index.mdx` | Site overview, product positioning, important entry points. |
+| Guide | `guides/*.mdx` | Task-based documentation. |
+| API reference | `api-reference/openapi.json` and generated endpoint pages | Endpoint documentation and request examples. |
+| Changelog | `changelog.mdx` or grouped update pages | Release notes and product changes. |
+| Component reference | `writing-content/*.mdx` | Reusable writing and MDX component docs. |
+| Snippet | `snippets/*.mdx` | Reusable content included by other pages. |
+| Asset | `assets/*`, `img/*`, `logo/*` | Images, icons, and downloadable files. |
+| Hidden page | Any page excluded from navigation | Drafts, direct-link pages, or support-only pages. |
+
+## Guides
+
+Use guides for outcomes.
+
+Good guide titles are action-oriented:
+
+- Connect GitHub
+- Add a custom domain
+- Publish an API reference
+- Draft docs from code changes
+
+Keep guides focused on one task. If a guide has several unrelated outcomes, split it.
+
+## Reference pages
+
+Use reference pages for structured information readers need to look up.
+
+Good reference topics include:
+
+- settings fields
+- limits
+- roles
+- API parameters
+- workflow catalog entries
+- supported configuration keys
+
+Reference pages should be complete and predictable, but they do not need to be read from top to bottom.
+
+## Changelog entries
+
+Use changelogs for time-based updates.
+
+A good changelog entry includes:
+
+- what changed
+- who is affected
+- whether action is required
+- links to updated docs
+
+Avoid using the changelog as the only documentation for a feature.
+
+## Hidden pages and snippets
+
+Hidden pages are useful when content should exist but not appear in navigation.
+
+Examples:
+
+- migration notes
+- direct-link support pages
+- temporary launch notes
+- internal reviewer instructions
+
+Snippets are better when the same content should appear in multiple pages.
+
+## Related
+
+- [Pages and files](/writing-content/pages-files)
+- [MDX](/writing-content/mdx)
+- [Navigation](/configuration/navigation)
+- [Hidden pages](/configuration/hidden-pages)
+- [Reusable snippets](/writing-content/reusable-snippets)
+

@@ -1,0 +1,99 @@
+---
+title: Security overview
+description: Understand the security controls currently available across dashboard access, docs publishing, integrations, and public docs surfaces.
+icon: shield-check
+---
+
+Use this page to understand the current security boundaries in dubstack.
+
+## Account and workspace access
+
+Dashboard access is scoped to a workspace and site context.
+
+Use:
+
+- [team members](/dashboard/team-members) to invite users
+- [roles](/dashboard/roles) to assign least-privileged access
+- [deployment permissions](/dashboard/deployment-permissions) to understand who can change publishing settings
+- [SSO](/dashboard/sso) when enterprise identity controls are available for the workspace
+- [audit logs](/dashboard/audit-logs) to review important operational changes
+
+## Source-control boundaries
+
+Git provider access is separate from dashboard access.
+
+A user may have dashboard access without having direct write access to the repository, and a repository token may have only the provider scopes needed for publishing or workflow context.
+
+Review:
+
+- [Git settings](/deployment/git-settings)
+- [GitHub](/deployment/github)
+- [GitLab](/deployment/gitlab)
+- [Self-hosted GitLab](/deployment/gitlab-self-hosted-oauth)
+- [Forgejo, GitHub, and GitLab](/deployment/forgejo-github-gitlab)
+
+## Published docs access
+
+Published docs are public unless a docs-authentication mode is enabled.
+
+Password-protected docs guard:
+
+- rendered docs pages
+- markdown exports
+- assistant answers
+- MCP endpoints
+- LLM-readable files
+- API reference pages
+- sitemap and metadata routes that could expose protected content
+
+See [docs authentication](/deployment/docs-authentication).
+
+## Public AI surfaces
+
+AI-readable surfaces are designed for published docs content.
+
+They do not grant dashboard access and they do not read private team context unless a separate authenticated product surface explicitly provides that access.
+
+Review:
+
+- [AI discovery files](/ai/ai-discovery-files)
+- [Public MCP](/ai/mcp)
+- [Markdown export](/ai/markdown-export)
+- [Agent readiness checklist](/ai/agent-readiness-checklist)
+
+## Custom domains and proxies
+
+When using a custom domain, proxy all required docs paths and avoid caching write or streaming endpoints.
+
+For path-mounted docs, pay particular attention to:
+
+- MCP discovery paths
+- `/mcp`
+- `/feedback`
+- assistant and search requests
+- LLM files
+- markdown export requests
+
+See [reverse proxy](/deployment/reverse-proxy) and [security headers](/deployment/security-headers).
+
+## Integrations
+
+Integrations should be scoped to the minimum provider access required for the workflow.
+
+Before enabling a provider:
+
+- confirm whether the integration is organization-scoped or user-scoped
+- check which workflows can use it
+- avoid publishing private support or issue details into public docs
+- review provider permissions after role changes
+
+See [integration permissions](/ai/integration-permissions).
+
+## Related
+
+- [Roles](/dashboard/roles)
+- [Audit logs](/dashboard/audit-logs)
+- [Docs authentication](/deployment/docs-authentication)
+- [Security headers](/deployment/security-headers)
+- [CSP configuration](/deployment/csp-configuration)
+

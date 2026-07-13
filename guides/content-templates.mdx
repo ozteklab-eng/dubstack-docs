@@ -1,0 +1,129 @@
+---
+title: Content templates
+description: Use repeatable page shapes for guides, references, troubleshooting, changelogs, and API docs.
+icon: layout-template
+---
+
+Use templates to make docs easier to write and review.
+
+A template is not a special file type. It is a repeatable structure your team follows for a page category.
+
+## Guide template
+
+Use this shape for task-based pages:
+
+```mdx
+---
+title: Connect a custom domain
+description: Point a domain or subdomain at your published docs site.
+---
+
+Explain when to use the guide.
+
+## Requirements
+
+- Requirement one
+- Requirement two
+
+## Steps
+
+1. Do the first thing.
+2. Do the second thing.
+3. Validate the result.
+
+## Troubleshooting
+
+### Problem name
+
+Explain the fix.
+
+## Related
+
+- [Related page](/path)
+```
+
+## Reference template
+
+Use this shape for settings, limits, roles, and catalog pages:
+
+```mdx
+---
+title: Settings reference
+description: Field-by-field reference for site settings.
+---
+
+Explain what this reference covers.
+
+| Field | Type | Default | Description |
+| --- | --- | --- | --- |
+| `name` | string | required | Site name. |
+
+## Examples
+
+Add short examples for common cases.
+
+## Troubleshooting
+
+List common invalid states.
+```
+
+## Troubleshooting template
+
+Use this shape when readers arrive with a problem:
+
+```mdx
+---
+title: Source-control troubleshooting
+description: Diagnose provider access, branches, webhooks, and sync issues.
+---
+
+## Quick checks
+
+- Check one
+- Check two
+
+## Symptoms
+
+### Error or symptom
+
+Cause and fix.
+
+## Collect before support
+
+- Request ID
+- Repository
+- Branch
+- Timestamp
+```
+
+## Changelog template
+
+Use this shape for release notes:
+
+```mdx
+<Update label="Feature name" description="Short summary." tags={["area"]}>
+  Explain what changed, who is affected, and whether the reader must do anything.
+
+  Link to the deeper docs page.
+</Update>
+```
+
+## Review checklist
+
+Before publishing a templated page:
+
+- Confirm the title matches reader intent.
+- Confirm the description is searchable.
+- Add links to prerequisites and related pages.
+- Verify code blocks and commands.
+- Check the page through markdown export.
+- Run search for the main keyword after publishing.
+
+## Related
+
+- [Style and tone](/guides/style-and-tone)
+- [Text formatting](/writing-content/text-formatting)
+- [Cards](/writing-content/cards)
+- [Callouts](/writing-content/callouts)
+- [Markdown export](/ai/markdown-export)
+

@@ -1,0 +1,77 @@
+---
+title: Custom layouts
+description: Understand layout modes, Theme Studio, and when to use Canvas Layout.
+icon: layout-template
+---
+
+Use this guide when a standard docs shell is not enough for a site.
+
+DubStack has two layout modes:
+
+| Layout mode | Use it for |
+| --- | --- |
+| Docs shell | Navigation, content pages, API reference, search, assistant, and standard docs publishing. |
+| Canvas Layout | Highly customized landing pages and branded page sections. |
+
+Most documentation sites should start with the docs shell. Use Canvas Layout when the page needs a designed composition rather than a normal article layout.
+
+## Start with the docs shell
+
+The docs shell is the default because it keeps the core reading experience predictable:
+
+- sidebar navigation
+- page table of contents
+- markdown export
+- API reference pages
+- search
+- assistant
+- feedback
+- related topics
+
+Use theme settings, navigation, icons, cards, panels, and MDX components before reaching for a custom layout.
+
+## Use Canvas Layout for designed pages
+
+Canvas Layout is useful for:
+
+- marketing-style docs landing pages
+- product portal homepages
+- enterprise-branded entry points
+- visual navigation hubs
+- content blocks that need custom positioning
+
+It should not replace normal docs pages that readers expect to scan, search, and export.
+
+## Keep content source-backed
+
+Custom layouts should still respect the docs source of truth.
+
+Use MDX files and `dubstack.json` for:
+
+- page content
+- navigation
+- API reference configuration
+- theme settings
+- assets
+
+Avoid relying on manual visual edits that cannot be reviewed or reproduced.
+
+## Validation checklist
+
+Before publishing a custom layout:
+
+- Test desktop and mobile breakpoints.
+- Open search and assistant.
+- Check related docs links.
+- Verify markdown export for content pages.
+- Confirm API reference pages still use the correct shell.
+- Check feedback and custom-domain paths.
+
+## Related
+
+- [Theme Studio](/theme-studio/overview)
+- [Canvas Layout](/theme-studio/canvas-layout)
+- [Enterprise gating](/theme-studio/enterprise-gating)
+- [Theming](/configuration/theming)
+- [Cards](/writing-content/cards)
+

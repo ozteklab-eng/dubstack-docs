@@ -166,6 +166,18 @@
                 "icon": "map"
               },
               {
+                "slug": "guides/developer-documentation",
+                "icon": "code"
+              },
+              {
+                "slug": "guides/internal-knowledge-base",
+                "icon": "building-2"
+              },
+              {
+                "slug": "guides/help-center",
+                "icon": "life-buoy"
+              },
+              {
                 "slug": "guides/draft-docs-from-code",
                 "icon": "git-pull-request"
               },
@@ -326,6 +338,14 @@
               {
                 "slug": "writing-content/pages-files",
                 "icon": "files"
+              },
+              {
+                "slug": "guides/content-types",
+                "icon": "files"
+              },
+              {
+                "slug": "guides/content-templates",
+                "icon": "layout-template"
               },
               {
                 "slug": "writing-content/text-formatting",
@@ -586,6 +606,10 @@
                 "icon": "lock-keyhole"
               },
               {
+                "slug": "dashboard/security-overview",
+                "icon": "shield-check"
+              },
+              {
                 "slug": "dashboard/api-keys",
                 "icon": "key-round"
               },
@@ -701,6 +725,10 @@
               },
               {
                 "slug": "theme-studio/canvas-layout",
+                "icon": "layout-template"
+              },
+              {
+                "slug": "guides/custom-layouts",
                 "icon": "layout-template"
               },
               {
@@ -857,13 +885,43 @@
         "tab": "Guides",
         "groups": [
           {
-            "group": "Writing and quality",
-            "icon": "pen-line",
+            "group": "Planning",
+            "icon": "map",
             "pages": [
               {
                 "slug": "guides/index",
                 "icon": "map"
               },
+              {
+                "slug": "guides/developer-documentation",
+                "icon": "code"
+              },
+              {
+                "slug": "guides/internal-knowledge-base",
+                "icon": "building-2"
+              },
+              {
+                "slug": "guides/help-center",
+                "icon": "life-buoy"
+              },
+              {
+                "slug": "guides/content-types",
+                "icon": "files"
+              },
+              {
+                "slug": "guides/content-templates",
+                "icon": "layout-template"
+              },
+              {
+                "slug": "guides/custom-layouts",
+                "icon": "layout-template"
+              }
+            ]
+          },
+          {
+            "group": "Writing and quality",
+            "icon": "pen-line",
+            "pages": [
               {
                 "slug": "guides/accessibility",
                 "icon": "accessibility"

@@ -1,0 +1,84 @@
+---
+title: Internal knowledge base
+description: Organize internal documentation with clear ownership, navigation, search, and access boundaries.
+icon: building-2
+---
+
+Use this guide when a docs site is primarily for internal teams.
+
+Internal knowledge bases work best when they are treated like a product: owned, reviewed, searchable, and regularly maintained. The same docs shell can support internal runbooks, product notes, architecture summaries, onboarding material, and team playbooks.
+
+## Decide the access model
+
+Before writing pages, decide who should be able to read them.
+
+| Access shape | Use it when |
+| --- | --- |
+| Public docs | The content can be shared externally. |
+| Password-protected docs | A small audience needs one shared reader password. |
+| Private or enterprise-controlled access | The docs need stronger identity, role, or SSO boundaries. |
+
+Do not treat hidden navigation as a security boundary. Hidden pages are still reachable if someone knows the URL.
+
+## Recommended structure
+
+Start with a few stable groups:
+
+| Group | Example pages |
+| --- | --- |
+| Start here | Team overview, how to use the knowledge base, where to ask questions. |
+| Runbooks | Incident steps, deployment checks, rollback steps. |
+| Architecture | System diagrams, service boundaries, decision records. |
+| Product | Feature notes, launch plans, roadmap summaries. |
+| Operations | On-call, support, billing, security, access requests. |
+
+Use folders when the group has many pages. Use headings and related topics when the group is small.
+
+## Keep ownership visible
+
+Use frontmatter, page introductions, or a short owner section to show who maintains a page.
+
+Useful ownership fields include:
+
+- responsible team
+- last reviewed date
+- escalation contact
+- related repository or dashboard
+- linked runbook or workflow
+
+If a page has no owner, schedule a review before relying on it during incidents.
+
+## Use search and feedback
+
+Internal readers often search before browsing navigation.
+
+Before launch:
+
+- write clear page titles
+- include common synonyms
+- add short summaries near the top of long pages
+- enable reader feedback when the site should collect correction requests
+- review search analytics for failed queries
+
+## Maintenance workflow
+
+For internal docs, recurring review matters more than initial polish.
+
+Use a monthly or quarterly workflow to:
+
+- find stale pages
+- fix broken links
+- check headings and metadata
+- summarize feedback trends
+- draft targeted improvements
+
+Keep review-required mode enabled until the team trusts the workflow output.
+
+## Related
+
+- [Docs authentication](/deployment/docs-authentication)
+- [Hidden pages](/configuration/hidden-pages)
+- [Search](/optimize/search)
+- [Feedback](/optimize/feedback)
+- [Workflows reference](/workflows/reference)
+

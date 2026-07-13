@@ -1,0 +1,93 @@
+---
+title: Developer documentation
+description: Plan a developer documentation site for APIs, SDKs, guides, and release notes.
+icon: code
+---
+
+Use this guide when your docs need to help developers understand, integrate, and maintain a product.
+
+Developer documentation usually combines conceptual guides, API reference, examples, changelogs, and troubleshooting content. In dubstack, these pages live in the same Git-backed source so the docs can be reviewed, previewed, and published with normal engineering workflows.
+
+## Recommended structure
+
+Start with a small structure:
+
+| Area | Purpose |
+| --- | --- |
+| Overview | Explain what the product does and who it is for. |
+| Quickstart | Give readers the shortest successful path. |
+| Guides | Explain common tasks and production patterns. |
+| API reference | Document OpenAPI endpoints and request/response examples. |
+| Changelog | Record product, API, or docs changes. |
+| Troubleshooting | Capture known failures and fixes. |
+
+Keep the first version narrow. Add deeper sections after readers ask for them or analytics show repeated confusion.
+
+## Use Git as the source of truth
+
+Connect a docs repository before launch when possible.
+
+Git-backed docs give your team:
+
+- reviewable changes
+- preview deployments
+- branch-based collaboration
+- history for rollbacks and audits
+- a clear handoff between product, engineering, and docs owners
+
+If you do not want to connect a repository on day one, use the hosted starter repository first, then move to a connected provider when the workflow is ready.
+
+## Add an API reference
+
+Put your OpenAPI spec in the repository and reference it from `dubstack.json`.
+
+For a single API, use:
+
+```text
+api-reference/openapi.json
+```
+
+For multiple APIs, keep named specs under:
+
+```text
+api-reference/openapi/admin.json
+api-reference/openapi/public.json
+```
+
+Then add API reference pages to navigation so readers can browse endpoint groups and open live request examples when enabled.
+
+## Make the docs AI-readable
+
+Developer docs are often read by coding agents as well as humans.
+
+Before publishing, validate:
+
+- `/llms.txt`
+- `/llms-full.txt`
+- page-level `.md` exports
+- public MCP discovery when enabled
+- OpenAPI download paths
+- sitemap and robots output
+
+See [Agent readiness checklist](/ai/agent-readiness-checklist).
+
+## Use workflows carefully
+
+Use workflows for repeatable maintenance:
+
+- fix broken links
+- audit SEO metadata
+- fix grammar and typos
+- draft changelog entries
+- draft updates from code changes
+
+Start with review-required runs. Move to direct updates only after the workflow has produced correct changes for the same docs area several times.
+
+## Related
+
+- [Quickstart](/quickstart)
+- [OpenAPI setup](/api-reference/openapi-setup)
+- [Draft docs from code changes](/guides/draft-docs-from-code)
+- [Preview deployments](/deployment/preview-deployments)
+- [Workflows](/workflows)
+
