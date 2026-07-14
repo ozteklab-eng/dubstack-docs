@@ -318,7 +318,7 @@ Use a copy target when you want to:
 
 Before switching production to a copy target, confirm the target repository has `dubstack.json`, all MDX pages, assets, OpenAPI specs, and a valid deployment branch.
 
-Repository copy targets support explicit one-time copies from Git settings and scheduled copies through the **Copy repository targets** workflow. A successful copy proves that dubstack can read the active source and write to the target provider, but it does not create continuous mirroring, provider failover, or webhook replication.
+Repository copy targets support explicit one-time copies from Git settings and scheduled copies through the **Repository copy targets** workflow. A successful copy proves that dubstack can read the active source and write to the target provider, but it does not create continuous mirroring, provider failover, or webhook replication.
 
 One-time repository copies do not consume AI credits when they only copy files. Scheduled repository-copy workflows consume automation credits because they are workflow runs, and their results appear in workflow history and usage reporting. Scheduled repository-copy workflows start at 35+ credits per run; final credits scale by copy target count and file volume.
 
