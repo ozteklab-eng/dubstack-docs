@@ -39,6 +39,7 @@ Proxy these routes to the origin hostname shown in the dubstack dashboard.
 | `/docs/assets/*` | `https://<site>--origin.dubstack.live/docs/assets/*` | If raw asset URLs are used |
 | `/docs/images/*` | `https://<site>--origin.dubstack.live/docs/images/*` | If raw image URLs are used |
 | `/docs/img/*` | `https://<site>--origin.dubstack.live/docs/img/*` | If used |
+| `/docs/fonts/*` | `https://<site>--origin.dubstack.live/docs/fonts/*` | If custom or bundled fonts are used |
 | `/docs/llms.txt` | `https://<site>--origin.dubstack.live/docs/llms.txt` | If AI discovery is enabled |
 | `/docs/llms-full.txt` | `https://<site>--origin.dubstack.live/docs/llms-full.txt` | If AI discovery is enabled |
 | `/docs/skill.md` | `https://<site>--origin.dubstack.live/docs/skill.md` | If agent skill discovery is enabled |
@@ -55,7 +56,7 @@ Do not strip the `/docs` prefix before sending the request upstream. The origin 
 
 Some edge-worker snippets map runtime endpoints such as `/docs/mcp`, `/docs/api/*`, and `/docs/_next/*` to canonical origin paths without the `/docs` prefix. That is also valid when the snippet forwards the public mount headers below. The important contract is that the public URL remains under `/docs` and discovery metadata advertises the public mounted MCP URL.
 
-Repository-backed logos, favicons, and MDX images are served through `/api/static/*` after publish. For example, a source path such as `/assets/favicon.svg` is available at `/docs/api/static/assets/favicon.svg` on a path-mounted site. Raw `/docs/assets/*` and `/docs/images/*` routes are supported for compatibility, but `/docs/api/static/*` is the route used by generated configuration and rendered docs.
+Repository-backed logos, favicons, and MDX images are served through `/api/static/*` after publish. For example, a source path such as `/assets/favicon.svg` is available at `/docs/api/static/assets/favicon.svg` on a path-mounted site. Raw `/docs/assets/*` and `/docs/images/*` routes are supported for compatibility, but `/docs/api/static/*` is the route used by generated configuration and rendered docs. If your proxy rewrites HTML or CSS, also rewrite absolute CSS URLs such as `url(/fonts/...)` to the mounted path so brand fonts keep loading under `/docs`.
 
 ## Header requirements
 

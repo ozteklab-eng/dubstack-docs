@@ -61,6 +61,7 @@ GET /docs              -> dubstack origin
 GET /docs/quickstart   -> dubstack origin
 GET /docs/_next/...    -> dubstack origin assets
 GET /docs/api/theme    -> dubstack origin API
+GET /docs/fonts/...    -> dubstack font assets
 GET /docs/llms.txt     -> dubstack origin AI-readable index
 GET /docs/skill.md     -> dubstack origin agent skill file
 GET /docs/mcp          -> dubstack origin public MCP server
@@ -90,6 +91,41 @@ Replace `DOCS_ORIGIN_HOST` and `PUBLIC_HOST` with the values shown in your dubst
 const DOCS_ORIGIN_HOST = '<site>--origin.dubstack.live';
 const PUBLIC_HOST = 'example.com';
 const DOCS_PREFIX = '/docs';
+const REWRITABLE_PREFIXES = [
+  '/_next/',
+  '/api/',
+  '/assets/',
+  '/images/',
+  '/fonts/',
+  '/favicon',
+  '/logo',
+  '/site.webmanifest',
+  '/apple-touch-icon',
+  '/robots.txt',
+  '/sitemap.xml',
+  '/feedback',
+  '/llms',
+  '/skill.md',
+  '/.well-known/',
+];
+
+function shouldPrefix(value) {
+  return value.startsWith('/') &&
+    value !== DOCS_PREFIX &&
+    !value.startsWith(`${DOCS_PREFIX}/`) &&
+    REWRITABLE_PREFIXES.some((prefix) => value.startsWith(prefix));
+}
+
+function prefixValue(value) {
+  return shouldPrefix(value) ? `${DOCS_PREFIX}${value}` : value;
+}
+
+function prefixCssUrls(value) {
+  return value.replace(/url\((['"]?)(\/[^'")]+)\1\)/g, (match, quote, url) => {
+    const next = prefixValue(url);
+    return next === url ? match : `url(${quote}${next}${quote})`;
+  });
+}
 
 function shouldProxy(pathname) {
   return pathname === DOCS_PREFIX || pathname.startsWith(`${DOCS_PREFIX}/`);
@@ -117,12 +153,24 @@ export default {
       return fetch(request);
     }
 
-    return fetch(buildProxyRequest(request));
+    const response = await fetch(buildProxyRequest(request));
+    const contentType = response.headers.get('content-type') || '';
+
+    if (contentType.includes('text/css')) {
+      const css = await response.text();
+      return new Response(prefixCssUrls(css), {
+        status: response.status,
+        statusText: response.statusText,
+        headers: response.headers,
+      });
+    }
+
+    return response;
   }
 };
 ```
 
-If your Worker also rewrites HTML or response headers, keep those rewrites limited to `/docs` traffic. The dubstack dashboard includes a fuller Worker snippet that prefixes supported static asset paths and preload headers for stricter root-site setups.
+If your Worker also rewrites HTML or response headers, keep those rewrites limited to `/docs` traffic. The dubstack dashboard includes a fuller Worker snippet that prefixes supported static asset paths, CSS font URLs, and preload headers for stricter root-site setups.
 
 ## Vercel rewrites example
 
