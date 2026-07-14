@@ -1,0 +1,99 @@
+---
+title: Maintain documentation over time
+description: Build a maintenance loop with ownership, review cadence, workflows, and clear deprecation rules.
+icon: calendar-check
+---
+
+Documentation starts drifting as soon as the product changes. A maintenance loop keeps docs accurate without relying on last-minute cleanup before every launch.
+
+Use this guide to define ownership, review cadence, workflow support, and removal rules.
+
+## Assign ownership
+
+Every important section should have someone accountable for accuracy.
+
+Common models:
+
+| Model | Use when |
+| --- | --- |
+| Central owner | A small team or docs owner maintains all core docs. |
+| Distributed owners | Product, engineering, support, or solutions teams own the areas closest to their work. |
+| Hybrid ownership | A central docs owner maintains structure and style while domain teams own technical accuracy. |
+
+Make ownership visible in your team process. For example, link a docs area to a team, Slack channel, issue label, or release checklist.
+
+## Review when the product changes
+
+The most reliable review trigger is a real product change.
+
+Add docs checks to:
+
+- feature launch checklists
+- pull request or merge request templates
+- API release steps
+- incident follow-ups
+- support escalation reviews
+- partner or customer onboarding changes
+
+For code-driven changes, connect source repositories and use [Update from code changes](/workflows/reference#update-from-code-changes) so the agent can draft a reviewable docs update from the merged change context.
+
+## Schedule recurring checks
+
+Some issues are not tied to a single release. Use scheduled reviews for content that needs periodic attention.
+
+Recommended cadence:
+
+| Cadence | Review |
+| --- | --- |
+| Weekly | Feedback with repeated negative signals, important launch pages, and active changelog drafts. |
+| Monthly | High-traffic guides, search gaps, assistant question trends, broken links, and SEO metadata. |
+| Quarterly | Navigation structure, stale screenshots, onboarding paths, and high-value API examples. |
+
+Use workflow scopes to keep scheduled checks focused. A workflow that reviews one product area usually produces better changes than a broad workflow that tries to inspect the whole docs site.
+
+## Automate narrow tasks
+
+Automate the checks that are repetitive and low-risk.
+
+Good candidates:
+
+- broken internal links
+- repeated spelling and grammar fixes
+- missing SEO titles or descriptions
+- stale changelog drafts from recent source activity
+- targeted improvements from feedback or assistant conversations
+
+Keep higher-risk changes reviewable. API behavior, auth instructions, pricing, security, and migration guidance should normally go through a pull request before publishing.
+
+## Remove or redirect stale content
+
+Wrong documentation is worse than missing documentation when readers act on it.
+
+When a page no longer belongs:
+
+1. Confirm there is a better destination.
+2. Add a redirect from the old path.
+3. Update internal links that still point at the old page.
+4. Mention the change in the changelog when users may have bookmarked the old path.
+5. Keep deprecated content only when users still need it for older versions or migration windows.
+
+Use [Redirects](/configuration/redirects) and [Hidden pages](/configuration/hidden-pages) to manage removal without breaking readers.
+
+## Maintenance checklist
+
+- Owners are defined for important docs areas.
+- Product changes include a docs review step.
+- High-traffic pages are reviewed on a schedule.
+- Feedback and assistant trends are triaged regularly.
+- Workflows run with a narrow scope and review mode where appropriate.
+- Deprecated pages have redirects or clear migration paths.
+- Changelog entries capture important documentation and product changes.
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/guides/improving-docs">Improve documentation quality</a>
+  <a href="/workflows/reference">Workflow reference</a>
+  <a href="/deployment/configure-automerge">Configure automerge</a>
+  <a href="/configuration/redirects">Redirects</a>
+</RelatedTopics>

@@ -1,0 +1,95 @@
+---
+title: Improve documentation quality
+description: Use analytics, search, feedback, assistant activity, and workflows to find and fix documentation gaps.
+icon: chart-line
+---
+
+Good documentation improves through a repeatable loop: measure what readers do, inspect where they struggle, make a focused change, and verify whether the signal improves.
+
+This guide shows how to use dubstack signals to decide what to update first.
+
+## Start with the highest-impact pages
+
+Open **Analytics** for the deployment you want to review.
+
+Prioritize pages that have:
+
+- high traffic and negative feedback
+- high search volume but weak click-through
+- repeated assistant questions about the same setup step or error
+- stale API examples after product or spec changes
+- support or team reports that point to the same page
+
+High-traffic pages deserve the fastest attention because one confusing paragraph can affect many readers.
+
+## Use search data to find missing content
+
+Search analytics help you see the words readers use when they cannot find an answer.
+
+Look for:
+
+- repeated queries with no clear clicked result
+- product terms that differ from your page titles
+- error messages that should have troubleshooting pages
+- API names or fields that need stronger descriptions
+
+When a query has a weak result, try one of these fixes:
+
+1. Add the missing page.
+2. Rename the page title or description to match reader language.
+3. Add a clearer heading to an existing page.
+4. Link to the page from a higher-level guide.
+
+See [Search](/optimize/search) for search quality guidance.
+
+## Review feedback before rewriting
+
+Feedback tells you what readers and agents could not resolve from the published page.
+
+Use **Analytics > Feedback** to group reports by page, source, and review status.
+
+Common patterns:
+
+| Signal | Likely fix |
+| --- | --- |
+| Many negative page ratings | Rewrite the intro, add prerequisites, or split the page into smaller tasks. |
+| Negative feedback on one API endpoint | Improve OpenAPI descriptions, examples, response fields, or auth notes. |
+| Agent feedback about stale instructions | Check the source repo, deployment settings, and recent product changes. |
+| Repeated assistant questions | Add a direct answer, troubleshooting section, or related topic link. |
+
+Keep review notes in the dashboard so the team can see whether feedback is pending, in progress, resolved, or dismissed.
+
+## Turn repeated issues into workflow runs
+
+Use workflows when the same improvement task repeats.
+
+Examples:
+
+- run **Fix broken links** after content changes
+- run **Audit SEO metadata** before a launch
+- run **Fix grammar & typos** on content-update triggers
+- run **Draft improvements from user feedback** after enough feedback is collected
+- run **Draft improvements from assistant conversations** when repeated questions show a docs gap
+
+Start new workflows in **Require review** mode. Review the first few pull requests, then decide whether the workflow is safe to run automatically.
+
+See [Workflow reference](/workflows/reference) for trigger, update-mode, and credit details.
+
+## Validate the change
+
+After publishing an improvement:
+
+1. Open the live page and confirm the change is visible.
+2. Search for the original query and confirm the page appears.
+3. Ask the assistant the original question and check whether it cites the improved page.
+4. Watch feedback and search trends over the next review window.
+5. Add a changelog entry if the change affects important user behavior.
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/optimize/analytics">Analytics</a>
+  <a href="/optimize/feedback">Feedback</a>
+  <a href="/optimize/search">Search</a>
+  <a href="/workflows/reference">Workflow reference</a>
+</RelatedTopics>

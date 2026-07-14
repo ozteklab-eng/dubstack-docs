@@ -937,6 +937,14 @@
               {
                 "slug": "guides/style-and-tone",
                 "icon": "pen-line"
+              },
+              {
+                "slug": "guides/improving-docs",
+                "icon": "chart-line"
+              },
+              {
+                "slug": "guides/maintenance",
+                "icon": "calendar-check"
               }
             ]
           },
