@@ -1,0 +1,119 @@
+---
+title: Write documentation with Claude Code
+description: Configure Claude Code with project instructions and the public docs MCP server for source-backed documentation work.
+icon: terminal
+---
+
+Claude Code can help draft, review, and maintain documentation from a local terminal session.
+
+Use it with dubstack in two separate ways:
+
+| Surface | Purpose |
+| --- | --- |
+| Project instructions | Keep Claude Code aligned with your writing standards, repository layout, and review expectations. |
+| Public docs MCP | Let Claude Code search and read the published docs site through the `/mcp` endpoint. |
+
+For authenticated content changes, keep using the dashboard, connected Git provider, Slack agent, or configured workflows until a trusted authoring MCP surface is available for your workspace.
+
+## Requirements
+
+Before starting, confirm:
+
+- your docs live in a Git-backed repository
+- Claude Code is installed and authenticated
+- your docs site has published content
+- public MCP is enabled if you want Claude Code to search the live docs site
+
+## Add project instructions
+
+Create a `CLAUDE.md` file at the root of your docs repository.
+
+```text
+docs/
+  CLAUDE.md
+  dubstack.json
+  index.mdx
+  api-reference/
+```
+
+Use the file to describe the content model and review rules.
+
+```md title="CLAUDE.md"
+# Documentation project
+
+## Source of truth
+
+- Docs are MDX files in this repository.
+- Navigation and site settings are configured in `dubstack.json`.
+- Published docs are served by dubstack after the connected branch syncs.
+
+## Writing standards
+
+- Use clear second-person instructions.
+- Keep pages focused on one user outcome.
+- Add frontmatter with `title` and `description` to every page.
+- Prefer relative links for internal pages.
+- Do not include secrets, private customer data, or unreleased commitments.
+
+## Git workflow
+
+- Check existing pages before creating a duplicate.
+- Keep changes small enough to review.
+- Use a branch or pull request when repository policy requires review.
+- Run the docs preview or publish flow before telling reviewers a change is ready.
+```
+
+## Connect the public docs MCP
+
+The public MCP server is read-focused. It lets Claude Code inspect published docs and submit documentation-quality feedback when agent feedback is enabled.
+
+```bash
+claude mcp add --transport http my-docs https://your-docs-domain.com/mcp
+```
+
+For a path-mounted docs site, use the mounted URL:
+
+```bash
+claude mcp add --transport http my-docs https://your-domain.com/docs/mcp
+```
+
+## Useful prompts
+
+Ask Claude Code to use the published docs as context before drafting local edits.
+
+```text
+Use the docs MCP to search for custom domains, then suggest the smallest update needed in the local deployment guide.
+```
+
+```text
+Review the changed MDX files and check whether the new page should be added to dubstack.json navigation.
+```
+
+```text
+Compare the local page with the published version through MCP and list what changed before I open a pull request.
+```
+
+## Keep authoring reviewable
+
+Claude Code can edit local files, but the published site still follows the connected source workflow:
+
+1. Make local changes in the docs repository.
+2. Commit the changes.
+3. Push to the connected branch or open a pull request.
+4. Let dubstack sync the published docs artifacts.
+5. Verify the live page and MCP results after publishing.
+
+<Callout type="warning">
+  Do not paste API keys, private user data, or customer conversations into local instruction files or public docs pages.
+</Callout>
+
+## Related topics
+
+<CardGroup cols={2}>
+  <Card title="Public MCP" icon="plug" href="/ai/mcp">
+    Connect AI clients to the published docs server.
+  </Card>
+  <Card title="Draft docs from code changes" icon="git-pull-request" href="/guides/draft-docs-from-code">
+    Use workflow source repositories to draft reviewable updates.
+  </Card>
+</CardGroup>

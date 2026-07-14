@@ -789,6 +789,22 @@
                 "icon": "pen-line"
               },
               {
+                "slug": "guides/claude-code",
+                "icon": "terminal"
+              },
+              {
+                "slug": "guides/codex",
+                "icon": "bot"
+              },
+              {
+                "slug": "guides/cursor",
+                "icon": "code"
+              },
+              {
+                "slug": "guides/devin-desktop",
+                "icon": "sparkles"
+              },
+              {
                 "slug": "ai/agent-use-cases",
                 "icon": "list-checks"
               },
@@ -1092,6 +1108,22 @@
               {
                 "slug": "guides/draft-docs-from-code",
                 "icon": "git-pull-request"
+              },
+              {
+                "slug": "guides/claude-code",
+                "icon": "terminal"
+              },
+              {
+                "slug": "guides/codex",
+                "icon": "bot"
+              },
+              {
+                "slug": "guides/cursor",
+                "icon": "code"
+              },
+              {
+                "slug": "guides/devin-desktop",
+                "icon": "sparkles"
               }
             ]
           },

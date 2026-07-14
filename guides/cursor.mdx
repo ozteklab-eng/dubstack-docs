@@ -1,0 +1,123 @@
+---
+title: Write documentation with Cursor
+description: Configure Cursor rules and MCP access so Cursor can work consistently with dubstack MDX docs.
+icon: code
+---
+
+Cursor can help write and review documentation when it has clear repository rules and access to the published docs site.
+
+Use it with dubstack in two separate ways:
+
+| Surface | Purpose |
+| --- | --- |
+| Cursor rules | Tell Cursor how your docs repository is structured and how content should be written. |
+| Public docs MCP | Let Cursor search and read the published docs site through the `/mcp` endpoint. |
+
+## Requirements
+
+Before starting, confirm:
+
+- Cursor is installed and authenticated
+- your docs repository is open in Cursor
+- your docs site has published content
+- public MCP is enabled if you want Cursor to search the live docs site
+
+## Add project rules
+
+Create a rule file under `.cursor/rules`.
+
+```text
+.cursor/
+  rules/
+    docs.mdc
+dubstack.json
+index.mdx
+```
+
+Use the rule to define page structure, style, and safety boundaries.
+
+```md title=".cursor/rules/docs.mdc"
+# Documentation writing rule
+
+## Project context
+
+- This repository publishes docs through dubstack.
+- Pages are MDX files.
+- Navigation and site settings are configured in `dubstack.json`.
+
+## Writing standards
+
+- Use clear second-person instructions.
+- Add frontmatter with `title` and `description`.
+- Keep headings descriptive and scannable.
+- Prefer relative links for internal pages.
+- Use components only when they improve clarity.
+
+## Safety rules
+
+- Do not include secrets, tokens, private customer data, or unreleased commitments.
+- Do not invent product behavior. Check existing docs or source context first.
+- Keep generated changes small enough to review.
+```
+
+## Connect the public docs MCP
+
+Open Cursor MCP settings and add a streamable HTTP server.
+
+```json
+{
+  "mcpServers": {
+    "my-docs": {
+      "url": "https://your-docs-domain.com/mcp"
+    }
+  }
+}
+```
+
+For a path-mounted docs site, use:
+
+```json
+{
+  "mcpServers": {
+    "my-docs": {
+      "url": "https://your-domain.com/docs/mcp"
+    }
+  }
+}
+```
+
+Reload Cursor after saving the MCP configuration.
+
+## Useful prompts
+
+```text
+Use the docs MCP to find the current deployment guide, then update this local page without duplicating existing instructions.
+```
+
+```text
+Review this new MDX page for missing frontmatter, broken relative links, and unclear headings.
+```
+
+```text
+Check whether the new page should be added to dubstack.json navigation.
+```
+
+## Publish changes
+
+Cursor edits local files. The public docs site updates only after the connected source publishes:
+
+1. Review the diff in your Git provider or local editor.
+2. Commit and push to the connected branch, or open a pull request.
+3. Let dubstack sync the published docs artifacts.
+4. Verify the live page and MCP results.
+
+## Related topics
+
+<CardGroup cols={2}>
+  <Card title="Public MCP" icon="plug" href="/ai/mcp">
+    Connect AI clients to the published docs server.
+  </Card>
+  <Card title="Editor publishing" icon="upload-cloud" href="/editor/publishing">
+    Understand how source-backed publishing works.
+  </Card>
+</CardGroup>

@@ -1,0 +1,128 @@
+---
+title: Write documentation with Devin Desktop
+description: Configure Devin Desktop workspace rules and MCP access for source-backed dubstack documentation work.
+icon: sparkles
+---
+
+Devin Desktop can help draft and review documentation when it has clear workspace rules and a bounded source of truth.
+
+Use it with dubstack in two separate ways:
+
+| Surface | Purpose |
+| --- | --- |
+| Workspace rules | Explain your docs repository, writing standards, and review workflow. |
+| Public docs MCP | Let Devin Desktop search and read the published docs site through the `/mcp` endpoint when the client supports custom MCP servers. |
+
+## Requirements
+
+Before starting, confirm:
+
+- Devin Desktop is installed and authenticated
+- your docs repository is open in the workspace
+- your docs site has published content
+- public MCP is enabled if you want Devin Desktop to search the live docs site
+
+## Add workspace rules
+
+Create a shared rule file in the docs repository.
+
+```text
+.devin/
+  rules/
+    docs.md
+dubstack.json
+index.mdx
+```
+
+Use the rule to keep generated docs work consistent.
+
+```md title=".devin/rules/docs.md"
+# Documentation workspace rule
+
+## Project context
+
+- This repository publishes docs through dubstack.
+- Pages are MDX files.
+- Navigation and site settings are configured in `dubstack.json`.
+- Published docs update after the connected branch syncs.
+
+## Writing standards
+
+- Use second person for instructions.
+- Add `title` and `description` frontmatter to every page.
+- Prefer short sections with descriptive headings.
+- Use relative links for internal docs pages.
+- Match existing component patterns before adding new ones.
+
+## Safety rules
+
+- Do not include secrets, tokens, private customer data, or unreleased commitments.
+- Do not invent product behavior.
+- Ask for source context when a feature is unclear.
+
+## Review workflow
+
+- Keep changes focused.
+- Update `dubstack.json` when navigation changes.
+- Open reviewable changes rather than silently editing the production branch.
+```
+
+## Connect the public docs MCP
+
+If your Devin Desktop workspace supports custom MCP configuration, add the public docs MCP URL as a streamable HTTP server.
+
+```json
+{
+  "mcpServers": {
+    "my-docs": {
+      "url": "https://your-docs-domain.com/mcp"
+    }
+  }
+}
+```
+
+For a path-mounted docs site, use:
+
+```json
+{
+  "mcpServers": {
+    "my-docs": {
+      "url": "https://your-domain.com/docs/mcp"
+    }
+  }
+}
+```
+
+## Useful prompts
+
+```text
+Search the published docs through MCP, then update the local guide with only the missing setup step.
+```
+
+```text
+Review this branch for docs changes that need navigation updates.
+```
+
+```text
+Draft a short troubleshooting section, but do not change API reference pages.
+```
+
+## Publish changes
+
+The public MCP endpoint does not write content. Devin Desktop edits local files, and the live site updates through the connected source workflow:
+
+1. Review the diff.
+2. Commit and push, or open a pull request.
+3. Wait for dubstack to sync the site.
+4. Verify the published page and MCP search result.
+
+## Related topics
+
+<CardGroup cols={2}>
+  <Card title="Public MCP" icon="plug" href="/ai/mcp">
+    Connect AI clients to the published docs server.
+  </Card>
+  <Card title="Agent use cases" icon="sparkles" href="/ai/agent-use-cases">
+    Use the dashboard agent for reviewable docs changes.
+  </Card>
+</CardGroup>

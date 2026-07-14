@@ -1,0 +1,126 @@
+---
+title: Write documentation with Codex
+description: Configure Codex with AGENTS.md instructions and the public docs MCP server for source-backed documentation work.
+icon: bot
+---
+
+Codex can work in your docs repository from the terminal, IDE, desktop app, or other Codex-supported surfaces.
+
+Use it with dubstack in two separate ways:
+
+| Surface | Purpose |
+| --- | --- |
+| `AGENTS.md` | Durable repository instructions for writing style, component usage, commands, and review expectations. |
+| Public docs MCP | Read and search the published docs site from Codex through the `/mcp` endpoint. |
+
+For authenticated content changes, keep using the dashboard, connected Git provider, Slack agent, or configured workflows until a trusted authoring MCP surface is available for your workspace.
+
+## Requirements
+
+Before starting, confirm:
+
+- Codex is installed and authenticated
+- your docs repository is trusted in your Codex environment
+- your docs site has published content
+- public MCP is enabled if you want Codex to search the live docs site
+
+## Add repository instructions
+
+Create an `AGENTS.md` file at the root of your docs repository.
+
+```text
+docs/
+  AGENTS.md
+  dubstack.json
+  index.mdx
+  api-reference/
+```
+
+Use the file to define the documentation contract for the repository.
+
+```md title="AGENTS.md"
+# Documentation project
+
+## Source of truth
+
+- Docs are MDX files in this repository.
+- Navigation and site settings are configured in `dubstack.json`.
+- Published docs are served by dubstack after the connected branch syncs.
+
+## Writing standards
+
+- Use second person for instructions.
+- Use sentence case for headings.
+- Add frontmatter with `title` and `description` to every page.
+- Prefer relative links for internal docs pages.
+- Use callouts, cards, tabs, accordions, and code groups only when they improve scannability.
+
+## Safety rules
+
+- Never add secrets, tokens, private customer data, or magic links to docs.
+- Do not invent dashboard settings, API endpoints, limits, or billing behavior.
+- Check existing pages before creating new content.
+
+## Review workflow
+
+- Keep changes small.
+- Update `dubstack.json` when navigation changes.
+- Run the local validation commands documented by this repository before opening a pull request.
+```
+
+Codex reads `AGENTS.md` files from the repository root down to the current working directory. Add nested files only when a folder needs more specific rules.
+
+## Connect the public docs MCP
+
+Codex supports streamable HTTP MCP servers from its shared configuration.
+
+Add the docs server to `~/.codex/config.toml` or a trusted project-scoped `.codex/config.toml`:
+
+```toml
+[mcp_servers.my-docs]
+url = "https://your-docs-domain.com/mcp"
+```
+
+For a path-mounted docs site, use the mounted URL:
+
+```toml
+[mcp_servers.my-docs]
+url = "https://your-domain.com/docs/mcp"
+```
+
+Restart Codex if it is already running, then use `/mcp` in the TUI to confirm the server is connected.
+
+## Useful prompts
+
+```text
+Use the docs MCP to search for API playground authentication, then inspect the local docs page and propose the smallest update.
+```
+
+```text
+Review my uncommitted MDX changes for broken relative links and missing frontmatter.
+```
+
+```text
+Check whether this new guide needs a navigation entry in dubstack.json and make the minimal change.
+```
+
+## Keep authoring reviewable
+
+The public MCP endpoint does not write content. If Codex changes local files, publish through the connected source workflow:
+
+1. Review the diff.
+2. Commit the docs changes.
+3. Push to the connected branch or open a pull request.
+4. Wait for the sync job to update the public docs site.
+5. Re-run MCP search or `tree / -L 2` to confirm the published result.
+
+## Related topics
+
+<CardGroup cols={2}>
+  <Card title="Public MCP" icon="plug" href="/ai/mcp">
+    Connect AI clients to the published docs server.
+  </Card>
+  <Card title="Custom skill files" icon="file-cog" href="/ai/custom-skill-files">
+    Publish agent instructions with your docs site.
+  </Card>
+</CardGroup>

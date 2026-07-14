@@ -295,20 +295,14 @@ Then ask Claude Code to search or read the docs through the connected MCP server
 
 Codex supports streamable HTTP MCP servers through its shared CLI and IDE configuration.
 
-Use the CLI:
-
-```bash
-codex mcp add my-docs --url https://your-docs-domain.com/mcp
-```
-
-Or edit `~/.codex/config.toml`:
+Edit `~/.codex/config.toml` or a trusted project-scoped `.codex/config.toml`:
 
 ```toml
 [mcp_servers.my-docs]
 url = "https://your-docs-domain.com/mcp"
 ```
 
-In the Codex TUI, run `/mcp` to confirm the server is connected.
+Restart Codex if it is already running, then run `/mcp` in the TUI to confirm the server is connected.
 
 ### Cursor
 
