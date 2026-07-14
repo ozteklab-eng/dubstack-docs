@@ -189,6 +189,7 @@ These routes use public docs content and public site metadata. They do not expos
 | `addons.feedback.code_snippet_feedback` | boolean | `false` | Enables feedback for code snippet surfaces when supported. |
 | `addons.feedback.collect_reader_emails` | boolean | `false` | Allows feedback forms to request reader email addresses. |
 | `addons.feedback.reader_email_disclaimer` | string | Empty | Short notice shown when collecting reader emails. |
+| `addons.related_topics.enabled` | boolean | `false` | Shows generated related page suggestions at the bottom of docs pages. |
 
 ```json
 {
@@ -197,6 +198,9 @@ These routes use public docs content and public site metadata. They do not expos
       "thumbs_rating": true,
       "agent_feedback": true,
       "collect_reader_emails": false
+    },
+    "related_topics": {
+      "enabled": true
     }
   }
 }

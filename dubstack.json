@@ -36,6 +36,9 @@
       "agent_feedback": true,
       "collect_reader_emails": false,
       "reader_email_disclaimer": ""
+    },
+    "related_topics": {
+      "enabled": true
     }
   },
   "redirects": [
