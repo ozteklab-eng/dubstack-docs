@@ -175,6 +175,8 @@ After the route is configured, check:
 - `/docs/api/theme` returns site theme data.
 - `/docs/llms.txt` lists docs URLs under `/docs`.
 - `/docs/skill.md` returns Markdown.
+- `/docs/feedback` returns the feedback endpoint response and is not cached.
+- `/docs/mcp` returns the public MCP transport response and is not cached.
 - `/docs/.well-known/mcp` returns a discovery document whose `url` is `https://example.com/docs/mcp`.
 - `/docs/.well-known/mcp/server-card.json` lists the public MCP tools.
 - `/docs/.well-known/agent-skills/index.json` returns the agent-skills manifest.
