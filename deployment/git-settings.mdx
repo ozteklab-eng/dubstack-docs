@@ -17,7 +17,7 @@ Git settings has five separate jobs:
 | Provider access | The GitHub App, GitLab token, or Forgejo token that lets dubstack read source files and receive repository events where the provider supports them. |
 | Authoring access | OAuth or app permissions that let approved agents, Slack requests, editor saves, and workflows create reviewable documentation changes. |
 | Source repositories | Additional code or product repositories that workflows can read as bounded context. |
-| Copy targets | Secondary repositories used for migration, backup, or provider evaluation. |
+| Repository copy targets | Secondary repositories used for migration, backup, or provider evaluation. |
 
 Keep these jobs separate when troubleshooting. A site can read from a repository while authoring is blocked, and an OAuth connection can be healthy while the deployment source still points somewhere else.
 
@@ -50,9 +50,9 @@ Changing the visible provider does not automatically migrate production traffic.
 | Provider | Typical use |
 | --- | --- |
 | GitHub | Primary repository source with GitHub App access, preview deployments, editor commits, and pull-request authoring. |
-| GitLab | Repository copy target, GitLab-backed source where enabled, and merge-request authoring through GitLab OAuth. |
+| GitLab | One-time or scheduled repository copy target, GitLab-backed source where enabled, and merge-request authoring through GitLab OAuth. |
 | Self-hosted GitLab | OAuth authoring against a reachable self-hosted GitLab instance after the workspace is configured. |
-| Forgejo | Self-hosted workflow source repository, repository copy target, and active deployment source where enabled. |
+| Forgejo | Self-hosted workflow source repository, one-time or scheduled repository copy target, and active deployment source where enabled. |
 
 For self-hosted providers, the instance must be reachable from dubstack and the configured token must have the repository permissions needed for the selected workflow.
 
@@ -69,7 +69,7 @@ Provider support is capability-based. A provider can be usable for one job while
 | Self-hosted GitLab | Supported where the instance is reachable and GitLab deployment source is enabled | Supported through self-hosted GitLab OAuth | Supported when the instance and selected projects are reachable | Supported through a repository access token |
 | Forgejo | Feature-gated | Supported through a repository token where enabled | Supported for selected repositories and webhook-capable instances | Supported through a repository token |
 
-Use the labels in the dashboard to confirm the active job. For example, a provider marked **Copy target** is not publishing the live site, and a provider marked **Source repository** is read-only context for workflows.
+Use the labels in the dashboard to confirm the active job. For example, a provider marked **One-time copy** or **Scheduled copy** is not publishing the live site, and a provider marked **Workflow source** is read-only context for workflows.
 
 ## Read the status labels
 
@@ -79,19 +79,20 @@ Use the status labels to identify which path a connection belongs to:
 
 | Status label | What it means |
 | --- | --- |
-| Active | This provider is the deployment source that publishes the live docs site. |
+| Active source | This provider is the deployment source that publishes the live docs site. |
 | Installed | The provider app or OAuth grant is connected for the listed account or organization. |
 | Needs reconnect | An authoring grant, OAuth token, or provider-side permission needs to be refreshed before authoring actions can use it. |
-| Copy target | The repository can receive an explicit copy from the active docs source for backup, provider testing, or migration rehearsal. |
-| Source repository | The repository can be selected as read-only context for workflows such as code-change documentation updates. |
+| One-time copy | The repository can receive an explicit manual copy from the active docs source for backup, provider testing, or migration rehearsal. |
+| Scheduled copy | A repository-copy workflow is enabled for this target. Runs happen only on the configured schedule or when manually triggered from Workflows. |
+| Workflow source | The repository can be selected as read-only context for workflows such as code-change documentation updates. |
 | Webhook configured | dubstack has configured the provider event subscription for the source repository. Verify delivery in workflow run history after a supported review event. |
 | Webhook pending | The repository remains usable as scheduled or manual context, but event-driven workflow runs need the webhook path fixed. |
 | Configured | The repository or connection has saved settings, but it might not be the active deployment source. |
 
-These labels are intentionally independent. For example, a GitHub repository can remain **Active** for publishing while a GitLab copy target is configured and a GitLab OAuth account shows **Needs reconnect**. In that state, pushes to GitHub still publish the site, the GitLab repository copy can still be valid if its repository token is healthy, and only GitLab authoring actions need the OAuth reconnect.
+These labels are intentionally independent. For example, a GitHub repository can remain **Active source** for publishing while a GitLab repository shows **One-time copy** or **Scheduled copy** and a GitLab OAuth account shows **Needs reconnect**. In that state, pushes to GitHub still publish the site, the GitLab repository copy can still be valid if its repository token is healthy, and only GitLab authoring actions need the OAuth reconnect.
 
 <Callout type="info">
-  Treat **Active deployment source**, **authoring access**, **source repository**, and **copy target** as separate jobs. Fix the job that is failing instead of rotating every provider credential.
+  Treat **active source**, **authoring access**, **workflow source**, and **repository copy target** as separate jobs. Fix the job that is failing instead of rotating every provider credential.
 </Callout>
 
 ## GitHub setup
