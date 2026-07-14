@@ -1,0 +1,84 @@
+---
+title: Git concepts for docs
+description: Understand repositories, branches, commits, pull requests, and deployment branches in a docs-as-code workflow.
+icon: git-branch
+---
+
+Git is the source-of-truth layer for a dubstack docs site. The dashboard can hide most Git mechanics, but understanding the core concepts helps you review changes, debug publishing, and collaborate with teammates who edit locally.
+
+## Why Git matters for documentation
+
+Git gives documentation teams:
+
+- version history for every page
+- reviewable changes through pull requests or merge requests
+- safe experimentation on branches
+- recovery when a change needs to be reverted
+- compatibility with engineering workflows, CI, and release processes
+
+In dubstack, your live docs are built from the configured deployment source. That source can be a connected Git provider repository or a hosted starter repository created during onboarding.
+
+## Core concepts
+
+<AccordionGroup>
+  <Accordion title="Repository">
+    A repository stores the files that make up your docs site, including MDX pages, images, snippets, OpenAPI specs, and `dubstack.json`.
+  </Accordion>
+
+  <Accordion title="Deployment branch">
+    The branch used to publish your live documentation site. Many teams use `main`, but your deployment branch can be another branch when your release process requires it.
+  </Accordion>
+
+  <Accordion title="Branch">
+    A branch is an isolated line of work. Use branches for larger edits, agent-authored drafts, OpenAPI updates, navigation changes, and anything that should be reviewed before publishing.
+  </Accordion>
+
+  <Accordion title="Commit">
+    A commit is a saved snapshot of file changes with a message that explains what changed.
+  </Accordion>
+
+  <Accordion title="Pull request or merge request">
+    A review request that proposes merging one branch into another. GitHub and Forgejo use pull requests. GitLab uses merge requests.
+  </Accordion>
+
+  <Accordion title="Diff">
+    A diff shows exactly what changed between two versions of a file. Review diffs before publishing generated or manually authored docs changes.
+  </Accordion>
+
+  <Accordion title="Remote">
+    A hosted copy of the repository. Your dashboard, local Git client, and provider UI all communicate with the remote repository.
+  </Accordion>
+</AccordionGroup>
+
+## How dubstack uses Git
+
+| Action | Git behavior |
+| --- | --- |
+| Connect a repository | Stores the provider, repository, branch, and access details needed to read and publish docs. |
+| Publish from the editor | Creates commits or review branches depending on your source settings and provider permissions. |
+| Generate agent drafts | Creates reviewable changes against the connected docs repository when authoring access is available. |
+| Run preview deployments | Builds a temporary preview from a non-production branch. |
+| Run workflows | Reads the configured docs source and optional context repositories, then drafts changes against the docs repository. |
+
+The docs repository remains the write target for generated docs updates. Source repositories used by workflows provide context; they do not become the live docs source unless you explicitly configure them as the deployment source.
+
+## Direct publishing versus review
+
+Use direct publishing for small, low-risk changes when your repository policy allows it.
+
+Use pull requests or merge requests for:
+
+- API reference changes
+- navigation restructuring
+- generated agent drafts
+- changes that affect authentication, billing, or security instructions
+- edits to protected deployment branches
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/guides/branches">Work with branches</a>
+  <a href="/editor/git-essentials">Editor Git essentials</a>
+  <a href="/deployment/git-settings">Git settings</a>
+  <a href="/deployment/preview-deployments">Preview deployments</a>
+</RelatedTopics>

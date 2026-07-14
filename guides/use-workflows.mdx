@@ -1,0 +1,113 @@
+---
+title: Use workflows
+description: Choose workflow triggers, context, instructions, update modes, and credit controls for recurring documentation work.
+icon: workflow
+---
+
+Workflows run the dashboard agent from a clear trigger, bounded context, and update mode. Use them for recurring documentation work that should happen on a schedule, after content changes, or after reviewed source changes merge.
+
+For one-off research or drafting, use the dashboard agent directly. For repeatable work, configure a workflow.
+
+## Choose the right trigger
+
+| Trigger | Use when |
+| --- | --- |
+| Content update | The workflow should react when docs content changes, such as link checks, SEO audits, translation, or grammar fixes. |
+| Code change | The workflow should inspect reviewed source-code changes and draft docs updates. |
+| Custom schedule | The workflow should run on a fixed cadence or be triggered by a trusted backend through the Admin API. |
+| Manual run | You want to test a workflow configuration before enabling it on a recurring trigger. |
+
+Start with the narrowest trigger that fits the task. Broad triggers create noisy runs and consume more credits.
+
+## Pick a built-in workflow first
+
+Use built-in workflows for common maintenance work:
+
+- **Update from code changes**
+- **Draft changelog**
+- **Draft improvements from assistant conversations**
+- **Draft improvements from user feedback**
+- **Fix broken links**
+- **Audit SEO metadata**
+- **Fix grammar & typos**
+- **Apply style guide**
+- **Copy repository targets**
+
+Use a custom workflow only when the built-in workflow does not match the trigger, scope, or instructions you need.
+
+## Scope the workflow
+
+Good workflow configuration is specific.
+
+Set:
+
+- the docs repository that receives changes
+- source repositories that provide code or product context
+- path scopes for monorepos
+- integration sources, such as Slack or issue tracker context, when connected
+- update mode
+- notification destinations
+- daily run limits
+
+Source repositories are context. They do not become the live docs source unless you configure them as the deployment source in Git settings.
+
+## Write effective instructions
+
+Instructions should describe the outcome and the procedure.
+
+```text
+Review pages under /api-reference for fields changed in the merged source pull request.
+Only edit pages that mention the changed endpoint or schema.
+Open a pull request that summarizes which endpoint pages changed and why.
+```
+
+Avoid broad prompts like:
+
+```text
+Improve the docs.
+```
+
+Broad prompts make runs slower, less predictable, and more expensive.
+
+## Choose update mode
+
+| Mode | Use when |
+| --- | --- |
+| Require review | The workflow may change meaning, API behavior, security guidance, pricing, or onboarding steps. |
+| Automatically | The workflow is narrow, low-risk, and has produced correct pull requests several times. |
+| Repository copy target | The workflow copies repository content to a configured target without changing the live docs source. |
+
+Keep new workflows in **Require review** until the team trusts the output.
+
+## Control credit usage
+
+Credits depend on what the workflow reads and writes.
+
+To keep usage predictable:
+
+- use path scopes for monorepos
+- schedule broad checks weekly instead of hourly
+- keep source repository selections minimal
+- split unrelated tasks into separate workflows
+- review run history for unusually expensive runs
+
+See [AI credits and usage](/ai/credits-usage) for current credit planning baselines.
+
+## Review runs
+
+After a workflow runs:
+
+1. Open the workflow run history.
+2. Review the summary, changed files, and any pull request or merge request.
+3. Check whether the workflow respected its scope.
+4. Tighten instructions if the output was too broad.
+5. Disable or pause the workflow if it repeatedly produces low-value changes.
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/workflows/reference">Workflow reference</a>
+  <a href="/workflows/configuration">Workflow configuration</a>
+  <a href="/guides/draft-docs-from-code">Draft docs from code changes</a>
+  <a href="/ai/credits-usage">AI credits and usage</a>
+</RelatedTopics>

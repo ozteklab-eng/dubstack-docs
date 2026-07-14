@@ -953,6 +953,14 @@
             "icon": "rocket",
             "pages": [
               {
+                "slug": "guides/git-concepts",
+                "icon": "git-branch"
+              },
+              {
+                "slug": "guides/branches",
+                "icon": "git-pull-request"
+              },
+              {
                 "slug": "deployment/custom-domains",
                 "icon": "globe"
               },
@@ -1031,6 +1039,20 @@
               {
                 "slug": "deployment/gitlab-self-hosted-oauth",
                 "icon": "key-round"
+              }
+            ]
+          },
+          {
+            "group": "AI and workflows",
+            "icon": "workflow",
+            "pages": [
+              {
+                "slug": "guides/use-workflows",
+                "icon": "workflow"
+              },
+              {
+                "slug": "guides/draft-docs-from-code",
+                "icon": "git-pull-request"
               }
             ]
           },
