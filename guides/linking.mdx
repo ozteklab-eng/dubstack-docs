@@ -1,0 +1,80 @@
+---
+title: Link documentation pages
+description: Create internal links, anchor links, related topics, and redirects that keep documentation navigable.
+icon: link
+---
+
+Links turn individual pages into a usable documentation system. They help readers move through a task, help search find related pages, and preserve trust when content moves.
+
+## Use root-relative internal links
+
+Root-relative links start with `/` and resolve from the docs site root.
+
+```mdx
+[Quickstart](/quickstart)
+[Git settings](/deployment/git-settings)
+[Workflow reference](/workflows/reference)
+```
+
+Prefer root-relative links for durable internal links because they keep working when the source page moves to another directory.
+
+## Link to headings and components
+
+Headings create anchors that can be linked directly.
+
+```mdx
+[Troubleshooting](/deployment/custom-domains#troubleshooting)
+```
+
+For stable links, use custom heading IDs when the heading text may change.
+
+```mdx
+## Configure DNS {#dns}
+```
+
+Accordions, fields, and API reference sections can also expose direct anchors when the component supports it. Use those links when sending readers to one specific setting or parameter.
+
+## Write useful anchor text
+
+Anchor text should describe the destination.
+
+| Better | Avoid |
+| --- | --- |
+| [Configure preview deployments](/deployment/preview-deployments) | [Click here](/deployment/preview-deployments) |
+| [Workflow credit usage](/ai/credits-usage) | [More info](/ai/credits-usage) |
+| [Source control troubleshooting](/deployment/source-control-troubleshooting) | [This page](/deployment/source-control-troubleshooting) |
+
+Good anchor text improves readability, accessibility, and search quality.
+
+## Add related topics
+
+Use related topics when readers commonly need another page after finishing the current task.
+
+```mdx
+<RelatedTopics>
+  <a href="/deployment/git-settings">Git settings</a>
+  <a href="/deployment/source-control-troubleshooting">Source control troubleshooting</a>
+</RelatedTopics>
+```
+
+Related topics are most useful on guides, troubleshooting pages, and API setup pages.
+
+## Maintain links when pages move
+
+When renaming or removing a page:
+
+1. Add a redirect from the old path to the new path.
+2. Update internal links that point to the old path.
+3. Check the public page and markdown export.
+4. Run a broken-link workflow or local link check before publishing.
+
+See [Redirects](/configuration/redirects) and [Fix broken links](/workflows/reference#fix-broken-links).
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/configuration/redirects">Redirects</a>
+  <a href="/writing-content/headings-anchors">Headings and anchors</a>
+  <a href="/writing-content/related-topics">Related topics</a>
+  <a href="/workflows/reference#fix-broken-links">Fix broken links workflow</a>
+</RelatedTopics>

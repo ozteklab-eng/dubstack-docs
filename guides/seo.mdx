@@ -1,0 +1,91 @@
+---
+title: Improve documentation SEO
+description: Use page metadata, headings, internal links, sitemaps, and workflow checks to improve documentation discoverability.
+icon: search
+---
+
+Search engines and in-product search both depend on clear content structure. A page with a specific title, useful description, descriptive headings, and strong internal links is easier for readers and agents to find.
+
+## Start with page metadata
+
+Every important page should have frontmatter that explains the outcome of the page.
+
+```mdx
+---
+title: Configure custom domains
+description: Point a domain or docs subdomain at your published docs site.
+---
+```
+
+Use titles that match reader intent. A page named `Authentication` is less clear than `Authenticate API requests`.
+
+Good descriptions:
+
+- explain what the reader can do
+- use plain product language
+- stay specific to the page
+- avoid repeating the title without adding detail
+
+## Structure pages for scanning
+
+Use one H1 from the page title, then organize the body with H2 and H3 headings.
+
+```mdx
+## Configure the provider
+
+### Add the redirect URL
+
+### Verify the connection
+```
+
+Headings should be useful on their own because they appear in the table of contents, search snippets, and AI-readable exports.
+
+## Link related pages
+
+Internal links help readers continue a task and help search systems understand related content.
+
+Use descriptive links:
+
+```mdx
+See [custom-domain troubleshooting](/deployment/custom-domains#troubleshooting).
+```
+
+Avoid vague links:
+
+```mdx
+See [this page](/deployment/custom-domains).
+```
+
+Use [Related topics](/writing-content/related-topics) at the bottom of guide and reference pages so readers can move to the next useful page.
+
+## Keep technical SEO healthy
+
+dubstack publishes docs with SEO-friendly defaults, but content teams still need to manage page-level quality.
+
+Check:
+
+- titles and descriptions are unique
+- canonical paths are correct after redirects
+- important pages are not hidden or marked noindex
+- images have descriptive alt text
+- stale pages redirect to current pages
+- sitemaps and robots settings match the intended public surface
+
+See [SEO and search settings](/configuration/seo-search-reference) and [SEO](/optimize/seo) for configuration details.
+
+## Use workflows for recurring checks
+
+Use **Audit SEO metadata** when titles, descriptions, headings, and canonical settings need regular review.
+
+Use **Fix broken links** before and after larger navigation changes.
+
+Run broad checks on a schedule and keep high-risk changes in **Require review** mode.
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/optimize/seo">SEO</a>
+  <a href="/configuration/seo-search-reference">SEO and search reference</a>
+  <a href="/guides/linking">Link documentation pages</a>
+  <a href="/workflows/reference#audit-seo-metadata">Audit SEO metadata workflow</a>
+</RelatedTopics>

@@ -1,0 +1,80 @@
+---
+title: Use media in documentation
+description: Add images, screenshots, diagrams, embeds, and alt text without making docs hard to maintain.
+icon: image
+---
+
+Media can make a workflow clearer, but every image or video becomes something the team must maintain. Use media when it helps readers understand a task faster than text alone.
+
+## Choose the right media
+
+| Media type | Use when |
+| --- | --- |
+| Screenshot | Readers need to identify a UI element or confirm they are on the right screen. |
+| Diagram | A system, flow, or architecture is easier to understand visually. |
+| Short animation | A small interaction is hard to describe in text. |
+| Video embed | A longer workflow benefits from pause, rewind, or narration. |
+| Code block | The important detail is exact text, commands, or configuration. |
+
+Avoid screenshots for simple steps that are obvious from text. They become stale quickly when the UI changes.
+
+## Keep files maintainable
+
+Use descriptive filenames:
+
+```text
+custom-domain-verification-record.png
+workflow-run-history.png
+assistant-feedback-panel.png
+```
+
+Avoid names such as `screenshot.png` or `image-1.png`.
+
+Store media near the content it supports or in a predictable `/images` structure. Keep source files for diagrams when possible so they can be updated without recreating the asset.
+
+## Write useful alt text
+
+Alt text should explain the information the image provides.
+
+```mdx
+![Custom domain settings showing a pending TXT verification record and CNAME traffic target](/images/custom-domain-verification.png)
+```
+
+If the image is decorative and adds no information, use empty alt text so assistive technology can skip it.
+
+```mdx
+<img src="/images/divider.png" alt="" />
+```
+
+## Prefer tight screenshots
+
+Crop screenshots to the UI element or panel that matters.
+
+Tight screenshots:
+
+- are easier to read on mobile
+- contain fewer details that can go stale
+- keep the reader focused on the task
+
+Avoid publishing private data, tokens, user emails, internal URLs, or customer information in screenshots.
+
+## Use embeds deliberately
+
+External embeds can explain complex workflows, but they depend on third-party availability and page performance.
+
+Before embedding:
+
+- confirm the source is allowed by your content security policy
+- add surrounding text so the page still makes sense if the embed fails
+- avoid requiring video to complete a critical setup task
+
+See [Media embeds](/writing-content/media-embeds) and [Content Security Policy](/deployment/csp-configuration).
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/writing-content/images-assets">Images and assets</a>
+  <a href="/writing-content/media-embeds">Media embeds</a>
+  <a href="/guides/accessibility">Accessibility</a>
+  <a href="/deployment/csp-configuration">Content Security Policy</a>
+</RelatedTopics>

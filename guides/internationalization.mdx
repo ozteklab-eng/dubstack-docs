@@ -1,0 +1,105 @@
+---
+title: Plan multi-language documentation
+description: Structure language directories, translated navigation, and review workflows for multilingual docs.
+icon: languages
+---
+
+Internationalization helps readers use documentation in their preferred language. It works best when translated content follows the same structure as the source docs and has a clear maintenance process.
+
+## Decide what to translate first
+
+Start with the pages that have the highest reader impact:
+
+- homepage and quickstart
+- authentication and setup guides
+- API reference introductions
+- pricing, limits, and billing pages
+- troubleshooting pages with high traffic
+- release notes or migration guides for affected regions
+
+Avoid translating low-traffic pages until the main user journeys are covered.
+
+## Keep file structure predictable
+
+Use language directories and keep filenames aligned across languages.
+
+```text
+index.mdx
+quickstart.mdx
+fr/
+  index.mdx
+  quickstart.mdx
+es/
+  index.mdx
+  quickstart.mdx
+```
+
+Matching paths make it easier to identify missing translations and keep links consistent.
+
+## Configure language navigation
+
+Language-specific navigation belongs in `dubstack.json`.
+
+```json
+{
+  "navigation": {
+    "languages": [
+      {
+        "language": "en",
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": ["index", "quickstart"]
+          }
+        ]
+      },
+      {
+        "language": "fr",
+        "groups": [
+          {
+            "group": "Premiers pas",
+            "pages": ["fr/index", "fr/quickstart"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Use one canonical path per page. Do not put the same page path in multiple language navigation trees.
+
+## Maintain translations
+
+Treat translations as living content.
+
+Recommended workflow:
+
+1. Update the source-language page.
+2. Mark affected translated pages for review.
+3. Run a translation workflow when routing and policy are configured for the deployment.
+4. Review the generated translation before publishing.
+5. Check links, code examples, screenshots, and product names.
+
+Translation workflows should start in **Require review** mode because translations can affect meaning, legal language, support expectations, and onboarding accuracy.
+
+## Watch for localization issues
+
+Review:
+
+- screenshots that show language-specific UI
+- date, time, number, and currency formats
+- links to region-specific support or legal pages
+- API examples that include locale or region parameters
+- fallback behavior when a translation is missing
+
+See [Internationalization](/configuration/internationalization) for configuration fields and examples.
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/configuration/internationalization">Internationalization</a>
+  <a href="/configuration/languages">Languages</a>
+  <a href="/workflows/reference#translate-content">Translate content workflow</a>
+  <a href="/guides/maintenance">Maintain documentation over time</a>
+</RelatedTopics>
