@@ -203,6 +203,8 @@ location = /docs {
   proxy_set_header X-Forwarded-Host $host;
   proxy_set_header X-Public-Host $host;
   proxy_set_header X-Forwarded-Proto https;
+  proxy_set_header X-Docs-Base-Path /docs;
+  proxy_set_header X-Public-Mcp-Url https://$host/docs/mcp;
 }
 
 location /docs/ {
@@ -210,8 +212,12 @@ location /docs/ {
   proxy_set_header X-Forwarded-Host $host;
   proxy_set_header X-Public-Host $host;
   proxy_set_header X-Forwarded-Proto https;
+  proxy_set_header X-Docs-Base-Path /docs;
+  proxy_set_header X-Public-Mcp-Url https://$host/docs/mcp;
 }
 ```
+
+If your proxy strips or rewrites response headers, preserve the headers returned by dubstack for `/docs/.well-known/mcp*` and keep `/docs/mcp` uncached.
 
 ## Validation
 

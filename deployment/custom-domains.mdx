@@ -166,3 +166,10 @@ Check that the proxy forwards `X-Forwarded-Host`, `X-Public-Host`, and `X-Forwar
 Check `/docs/.well-known/mcp/server-card.json`. If tools are listed but the `url` points to `--origin.dubstack.live`, forward `X-Public-Mcp-Url: https://example.com/docs/mcp` and clear CDN cache for `/docs/.well-known/mcp*`.
 
 If the connector adds but tools do not appear or tool calls fail, forward `X-Docs-Base-Path: /docs` as well and keep `/docs/mcp` uncached.
+
+For proxy examples that include explicit upstream headers, set both headers on every `/docs` and `/docs/*` route:
+
+```text
+X-Docs-Base-Path: /docs
+X-Public-Mcp-Url: https://example.com/docs/mcp
+```
