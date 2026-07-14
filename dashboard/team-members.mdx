@@ -72,8 +72,14 @@ When removing a teammate:
 2. Review pending invites for the same person.
 3. Review Git provider repository access.
 4. Review Slack, Jira, and other integration access.
-5. Rotate shared credentials and API keys the person could access.
+5. Rotate shared credentials the person could access.
 6. Review recent activity or audit logs if the workspace has audit logging enabled.
+
+Removing a member automatically revokes active Admin API keys created by that member, disconnects their GitLab authoring OAuth connection, and disconnects Forgejo source repositories connected with that member's token.
+
+<Callout type="warning">
+  Dashboard removal does not remove the person from GitHub, GitLab, Forgejo, Slack, Jira, or your identity provider. Review those systems separately, especially for shared workspace integrations and repository permissions.
+</Callout>
 
 ## Related
 
