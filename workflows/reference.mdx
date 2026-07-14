@@ -18,8 +18,8 @@ In this reference, **pull request** means the provider-native review request for
 | Draft changelog | Supported | Custom schedule, weekly | Require review | 223 | Supported | None |
 | Draft improvements from assistant conversations | Supported | Custom schedule, weekly | Require review | 212 | Not supported | None |
 | Draft improvements from user feedback | Supported | Custom schedule, weekly | Require review | 245 | Not supported | Feedback collection |
-| Update from support feedback | Blocked | Custom schedule | Require review | 285 | Supported | Support feedback integration |
-| Translate content | Blocked | Content update | Automatically | 913 | Not supported | Target languages and translation routing |
+| Update from support feedback | Coming soon | Custom schedule | Require review | 285 | Supported | Support feedback integration |
+| Translate content | Coming soon | Content update | Automatically | 913 | Not supported | Target languages and translation routing |
 | Fix broken links | Supported | Content update | Require review | 285 | Not supported | None |
 | Audit SEO metadata | Supported | Content update | Require review | 422 | Not supported | None |
 | Fix grammar & typos | Supported | Content update | Require review | 330 | Not supported | None |
@@ -29,11 +29,11 @@ In this reference, **pull request** means the provider-native review request for
 Credit estimates are planning baselines. Actual usage depends on how much content the run reads, how many repositories are selected as context, how many files change, and how long the run takes. Repository copy starts at 35 credits and can scale with target count and file volume.
 
 <Callout type="warning">
-  Translation is listed in the catalog, but it is blocked until translation routing and policy support are available for the selected deployment.
+  Translation is listed in the catalog, but it is not yet runnable until translation routing and policy support are available for the selected deployment.
 </Callout>
 
 <Callout type="warning">
-  Support feedback is listed in the catalog, but it is blocked until support-feedback integration collectors are available for the selected deployment.
+  Support feedback is listed in the catalog, but it is not yet runnable until support-feedback integration collectors are available for the selected deployment.
 </Callout>
 
 ## Self-updating content workflows
@@ -123,7 +123,7 @@ Reviews support feedback and opens targeted content updates on a schedule.
 | Required capabilities | Docs repository, repository write access, authoring model, support feedback integration |
 | Context repositories | Supported |
 | Integrations | Supported |
-| Current runner status | Blocked until support-feedback integration collectors are available |
+| Current runner status | Not yet runnable until support-feedback integration collectors are available |
 
 Use this workflow when recurring support conversations reveal missing or outdated documentation.
 
@@ -143,7 +143,7 @@ Keeps selected languages in sync whenever content changes.
 | Default update mode | Automatically |
 | Required capabilities | Docs repository, repository write access, authoring model, language routing |
 | Required setup | At least one target language |
-| Current runner status | Blocked until translation routing and policy support are available |
+| Current runner status | Not yet runnable until translation routing and policy support are available |
 
 Use this workflow after language routing is configured for the deployment.
 
