@@ -66,6 +66,12 @@ If a teammate can edit in dubstack but cannot merge a pull request, update the G
 
 ## Offboard a member
 
+Use **Revoke credentials** when you need staged offboarding or compromise response without removing dashboard membership.
+
+This action revokes active Admin API keys created by the member, disconnects their GitLab authoring OAuth connection, and disconnects Forgejo source repositories connected with that member's token. The member stays in the organization with the same role.
+
+Use **Remove** when the person should no longer access the dashboard.
+
 When removing a teammate:
 
 1. Remove dashboard membership.
