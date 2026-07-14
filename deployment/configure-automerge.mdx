@@ -1,0 +1,103 @@
+---
+title: Configure automerge
+description: Allow selected GitHub workflow updates to merge automatically when your branch rules permit it.
+icon: shield-check
+---
+
+Use automerge only for narrow, well-tested workflows where direct updates are safe.
+
+Most production docs repositories should keep **Require review** enabled. Configure automerge when you intentionally want a workflow to update the deployment branch without a human reviewer, and your GitHub ruleset would otherwise block that write.
+
+<Callout type="warning">
+  Automerge changes repository policy. Review the ruleset with a repository or organization admin before allowing any app to bypass branch rules.
+</Callout>
+
+## When to use this
+
+Automerge is useful for low-risk maintenance workflows such as:
+
+- fixing typos after a successful grammar workflow
+- updating generated reference pages from a trusted API spec
+- applying small scheduled maintenance changes
+
+Keep **Require review** when:
+
+- the workflow can make broad editorial changes
+- the source context is large or noisy
+- the workflow is new and has not produced several correct runs
+- your repository requires human approval for compliance
+
+## Prerequisites
+
+Before changing GitHub rules, confirm:
+
+- your site is connected to GitHub from **Settings > Deployment > Git settings**
+- the GitHub App has access to the docs repository
+- the workflow has already succeeded in **Require review** mode
+- you have repository admin access, and organization admin access if an organization-level ruleset applies
+
+## Configure the GitHub ruleset
+
+Repeat this for every ruleset that targets the deployment branch. Rules can exist at both the repository and organization level.
+
+<Steps>
+  <Step title="Open GitHub rulesets">
+    In GitHub, open the repository or organization settings, then go to **Rules > Rulesets**.
+  </Step>
+
+  <Step title="Select the ruleset">
+    Open the ruleset that targets your deployment branch, such as `main`, `docs`, or the branch configured in Git settings.
+  </Step>
+
+  <Step title="Add a bypass entry">
+    In the ruleset bypass section, add the dubstack GitHub App.
+
+    Use the narrowest bypass mode that supports your policy. If your workflow must update the branch automatically, the app needs permission to bypass the rule that blocks that update.
+  </Step>
+
+  <Step title="Save the ruleset">
+    Save the rule and repeat the same change for any other repository-level or organization-level ruleset targeting the deployment branch.
+  </Step>
+
+  <Step title="Test with a narrow workflow">
+    Run a small workflow manually and confirm the run details show the expected commit, pull request, or direct update result.
+  </Step>
+</Steps>
+
+## Validate in dubstack
+
+After updating GitHub:
+
+1. Open **Automate > Workflows**.
+2. Open the workflow settings.
+3. Set the update mode to **Automatically** only if the workflow should write without review.
+4. Run the workflow once.
+5. Open the run details and confirm the result link points to the expected GitHub change.
+
+If the run cannot write, switch back to **Require review** and inspect the run error. GitHub usually reports whether a ruleset, branch protection rule, missing app permission, or repository access setting blocked the update.
+
+## Troubleshooting
+
+### The workflow opens a pull request instead of merging
+
+The workflow is still in **Require review** mode, or the ruleset does not allow automatic updates. Confirm the workflow update mode and the ruleset bypass entries.
+
+### The workflow fails with a protected branch error
+
+Check every ruleset that targets the deployment branch. Organization-level rulesets apply in addition to repository-level rulesets.
+
+### The app is not available in the bypass list
+
+Confirm the GitHub App is installed on the organization or account that owns the repository, and that the repository is included in the app installation.
+
+### The wrong branch was updated
+
+Open **Settings > Deployment > Git settings** and verify the deployment branch. The workflow writes to the active docs repository and branch unless a review branch is created for the selected update mode.
+
+## Related
+
+- [GitHub](/deployment/github)
+- [Configure workflow runs](/workflows/configuration)
+- [Manage workflows](/workflows/manage)
+- [Deployment permissions](/dashboard/deployment-permissions)
+- [Source control troubleshooting](/deployment/source-control-troubleshooting)

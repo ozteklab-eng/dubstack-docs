@@ -216,6 +216,10 @@
                 "icon": "github"
               },
               {
+                "slug": "deployment/configure-automerge",
+                "icon": "shield-check"
+              },
+              {
                 "slug": "deployment/gitlab",
                 "icon": "gitlab"
               },
