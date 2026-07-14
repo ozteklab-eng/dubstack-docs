@@ -93,6 +93,74 @@ Successful requests return `202 Accepted` with the queued workflow run.
 
 API-triggered runs appear in workflow history with the `api` trigger source. Usage reporting stores the Admin API key prefix for auditability, not the raw key.
 
+## CI examples
+
+Use CI triggers when your source repository should decide when to queue a saved workflow. The workflow still uses the configuration saved in dubstack.
+
+### GitHub Actions
+
+Store the Admin API key as a repository or organization secret named `DUBSTACK_ADMIN_API_KEY`.
+
+```yaml .github/workflows/dubstack-workflow.yml
+name: Trigger dubstack workflow
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Queue workflow
+        env:
+          DUBSTACK_API_URL: https://api.dubstack.ai
+          DUBSTACK_ADMIN_API_KEY: ${{ secrets.DUBSTACK_ADMIN_API_KEY }}
+          DUBSTACK_WORKFLOW_ID: fix_broken_links
+        run: |
+          curl --fail --show-error --request POST \
+            --url "${DUBSTACK_API_URL}/api/agent/workflows/${DUBSTACK_WORKFLOW_ID}/api-trigger" \
+            --header "Authorization: Bearer ${DUBSTACK_ADMIN_API_KEY}" \
+            --header "Content-Type: application/json" \
+            --data '{}'
+```
+
+### Forgejo or Gitea Actions
+
+Store the Admin API key as an action secret named `DUBSTACK_ADMIN_API_KEY`.
+
+```yaml .forgejo/workflows/dubstack-workflow.yml
+name: Trigger dubstack workflow
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  trigger:
+    runs-on: docker
+    steps:
+      - name: Queue workflow
+        env:
+          DUBSTACK_API_URL: https://api.dubstack.ai
+          DUBSTACK_ADMIN_API_KEY: ${{ secrets.DUBSTACK_ADMIN_API_KEY }}
+          DUBSTACK_WORKFLOW_ID: fix_broken_links
+        run: |
+          curl --fail --show-error --request POST \
+            --url "${DUBSTACK_API_URL}/api/agent/workflows/${DUBSTACK_WORKFLOW_ID}/api-trigger" \
+            --header "Authorization: Bearer ${DUBSTACK_ADMIN_API_KEY}" \
+            --header "Content-Type: application/json" \
+            --data '{}'
+```
+
+<Callout type="info">
+  API triggers are best for deliberate CI, release, or scheduler automation. For reactive documentation updates from merged source pull requests or merge requests, use the **Code change** trigger in workflow settings.
+</Callout>
+
 ## Error reasons
 
 | Reason | Meaning |
