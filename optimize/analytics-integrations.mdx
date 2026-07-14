@@ -1,0 +1,169 @@
+---
+title: Analytics integrations
+description: Send published docs traffic to Google Analytics, Google Tag Manager, Plausible, or PostHog.
+icon: chart-network
+---
+
+Analytics integrations let you forward docs traffic to the analytics tools your team already uses.
+
+DubStack records built-in traffic, search, assistant, and feedback analytics for the dashboard. Third-party analytics integrations add provider tags to the published docs site so page traffic can also flow to your own analytics workspace.
+
+<Info>
+  Only add public analytics identifiers to `dubstack.json`. Do not publish private API keys, server-side secrets, or write tokens in your docs repository.
+</Info>
+
+## Configure from the dashboard
+
+1. Open your site in the dashboard.
+2. Go to **Editor**.
+3. Open **Configuration**.
+4. Select **Analytics**.
+5. Add the provider IDs you want to use.
+6. Save and publish the site.
+
+The dashboard writes the same values to the site configuration that you can edit directly in `dubstack.json`.
+
+## Configure in dubstack.json
+
+Add supported providers under the top-level `integrations` object.
+
+```json dubstack.json
+{
+  "integrations": {
+    "ga4": {
+      "measurementId": "G-XXXXXXXXXX"
+    },
+    "gtm": {
+      "tagId": "GTM-XXXXXXX"
+    },
+    "plausible": {
+      "domain": "docs.example.com",
+      "server": "https://plausible.example.com"
+    },
+    "posthog": {
+      "apiKey": "phc_your_public_project_key",
+      "apiHost": "https://app.posthog.com",
+      "sessionRecording": false
+    }
+  }
+}
+```
+
+You only need to include the providers you use.
+
+## Google Analytics 4
+
+Create a GA4 web stream for your docs domain, then copy the measurement ID.
+
+```json dubstack.json
+{
+  "integrations": {
+    "ga4": {
+      "measurementId": "G-XXXXXXXXXX"
+    }
+  }
+}
+```
+
+The measurement ID must start with `G-`.
+
+## Google Tag Manager
+
+Add your GTM container ID when you want Google Tag Manager to manage analytics and marketing tags for the docs site.
+
+```json dubstack.json
+{
+  "integrations": {
+    "gtm": {
+      "tagId": "GTM-XXXXXXX"
+    }
+  }
+}
+```
+
+The tag ID must start with `GTM-`.
+
+<Warning>
+  You are responsible for cookie consent, privacy notices, and regional compliance for tags you load through Google Tag Manager.
+</Warning>
+
+## Plausible
+
+Use Plausible for lightweight privacy-focused page analytics.
+
+```json dubstack.json
+{
+  "integrations": {
+    "plausible": {
+      "domain": "docs.example.com"
+    }
+  }
+}
+```
+
+For a self-hosted Plausible instance, add `server`.
+
+```json dubstack.json
+{
+  "integrations": {
+    "plausible": {
+      "domain": "docs.example.com",
+      "server": "https://plausible.example.com"
+    }
+  }
+}
+```
+
+Use the published docs hostname as `domain`. Include `https://` for `server` when you provide a self-hosted Plausible URL.
+
+## PostHog
+
+Add your public PostHog project key to collect docs traffic in PostHog.
+
+```json dubstack.json
+{
+  "integrations": {
+    "posthog": {
+      "apiKey": "phc_your_public_project_key",
+      "apiHost": "https://app.posthog.com",
+      "sessionRecording": false
+    }
+  }
+}
+```
+
+`apiHost` is optional for PostHog Cloud. Set it when you use a regional or self-hosted PostHog instance.
+
+`sessionRecording` defaults to `false`. Set it to `true` only when your privacy policy and consent flow allow session recordings on documentation pages.
+
+## Preview and custom domains
+
+Third-party analytics tags are added to published docs pages after the site is synced and rendered with the latest configuration.
+
+For custom domains:
+
+- use the final public hostname in provider dashboards
+- allow the provider script domains in your Content Security Policy if you configure CSP headers
+- confirm path-based docs mounts still load provider scripts from the public route
+
+For preview links, expect analytics behavior to depend on the deployment and provider settings. Use a published deployment for final provider verification.
+
+## Troubleshooting
+
+If analytics do not appear in your provider:
+
+1. Confirm the provider ID is in `dubstack.json` or saved from **Configuration > Analytics**.
+2. Publish the site after changing analytics settings.
+3. Open the public docs site, not only the dashboard preview.
+4. Check the provider's realtime or debug view.
+5. Check browser console and network requests for CSP or ad-blocker blocks.
+6. Wait for provider-side processing delays before assuming the integration failed.
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/optimize/analytics">Analytics</a>
+  <a href="/deployment/csp-configuration">CSP configuration</a>
+  <a href="/configuration/dubstack-json">dubstack.json</a>
+  <a href="/optimize/feedback">Feedback</a>
+</RelatedTopics>

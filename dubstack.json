@@ -571,6 +571,10 @@
                 "icon": "chart-no-axes-combined"
               },
               {
+                "slug": "optimize/analytics-integrations",
+                "icon": "chart-network"
+              },
+              {
                 "slug": "optimize/seo",
                 "icon": "search-check"
               },
