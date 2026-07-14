@@ -121,6 +121,9 @@
       "perplexity": "Ask Perplexity"
     }
   },
+  "search": {
+    "prompt": "Search docs..."
+  },
   "widgets": {
     "search": {
       "enabled": true,

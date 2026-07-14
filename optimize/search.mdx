@@ -8,6 +8,34 @@ Search helps readers find the right page without knowing your navigation structu
 
 dubstack builds search from published docs content. Good search quality starts with clear page metadata, strong headings, and navigation that reflects the way readers think about your product.
 
+## Configure the search bar
+
+Open **Settings > Deployment > Search** to change the placeholder shown in the public search entry points.
+
+The dashboard saves this value to `search.prompt` in `dubstack.json` and mirrors it to the existing search widget placeholders for compatibility:
+
+```json
+{
+  "search": {
+    "prompt": "Search docs..."
+  },
+  "widgets": {
+    "search": {
+      "placeholder": "Search docs..."
+    },
+    "sidebar_search": {
+      "placeholder": "Search docs..."
+    }
+  }
+}
+```
+
+Use short helper text that matches the reader's intent. For example, API-heavy docs can use `Search endpoints...`, while internal knowledge bases can use `Search policies and runbooks...`.
+
+<Callout type="info">
+  Product and version filters are shown only after the site has indexed navigation metadata for those filters. If the dashboard marks those controls as unavailable, keep tuning search through page metadata, navigation labels, and ranking boosts.
+</Callout>
+
 ## What search uses
 
 Search quality is influenced by:

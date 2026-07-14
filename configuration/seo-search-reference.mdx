@@ -75,22 +75,30 @@ Published indexing is based on visible navigation plus explicit hidden indexing 
 
 | Field | Type | Default | Purpose |
 | --- | --- | --- | --- |
+| `search.prompt` | string | Theme default | Canonical source-backed placeholder for public search entry points. |
 | `widgets.search.placeholder` | string | Theme default | Placeholder text in the search box. |
+| `widgets.sidebar_search.placeholder` | string | Theme default | Compatibility placeholder for sidebar search when a theme uses a separate sidebar widget. |
 | Navigation group `boost` | number | `1` | Applies a ranking multiplier to every page under the group unless a child group or page overrides it. |
 | Page `boost` frontmatter | number | `1` | Raises the ranking weight for that page in search and assistant retrieval. |
 | Page `searchable` frontmatter | boolean | `true` | Removes a page from search and retrieval when set to `false`. |
 
 ```json
 {
+  "search": {
+    "prompt": "Search docs..."
+  },
   "widgets": {
     "search": {
+      "placeholder": "Search docs..."
+    },
+    "sidebar_search": {
       "placeholder": "Search docs..."
     }
   }
 }
 ```
 
-Search results are built from published content. If a page is missing from search, check navigation, frontmatter, and indexing policy first.
+The dashboard Search settings page writes `search.prompt` and mirrors it to existing widget placeholders so older themes and current themes render the same placeholder. Search results are built from published content. If a page is missing from search, check navigation, frontmatter, and indexing policy first.
 
 ```json
 {

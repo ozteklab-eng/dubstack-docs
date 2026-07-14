@@ -29,6 +29,7 @@ This reference covers fields currently used by the public renderer, sync worker,
 | `navigation.languages` | array | Language selector and locale-prefixed routing options. |
 | `redirects` | array | Source-to-destination redirects. |
 | `contextual.options` | array | Page action menu options. |
+| `search.prompt` | string | Canonical public search placeholder managed by Search settings. |
 | `widgets.search.enabled` | boolean | Enables site search. |
 | `widgets.assistant` | object | Public assistant labels and welcome copy. |
 | `api.openapi` | string | Default OpenAPI spec path. |
@@ -159,6 +160,27 @@ Leave `redirect` empty to render the not-found page. Set it to a root-relative p
   }
 }
 ```
+
+## Search
+
+```json
+{
+  "search": {
+    "prompt": "Search docs..."
+  },
+  "widgets": {
+    "search": {
+      "enabled": true,
+      "placeholder": "Search docs..."
+    },
+    "sidebar_search": {
+      "placeholder": "Search docs..."
+    }
+  }
+}
+```
+
+`search.prompt` is the canonical placeholder used by Search settings. `widgets.search.placeholder` and `widgets.sidebar_search.placeholder` are kept in sync for renderer and theme compatibility.
 
 ## Feedback add-on
 
