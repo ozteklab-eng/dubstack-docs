@@ -14,13 +14,19 @@ The dashboard is the source of truth for current plan names, prices, allowances,
 
 Common workspace states include:
 
-| Plan state | Typical use |
+| Plan state | Typical use | Current public pricing |
 | --- | --- |
-| Free | Evaluate the docs site, editor, source connection, and baseline publishing flow. |
-| Pro | Use custom domains, AI assistant, agent workflows, Git-backed publishing, team access, and production docs features. |
-| Enterprise | Add custom commercial terms, SSO, advanced branding, Theme Studio controls, and larger or custom AI allowances. |
+| Free | Evaluate the docs site, editor, source connection, and baseline publishing flow. | Included. |
+| Pro | Use custom domains, AI assistant, agent workflows, Git-backed publishing, team access, and production docs features. | USD 199/month, or USD 1,908/year when billed yearly. |
+| Enterprise | Add custom commercial terms, SSO, advanced branding, Theme Studio controls, and larger or custom AI allowances. | Custom. |
 
 Pro workspaces can be billed monthly or annually when both options are available for the workspace.
+
+The Pro plan is billed as a flat-rate workspace subscription. It is not seat-based by default. Team access, limits, and AI usage are controlled through workspace entitlements and the monthly AI credit allowance shown in the dashboard.
+
+<Callout type="info">
+  Annual Pro billing is displayed as USD 159/month in the dashboard and is charged as USD 1,908/year.
+</Callout>
 
 ## What billing controls
 
@@ -43,6 +49,8 @@ For assistant, agent, Slack, and workflow usage details, see [Usage](/dashboard/
 Workspace admins can open **Settings > Workspace > Billing** to review available plans and start checkout.
 
 The upgrade flow uses a hosted checkout page. After checkout completes, dubstack updates the workspace subscription state and refreshes feature entitlements.
+
+Checkout can collect billing details, tax information, and payment method details when required for the workspace and billing country. Do not share card details, tax identifiers, or billing secrets with support unless support explicitly asks you to use a secure channel.
 
 Use the billing portal from the same page to:
 
@@ -68,7 +76,7 @@ Invoices and receipts are available from the billing portal after a successful p
 
 ## Trials
 
-Trials can temporarily enable higher-tier features. During a trial, validate the features your team actually needs:
+New workspaces can start with a 14-day Pro trial. Trials can temporarily enable higher-tier features. During a trial, validate the features your team actually needs:
 
 - custom domain setup
 - team access
