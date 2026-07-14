@@ -93,6 +93,8 @@ Successful requests return `202 Accepted` with the queued workflow run.
 
 API-triggered runs appear in workflow history with the `api` trigger source. Usage reporting stores the Admin API key prefix for auditability, not the raw key.
 
+Triggered runs use the same credit accounting as other workflow runs. Actual credits depend on the saved workflow configuration, selected context repositories, enabled integrations, files changed, and run duration.
+
 ## CI examples
 
 Use CI triggers when your source repository should decide when to queue a saved workflow. The workflow still uses the configuration saved in dubstack.
