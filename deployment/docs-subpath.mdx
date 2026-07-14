@@ -43,11 +43,21 @@ The origin hostname has this shape:
 <site>--origin.dubstack.live
 ```
 
-Proxy to the origin with the `/docs` path preserved:
+Proxy page routes to the origin with the `/docs` path preserved:
 
 ```text
 https://example.com/docs     -> https://<site>--origin.dubstack.live/docs
 https://example.com/docs/... -> https://<site>--origin.dubstack.live/docs/...
+```
+
+Runtime endpoints and discovery files stay mounted at `/docs` for visitors, but are forwarded to the origin's canonical endpoint path:
+
+```text
+https://example.com/docs/api/theme           -> https://<site>--origin.dubstack.live/api/theme
+https://example.com/docs/feedback            -> https://<site>--origin.dubstack.live/feedback
+https://example.com/docs/llms.txt            -> https://<site>--origin.dubstack.live/llms.txt
+https://example.com/docs/mcp                 -> https://<site>--origin.dubstack.live/mcp
+https://example.com/docs/.well-known/mcp     -> https://<site>--origin.dubstack.live/.well-known/mcp
 ```
 
 ## Routing model
@@ -68,7 +78,7 @@ GET /docs/mcp          -> dubstack origin public MCP server
 GET /docs/.well-known/* -> dubstack origin discovery metadata
 ```
 
-Do not strip `/docs` before forwarding to dubstack. The origin is designed to receive the `/docs` prefix and render public links, assets, assistant calls, search, MCP metadata, and LLM indexes under that same prefix.
+Do not strip `/docs` from the public URL seen by users. Your proxy may forward selected runtime paths to their canonical origin path, but it must keep the public mounted URL in forwarded headers so dubstack can generate mounted links, source URLs, assistant calls, search responses, MCP metadata, and LLM indexes.
 
 For public MCP, the client-facing endpoint must stay mounted at `/docs/mcp`. Your proxy should also forward:
 
@@ -94,6 +104,7 @@ const DOCS_PREFIX = '/docs';
 const REWRITABLE_PREFIXES = [
   '/_next/',
   '/api/',
+  '/img/',
   '/assets/',
   '/images/',
   '/fonts/',
@@ -103,10 +114,14 @@ const REWRITABLE_PREFIXES = [
   '/apple-touch-icon',
   '/robots.txt',
   '/sitemap.xml',
+  '/openapi.json',
+  '/api-reference/openapi.json',
   '/feedback',
   '/llms',
   '/skill.md',
-  '/.well-known/',
+  '/.well-known/agent-card.json',
+  '/.well-known/agent-skills/',
+  '/.well-known/skills/',
 ];
 
 function shouldPrefix(value) {
@@ -120,6 +135,67 @@ function prefixValue(value) {
   return shouldPrefix(value) ? `${DOCS_PREFIX}${value}` : value;
 }
 
+function normalizeHostname(value) {
+  return String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/^https?:\/\//, '')
+    .replace(/\/.*$/, '')
+    .replace(/:\d+$/, '');
+}
+
+function withDocsPrefix(pathname) {
+  if (pathname === DOCS_PREFIX || pathname.startsWith(`${DOCS_PREFIX}/`)) return pathname;
+  if (pathname === '/') return DOCS_PREFIX;
+  return `${DOCS_PREFIX}${pathname.startsWith('/') ? pathname : '/' + pathname}`;
+}
+
+function prefixLocationValue(value) {
+  const trimmed = String(value || '').trim();
+  if (!trimmed || trimmed.startsWith('//')) return value;
+
+  if (/^https?:\/\//i.test(trimmed)) {
+    try {
+      const url = new URL(trimmed);
+      const hostname = normalizeHostname(url.hostname);
+      if (hostname !== DOCS_ORIGIN_HOST && hostname !== PUBLIC_HOST) return value;
+      url.protocol = 'https:';
+      url.hostname = PUBLIC_HOST;
+      url.port = '';
+      url.pathname = withDocsPrefix(url.pathname);
+      return url.toString();
+    } catch {
+      return value;
+    }
+  }
+
+  if (!trimmed.startsWith('/')) return value;
+
+  try {
+    const url = new URL(trimmed, 'https://docs.local');
+    return new URL(`${withDocsPrefix(url.pathname)}${url.search}${url.hash}`, `https://${PUBLIC_HOST}`).toString();
+  } catch {
+    return new URL(withDocsPrefix(trimmed), `https://${PUBLIC_HOST}`).toString();
+  }
+}
+
+function isRedirectStatus(status) {
+  return status >= 300 && status < 400;
+}
+
+function prefixSrcSet(value) {
+  return value
+    .split(',')
+    .map((candidate) => {
+      const leading = candidate.match(/^\s*/)?.[0] || '';
+      const trimmed = candidate.trim();
+      if (!trimmed) return candidate;
+      const [url, ...descriptors] = trimmed.split(/\s+/);
+      return `${leading}${[prefixValue(url), ...descriptors].join(' ')}`;
+    })
+    .join(',');
+}
+
 function prefixCssUrls(value) {
   return value.replace(/url\((['"]?)(\/[^'")]+)\1\)/g, (match, quote, url) => {
     const next = prefixValue(url);
@@ -127,14 +203,78 @@ function prefixCssUrls(value) {
   });
 }
 
+class DocsAssetPrefixer {
+  element(element) {
+    for (const attr of ['href', 'src', 'action', 'poster']) {
+      const value = element.getAttribute(attr);
+      if (value) element.setAttribute(attr, prefixValue(value));
+    }
+
+    const srcset = element.getAttribute('srcset');
+    if (srcset) element.setAttribute('srcset', prefixSrcSet(srcset));
+
+    const style = element.getAttribute('style');
+    if (style) element.setAttribute('style', prefixCssUrls(style));
+  }
+}
+
+function prefixResponseHeaders(response) {
+  const headers = new Headers(response.headers);
+
+  const link = headers.get('link');
+  if (link) {
+    headers.set('link', link.replace(/<([^>]+)>/g, (match, href) => (
+      shouldPrefix(href) ? `<${DOCS_PREFIX}${href}>` : match
+    )));
+  }
+
+  const location = headers.get('location');
+  if (location) {
+    headers.set('location', prefixLocationValue(location));
+  }
+
+  headers.delete('content-length');
+  return cloneResponseWithHeaders(response, headers);
+}
+
+function cloneResponseWithHeaders(response, headers) {
+  return new Response(isRedirectStatus(response.status) ? null : response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
 function shouldProxy(pathname) {
   return pathname === DOCS_PREFIX || pathname.startsWith(`${DOCS_PREFIX}/`);
+}
+
+function stripDocsPrefix(pathname) {
+  if (pathname === DOCS_PREFIX) return '/';
+  if (pathname.startsWith(`${DOCS_PREFIX}/`)) {
+    return pathname.slice(DOCS_PREFIX.length) || '/';
+  }
+  return null;
+}
+
+function mapMountedPathToOrigin(pathname) {
+  const stripped = stripDocsPrefix(pathname);
+  if (stripped === '/mcp' || stripped === '/mcp/') return '/mcp';
+  if (stripped === '/.well-known/mcp' || stripped === '/.well-known/mcp.json') return stripped;
+  if (stripped?.startsWith('/.well-known/mcp/')) return stripped.replace(/\/+$/, '');
+  if (stripped === '/.well-known/agent-card.json') return stripped;
+  if (stripped?.startsWith('/.well-known/agent-skills/') || stripped?.startsWith('/.well-known/skills/')) {
+    return stripped.replace(/\/+$/, '');
+  }
+  if (stripped && REWRITABLE_PREFIXES.some((prefix) => stripped.startsWith(prefix))) return stripped;
+  return pathname;
 }
 
 function buildProxyRequest(request) {
   const target = new URL(request.url);
   target.hostname = DOCS_ORIGIN_HOST;
   target.protocol = 'https:';
+  target.pathname = mapMountedPathToOrigin(target.pathname);
 
   const proxyRequest = new Request(target, request);
   proxyRequest.headers.set('X-Forwarded-Host', PUBLIC_HOST);
@@ -142,7 +282,7 @@ function buildProxyRequest(request) {
   proxyRequest.headers.set('X-Forwarded-Proto', 'https');
   proxyRequest.headers.set('X-Docs-Base-Path', DOCS_PREFIX);
   proxyRequest.headers.set('X-Public-Mcp-Url', `https://${PUBLIC_HOST}${DOCS_PREFIX}/mcp`);
-  return proxyRequest;
+  return new Request(proxyRequest, { redirect: 'manual' });
 }
 
 export default {
@@ -153,7 +293,9 @@ export default {
       return fetch(request);
     }
 
-    const response = await fetch(buildProxyRequest(request));
+    const response = prefixResponseHeaders(await fetch(buildProxyRequest(request)));
+    if (isRedirectStatus(response.status)) return response;
+
     const contentType = response.headers.get('content-type') || '';
 
     if (contentType.includes('text/css')) {
@@ -165,12 +307,16 @@ export default {
       });
     }
 
-    return response;
+    if (!contentType.includes('text/html')) return response;
+
+    return new HTMLRewriter()
+      .on('[href],[src],[action],[poster],[srcset],[style]', new DocsAssetPrefixer())
+      .transform(response);
   }
 };
 ```
 
-If your Worker also rewrites HTML or response headers, keep those rewrites limited to `/docs` traffic. The dubstack dashboard includes a fuller Worker snippet that prefixes supported static asset paths, CSS font URLs, and preload headers for stricter root-site setups.
+Keep these rewrites limited to `/docs` traffic. The dubstack dashboard generates a site-specific copy of this Worker snippet with your actual origin hostname and public host filled in.
 
 ## Vercel rewrites example
 
@@ -179,6 +325,98 @@ Use this when your root site is deployed on Vercel.
 ```json
 {
   "rewrites": [
+    {
+      "source": "/docs/mcp",
+      "destination": "https://<site>--origin.dubstack.live/mcp"
+    },
+    {
+      "source": "/docs/.well-known/:match*",
+      "destination": "https://<site>--origin.dubstack.live/.well-known/:match*"
+    },
+    {
+      "source": "/docs/api/:match*",
+      "destination": "https://<site>--origin.dubstack.live/api/:match*"
+    },
+    {
+      "source": "/docs/_next/:match*",
+      "destination": "https://<site>--origin.dubstack.live/_next/:match*"
+    },
+    {
+      "source": "/docs/assets/:match*",
+      "destination": "https://<site>--origin.dubstack.live/assets/:match*"
+    },
+    {
+      "source": "/docs/images/:match*",
+      "destination": "https://<site>--origin.dubstack.live/images/:match*"
+    },
+    {
+      "source": "/docs/img/:match*",
+      "destination": "https://<site>--origin.dubstack.live/img/:match*"
+    },
+    {
+      "source": "/docs/fonts/:match*",
+      "destination": "https://<site>--origin.dubstack.live/fonts/:match*"
+    },
+    {
+      "source": "/docs/favicon.ico",
+      "destination": "https://<site>--origin.dubstack.live/favicon.ico"
+    },
+    {
+      "source": "/docs/favicon.svg",
+      "destination": "https://<site>--origin.dubstack.live/favicon.svg"
+    },
+    {
+      "source": "/docs/logo-light.svg",
+      "destination": "https://<site>--origin.dubstack.live/logo-light.svg"
+    },
+    {
+      "source": "/docs/logo-dark.svg",
+      "destination": "https://<site>--origin.dubstack.live/logo-dark.svg"
+    },
+    {
+      "source": "/docs/site.webmanifest",
+      "destination": "https://<site>--origin.dubstack.live/site.webmanifest"
+    },
+    {
+      "source": "/docs/web-app-manifest-192x192.png",
+      "destination": "https://<site>--origin.dubstack.live/web-app-manifest-192x192.png"
+    },
+    {
+      "source": "/docs/web-app-manifest-512x512.png",
+      "destination": "https://<site>--origin.dubstack.live/web-app-manifest-512x512.png"
+    },
+    {
+      "source": "/docs/apple-touch-icon.png",
+      "destination": "https://<site>--origin.dubstack.live/apple-touch-icon.png"
+    },
+    {
+      "source": "/docs/robots.txt",
+      "destination": "https://<site>--origin.dubstack.live/robots.txt"
+    },
+    {
+      "source": "/docs/sitemap.xml",
+      "destination": "https://<site>--origin.dubstack.live/sitemap.xml"
+    },
+    {
+      "source": "/docs/openapi.json",
+      "destination": "https://<site>--origin.dubstack.live/openapi.json"
+    },
+    {
+      "source": "/docs/api-reference/openapi.json",
+      "destination": "https://<site>--origin.dubstack.live/api-reference/openapi.json"
+    },
+    {
+      "source": "/docs/llms.txt",
+      "destination": "https://<site>--origin.dubstack.live/llms.txt"
+    },
+    {
+      "source": "/docs/skill.md",
+      "destination": "https://<site>--origin.dubstack.live/skill.md"
+    },
+    {
+      "source": "/docs/feedback",
+      "destination": "https://<site>--origin.dubstack.live/feedback"
+    },
     {
       "source": "/docs",
       "destination": "https://<site>--origin.dubstack.live/docs"
@@ -191,13 +429,42 @@ Use this when your root site is deployed on Vercel.
 }
 ```
 
-The first rewrite handles the docs homepage. The second handles nested pages, assets, APIs, search, assistant requests, and AI-readable metadata under `/docs`.
+Place the runtime rewrites before the catch-all page rewrite. Vercel rewrites do not automatically add the forwarded base-path headers shown above, so use an edge middleware or platform that can set `X-Docs-Base-Path` and `X-Public-Mcp-Url` when public MCP or AI-readable discovery files are enabled.
 
 ## Generic reverse proxy example
 
-For Nginx-style reverse proxies, preserve `/docs` and forward the public host headers.
+For Nginx-style reverse proxies, preserve `/docs` for page routes and forward runtime endpoints to their canonical origin paths.
 
 ```nginx
+location = /docs/mcp {
+  proxy_pass https://<site>--origin.dubstack.live/mcp;
+  proxy_set_header X-Forwarded-Host $host;
+  proxy_set_header X-Public-Host $host;
+  proxy_set_header X-Forwarded-Proto https;
+  proxy_set_header X-Docs-Base-Path /docs;
+  proxy_set_header X-Public-Mcp-Url https://$host/docs/mcp;
+}
+
+location /docs/.well-known/ {
+  rewrite ^/docs(/.*)$ $1 break;
+  proxy_pass https://<site>--origin.dubstack.live;
+  proxy_set_header X-Forwarded-Host $host;
+  proxy_set_header X-Public-Host $host;
+  proxy_set_header X-Forwarded-Proto https;
+  proxy_set_header X-Docs-Base-Path /docs;
+  proxy_set_header X-Public-Mcp-Url https://$host/docs/mcp;
+}
+
+location ~ ^/docs/(_next/|api/|img/|assets/|images/|fonts/|favicon|logo|site\.webmanifest|apple-touch-icon|web-app-manifest|robots\.txt|sitemap\.xml|openapi\.json|api-reference/openapi\.json|feedback|llms|skill\.md) {
+  rewrite ^/docs(/.*)$ $1 break;
+  proxy_pass https://<site>--origin.dubstack.live;
+  proxy_set_header X-Forwarded-Host $host;
+  proxy_set_header X-Public-Host $host;
+  proxy_set_header X-Forwarded-Proto https;
+  proxy_set_header X-Docs-Base-Path /docs;
+  proxy_set_header X-Public-Mcp-Url https://$host/docs/mcp;
+}
+
 location = /docs {
   proxy_pass https://<site>--origin.dubstack.live/docs;
   proxy_set_header X-Forwarded-Host $host;
