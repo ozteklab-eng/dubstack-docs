@@ -7,46 +7,31 @@ rss: true
 
 Follow this changelog for notable updates to the dubstack product documentation.
 
-<Update label="Planning guides added" description="Added use-case, content planning, layout, and security overview guides for launch-readiness coverage." tags={["docs", "guides"]}>
-  New guides cover developer documentation, internal knowledge bases, help centers, content types, content templates, custom layouts, and the current dashboard security boundary.
+<Update label="2026-07-14" description="Planning and security guides added." tags={["docs", "guides"]}>
+  Added launch-readiness guides for developer documentation, internal knowledge bases, help centers, content types, content templates, custom layouts, and the current dashboard security boundary.
 </Update>
 
-<Update label="MCP API reference redirects" description="Added compatibility redirects for earlier MCP discovery endpoint slugs." tags={["api", "mcp"]}>
-  Older API reference links for MCP discovery now redirect to the current MCP server-card endpoint pages.
+<Update label="2026-07-13" description="Git provider states and MCP API redirects clarified." tags={["deployment", "workflows", "api", "mcp"]}>
+  - Older MCP discovery API reference links now redirect to the current MCP server-card endpoint pages.
+  - Git settings docs now distinguish active deployment sources, authoring reconnects, source repositories, copy targets, and webhook state labels.
+  - Forgejo docs now separate repository-copy targets, workflow source repositories, and environment-enabled deployment-source mode.
 </Update>
 
-<Update label="Git settings states clarified" description="Explained active sources, authoring reconnects, source repositories, copy targets, and webhook state labels." tags={["deployment", "workflows"]}>
-  Git settings docs now clarify how multiple provider connections can coexist without changing the live deployment source.
+<Update label="2026-07-12" description="Repository copy workflows and mounted MCP validation documented." tags={["workflows", "deployment", "mcp"]}>
+  - Repository copy workflows can copy the active docs source into a configured provider target for backup, provider testing, or migration rehearsal without changing the live deployment source.
+  - Public MCP endpoints now work through host-based docs sites and path-mounted custom domains when the proxy forwards the MCP, discovery, and feedback paths.
 </Update>
 
-<Update label="Forgejo setup clarified" description="Separated Forgejo repository-copy targets, workflow source repositories, and environment-enabled deployment-source mode." tags={["deployment", "workflows"]}>
-  Git settings now documents Forgejo as safe workflow source context and repository-copy target setup by default, with active deployment-source mode shown only when it is enabled for the workspace.
-</Update>
-
-<Update label="Repository copy workflows" description="Documented one-time repository copy workflows, copy targets, run results, and credit usage." tags={["workflows", "deployment"]}>
-  Repository copy workflows can copy the active docs source into a configured provider target for backup, provider testing, or migration rehearsal without changing the live deployment source.
-</Update>
-
-<Update label="Mounted docs MCP validation" description="Validated public MCP discovery, search, docs filesystem access, and feedback submission through a /docs route mount." tags={["mcp", "deployment"]}>
-  Public MCP endpoints now work through host-based docs sites and path-mounted custom domains when the proxy forwards the MCP, discovery, and feedback paths.
-</Update>
-
-<Update label="Custom-domain verification docs" description="Documented verification TXT records, traffic CNAME setup, TLS readiness, and /docs route-mount boundaries." tags={["deployment", "docs"]}>
+<Update label="2026-07-07" description="Custom-domain verification docs expanded." tags={["deployment", "docs"]}>
   The custom-domain guide now explains why host-based domains use separate hostname ownership, certificate validation, and traffic routing records before a domain is production-ready.
 </Update>
 
-<Update label="Public docs expanded" description="Expanded the customer-facing product docs with clearer AI, Theme Studio, API, deployment, and configuration guidance." tags={["docs"]}>
+<Update label="2026-06-27" description="Public docs expanded across AI, Theme Studio, API, deployment, and configuration." tags={["docs", "api", "ai"]}>
   The docs now separate public product guidance from internal architecture notes and use the canonical Git-backed product docs repository as the source of truth.
+
+  This update also added the generated API reference, API playground guidance, MCP discovery endpoints, assistant request examples, public MCP retrieval tools, optional agent feedback, discovery paths, skill file guidance, and current authoring boundaries.
 </Update>
 
-<Update label="API reference added" description="Added the docs runtime OpenAPI reference, API playground guidance, MCP discovery endpoints, and assistant request examples." tags={["api", "docs"]}>
-  The API reference is generated from the product docs OpenAPI spec and is published as part of the public docs site.
-</Update>
-
-<Update label="MCP documentation added" description="Documented the public MCP retrieval tools, optional agent feedback, discovery paths, skill file, and current authoring boundaries." tags={["mcp", "ai"]}>
-  Public MCP access is scoped to published docs content and remains separate from authenticated dashboard authoring workflows.
-</Update>
-
-<Update label="Initial product docs scaffold" description="Created the canonical dubstack product documentation repository structure." tags={["docs"]}>
+<Update label="2026-05-26" description="Initial product docs scaffold created." tags={["docs"]}>
   The first version defined the customer-facing docs information architecture and separated it from starter templates and internal operations notes.
 </Update>
