@@ -144,6 +144,56 @@ Server-card responses include tool metadata and safety annotations so MCP client
 
 The public server reserves `/mcp` for MCP. Do not create docs pages or redirects at that path.
 
+The discovery document lists the available server endpoints:
+
+```json
+{
+  "version": "1.0.0",
+  "transport": "http",
+  "url": "https://your-docs-domain.com/mcp",
+  "servers": [
+    {
+      "name": "public",
+      "title": "Your docs",
+      "description": "Your site description",
+      "url": "https://your-docs-domain.com/mcp",
+      "transport": "http",
+      "authentication": "none"
+    }
+  ]
+}
+```
+
+The server card adds capabilities and tool metadata:
+
+```json
+{
+  "name": "your-docs-public-mcp",
+  "version": "1.0.0",
+  "url": "https://your-docs-domain.com/mcp",
+  "transport": "http",
+  "authentication": "none",
+  "capabilities": {
+    "tools": true,
+    "resources": true
+  },
+  "tools": [
+    {
+      "name": "search",
+      "title": "Search documentation",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    }
+  ]
+}
+```
+
+Use the tool names returned by the server card. Do not hardcode site-specific names in custom clients.
+
 For `/docs` subpath deployments, the same public paths live under the mounted prefix:
 
 ```text
@@ -164,13 +214,15 @@ The discovery documents under `/.well-known/mcp*` and the server-card responses 
 
 The server card describes tool behavior so MCP clients can show the right approval prompts:
 
-| Tool | Read-only | Idempotent | Notes |
-| --- | --- | --- | --- |
-| `search` | Yes | Yes | Searches indexed public docs content only. |
-| `query_docs_filesystem` | Yes | Yes | Reads a virtual filesystem generated from published docs. |
-| `submit_feedback` | No | No | Creates a feedback record for a documentation-quality issue when Agent feedback is enabled. |
+| Tool | `readOnlyHint` | `destructiveHint` | `idempotentHint` | `openWorldHint` | Notes |
+| --- | --- | --- | --- | --- | --- |
+| `search` | `true` | `false` | `true` | `false` | Searches indexed public docs content only. |
+| `query_docs_filesystem` | `true` | `false` | `true` | `false` | Reads a virtual filesystem generated from published docs. |
+| `submit_feedback` | `false` | `false` | `false` | `false` | Creates a feedback record for a documentation-quality issue when Agent feedback is enabled. |
 
 All public MCP tools operate against the current published docs site, not the open web.
+
+`submit_feedback` is intentionally the only write-capable public MCP tool. It cannot edit pages, change repository content, access dashboard settings, or run workflows. It only creates a feedback analytics record for the current deployment.
 
 ## Skill file
 
