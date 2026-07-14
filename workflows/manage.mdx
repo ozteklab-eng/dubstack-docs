@@ -67,11 +67,14 @@ Each run records:
 - enabled integrations
 - queued, started, and completed timestamps
 - charged or estimated credits when a usage ledger entry exists
+- current progress for active repository-copy runs, including the target provider and file count checkpoint
 - result link, such as a provider-native review request or commit
 - error message when the run fails
 - Slack notification delivery status when notifications are enabled
 
 Click a run to inspect its output, usage, and open the generated branch in the editor when an editor review link is available.
+
+Repository-copy runs update their row and details drawer while they are running. This is useful for large repositories and self-hosted targets where provider writes can take several minutes.
 
 The credit badge on a run row shows charged credits when billing is active for the run. If the workspace is in passive ledger mode, the drawer still shows the recorded estimate so teams can forecast automation usage before enforcement is enabled.
 

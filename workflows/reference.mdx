@@ -215,6 +215,8 @@ This workflow does not continuously mirror repositories. It runs only when the c
 
 Repository copy targets are configured in **Settings > Deployment > Git settings**. They do not become the active deployment source unless you deliberately switch providers from Git settings.
 
+While a repository-copy run is active, the run history shows the current target and file-count checkpoint. Open the run details drawer to see the same progress alongside the eventual per-target result.
+
 The workflow settings drawer lists the current copy targets before you enable the schedule, including provider, repository, branch, and whether the target is scoped to the site or organization.
 
 Repository copies use the saved provider credentials for the active source and each target. Large repositories or self-hosted targets can take longer because the run must read, validate, and write files through the provider APIs. If one target fails because of provider quota, branch protection, token permissions, or network reachability, the run details show that target as failed while leaving the active deployment source unchanged.
