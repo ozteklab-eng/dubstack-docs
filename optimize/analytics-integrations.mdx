@@ -42,7 +42,7 @@ Add supported providers under the top-level `integrations` object.
     },
     "posthog": {
       "apiKey": "phc_your_public_project_key",
-      "apiHost": "https://app.posthog.com",
+      "apiHost": "https://us.i.posthog.com",
       "sessionRecording": false
     }
   }
@@ -125,14 +125,14 @@ Add your public PostHog project key to collect docs traffic in PostHog.
   "integrations": {
     "posthog": {
       "apiKey": "phc_your_public_project_key",
-      "apiHost": "https://app.posthog.com",
+      "apiHost": "https://us.i.posthog.com",
       "sessionRecording": false
     }
   }
 }
 ```
 
-`apiHost` is optional for PostHog Cloud. Set it when you use a regional or self-hosted PostHog instance.
+`apiHost` is optional for PostHog Cloud. DubStack defaults to `https://us.i.posthog.com`. Set `apiHost` when you use another region or a self-hosted PostHog instance.
 
 `sessionRecording` defaults to `false`. Set it to `true` only when your privacy policy and consent flow allow session recordings on documentation pages.
 
