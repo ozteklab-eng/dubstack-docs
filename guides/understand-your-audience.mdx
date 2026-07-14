@@ -1,0 +1,109 @@
+---
+title: Understand your documentation audience
+description: Identify who each documentation page serves so navigation, examples, and maintenance work stay focused.
+icon: users
+---
+
+Good documentation starts with a clear reader. A page that tries to serve every audience usually becomes too broad, too long, and difficult to maintain.
+
+Use this guide before restructuring navigation, writing a new section, or asking an agent to improve a set of pages.
+
+## Define the primary reader
+
+For each important page, write down the primary reader and the job they are trying to complete.
+
+Good audience statements:
+
+- "A developer adding API authentication for the first time."
+- "A support engineer troubleshooting a failed deployment."
+- "A workspace admin deciding whether to enable SSO."
+- "A content author reviewing assistant feedback trends."
+
+Avoid vague labels such as "users" or "customers" unless the page is truly general.
+
+## Match content type to intent
+
+Different readers need different page shapes.
+
+| Reader intent | Strong page type | Notes |
+| --- | --- | --- |
+| Learn a concept | Overview or explanation | Keep prerequisites and terminology visible. |
+| Complete a task | Guide or tutorial | Use ordered steps, verification, and troubleshooting. |
+| Look up exact behavior | Reference | Keep descriptions precise and skimmable. |
+| Understand changes | Changelog | Link releases to updated guides and references. |
+| Fix a problem | Troubleshooting | Start with symptoms, causes, and checks. |
+
+See [content types](/guides/content-types) and [content templates](/guides/content-templates) for reusable structures.
+
+## Separate audiences in navigation
+
+If readers have different goals, separate the entry points instead of blending everything into one page.
+
+Use:
+
+- tabs for major product areas or audiences
+- groups for related tasks
+- hidden pages for support-only or work-in-progress content
+- related topics for cross-links between nearby tasks
+
+See [navigation](/configuration/navigation), [hidden pages](/configuration/hidden-pages), and [related topics](/writing-content/related-topics).
+
+## Use analytics and feedback to validate assumptions
+
+Audience planning should not stay theoretical. Use product signals to find where readers are struggling.
+
+Check:
+
+- page feedback on important pages
+- search queries with poor or no results
+- assistant conversations that repeat the same question
+- support or Slack threads that point to missing docs
+- workflow suggestions that keep touching the same area
+
+See [feedback analytics](/dashboard/feedback-analytics), [search optimization](/optimize/search), and [assistant usage](/ai/assistant-usage).
+
+## Write for one outcome at a time
+
+A page should make the next action obvious.
+
+Good page outcomes:
+
+- connect a repository
+- publish a preview deployment
+- configure a custom domain
+- review workflow output
+- authenticate an API request
+
+If a page has several unrelated outcomes, split it and connect the pieces with links.
+
+## Give agents useful writing context
+
+When you ask an AI agent to update documentation, include the target audience and outcome in the instruction.
+
+```text
+Update this guide for a workspace admin who has never connected Git before.
+Keep the steps concrete, include verification, and link to troubleshooting only at the end.
+```
+
+For repository-level guidance, add [agent instructions](/ai/agent-instructions) or [custom skill files](/ai/custom-skill-files).
+
+## Review audience drift
+
+Review audience assumptions when:
+
+- a product workflow changes
+- a new role starts using the product
+- search queries cluster around a missing topic
+- page feedback says the page is confusing
+- assistant answers cite the wrong page for common questions
+
+Use [documentation quality loops](/guides/improving-docs) and [maintenance workflows](/guides/maintenance) to make this review recurring.
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/guides/content-types">Content types</a>
+  <a href="/guides/content-templates">Content templates</a>
+  <a href="/guides/improving-docs">Improve documentation quality</a>
+  <a href="/ai/effective-agent-prompts">Effective agent prompts</a>
+</RelatedTopics>

@@ -166,6 +166,10 @@
                 "icon": "map"
               },
               {
+                "slug": "guides/understand-your-audience",
+                "icon": "users"
+              },
+              {
                 "slug": "guides/developer-documentation",
                 "icon": "code"
               },
@@ -830,6 +834,10 @@
                 "icon": "file-search"
               },
               {
+                "slug": "guides/geo",
+                "icon": "sparkles"
+              },
+              {
                 "slug": "ai/agent-readiness-checklist",
                 "icon": "list-checks"
               },
@@ -901,6 +909,10 @@
                 "icon": "map"
               },
               {
+                "slug": "guides/understand-your-audience",
+                "icon": "users"
+              },
+              {
                 "slug": "guides/developer-documentation",
                 "icon": "code"
               },
@@ -920,16 +932,16 @@
                 "slug": "guides/content-templates",
                 "icon": "layout-template"
               },
-            {
-              "slug": "guides/custom-layouts",
-              "icon": "layout-template"
-            },
-            {
-              "slug": "guides/internationalization",
-              "icon": "languages"
-            }
-          ]
-        },
+              {
+                "slug": "guides/custom-layouts",
+                "icon": "layout-template"
+              },
+              {
+                "slug": "guides/internationalization",
+                "icon": "languages"
+              }
+            ]
+          },
           {
             "group": "Writing and quality",
             "icon": "pen-line",
@@ -946,24 +958,24 @@
                 "slug": "guides/improving-docs",
                 "icon": "chart-line"
               },
-            {
-              "slug": "guides/maintenance",
-              "icon": "calendar-check"
-            },
-            {
-              "slug": "guides/seo",
-              "icon": "search"
-            },
-            {
-              "slug": "guides/linking",
-              "icon": "link"
-            },
-            {
-              "slug": "guides/media",
-              "icon": "image"
-            }
-          ]
-        },
+              {
+                "slug": "guides/maintenance",
+                "icon": "calendar-check"
+              },
+              {
+                "slug": "guides/seo",
+                "icon": "search"
+              },
+              {
+                "slug": "guides/linking",
+                "icon": "link"
+              },
+              {
+                "slug": "guides/media",
+                "icon": "image"
+              }
+            ]
+          },
           {
             "group": "Deployment",
             "icon": "rocket",
@@ -1065,6 +1077,10 @@
               {
                 "slug": "guides/use-workflows",
                 "icon": "workflow"
+              },
+              {
+                "slug": "guides/geo",
+                "icon": "sparkles"
               },
               {
                 "slug": "guides/draft-docs-from-code",

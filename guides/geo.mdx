@@ -1,0 +1,120 @@
+---
+title: Optimize docs for AI discovery
+description: Structure docs so AI search, assistants, MCP clients, and llms.txt readers can find and cite the right content.
+icon: sparkles
+---
+
+AI discovery depends on the same fundamentals as good documentation: clear titles, accurate content, descriptive links, and stable source files. The difference is that AI tools often read Markdown, indexes, MCP results, and page metadata before a human sees the page.
+
+Use this guide to make your docs easier for assistants and AI search tools to retrieve, summarize, and cite.
+
+## Start with specific page metadata
+
+Page titles and descriptions help search, assistant responses, and AI-readable exports understand what a page covers.
+
+```mdx
+---
+title: Authenticate API requests
+description: Add an API key to the Authorization header and verify authenticated requests with cURL.
+---
+```
+
+Write metadata as if answering: what can the reader do after opening this page?
+
+See [page frontmatter](/configuration/pages-frontmatter) and [SEO and search settings](/configuration/seo-search-reference).
+
+## Make headings useful out of context
+
+AI tools often retrieve sections rather than whole pages. Headings should explain the section without relying on the surrounding page title.
+
+Use headings like:
+
+- `## Create a preview deployment`
+- `## Add the Authorization header`
+- `## Verify the custom domain`
+
+Avoid headings like:
+
+- `## Setup`
+- `## More details`
+- `## Important`
+
+See [headings and anchors](/writing-content/headings-anchors).
+
+## Keep one topic per page
+
+A focused page is easier to retrieve and cite. If a page combines setup, troubleshooting, API reference, and migration notes, split it into separate pages and link them together.
+
+Use [related topics](/writing-content/related-topics) at the bottom of pages so readers and agents can follow the next logical path.
+
+## Use AI discovery files
+
+dubstack publishes AI-readable discovery surfaces for supported docs sites.
+
+| Surface | Purpose |
+| --- | --- |
+| `llms.txt` | Structured page index for AI tools. |
+| `llms-full.txt` | Larger export for tools that need complete public docs context. |
+| Public MCP | Search and page-reading tools for connected AI clients. |
+| `skill.md` | Product-specific guidance for coding agents. |
+
+See [LLM indexes](/ai/llms-indexes), [AI discovery files](/ai/ai-discovery-files), [public MCP](/ai/mcp), and [generated skill files](/ai/generated-skill-file).
+
+## Prefer plain, citable answers
+
+Write the answer directly before adding context.
+
+Good:
+
+```mdx
+To authenticate a request, send your API key in the `Authorization` header.
+```
+
+Weak:
+
+```mdx
+There are several things to know before we discuss authentication.
+```
+
+Assistants perform better when the first paragraph names the answer, the product object, and the action.
+
+## Keep examples complete
+
+Examples should include the command, the expected input shape, and how to verify success.
+
+For API docs, include:
+
+- required headers
+- request body fields
+- realistic response examples
+- common error responses
+- links to related endpoints
+
+See [request and response examples](/writing-content/request-response-examples) and [API response examples](/api-reference/response-examples).
+
+## Control what AI tools see
+
+If a page is not ready, keep it hidden or out of navigation until it is accurate. If a section is only useful for a specific audience, use visibility components or separate pages.
+
+See [visibility](/writing-content/visibility), [hidden pages](/configuration/hidden-pages), and [Markdown export](/ai/markdown-export).
+
+## Watch retrieval quality over time
+
+Use these signals to decide what to improve:
+
+- assistant answers cite a less relevant page
+- repeated assistant questions point to missing docs
+- search queries have no clear result
+- feedback says a page is incomplete or confusing
+- workflow output keeps proposing the same fix
+
+See [assistant usage](/ai/assistant-usage), [feedback analytics](/dashboard/feedback-analytics), and [improving docs](/guides/improving-docs).
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/guides/seo">Improve documentation SEO</a>
+  <a href="/ai/llms-indexes">LLM indexes</a>
+  <a href="/ai/mcp">Public MCP</a>
+  <a href="/ai/generated-skill-file">Generated skill files</a>
+</RelatedTopics>
