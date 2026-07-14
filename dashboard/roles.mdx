@@ -1,6 +1,6 @@
 ---
 title: Roles
-description: Understand owner, admin, editor, and viewer access in dubstack.
+description: Understand admin, editor, and viewer access in dubstack.
 icon: shield-check
 ---
 
@@ -14,39 +14,26 @@ Use roles to keep day-to-day documentation work fast while reserving dangerous s
 
 ## Role summary
 
-| Capability | Viewer | Editor | Admin | Owner |
-| --- | :---: | :---: | :---: | :---: |
-| View dashboard and content | Yes | Yes | Yes | Yes |
-| Ask the agent questions | Yes | Yes | Yes | Yes |
-| Edit docs content | No | Yes | Yes | Yes |
-| Publish content | No | Yes | Yes | Yes |
-| Trigger deployments | No | Yes | Yes | Yes |
-| Manage navigation and site configuration | No | Yes | Yes | Yes |
-| Create Admin API keys | No | Yes | Yes | Yes |
-| Configure integrations | No | Yes | Yes | Yes |
-| Configure assistant and workflows | No | Yes | Yes | Yes |
-| Invite editors and viewers | No | Yes | Yes | Yes |
-| Invite admins | No | No | Yes | Yes |
-| Update member roles | No | No | Yes | Yes |
-| Remove members | No | No | Yes | Yes |
-| Manage billing | No | No | Yes | Yes |
-| Manage SSO | No | No | Yes | Yes |
-| Manage custom domains | No | No | Yes | Yes |
-| Change Git source | No | No | Yes | Yes |
-| Delete organization | No | No | Yes | Yes |
-
-## Owner
-
-The owner is the primary organization authority. Ownership is created when the organization is created and should belong to a durable company-controlled account.
-
-Owners can:
-
-- manage every dashboard area
-- recover access if other admins are removed
-- control billing and destructive organization actions
-- manage SSO, domains, Git source, and member roles
-
-Keep ownership limited and protect the owner account with strong authentication.
+| Capability | Viewer | Editor | Admin |
+| --- | :---: | :---: | :---: |
+| View dashboard and content | Yes | Yes | Yes |
+| Ask the agent questions | Yes | Yes | Yes |
+| Edit docs content | No | Yes | Yes |
+| Publish content | No | Yes | Yes |
+| Trigger deployments | No | Yes | Yes |
+| Manage navigation and site configuration | No | Yes | Yes |
+| Create Admin API keys | No | Yes | Yes |
+| Configure integrations | No | Yes | Yes |
+| Configure assistant and workflows | No | Yes | Yes |
+| Invite editors and viewers | No | Yes | Yes |
+| Invite admins | No | No | Yes |
+| Update member roles | No | No | Yes |
+| Remove members | No | No | Yes |
+| Manage billing | No | No | Yes |
+| Manage SSO | No | No | Yes |
+| Manage custom domains | No | No | Yes |
+| Change Git source | No | No | Yes |
+| Delete organization | No | No | Yes |
 
 ## Admin
 
@@ -62,6 +49,8 @@ Admins can:
 - configure integrations and workflow behavior
 
 Use admin access for platform owners, docs leads, or engineering managers who are responsible for production docs operations.
+
+The first member who creates a workspace starts as the primary admin. Keep at least one durable company-controlled admin account protected with strong authentication.
 
 ## Editor
 
