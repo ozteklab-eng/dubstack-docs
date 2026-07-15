@@ -82,6 +82,7 @@ Use the status labels to identify which path a connection belongs to:
 | Active source | This provider is the deployment source that publishes the live docs site. |
 | Installed | The provider app or OAuth grant is connected for the listed account or organization. |
 | Needs reconnect | An authoring grant, OAuth token, or provider-side permission needs to be refreshed before authoring actions can use it. |
+| Copy-token readiness | The repository-copy overview count for targets with a valid repository token or provider credential. This does not mean OAuth authoring is healthy. |
 | Repository copy target | The repository can receive explicit copies from the active docs source for backup, provider testing, or migration rehearsal. |
 | Ready for copies | Repository-token access is healthy for manual copies from Git settings and scheduled repository-copy workflows. |
 | Scheduled copy target | A repository-copy workflow is enabled for this target. Runs happen only on the configured schedule or when manually triggered from Workflows. |
