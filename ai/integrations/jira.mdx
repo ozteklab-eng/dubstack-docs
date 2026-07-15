@@ -73,6 +73,10 @@ Use Jira context with jql: project = DOCS AND statusCategory != Done ORDER BY up
 
 Keep the query narrow. The agent does not infer projects, search arbitrary Jira fields, or inspect unrelated issues.
 
+<Callout type="info">
+  Jira context queries must include a search restriction, such as a project, issue key, label, fix version, or updated-date window. Broad queries like `ORDER BY updated DESC` are rejected safely instead of scanning the whole workspace.
+</Callout>
+
 ## Use Jira context in workflows
 
 Workflows that support integrations can enable Jira context.
@@ -85,6 +89,8 @@ When configuring the workflow, set:
 | Limit | Caps the number of issues included in a run. The default is 5 and the maximum is 10. |
 
 Keep JQL narrow. Smaller context usually produces better documentation updates and reduces unnecessary token usage.
+
+Unbounded JQL is blocked. Use a project, label, issue key, fix version, status, or date window so the workflow reads only the issues relevant to the documentation update.
 
 For each issue, the workflow can include the issue summary, status, issue type, project, updated timestamp, issue link, and up to two recent comments. It does not include issue attachments or arbitrary custom fields.
 

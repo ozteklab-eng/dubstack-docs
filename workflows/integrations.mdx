@@ -38,6 +38,8 @@ If any requirement is missing, the workflow should show a blocking reason instea
 
 Other providers can appear as catalog items before they are available. Catalog-only providers cannot be selected for a run until authorization, scopes, collectors, access checks, and workflow support are active.
 
+Jira JQL must be bounded. Use a project, issue key, label, fix version, status, or updated-date window. Queries that only sort results, such as `ORDER BY updated DESC`, are rejected safely instead of scanning the whole workspace.
+
 Support-feedback providers are currently catalog-gated for workflows. The **Update from support feedback** workflow remains visible, but it cannot run until a supported support-feedback connector, collector, and readiness check are available for the deployment.
 
 ## Shared and personal integrations
