@@ -1,0 +1,138 @@
+---
+title: Forgejo
+description: Connect a self-hosted Forgejo repository as a docs source, copy target, or workflow source repository.
+icon: git-branch
+---
+
+Forgejo support is for teams that keep documentation or product code in a self-hosted Git service.
+
+Use Forgejo when you want dubstack to read a reachable self-hosted repository, copy docs into a backup repository, or inspect a code repository as workflow context.
+
+<Callout type="info">
+  Forgejo repositories can have different roles. Confirm whether the repository is the active docs source, a repository copy target, or a workflow source repository before debugging sync or workflow behavior.
+</Callout>
+
+## What Forgejo can do
+
+| Capability | Status |
+| --- | --- |
+| Use a Forgejo repository as a workflow source repository | Supported where the instance is reachable by dubstack |
+| Copy docs from the active deployment source into Forgejo | Supported where repository write access is configured |
+| Use Forgejo as a backup or migration rehearsal target | Supported |
+| Queue code-change workflows from Forgejo review events | Supported when the source webhook is active |
+| Use Forgejo as the active docs deployment source | Available where enabled for the workspace |
+| Create review branches or pull requests from authoring workflows | Requires provider write access and workspace authoring support |
+
+Provider availability can depend on your plan, workspace settings, and rollout state.
+
+## Repository roles
+
+Keep these roles separate:
+
+| Role | What it does |
+| --- | --- |
+| Active docs repository | Publishes the live docs site and receives generated documentation changes. |
+| Repository copy target | Receives an explicit manual or scheduled copy from the active docs source. |
+| Workflow source repository | Provides code, API, SDK, or product context for workflows. |
+
+A Forgejo source repository does not publish docs by itself. It gives the agent or workflow bounded context, then generated documentation changes still target the active docs repository.
+
+## Requirements
+
+Before connecting Forgejo, confirm:
+
+- the Forgejo instance is reachable by dubstack over HTTPS
+- the repository and branch exist
+- the token can read the selected repository
+- copy targets have write access to the target branch
+- source repositories have webhook delivery enabled if you want event-triggered workflow runs
+- branch protection allows the update mode you choose
+
+If your Forgejo instance is not publicly reachable, use scheduled or manual workflow runs only after exposing the required provider API and webhook paths through your network boundary.
+
+## Add Forgejo in Git settings
+
+1. Open the dashboard.
+2. Select the site.
+3. Go to **Settings > Deployment > Git settings**.
+4. Open the Forgejo source or copy-target configuration.
+5. Enter the instance URL.
+6. Enter the repository owner and name.
+7. Choose the branch.
+8. Add a repository token with the minimum required access for the role.
+9. Save and confirm the card shows a valid connection.
+
+For workflow source repositories, select the Forgejo repository in the workflow configuration after saving it in Git settings.
+
+## Use Forgejo for docs publishing
+
+Use Forgejo as the active deployment source only when the workspace has that mode enabled.
+
+Before switching a live site:
+
+- copy the current docs source into the Forgejo repository
+- confirm `dubstack.json` is present at the configured docs root
+- run a manual update successfully
+- confirm the active source card points at the Forgejo repository and branch
+- confirm your team understands Forgejo is now the source of truth for production docs
+
+If the first copy or manual update fails, keep the previous active provider until the Forgejo repository validates.
+
+## Use Forgejo as a copy target
+
+Use a Forgejo copy target for:
+
+- backup copies
+- migration rehearsal
+- provider testing
+- keeping a self-hosted copy of the docs source
+
+Repository copies are explicit. A copy target is not a continuous mirror unless you configure a scheduled repository-copy workflow.
+
+See [Git sync and repository copies](/deployment/git-sync) for the provider-neutral behavior.
+
+## Use Forgejo as workflow source context
+
+Use a Forgejo source repository when product code lives outside the docs repository.
+
+Example use cases:
+
+- inspect `services/api` after a merged API change
+- inspect `apps/marketing` after a product-page change
+- inspect SDK packages before drafting SDK guide updates
+
+For the safest rollout:
+
+1. Add the Forgejo code repository as a source repository in Git settings.
+2. Select a narrow path scope in the workflow configuration.
+3. Enable **Update from code changes**.
+4. Keep **Require review** enabled.
+5. Validate one small merged pull request before broadening the scope.
+
+If the Forgejo webhook is unavailable, run the workflow manually or on a schedule after the source change has merged.
+
+## Troubleshooting
+
+### Forgejo repository cannot be read
+
+Check the instance URL, repository owner/name, branch, token permissions, and network reachability from dubstack.
+
+### Copy target fails
+
+Check write permission on the target branch, branch protection, file size limits, and whether the active docs source is valid.
+
+### Workflow does not run from code changes
+
+Confirm the source repository webhook is active, the workflow is enabled, the changed files match the path scope, and the workflow supports the code-change trigger.
+
+### Generated docs changes target the wrong repository
+
+Check the active deployment source. Source repositories provide context only; they should not receive generated docs changes unless they are also the active docs repository.
+
+## Related
+
+- [Git providers](/deployment/forgejo-github-gitlab)
+- [Git settings](/deployment/git-settings)
+- [Git sync and repository copies](/deployment/git-sync)
+- [Draft docs from code changes](/guides/draft-docs-from-code)
+- [Workflow integrations](/workflows/integrations)

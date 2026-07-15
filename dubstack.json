@@ -238,6 +238,10 @@
                 "icon": "key-round"
               },
               {
+                "slug": "deployment/forgejo",
+                "icon": "git-branch"
+              },
+              {
                 "slug": "deployment/local-git-workflow",
                 "icon": "terminal"
               },
@@ -1101,6 +1105,10 @@
               {
                 "slug": "deployment/gitlab-self-hosted-oauth",
                 "icon": "key-round"
+              },
+              {
+                "slug": "deployment/forgejo",
+                "icon": "git-branch"
               }
             ]
           },

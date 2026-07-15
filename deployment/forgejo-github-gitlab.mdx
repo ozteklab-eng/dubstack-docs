@@ -44,9 +44,9 @@ Source repositories are read-only context. They do not publish pages and they do
 | Production docs from your own hosted GitHub repository | [GitHub](/deployment/github) |
 | Keep a GitLab copy or prepare a migration | [GitLab](/deployment/gitlab) |
 | Draft GitLab merge requests from agents or workflows | [GitLab](/deployment/gitlab) with OAuth authoring access |
-| Copy docs into a self-hosted Forgejo repository | Configure Forgejo as a repository copy target in [Git settings](/deployment/git-settings). |
-| Publish from a self-hosted Forgejo docs repository | Configure Forgejo as the active deployment source in [Git settings](/deployment/git-settings) when that mode is enabled for the workspace. |
-| Use a self-hosted Forgejo code repository for workflows | Add it as a source repository in [Git settings](/deployment/git-settings), then select it in [workflow configuration](/workflows/configuration). |
+| Copy docs into a self-hosted Forgejo repository | [Forgejo](/deployment/forgejo) as a repository copy target in Git settings. |
+| Publish from a self-hosted Forgejo docs repository | [Forgejo](/deployment/forgejo) as the active deployment source when that mode is enabled for the workspace. |
+| Use a self-hosted Forgejo code repository for workflows | [Forgejo](/deployment/forgejo) as a source repository, then select it in [workflow configuration](/workflows/configuration). |
 | Review generic provider concepts | This page |
 | Configure an unsupported custom provider | Contact support or your dubstack operator before relying on it for production publishing. |
 
@@ -133,5 +133,6 @@ If the first sync fails:
 
 - [GitHub](/deployment/github)
 - [GitLab](/deployment/gitlab)
+- [Forgejo](/deployment/forgejo)
 - [Git settings](/deployment/git-settings)
 - [Deployment permissions](/dashboard/deployment-permissions)
