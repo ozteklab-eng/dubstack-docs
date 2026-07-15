@@ -49,6 +49,20 @@ Before connecting Jira, confirm:
 
 The dashboard stores the selected workspace and granted scopes for that organization or deployment scope.
 
+## OAuth scopes
+
+Jira uses Atlassian OAuth and requests read-only access so workflows and the dashboard agent can search and summarize issue context.
+
+| Scope | Purpose |
+| --- | --- |
+| `read:jira-user` | Resolves issue authors, assignees, reporters, and commenters to readable names. |
+| `read:jira-work` | Reads issues, comments, projects, and JQL search results visible to the connected account. |
+| `offline_access` | Refreshes the OAuth token so the integration keeps working without repeated consent. |
+
+dubstack does not request Jira write, transition, delete, or admin scopes.
+
+If your Atlassian organization restricts connected apps, an Atlassian admin may need to approve the dubstack OAuth app before the connection can complete. Review the consent screen before authorizing and revoke the app from Atlassian or the dubstack dashboard if access should stop.
+
 ## Use Jira context with the agent
 
 Ask for Jira context when the issue tracker contains the source details.

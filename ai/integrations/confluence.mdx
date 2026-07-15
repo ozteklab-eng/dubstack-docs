@@ -48,6 +48,20 @@ Before connecting Confluence, confirm:
 
 The dashboard stores the selected workspace and granted scopes for that organization or deployment scope.
 
+## OAuth scopes
+
+Confluence uses Atlassian OAuth and requests read-only access so workflows can search and retrieve bounded page context.
+
+| Scope | Purpose |
+| --- | --- |
+| `search:confluence` | Searches pages and spaces visible to the connected account. |
+| `read:content-details:confluence` | Reads page metadata and content details needed to produce bounded workflow context. |
+| `offline_access` | Refreshes the OAuth token so the integration keeps working without repeated consent. |
+
+dubstack does not request Confluence write, delete, attachment-management, or admin scopes.
+
+If your Atlassian organization restricts connected apps, an Atlassian admin may need to approve the dubstack OAuth app before the connection can complete. Review the consent screen before authorizing and revoke the app from Atlassian or the dubstack dashboard if access should stop.
+
 ## Use Confluence context in workflows
 
 Workflows that support integrations can enable Confluence context.
