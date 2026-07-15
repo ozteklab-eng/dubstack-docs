@@ -1,0 +1,115 @@
+---
+title: Confluence integration
+description: Connect Confluence so workflows can use scoped page context from selected spaces.
+icon: file-stack
+---
+
+The Confluence integration gives supported workflows controlled access to knowledge-base page context.
+
+Use it when a documentation update depends on product notes, release plans, runbooks, implementation decisions, or support handoff pages that live in Confluence.
+
+## What Confluence can do
+
+Confluence can provide:
+
+- page titles, page type, space key, updated timestamp, links, and bounded excerpts for supported workflows
+- CQL-based page context for recurring documentation workflows
+- knowledge-base context alongside source repositories, Jira issues, or Slack threads
+
+Confluence is a read-only context source. It does not write documentation, edit Confluence pages, inspect attachments, or scan a whole workspace without an explicit query. Documentation changes still write through the connected Git provider.
+
+## Connection scope
+
+Confluence is a shared integration. An admin or editor connects one Atlassian workspace for the organization, and eligible workflow surfaces can use that connection when Confluence context is explicitly selected.
+
+The workflow inherits the access of the Atlassian account that authorized the connection. It can read only pages that account can already view in Confluence.
+
+To narrow access, restrict the connected Atlassian account in Confluence or connect an account that belongs only to the spaces you want documentation workflows to inspect.
+
+## Requirements
+
+Before connecting Confluence, confirm:
+
+- your organization has Enterprise access or an active trial that includes integration features
+- you know the Atlassian site subdomain to connect
+- the Atlassian OAuth app is configured for the environment
+- your Atlassian account can access the pages and spaces you want workflows to use
+- the deployment has repository authoring access if you want pull requests
+
+## Connect Confluence
+
+1. Open the dashboard.
+2. Select the deployment.
+3. Go to **Settings > Organization > Integrations**.
+4. Choose **Confluence**.
+5. Enter the Atlassian site subdomain.
+6. Authorize Confluence access.
+7. Return to the dashboard and confirm Confluence is connected.
+
+The dashboard stores the selected workspace and granted scopes for that organization or deployment scope.
+
+## Use Confluence context in workflows
+
+Workflows that support integrations can enable Confluence context.
+
+When configuring the workflow, set:
+
+| Setting | Purpose |
+| --- | --- |
+| CQL | Narrows which pages the workflow can read. |
+| Limit | Caps the number of pages included in a run. The default is 5 and the maximum is 10. |
+
+Keep CQL narrow. Smaller context usually produces better documentation updates and reduces unnecessary token usage.
+
+Unbounded CQL is blocked. Use a content type, space, label, title, owner, parent, or date window so the workflow reads only pages relevant to the documentation update.
+
+For each page, the workflow can include the page title, page type, space key, updated timestamp, link, and a bounded excerpt. It does not include attachments or store raw excerpts in run history.
+
+Example CQL:
+
+```text
+type = page AND space = DOC ORDER BY lastmodified DESC
+```
+
+## Good Confluence scopes
+
+Use Confluence when the workflow needs authored team knowledge, not when the source repository already contains the definitive implementation detail.
+
+Good examples:
+
+```text
+type = page AND space = RUNBOOKS AND label = "release-note-source" ORDER BY lastmodified DESC
+```
+
+```text
+type = page AND space = API AND title ~ "authentication" ORDER BY lastmodified DESC
+```
+
+Avoid broad queries:
+
+```text
+ORDER BY lastmodified DESC
+```
+
+Broad queries are rejected because they can read unrelated workspace pages, increase cost, and make workflow output harder to review.
+
+## Run history
+
+Workflow run details show whether Confluence was selected, which workspace was used, the CQL query, collection status, and safe page summaries.
+
+Run history stores page titles, spaces, links, timestamps, and counts. Raw page excerpts are used for the run prompt but are not stored in the run result.
+
+## Disconnect Confluence
+
+1. Open **Settings > Organization > Integrations**.
+2. Find Confluence.
+3. Choose **Disconnect**.
+
+Disconnecting Confluence stops new page context collection. Existing docs, pull requests, and previous run records are not removed.
+
+## Related
+
+- [Workflow integrations](/workflows/integrations)
+- [Connector capabilities](/ai/connector-capabilities)
+- [Integration permissions and scopes](/ai/integration-permissions)
+- [Jira integration](/ai/integrations/jira)

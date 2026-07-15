@@ -840,6 +840,10 @@
                 "icon": "panels-top-left"
               },
               {
+                "slug": "ai/integrations/confluence",
+                "icon": "file-stack"
+              },
+              {
                 "slug": "ai/contextual-actions",
                 "icon": "mouse-pointer-click"
               },

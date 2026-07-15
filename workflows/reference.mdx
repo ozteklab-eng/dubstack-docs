@@ -62,6 +62,8 @@ If the source repository is a monorepo, add a path scope in the workflow configu
 
 Supported source repositories can be on a different provider from the docs repository. For example, a GitHub-backed docs site can use a Forgejo code repository as source context while generated documentation changes still open against the GitHub docs repository.
 
+When integrations are selected, the workflow can include bounded context such as Jira issues or Confluence pages. Keep JQL and CQL queries narrow so the run uses the relevant external context without scanning unrelated workspace data.
+
 Before enabling automatic updates, run this workflow in **Require review** mode and confirm:
 
 - the source repository card validates in Git settings

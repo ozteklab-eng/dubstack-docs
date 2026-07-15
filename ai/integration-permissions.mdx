@@ -55,7 +55,7 @@ The agent inherits the access of the account that authorized the connection. It 
 | Google Drive | Files and folders visible to the connected user, including shared drives when authorized. |
 | Nextcloud | Files, folders, and shared knowledge-base content visible to the connected account. |
 | Google Calendar | Events on calendars visible to the connected user. |
-| Confluence | Pages, spaces, and attachments visible to the connected account. |
+| Confluence | Pages and spaces visible to the connected account. Workflow runs use bounded page metadata, links, and excerpts; they do not inspect attachments. |
 | Plain | Support conversations and customer records available to the provided API key. |
 | Intercom | Conversations, contacts, and help-center records visible to the connected account. |
 | Salesforce | Standard and custom objects visible to the connected account. |
@@ -120,3 +120,4 @@ If reconnecting succeeds but a workflow still cannot use the provider, review th
 - [Integrations](/ai/integrations)
 - [Slack integration](/ai/integrations/slack)
 - [Jira integration](/ai/integrations/jira)
+- [Confluence integration](/ai/integrations/confluence)

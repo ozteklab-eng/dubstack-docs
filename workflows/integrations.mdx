@@ -35,10 +35,13 @@ If any requirement is missing, the workflow should show a blocking reason instea
 | --- | --- | --- |
 | Slack | Read selected channel or thread context and send workflow notifications. | Connect Slack, invite the app to private channels if needed, and select the channel or thread in workflow settings. |
 | Jira | Read bounded issue context from a JQL query. | Connect Jira and configure a JQL query plus an issue limit. |
+| Confluence | Read bounded page context from a CQL query. | Connect Confluence and configure a CQL query plus a page limit. |
 
 Other providers can appear as catalog items before they are available. Catalog-only providers cannot be selected for a run until authorization, scopes, collectors, access checks, and workflow support are active.
 
 Jira JQL must be bounded. Use a project, issue key, label, fix version, status, or updated-date window. Queries that only sort results, such as `ORDER BY updated DESC`, are rejected safely instead of scanning the whole workspace.
+
+Confluence CQL must also be bounded. Use a content type, space, label, title, owner, parent, or date window. Queries that only sort results, such as `ORDER BY lastmodified DESC`, are rejected safely instead of scanning the whole workspace.
 
 Support-feedback providers are currently catalog-gated for workflows. The **Update from support feedback** workflow remains visible, but it cannot run until a supported support-feedback connector, collector, and readiness check are available for the deployment.
 
@@ -60,7 +63,7 @@ Current shipped workflow integrations are shared. Personal integrations are rese
 3. Open the configuration drawer.
 4. Find the integration context section.
 5. Select the connected integrations the workflow should use.
-6. Fill in provider-specific fields, such as Slack channel, Slack thread timestamp, Jira JQL, or issue limit.
+6. Fill in provider-specific fields, such as Slack channel, Slack thread timestamp, Jira JQL, Confluence CQL, or context limits.
 7. Save the workflow.
 
 Only integrations that are connected and supported by that workflow appear as selectable options.
@@ -147,6 +150,10 @@ Use Jira context with jql: project = DOCS AND fixVersion = "2026.07" ORDER BY up
 ```
 
 ```text
+Use Confluence context with cql: type = page AND space = DOC ORDER BY lastmodified DESC, limit 5.
+```
+
+```text
 Use the source repository context under services/api and update the API reference only when public endpoint behavior changed.
 ```
 
@@ -207,6 +214,10 @@ Invite the app to the channel. Private channels only appear after the app has be
 
 Check that the connected Jira account can see the issues returned by the JQL query. Keep the issue limit low while testing.
 
+### Confluence query returns no context
+
+Check that the connected Atlassian account can see the pages returned by the CQL query. Keep the page limit low while testing.
+
 ### Workflow runs without expected context
 
 Open the run details and check the selected integrations, collected context count, and readiness messages. If the integration was disconnected or missing scopes, reconnect it from **Settings > Organization > Integrations**.
@@ -218,3 +229,4 @@ Open the run details and check the selected integrations, collected context coun
 - [Integration permissions and scopes](/ai/integration-permissions)
 - [Slack integration](/ai/integrations/slack)
 - [Jira integration](/ai/integrations/jira)
+- [Confluence integration](/ai/integrations/confluence)

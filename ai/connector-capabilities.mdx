@@ -28,7 +28,7 @@ Capabilities keep integrations predictable:
 | Conversation | Slack messages, threads, direct messages, and follow-up context. | Slack; catalog-only: Mattermost |
 | Notification | Workflow run notifications and agent progress updates. | Slack; catalog-only: Mattermost |
 | Issue tracking | Issue metadata and recent issue comments for selected work items. | Jira; catalog-only: Linear, Plane |
-| Knowledge base and files | External pages, docs, or files that can be used as bounded context. | Catalog only: Notion, Google Drive, Nextcloud, Confluence |
+| Knowledge base and files | External pages, docs, or files that can be used as bounded context. | Confluence; catalog-only: Notion, Google Drive, Nextcloud |
 | Calendar | User-specific event context for docs and workflow tasks. | Catalog only: Google Calendar |
 | CRM and support | Customer, ticket, or account context for docs updates. | Catalog only: Plain, Intercom, Salesforce, HubSpot |
 | Repository context | Source repositories used as read-only context. | Connected Git provider |
@@ -42,6 +42,7 @@ Catalog-only means the provider can appear as planned surface area, but it canno
 | --- | --- | --- |
 | Slack | Organization | Agent conversation surface, bounded chat context, thread follow-ups, progress updates, deployment selection, approval prompts, and workflow notifications. |
 | Jira | Organization | Bounded issue-tracker context for dashboard agent requests and supported workflows. |
+| Confluence | Organization | Bounded knowledge-base page context for supported workflows. |
 
 The exact providers you see in the dashboard can depend on plan, environment configuration, and organization permissions.
 
@@ -79,7 +80,7 @@ Examples:
 | --- | --- | --- |
 | Conversation and notifications | Slack | A self-hosted chat provider can reuse chat context, thread follow-up, and notification capabilities. |
 | Issue tracking | Jira | Another issue tracker can reuse bounded issue context and, later, guarded issue actions. |
-| Knowledge base and files | Catalog only | A file or wiki provider can reuse file context once pagination, access labels, and redaction are implemented. |
+| Knowledge base and files | Confluence | A file or wiki provider can reuse file context once pagination, access labels, and redaction are implemented. |
 
 This model lets dubstack add provider choice without changing how users reason about agent safety.
 
@@ -100,4 +101,5 @@ Integration context follows these boundaries:
 - [Integration permissions and scopes](/ai/integration-permissions)
 - [Slack integration](/ai/integrations/slack)
 - [Jira integration](/ai/integrations/jira)
+- [Confluence integration](/ai/integrations/confluence)
 - [Configure workflow runs](/workflows/configuration)

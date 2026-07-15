@@ -44,7 +44,7 @@ Set:
 - the docs repository that receives changes
 - source repositories that provide code or product context
 - path scopes for monorepos
-- integration sources, such as Slack or issue tracker context, when connected
+- integration sources, such as Slack, issue tracker, or knowledge-base context, when connected
 - update mode
 - notification destinations
 - daily run limits
@@ -90,6 +90,7 @@ To keep usage predictable:
 - use path scopes for monorepos
 - schedule broad checks weekly instead of hourly
 - keep source repository selections minimal
+- keep integration queries narrow, such as bounded Jira JQL or Confluence CQL
 - avoid selecting the full 10 context repositories unless the workflow genuinely needs all of them
 - split unrelated tasks into separate workflows
 - review run history for unusually expensive runs
