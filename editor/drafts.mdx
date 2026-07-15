@@ -1,0 +1,103 @@
+---
+title: Drafts
+description: Understand how unsaved editor changes are preserved before they are published to source control.
+icon: file-clock
+---
+
+Drafts protect in-progress editor changes before they are published.
+
+The editor keeps unsaved Markdown and MDX page changes in the browser so a refresh or accidental navigation does not immediately discard work. Drafts are temporary editing state. They are not the published source of truth.
+
+```text
+Open page
+-> edit content
+-> draft saved in this browser
+-> review changed files
+-> publish to Git
+-> draft cleared after successful publish
+```
+
+## What drafts preserve
+
+Drafts help with common editing interruptions:
+
+- refreshing the dashboard tab
+- switching away from the editor and returning later
+- temporarily losing the current page view
+- creating pages or folders before the source update finishes
+
+For Markdown and MDX files, the editor restores the draft when it still matches the current source version of the file. This avoids reapplying stale local edits on top of a newer source version.
+
+## What drafts do not do
+
+Drafts are not shared workspace state.
+
+| Draft behavior | Meaning |
+| --- | --- |
+| Browser-local | A draft is tied to the browser profile where it was created. |
+| Not published | Readers cannot see a draft until it is published. |
+| Not a review branch | Use branches or pull requests for team review. |
+| Not permanent storage | Publish or commit important work before clearing browser data. |
+
+If another teammate changes the same file in source control, reload the page and review the latest source before continuing.
+
+## Review drafts before publishing
+
+Use the **Publish** menu to inspect pending changes.
+
+The menu shows:
+
+- changed-file count
+- files with pending edits
+- whether there are no pending changes
+- available publish, branch, or review actions for the current source
+
+Before publishing, confirm the changed files match the intended edit. Pay special attention to `dubstack.json`, OpenAPI specs, snippets, media files, and deleted pages.
+
+## Clear a draft
+
+Use **Undo all changes** from the publish menu when the draft should be discarded.
+
+After undoing changes:
+
+1. Reopen the page in the editor.
+2. Confirm the source content is restored.
+3. Check the publish menu shows no pending changes.
+
+## When to use a branch instead
+
+Use a branch or pull request when the change needs review or touches multiple areas.
+
+Good branch candidates include:
+
+- new guides
+- navigation refactors
+- OpenAPI spec changes
+- large rewrites
+- agent-authored updates
+- theme or `dubstack.json` changes
+
+For the full review flow, see [Branching and publishing](/editor/branching-and-publishing).
+
+## Troubleshooting
+
+### My draft did not restore
+
+The editor restores a draft only when it still matches the source version it was based on. If the source changed in the meantime, the editor keeps the current source version to avoid applying stale content.
+
+Check Git history, deployment history, and recent team changes before recreating the edit.
+
+### I edited in another browser and cannot see the draft
+
+Drafts are browser-local. Open the same browser profile where the edit was started, or use a branch or pull request for shared work.
+
+### The live site does not show my draft
+
+Drafts are not live content. Publish the change and wait for the sync job to finish, then open the live page directly.
+
+## Related
+
+- [Publishing](/editor/publishing)
+- [Branching and publishing](/editor/branching-and-publishing)
+- [Git essentials](/editor/git-essentials)
+- [Manual updates and history](/deployment/manual-updates-history)

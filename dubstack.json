@@ -706,6 +706,10 @@
                 "icon": "git-pull-request"
               },
               {
+                "slug": "editor/drafts",
+                "icon": "file-clock"
+              },
+              {
                 "slug": "editor/keyboard-shortcuts",
                 "icon": "keyboard"
               },
