@@ -1630,6 +1630,318 @@
           }
         }
       }
+    },
+    "/api/v1/admin/analytics/usage": {
+      "get": {
+        "tags": [
+          "Admin API"
+        ],
+        "summary": "Export usage analytics",
+        "description": "Read retrieval activity and AI usage accounting for a site-scoped or organization-scoped Admin API key. Requires the analytics:read scope.",
+        "operationId": "exportUsageAnalytics",
+        "servers": [
+          {
+            "url": "https://api.dubstack.ai",
+            "description": "dubstack Admin API"
+          }
+        ],
+        "security": [
+          {
+            "AdminApiBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 366,
+              "default": 30
+            },
+            "description": "Rolling window length in days. Ignored when from and to are supplied."
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "description": "Start calendar date for the export window in YYYY-MM-DD format."
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "description": "End calendar date for the export window in YYYY-MM-DD format."
+          },
+          {
+            "name": "timezoneOffsetMinutes",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": -840,
+              "maximum": 840,
+              "default": 0
+            },
+            "description": "Timezone offset used when calculating local reporting days."
+          },
+          {
+            "name": "site_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Deployment site ID. Required only when the Admin API key is organization-scoped and the export should be limited to one deployment."
+          },
+          {
+            "name": "site_slug",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Deployment slug alternative to site_id for organization-scoped keys."
+          },
+          {
+            "name": "subdomain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Published dubstack.live subdomain alternative to site_id for organization-scoped keys."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usage analytics export.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminUsageAnalyticsExport"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Admin API key is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Admin API key is not allowed to read this analytics scope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested deployment was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Usage analytics could not be exported.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/analytics/feedback": {
+      "get": {
+        "tags": [
+          "Admin API"
+        ],
+        "summary": "Export feedback analytics",
+        "description": "Read public assistant and MCP feedback analytics for a site-scoped or organization-scoped Admin API key. Requires the analytics:read scope.",
+        "operationId": "exportFeedbackAnalytics",
+        "servers": [
+          {
+            "url": "https://api.dubstack.ai",
+            "description": "dubstack Admin API"
+          }
+        ],
+        "security": [
+          {
+            "AdminApiBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 366,
+              "default": 30
+            },
+            "description": "Rolling window length in days. Ignored when from and to are supplied."
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "description": "Start calendar date for the export window in YYYY-MM-DD format."
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "description": "End calendar date for the export window in YYYY-MM-DD format."
+          },
+          {
+            "name": "timezoneOffsetMinutes",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": -840,
+              "maximum": 840,
+              "default": 0
+            },
+            "description": "Timezone offset used when calculating local reporting days."
+          },
+          {
+            "name": "site_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Deployment site ID. Required only when the Admin API key is organization-scoped and the export should be limited to one deployment."
+          },
+          {
+            "name": "site_slug",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Deployment slug alternative to site_id for organization-scoped keys."
+          },
+          {
+            "name": "subdomain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Published dubstack.live subdomain alternative to site_id for organization-scoped keys."
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Comma-separated review statuses: pending, in_progress, resolved, dismissed."
+            },
+            "description": "Optional comma-separated feedback review status filter."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Feedback analytics export.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminFeedbackAnalyticsExport"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The feedback status filter is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Admin API key is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Admin API key is not allowed to read this analytics scope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested deployment was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Feedback analytics could not be exported.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2727,6 +3039,155 @@
             "$ref": "#/components/schemas/WorkflowRun"
           }
         }
+      },
+      "AdminAnalyticsScope": {
+        "type": "object",
+        "properties": {
+          "siteId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "siteSlug": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "subdomain": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdminUsageAnalyticsExport": {
+        "type": "object",
+        "required": [
+          "available",
+          "checkedAt",
+          "from",
+          "to",
+          "periodDays",
+          "scope",
+          "retrieval",
+          "aiUsage"
+        ],
+        "properties": {
+          "available": {
+            "type": "boolean"
+          },
+          "checkedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "periodDays": {
+            "type": "integer"
+          },
+          "scope": {
+            "$ref": "#/components/schemas/AdminAnalyticsScope"
+          },
+          "retrieval": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "aiUsage": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "AdminFeedbackAnalyticsExport": {
+        "type": "object",
+        "required": [
+          "available",
+          "checkedAt",
+          "from",
+          "to",
+          "periodDays",
+          "scope",
+          "totals",
+          "dailySeries",
+          "recentEvents"
+        ],
+        "properties": {
+          "available": {
+            "type": "boolean"
+          },
+          "checkedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "periodDays": {
+            "type": "integer"
+          },
+          "scope": {
+            "$ref": "#/components/schemas/AdminAnalyticsScope"
+          },
+          "totals": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "byRating": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "bySource": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "byPagePath": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "byReviewStatus": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "dailySeries": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "recentEvents": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
       }
     },
     "securitySchemes": {

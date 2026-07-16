@@ -1,0 +1,119 @@
+---
+title: Analytics API exports
+description: Export usage and feedback analytics from trusted backend systems.
+icon: chart-no-axes-combined
+---
+
+Use analytics exports when a backend job needs to sync dubstack usage or feedback data into a BI warehouse, internal reporting system, or customer health dashboard.
+
+<Callout type="warning">
+  Analytics exports use Admin API keys. Store keys in a backend secret manager and never expose them in client-side code, docs content, screenshots, or support threads.
+</Callout>
+
+## Endpoints
+
+```http
+GET https://api.dubstack.ai/api/v1/admin/analytics/usage
+GET https://api.dubstack.ai/api/v1/admin/analytics/feedback
+```
+
+The key must include the `analytics:read` scope.
+
+## Site scope
+
+Site-scoped keys automatically export analytics for the deployment they are restricted to.
+
+```bash
+curl --request GET \
+  --url "https://api.dubstack.ai/api/v1/admin/analytics/usage?days=30" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY"
+```
+
+Organization-scoped keys can target a deployment with `site_id`, `site_slug`, or `subdomain`.
+
+```bash
+curl --request GET \
+  --url "https://api.dubstack.ai/api/v1/admin/analytics/usage?subdomain=docs&days=30" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY"
+```
+
+If no deployment scope is provided for an organization-scoped key, the usage endpoint returns organization-wide totals.
+
+## Time windows
+
+Use `days` for rolling windows, or `from` and `to` for calendar-date exports.
+
+```bash
+curl --request GET \
+  --url "https://api.dubstack.ai/api/v1/admin/analytics/feedback?from=2026-07-01&to=2026-07-16" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY"
+```
+
+Dates use `YYYY-MM-DD`. Add `timezoneOffsetMinutes` when your reporting day should align to a local timezone.
+
+## Usage export
+
+The usage export includes retrieval activity and AI usage accounting.
+
+```json
+{
+  "available": true,
+  "periodDays": 30,
+  "scope": {
+    "siteId": "site-id",
+    "siteSlug": "docs",
+    "subdomain": "docs"
+  },
+  "retrieval": {
+    "totals": {
+      "requests": 124,
+      "sourceCount": 420,
+      "averageLatencyMs": 184
+    }
+  },
+  "aiUsage": {
+    "totals": {
+      "runs": 82,
+      "creditsEstimated": 1886,
+      "creditsCharged": 1886,
+      "totalTokens": 91000
+    }
+  }
+}
+```
+
+Recent rows are included for debugging and reconciliation. Use the grouped totals for reporting.
+
+## Feedback export
+
+The feedback export includes feedback totals, grouped dimensions, daily series, and recent feedback events.
+
+```bash
+curl --request GET \
+  --url "https://api.dubstack.ai/api/v1/admin/analytics/feedback?subdomain=docs&status=pending,resolved" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY"
+```
+
+`status` can contain one or more feedback review statuses:
+
+| Status | Meaning |
+| --- | --- |
+| `pending` | Feedback is waiting for review. |
+| `in_progress` | Your team is actively reviewing it. |
+| `resolved` | Feedback has been handled. |
+| `dismissed` | Feedback does not require action. |
+
+## Error reasons
+
+| Status | Meaning |
+| --- | --- |
+| `401` | The Admin API key is missing, invalid, revoked, expired, or misconfigured. |
+| `403` | The key does not include `analytics:read`, or a site-scoped key was used for another deployment. |
+| `404` | The requested deployment was not found for an organization-scoped key. |
+
+## Related
+
+- [API keys](/dashboard/api-keys)
+- [Feedback analytics](/dashboard/feedback-analytics)
+- [Usage and credits](/dashboard/usage)
+- [Workflow API triggers](/api-reference/workflow-triggers)

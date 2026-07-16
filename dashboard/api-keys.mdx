@@ -32,6 +32,7 @@ Scopes control which Admin API capabilities a key can use:
 | `deployments:trigger` | Queue live deployment updates and branch preview deployments. |
 | `deployments:read` | Read deployment status and logs. |
 | `workflows:run` | Trigger eligible workflow runs. |
+| `analytics:read` | Read usage and feedback analytics exports. |
 
 ## Key types
 
@@ -130,6 +131,26 @@ API-triggered runs appear in the workflow run history with the `api` trigger sou
 
 See [Workflow API triggers](/api-reference/workflow-triggers) for CI examples, workflow ID formats, and error reasons.
 
+## Export analytics
+
+Use a key with the `analytics:read` scope to read usage and feedback analytics from a trusted backend job.
+
+```bash
+curl --request GET \
+  --url "https://api.dubstack.ai/api/v1/admin/analytics/usage?days=30" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY"
+```
+
+Site-scoped keys automatically use their deployment scope. Organization-scoped keys can include `site_id`, `site_slug`, or `subdomain`.
+
+```bash
+curl --request GET \
+  --url "https://api.dubstack.ai/api/v1/admin/analytics/feedback?subdomain=docs&status=pending,resolved" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY"
+```
+
+Analytics exports are read-only and return JSON. They are intended for backend BI sync, internal dashboards, and periodic reporting jobs.
+
 ## Required workflow state
 
 The Admin API does not bypass workflow readiness checks.
@@ -193,6 +214,7 @@ Open **Automate > Workflows**, inspect the run history, and check the runner sta
 ## Related
 
 - [Workflow API triggers](/api-reference/workflow-triggers)
+- [Analytics API exports](/api-reference/analytics-exports)
 - [Configure workflow runs](/workflows/configuration)
 - [Manage workflows](/workflows/manage)
 - [Workflow reference](/workflows/reference)
