@@ -66,6 +66,8 @@ Current estimate units include:
 
 Catalog-only workflows do not charge credits until a runner is available and a run is actually queued.
 
+Failed workflow runs can still record an estimate for forecasting and diagnostics, but they do not charge credits when the ledger records `credits_charged` as `0`.
+
 Exact allowance, charging, and overage behavior can depend on your plan and workspace configuration.
 
 ## Plan availability

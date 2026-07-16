@@ -76,7 +76,7 @@ Click a run to inspect its output, usage, and open the generated branch in the e
 
 Repository-copy runs update their row and details drawer while they are running. This is useful for large repositories and self-hosted targets where provider writes can take several minutes.
 
-The credit badge on a run row shows charged credits when billing is active for the run. If the workspace is in passive ledger mode, the drawer still shows the recorded estimate so teams can forecast automation usage before enforcement is enabled.
+The credit badge on a run row shows charged or recorded credits when the run has a usage ledger entry. If a run only has an estimate, the badge is marked as estimated usage and the details drawer shows whether `credits_charged` is `0`. Passive ledger mode keeps the estimate visible so teams can forecast automation usage before enforcement is enabled.
 
 ## Slack notifications
 
