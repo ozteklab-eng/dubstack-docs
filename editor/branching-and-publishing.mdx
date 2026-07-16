@@ -107,6 +107,17 @@ Use your Git provider review flow when a change needs approval.
 
 For GitHub, GitLab, and Forgejo repositories, the dashboard can create review branches and authoring pull requests or merge requests when the connected app or token has the required repository access.
 
+## Open workflow changes in the editor
+
+When a workflow creates a review branch, you can jump from the run history or Slack notification into the editor on that branch.
+
+- From **Automate > Workflows**, open the run history, select a completed run, and click **Open in editor** when the action is available.
+- From a Slack workflow notification, click **View changes** when the notification includes an editor link.
+
+The editor opens against the generated workflow branch so you can review changed files, inspect the diff, continue editing, and publish through the same branch or pull request workflow used for manual edits.
+
+Repository-copy workflow runs do not open in the editor because they copy the active docs source into configured copy targets instead of creating reviewable content changes.
+
 ## Local Git and dashboard editing
 
 You can use local Git and the dashboard editor on the same docs project.

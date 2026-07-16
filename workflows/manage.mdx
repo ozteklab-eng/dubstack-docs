@@ -78,6 +78,23 @@ Repository-copy runs update their row and details drawer while they are running.
 
 The credit badge on a run row shows charged or recorded credits when the run has a usage ledger entry. If a run only has an estimate, the badge is marked as estimated usage and the details drawer shows whether `credits_charged` is `0`. Passive ledger mode keeps the estimate visible so teams can forecast automation usage before enforcement is enabled.
 
+## Review generated changes in the editor
+
+When a workflow opens a pull request or merge request, the run details include an editor review link when dubstack can resolve the generated branch.
+
+Use that link to continue the review from the dashboard editor:
+
+1. Open **Automate > Workflows**.
+2. Open the run history.
+3. Select the completed workflow run.
+4. Click **Open in editor**.
+5. Review the generated branch, changed files, and source diff.
+6. Merge, request changes, or continue editing according to your repository policy.
+
+If Slack notifications are enabled, workflow notifications can also include a **View changes** link. That link opens the same generated branch in the editor when an editor review link is available.
+
+The editor link is available for content-authoring runs that create a branch, pull request, merge request, or direct update. Repository-copy runs do not open editor review links because they copy repository content into configured targets instead of drafting docs changes.
+
 ## Slack notifications
 
 When Slack is connected, workflows can post run updates to one or more selected channels.
