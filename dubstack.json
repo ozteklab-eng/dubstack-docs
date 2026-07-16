@@ -792,6 +792,10 @@
                 "icon": "settings"
               },
               {
+                "slug": "ai/custom-ai-surfaces",
+                "icon": "panels-top-left"
+              },
+              {
                 "slug": "ai/agent",
                 "icon": "sparkles"
               },

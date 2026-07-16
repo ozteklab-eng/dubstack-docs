@@ -1,0 +1,97 @@
+---
+title: Custom AI surfaces
+description: Use published docs context in custom applications without crossing assistant or authoring boundaries.
+icon: panels-top-left
+---
+
+Custom AI surfaces let you bring docs context into places outside the hosted docs UI, such as an internal support tool, onboarding portal, or product dashboard.
+
+Use the integration surface that matches the trust boundary of the application you are building.
+
+## Supported options
+
+| Option | Best for | Access |
+| --- | --- | --- |
+| Hosted assistant | Reader-facing questions on the published docs site | Opens from the docs header and contextual actions |
+| Public MCP | AI tools and custom agents that need to search and read published docs | `https://your-docs-domain.com/mcp` |
+| Markdown export | Custom indexing, support tooling, and one-off page reuse | `.md`, `/llms.txt`, and `/llms-full.txt` |
+| Dashboard agent and workflows | Trusted authoring flows that can draft documentation changes | Dashboard, Git provider, and configured integrations |
+
+## Use the hosted assistant
+
+The hosted assistant is the supported reader-facing chat experience.
+
+It is enabled from the dashboard, rendered inside the docs site, and answers from the published docs index. It can cite source pages, use the current page as context, and record usage in the AI usage ledger when billing is enabled.
+
+Use it when you want readers to ask questions from the docs site itself.
+
+## Use public MCP for custom clients
+
+Use public MCP when a custom AI client needs structured access to published docs.
+
+```text
+https://your-docs-domain.com/mcp
+```
+
+MCP clients can search docs, read published pages, and submit documentation feedback when agent feedback is enabled. The public MCP server does not grant dashboard access and cannot edit docs.
+
+For sites mounted under a path, keep the mounted prefix in the MCP URL:
+
+```text
+https://example.com/docs/mcp
+```
+
+See [MCP](/ai/mcp) for discovery paths, tool behavior, and reverse-proxy requirements.
+
+## Use Markdown and LLM indexes
+
+Use Markdown export when your application owns the AI orchestration layer and only needs clean docs content.
+
+Examples:
+
+```text
+https://docs.example.com/getting-started.md
+https://docs.example.com/llms.txt
+https://docs.example.com/llms-full.txt
+```
+
+Markdown export follows the same reader access rules as the rendered page. It does not expose unpublished changes, dashboard settings, repository secrets, or private team data.
+
+See [Markdown export](/ai/markdown-export) and [AI index files](/ai/llms-indexes).
+
+## Authoring stays in trusted surfaces
+
+Do not use public docs surfaces for authoring.
+
+Documentation updates should go through trusted paths:
+
+- dashboard agent
+- configured workflows
+- Slack or Jira integrations when enabled
+- Git provider authoring and pull requests
+
+These paths can enforce workspace roles, repository permissions, review policy, and AI credit usage.
+
+## API status
+
+dubstack does not currently expose a public, customer-facing assistant message API for embedding the hosted assistant in arbitrary applications.
+
+If you need a custom in-app assistant today, use public MCP or Markdown export as the retrieval layer and run your own chat orchestration in your application. Use the hosted assistant for docs-site chat until a public assistant API is available.
+
+## Safety checklist
+
+Before connecting a custom AI surface:
+
+- Use public MCP only for content that should be readable by the client.
+- Use Markdown export only for published pages that the reader can already access.
+- Do not send secrets, cookies, session tokens, or private repository content to external AI tools.
+- Keep authoring actions inside dashboard, workflow, Slack, Jira, or Git review boundaries.
+- Check usage and credits before running custom retrieval or workflow jobs at scale.
+
+## Related
+
+- [AI surfaces](/ai/ai-surfaces)
+- [Assistant](/ai/assistant)
+- [MCP](/ai/mcp)
+- [Markdown export](/ai/markdown-export)
+- [AI credits and usage](/ai/credits-usage)
