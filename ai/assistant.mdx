@@ -35,12 +35,15 @@ Write pages so both humans and AI tools can understand them:
 
 ## Source freshness
 
-The assistant reads from the published docs index. If an answer is missing a recent change:
+The assistant reads from the published docs index. Some deployments also use an advanced answer index for deeper retrieval.
+
+If an answer is missing a recent change:
 
 1. Confirm the change is committed to the connected source.
-2. Run a manual update from the dashboard if needed.
-3. Wait for the activity item to finish.
-4. Refresh the docs page and ask again.
+2. Confirm the deployment update or manual update finished.
+3. Open the Assistant readiness checks in the dashboard.
+4. Use **Sync advanced** when the advanced answer index is enabled and should be refreshed.
+5. Refresh the docs page and ask again.
 
 ## Configure the assistant
 
