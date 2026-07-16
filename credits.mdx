@@ -21,7 +21,9 @@ Repository sync and one-time repository copy actions are not counted as AI credi
 
 ## Plan limits
 
-Plan limits are shown on the billing page and in the subscription reference.
+Plan limits are shown on the billing page and in the subscription reference. Pro workspaces include a default monthly AI credit allowance, and Enterprise workspaces can use a custom allowance configured for the account.
+
+The default Pro allowance is 10,000 credits per month. The dashboard remains the source of truth for the current workspace allowance, billing window, used credits, remaining credits, and whether quota enforcement is passive or enforced.
 
 <CardGroup cols={2}>
   <Card title="Billing plans" icon="credit-card" href="/dashboard/billing-plans">
@@ -38,3 +40,18 @@ Plan limits are shown on the billing page and in the subscription reference.
 - Use the agent for authoring, workflow, and pull request tasks.
 - Keep docs content structured so retrieval needs less context to answer accurately.
 - Review analytics and feedback to decide where workflow is worth spending credits.
+- Schedule broad maintenance workflows deliberately instead of triggering them on every content or code change.
+- Keep workflow context narrow with repository, branch, path, integration, and prompt scope.
+- Treat manual and API-triggered workflow runs like scheduled runs for credit planning.
+
+## Workflow credit planning
+
+Workflow runs can vary more than assistant answers because they may read multiple files, inspect repository context, query integrations, draft changes, and prepare review requests.
+
+Manual runs, scheduled runs, and Admin API-triggered runs all use the saved workflow configuration and appear in workflow history. If the run uses a workflow runner, it can record estimated or charged credits according to the workspace billing mode.
+
+Use scheduled workflows when you want predictable monthly usage. For example, a weekly SEO audit or broken-link check is easier to forecast than running the same workflow on every content update.
+
+Use event-based workflows when timeliness matters more than predictable credit volume, such as updating docs from merged source-code changes.
+
+Use repository-copy workflows for scheduled portability checks, backups, or migration rehearsal. They start at 35+ credits per run and scale with target count and file volume because they perform provider reads, provider writes, validation, and audit logging.
