@@ -16,12 +16,12 @@ In this reference, **pull request** means the provider-native review request for
 | --- | --- | --- | --- | --- | --- | --- |
 | Update from code changes | Supported | Custom schedule, twice weekly | Require review | 180 | Supported | At least one source repository |
 | Draft changelog | Supported | Custom schedule, weekly | Require review | 223 | Supported | None |
-| Draft improvements from assistant conversations | Supported | Custom schedule, weekly | Require review | 212 | Not supported | None |
-| Draft improvements from user feedback | Supported | Custom schedule, weekly | Require review | 285 | Not supported | Feedback collection |
+| Fill gaps from assistant conversations | Supported | Custom schedule, weekly | Require review | 212 | Not supported | None |
+| Improve docs from user feedback | Supported | Custom schedule, weekly | Require review | 285 | Not supported | Feedback collection |
 | Update from support feedback | Coming soon | Custom schedule | Require review | 285 | Supported | Support feedback integration |
 | Translate content | Coming soon | Content update | Automatically | 913 | Not supported | Target languages and translation routing |
 | Fix broken links | Supported | Content update | Require review | 285 | Not supported | None |
-| Audit SEO metadata | Supported | Content update | Require review | 422 | Not supported | None |
+| Fix SEO issues | Supported | Content update | Require review | 422 | Not supported | None |
 | Fix grammar & typos | Supported | Content update | Require review | 330 | Not supported | None |
 | Enforce your style guide | Supported | Content update | Require review | 235 | Not supported | Style guide instructions |
 | Repository copy targets | Supported | Custom schedule | Repository copy targets | 35+ | Not supported | At least one repository copy target |
@@ -88,7 +88,7 @@ Use this workflow to keep release notes and changelog pages fresh without requir
 
 When context repositories are selected, scheduled changelog runs can inspect recent source activity from those repositories. The docs repository remains the write target for the generated changelog draft.
 
-### Draft improvements from assistant conversations
+### Fill gaps from assistant conversations
 
 Reviews assistant question trends and opens targeted content updates on a schedule.
 
@@ -101,7 +101,7 @@ Reviews assistant question trends and opens targeted content updates on a schedu
 
 Use this workflow when repeated reader questions show gaps in the docs.
 
-### Draft improvements from user feedback
+### Improve docs from user feedback
 
 Reviews page feedback and opens targeted updates on a schedule.
 
@@ -161,7 +161,7 @@ Finds and fixes broken internal and external links whenever content changes.
 
 Use review mode when external link behavior may require human judgment.
 
-### Audit SEO metadata
+### Fix SEO issues
 
 Audits titles, meta descriptions, headings, and canonical tags whenever content changes.
 
