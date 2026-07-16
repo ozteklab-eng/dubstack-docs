@@ -321,7 +321,7 @@ Before switching production to a copy target, confirm the target repository has 
 
 Repository copy targets support explicit one-time copies from Git settings and scheduled copies through the **Repository copy targets** workflow. A successful copy proves that dubstack can read the active source and write to the target provider, but it does not create continuous mirroring, provider failover, or webhook replication.
 
-One-time repository copies do not consume AI credits when they only copy files. Scheduled repository-copy workflows consume automation credits because they are workflow runs, and their results appear in workflow history and usage reporting. Scheduled repository-copy workflows start at 35+ credits per run; final credits scale by copy target count and file volume.
+One-time repository copies do not consume AI credits when they only copy files. Scheduled repository-copy workflows consume automation credits because they are workflow runs, and their results appear in workflow history and usage reporting. Scheduled repository-copy workflows start at 35+ credits per run. Before execution, the workflow reserves credits from the active source file count and configured copy target count; final usage is recorded from the actual copy result.
 
 Forgejo copy targets may take longer than GitHub or GitLab targets for large repositories because dubstack writes files through Forgejo's repository content API in sequence. This keeps the target branch consistent while the copy runs.
 

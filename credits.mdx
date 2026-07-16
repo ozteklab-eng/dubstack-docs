@@ -17,7 +17,7 @@ The exact credit cost depends on the action, the amount of context required, and
 | Workflows | Running scheduled docs improvements and maintenance workflows. |
 | Retrieval | Searching, ranking, and summarizing docs context for AI responses. |
 
-Repository sync and one-time repository copy actions are not counted as AI credits when they only move files between Git providers or published artifacts. Scheduled repository-copy workflows are workflow runs, so they consume automation credits and appear in workflow usage. Repository-copy workflow credits start at 35+ credits per run and scale with target count and file volume.
+Repository sync and one-time repository copy actions are not counted as AI credits when they only move files between Git providers or published artifacts. Scheduled repository-copy workflows are workflow runs, so they consume automation credits and appear in workflow usage. Repository-copy workflow credits start at 35+ credits per run. Before execution, the workflow reserves credits from the active source file count and configured target count, then finalizes usage from the actual copy result.
 
 ## Plan limits
 
@@ -54,4 +54,4 @@ Use scheduled workflows when you want predictable monthly usage. For example, a 
 
 Use event-based workflows when timeliness matters more than predictable credit volume, such as updating docs from merged source-code changes.
 
-Use repository-copy workflows for scheduled portability checks, backups, or migration rehearsal. They start at 35+ credits per run and scale with target count and file volume because they perform provider reads, provider writes, validation, and audit logging.
+Use repository-copy workflows for scheduled portability checks, backups, or migration rehearsal. They start at 35+ credits per run and scale with target count and file volume because they perform provider reads, provider writes, validation, and audit logging. Quota checks happen before the copy starts, using a preflight source-file and target-count estimate.

@@ -26,7 +26,7 @@ In this reference, **pull request** means the provider-native review request for
 | Enforce your style guide | Supported | Content update | Require review | 235 | Not supported | Style guide instructions |
 | Repository copy targets | Supported | Custom schedule | Repository copy targets | 35+ | Not supported | At least one repository copy target |
 
-Credit estimates are planning baselines. Actual usage depends on how much content the run reads, how many repositories are selected as context, how many files change, and how long the run takes. Repository copy starts at 35 credits and can scale with target count and file volume.
+Credit estimates are planning baselines. Actual usage depends on how much content the run reads, how many repositories are selected as context, how many files change, and how long the run takes. Repository copy starts at 35 credits and can scale with target count and file volume. Scheduled repository-copy runs reserve credits from a preflight source-file and target-count check, then finalize usage from the actual copy result.
 
 <Callout type="warning">
   Translation is listed in the catalog, but it is not yet runnable until translation routing and policy support are available for the selected deployment.
@@ -209,7 +209,7 @@ Copies the active docs source into configured repository copy targets on a sched
 | Required capabilities | Docs repository |
 | Required setup | At least one repository copy target |
 | Context repositories | Not supported |
-| Estimated credits | Starts at 35 credits per run; scales with target count and file volume |
+| Estimated credits | Starts at 35 credits per run; preflight reservation scales with source file count and target count, then final usage is recorded from the actual copy result |
 
 Use this workflow when you want a scheduled backup, migration rehearsal, or provider portability check.
 
@@ -221,7 +221,7 @@ While a repository-copy run is active, the run history shows the current target 
 
 The workflow settings drawer lists the current copy targets before you enable the schedule, including provider, repository, branch, and whether the target is scoped to the site or organization.
 
-Repository copies use the saved provider credentials for the active source and each target. Large repositories or self-hosted targets can take longer because the run must read, validate, and write files through the provider APIs. If one target fails because of provider quota, branch protection, token permissions, or network reachability, the run details show that target as failed while leaving the active deployment source unchanged.
+Repository copies use the saved provider credentials for the active source and each target. Before execution, dubstack reads the active source repository tree and configured copy targets to reserve automation credits for that run. Large repositories or self-hosted targets can take longer because the run must read, validate, and write files through the provider APIs. If one target fails because of provider quota, branch protection, token permissions, or network reachability, the run details show that target as failed while leaving the active deployment source unchanged.
 
 ## Custom workflows
 
