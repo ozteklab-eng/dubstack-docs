@@ -87,7 +87,7 @@ Use a Forgejo copy target for:
 - provider testing
 - keeping a self-hosted copy of the docs source
 
-Repository copies are explicit. A copy target is not a continuous mirror unless you configure a scheduled repository-copy workflow.
+Repository copies are explicit. A copy target is not a continuous mirror. If you configure a scheduled repository-copy workflow, dubstack runs recurring copies on that schedule, but it still does not create provider failover, webhook replication, or continuous mirroring.
 
 See [Git sync and repository copies](/deployment/git-sync) for the provider-neutral behavior.
 
