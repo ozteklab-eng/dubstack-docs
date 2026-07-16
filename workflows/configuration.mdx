@@ -128,6 +128,8 @@ The workflow uses integration context as a live tool for the run. It does not pr
 
 Translation workflows require at least one target language and deployment-level translation routing.
 
+Target languages are read from the languages configured in your docs config. If the site has not configured languages yet, the dashboard can show catalog languages as setup placeholders, but production translation should use the configured language routes that readers can navigate to.
+
 If translation routing is not available for the deployment, the workflow remains visible but blocked with a runner-unavailable message.
 
 ## Additional instructions
