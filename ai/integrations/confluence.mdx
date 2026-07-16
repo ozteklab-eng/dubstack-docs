@@ -50,12 +50,14 @@ The dashboard stores the selected workspace and granted scopes for that organiza
 
 ## OAuth scopes
 
-Confluence uses Atlassian OAuth and requests read-only access so workflows can search and retrieve bounded page context.
+Confluence uses Atlassian OAuth and requests classic read-only access so workflows can search and retrieve bounded page context.
 
 | Scope | Purpose |
 | --- | --- |
-| `search:confluence` | Searches pages and spaces visible to the connected account. |
-| `read:content-details:confluence` | Reads page metadata and content details needed to produce bounded workflow context. |
+| `read:confluence-content.all` | Allows bounded page content reads for pages visible to the connected account. |
+| `read:confluence-content.summary` | Searches and previews pages before bounded context is fetched. |
+| `read:confluence-space.summary` | Lists and resolves spaces visible to the connected account. |
+| `read:confluence-user` | Resolves page authors and editors to readable names. |
 | `offline_access` | Refreshes the OAuth token so the integration keeps working without repeated consent. |
 
 dubstack does not request Confluence write, delete, attachment-management, or admin scopes.
