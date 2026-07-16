@@ -86,6 +86,17 @@ The AI allowance summary shows whether quota enforcement is currently passive or
 - **Passive** means usage is tracked and reported, but requests are not blocked by the allowance.
 - **Enforced** means eligible AI requests are checked against the workspace allowance before the run starts.
 
+The Credit policy section shows the current plan state, included monthly allowance, package options, overage mode, alert thresholds, and rollover behavior.
+
+Plan behavior is:
+
+- Free workspaces have no permanent included AI credits unless a trial or entitlement is active.
+- Pro trials can use the Pro allowance during the trial window.
+- Pro workspaces include a default 10,000 AI credits per month.
+- Enterprise workspaces can have custom allowances, routing, and operational controls.
+
+Overage is opt-in. If overage is disabled and quota enforcement is active, eligible AI requests can be blocked once the enforced allowance is exhausted.
+
 If usage looks higher than expected:
 
 1. Check which product surface is consuming the most credits.

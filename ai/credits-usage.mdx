@@ -76,8 +76,9 @@ AI features are plan-gated.
 
 | Plan state | Expected behavior |
 | --- | --- |
-| Free | AI assistant and agent usage may be unavailable unless a trial or entitlement enables it. |
-| Pro | AI assistant, agent, and workflow usage can draw from the workspace allowance. The default Pro allowance is 10,000 AI credits per month. |
+| Free | Ongoing AI credits are not included. A trial or explicit entitlement can temporarily unlock AI usage. |
+| Pro trial | Trial workspaces can use the Pro allowance during the trial window, currently 10,000 AI credits. |
+| Pro | AI assistant, agent, Slack agent, and workflow usage draw from the workspace allowance. The default Pro allowance is 10,000 AI credits per month. |
 | Enterprise | AI usage can use custom allowances, model routing, and enterprise controls configured for the workspace. |
 
 If a feature is locked, check the dashboard reason before assuming the site is misconfigured.
@@ -95,9 +96,25 @@ This means the same monthly allowance can be consumed by:
 
 Free workspaces can use eligible trial or preview entitlements when available, but ongoing AI usage is intended for Pro and Enterprise workspaces. Enterprise workspaces can receive custom allowances, routing, and operational controls.
 
+Credits reset on the workspace billing window. Unused monthly allowance does not roll over unless your account has a custom agreement that says otherwise.
+
 <Callout type="info">
   Credits are reporting and billing units, not raw model tokens. Token usage, retrieval cost, model route, and workflow complexity can all contribute to the credit estimate.
 </Callout>
+
+## Credit packages and overage
+
+When a workspace needs more than the included allowance, admins can manage additional credit packages from the billing and usage settings.
+
+| Package | Typical use |
+| --- | --- |
+| 25,000 credits | Extra assistant, agent, or workflow usage for a small team. |
+| 50,000 credits | Higher-volume workflow and assistant usage across a growing docs program. |
+| 100,000 credits | Larger launches, migration work, or heavier workflow automation. |
+
+Credit packages are workspace-level. They are not tied to a single site unless your organization has a custom billing arrangement.
+
+Overage is opt-in. When overage is off, eligible AI requests can be blocked or held once the enforced allowance is exhausted. When overage is on, extra usage can continue and is reported separately from included allowance.
 
 ## Workflow cost expectations
 
