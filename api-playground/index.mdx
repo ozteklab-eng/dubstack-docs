@@ -1,0 +1,78 @@
+---
+title: API playground
+description: Configure interactive API endpoint pages from OpenAPI specs and MDX endpoint metadata.
+icon: terminal
+---
+
+The API playground lets readers inspect endpoint details, copy request examples, and send live requests from published API reference pages when the endpoint is safe to expose interactively.
+
+Use this page as the entry point for configuring, securing, and troubleshooting interactive API docs.
+
+<CardGroup cols={2}>
+  <Card title="Playground overview" icon="terminal" href="/api-reference/playground-overview">
+    Learn how OpenAPI operations become documentation and Try it views.
+  </Card>
+  <Card title="Request builder" icon="panel-top" href="/api-reference/request-builder">
+    Understand how parameters, bodies, examples, and security schemes become request inputs.
+  </Card>
+  <Card title="Playground authentication" icon="key" href="/api-reference/playground-authentication">
+    Configure bearer tokens, API keys, basic auth, and safe credential handling.
+  </Card>
+  <Card title="Live API requests" icon="send" href="/api-reference/live-requests">
+    Configure request routing, proxy safety checks, and test environments.
+  </Card>
+  <Card title="Code examples" icon="code" href="/api-reference/code-examples">
+    Generate request snippets from the same state used by the interactive playground.
+  </Card>
+  <Card title="Response examples" icon="braces" href="/api-reference/response-examples">
+    Add request and response examples that make generated endpoint pages easier to test.
+  </Card>
+</CardGroup>
+
+## Configure the playground
+
+The site-level playground setting lives under the `api` object in `dubstack.json`.
+
+```json dubstack.json
+{
+  "api": {
+    "openapi": "api-reference/openapi.json",
+    "playground": {
+      "display": "interactive"
+    }
+  }
+}
+```
+
+Use `interactive` when readers should see the full request builder. Use `none` when endpoint pages should show documentation only.
+
+For manual MDX endpoint pages, attach the page to an operation in frontmatter.
+
+```mdx
+---
+title: Create project
+openapi: "POST /v1/projects"
+playground: interactive
+---
+```
+
+## Safety checklist
+
+Before enabling live requests on public docs:
+
+- keep real credentials out of Git and examples
+- point `servers` at a safe public API environment
+- disable the playground for destructive or internal-only endpoints
+- keep CORS, authorization, rate limiting, and audit logging on the API itself
+- verify custom-domain and path-mounted docs still route playground requests correctly
+
+The playground improves the reader experience. It does not replace API security controls.
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/api-reference/introduction">API reference</a>
+  <a href="/api-reference/openapi-setup">OpenAPI setup</a>
+  <a href="/api-reference/spec-management">Manage API specifications</a>
+  <a href="/api-reference/troubleshooting">API reference troubleshooting</a>
+</RelatedTopics>

@@ -75,6 +75,30 @@
       "destination": "/workflows/create"
     },
     {
+      "source": "/api-playground/overview",
+      "destination": "/api-reference/playground-overview"
+    },
+    {
+      "source": "/api-playground/request-builder",
+      "destination": "/api-reference/request-builder"
+    },
+    {
+      "source": "/api-playground/authentication",
+      "destination": "/api-reference/playground-authentication"
+    },
+    {
+      "source": "/api-playground/live-requests",
+      "destination": "/api-reference/live-requests"
+    },
+    {
+      "source": "/api-playground/code-examples",
+      "destination": "/api-reference/code-examples"
+    },
+    {
+      "source": "/api-playground/response-examples",
+      "destination": "/api-reference/response-examples"
+    },
+    {
       "source": "/integrations",
       "destination": "/ai/integrations"
     },
@@ -1264,6 +1288,10 @@
               {
                 "slug": "api-reference/introduction",
                 "icon": "book"
+              },
+              {
+                "slug": "api-playground/index",
+                "icon": "terminal"
               },
               {
                 "slug": "api-reference/playground-overview",
