@@ -1,0 +1,106 @@
+---
+title: User feedback improvements workflow
+description: Draft docs updates from recurring page feedback and reader comments.
+icon: thumbs-up
+---
+
+The user feedback improvements workflow reviews page feedback and drafts documentation updates where readers repeatedly report problems.
+
+Use it after feedback collection is enabled and enough thumbs ratings or written comments exist to identify patterns.
+
+<Info>
+  Feedback collection must be enabled before this workflow can run.
+</Info>
+
+## What it does
+
+When enabled for a deployment, the workflow is designed to:
+
+- read bounded page feedback for the selected deployment
+- identify recurring negative ratings, comments, and confusion patterns
+- map feedback themes to specific docs pages
+- draft focused docs updates in the connected docs repository
+- open a provider-native review request unless automatic updates are explicitly enabled
+- record run status, themes, changed files, and credit usage in workflow history
+
+The workflow should prioritize repeated feedback signals over one-off comments.
+
+## Feedback signals
+
+| Signal | How it helps |
+| --- | --- |
+| Negative ratings | Highlights pages that may be confusing, outdated, or incomplete. |
+| Written comments | Explains what the reader expected but could not find. |
+| Page context | Keeps updates targeted to the page where feedback was submitted. |
+| Feedback trends | Reduces noisy one-off changes and focuses the workflow on recurring issues. |
+
+## Required setup
+
+Before enabling user feedback automation:
+
+1. Enable feedback collection from **Settings > Deployment > Add-ons**.
+2. Confirm feedback events are visible in feedback analytics.
+3. Connect a Git-backed docs repository with write access.
+4. Confirm the authoring model profile is available.
+5. Start in **Require review** mode.
+
+## Triggers and update mode
+
+| Setting | Behavior |
+| --- | --- |
+| Default trigger | Custom schedule, weekly |
+| Optional trigger | Manual run or API-triggered scheduled workflow |
+| Recommended first mode | Require review |
+| Automatic mode | Use only after repeated clean reviewed runs |
+| Write target | Connected docs repository |
+| Context repositories | Not supported |
+| Required setup | Feedback collection |
+
+A scheduled run should create its own review request for feedback themes found in that run.
+
+## Privacy boundary
+
+Feedback comments can contain private user context.
+
+The workflow must:
+
+- summarize repeated issues instead of copying private comments verbatim
+- redact secrets, tokens, cookies, and private identifiers
+- avoid exposing email addresses or account-specific details in generated docs
+- keep feedback analytics scoped to the current deployment
+- link source feedback only for authorized dashboard users
+
+## Credit usage
+
+User feedback runs are self-updating workflow runs and count toward workflow credit usage.
+
+The current planning estimate is **285 credits per run**. Actual usage can vary with:
+
+- number of feedback events inspected
+- number of affected pages
+- number of themes identified
+- amount of docs context retrieved
+- number of generated updates
+- model route and workflow profile
+
+See [AI credits and usage](/ai/credits-usage) for the shared allowance model.
+
+## Review checklist
+
+Before merging generated updates, confirm:
+
+- the change addresses repeated feedback, not a single edge case
+- sensitive reader details were not copied into docs
+- the affected page still has a clear purpose
+- the update does not conflict with product or support policy
+- feedback analytics should improve after publishing the change
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/workflows/reference#improve-docs-from-user-feedback">Workflow reference</a>
+  <a href="/optimize/feedback">Feedback</a>
+  <a href="/dashboard/feedback-analytics">Feedback analytics</a>
+  <a href="/settings/deployment/addons">Add-ons</a>
+  <a href="/ai/credits-usage">AI credits and usage</a>
+</RelatedTopics>

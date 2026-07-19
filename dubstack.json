@@ -497,6 +497,74 @@
     {
       "source": "/workflows/repository-copy",
       "destination": "/workflows/repository-copy-targets"
+    },
+    {
+      "source": "/automations/update-from-code-changes",
+      "destination": "/workflows/update-from-code-changes"
+    },
+    {
+      "source": "/automations/code-changes",
+      "destination": "/workflows/update-from-code-changes"
+    },
+    {
+      "source": "/automations/source-code-agent",
+      "destination": "/workflows/update-from-code-changes"
+    },
+    {
+      "source": "/workflows/source-code-agent",
+      "destination": "/workflows/update-from-code-changes"
+    },
+    {
+      "source": "/automations/draft-changelog",
+      "destination": "/workflows/draft-changelog"
+    },
+    {
+      "source": "/automations/changelog",
+      "destination": "/workflows/draft-changelog"
+    },
+    {
+      "source": "/workflows/changelog",
+      "destination": "/workflows/draft-changelog"
+    },
+    {
+      "source": "/automations/fill-gaps-from-assistant-conversations",
+      "destination": "/workflows/assistant-conversation-gaps"
+    },
+    {
+      "source": "/automations/draft-improvements-from-assistant-conversations",
+      "destination": "/workflows/assistant-conversation-gaps"
+    },
+    {
+      "source": "/automations/update-from-assistant-conversations",
+      "destination": "/workflows/assistant-conversation-gaps"
+    },
+    {
+      "source": "/automations/assistant-docs-updates",
+      "destination": "/workflows/assistant-conversation-gaps"
+    },
+    {
+      "source": "/workflows/assistant-conversations",
+      "destination": "/workflows/assistant-conversation-gaps"
+    },
+    {
+      "source": "/automations/improve-docs-from-user-feedback",
+      "destination": "/workflows/user-feedback-improvements"
+    },
+    {
+      "source": "/automations/draft-improvements-from-user-feedback",
+      "destination": "/workflows/user-feedback-improvements"
+    },
+    {
+      "source": "/automations/contextual-feedback-docs-updates",
+      "destination": "/workflows/user-feedback-improvements"
+    },
+    {
+      "source": "/automations/user-feedback",
+      "destination": "/workflows/user-feedback-improvements"
+    },
+    {
+      "source": "/workflows/user-feedback",
+      "destination": "/workflows/user-feedback-improvements"
     }
   ],
   "navbar": {
@@ -1342,6 +1410,26 @@
                 "icon": "list-checks"
               },
               {
+                "slug": "workflows/update-from-code-changes",
+                "icon": "git-pull-request"
+              },
+              {
+                "slug": "workflows/draft-changelog",
+                "icon": "history"
+              },
+              {
+                "slug": "workflows/assistant-conversation-gaps",
+                "icon": "messages-square"
+              },
+              {
+                "slug": "workflows/user-feedback-improvements",
+                "icon": "thumbs-up"
+              },
+              {
+                "slug": "workflows/support-feedback",
+                "icon": "life-buoy"
+              },
+              {
                 "slug": "workflows/translate-content",
                 "icon": "languages"
               },
@@ -1364,10 +1452,6 @@
               {
                 "slug": "workflows/repository-copy-targets",
                 "icon": "copy"
-              },
-              {
-                "slug": "workflows/support-feedback",
-                "icon": "life-buoy"
               },
               {
                 "slug": "workflows/manage",

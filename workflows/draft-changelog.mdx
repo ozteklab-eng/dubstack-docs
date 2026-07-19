@@ -1,0 +1,92 @@
+---
+title: Draft changelog workflow
+description: Draft changelog entries from recent product, docs, or source repository activity.
+icon: history
+---
+
+The draft changelog workflow prepares reviewable changelog entries from recent product updates.
+
+Use it when your team ships regularly and wants a consistent first draft for release notes without turning every merged change into a public announcement automatically.
+
+## What it does
+
+When enabled for a deployment, the workflow is designed to:
+
+- inspect recent docs repository changes and selected context repositories
+- identify updates that belong in the changelog
+- draft a changelog entry in the connected docs repository
+- open a provider-native review request unless automatic updates are explicitly enabled
+- record run status, source context, changed files, and credit usage in workflow history
+
+Without selected context repositories, the workflow works from docs activity and existing changelog patterns. With context repositories, it can include more product detail from recent source changes.
+
+## Required setup
+
+Before enabling changelog automation:
+
+1. Connect a Git-backed docs repository with write access.
+2. Confirm the changelog location and content pattern in your docs repository.
+3. Add source repositories as context when changelog entries need product-code context.
+4. Confirm the authoring model profile is available.
+5. Start in **Require review** mode.
+
+No extra connector is required.
+
+## Triggers and update mode
+
+| Setting | Behavior |
+| --- | --- |
+| Default trigger | Custom schedule, weekly |
+| Optional trigger | Manual run or API-triggered scheduled workflow |
+| Recommended first mode | Require review |
+| Automatic mode | Use only after repeated clean reviewed runs |
+| Write target | Connected docs repository |
+| Context repositories | Supported |
+
+A scheduled changelog run should create a separate review request for that run. It should not continuously append to unrelated workflow review requests.
+
+## Good changelog instructions
+
+Add instructions when your changelog has strict rules.
+
+Useful instructions include:
+
+- which product areas should be included
+- release-label naming conventions
+- whether internal changes should be excluded
+- how to group breaking changes, new features, fixes, and deprecations
+- when to link to API reference or migration pages
+
+## Credit usage
+
+Changelog runs are self-updating workflow runs and count toward workflow credit usage.
+
+The current planning estimate is **223 credits per run**. Actual usage can vary with:
+
+- number of source repositories inspected
+- number of recent changes since the last run
+- amount of changelog history read for style and format
+- number of changelog files updated
+- model route and workflow profile
+
+See [AI credits and usage](/ai/credits-usage) for the shared allowance model.
+
+## Review checklist
+
+Before merging a generated changelog entry, confirm:
+
+- every public claim maps to a shipped change
+- internal-only changes are excluded
+- breaking changes and migration steps are explicit
+- links point to live docs or planned docs updates
+- the entry follows your changelog format
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/workflows/reference#draft-changelog">Workflow reference</a>
+  <a href="/writing-content/changelog-updates">Changelog updates</a>
+  <a href="/workflows/update-from-code-changes">Update from code changes workflow</a>
+  <a href="/workflows/manage">Manage workflows</a>
+  <a href="/ai/credits-usage">AI credits and usage</a>
+</RelatedTopics>

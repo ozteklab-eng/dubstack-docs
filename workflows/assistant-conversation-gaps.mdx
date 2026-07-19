@@ -1,0 +1,104 @@
+---
+title: Assistant conversation gaps workflow
+description: Review assistant question trends and draft docs updates where readers repeatedly need help.
+icon: messages-square
+---
+
+The assistant conversation gaps workflow reviews reader questions from the site assistant and drafts documentation updates for repeated gaps.
+
+Use it when readers ask the assistant the same questions because the answer is missing, hard to find, or unclear in the published docs.
+
+## What it does
+
+When enabled for a deployment, the workflow is designed to:
+
+- read bounded assistant conversation analytics for the selected deployment
+- identify repeated questions, failed retrievals, and unresolved topics
+- map each theme to relevant docs pages
+- draft focused docs updates in the connected docs repository
+- open a provider-native review request unless automatic updates are explicitly enabled
+- record run status, themes, changed files, and credit usage in workflow history
+
+The workflow should work from trends, not isolated single-user questions.
+
+## Signal sources
+
+| Signal | How it helps |
+| --- | --- |
+| Repeated questions | Shows what readers cannot find quickly. |
+| Low-confidence retrievals | Shows where source docs may be missing or too thin. |
+| Source-click patterns | Shows which answers need better page coverage. |
+| Escalation or negative feedback | Shows where answers were not useful enough. |
+
+Conversation context must stay scoped to the selected organization and deployment.
+
+## Required setup
+
+Before enabling assistant conversation automation:
+
+1. Enable the public assistant for the docs site.
+2. Allow enough assistant usage to create useful trends.
+3. Connect a Git-backed docs repository with write access.
+4. Confirm the authoring model profile is available.
+5. Start in **Require review** mode.
+
+No extra integration connector is required.
+
+## Triggers and update mode
+
+| Setting | Behavior |
+| --- | --- |
+| Default trigger | Custom schedule, weekly |
+| Optional trigger | Manual run or API-triggered scheduled workflow |
+| Recommended first mode | Require review |
+| Automatic mode | Use only after repeated clean reviewed runs |
+| Write target | Connected docs repository |
+| Context repositories | Not supported |
+
+A scheduled run should create its own review request for the themes found in that run.
+
+## Privacy boundary
+
+Assistant conversation data can include sensitive reader context.
+
+The workflow must:
+
+- summarize patterns instead of copying raw conversations into public docs
+- redact secrets, access tokens, cookies, and private identifiers
+- avoid exposing user-specific information in generated changes
+- store only bounded source metadata in run history
+- keep analytics scoped to the current deployment
+
+## Credit usage
+
+Assistant conversation runs are self-updating workflow runs and count toward workflow credit usage.
+
+The current planning estimate is **212 credits per run**. Actual usage can vary with:
+
+- number of conversations inspected
+- number of themes identified
+- amount of docs context retrieved
+- number of generated updates
+- model route and workflow profile
+
+See [AI credits and usage](/ai/credits-usage) for the shared allowance model.
+
+## Review checklist
+
+Before merging generated updates, confirm:
+
+- the update addresses a real repeated reader gap
+- sensitive conversation details were not copied into docs
+- the answer belongs in public docs rather than support-only guidance
+- new content links to the right related pages
+- the assistant should have a better source after the change is published
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/workflows/reference#fill-gaps-from-assistant-conversations">Workflow reference</a>
+  <a href="/ai/assistant">Assistant</a>
+  <a href="/ai/assistant-usage">Assistant usage</a>
+  <a href="/dashboard/usage">Usage dashboard</a>
+  <a href="/ai/credits-usage">AI credits and usage</a>
+</RelatedTopics>

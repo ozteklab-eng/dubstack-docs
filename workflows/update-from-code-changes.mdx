@@ -1,0 +1,110 @@
+---
+title: Update from code changes workflow
+description: Draft documentation updates when selected source repositories ship product, API, or feature changes.
+icon: git-pull-request
+---
+
+The update from code changes workflow inspects selected source repositories and drafts documentation updates when product behavior changes.
+
+Use it when code, API schemas, CLI behavior, configuration options, or product flows change faster than the docs are updated manually.
+
+## What it does
+
+When enabled for a deployment, the workflow is designed to:
+
+- read merged source changes from selected repositories
+- compare source changes with the connected docs repository
+- identify user-facing behavior that needs documentation
+- draft focused docs updates in the docs repository
+- open a provider-native review request unless automatic updates are explicitly enabled
+- cite source repositories, pull requests, files, or commits when available
+- record run status, changed files, context sources, and credit usage in workflow history
+
+The selected source repositories are read-only context. The workflow writes generated documentation changes to the connected docs repository.
+
+## Source repositories
+
+Source repositories can be separate from the docs repository.
+
+| Repository role | Behavior |
+| --- | --- |
+| Docs repository | The write target for generated documentation changes. |
+| Source repository | Read-only context for product, API, or feature changes. |
+| Context repository | Additional read-only context used by the workflow when supported. |
+
+A GitHub-backed docs site can inspect a GitLab or self-hosted source repository when the provider connection, webhook, and permissions are configured for that deployment.
+
+## Required setup
+
+Before enabling code-change automation:
+
+1. Connect a Git-backed docs repository with write access.
+2. Add at least one source repository in Git settings or workflow configuration.
+3. Confirm the source repository card validates.
+4. Choose a path scope for monorepos when only part of the repository is relevant.
+5. Confirm the authoring model profile is available.
+6. Start in **Require review** mode.
+
+## Triggers and update mode
+
+| Setting | Behavior |
+| --- | --- |
+| Default trigger | Custom schedule, twice weekly |
+| Optional trigger | Code change after a merged review event |
+| Recommended first mode | Require review |
+| Automatic mode | Use only after repeated clean reviewed runs |
+| Write target | Connected docs repository |
+| Context repositories | Supported |
+
+Scheduled runs batch merged changes since the previous comparable run. Code-change triggers are useful when docs should update closer to when product changes merge.
+
+Direct pushes can still be inspected by scheduled runs, but review-event triggers should be based on merged pull requests, merge requests, or provider-native review events.
+
+## Path scope
+
+Path scope keeps monorepo runs focused.
+
+Use path scope when:
+
+- one repository contains many unrelated services
+- only one package or app affects the docs site
+- generated API specs live under a known directory
+- docs should ignore infrastructure-only changes
+
+If changed-file metadata is available, source changes outside the path scope should be skipped before the run spends authoring credits.
+
+## Credit usage
+
+Code-change runs are self-updating workflow runs and count toward workflow credit usage.
+
+The current planning estimate is **180 credits per run**. Actual usage can vary with:
+
+- number of source changes inspected
+- number of selected repositories
+- path scope breadth
+- amount of docs context retrieved
+- number of files changed by the generated update
+- selected model route and workflow profile
+
+See [AI credits and usage](/ai/credits-usage) for the shared allowance model.
+
+## Review checklist
+
+Before merging generated changes, confirm:
+
+- the source change is user-facing
+- the generated docs target the right page and repository
+- code examples match the shipped behavior
+- API reference updates match the OpenAPI source of truth
+- generated claims cite enough source context for reviewers
+- unrelated monorepo changes were skipped
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/workflows/reference#update-from-code-changes">Workflow reference</a>
+  <a href="/workflows/integrations">Workflow integrations</a>
+  <a href="/deployment/git-settings">Git settings</a>
+  <a href="/guides/draft-docs-from-code">Draft docs from code</a>
+  <a href="/ai/credits-usage">AI credits and usage</a>
+</RelatedTopics>
