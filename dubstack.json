@@ -157,6 +157,262 @@
     {
       "source": "/api-reference/endpoint/get-well-known-mcp-discovery-alias",
       "destination": "/api-reference/endpoint/get-mcp-server-card"
+    },
+    {
+      "source": "/api",
+      "destination": "/api-reference/introduction"
+    },
+    {
+      "source": "/api/introduction",
+      "destination": "/api-reference/introduction"
+    },
+    {
+      "source": "/components",
+      "destination": "/writing-content/components"
+    },
+    {
+      "source": "/components/index",
+      "destination": "/writing-content/components"
+    },
+    {
+      "source": "/components/accordions",
+      "destination": "/writing-content/accordions"
+    },
+    {
+      "source": "/components/badge",
+      "destination": "/writing-content/badges"
+    },
+    {
+      "source": "/components/callouts",
+      "destination": "/writing-content/callouts"
+    },
+    {
+      "source": "/components/cards",
+      "destination": "/writing-content/cards"
+    },
+    {
+      "source": "/components/code-groups",
+      "destination": "/writing-content/code-groups"
+    },
+    {
+      "source": "/components/color",
+      "destination": "/writing-content/colors"
+    },
+    {
+      "source": "/components/columns",
+      "destination": "/writing-content/columns"
+    },
+    {
+      "source": "/components/expandables",
+      "destination": "/writing-content/fields-expandables"
+    },
+    {
+      "source": "/components/fields",
+      "destination": "/writing-content/fields-expandables"
+    },
+    {
+      "source": "/components/frames",
+      "destination": "/writing-content/frames"
+    },
+    {
+      "source": "/components/icons",
+      "destination": "/writing-content/icons"
+    },
+    {
+      "source": "/components/mermaid-diagrams",
+      "destination": "/writing-content/mermaid-diagrams"
+    },
+    {
+      "source": "/components/panel",
+      "destination": "/writing-content/panels"
+    },
+    {
+      "source": "/components/prompt",
+      "destination": "/writing-content/prompts"
+    },
+    {
+      "source": "/components/responses",
+      "destination": "/writing-content/request-response-examples"
+    },
+    {
+      "source": "/components/steps",
+      "destination": "/writing-content/tabs-and-steps"
+    },
+    {
+      "source": "/components/tabs",
+      "destination": "/writing-content/tabs-and-steps"
+    },
+    {
+      "source": "/components/tiles",
+      "destination": "/writing-content/tiles"
+    },
+    {
+      "source": "/components/tooltips",
+      "destination": "/writing-content/tooltips"
+    },
+    {
+      "source": "/components/tree",
+      "destination": "/writing-content/file-trees"
+    },
+    {
+      "source": "/components/view",
+      "destination": "/writing-content/views"
+    },
+    {
+      "source": "/components/visibility",
+      "destination": "/writing-content/visibility"
+    },
+    {
+      "source": "/components/update",
+      "destination": "/writing-content/changelog-updates"
+    },
+    {
+      "source": "/components/banner",
+      "destination": "/configuration/banners"
+    },
+    {
+      "source": "/create/changelogs",
+      "destination": "/writing-content/changelog-updates"
+    },
+    {
+      "source": "/create/code",
+      "destination": "/writing-content/code-blocks"
+    },
+    {
+      "source": "/create/files",
+      "destination": "/writing-content/pages-files"
+    },
+    {
+      "source": "/create/image-embeds",
+      "destination": "/writing-content/images-assets"
+    },
+    {
+      "source": "/create/list-table",
+      "destination": "/writing-content/tables"
+    },
+    {
+      "source": "/create/redirects",
+      "destination": "/configuration/redirects"
+    },
+    {
+      "source": "/create/reusable-snippets",
+      "destination": "/writing-content/reusable-snippets"
+    },
+    {
+      "source": "/create/text",
+      "destination": "/writing-content/text-formatting"
+    },
+    {
+      "source": "/customize/custom-404-page",
+      "destination": "/configuration/custom-404-page"
+    },
+    {
+      "source": "/customize/custom-domain",
+      "destination": "/deployment/custom-domains"
+    },
+    {
+      "source": "/customize/fonts",
+      "destination": "/configuration/fonts"
+    },
+    {
+      "source": "/customize/themes",
+      "destination": "/configuration/theming"
+    },
+    {
+      "source": "/deploy",
+      "destination": "/deployment/git-settings"
+    },
+    {
+      "source": "/deploy/authentication-setup",
+      "destination": "/deployment/docs-authentication"
+    },
+    {
+      "source": "/deploy/ci",
+      "destination": "/deployment/ci"
+    },
+    {
+      "source": "/deploy/cloudflare",
+      "destination": "/deployment/cloudflare"
+    },
+    {
+      "source": "/deploy/csp-configuration",
+      "destination": "/deployment/csp-configuration"
+    },
+    {
+      "source": "/deploy/custom-domain",
+      "destination": "/deployment/custom-domains"
+    },
+    {
+      "source": "/deploy/docs-subpath",
+      "destination": "/deployment/docs-subpath"
+    },
+    {
+      "source": "/deploy/github",
+      "destination": "/deployment/github"
+    },
+    {
+      "source": "/deploy/gitlab",
+      "destination": "/deployment/gitlab"
+    },
+    {
+      "source": "/deploy/gitlab-self-hosted",
+      "destination": "/deployment/gitlab-self-hosted-oauth"
+    },
+    {
+      "source": "/deploy/monorepo",
+      "destination": "/deployment/monorepo"
+    },
+    {
+      "source": "/deploy/multi-repo",
+      "destination": "/deployment/multi-repo"
+    },
+    {
+      "source": "/deploy/preview-deployments",
+      "destination": "/deployment/preview-deployments"
+    },
+    {
+      "source": "/deploy/reverse-proxy",
+      "destination": "/deployment/reverse-proxy"
+    },
+    {
+      "source": "/deploy/route53-cloudfront",
+      "destination": "/deployment/route53-cloudfront"
+    },
+    {
+      "source": "/deploy/vercel",
+      "destination": "/deployment/vercel-rewrites"
+    },
+    {
+      "source": "/deploy/vercel-external-proxies",
+      "destination": "/deployment/vercel-rewrites"
+    },
+    {
+      "source": "/editor",
+      "destination": "/editor/overview"
+    },
+    {
+      "source": "/editor/agent",
+      "destination": "/editor/ask-agent"
+    },
+    {
+      "source": "/editor/configurations",
+      "destination": "/editor/site-configurations"
+    },
+    {
+      "source": "/ai/contextual-menu",
+      "destination": "/ai/contextual-actions"
+    },
+    {
+      "source": "/ai/llmstxt",
+      "destination": "/ai/llms-indexes"
+    },
+    {
+      "source": "/ai/model-context-protocol",
+      "destination": "/ai/mcp"
+    },
+    {
+      "source": "/ai/skillmd",
+      "destination": "/ai/generated-skill-file"
     }
   ],
   "navbar": {
