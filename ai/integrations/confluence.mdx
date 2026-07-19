@@ -31,7 +31,7 @@ To narrow access, restrict the connected Atlassian account in Confluence or conn
 Before connecting Confluence, confirm:
 
 - your organization has Enterprise access or an active trial that includes integration features
-- you know the Atlassian site subdomain to connect
+- you know the Atlassian site subdomain to connect, or you are comfortable letting Atlassian return the first accessible workspace during authorization
 - the Atlassian OAuth app is configured for the environment
 - your Atlassian account can access the pages and spaces you want workflows to use
 - the deployment has repository authoring access if you want pull requests
@@ -42,11 +42,11 @@ Before connecting Confluence, confirm:
 2. Select the deployment.
 3. Go to **Settings > Organization > Integrations**.
 4. Choose **Confluence**.
-5. Enter the Atlassian site subdomain.
+5. Optionally enter the Atlassian site subdomain to pin the connection to a specific workspace.
 6. Authorize Confluence access.
 7. Return to the dashboard and confirm Confluence is connected.
 
-The dashboard stores the selected workspace and granted scopes for that organization or deployment scope.
+If you leave the subdomain blank, dubstack uses the first accessible Confluence workspace returned by Atlassian for the authorizing account. The dashboard stores the selected workspace and granted scopes for that organization or deployment scope.
 
 ## OAuth scopes
 
