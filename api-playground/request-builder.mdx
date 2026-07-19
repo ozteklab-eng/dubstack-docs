@@ -1,0 +1,32 @@
+---
+title: Request builder
+description: Understand how OpenAPI parameters, bodies, security schemes, and examples become playground inputs.
+icon: panel-top
+---
+
+The request builder is the interactive form shown when a reader opens **Try it** on an endpoint page.
+
+It is generated from the same OpenAPI operation that renders the documentation view.
+
+## What becomes an input
+
+| OpenAPI source | Playground behavior |
+| --- | --- |
+| `servers` | Provides the request base URL. |
+| `parameters` | Creates path, query, header, and cookie inputs. |
+| `requestBody` | Creates JSON body fields and payload examples. |
+| `components.securitySchemes` | Creates authorization inputs. |
+| `responses` | Creates documented response tabs and examples. |
+
+Required fields in the OpenAPI spec appear as required fields in the playground.
+
+For detailed examples, see [Request builder](/api-reference/request-builder).
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/api-playground/overview">API playground overview</a>
+  <a href="/api-reference/playground-authentication">Playground authentication</a>
+  <a href="/api-reference/code-examples">Code examples</a>
+  <a href="/api-reference/response-examples">Response examples</a>
+</RelatedTopics>

@@ -1,0 +1,34 @@
+---
+title: Live API requests
+description: Configure safe request routing for interactive endpoint pages.
+icon: send
+---
+
+Live API requests let readers send a documented request from an endpoint page and inspect the upstream response.
+
+Use live requests for sandbox APIs, onboarding APIs, and endpoints where readers have their own credentials.
+
+## Request flow
+
+```text
+Endpoint page
+-> playground request state
+-> docs playground proxy
+-> allowed OpenAPI server origin
+-> upstream API response
+```
+
+The proxy validates the target against the published OpenAPI `servers` list and blocks local, private, internal, or unlisted origins.
+
+Proxy checks do not replace API security. Your API still needs authorization, rate limits, validation, and audit logging.
+
+For detailed behavior and troubleshooting, see [Live API requests](/api-reference/live-requests).
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/api-playground/overview">API playground overview</a>
+  <a href="/api-reference/request-builder">Request builder</a>
+  <a href="/api-reference/playground-authentication">Playground authentication</a>
+  <a href="/deployment/csp-configuration">CSP configuration</a>
+</RelatedTopics>

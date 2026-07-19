@@ -1,0 +1,40 @@
+---
+title: API playground overview
+description: Learn how interactive endpoint documentation is generated from OpenAPI metadata.
+icon: terminal
+---
+
+The API playground turns OpenAPI operations into endpoint pages with documentation, generated examples, and an optional **Try it** request builder.
+
+Use it when readers should understand an endpoint and test it from the published docs site.
+
+## How it works
+
+```text
+OpenAPI spec
+-> generated endpoint page
+-> documentation view
+-> Try it request builder
+-> generated code examples
+```
+
+The canonical source of truth is your OpenAPI file, usually `api-reference/openapi.json`.
+
+## What to configure
+
+- Add a valid OpenAPI 3.x JSON file.
+- Reference the spec from `dubstack.json`.
+- Decide whether generated endpoints should be visible by default.
+- Choose the playground mode for each page or site.
+- Keep live request targets safe for public readers.
+
+For the full setup guide, see [API playground overview](/api-reference/playground-overview).
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/api-reference/openapi-setup">OpenAPI setup</a>
+  <a href="/api-reference/request-builder">Request builder</a>
+  <a href="/api-reference/playground-authentication">Playground authentication</a>
+  <a href="/api-reference/live-requests">Live API requests</a>
+</RelatedTopics>

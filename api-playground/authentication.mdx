@@ -1,0 +1,27 @@
+---
+title: Playground authentication
+description: Configure how readers provide credentials when trying documented API requests.
+icon: key
+---
+
+Playground authentication is controlled by your OpenAPI security schemes and endpoint-level security requirements.
+
+Use standard OpenAPI security definitions for bearer tokens, API keys, or basic auth.
+
+## Credential rules
+
+- Readers enter their own credentials at request time.
+- Do not commit real API keys, bearer tokens, or customer credentials into docs or examples.
+- Public playground credentials authenticate requests to your documented API, not to dubstack.
+- Hide the playground for internal-only or risky operations.
+
+For full examples, see [Playground authentication](/api-reference/playground-authentication).
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/api-playground/overview">API playground overview</a>
+  <a href="/api-reference/live-requests">Live API requests</a>
+  <a href="/api-reference/base-url-authentication">Base URL and authentication</a>
+  <a href="/dashboard/api-keys">Admin API keys</a>
+</RelatedTopics>
