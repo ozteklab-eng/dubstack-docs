@@ -425,6 +425,18 @@
     {
       "source": "/workflows/translations",
       "destination": "/workflows/translate-content"
+    },
+    {
+      "source": "/automations/support-feedback",
+      "destination": "/workflows/support-feedback"
+    },
+    {
+      "source": "/automations/update-from-support-feedback",
+      "destination": "/workflows/support-feedback"
+    },
+    {
+      "source": "/workflows/update-from-support-feedback",
+      "destination": "/workflows/support-feedback"
     }
   ],
   "navbar": {
@@ -1272,6 +1284,10 @@
               {
                 "slug": "workflows/translate-content",
                 "icon": "languages"
+              },
+              {
+                "slug": "workflows/support-feedback",
+                "icon": "life-buoy"
               },
               {
                 "slug": "workflows/manage",

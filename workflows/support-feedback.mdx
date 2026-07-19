@@ -1,0 +1,111 @@
+---
+title: Support feedback workflow
+description: Draft documentation improvements from recurring support conversations when a supported connector is enabled.
+icon: life-buoy
+---
+
+The support feedback workflow turns repeated support questions into reviewable documentation updates.
+
+Use it when support conversations reveal missing setup steps, confusing API behavior, unclear troubleshooting guidance, or outdated product instructions.
+
+<Warning>
+  Support feedback workflow is visible in the workflow catalog, but it is not yet runnable until support-feedback connectors, collectors, and readiness checks are enabled for the selected deployment.
+</Warning>
+
+## What it does
+
+When enabled for a deployment, the workflow is designed to:
+
+- read bounded support conversation context from supported providers
+- group related issues into a small number of documentation themes
+- draft focused documentation updates for each theme
+- open review requests through the connected Git provider
+- record provider, source counts, status, and credit usage in workflow history
+
+The workflow should improve docs from patterns, not from one-off private conversations.
+
+## Supported provider family
+
+Support feedback belongs to the support integration family.
+
+| Provider | Current status | Connection type | Intended use |
+| --- | --- | --- | --- |
+| Plain | Catalog | Shared organization connector | Resolved support conversations and customer context. |
+| Intercom | Catalog | Shared organization connector | Conversations, contacts, and support context. |
+| Pylon | Catalog | Shared organization connector | Customer conversations, accounts, and support context. |
+
+See [Support feedback integrations](/ai/integrations/support) for the integration readiness boundary.
+
+## Required setup
+
+Before using support feedback automation:
+
+1. Connect a docs repository with write access.
+2. Connect a supported support feedback provider.
+3. Confirm the connector is scoped to the correct organization and deployment.
+4. Configure which conversation states are eligible for review.
+5. Enable redaction and storage policy controls.
+6. Start in **Require review** mode.
+
+The workflow should not run until the deployment passes readiness checks for connector access, provider scopes, conversation collection, redaction, and repository write behavior.
+
+## Theme grouping
+
+Support feedback workflows should group repeated issues into focused themes.
+
+Example themes:
+
+- customers repeatedly miss an authentication header
+- trial users cannot find the Git provider setup steps
+- API playground users misunderstand a required request body field
+- enterprise admins ask how SSO, roles, and deployment permissions interact
+
+When the runner is available, a scheduled run can open separate review requests for distinct themes so reviewers can approve or reject each documentation change independently.
+
+## Privacy boundary
+
+Support feedback context can contain sensitive customer data.
+
+The workflow must:
+
+- avoid copying raw transcripts into public docs
+- redact secrets, access tokens, cookies, and private identifiers
+- summarize patterns instead of quoting private customer messages
+- store only bounded source metadata in run history
+- link back to source systems only for authorized dashboard users
+
+Do not enable automatic updates until redaction and review behavior are proven for the connected provider.
+
+## Credit usage
+
+Support feedback runs are automation runs and count toward workflow credit usage when a runnable collector queues work.
+
+The current planning estimate is **285 credits per run**. Actual usage can vary with:
+
+- number of conversations inspected
+- number of themes identified
+- amount of docs context retrieved
+- whether source repositories or issue trackers are selected as additional context
+- number of review requests created
+
+See [AI credits and usage](/ai/credits-usage) for the shared allowance model.
+
+## Recommended rollout
+
+1. Start with one support provider and one deployment.
+2. Limit the source to resolved conversations or tagged support themes.
+3. Run manually before enabling a schedule.
+4. Review generated changes for customer-data leakage.
+5. Keep the workflow in **Require review** mode.
+6. Expand provider scope only after several clean runs.
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/ai/integrations/support">Support feedback integrations</a>
+  <a href="/workflows/reference#update-from-support-feedback">Workflow reference</a>
+  <a href="/workflows/integrations">Workflow integrations</a>
+  <a href="/optimize/feedback">Feedback</a>
+  <a href="/dashboard/feedback-analytics">Feedback analytics</a>
+  <a href="/ai/credits-usage">AI credits and usage</a>
+</RelatedTopics>
