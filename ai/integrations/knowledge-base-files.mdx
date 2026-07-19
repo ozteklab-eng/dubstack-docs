@@ -1,0 +1,46 @@
+---
+title: Knowledge base and file integrations
+description: Use external pages and files as bounded context for documentation workflows.
+icon: file-stack
+---
+
+Knowledge base and file integrations let workflows read selected external pages or files when source details live outside the docs repository.
+
+Use this family for release notes, implementation decisions, runbooks, product specs, and internal handoff docs that should inform a documentation update.
+
+## Supported providers
+
+| Provider | Status | Scope | Capabilities |
+| --- | --- | --- | --- |
+| [Confluence](/ai/integrations/confluence) | Active | Shared | Bounded page context for supported workflows. |
+| Notion | Catalog | Shared | Planned page and knowledge-base context. |
+| Google Drive | Catalog | Personal | Planned file, folder, and shared-drive context. |
+| Nextcloud | Catalog | Shared | Planned self-hosted file and knowledge-base context. |
+
+Catalog-only providers remain unavailable for runs until authorization, pagination, access checks, redaction, and tests are implemented.
+
+## Use cases
+
+Use knowledge-base context when:
+
+- product notes live in an internal wiki
+- a release plan explains feature behavior
+- a runbook should become public troubleshooting guidance
+- a workflow needs bounded non-code context alongside a source repository
+
+Use repository context instead when the implementation source is the clearest source of truth.
+
+## Boundaries
+
+The active Confluence integration requires bounded CQL. Use a space, title, label, content type, owner, parent, or date window.
+
+Future file and wiki providers should follow the same model. The agent should fetch only selected pages or files needed for the run, and it should not store raw external documents in run history unless the product explicitly says so.
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/ai/integrations/confluence">Confluence integration</a>
+  <a href="/workflows/integrations">Workflow integrations</a>
+  <a href="/ai/integration-permissions">Integration permissions and scopes</a>
+  <a href="/ai/connector-capabilities">Connector capabilities</a>
+</RelatedTopics>

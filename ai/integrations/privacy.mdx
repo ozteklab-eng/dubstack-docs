@@ -1,0 +1,49 @@
+---
+title: Privacy integrations
+description: Plan cookie consent, privacy notices, and compliance controls for published docs sites.
+icon: shield-check
+---
+
+Privacy integrations control how published docs sites handle consent, cookies, analytics tags, and regional privacy requirements.
+
+dubstack currently supports privacy-sensitive configuration through analytics settings, custom scripts, custom CSS, CSP configuration, and dashboard-controlled add-ons. Dedicated privacy-provider connectors are not yet active.
+
+## Current status
+
+| Area | Status | Notes |
+| --- | --- | --- |
+| Analytics identifiers | Active | Configure supported analytics tags from the dashboard or `dubstack.json`. |
+| CSP configuration | Active | Restrict script, image, connect, and frame sources for the published docs site. |
+| Feedback add-ons | Active | Configure feedback collection and optional reader-email collection from deployment add-ons. |
+| Dedicated consent providers | Catalog planning | Provider-specific consent-manager integrations are not active yet. |
+
+## What to configure today
+
+Before adding analytics or embedded scripts:
+
+1. Review your privacy policy.
+2. Decide which regions require consent before loading analytics or marketing tags.
+3. Configure analytics providers with public IDs only.
+4. Update CSP to allow only required provider hosts.
+5. Enable reader-email collection only when your policy explains how the data is used.
+
+## Future provider model
+
+Privacy providers should be configured as published-site integrations rather than agent context providers.
+
+That means they should:
+
+- load only on public docs pages where enabled
+- respect the site's custom domain and path mount
+- integrate with CSP guidance
+- avoid exposing private account secrets in `dubstack.json`
+- provide clear preview and production verification steps
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/optimize/analytics-integrations">Analytics integrations</a>
+  <a href="/deployment/csp-configuration">CSP configuration</a>
+  <a href="/optimize/feedback">Feedback</a>
+  <a href="/settings/deployment/addons">Add-ons</a>
+</RelatedTopics>

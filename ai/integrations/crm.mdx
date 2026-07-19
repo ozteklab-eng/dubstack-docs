@@ -1,0 +1,47 @@
+---
+title: CRM integrations
+description: Use customer and account context safely when documentation work depends on commercial signals.
+icon: users
+---
+
+CRM integrations are planned context sources for customer, account, deal, and ticket signals.
+
+This family is catalog-only. CRM providers cannot be selected for agent or workflow runs until authorization, scopes, collectors, and safety controls are implemented.
+
+## Supported providers
+
+| Provider | Status | Scope | Planned capabilities |
+| --- | --- | --- | --- |
+| Salesforce | Catalog | Shared | Account, contact, and opportunity context. |
+| HubSpot | Catalog | Shared | Contact, company, deal, and ticket context. |
+
+## Use cases
+
+CRM context can help when docs teams need to understand:
+
+- which customer segments are repeatedly blocked
+- which features appear in sales or onboarding conversations
+- which tickets or opportunities point to documentation gaps
+- which launch materials need better public docs coverage
+
+CRM context should inform documentation priorities. It should not expose private customer records in public docs.
+
+## Safety boundaries
+
+Before CRM context becomes runnable, each provider needs:
+
+- least-privilege scopes
+- organization-scoped connection records
+- tenant isolation
+- clear redaction rules
+- run-history summaries without raw customer records by default
+- explicit workflow selection before any CRM context is read
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/ai/connector-capabilities">Connector capabilities</a>
+  <a href="/ai/integration-permissions">Integration permissions and scopes</a>
+  <a href="/workflows/integrations">Workflow integrations</a>
+  <a href="/dashboard/security-overview">Security overview</a>
+</RelatedTopics>

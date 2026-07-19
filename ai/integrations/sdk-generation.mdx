@@ -1,0 +1,43 @@
+---
+title: SDK generation integrations
+description: Understand how generated SDKs and source repositories fit into API documentation workflows.
+icon: code
+---
+
+SDK generation integrations connect API specifications, generated client libraries, and documentation workflows.
+
+This family is not active as a dedicated connector yet. Use this page to understand the intended boundary and what to use today.
+
+## Current status
+
+dubstack can already document APIs from OpenAPI specifications and expose interactive API reference pages.
+
+For generated SDK workflows today:
+
+- keep the OpenAPI source in the docs repository or a connected source repository
+- document generated SDK install and usage steps as MDX pages
+- use source repositories as read-only workflow context when code changes should produce docs updates
+- use repository authoring to open reviewable docs changes
+
+Dedicated SDK-generation provider connectors are planned, but they are not active in the integration catalog yet.
+
+## Intended connector boundary
+
+An SDK-generation connector should not replace API reference rendering. It should provide extra context such as:
+
+- generated SDK repository links
+- package names and install commands
+- language support matrix
+- release or changelog metadata
+- generated example snippets when available
+
+Docs changes should still write through the connected docs repository.
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/api-reference/introduction">API reference</a>
+  <a href="/api-reference/openapi-setup">OpenAPI setup</a>
+  <a href="/api-reference/code-examples">Code examples</a>
+  <a href="/workflows/reference">Workflow reference</a>
+</RelatedTopics>

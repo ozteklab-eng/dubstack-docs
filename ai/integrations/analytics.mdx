@@ -1,0 +1,57 @@
+---
+title: Analytics integrations
+description: Send published docs traffic to your analytics provider and keep built-in dubstack analytics available in the dashboard.
+icon: chart-network
+---
+
+Analytics integrations add provider tags to the published docs site.
+
+Use this family when your team wants docs traffic to appear in its existing analytics workspace while keeping built-in dubstack traffic, search, assistant, and feedback analytics available in the dashboard.
+
+<Info>
+  Analytics identifiers that run in the browser must be public project IDs or public measurement IDs. Do not publish server-side secrets or write tokens in your docs repository.
+</Info>
+
+## Supported providers
+
+dubstack currently documents configuration for:
+
+- Google Analytics 4
+- Google Tag Manager
+- Plausible, including self-hosted Plausible
+- PostHog, including self-hosted or regional API hosts
+
+Configure analytics from the dashboard or under the top-level `integrations` object in `dubstack.json`.
+
+See [Analytics integrations](/optimize/analytics-integrations) for provider-specific settings and examples.
+
+## Built-in analytics
+
+Third-party analytics do not replace built-in deployment analytics.
+
+The dashboard can still show:
+
+- page views and visitors
+- search activity
+- assistant usage
+- feedback events
+- exports where enabled
+
+See [Analytics](/optimize/analytics) for the dashboard reporting model.
+
+## Custom domains and CSP
+
+For custom domains:
+
+- use the final public hostname in provider dashboards
+- allow provider script hosts in your Content Security Policy if you configure CSP headers
+- verify route-mounted docs still load provider scripts from the public path
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/optimize/analytics-integrations">Analytics integrations</a>
+  <a href="/optimize/analytics">Analytics</a>
+  <a href="/deployment/csp-configuration">CSP configuration</a>
+  <a href="/ai/integrations/privacy">Privacy integrations</a>
+</RelatedTopics>

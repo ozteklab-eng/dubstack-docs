@@ -1,0 +1,45 @@
+---
+title: Project management integrations
+description: Use issue trackers as bounded context for agent answers and documentation workflows.
+icon: panels-top-left
+---
+
+Project management integrations let the agent read selected issue-tracker context when docs work depends on planned, shipped, or triaged product changes.
+
+Use this family for feature issues, bug reports, release epics, backlog labels, and roadmap items that explain what documentation should change.
+
+## Supported providers
+
+| Provider | Status | Scope | Capabilities |
+| --- | --- | --- | --- |
+| [Jira](/ai/integrations/jira) | Active | Shared | Bounded issue context for dashboard agent requests and supported workflows. |
+| Linear | Catalog | Shared | Planned issue, project, and roadmap context. |
+| Plane | Catalog | Shared | Planned self-hosted issue, cycle, module, and project context. |
+
+Catalog-only providers cannot be connected or selected for workflow runs until their authorization flow, scopes, collectors, and tests are enabled for the environment.
+
+## Use cases
+
+Use issue-tracker context when:
+
+- an issue describes the product change more clearly than the code diff
+- a release epic lists documentation tasks
+- bug reports show repeated setup or troubleshooting problems
+- a workflow should inspect recent issues on a schedule and open a docs update for review
+
+Keep queries narrow. Broad issue queries increase cost and make generated documentation harder to review.
+
+## Query boundaries
+
+The active Jira integration requires bounded JQL. Use filters such as project, issue key, label, status, fix version, or updated-date window.
+
+Future issue-tracker providers should follow the same boundary: the workflow should read selected issues, not scan an entire workspace by default.
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/ai/integrations/jira">Jira integration</a>
+  <a href="/workflows/integrations">Workflow integrations</a>
+  <a href="/ai/connector-capabilities">Connector capabilities</a>
+  <a href="/guides/draft-docs-from-code">Draft docs from code</a>
+</RelatedTopics>

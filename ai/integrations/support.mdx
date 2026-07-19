@@ -1,0 +1,53 @@
+---
+title: Support feedback integrations
+description: Understand how support conversations will feed documentation improvement workflows.
+icon: life-buoy
+---
+
+Support feedback integrations help documentation teams turn repeated customer questions into reviewable docs updates.
+
+This family is currently catalog-only. The dashboard can show the provider category, but support-feedback workflows stay blocked until a supported connector, collector, and readiness check are enabled for the deployment.
+
+## Supported providers
+
+| Provider | Status | Scope | Planned capabilities |
+| --- | --- | --- | --- |
+| Plain | Catalog | Shared | Support conversation context and customer records. |
+| Intercom | Catalog | Shared | Conversation and customer context. |
+| Pylon | Catalog | Shared | Customer conversations, accounts, and support context. |
+
+## Workflow relationship
+
+The **Update from support feedback** workflow is visible in the workflow catalog, but it is not runnable until support feedback collection is available.
+
+When enabled, this workflow should:
+
+- read resolved or selected support conversations from connected support systems
+- group related documentation issues into focused themes
+- open reviewable docs changes through the connected Git provider
+- show source counts, provider, and credit usage in run history
+
+It should not copy private customer data into public docs. The workflow must summarize patterns and redact details that are not appropriate for publication.
+
+## Requirements before activation
+
+Support feedback connectors need:
+
+- provider authorization or API-key storage
+- tenant-scoped connection records
+- bounded conversation collection
+- PII and secret redaction
+- workflow readiness checks
+- usage and credit estimation
+- run-history summaries that avoid storing raw transcripts by default
+
+Until those requirements are met, keep the provider catalog visible but unavailable for runs.
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/workflows/reference">Workflow reference</a>
+  <a href="/workflows/integrations">Workflow integrations</a>
+  <a href="/optimize/feedback">Feedback</a>
+  <a href="/dashboard/feedback-analytics">Feedback analytics</a>
+</RelatedTopics>

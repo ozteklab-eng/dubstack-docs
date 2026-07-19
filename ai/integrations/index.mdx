@@ -25,6 +25,31 @@ They do not change the source of truth. Documentation changes still write throug
 
 Connected providers are used as tools for a specific agent or workflow run. dubstack does not proactively read connected apps in the background, and the run should only fetch provider context when that context is relevant to the task.
 
+## Integration families
+
+Start with the family that matches the source context you want the agent or workflow to use.
+
+<CardGroup cols={2}>
+  <Card title="Communication" icon="message-circle" href="/ai/integrations/communication">
+    Slack is active. Mattermost is catalog-only for self-hosted chat and notification workflows.
+  </Card>
+  <Card title="Project management" icon="panels-top-left" href="/ai/integrations/project-management">
+    Jira is active. Linear and Plane are catalog-only issue-tracking providers.
+  </Card>
+  <Card title="Knowledge bases and files" icon="file-stack" href="/ai/integrations/knowledge-base-files">
+    Confluence is active. Notion, Google Drive, and Nextcloud are catalog-only context providers.
+  </Card>
+  <Card title="Support feedback" icon="life-buoy" href="/ai/integrations/support">
+    Plain, Intercom, and Pylon are catalog-only until support-feedback collectors are enabled.
+  </Card>
+  <Card title="CRM" icon="users" href="/ai/integrations/crm">
+    Salesforce and HubSpot are catalog-only customer-context providers.
+  </Card>
+  <Card title="Analytics and privacy" icon="chart-network" href="/ai/integrations/analytics">
+    Traffic tags are configured from site settings. Privacy and consent providers are documented separately.
+  </Card>
+</CardGroup>
+
 ## Available integrations
 
 The integration catalog separates providers that are ready for runs from providers that are visible for roadmap and capability planning.
@@ -34,17 +59,18 @@ The integration catalog separates providers that are ready for runs from provide
 | [Slack](/ai/integrations/slack) | Active | Communication | Agent conversations in Slack, docs answers, draft PR requests, and workflow notifications. | Shared |
 | [Jira](/ai/integrations/jira) | Active | Project management | Issue context for dashboard agent requests and workflows. | Shared |
 | [Confluence](/ai/integrations/confluence) | Active | Documentation | Bounded page context for supported workflows. | Shared |
-| Mattermost | Catalog | Communication | Self-hosted workspace conversations, threads, and notifications. | Shared |
-| Notion | Catalog | Documentation | Pages, docs, and knowledge-base context. | Shared |
-| Google Drive | Catalog | Documentation | Files, folders, and shared-drive context. | Personal |
-| Nextcloud | Catalog | Documentation | Self-hosted files, shared folders, and knowledge bases. | Shared |
+| [Mattermost](/ai/integrations/communication) | Catalog | Communication | Self-hosted workspace conversations, threads, and notifications. | Shared |
+| [Notion](/ai/integrations/knowledge-base-files) | Catalog | Documentation | Pages, docs, and knowledge-base context. | Shared |
+| [Google Drive](/ai/integrations/knowledge-base-files) | Catalog | Documentation | Files, folders, and shared-drive context. | Personal |
+| [Nextcloud](/ai/integrations/knowledge-base-files) | Catalog | Documentation | Self-hosted files, shared folders, and knowledge bases. | Shared |
 | Google Calendar | Catalog | Communication | Event, schedule, and meeting context. | Personal |
-| Linear | Catalog | Project management | Issues, projects, and roadmap context. | Shared |
-| Plane | Catalog | Project management | Self-hosted issues, cycles, modules, and project context. | Shared |
-| Plain | Catalog | Customer support | Support conversations and customer records. | Shared |
-| Intercom | Catalog | Customer support | Conversations, contacts, and help-center context. | Shared |
-| Salesforce | Catalog | CRM | Accounts, contacts, and opportunity context. | Shared |
-| HubSpot | Catalog | CRM | Contacts, companies, deals, and tickets. | Shared |
+| [Linear](/ai/integrations/project-management) | Catalog | Project management | Issues, projects, and roadmap context. | Shared |
+| [Plane](/ai/integrations/project-management) | Catalog | Project management | Self-hosted issues, cycles, modules, and project context. | Shared |
+| [Plain](/ai/integrations/support) | Catalog | Customer support | Support conversations and customer records. | Shared |
+| [Intercom](/ai/integrations/support) | Catalog | Customer support | Conversations, contacts, and help-center context. | Shared |
+| [Pylon](/ai/integrations/support) | Catalog | Customer support | Customer conversations, accounts, and support context. | Shared |
+| [Salesforce](/ai/integrations/crm) | Catalog | CRM | Accounts, contacts, and opportunity context. | Shared |
+| [HubSpot](/ai/integrations/crm) | Catalog | CRM | Contacts, companies, deals, and tickets. | Shared |
 
 | Status | Meaning |
 | --- | --- |

@@ -1,0 +1,45 @@
+---
+title: Communication integrations
+description: Use chat workspaces as bounded context, agent surfaces, and workflow notification channels.
+icon: message-circle
+---
+
+Communication integrations connect the agent to team conversations.
+
+Use this family when documentation work starts from a release thread, incident discussion, product question, or a team channel where people already coordinate changes.
+
+## Supported providers
+
+| Provider | Status | Scope | Capabilities |
+| --- | --- | --- | --- |
+| [Slack](/ai/integrations/slack) | Active | Shared | Agent conversations, bounded thread context, draft documentation requests, follow-up edits, deployment selection, approvals, and workflow notifications. |
+| Mattermost | Catalog | Shared | Planned self-hosted chat context, thread follow-ups, approvals, and workflow notifications. |
+| Google Calendar | Catalog | Personal | Planned event and schedule context for documentation workflows. |
+
+Catalog-only providers are visible for planning, but they cannot be selected for an agent or workflow run until authorization, scopes, collectors, access checks, and tests are active.
+
+## When to use chat context
+
+Use chat context when the relevant source material is conversational:
+
+- a release thread explains why behavior changed
+- an incident channel includes troubleshooting steps that should become docs
+- a support handoff summarizes repeated customer confusion
+- a product team asks for a draft from a short discussion
+
+Do not use chat context as a replacement for repository review. Documentation changes still write through the connected docs repository.
+
+## Safety boundaries
+
+The agent reads chat context only when a request or workflow selects it.
+
+For private Slack channels, invite the app to the channel first. For future self-hosted chat providers, use a restricted service account or app installation that can read only the channels intended for documentation work.
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/ai/integrations/slack">Slack integration</a>
+  <a href="/workflows/integrations">Workflow integrations</a>
+  <a href="/ai/integration-permissions">Integration permissions and scopes</a>
+  <a href="/ai/connector-capabilities">Connector capabilities</a>
+</RelatedTopics>

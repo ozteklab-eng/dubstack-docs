@@ -79,6 +79,50 @@
       "destination": "/ai/integrations"
     },
     {
+      "source": "/integrations/communication",
+      "destination": "/ai/integrations/communication"
+    },
+    {
+      "source": "/integrations/project-management",
+      "destination": "/ai/integrations/project-management"
+    },
+    {
+      "source": "/integrations/knowledge-base-files",
+      "destination": "/ai/integrations/knowledge-base-files"
+    },
+    {
+      "source": "/integrations/support",
+      "destination": "/ai/integrations/support"
+    },
+    {
+      "source": "/integrations/crm",
+      "destination": "/ai/integrations/crm"
+    },
+    {
+      "source": "/integrations/analytics",
+      "destination": "/ai/integrations/analytics"
+    },
+    {
+      "source": "/integrations/privacy",
+      "destination": "/ai/integrations/privacy"
+    },
+    {
+      "source": "/integrations/sdk-generation",
+      "destination": "/ai/integrations/sdk-generation"
+    },
+    {
+      "source": "/integrations/slack",
+      "destination": "/ai/integrations/slack"
+    },
+    {
+      "source": "/integrations/jira",
+      "destination": "/ai/integrations/jira"
+    },
+    {
+      "source": "/integrations/confluence",
+      "destination": "/ai/integrations/confluence"
+    },
+    {
       "source": "/api-reference/endpoint/get-mcp-discovery",
       "destination": "/api-reference/endpoint/get-mcp-server-card"
     },
@@ -830,6 +874,38 @@
               {
                 "slug": "ai/integrations/index",
                 "icon": "plug"
+              },
+              {
+                "slug": "ai/integrations/communication",
+                "icon": "message-circle"
+              },
+              {
+                "slug": "ai/integrations/project-management",
+                "icon": "panels-top-left"
+              },
+              {
+                "slug": "ai/integrations/knowledge-base-files",
+                "icon": "file-stack"
+              },
+              {
+                "slug": "ai/integrations/support",
+                "icon": "life-buoy"
+              },
+              {
+                "slug": "ai/integrations/crm",
+                "icon": "users"
+              },
+              {
+                "slug": "ai/integrations/analytics",
+                "icon": "chart-network"
+              },
+              {
+                "slug": "ai/integrations/privacy",
+                "icon": "shield-check"
+              },
+              {
+                "slug": "ai/integrations/sdk-generation",
+                "icon": "code"
               },
               {
                 "slug": "ai/integration-permissions",
