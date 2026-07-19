@@ -413,6 +413,18 @@
     {
       "source": "/ai/skillmd",
       "destination": "/ai/generated-skill-file"
+    },
+    {
+      "source": "/automations/translate-content",
+      "destination": "/workflows/translate-content"
+    },
+    {
+      "source": "/automations/translations",
+      "destination": "/workflows/translate-content"
+    },
+    {
+      "source": "/workflows/translations",
+      "destination": "/workflows/translate-content"
     }
   ],
   "navbar": {
@@ -1256,6 +1268,10 @@
               {
                 "slug": "workflows/reference",
                 "icon": "list-checks"
+              },
+              {
+                "slug": "workflows/translate-content",
+                "icon": "languages"
               },
               {
                 "slug": "workflows/manage",

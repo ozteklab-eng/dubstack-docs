@@ -1,0 +1,129 @@
+---
+title: Translate content workflow
+description: Keep translated documentation aligned with source-language content when language routing is configured.
+icon: languages
+---
+
+The translate content workflow helps keep localized documentation in sync when source-language content changes.
+
+Use it after your docs site has language routing configured and translated pages are maintained in the same repository as the source docs.
+
+<Info>
+  Language routing is source-backed. dubstack serves translated files from your repository; it does not generate translations at request time.
+</Info>
+
+<Warning>
+  Translation workflow is visible in the workflow catalog, but it is not yet runnable until translation routing, policy controls, and repository write behavior are enabled for the selected deployment.
+</Warning>
+
+## What it does
+
+When enabled for a deployment, the workflow is designed to:
+
+- detect source-language content changes
+- identify configured target languages
+- draft or apply translated updates in locale-prefixed directories
+- keep filenames and slug structure aligned across languages
+- record credit usage in the workflow run history
+
+The workflow writes to the docs repository, not to the published site directly. Published pages update only after the repository change is reviewed, merged, and synced.
+
+## Required setup
+
+Before using translation automation:
+
+1. Choose the default source language.
+2. Add target languages in `navigation.languages`.
+3. Create locale-prefixed directories such as `fr/`, `es/`, or `de/`.
+4. Keep translated page paths aligned with the source-language paths.
+5. Connect a Git provider with repository write access.
+6. Start in **Require review** mode.
+
+See [Languages](/configuration/languages) and [Internationalization](/configuration/internationalization) for the site configuration.
+
+## Target languages
+
+Target languages come from the published site configuration.
+
+```json dubstack.json
+{
+  "navigation": {
+    "languages": [
+      {
+        "code": "en",
+        "label": "English",
+        "href": "/"
+      },
+      {
+        "code": "fr",
+        "label": "French",
+        "href": "/fr"
+      },
+      {
+        "code": "es",
+        "label": "Spanish",
+        "href": "/es"
+      }
+    ]
+  }
+}
+```
+
+The source language should not be selected as a translation target.
+
+## Triggers and update mode
+
+| Setting | Behavior |
+| --- | --- |
+| Trigger | Content update or custom schedule |
+| Recommended first mode | Require review |
+| Automatic mode | Use only after repeated successful reviewed runs |
+| Write target | Connected docs repository |
+| Target pages | Locale-prefixed translated files |
+
+Content-update triggers are useful when source pages change frequently. Scheduled runs are safer when you want translation work to happen in predictable review batches.
+
+## Credit usage
+
+Translation runs are automation runs and count toward workflow credit usage when a runnable translation runner queues work.
+
+The current planning estimate is **913 credits per run**. Actual usage can vary with:
+
+- number of changed source pages
+- number of target languages
+- amount of context read from existing translated pages
+- number of files changed
+- model route and workflow profile
+
+See [AI credits and usage](/ai/credits-usage) for the shared allowance model.
+
+## Review checklist
+
+Review generated translations before publishing, especially for:
+
+- product names and terminology
+- legal, billing, security, or support language
+- code comments and inline UI labels
+- links to localized pages
+- screenshots or region-specific examples
+- date, time, number, and currency formats
+
+## When to keep translation manual
+
+Keep translations manual or use your own translation process when:
+
+- translated docs need legal review before publication
+- the target language has regional terminology requirements
+- only a small number of pages are translated
+- your docs repository has branch protection that requires manual reviewer approval
+- translation workflow is not yet enabled for the deployment
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/configuration/languages">Languages</a>
+  <a href="/configuration/internationalization">Internationalization</a>
+  <a href="/guides/internationalization">Plan multi-language documentation</a>
+  <a href="/workflows/reference#translate-content">Workflow reference</a>
+  <a href="/ai/credits-usage">AI credits and usage</a>
+</RelatedTopics>
