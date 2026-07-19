@@ -1,0 +1,92 @@
+---
+title: Fix grammar and typos workflow
+description: Find spelling, typo, grammar, and small clarity issues before they reach readers.
+icon: spell-check
+---
+
+The fix grammar and typos workflow catches low-risk writing issues and drafts small reviewable corrections.
+
+Use it as an early maintenance workflow because its changes are usually narrow, easy to review, and useful across every docs site.
+
+## What it does
+
+When enabled for a deployment, the workflow is designed to:
+
+- find spelling mistakes, typos, repeated words, and grammar issues
+- improve small clarity issues without changing technical meaning
+- preserve code blocks, API names, CLI flags, and product terminology
+- draft corrections in the connected docs repository
+- open a provider-native review request unless automatic updates are explicitly enabled
+- record run status, changed files, and credit usage in workflow history
+
+This workflow should not rewrite whole pages. Use the style guide workflow when you need voice, tone, or terminology enforcement.
+
+## What it avoids
+
+The workflow should avoid changing:
+
+- code examples and command output
+- API paths, parameters, schema names, and enum values
+- intentional product names or acronyms
+- quoted text that must remain exact
+- legal, compliance, billing, or security language without review
+
+Add instructions for project-specific terms that should not be changed.
+
+## Required setup
+
+Before enabling grammar and typo automation:
+
+1. Connect a Git-backed docs repository.
+2. Confirm the docs repository has write access.
+3. Confirm the authoring model profile is available.
+4. Add exceptions for product names, acronyms, or house terminology.
+5. Start in **Require review** mode.
+
+No additional connector is required.
+
+## Triggers and update mode
+
+| Setting | Behavior |
+| --- | --- |
+| Trigger | Content update or custom schedule |
+| Recommended first mode | Require review |
+| Automatic mode | Use only after repeated clean runs and narrow instructions |
+| Write target | Connected docs repository |
+| Context repositories | Not supported |
+
+Content-update triggers keep recent changes clean. Scheduled runs are useful when a team wants a weekly cleanup pull request instead of frequent small review requests.
+
+## Credit usage
+
+Grammar and typo runs are maintenance workflow runs and count toward workflow credit usage.
+
+The current planning estimate is **330 credits per run**. Actual usage can vary with:
+
+- number of changed pages
+- amount of prose inspected
+- number of suggested edits
+- complexity of terminology exceptions
+- model route and workflow profile
+
+See [AI credits and usage](/ai/credits-usage) for the shared allowance model.
+
+## Review checklist
+
+Before merging generated corrections, confirm:
+
+- technical meaning did not change
+- product names and acronyms were preserved
+- code samples were not rewritten
+- links and anchors still resolve
+- tone remains aligned with your docs style
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/workflows/reference#fix-grammar-and-typos">Workflow reference</a>
+  <a href="/workflows/enforce-style-guide">Enforce your style guide workflow</a>
+  <a href="/guides/style-and-tone">Style and tone</a>
+  <a href="/workflows/manage">Manage workflows</a>
+  <a href="/ai/credits-usage">AI credits and usage</a>
+</RelatedTopics>

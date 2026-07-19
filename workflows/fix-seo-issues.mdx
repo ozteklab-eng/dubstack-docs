@@ -1,0 +1,101 @@
+---
+title: Fix SEO issues workflow
+description: Audit titles, descriptions, headings, canonical URLs, and indexing metadata from workflow runs.
+icon: search-check
+---
+
+The fix SEO issues workflow reviews documentation metadata and page structure so important content is easier to discover and share.
+
+Use it when you publish new sections, migrate routes, refresh product positioning, or need recurring checks for pages that affect acquisition.
+
+## What it does
+
+When enabled for a deployment, the workflow is designed to:
+
+- find pages with missing or weak titles and descriptions
+- flag duplicate or confusing heading structure
+- check canonical URL and redirect consistency
+- review `robots`, `noindex`, and sitemap-related metadata
+- draft focused metadata and copy edits in the connected docs repository
+- record run status, inspected pages, changed files, and credit usage in workflow history
+
+The workflow should improve authored metadata and page structure. It does not replace your broader content strategy, keyword research, or launch messaging.
+
+## Metadata reviewed
+
+| Area | What the workflow checks |
+| --- | --- |
+| Page title | Clear, unique, and aligned with the page topic. |
+| Description | Useful summary for search results and link previews. |
+| Headings | One clear page title and a readable heading hierarchy. |
+| Canonical URL | Canonical route matches redirects and custom-domain behavior. |
+| Indexing metadata | `noindex`, robots, and visibility settings match the intended publication state. |
+| Social metadata | Open Graph and preview fields use the expected page metadata when configured. |
+
+## Required setup
+
+Before enabling SEO automation:
+
+1. Connect a Git-backed docs repository.
+2. Confirm the docs repository has write access.
+3. Confirm the authoring model profile is available.
+4. Add project-specific SEO instructions if you have target terms, naming rules, or pages that should stay hidden.
+5. Start in **Require review** mode.
+
+## Triggers and update mode
+
+| Setting | Behavior |
+| --- | --- |
+| Trigger | Content update or custom schedule |
+| Recommended first mode | Require review |
+| Automatic mode | Use only for narrow metadata-only updates after clean reviewed runs |
+| Write target | Connected docs repository |
+| Context repositories | Not supported |
+
+Scheduled runs are useful for quarterly maintenance. Content-update triggers are useful when many contributors publish pages and frontmatter needs consistent review.
+
+## Instructions
+
+Use workflow instructions to keep SEO fixes aligned with your product language.
+
+Good instructions include:
+
+- preferred product names and capitalization
+- terms that should not be rewritten
+- priority audiences and use cases
+- pages that should stay hidden or noindexed
+- canonical routes after a migration
+
+## Credit usage
+
+SEO audit runs are maintenance workflow runs and count toward workflow credit usage.
+
+The current planning estimate is **422 credits per run**. Actual usage can vary with:
+
+- number of changed or inspected pages
+- amount of metadata already present
+- number of redirects and canonical routes considered
+- amount of copy edited by the run
+- model route and workflow profile
+
+See [AI credits and usage](/ai/credits-usage) for the shared allowance model.
+
+## Review checklist
+
+Before merging a generated SEO fix, confirm:
+
+- titles and descriptions are accurate, not just keyword-heavy
+- hidden or internal pages remain hidden when intended
+- canonical routes match the current domain and route structure
+- headings still read naturally for humans
+- API reference pages keep endpoint names and methods clear
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/workflows/reference#fix-seo-issues">Workflow reference</a>
+  <a href="/configuration/seo-search">SEO and search configuration</a>
+  <a href="/optimize/seo">SEO optimization</a>
+  <a href="/workflows/manage">Manage workflows</a>
+  <a href="/ai/credits-usage">AI credits and usage</a>
+</RelatedTopics>

@@ -1,0 +1,104 @@
+---
+title: Repository copy targets workflow
+description: Run scheduled repository copies for backup, migration rehearsal, and provider portability checks.
+icon: copy
+---
+
+The repository copy targets workflow copies the active docs source into configured target repositories on a schedule or manual run.
+
+Use it for backup rehearsals, Git provider portability checks, and migration testing without switching the live deployment source.
+
+<Info>
+  Repository copy targets are explicit runs, not continuous mirrors.
+</Info>
+
+## What it does
+
+When enabled for a deployment, the workflow is designed to:
+
+- read the active docs repository source
+- validate configured repository copy targets
+- reserve usage from source file count and target count before execution
+- copy the latest docs tree into each configured target
+- record per-target status, file counts, errors, and final credit usage
+- leave the active deployment source unchanged
+
+Repository copies are configured in **Settings > Deployment > Git settings**. A copy target can help prove that a repository can be written, but it does not become the deployment source until an admin deliberately switches providers.
+
+## Common use cases
+
+| Use case | Why it helps |
+| --- | --- |
+| Backup rehearsal | Confirm a secondary repository can receive the current docs tree. |
+| Migration test | Copy docs into a new provider before switching deployment source. |
+| Provider portability | Validate GitHub, GitLab, or self-hosted Git targets without changing production docs. |
+| Compliance archive | Keep scheduled snapshots in a controlled repository target. |
+
+## Required setup
+
+Before enabling repository copy automation:
+
+1. Connect an active docs source repository.
+2. Configure at least one repository copy target in Git settings.
+3. Confirm credentials for the target provider are valid.
+4. Confirm the target branch exists or can be created according to provider policy.
+5. Run a manual copy before enabling a schedule.
+
+## Triggers and update mode
+
+| Setting | Behavior |
+| --- | --- |
+| Trigger | Custom schedule or manual run |
+| Update mode | Repository copy targets |
+| Write target | Configured copy targets |
+| Active deployment source | Unchanged |
+| Context repositories | Not supported |
+
+This workflow does not run on every content update. Use a schedule when you want predictable copies, or run it manually before a migration step.
+
+## Credit usage
+
+Repository copy runs count toward workflow credit usage because they consume platform workers, provider API calls, validation, and run history processing.
+
+The current planning estimate starts at **35 credits per run**. Actual usage can scale with:
+
+- source repository file count
+- total bytes copied
+- number of copy targets
+- provider API pagination and rate limits
+- self-hosted Git network latency
+- retry behavior for failed targets
+
+The run should reserve credits from a preflight source-file and target-count check, then finalize usage from the actual copy result.
+
+## Failure handling
+
+If a target fails, the run history should show:
+
+- provider and repository target
+- branch or path scope
+- last completed file checkpoint when available
+- provider error category
+- whether retry is safe
+
+A failed copy target should not affect the active deployment source or other successful targets.
+
+## Review checklist
+
+After a repository copy run, confirm:
+
+- the target repository contains the expected docs tree
+- `dubstack.json` and OpenAPI files were copied
+- generated or ignored files were handled according to policy
+- the live deployment source did not change
+- usage was recorded against the workflow run
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/workflows/reference#repository-copy-targets">Workflow reference</a>
+  <a href="/deployment/git-settings">Git settings</a>
+  <a href="/deployment/forgejo-github-gitlab">Forgejo, GitHub, and GitLab</a>
+  <a href="/workflows/manage">Manage workflows</a>
+  <a href="/ai/credits-usage">AI credits and usage</a>
+</RelatedTopics>

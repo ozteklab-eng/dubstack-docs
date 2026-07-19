@@ -437,6 +437,66 @@
     {
       "source": "/workflows/update-from-support-feedback",
       "destination": "/workflows/support-feedback"
+    },
+    {
+      "source": "/automations/fix-broken-links",
+      "destination": "/workflows/fix-broken-links"
+    },
+    {
+      "source": "/automations/broken-link-detection",
+      "destination": "/workflows/fix-broken-links"
+    },
+    {
+      "source": "/workflows/broken-link-detection",
+      "destination": "/workflows/fix-broken-links"
+    },
+    {
+      "source": "/automations/fix-seo-issues",
+      "destination": "/workflows/fix-seo-issues"
+    },
+    {
+      "source": "/automations/audit-seo-metadata",
+      "destination": "/workflows/fix-seo-issues"
+    },
+    {
+      "source": "/automations/seo-metadata-audit",
+      "destination": "/workflows/fix-seo-issues"
+    },
+    {
+      "source": "/automations/fix-grammar-typos",
+      "destination": "/workflows/fix-grammar-typos"
+    },
+    {
+      "source": "/automations/fix-grammar-and-typos",
+      "destination": "/workflows/fix-grammar-typos"
+    },
+    {
+      "source": "/automations/typo-check",
+      "destination": "/workflows/fix-grammar-typos"
+    },
+    {
+      "source": "/automations/enforce-style-guide",
+      "destination": "/workflows/enforce-style-guide"
+    },
+    {
+      "source": "/automations/apply-style-guide",
+      "destination": "/workflows/enforce-style-guide"
+    },
+    {
+      "source": "/automations/writing-style",
+      "destination": "/workflows/enforce-style-guide"
+    },
+    {
+      "source": "/automations/repository-copy-targets",
+      "destination": "/workflows/repository-copy-targets"
+    },
+    {
+      "source": "/automations/repository-copy",
+      "destination": "/workflows/repository-copy-targets"
+    },
+    {
+      "source": "/workflows/repository-copy",
+      "destination": "/workflows/repository-copy-targets"
     }
   ],
   "navbar": {
@@ -1284,6 +1344,26 @@
               {
                 "slug": "workflows/translate-content",
                 "icon": "languages"
+              },
+              {
+                "slug": "workflows/fix-broken-links",
+                "icon": "link"
+              },
+              {
+                "slug": "workflows/fix-seo-issues",
+                "icon": "search-check"
+              },
+              {
+                "slug": "workflows/fix-grammar-typos",
+                "icon": "spell-check"
+              },
+              {
+                "slug": "workflows/enforce-style-guide",
+                "icon": "check-circle"
+              },
+              {
+                "slug": "workflows/repository-copy-targets",
+                "icon": "copy"
               },
               {
                 "slug": "workflows/support-feedback",

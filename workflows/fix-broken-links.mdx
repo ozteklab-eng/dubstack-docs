@@ -1,0 +1,91 @@
+---
+title: Fix broken links workflow
+description: Find broken internal and external links and open reviewable fixes from workflow runs.
+icon: link
+---
+
+The fix broken links workflow checks documentation links after content changes and drafts fixes before readers hit dead ends.
+
+Use it after reorganizing pages, migrating docs, changing redirects, or publishing content that links to external services.
+
+## What it does
+
+When enabled for a deployment, the workflow is designed to:
+
+- scan changed documentation content for internal and external links
+- verify that internal routes, redirects, anchors, and generated API reference links resolve
+- detect external links that fail or return unsafe status codes
+- draft link fixes in the connected docs repository
+- open a provider-native review request unless automatic updates are explicitly enabled
+- record run status, inspected pages, changed files, and credit usage in workflow history
+
+The workflow writes through the connected Git provider. It does not patch published R2 artifacts directly.
+
+## What it checks
+
+| Link type | What the workflow validates |
+| --- | --- |
+| Internal pages | Route exists in the published docs tree or redirects to a valid page. |
+| Heading anchors | Anchor IDs resolve after MDX rendering and generated heading IDs are considered. |
+| API reference routes | Endpoint pages and generated OpenAPI pages resolve. |
+| Static assets | Images, downloads, and public files are present. |
+| External URLs | Target responds successfully, or the run records the reason it could not be validated. |
+
+External link validation should be conservative. Some providers block automated checks, rate-limit requests, or return different status codes by geography. Keep review mode enabled when external links are important.
+
+## Required setup
+
+Before enabling broken-link automation:
+
+1. Connect a Git-backed docs repository.
+2. Confirm the docs repository has write access.
+3. Confirm the authoring model profile is available.
+4. Keep the first runs in **Require review** mode.
+
+No additional connector is required.
+
+## Triggers and update mode
+
+| Setting | Behavior |
+| --- | --- |
+| Trigger | Content update or custom schedule |
+| Recommended first mode | Require review |
+| Automatic mode | Use only after repeated clean runs |
+| Write target | Connected docs repository |
+| Context repositories | Not supported |
+
+Content-update triggers catch link regressions quickly. Scheduled runs are more credit-efficient when your team makes many small changes each day.
+
+## Credit usage
+
+Broken-link runs are maintenance workflow runs and count toward workflow credit usage.
+
+The current planning estimate is **285 credits per run**. Actual usage can vary with:
+
+- number of changed pages
+- number of internal and external links
+- redirect depth
+- external provider response behavior
+- number of files changed by the fix
+
+See [AI credits and usage](/ai/credits-usage) for the shared allowance model.
+
+## Review checklist
+
+Before merging a generated fix, confirm:
+
+- changed internal links point to the intended canonical page
+- removed anchors were not replaced with a less specific page link
+- external replacement URLs are trustworthy
+- redirects are not hiding a larger navigation issue
+- generated links still make sense in the surrounding sentence
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/workflows/reference#fix-broken-links">Workflow reference</a>
+  <a href="/workflows/manage">Manage workflows</a>
+  <a href="/configuration/redirects">Redirects</a>
+  <a href="/guides/linking">Linking guide</a>
+  <a href="/ai/credits-usage">AI credits and usage</a>
+</RelatedTopics>

@@ -1,0 +1,97 @@
+---
+title: Enforce your style guide workflow
+description: Keep voice, tone, terminology, and writing rules consistent across documentation updates.
+icon: check-circle
+---
+
+The enforce your style guide workflow applies your writing rules to documentation changes and opens reviewable updates.
+
+Use it when your team has preferred terminology, voice and tone rules, accessibility conventions, or formatting patterns that should stay consistent across contributors.
+
+<Info>
+  Style guide instructions are required before this workflow can be enabled.
+</Info>
+
+## What it does
+
+When enabled for a deployment, the workflow is designed to:
+
+- read saved style guide instructions for the selected deployment
+- review changed documentation content against those rules
+- suggest terminology, tone, and formatting fixes
+- preserve technical accuracy, code examples, and API identifiers
+- draft changes in the connected docs repository
+- record run status, changed files, and credit usage in workflow history
+
+This workflow enforces rules you define. Keep the instructions precise so the generated changes are reviewable.
+
+## Good style guide instructions
+
+Strong instructions are specific and testable.
+
+| Rule type | Example instruction |
+| --- | --- |
+| Terminology | Use "workspace" for the customer account area. Do not use "tenant" in public docs. |
+| Voice | Use direct, active sentences. Avoid marketing claims in setup guides. |
+| Accessibility | Link text should describe the destination. Avoid "click here". |
+| Formatting | Use sentence case for headings. Keep checklist items parallel. |
+| Exceptions | Do not rewrite API enum values, product names, file paths, or command output. |
+
+Avoid broad instructions such as "make the docs better". They make review noisy and can change too much at once.
+
+## Required setup
+
+Before enabling style guide automation:
+
+1. Connect a Git-backed docs repository.
+2. Confirm the docs repository has write access.
+3. Confirm the authoring model profile is available.
+4. Add style guide instructions in the workflow settings drawer.
+5. Start in **Require review** mode.
+
+## Triggers and update mode
+
+| Setting | Behavior |
+| --- | --- |
+| Trigger | Content update or custom schedule |
+| Recommended first mode | Require review |
+| Automatic mode | Use only for narrow, well-tested rules |
+| Write target | Connected docs repository |
+| Context repositories | Not supported |
+| Required setup | Style guide instructions |
+
+Scheduled runs are useful when you want one regular editorial review request. Content-update triggers are useful when consistency needs to be checked immediately after every docs change.
+
+## Credit usage
+
+Style guide runs are maintenance workflow runs and count toward workflow credit usage.
+
+The current planning estimate is **235 credits per run**. Actual usage can vary with:
+
+- number of changed pages
+- number and complexity of style rules
+- amount of prose inspected
+- number of generated edits
+- model route and workflow profile
+
+See [AI credits and usage](/ai/credits-usage) for the shared allowance model.
+
+## Review checklist
+
+Before merging generated style guide updates, confirm:
+
+- the rule was applied correctly
+- the edit did not weaken technical accuracy
+- examples, code, and API identifiers were preserved
+- the change improves consistency without making the page generic
+- any noisy rule should be tightened before the next run
+
+## Related topics
+
+<RelatedTopics>
+  <a href="/workflows/reference#enforce-your-style-guide">Workflow reference</a>
+  <a href="/workflows/fix-grammar-typos">Fix grammar and typos workflow</a>
+  <a href="/guides/style-and-tone">Style and tone</a>
+  <a href="/guides/accessibility">Accessibility</a>
+  <a href="/ai/credits-usage">AI credits and usage</a>
+</RelatedTopics>
