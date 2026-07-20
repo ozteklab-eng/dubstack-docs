@@ -1830,7 +1830,9 @@
   "footer": {
     "style": "default",
     "socials": {
-      "github": "https://github.com/dubstack-ai"
+      "x": "https://x.com/dubstackAI",
+      "github": "https://github.com/dubstack-ai",
+      "linkedin": "https://www.linkedin.com/company/dubstack/"
     },
     "branding": {
       "show_powered_by": true
