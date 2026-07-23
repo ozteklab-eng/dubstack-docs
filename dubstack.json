@@ -568,6 +568,12 @@
     }
   ],
   "navbar": {
+    "links": [
+      {
+        "label": "Talk to us",
+        "href": "https://dubstack.ai/about#contact"
+      }
+    ],
     "primary": {
       "type": "button",
       "label": "Get Started",
@@ -3035,23 +3041,7 @@
               }
             ]
           }
-        ],
-        "footer": {
-          "style": "default",
-          "socials": {
-            "github": "https://github.com/dubstack-ai"
-          },
-          "branding": {
-            "show_powered_by": true
-          }
-        },
-        "navbar": {
-          "primary": {
-            "type": "button",
-            "label": "Bien démarrer",
-            "href": "https://dubstack.ai/#register"
-          }
-        }
+        ]
       }
     ]
   },
