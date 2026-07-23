@@ -1,0 +1,92 @@
+---
+title: Personnalisation du thème
+description: "Configurer les couleurs, les polices, les logos, les blocs de code et les tokens visuels."
+icon: palette
+---
+
+Le thème contrôle le langage visuel de votre site de documentation publié.
+
+La plupart des sites commencent par la configuration du tableau de bord et synchronisent les paramètres résultants via `dubstack.json`.
+
+## Paramètres de thème courants
+
+| Paramètre | Objectif |
+| --- | --- |
+| Couleur principale | Couleur de marque utilisée pour les états actifs et les accents clés. |
+| Couleur d'accent | Accents secondaires utilisés pour les surbrillances et l'interface utilisateur de support. |
+| Logo | Actifs de logo clair et sombre pour l'enveloppe de documentation. |
+| Favicon | Actifs de favicon du navigateur. |
+| Polices | Typographie utilisée pour les titres et le texte principal. |
+| Thème des blocs de code | Comportement de mise en évidence de la syntaxe pour les exemples de code. |
+
+## Configurer depuis le tableau de bord
+
+1. Ouvrez le tableau de bord.
+2. Allez à l'éditeur.
+3. Ouvrez la configuration du site.
+4. Mettez à jour la marque, les couleurs et les paramètres de thème.
+5. Prévisualisez le résultat.
+6. Publiez le changement de configuration.
+
+## Configurer dans la source
+
+Les paramètres de thème peuvent également être représentés dans `dubstack.json` :
+
+```json
+{
+  "theme": "prism",
+  "palette": "classic",
+  "colors": {
+    "primary": "#15803D",
+    "light": "#07C983",
+    "dark": "#15803D"
+  },
+  "site": {
+    "logo": {
+      "light": "/logo/light.svg",
+      "dark": "/logo/dark.svg"
+    },
+    "favicon": "/assets/favicon.svg"
+  },
+  "styling": {
+    "codeblocks": "system"
+  }
+}
+```
+
+Coordonnez les modifications effectuées dans la source et dans le tableau de bord. Si votre équipe examine tous les changements dans des demandes de fusion, appliquez les modifications du thème par le même workflow Git.
+
+## Actifs clairs et sombres
+
+Fournissez des actifs distincts lorsque votre logo ou favicon nécessite un contraste différent en mode clair et sombre.
+
+Fichiers recommandés:
+
+```text
+assets/logo-light.svg
+assets/logo-dark.svg
+assets/favicon-light.svg
+assets/favicon-dark.svg
+```
+
+## Thème du bloc de code
+
+Le thème du bloc de code contrôle la mise en évidence de la syntaxe. Utilisez le paramètre du tableau de bord lorsque c'est possible afin que votre équipe puisse prévisualiser le résultat avant la publication.
+
+Utilisez un thème système/par défaut, sauf si votre marque exige une paire spécifique claire et sombre.
+
+## Polices
+
+Utilisez `fonts` pour contrôler la typographie des titres, du corps et du code.
+
+Voir [Fonts](/fr/configuration/fonts) pour les familles de polices prises en charge, la configuration basée sur la source et les limites de chargement des polices personnalisées.
+
+## CSS personnalisé
+
+Utilisez uniquement `custom_css` pour des substitutions avancées qui ne peuvent pas être exprimées avec les paramètres de thème normaux.
+
+Voir [CSS personnalisé](/fr/configuration/custom-css) pour les points d'ancrage stables et les limites de planification.
+
+## Personnalisation d'entreprise
+
+Theme Studio et Canvas Layout offrent un contrôle visuel plus approfondi pour les espaces de travail éligibles. Utilisez les paramètres de thème standard pour la personnalisation courante du mode docs-shell, et Theme Studio lorsque le site nécessite un système de mise en page personnalisé.

@@ -1825,6 +1825,1234 @@
           }
         ]
       }
+    ],
+    "languages": [
+      {
+        "language": "en",
+        "label": "English",
+        "href": "/",
+        "default": true
+      },
+      {
+        "language": "fr",
+        "label": "Français",
+        "href": "/fr",
+        "tabs": [
+          {
+            "tab": "Documentation",
+            "default": true,
+            "groups": [
+              {
+                "group": "Bien démarrer",
+                "icon": "rocket",
+                "pages": [
+                  {
+                    "slug": "fr/index",
+                    "icon": "house"
+                  },
+                  {
+                    "slug": "fr/what-is-dubstack",
+                    "icon": "circle-help"
+                  },
+                  {
+                    "slug": "fr/quickstart",
+                    "icon": "zap"
+                  },
+                  {
+                    "slug": "fr/guides/index",
+                    "icon": "map"
+                  },
+                  {
+                    "slug": "fr/guides/understand-your-audience",
+                    "icon": "users"
+                  },
+                  {
+                    "slug": "fr/guides/developer-documentation",
+                    "icon": "code"
+                  },
+                  {
+                    "slug": "fr/guides/internal-knowledge-base",
+                    "icon": "building-2"
+                  },
+                  {
+                    "slug": "fr/guides/help-center",
+                    "icon": "life-buoy"
+                  },
+                  {
+                    "slug": "fr/guides/draft-docs-from-code",
+                    "icon": "git-pull-request"
+                  },
+                  {
+                    "slug": "fr/getting-started/overview",
+                    "icon": "book-open"
+                  },
+                  {
+                    "slug": "fr/getting-started/create-site",
+                    "icon": "plus"
+                  },
+                  {
+                    "slug": "fr/getting-started/connect-git",
+                    "icon": "git-branch"
+                  },
+                  {
+                    "slug": "fr/getting-started/skip-git-hosted-repo",
+                    "icon": "cloud"
+                  },
+                  {
+                    "slug": "fr/getting-started/deploy",
+                    "icon": "upload-cloud"
+                  }
+                ]
+              },
+              {
+                "group": "Déploiement",
+                "icon": "cloud",
+                "pages": [
+                  {
+                    "slug": "fr/deployment/git-settings",
+                    "icon": "settings"
+                  },
+                  {
+                    "slug": "fr/deployment/github",
+                    "icon": "github"
+                  },
+                  {
+                    "slug": "fr/deployment/configure-automerge",
+                    "icon": "shield-check"
+                  },
+                  {
+                    "slug": "fr/deployment/gitlab",
+                    "icon": "gitlab"
+                  },
+                  {
+                    "slug": "fr/deployment/gitlab-self-hosted-oauth",
+                    "icon": "key-round"
+                  },
+                  {
+                    "slug": "fr/deployment/forgejo",
+                    "icon": "git-branch"
+                  },
+                  {
+                    "slug": "fr/deployment/local-git-workflow",
+                    "icon": "terminal"
+                  },
+                  {
+                    "slug": "fr/deployment/monorepo",
+                    "icon": "folder-tree"
+                  },
+                  {
+                    "slug": "fr/deployment/multi-repo",
+                    "icon": "git-fork"
+                  },
+                  {
+                    "slug": "fr/deployment/preview-deployments",
+                    "icon": "git-pull-request"
+                  },
+                  {
+                    "slug": "fr/deployment/docs-authentication",
+                    "icon": "lock-keyhole"
+                  },
+                  {
+                    "slug": "fr/deployment/manual-updates-history",
+                    "icon": "refresh-cw"
+                  },
+                  {
+                    "slug": "fr/deployment/custom-domains",
+                    "icon": "globe"
+                  },
+                  {
+                    "slug": "fr/deployment/docs-subpath",
+                    "icon": "route"
+                  },
+                  {
+                    "slug": "fr/deployment/cloudflare",
+                    "icon": "cloud"
+                  },
+                  {
+                    "slug": "fr/deployment/vercel-rewrites",
+                    "icon": "split"
+                  },
+                  {
+                    "slug": "fr/deployment/reverse-proxy",
+                    "icon": "network"
+                  },
+                  {
+                    "slug": "fr/deployment/route53-cloudfront",
+                    "icon": "server"
+                  },
+                  {
+                    "slug": "fr/deployment/ci",
+                    "icon": "check-circle"
+                  },
+                  {
+                    "slug": "fr/deployment/webhooks-ci",
+                    "icon": "workflow"
+                  },
+                  {
+                    "slug": "fr/deployment/security-headers",
+                    "icon": "shield-check"
+                  },
+                  {
+                    "slug": "fr/deployment/csp-configuration",
+                    "icon": "shield"
+                  },
+                  {
+                    "slug": "fr/deployment/forgejo-github-gitlab",
+                    "icon": "git-branch"
+                  },
+                  {
+                    "slug": "fr/deployment/git-sync",
+                    "icon": "refresh-cw"
+                  },
+                  {
+                    "slug": "fr/deployment/source-control-troubleshooting",
+                    "icon": "wrench"
+                  }
+                ]
+              },
+              {
+                "group": "Migration",
+                "icon": "git-pull-request-arrow",
+                "pages": [
+                  {
+                    "slug": "fr/migration/overview",
+                    "icon": "map"
+                  },
+                  {
+                    "slug": "fr/migration/public-wiki-previews",
+                    "icon": "globe"
+                  },
+                  {
+                    "slug": "fr/migration/generated-reconstruction",
+                    "icon": "sparkles"
+                  },
+                  {
+                    "slug": "fr/migration/authored-config-import",
+                    "icon": "file-cog"
+                  },
+                  {
+                    "slug": "fr/migration/claim-adopt-flow",
+                    "icon": "badge-check"
+                  }
+                ]
+              },
+              {
+                "group": "Rédaction de contenu",
+                "icon": "file-text",
+                "pages": [
+                  {
+                    "slug": "fr/writing-content/mdx",
+                    "icon": "file-code"
+                  },
+                  {
+                    "slug": "fr/writing-content/pages-files",
+                    "icon": "files"
+                  },
+                  {
+                    "slug": "fr/guides/content-types",
+                    "icon": "files"
+                  },
+                  {
+                    "slug": "fr/guides/content-templates",
+                    "icon": "layout-template"
+                  },
+                  {
+                    "slug": "fr/writing-content/text-formatting",
+                    "icon": "pilcrow"
+                  },
+                  {
+                    "slug": "fr/writing-content/headings-anchors",
+                    "icon": "heading"
+                  },
+                  {
+                    "slug": "fr/writing-content/changelog-updates",
+                    "icon": "history"
+                  },
+                  {
+                    "slug": "fr/writing-content/components",
+                    "icon": "puzzle-piece"
+                  },
+                  {
+                    "slug": "fr/writing-content/columns",
+                    "icon": "columns-3"
+                  },
+                  {
+                    "slug": "fr/writing-content/cards",
+                    "icon": "panels-top-left"
+                  },
+                  {
+                    "slug": "fr/writing-content/related-topics",
+                    "icon": "file-search"
+                  },
+                  {
+                    "slug": "fr/writing-content/callouts",
+                    "icon": "badge-alert"
+                  },
+                  {
+                    "slug": "fr/writing-content/accordions",
+                    "icon": "list-collapse"
+                  },
+                  {
+                    "slug": "fr/writing-content/tabs-and-steps",
+                    "icon": "list-ordered"
+                  },
+                  {
+                    "slug": "fr/writing-content/code-groups",
+                    "icon": "square-terminal"
+                  },
+                  {
+                    "slug": "fr/writing-content/request-response-examples",
+                    "icon": "panel-right"
+                  },
+                  {
+                    "slug": "fr/writing-content/frames",
+                    "icon": "scan"
+                  },
+                  {
+                    "slug": "fr/writing-content/badges",
+                    "icon": "badge"
+                  },
+                  {
+                    "slug": "fr/writing-content/icons",
+                    "icon": "icons"
+                  },
+                  {
+                    "slug": "fr/writing-content/tooltips",
+                    "icon": "message-circle-question"
+                  },
+                  {
+                    "slug": "fr/writing-content/colors",
+                    "icon": "palette"
+                  },
+                  {
+                    "slug": "fr/writing-content/tiles",
+                    "icon": "panels-top-left"
+                  },
+                  {
+                    "slug": "fr/writing-content/panels",
+                    "icon": "panel-right"
+                  },
+                  {
+                    "slug": "fr/writing-content/views",
+                    "icon": "gallery-horizontal-end"
+                  },
+                  {
+                    "slug": "fr/writing-content/prompts",
+                    "icon": "sparkles"
+                  },
+                  {
+                    "slug": "fr/writing-content/visibility",
+                    "icon": "eye"
+                  },
+                  {
+                    "slug": "fr/writing-content/fields-expandables",
+                    "icon": "list-tree"
+                  },
+                  {
+                    "slug": "fr/writing-content/file-trees",
+                    "icon": "folder-tree"
+                  },
+                  {
+                    "slug": "fr/writing-content/code-blocks",
+                    "icon": "code"
+                  },
+                  {
+                    "slug": "fr/writing-content/images-assets",
+                    "icon": "image"
+                  },
+                  {
+                    "slug": "fr/writing-content/media-embeds",
+                    "icon": "image"
+                  },
+                  {
+                    "slug": "fr/writing-content/mermaid-diagrams",
+                    "icon": "workflow"
+                  },
+                  {
+                    "slug": "fr/writing-content/reusable-snippets",
+                    "icon": "recycle"
+                  },
+                  {
+                    "slug": "fr/writing-content/tables",
+                    "icon": "table"
+                  }
+                ]
+              },
+              {
+                "group": "Configuration",
+                "icon": "settings",
+                "pages": [
+                  {
+                    "slug": "fr/configuration/dubstack-json",
+                    "icon": "braces"
+                  },
+                  {
+                    "slug": "fr/configuration/settings-reference",
+                    "icon": "list-checks"
+                  },
+                  {
+                    "slug": "fr/configuration/appearance-reference",
+                    "icon": "palette"
+                  },
+                  {
+                    "slug": "fr/configuration/structure-reference",
+                    "icon": "layout-list"
+                  },
+                  {
+                    "slug": "fr/configuration/banners",
+                    "icon": "megaphone"
+                  },
+                  {
+                    "slug": "fr/configuration/api-settings-reference",
+                    "icon": "terminal"
+                  },
+                  {
+                    "slug": "fr/configuration/seo-search-reference",
+                    "icon": "search-check"
+                  },
+                  {
+                    "slug": "fr/configuration/pages-frontmatter",
+                    "icon": "file-cog"
+                  },
+                  {
+                    "slug": "fr/configuration/hidden-pages",
+                    "icon": "eye-off"
+                  },
+                  {
+                    "slug": "fr/configuration/dubstackignore",
+                    "icon": "file-x"
+                  },
+                  {
+                    "slug": "fr/configuration/navigation",
+                    "icon": "map"
+                  },
+                  {
+                    "slug": "fr/configuration/languages",
+                    "icon": "languages"
+                  },
+                  {
+                    "slug": "fr/configuration/internationalization",
+                    "icon": "languages"
+                  },
+                  {
+                    "slug": "fr/configuration/theming",
+                    "icon": "palette"
+                  },
+                  {
+                    "slug": "fr/configuration/fonts",
+                    "icon": "text-cursor-input"
+                  },
+                  {
+                    "slug": "fr/configuration/custom-css",
+                    "icon": "paintbrush"
+                  },
+                  {
+                    "slug": "fr/configuration/redirects",
+                    "icon": "corner-up-right"
+                  },
+                  {
+                    "slug": "fr/configuration/custom-404-page",
+                    "icon": "file-question"
+                  },
+                  {
+                    "slug": "fr/configuration/seo-search",
+                    "icon": "search"
+                  }
+                ]
+              },
+              {
+                "group": "Optimiser",
+                "icon": "chart-no-axes-combined",
+                "pages": [
+                  {
+                    "slug": "fr/optimize/analytics",
+                    "icon": "chart-no-axes-combined"
+                  },
+                  {
+                    "slug": "fr/optimize/analytics-integrations",
+                    "icon": "chart-network"
+                  },
+                  {
+                    "slug": "fr/optimize/seo",
+                    "icon": "search-check"
+                  },
+                  {
+                    "slug": "fr/optimize/search",
+                    "icon": "search"
+                  },
+                  {
+                    "slug": "fr/optimize/feedback",
+                    "icon": "thumbs-up"
+                  }
+                ]
+              },
+              {
+                "group": "Tableau de bord",
+                "icon": "layout-dashboard",
+                "pages": [
+                  {
+                    "slug": "fr/dashboard/overview",
+                    "icon": "layout-dashboard"
+                  },
+                  {
+                    "slug": "fr/dashboard/setup-checklist",
+                    "icon": "list-checks"
+                  },
+                  {
+                    "slug": "fr/settings/deployment/addons",
+                    "icon": "sliders-horizontal"
+                  },
+                  {
+                    "slug": "fr/dashboard/feedback-analytics",
+                    "icon": "chart-no-axes-combined"
+                  },
+                  {
+                    "slug": "fr/dashboard/team-members",
+                    "icon": "users"
+                  },
+                  {
+                    "slug": "fr/dashboard/roles",
+                    "icon": "shield-check"
+                  },
+                  {
+                    "slug": "fr/dashboard/deployment-permissions",
+                    "icon": "lock-keyhole"
+                  },
+                  {
+                    "slug": "fr/dashboard/security-overview",
+                    "icon": "shield-check"
+                  },
+                  {
+                    "slug": "fr/dashboard/api-keys",
+                    "icon": "key-round"
+                  },
+                  {
+                    "slug": "fr/dashboard/sso",
+                    "icon": "building-2"
+                  },
+                  {
+                    "slug": "fr/dashboard/audit-logs",
+                    "icon": "clipboard-list"
+                  },
+                  {
+                    "slug": "fr/dashboard/billing-plans",
+                    "icon": "credit-card"
+                  },
+                  {
+                    "slug": "fr/dashboard/usage",
+                    "icon": "gauge"
+                  },
+                  {
+                    "slug": "fr/dashboard/notifications",
+                    "icon": "bell"
+                  }
+                ]
+              },
+              {
+                "group": "Éditeur",
+                "icon": "pencil-ruler",
+                "pages": [
+                  {
+                    "slug": "fr/editor/overview",
+                    "icon": "pencil"
+                  },
+                  {
+                    "slug": "fr/editor/tutorial",
+                    "icon": "graduation-cap"
+                  },
+                  {
+                    "slug": "fr/editor/pages",
+                    "icon": "file-text"
+                  },
+                  {
+                    "slug": "fr/editor/media",
+                    "icon": "image"
+                  },
+                  {
+                    "slug": "fr/editor/navigation",
+                    "icon": "map"
+                  },
+                  {
+                    "slug": "fr/editor/live-preview",
+                    "icon": "eye"
+                  },
+                  {
+                    "slug": "fr/editor/ask-agent",
+                    "icon": "sparkles"
+                  },
+                  {
+                    "slug": "fr/editor/site-configurations",
+                    "icon": "sliders-horizontal"
+                  },
+                  {
+                    "slug": "fr/editor/settings",
+                    "icon": "settings"
+                  },
+                  {
+                    "slug": "fr/editor/slash-commands",
+                    "icon": "command"
+                  },
+                  {
+                    "slug": "fr/editor/git-essentials",
+                    "icon": "git-branch"
+                  },
+                  {
+                    "slug": "fr/editor/branching-and-publishing",
+                    "icon": "git-pull-request"
+                  },
+                  {
+                    "slug": "fr/editor/drafts",
+                    "icon": "file-clock"
+                  },
+                  {
+                    "slug": "fr/editor/keyboard-shortcuts",
+                    "icon": "keyboard"
+                  },
+                  {
+                    "slug": "fr/editor/publishing",
+                    "icon": "upload-cloud"
+                  }
+                ]
+              },
+              {
+                "group": "CLI",
+                "icon": "terminal",
+                "pages": [
+                  {
+                    "slug": "fr/cli/index",
+                    "icon": "terminal"
+                  },
+                  {
+                    "slug": "fr/cli/install",
+                    "icon": "download"
+                  },
+                  {
+                    "slug": "fr/cli/commands",
+                    "icon": "list"
+                  },
+                  {
+                    "slug": "fr/cli/preview",
+                    "icon": "eye"
+                  }
+                ]
+              },
+              {
+                "group": "Theme Studio",
+                "icon": "paintbrush",
+                "pages": [
+                  {
+                    "slug": "fr/theme-studio/overview",
+                    "icon": "paintbrush"
+                  },
+                  {
+                    "slug": "fr/theme-studio/canvas-layout",
+                    "icon": "layout-template"
+                  },
+                  {
+                    "slug": "fr/guides/custom-layouts",
+                    "icon": "layout-template"
+                  },
+                  {
+                    "slug": "fr/theme-studio/enterprise-gating",
+                    "icon": "shield"
+                  }
+                ]
+              },
+              {
+                "group": "IA",
+                "icon": "sparkles",
+                "pages": [
+                  {
+                    "slug": "fr/ai/ai-surfaces",
+                    "icon": "panels-top-left"
+                  },
+                  {
+                    "slug": "fr/ai/credits-usage",
+                    "icon": "gauge"
+                  },
+                  {
+                    "slug": "fr/ai/assistant",
+                    "icon": "bot"
+                  },
+                  {
+                    "slug": "fr/ai/assistant-usage",
+                    "icon": "messages-square"
+                  },
+                  {
+                    "slug": "fr/ai/assistant-settings",
+                    "icon": "settings"
+                  },
+                  {
+                    "slug": "fr/ai/custom-ai-surfaces",
+                    "icon": "panels-top-left"
+                  },
+                  {
+                    "slug": "fr/ai/agent",
+                    "icon": "sparkles"
+                  },
+                  {
+                    "slug": "fr/ai/effective-agent-prompts",
+                    "icon": "pen-line"
+                  },
+                  {
+                    "slug": "fr/guides/claude-code",
+                    "icon": "terminal"
+                  },
+                  {
+                    "slug": "fr/guides/codex",
+                    "icon": "bot"
+                  },
+                  {
+                    "slug": "fr/guides/cursor",
+                    "icon": "code"
+                  },
+                  {
+                    "slug": "fr/guides/devin-desktop",
+                    "icon": "sparkles"
+                  },
+                  {
+                    "slug": "fr/ai/agent-use-cases",
+                    "icon": "list-checks"
+                  },
+                  {
+                    "slug": "fr/ai/agent-instructions",
+                    "icon": "file-cog"
+                  },
+                  {
+                    "slug": "fr/ai/integrations/index",
+                    "icon": "plug"
+                  },
+                  {
+                    "slug": "fr/ai/integrations/communication",
+                    "icon": "message-circle"
+                  },
+                  {
+                    "slug": "fr/ai/integrations/project-management",
+                    "icon": "panels-top-left"
+                  },
+                  {
+                    "slug": "fr/ai/integrations/knowledge-base-files",
+                    "icon": "file-stack"
+                  },
+                  {
+                    "slug": "fr/ai/integrations/support",
+                    "icon": "life-buoy"
+                  },
+                  {
+                    "slug": "fr/ai/integrations/crm",
+                    "icon": "users"
+                  },
+                  {
+                    "slug": "fr/ai/integrations/analytics",
+                    "icon": "chart-network"
+                  },
+                  {
+                    "slug": "fr/ai/integrations/privacy",
+                    "icon": "shield-check"
+                  },
+                  {
+                    "slug": "fr/ai/integrations/sdk-generation",
+                    "icon": "code"
+                  },
+                  {
+                    "slug": "fr/ai/integration-permissions",
+                    "icon": "shield-check"
+                  },
+                  {
+                    "slug": "fr/ai/connector-capabilities",
+                    "icon": "plug-zap"
+                  },
+                  {
+                    "slug": "fr/ai/integrations/slack",
+                    "icon": "message-circle"
+                  },
+                  {
+                    "slug": "fr/ai/integrations/jira",
+                    "icon": "panels-top-left"
+                  },
+                  {
+                    "slug": "fr/ai/integrations/confluence",
+                    "icon": "file-stack"
+                  },
+                  {
+                    "slug": "fr/ai/contextual-actions",
+                    "icon": "mouse-pointer-click"
+                  },
+                  {
+                    "slug": "fr/ai/markdown-export",
+                    "icon": "file-text"
+                  },
+                  {
+                    "slug": "fr/ai/llms-indexes",
+                    "icon": "list-tree"
+                  },
+                  {
+                    "slug": "fr/ai/generated-skill-file",
+                    "icon": "badge-check"
+                  },
+                  {
+                    "slug": "fr/ai/custom-skill-files",
+                    "icon": "file-cog"
+                  },
+                  {
+                    "slug": "fr/ai/ai-discovery-files",
+                    "icon": "file-search"
+                  },
+                  {
+                    "slug": "fr/guides/geo",
+                    "icon": "sparkles"
+                  },
+                  {
+                    "slug": "fr/ai/agent-readiness-checklist",
+                    "icon": "list-checks"
+                  },
+                  {
+                    "slug": "fr/ai/mcp",
+                    "icon": "plug"
+                  }
+                ]
+              },
+              {
+                "group": "Flux de travail",
+                "icon": "workflow",
+                "pages": [
+                  {
+                    "slug": "fr/workflows",
+                    "icon": "workflow"
+                  },
+                  {
+                    "slug": "fr/workflows/reference",
+                    "icon": "list-checks"
+                  },
+                  {
+                    "slug": "fr/workflows/update-from-code-changes",
+                    "icon": "git-pull-request"
+                  },
+                  {
+                    "slug": "fr/workflows/draft-changelog",
+                    "icon": "history"
+                  },
+                  {
+                    "slug": "fr/workflows/assistant-conversation-gaps",
+                    "icon": "messages-square"
+                  },
+                  {
+                    "slug": "fr/workflows/user-feedback-improvements",
+                    "icon": "thumbs-up"
+                  },
+                  {
+                    "slug": "fr/workflows/support-feedback",
+                    "icon": "life-buoy"
+                  },
+                  {
+                    "slug": "fr/workflows/translate-content",
+                    "icon": "languages"
+                  },
+                  {
+                    "slug": "fr/workflows/fix-broken-links",
+                    "icon": "link"
+                  },
+                  {
+                    "slug": "fr/workflows/fix-seo-issues",
+                    "icon": "search-check"
+                  },
+                  {
+                    "slug": "fr/workflows/fix-grammar-typos",
+                    "icon": "spell-check"
+                  },
+                  {
+                    "slug": "fr/workflows/enforce-style-guide",
+                    "icon": "check-circle"
+                  },
+                  {
+                    "slug": "fr/workflows/repository-copy-targets",
+                    "icon": "copy"
+                  },
+                  {
+                    "slug": "fr/workflows/manage",
+                    "icon": "toggle-right"
+                  },
+                  {
+                    "slug": "fr/workflows/configuration",
+                    "icon": "settings-2"
+                  },
+                  {
+                    "slug": "fr/workflows/integrations",
+                    "icon": "plug-zap"
+                  },
+                  {
+                    "slug": "fr/workflows/create",
+                    "icon": "plus"
+                  }
+                ]
+              },
+              {
+                "group": "Référence",
+                "icon": "list-checks",
+                "pages": [
+                  {
+                    "slug": "fr/reference/tiers",
+                    "icon": "layers"
+                  },
+                  {
+                    "slug": "fr/reference/limits",
+                    "icon": "gauge"
+                  },
+                  {
+                    "slug": "fr/reference/troubleshooting",
+                    "icon": "wrench"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Guides",
+            "groups": [
+              {
+                "group": "Planification",
+                "icon": "map",
+                "pages": [
+                  {
+                    "slug": "fr/guides/index",
+                    "icon": "map"
+                  },
+                  {
+                    "slug": "fr/guides/understand-your-audience",
+                    "icon": "users"
+                  },
+                  {
+                    "slug": "fr/guides/developer-documentation",
+                    "icon": "code"
+                  },
+                  {
+                    "slug": "fr/guides/internal-knowledge-base",
+                    "icon": "building-2"
+                  },
+                  {
+                    "slug": "fr/guides/help-center",
+                    "icon": "life-buoy"
+                  },
+                  {
+                    "slug": "fr/guides/content-types",
+                    "icon": "files"
+                  },
+                  {
+                    "slug": "fr/guides/content-templates",
+                    "icon": "layout-template"
+                  },
+                  {
+                    "slug": "fr/guides/custom-layouts",
+                    "icon": "layout-template"
+                  },
+                  {
+                    "slug": "fr/guides/internationalization",
+                    "icon": "languages"
+                  }
+                ]
+              },
+              {
+                "group": "Rédaction et qualité",
+                "icon": "pen-line",
+                "pages": [
+                  {
+                    "slug": "fr/guides/accessibility",
+                    "icon": "accessibility"
+                  },
+                  {
+                    "slug": "fr/guides/style-and-tone",
+                    "icon": "pen-line"
+                  },
+                  {
+                    "slug": "fr/guides/improving-docs",
+                    "icon": "chart-line"
+                  },
+                  {
+                    "slug": "fr/guides/maintenance",
+                    "icon": "calendar-check"
+                  },
+                  {
+                    "slug": "fr/guides/seo",
+                    "icon": "search"
+                  },
+                  {
+                    "slug": "fr/guides/linking",
+                    "icon": "link"
+                  },
+                  {
+                    "slug": "fr/guides/media",
+                    "icon": "image"
+                  }
+                ]
+              },
+              {
+                "group": "Déploiement",
+                "icon": "rocket",
+                "pages": [
+                  {
+                    "slug": "fr/guides/git-concepts",
+                    "icon": "git-branch"
+                  },
+                  {
+                    "slug": "fr/guides/branches",
+                    "icon": "git-pull-request"
+                  },
+                  {
+                    "slug": "fr/deployment/custom-domains",
+                    "icon": "globe"
+                  },
+                  {
+                    "slug": "fr/deployment/security-headers",
+                    "icon": "shield-check"
+                  },
+                  {
+                    "slug": "fr/deployment/csp-configuration",
+                    "icon": "shield"
+                  },
+                  {
+                    "slug": "fr/deployment/docs-authentication",
+                    "icon": "lock-keyhole"
+                  },
+                  {
+                    "slug": "fr/deployment/docs-subpath",
+                    "icon": "folder-tree"
+                  },
+                  {
+                    "slug": "fr/deployment/reverse-proxy",
+                    "icon": "route"
+                  },
+                  {
+                    "slug": "fr/deployment/cloudflare",
+                    "icon": "cloud"
+                  },
+                  {
+                    "slug": "fr/deployment/vercel-rewrites",
+                    "icon": "triangle"
+                  },
+                  {
+                    "slug": "fr/deployment/route53-cloudfront",
+                    "icon": "cloud-cog"
+                  },
+                  {
+                    "slug": "fr/deployment/preview-deployments",
+                    "icon": "eye"
+                  },
+                  {
+                    "slug": "fr/deployment/manual-updates-history",
+                    "icon": "refresh-cw"
+                  },
+                  {
+                    "slug": "fr/deployment/source-control-troubleshooting",
+                    "icon": "circle-alert"
+                  },
+                  {
+                    "slug": "fr/deployment/ci",
+                    "icon": "check-circle"
+                  },
+                  {
+                    "slug": "fr/deployment/webhooks-ci",
+                    "icon": "workflow"
+                  },
+                  {
+                    "slug": "fr/deployment/git-sync",
+                    "icon": "refresh-cw"
+                  },
+                  {
+                    "slug": "fr/deployment/forgejo-github-gitlab",
+                    "icon": "git-merge"
+                  },
+                  {
+                    "slug": "fr/deployment/git-settings",
+                    "icon": "settings"
+                  },
+                  {
+                    "slug": "fr/deployment/github",
+                    "icon": "github"
+                  },
+                  {
+                    "slug": "fr/deployment/gitlab",
+                    "icon": "gitlab"
+                  },
+                  {
+                    "slug": "fr/deployment/gitlab-self-hosted-oauth",
+                    "icon": "key-round"
+                  },
+                  {
+                    "slug": "fr/deployment/forgejo",
+                    "icon": "git-branch"
+                  }
+                ]
+              },
+              {
+                "group": "IA et flux de travail",
+                "icon": "workflow",
+                "pages": [
+                  {
+                    "slug": "fr/guides/use-workflows",
+                    "icon": "workflow"
+                  },
+                  {
+                    "slug": "fr/guides/geo",
+                    "icon": "sparkles"
+                  },
+                  {
+                    "slug": "fr/guides/draft-docs-from-code",
+                    "icon": "git-pull-request"
+                  },
+                  {
+                    "slug": "fr/guides/claude-code",
+                    "icon": "terminal"
+                  },
+                  {
+                    "slug": "fr/guides/codex",
+                    "icon": "bot"
+                  },
+                  {
+                    "slug": "fr/guides/cursor",
+                    "icon": "code"
+                  },
+                  {
+                    "slug": "fr/guides/devin-desktop",
+                    "icon": "sparkles"
+                  }
+                ]
+              },
+              {
+                "group": "Migration",
+                "icon": "repeat",
+                "pages": [
+                  {
+                    "slug": "fr/migration/overview",
+                    "icon": "route"
+                  },
+                  {
+                    "slug": "fr/migration/public-wiki-previews",
+                    "icon": "scan-search"
+                  },
+                  {
+                    "slug": "fr/migration/authored-config-import",
+                    "icon": "file-json"
+                  },
+                  {
+                    "slug": "fr/migration/generated-reconstruction",
+                    "icon": "wand-sparkles"
+                  },
+                  {
+                    "slug": "fr/migration/claim-adopt-flow",
+                    "icon": "badge-check"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Référence API",
+            "groups": [
+              {
+                "group": "Référence API",
+                "icon": "book",
+                "pages": [
+                  {
+                    "slug": "fr/api-reference/introduction",
+                    "icon": "book"
+                  },
+                  {
+                    "slug": "fr/api-playground/index",
+                    "icon": "terminal"
+                  },
+                  {
+                    "slug": "fr/api-reference/playground-overview",
+                    "icon": "terminal"
+                  },
+                  {
+                    "slug": "fr/api-reference/request-builder",
+                    "icon": "panel-top"
+                  },
+                  {
+                    "slug": "fr/api-reference/code-examples",
+                    "icon": "code"
+                  },
+                  {
+                    "slug": "fr/api-reference/live-requests",
+                    "icon": "send"
+                  },
+                  {
+                    "slug": "fr/api-reference/workflow-triggers",
+                    "icon": "workflow"
+                  },
+                  {
+                    "slug": "fr/api-reference/analytics-exports",
+                    "icon": "chart-no-axes-combined"
+                  },
+                  {
+                    "slug": "fr/api-reference/base-url-authentication",
+                    "icon": "shield-check"
+                  },
+                  {
+                    "slug": "fr/api-reference/nested-schemas",
+                    "icon": "brackets"
+                  },
+                  {
+                    "slug": "fr/api-reference/openapi-setup",
+                    "icon": "file-json"
+                  },
+                  {
+                    "slug": "fr/api-reference/spec-management",
+                    "icon": "file-json"
+                  },
+                  {
+                    "slug": "fr/api-reference/playground-authentication",
+                    "icon": "key"
+                  },
+                  {
+                    "slug": "fr/api-reference/endpoint-visibility",
+                    "icon": "eye-off"
+                  },
+                  {
+                    "slug": "fr/api-reference/response-examples",
+                    "icon": "braces"
+                  },
+                  {
+                    "slug": "fr/api-reference/troubleshooting",
+                    "icon": "wrench"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Journal des modifications",
+            "groups": [
+              {
+                "group": "Journal des modifications",
+                "icon": "history",
+                "pages": [
+                  {
+                    "slug": "fr/changelog",
+                    "icon": "history"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "footer": {
+          "style": "default",
+          "socials": {
+            "github": "https://github.com/dubstack-ai"
+          },
+          "branding": {
+            "show_powered_by": true
+          }
+        },
+        "navbar": {
+          "primary": {
+            "type": "button",
+            "label": "Bien démarrer",
+            "href": "https://dubstack.ai/#register"
+          }
+        }
+      }
     ]
   },
   "footer": {

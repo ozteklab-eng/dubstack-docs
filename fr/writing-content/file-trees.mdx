@@ -1,0 +1,46 @@
+---
+title: Arbres de fichiers
+description: Afficher la structure du projet et les organisations du dépôt de documentation.
+icon: folder-tree
+---
+
+Utilisez des arbres de fichiers pour expliquer où se trouvent les fichiers dans un dépôt de documentation.
+
+<Tree>
+  <Tree.Folder name="api-reference" defaultOpen>
+    <Tree.File name="openapi.json" />
+    <Tree.File name="introduction.mdx" />
+  </Tree.Folder>
+
+  <Tree.Folder name="getting-started" defaultOpen>
+    <Tree.File name="overview.mdx" />
+    <Tree.File name="deploy.mdx" />
+  </Tree.Folder>
+
+  <Tree.File name="dubstack.json" />
+</Tree>
+
+```mdx
+<Tree>
+  <Tree.Folder name="api-reference" defaultOpen>
+    <Tree.File name="openapi.json" />
+    <Tree.File name="introduction.mdx" />
+  </Tree.Folder>
+
+  <Tree.File name="dubstack.json" />
+</Tree>
+```
+
+## Propriétés prises en charge
+
+<ResponseField name="name" type="string" required>
+  Nom du fichier ou du dossier affiché dans l'arbre.
+</ResponseField>
+
+<ResponseField name="defaultOpen" type="boolean">
+  Ouvre un dossier par défaut.
+</ResponseField>
+
+<ResponseField name="openable" type="boolean">
+  Définir sur `false` pour les dossiers qui doivent rester toujours ouverts.
+</ResponseField>

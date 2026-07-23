@@ -1,0 +1,111 @@
+---
+title: Vérifications CI/CD
+sidebarTitle: Vérifications CI/CD
+description: "Configurez les vérifications de documentation qui s'exécutent avant que les modifications n'atteignent votre branche de déploiement en direct."
+icon: check-circle
+---
+
+Les vérifications CI/CD aident les équipes à détecter les problèmes de documentation avant la publication des modifications.
+
+Utilisez-les avec un workflow de pull request (pull request) : les contributeurs modifient les documents sur une branche, les vérifications s'exécutent contre le changement proposé, et la branche de déploiement publie uniquement après examen.
+
+<Info>
+  Les vérifications CI/CD sont configurées par déploiement depuis **Paramètres > Déploiement > Compléments**. Si une vérification n'est pas disponible, le tableau de bord affiche la raison de la capacité actuelle sur la carte du complément.
+</Info>
+
+## Comment CI s'intègre à la publication
+
+```text
+Docs branch
+-> pull request
+-> CI/CD checks
+-> merge to deployment branch
+-> Git provider event
+-> dubstack sync
+-> live docs site
+```
+
+Les vérifications CI/CD valident le dépôt avant la publication. L'événement du fournisseur de Git et le travailleur de synchronisation gèrent toujours le déploiement final après que le changement ait atteint la branche de déploiement configurée.
+
+## Configurer les vérifications
+
+Ouvrez **Paramètres > Déploiement > Compléments**, puis sélectionnez le mode pour chaque vérification CI/CD disponible.
+
+| Mode | Comportement |
+| --- | --- |
+| Désactivé | La vérification ne s'exécute pas pour ce déploiement. |
+| Conseil | La vérification signale les problèmes sans bloquer la pull request. |
+| Requis | La vérification signale les problèmes et devrait bloquer la pull request jusqu'à ce qu'ils soient corrigés. |
+
+Commencez en mode conseil pendant l'ajustement d'une vérification. Passez en mode requis uniquement lorsque la vérification est suffisamment fiable pour votre dépôt et votre workflow d'équipe.
+
+## Vérifications disponibles
+
+### Liens rompus
+
+La vérification des liens rompus valide les liens entre les pages de documentation de votre site.
+
+Utilisez-la pour détecter les pages supprimées, les chemins renommés et les liens de navigation qui ne s'appliquent plus.
+
+<Callout type="warning">
+  Les sites externes peuvent changer ou limiter les demandes. Gardez la validation des liens externes séparée des vérifications internes obligatoires de documentation, sauf si votre équipe est prête à gérer les listes d'autorisation et les réessais.
+</Callout>
+
+### Correcteur de grammaire
+
+Le correcteur de grammaire vérifie la qualité et la cohérence du texte avant qu'un changement ne soit fusionné.
+
+Utilisez d'abord le mode conseil afin que l'équipe puisse ajuster les règles de formulation, le vocabulaire et les faux positifs sans bloquer le travail quotidien de documentation.
+
+## Portes de capacité
+
+Les compléments CI/CD dépendent du déploiement, du fournisseur de Git, de l'accès au dépôt et du support d'exécution.
+
+Si une vérification est désactivée dans le tableau de bord, lisez la raison indiquée sur la carte. La raison provient du contrôle de capacité actuel du déploiement et n'est pas un état statique uniquement lié à l'interface utilisateur.
+
+Raisons courantes incluent :
+
+- le déploiement n'est pas connecté à un fournisseur de Git pris en charge
+- La connexion au dépôt ne peut pas créer des résultats de vérification
+- La vérification sélectionnée n'est pas encore activée pour le déploiement
+- La configuration du dépôt ou de la branche doit être actualisée
+
+## Flux de travail recommandé
+
+1. Connectez le dépôt de documentation.
+2. Définissez une branche comme branche de déploiement.
+3. Activez les vérifications CI/CD en mode d'orientation.
+4. Ouvrez une pull request (pull request) pour la documentation et inspectez la sortie des vérifications.
+5. Corrigez les règles bruyantes ou les faux positifs.
+6. Passez les vérifications stables en mode requis.
+7. Fusionnez dans la branche de déploiement après que les vérifications aient réussi.
+
+## Dépannage
+
+### Les vérifications n'apparaissent pas sur une pull request
+
+Confirmez que :
+
+- le dépôt est connecté dans les paramètres de déploiement
+- la pull request cible la branche de déploiement configurée
+- la vérification est activée dans **Paramètres > Déploiement > Compléments**
+- la carte d'extension ne montre pas un avertissement de capacité
+- l'application du fournisseur Git ou le jeton a toujours accès au dépôt
+
+### Une vérification a réussi mais le site en direct n'a pas été mis à jour
+
+Les vérifications CI/CD valident la pull request. Elles ne remplacent pas le chemin de publication.
+
+Après la fusion, vérifiez que l'événement du fournisseur a atteint dubstack et que le fil d'activité montre une synchronisation réussie. Si aucun événement n'est arrivé, utilisez [Mises à jour manuelles](/fr/deployment/manual-updates-history) pour réessayer à partir de la branche de déploiement configurée.
+
+### Une vérification requise est trop bruyante
+
+Passez la vérification en mode d'orientation, ajustez les règles du dépôt, puis réactivez le mode requis une fois que les résultats sont stables.
+
+## Sujets connexes
+
+- [Compléments](/fr/settings/deployment/addons)
+- [Webhooks et CI](/fr/deployment/webhooks-ci)
+- [Synchronisation Git](/fr/deployment/git-sync)
+- [Déploiements de prévisualisation](/fr/deployment/preview-deployments)
+- [Mises à jour manuelles](/fr/deployment/manual-updates-history)

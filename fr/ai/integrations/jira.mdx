@@ -1,0 +1,123 @@
+---
+title: Intégration Jira
+description: "Connectez Jira afin que l'agent du tableau de bord et les flux de travail puissent utiliser un contexte limité aux tickets sélectionnés."
+icon: panels-top-left
+---
+
+L'intégration Jira donne à l'agent de tableau de bord un accès contrôlé au contexte des tickets.
+
+Utilisez-la lorsque les mises à jour de documentation dépendent du travail produit suivi dans Jira, comme les demandes de fonctionnalités, les rapports de bogues, les épopées de version ou les lacunes de documentation liées au support.
+
+## Ce que Jira peut faire
+
+Jira peut fournir :
+
+- les clés de ticket, les résumés, le statut, le type de ticket, le projet, l'horodatage de la dernière mise à jour, les liens et les commentaires récents pour les réponses de l'agent du tableau de bord
+- le contexte des tickets pour les demandes de l'agent Slack lorsqu'un contexte Jira est demandé
+- le contexte des tickets pour les flux de travail qui prennent en charge les intégrations
+- un contexte JQL limité pour les flux de travail de documentation récurrents
+
+Jira est une source de contexte en lecture seule. Il ne rédige pas de documentation, ne met pas à jour les tickets, ne lit pas de champs Jira arbitraires et n'inspecte pas les pièces jointes. Les modifications de documentation sont écrites par l'agent via le fournisseur Git connecté.
+
+## Portée de la connexion
+
+Jira est une intégration partagée. Un administrateur ou un éditeur connecte un espace de travail Atlassian pour l'organisation, et les surfaces d'agent ou de workflow éligibles peuvent utiliser cette connexion lorsqu'un contexte Jira est explicitement demandé ou sélectionné.
+
+L'agent hérite des accès du compte Atlassian ayant autorisé la connexion. Il ne peut lire que les problèmes et commentaires accessibles à ce compte dans Jira.
+
+Pour restreindre l'accès, restreignez le compte Atlassian connecté dans Jira ou connectez un compte n'appartenant qu'aux projets que vous souhaitez inspecter avec les workflows de documentation.
+
+## Exigences
+
+Avant de connecter Jira, vérifiez :
+
+- votre organisation dispose d'un accès Enterprise ou d'un essai actif incluant les fonctionnalités d'intégration
+- vous connaissez le sous-domaine du site Atlassian à connecter, ou vous êtes prêt à laisser Atlassian retourner le premier espace de travail accessible pendant l'autorisation
+- l'application OAuth Jira est configurée pour l'environnement
+- votre compte Atlassian peut accéder aux problèmes que vous souhaitez que l'agent utilise
+- le déploiement dispose d'un accès à l'écriture des dépôts si vous souhaitez des pull requests
+
+## Connectez Jira
+
+1. Ouvrez le tableau de bord.
+2. Sélectionnez le déploiement.
+3. Allez dans **Paramètres > Organisation > Intégrations**.
+4. Choisissez **Jira**.
+5. Entrez éventuellement le sous-domaine du site Atlassian pour fixer la connexion à un espace de travail spécifique.
+6. Autorisez l'accès Jira.
+7. Retournez sur le tableau de bord et vérifiez que Jira est connecté.
+
+Si vous laissez le sous-domaine vide, dubstack utilise le premier espace de travail Jira accessible retourné par Atlassian pour le compte d'autorisation. Le tableau de bord stocke l'espace de travail sélectionné et les portées accordées pour la portée de l'organisation ou du déploiement.
+
+## Portées OAuth
+
+Jira utilise l'OAuth d'Atlassian et demande un accès en lecture seule afin que les workflows et l'agent du tableau de bord puissent rechercher et résumer le contexte des problèmes.
+
+| Portée | Objectif |
+| --- | --- |
+| `read:jira-user` | Associe les auteurs de problèmes, les assignataires, les rapporteurs et les commentateurs à des noms lisibles. |
+| `read:jira-work` | Lit les problèmes, les commentaires, les projets et les résultats de recherche JQL visibles pour le compte connecté. |
+| `offline_access` | Rafraîchit le jeton OAuth afin que l'intégration fonctionne sans nécessiter une nouvelle validation répétée. |
+
+dubstack ne demande pas les autorisations Jira en écriture, de transition, de suppression ou d'administration.
+
+Si votre organisation Atlassian restreint les applications connectées, un administrateur Atlassian doit peut-être approuver l'application OAuth de dubstack avant que la connexion ne puisse s'achever. Consultez l'écran de consentement avant d'autoriser et révoquez l'application depuis Atlassian ou le tableau de bord de dubstack si l'accès doit cesser.
+
+## Utiliser le contexte Jira avec l'agent
+
+Demander le contexte Jira lorsque le gestionnaire d'incidents contient les détails sources.
+
+L'agent collecte le contexte Jira uniquement lorsqu'une requête inclut une clé de problème Jira ou une requête `jql:` inline.
+
+Si vous mentionnez Jira sans clé de problème spécifique ou requête, l'agent demande un problème ou un filtre plus précis au lieu de balayer l'ensemble de votre espace de travail.
+
+Exemples :
+
+```text
+Use Jira context for PROJ-123 and draft a migration note for the docs.
+```
+
+```text
+Use Jira context with jql: project = BILLING AND labels = docs ORDER BY updated DESC, then summarize the open documentation issues.
+```
+
+```text
+Use Jira context with jql: project = DOCS AND statusCategory != Done ORDER BY updated DESC, then draft a docs backlog summary.
+```
+
+Maintenez la requête étroite. L'agent n'infère pas les projets, ne recherche pas arbitrairement les champs Jira ou n'inspecte pas les problèmes non liés.
+
+<Callout type="info">
+  Les requêtes de contexte Jira doivent inclure une restriction de recherche, comme un projet, une clé de problème, une étiquette, une version de correction ou une fenêtre de date de mise à jour. Les requêtes générales comme `ORDER BY updated DESC` sont rejetées en toute sécurité au lieu de scanner l'ensemble de l'espace de travail.
+</Callout>
+
+## Utiliser le contexte Jira dans les flux de travail
+
+Les flux de travail prenant en charge les intégrations peuvent activer le contexte Jira.
+
+Lors de la configuration du workflow, définissez :
+
+| Paramètre | Objectif |
+| --- | --- |
+| JQL | Restreint les problèmes que le workflow peut lire. |
+| Limite | Limite le nombre de problèmes inclus lors d'une exécution. La valeur par défaut est 5 et la valeur maximale est 10. |
+
+Maintenez le JQL étroit. Un contexte plus petit produit généralement de meilleures mises à jour de documentation et réduit l'utilisation inutile des jetons.
+
+Le JQL non limité est bloqué. Utilisez un projet, une étiquette, une clé de problème, une version de correction, un statut ou une fenêtre de date afin que le workflow lise uniquement les problèmes pertinents pour la mise à jour de la documentation.
+
+Pour chaque problème, le workflow peut inclure le résumé du problème, le statut, le type de problème, le projet, l'horodatage de mise à jour, le lien de problème et jusqu'à deux commentaires récents. Il n'inclut pas les pièces jointes du problème ou les champs personnalisés arbitraires.
+
+Exemple de JQL :
+
+```text
+project = DOCS AND statusCategory != Done ORDER BY updated DESC
+```
+
+## Déconnecter Jira
+
+1. Ouvrez **Paramètres > Organisation > Intégrations**.
+2. Recherchez Jira.
+3. Sélectionnez **Déconnecter**.
+
+La déconnexion de Jira empêche la collecte de nouveaux contextes Jira. Les documents existants, les pull requests et les enregistrements des exécutions précédentes ne sont pas supprimés.

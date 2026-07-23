@@ -1,0 +1,104 @@
+---
+title: "Flux de travail pour les lacunes dans les conversations de l'assistant"
+description: "Examiner les tendances des questions posées à l'assistant et rédiger des mises à jour de la documentation là où les lecteurs ont besoin d'aide de manière répétée."
+icon: messages-square
+---
+
+Le flux de travail pour les lacunes dans les conversations de l'assistant analyse les questions des lecteurs provenant de l'assistant du site et propose des mises à jour de la documentation pour les lacunes répétées.
+
+Utilisez-le lorsque les lecteurs posent les mêmes questions à l'assistant car la réponse manque, est difficile à trouver ou peu claire dans les documents publiés.
+
+## Ce qu'il fait
+
+Lorsqu'il est activé pour une mise en œuvre, le flux de travail est conçu pour :
+
+- analyser les données des conversations de l'assistant limitées à la mise en œuvre sélectionnée
+- identifier les questions répétées, les échecs de récupération et les sujets non résolus
+- associer chaque thème aux pages de documentation pertinentes
+- rédiger des mises à jour ciblées dans le dépôt de documentation connecté
+- ouvrir une demande de revue native du fournisseur à moins que les mises à jour automatiques ne soient activées explicitement
+- enregistrer l'état de l'exécution, les thèmes, les fichiers modifiés et l'utilisation des crédits dans l'historique du flux de travail
+
+Le flux de travail doit se baser sur les tendances, et non sur des questions isolées d'un seul utilisateur.
+
+## Sources de signaux
+
+| Signal | Comment cela aide |
+| --- | --- |
+| Questions répétées | Montre ce que les lecteurs ne trouvent pas rapidement. |
+| Récupérations à faible confiance | Montre où les documents sources pourraient manquer ou être trop minces. |
+| Modèles de clics sur les sources | Montre quels réponses ont besoin d'une meilleure couverture de page. |
+| Escalade ou feedback négatif | Montre où les réponses n'étaient pas suffisamment utiles. |
+
+Le contexte des conversations doit rester limité à l'organisation et à la mise en œuvre sélectionnées.
+
+## Configuration requise
+
+Avant d'activer l'automatisation des conversations de l'assistant :
+
+1. Activer l'assistant public pour le site de documentation.
+2. Permettre un usage suffisant de l'assistant pour créer des tendances utiles.
+3. Connecter un dépôt de documentation hébergé sur Git avec des droits d'écriture.
+4. Confirmer que le profil du modèle de rédaction est disponible.
+5. Commencer en mode **Exiger une revue**.
+
+Aucun connecteur d'intégration supplémentaire n'est requis.
+
+## Déclencheurs et mode de mise à jour
+
+| Paramètre | Comportement |
+| --- | --- |
+| Déclencheur par défaut | Planification personnalisée, hebdomadaire |
+| Déclencheur facultatif | Exécution manuelle ou flux de travail planifié déclenché par l'API |
+| Premier mode recommandé | Requiert une revue |
+| Mode automatique | Utiliser uniquement après des exécutions répétées, nettoyées et revues |
+| Cible d'écriture | Dépôt de documents connectés |
+| Répertoires de contexte | Non pris en charge |
+
+Une exécution planifiée doit créer sa propre demande de revue pour les thèmes identifiés lors de cette exécution.
+
+## Frontière de confidentialité
+
+Les données de conversation de l'assistant peuvent inclure un contexte sensible des lecteurs.
+
+Le flux de travail doit :
+
+- résumer les modèles au lieu de copier les conversations brutes dans des documents publics
+- censurer les secrets, les jetons d'accès, les cookies et les identifiants privés
+- éviter d'exposer des informations spécifiques à l'utilisateur dans les modifications générées
+- stocker uniquement les métadonnées sources limitées dans l'historique des exécutions
+- limiter les analyses au déploiement actuel
+
+## Utilisation des crédits
+
+Les exécutions de conversation de l'assistant sont des exécutions de flux de travail auto-mises à jour et comptent dans l'utilisation des crédits de flux de travail.
+
+L'estimation actuelle de planification est de **212 crédits par exécution**. L'utilisation réelle peut varier selon :
+
+- nombre de conversations inspectées
+- nombre de thèmes identifiés
+- quantité de contexte de documents récupéré
+- nombre de mises à jour générées
+- routage du modèle et profil du flux de travail
+
+Voir [les crédits et l'utilisation de l'IA](/fr/ai/credits-usage) pour le modèle d'allocation partagée.
+
+## Liste de vérification
+
+Avant de fusionner les mises à jour générées, confirmez :
+
+- la mise à jour résout un écart réel et répétitif des lecteurs
+- les détails sensibles des conversations n'ont pas été copiés dans les documents
+- la réponse appartient aux documents publics plutôt qu'aux guides d'assistance
+- le nouveau contenu pointe vers les bonnes pages associées
+- l'assistant devrait avoir une meilleure source après la publication de la modification
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/workflows/reference#fill-gaps-from-assistant-conversations">Référence de flux de travail</a>
+  <a href="/fr/ai/assistant">Assistant</a>
+  <a href="/fr/ai/assistant-usage">Utilisation de l'assistant</a>
+  <a href="/fr/dashboard/usage">Tableau de bord d'utilisation</a>
+  <a href="/fr/ai/credits-usage">Crédits et utilisation de l'IA</a>
+</RelatedTopics>

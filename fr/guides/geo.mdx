@@ -1,0 +1,120 @@
+---
+title: "Optimiser les documents pour la découverte par l'IA"
+description: "Structurer les documents pour que les outils de recherche par IA, les assistants, les clients MCP et les lecteurs de llms.txt trouvent et citent le bon contenu."
+icon: sparkles
+---
+
+La découverte par l'IA repose sur les mêmes fondamentaux que la bonne documentation : des titres clairs, du contenu précis, des liens descriptifs et des fichiers sources stables. La différence est que les outils d'IA lisent souvent le Markdown, les index, les résultats MCP et les métadonnées des pages avant qu'un humain ne voie la page.
+
+Utilisez ce guide pour rendre vos documents plus faciles à récupérer, résumer et citer par les assistants et les outils de recherche par IA.
+
+## Commencez par les métadonnées de page
+
+Les titres et descriptions de page aident les moteurs de recherche, les réponses des assistants et les exports lisibles par l'IA à comprendre de quoi traite une page.
+
+```mdx
+---
+title: Authenticate API requests
+description: Add an API key to the Authorization header and verify authenticated requests with cURL.
+---
+```
+
+Rédigez les métadonnées comme si vous répondiez à la question : qu'est-ce que le lecteur peut faire après avoir ouvert cette page ?
+
+Voyez [frontmatter de la page](/fr/configuration/pages-frontmatter) et [paramètres SEO et de recherche](/fr/configuration/seo-search-reference).
+
+## Rendez les titres utiles hors contexte
+
+Les outils d'IA récupèrent souvent des sections plutôt que des pages entières. Les titres doivent expliquer la section sans dépendre du titre de la page.
+
+Utilisez des titres comme :
+
+- `## Create a preview deployment`
+- `## Add the Authorization header`
+- `## Verify the custom domain`
+
+Évitez des titres comme :
+
+- `## Setup`
+- `## More details`
+- `## Important`
+
+Voyez [titres et ancres](/fr/writing-content/headings-anchors).
+
+## Gardez un seul sujet par page
+
+Une page axée sur un seul sujet est plus facile à récupérer et à citer. Si une page combine la configuration, le dépannage, la référence API et les notes de migration, séparez-la en pages distinctes et reliez-les entre elles.
+
+Utilisez [sujets connexes](/fr/writing-content/related-topics) en bas des pages pour que les lecteurs et les agents puissent suivre le prochain chemin logique.
+
+## Utilisez les fichiers de découverte par l'IA
+
+dubstack publie des surfaces de découverte lisibles par l'IA pour les sites de documentation pris en charge.
+
+| Surface | Objectif |
+| --- | --- |
+| `llms.txt` | Index de page structuré pour les outils d'IA. |
+| `llms-full.txt` | Export plus volumineux pour les outils qui ont besoin d'un contexte complet des documents publics. |
+| MCP public | Outils de recherche et de lecture de pages pour les clients d'IA connectés. |
+| `skill.md` | Conseils spécifiques au produit pour les agents de codage. |
+
+Voyez [index des LLM](/fr/ai/llms-indexes), [fichiers de découverte par IA](/fr/ai/ai-discovery-files), [MCP public](/fr/ai/mcp) et [fichiers de compétences générés](/fr/ai/generated-skill-file).
+
+## Privilégiez des réponses simples et citables
+
+Écrivez la réponse directement avant d'ajouter le contexte.
+
+Bon :
+
+```mdx
+To authenticate a request, send your API key in the `Authorization` header.
+```
+
+Faible :
+
+```mdx
+There are several things to know before we discuss authentication.
+```
+
+Les assistants performent mieux lorsque le premier paragraphe nomme la réponse, l'objet du produit et l'action.
+
+## Gardez les exemples complets
+
+Les exemples doivent inclure la commande, la forme attendue des entrées et la manière de vérifier le succès.
+
+Pour les documents API, inclure :
+
+- en-têtes requis
+- champs du corps de la requête
+- exemples de réponses réalistes
+- réponses d'erreur courantes
+- liens vers des points de terminaison associés
+
+Voir [exemples de requête et de réponse](/fr/writing-content/request-response-examples) et [exemples de réponses API](/fr/api-reference/response-examples).
+
+## Contrôlez ce que les outils d'IA voient
+
+Si une page n'est pas prête, gardez-la masquée ou hors de la navigation jusqu'à ce qu'elle soit exacte. Si une section n'est utile que pour un public spécifique, utilisez des composants de visibilité ou des pages séparées.
+
+Voir [visibilité](/fr/writing-content/visibility), [pages masquées](/fr/configuration/hidden-pages) et [export Markdown](/fr/ai/markdown-export).
+
+## Surveillez la qualité de la récupération au fil du temps
+
+Utilisez ces signaux pour décider ce à améliorer :
+
+- les réponses de l'assistant citent une page moins pertinente
+- les questions répétées de l'assistant pointent vers des documents manquants
+- les requêtes de recherche n'ont pas de résultat clair
+- les commentaires indiquent qu'une page est incomplète ou confuse
+- la sortie du workflow continue de proposer la même solution
+
+Voir [utilisation de l'assistant](/fr/ai/assistant-usage), [analyse des commentaires](/fr/dashboard/feedback-analytics) et [amélioration des documents](/fr/guides/improving-docs).
+
+## Sujets associés
+
+<RelatedTopics>
+  <a href="/fr/guides/seo">Améliorer le référencement des documents</a>
+  <a href="/fr/ai/llms-indexes">Indexeurs de LLM</a>
+  <a href="/fr/ai/mcp">MCP public</a>
+  <a href="/fr/ai/generated-skill-file">Fichiers de compétences générés</a>
+</RelatedTopics>

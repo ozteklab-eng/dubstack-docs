@@ -1,0 +1,84 @@
+---
+title: Concepts de Git pour la documentation
+description: "Comprenez les dépôts, les branches, les commits, les pull requests et les branches de déploiement dans un flux de documentation-as-code."
+icon: git-branch
+---
+
+Git est la couche source de vérité pour un site de documentation dubstack. Le tableau de bord peut cacher la plupart des mécanismes Git, mais comprendre les concepts de base vous aide à revoir les modifications, déboguer la publication et collaborer avec des collègues qui éditent localement.
+
+## Pourquoi Git est important pour la documentation
+
+Git offre aux équipes de documentation :
+
+- historique des versions pour chaque page
+- modifications révisables via des pull requests ou des demandes de fusion
+- expérimentation sécurisée sur les branches
+- restauration lorsqu'une modification doit être annulée
+- compatibilité avec les flux de travail d'ingénierie, l'intégration continue et les processus de publication
+
+Dans dubstack, vos documents en direct sont construits à partir de la source de déploiement configurée. Cette source peut être un dépôt d'un fournisseur Git connecté ou un dépôt de démarrage hébergé créé lors de l'inscription.
+
+## Concepts de base
+
+<AccordionGroup>
+  <Accordion title="Dépôt">
+    Un dépôt stocke les fichiers qui composent votre site de documentation, y compris les pages MDX, les images, les extraits, les spécifications OpenAPI et `dubstack.json`.
+  </Accordion>
+
+  <Accordion title="Branche de déploiement">
+    La branche utilisée pour publier votre site de documentation en direct. Beaucoup d'équipes utilisent `main`, mais votre branche de déploiement peut être une autre branche lorsque votre processus de publication le nécessite.
+  </Accordion>
+
+  <Accordion title="Branche">
+    Une branche est une ligne de travail isolée. Utilisez les branches pour des modifications plus importantes, des brouillons rédigés par un agent, des mises à jour OpenAPI, des changements de navigation et tout ce qui doit être révisé avant la publication.
+  </Accordion>
+
+  <Accordion title="Commit">
+    Un commit est un instantané enregistré des modifications de fichiers, accompagné d'un message qui explique ce qui a changé.
+  </Accordion>
+
+  <Accordion title="Pull request ou demande de fusion">
+    Une demande de révision qui propose de fusionner une branche dans une autre. GitHub et Forgejo utilisent les pull requests. GitLab utilise les demandes de fusion.
+  </Accordion>
+
+  <Accordion title="Diff">
+    Un diff montre exactement ce qui a changé entre deux versions d'un fichier. Examinez les diffs avant de publier des modifications générées ou rédigées manuellement.
+  </Accordion>
+
+  <Accordion title="Dépôt distant">
+    Une copie hébergée du dépôt. Votre tableau de bord, votre client Git local et l'interface utilisateur du fournisseur communiquent tous avec le dépôt distant.
+  </Accordion>
+</AccordionGroup>
+
+## Comment dubstack utilise Git
+
+| Action | Comportement Git |
+| --- | --- |
+| Connecter un dépôt | Stocke le fournisseur, le dépôt, la branche et les détails d'accès nécessaires pour lire et publier des documents. |
+| Publier depuis l'éditeur | Crée des commits ou des branches de revue selon vos paramètres source et les autorisations du fournisseur. |
+| Générer des brouillons d'agent | Crée des modifications révisables contre le dépôt de documentation connecté lorsqu'un accès d'édition est disponible. |
+| Exécuter des déploiements de prévisualisation | Construit une prévisualisation temporaire à partir d'une branche non de production. |
+| Exécuter des flux de travail | Lit la source de documentation configurée et les dépôts de contexte optionnels, puis rédige des modifications contre le dépôt de documentation. |
+
+Le dépôt de documentation reste la cible d'écriture pour les mises à jour des documents générés. Les dépôts sources utilisés par les flux de travail fournissent un contexte ; ils ne deviennent pas la source des documents en production, sauf si vous les configurez explicitement comme source de déploiement.
+
+## Publication directe versus révision
+
+Utilisez la publication directe pour les petites modifications à faible risque lorsqu'elle est autorisée par votre politique de dépôt.
+
+Utilisez les pull requests ou les demandes de fusion pour :
+
+- Modifications de la documentation de l'API
+- Réorganisation de la navigation
+- Brouillons d'agent générés
+- Changements qui affectent l'authentification, la facturation ou les instructions de sécurité
+- Modifications des branches de déploiement protégées
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/guides/branches">Travailler avec les branches</a>
+  <a href="/fr/editor/git-essentials">Bases Git de l'éditeur</a>
+  <a href="/fr/deployment/git-settings">Paramètres Git</a>
+  <a href="/fr/deployment/preview-deployments">Déploiements de prévisualisation</a>
+</RelatedTopics>

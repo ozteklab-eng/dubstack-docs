@@ -1,0 +1,100 @@
+---
+title: Agent
+description: "Utilisez l'agent du tableau de bord pour répondre, rédiger et maintenir la documentation avec un dépôt et un contexte d'intégration connectés."
+icon: sparkles
+---
+
+L'agent du tableau de bord aide les membres de confiance de l'espace de travail à maintenir la documentation depuis le tableau de bord et les outils de collaboration connectés.
+
+Il est distinct de l'assistant public. L'assistant public répond aux questions des lecteurs à partir des documents publiés. L'agent du tableau de bord peut utiliser le contexte de déploiement privé et, lorsqu'il est configuré, créer des modifications de documentation via le dépôt connecté.
+
+## Ce que l'agent peut faire
+
+- Répondre aux questions sur le déploiement sélectionné.
+- Examiner les documents publiés et les index des documents gérés.
+- Utiliser le contexte d'intégration connecté, tel que Slack ou Jira, lorsqu'il est activé.
+- Rédiger des modifications de documentation.
+- Ouvrir des pull requests via un fournisseur Git capable de rédaction.
+- Prendre en charge les workflows déclenchés selon un calendrier, par des modifications de code ou par des mises à jour de contenu.
+
+## Exigences
+
+La rédaction de l'agent nécessite :
+
+- un déploiement sélectionné
+- un dépôt de documentation connecté
+- des autorisations de rédaction pour le fournisseur Git
+- un profil de modèle de rédaction
+- des intégrations connectées lorsqu'une demande nécessite un contexte externe
+
+Le tableau de bord affiche l'état de préparation de l'index de documentation, de l'index géré, des réponses avancées, de Slack et de l'accès au dépôt.
+
+## Sections de la page de l'agent
+
+La page de l'agent change en fonction de ce qui est connecté pour le déploiement sélectionné.
+
+| Section | À vérifier |
+| --- | --- |
+| Paramètres de l'agent | Affiche si l'application Slack est connectée et à quel espace elle est connectée. |
+| Intégrations activées | Affiche les fournisseurs connectés qui peuvent fournir un contexte à l'agent. |
+| Disponible pour votre équipe | Répertorie les fournisseurs qui ne sont pas encore connectés. Les cartes marquées comme bientôt disponibles sont des entrées de catalogue, et non des sources de contexte actives. |
+| Accès au dépôt | Affiche si le dépôt de documentation peut être utilisé pour la rédaction et relie les paramètres Git. |
+| Préparation de l'agent | Affiche l'index des documents publiés, l'index des documents gérés et le chemin des réponses avancées utilisés par l'agent. |
+
+## Rapport d'utilisation
+
+Les exécutions de l'agent peuvent enregistrer des métadonnées d'utilisation telles que la source, le type d'exécution, le profil, la routage du modèle, le contexte du connecteur, le statut, le nombre de tokens et l'estimation des crédits.
+
+Voir [Crédits et utilisation de l'IA](/fr/ai/credits-usage) pour savoir comment l'utilisation est suivie sur les tableaux de bord, Slack, l'assistant et les interfaces de workflow.
+
+## Accès au dépôt
+
+L'agent écrit via Git.
+
+Pour les déploiements basés sur GitHub, installez l'application GitHub sur le dépôt et accordez-lui les autorisations nécessaires pour créer des pull requests.
+
+Pour les déploiements basés sur GitLab, connectez l'accès d'auteur GitLab depuis les paramètres Git avant d'exécuter des workflows qui créent des demandes de fusion.
+
+## Contexte d'intégration
+
+Les intégrations connectées peuvent fournir un contexte limité à l'agent :
+
+| Intégration | Utilisation courante |
+| --- | --- |
+| Slack | Lire le contexte limité d'un fil ou d'un canal et poursuivre une conversation de rédaction. |
+| Jira | Lire les métadonnées des tickets sélectionnés à partir d'une requête JQL limitée. |
+
+Seules les intégrations connectées qui prennent en charge l'action demandée sont disponibles pour l'agent.
+
+Les cartes de fournisseur visibles mais marquées comme bientôt disponibles ne peuvent pas encore être sélectionnées pour les exécutions de l'agent ou les workflows. Utilisez uniquement les fournisseurs connectés lors de tests ou de la documentation d'un workflow de production.
+
+## Vérifications de préparation
+
+Utilisez **Synchroniser l'index** lorsque les documents publiés ont changé et que l'index de récupération géré doit être actualisé. Utilisez **Rafraîchir** lorsque vous avez seulement besoin de vérifier à nouveau l'état de disponibilité actuel.
+
+Le panneau de préparation distingue trois chemins :
+
+| Chemin | Signification |
+| --- | --- |
+| Documents publiés | Le chemin rapide soutenu par l'instantané des documents publiés. |
+| Index des documents gérés | L'index de récupération géré construit pour des réponses plus approfondies. |
+| Réponses avancées | Le profil de réponse, la route de récupération, la route de secours et la configuration de l'invite pour le site sélectionné. |
+
+Si un chemin n'est pas prêt, corrigez le problème du dépôt bloquant, de l'indexation ou du profil avant de demander à l'agent de rédiger des modifications de documentation.
+
+## Déploiements protégés
+
+Certains déploiements protégés restent lisibles, mais désactivent les contrôles de rédaction afin d'éviter des modifications accidentelles du dépôt.
+
+Créez un déploiement temporaire pour tester Slack, Git ou la création de workflows.
+
+## Limites de sécurité
+
+- L'agent doit rester limité à l'organisation et au déploiement sélectionnés.
+- Les demandes adressées à l'assistant public ne donnent pas accès aux fonctions de rédaction du tableau de bord.
+- Les modifications du dépôt doivent utiliser une revue de pull request, sauf si le workflow est configuré intentionnellement pour des mises à jour directes.
+- Les secrets et les jetons privés ne doivent pas être soumis à la documentation.
+
+<Callout type="info">
+  Utilisez [Workflows](/fr/workflows) lorsque vous souhaitez que l'agent s'exécute à partir d'un déclencheur récurrent ou d'un événement de dépôt.
+</Callout>

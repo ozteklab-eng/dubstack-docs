@@ -1,0 +1,80 @@
+---
+title: Utiliser les médias dans la documentation
+description: "Ajoutez des images, des captures d'écran, des diagrammes, des intégrations et du texte alternatif sans rendre la documentation difficile à maintenir."
+icon: image
+---
+
+Les médias peuvent clarifier un processus, mais chaque image ou vidéo devient quelque chose que l'équipe doit maintenir. Utilisez les médias lorsque cela permet aux lecteurs de comprendre une tâche plus rapidement que le texte seul.
+
+## Choisir le bon type de média
+
+| Type de média | Utiliser lorsque |
+| --- | --- |
+| Capture d'écran | Les lecteurs doivent identifier un élément d'interface ou confirmer qu'ils sont sur le bon écran. |
+| Diagramme | Un système, un flux ou une architecture est plus facile à comprendre visuellement. |
+| Animation courte | Une petite interaction est difficile à décrire en texte. |
+| Vidéo intégrée | Une procédure plus longue bénéficie des fonctions de pause, de retour en arrière ou de narration. |
+| Bloc de code | Le détail important est un texte exact, des commandes ou une configuration. |
+
+Évitez les captures d'écran pour les étapes simples évidentes à partir du texte. Elles deviennent rapidement obsolètes lorsqu'UI change.
+
+## Maintenir les fichiers
+
+Utilisez des noms de fichiers descriptifs :
+
+```text
+custom-domain-verification-record.png
+workflow-run-history.png
+assistant-feedback-panel.png
+```
+
+Évitez les noms tels que `screenshot.png` ou `image-1.png`.
+
+Stockez les médias près du contenu qu'ils soutiennent ou dans une structure `/images` prévisible. Gardez les fichiers sources des diagrammes lorsqu'il est possible afin qu'ils puissent être mis à jour sans recréer l'élément.
+
+## Rédigez un texte alternatif utile
+
+Le texte alternatif doit expliquer l'information fournie par l'image.
+
+```mdx
+![Custom domain settings showing a pending TXT verification record and CNAME traffic target](/images/custom-domain-verification.svg)
+```
+
+Si l'image est décorative et n'apporte aucune information, utilisez un texte alternatif vide afin que les technologies d'assistance puissent la sauter.
+
+```mdx
+<img src="/images/divider.png" alt="" />
+```
+
+## Privilégiez les captures d'écran serrées
+
+Coupez les captures d'écran pour ne conserver que l'élément ou le panneau d'interface qui compte.
+
+Captures d'écran serrées :
+
+- plus faciles à lire sur mobile
+- contiennent moins de détails pouvant devenir obsolètes
+- aident le lecteur à se concentrer sur la tâche
+
+Évitez de publier des données privées, des jetons, des adresses e-mail d'utilisateurs, des URL internes ou des informations clients dans les captures d'écran.
+
+## Utilisez les intégrations avec soin
+
+Les intégrations externes peuvent expliquer des procédures complexes, mais elles dépendent de la disponibilité du service tiers et des performances de la page.
+
+Avant l'intégration :
+
+- confirmer que la source est autorisée par votre politique de sécurité du contenu
+- ajouter du texte contextuel pour que la page ait toujours du sens si l'intégration échoue
+- éviter de nécessiter une vidéo pour terminer une tâche de configuration critique
+
+Voir [Intégrations multimédias](/fr/writing-content/media-embeds) et [Politique de sécurité du contenu](/fr/deployment/csp-configuration).
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/writing-content/images-assets">Images et actifs</a>
+  <a href="/fr/writing-content/media-embeds">Intégrations multimédias</a>
+  <a href="/fr/guides/accessibility">Accessibilité</a>
+  <a href="/fr/deployment/csp-configuration">Politique de sécurité du contenu</a>
+</RelatedTopics>

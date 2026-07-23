@@ -1,0 +1,187 @@
+---
+title: Recherche
+description: "Améliorez la qualité de la recherche intégrée avec des titres clairs, des descriptions, une navigation et une structure de contenu publiés."
+icon: search
+---
+
+La recherche aide les lecteurs à trouver la bonne page sans connaître votre structure de navigation.
+
+dubstack construit la recherche à partir du contenu des documents publiés. Une bonne qualité de recherche commence par des métadonnées de page claires, des titres solides et une navigation qui reflète la façon dont les lecteurs pensent à votre produit.
+
+## Configurez la barre de recherche
+
+Ouvrez **Paramètres > Déploiement > Recherche** pour modifier le texte d'indication affiché dans les points d'entrée publics de recherche.
+
+Le tableau de bord enregistre cette valeur dans `search.prompt` et `dubstack.json`, puis la répercute dans les textes indicatifs des widgets de recherche existants pour assurer la compatibilité :
+
+```json
+{
+  "search": {
+    "prompt": "Search docs..."
+  },
+  "widgets": {
+    "search": {
+      "placeholder": "Search docs..."
+    },
+    "sidebar_search": {
+      "placeholder": "Search docs..."
+    }
+  }
+}
+```
+
+Utilisez un texte d'aide court qui correspond à l'intention du lecteur. Par exemple, la documentation axée sur les API peut utiliser `Rechercher des points de terminaison...`, tandis qu'une base de connaissances interne peut utiliser `Rechercher des politiques et des runbooks...`.
+
+<Callout type="info">
+  Les filtres de produit et de version ne s'affichent que lorsque le site a indexé les métadonnées de navigation correspondantes. Si le tableau de bord indique que ces contrôles ne sont pas disponibles, continuez à affiner la recherche au moyen des métadonnées de page, des étiquettes de navigation et des pondérations de classement.
+</Callout>
+
+## Ce que la recherche utilise
+
+La qualité de la recherche est influencée par :
+
+- les titres de page
+- les descriptions de page
+- les titres
+- le contenu principal
+- les étiquettes de navigation
+- les résumés et descriptions des opérations OpenAPI
+- les chemins de page publiés
+
+Les pages cachées de l'indexation publique ne sont pas utiles pour la recherche. Maintenez les pages importantes visibles dans la navigation et gardez le contenu privé hors des documents publics.
+
+## Affinez le classement des pages
+
+Utilisez le frontmatter de page pour affiner le comportement de recherche lorsque les métadonnées et la structure du contenu ne suffisent pas.
+
+```mdx
+---
+title: Quickstart
+description: Create and publish your first docs site.
+boost: 2
+---
+```
+
+`boost` est un multiplicateur de pertinence positif. Il affecte la recherche sur le site, la recherche publique MCP et le classement de récupération de l'assistant. Utilisez-le pour les pages canoniques qui doivent obtenir un bon classement pour des requêtes générales, comme les guides de démarrage rapide, les guides de migration et les pages de présentation de l'API.
+
+Maintenez les pondérations modérées. La recherche doit toujours renvoyer la page la plus précise pour une requête spécifique.
+
+## Augmentez un groupe de navigation
+
+Définissez `boost` sur un groupe de navigation dans `dubstack.json` pour appliquer le multiplicateur à chaque page de ce groupe.
+
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Getting started",
+            "boost": 5,
+            "pages": [
+              "quickstart",
+              "getting-started/create-site"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Une page hérite de la pondération de son groupe parent le plus proche. Les groupes imbriqués peuvent remplacer les pondérations parentes, et le `boost` défini dans le frontmatter de la page l'emporte toujours sur la valeur héritée de la navigation.
+
+Utilisez les pondérations de groupe pour un petit nombre de sections prioritaires. Évitez d'augmenter l'ensemble du site de documentation, car cela annule le signal de classement.
+
+## Excluez les pages utilitaires de la recherche
+
+Utilisez `searchable: false` lorsqu'une page doit rester publiée et directement accessible mais ne pas apparaître dans la recherche ou la récupération publique par l'IA.
+
+```mdx
+---
+title: Terms of service
+description: Legal terms linked from the footer.
+searchable: false
+---
+```
+
+Cela empêche la page d'apparaître dans la recherche interne, la recherche publique MCP, le système de fichiers MCP public et les index de récupération par l'assistant. Cela ne supprime pas la page de la navigation si vous l'avez explicitement listée là-bas.
+
+Utilisez plutôt `noindex: true` lorsque la page doit être exclue du sitemap et des surfaces d'indexation publique.
+
+## Rédigez des titres recherchables
+
+Préférez des titres qui nomment la tâche ou l'objet exacts.
+
+| Faible | Fort |
+| --- | --- |
+| Aperçu | Aperçu de l'authentification |
+| Configuration | Connecter GitHub |
+| API | Authentification de la console API |
+| Paramètres | Configurer les compléments de déploiement |
+
+Les titres génériques sont plus difficiles à interpréter pour les lecteurs et les outils d'IA car le contexte de navigation environnant peut ne pas apparaître sur toutes les surfaces de recherche.
+
+## Rédigez des descriptions pour les extraits
+
+Les descriptions sont réutilisées dans les métadonnées, les extraits de recherche, les index d'IA et les aperçus.
+
+```mdx
+---
+title: Configure deployment add-ons
+description: Enable page feedback, reader email collection, CI checks, preview authentication, and noindex controls.
+---
+```
+
+Rédigez des descriptions en tant que résultats, pas en tant qu'étiquettes. Un lecteur doit comprendre pourquoi la page est pertinente avant de l'ouvrir.
+
+## Structurer les pages pour la récupération
+
+Utilisez des titres qui correspondent aux questions probables des lecteurs.
+
+```mdx
+## Connect a GitHub repository
+
+## Trigger a manual update
+
+## Troubleshoot failed syncs
+```
+
+Placez les exemples près de l'explication qu'ils soutiennent. La recherche et la récupération par l'IA fonctionnent mieux lorsque la page maintient les concepts liés proches les uns des autres.
+
+## Maintenir la recherche API utile
+
+Pour les pages basées sur OpenAPI, rédigez des résumés et des descriptions clairs dans la spécification.
+
+```json
+{
+  "summary": "Create an API key",
+  "description": "Creates a scoped API key for a deployment so workflow can call the dubstack API."
+}
+```
+
+Évitez les résumés de modèle tels que `Get item` ou `Post request`. Le texte d'opération API devient du contenu de documentation publique.
+
+## Rafraîchir la recherche après les modifications
+
+La recherche est mise à jour après la synchronisation et la publication du contenu.
+
+Si les résultats de recherche semblent obsolètes :
+
+1. Vérifiez que le dernier commit a été synchronisé.
+2. Déclenchez une mise à jour manuelle depuis le tableau de bord.
+3. Rafraîchissez la page de documentation publique.
+4. Recherchez les mots exacts du titre ou de l'en-tête de la page.
+5. Vérifiez si la page est masquée, marquée `noindex`, ou marquée `searchable: false`.
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/optimize/seo">SEO</a>
+  <a href="/fr/configuration/seo-search-reference">Référence SEO et recherche</a>
+  <a href="/fr/writing-content/headings-anchors">Titres et ancres</a>
+  <a href="/fr/api-reference/openapi-setup">Configuration OpenAPI</a>
+</RelatedTopics>

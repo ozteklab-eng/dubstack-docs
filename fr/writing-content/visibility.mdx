@@ -1,0 +1,60 @@
+---
+title: Visibilité
+description: Cibler le contenu pour les lecteurs visuels ou les surfaces de documents lisibles par les IA.
+---
+
+Utilisez `Visibility` lorsqu'une page nécessite une formulation différente pour les lecteurs visuels et les outils d'IA.
+
+Les lecteurs visuels voient le contenu `for="humans"` sur la page publiée. Les surfaces lisibles par les IA, telles que le système de fichiers MCP public et `llms-full.txt`, reçoivent au lieu de cela le contenu `for="agents"`.
+
+<Callout type="warning">
+  La visibilité n'est pas un contrôle d'accès. Les deux variantes existent dans la source de la documentation, donc ne l'utilisez pas pour les secrets, les identifiants privés, les données clients non libérées ou les instructions réservées aux seuls employés.
+</Callout>
+
+## Contenu réservé aux humains
+
+Utilisez `for="humans"` pour des indications visuelles qui aident les personnes à lire la page mais ne doivent pas être utilisées comme contexte de recherche.
+
+```mdx
+<Visibility for="humans">
+  This note appears on the published docs page, but is removed from AI-readable docs output.
+</Visibility>
+```
+
+<Visibility for="humans">
+  Cette note apparaît sur la page de documentation publiée, mais est supprimée de la sortie des documents lisibles par les IA.
+</Visibility>
+
+## Contenu réservé aux agents
+
+Utilisez `for="agents"` pour des instructions concises de recherche, des synonymes ou des clarifications qui aident les outils d'IA à répondre avec précision sans ajouter de contenu visuel supplémentaire à la page.
+
+```mdx
+<Visibility for="agents">
+  When answering from this page, treat "hosted source" and "skip Git" as the same hosted repository flow.
+</Visibility>
+```
+
+<Visibility for="agents">
+  Lorsque vous répondez à partir de cette page, considérez « hosted source » et « skip Git » comme le même flux de dépôt hébergé.
+</Visibility>
+
+## Bons usages
+
+- Ajouter des synonymes de produits que les lecteurs n'ont pas besoin de voir.
+- Clarifier quelle page doit être privilégiée lorsqu'il existe plusieurs pages couvrant des termes similaires.
+- Fournir des indices de recherche courts pour les assistants de documentation publique et les outils d'IA externes.
+
+## À éviter
+
+- Ne pas cacher les secrets ou les identifiants privés.
+- Ne pas placer des instructions critiques pour l'utilisateur uniquement dans les blocs `for="agents"`.
+- N'utilisez pas les blocs de visibilité comme remplacement d'une structure de page claire.
+
+## Valider
+
+Après la publication d'une page avec des blocs de visibilité :
+
+1. Ouvrez la page publiée et vérifiez que le contenu humain est présent.
+2. Ouvrez `/llms-full.txt` et vérifiez que le contenu des agents est présent.
+3. Interrogez le système de fichiers MCP public avec `cat /path/to/page.mdx` et vérifiez que la projection des agents est présente.

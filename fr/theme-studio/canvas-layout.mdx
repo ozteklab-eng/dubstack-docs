@@ -1,0 +1,86 @@
+---
+title: Canvas Layout
+description: Comprenez comment Canvas Layout modifie le fonctionnement du site de documentation publié.
+icon: layout-template
+---
+
+Canvas Layout est le runtime de Theme Studio pour les sites qui choisissent explicitement une mise en page visuelle.
+
+Il permet aux équipes Enterprise de positionner et de styliser les principales zones des pages tout en conservant le contenu de la documentation dans Git.
+
+## Modes de fonctionnement
+
+dubstack prend en charge deux modes de mise en page pour les sites publiés :
+
+| Mode | Utilisez-le pour |
+| --- | --- |
+| Docs Shell | Sites de documentation standard avec navigation latérale, pages de contenu, référence API et recherche. |
+| Canvas Layout | Sites Enterprise nécessitant une composition visuelle personnalisée autour de la documentation. |
+
+Le niveau Enterprise n'active pas Canvas Layout automatiquement. Chaque site doit l'activer explicitement.
+
+## Composants du canevas
+
+Canvas Layout est composé de composants tels que :
+
+- En-tête.
+- Barre latérale.
+- Zone de contenu principal.
+- Section d'accueil.
+- Cartes de navigation.
+- Pied de page.
+- Lanceur d'assistant.
+- Blocs de contenu personnalisés.
+
+La mise en page définit l'emplacement des composants. Le contenu des pages de documentation provient toujours de fichiers MDX et de sources publiées.
+
+## Structure de configuration
+
+Les données du canevas sont stockées avec la configuration du site et publiées pendant le même cycle de déploiement que les autres paramètres de documentation.
+
+Un exemple simplifié :
+
+```json
+{
+  "canvas_layout": {
+    "components": [
+      {
+        "id": "sidebar",
+        "type": "sidebar",
+        "x": 0,
+        "y": 0,
+        "width": 260,
+        "height": 900
+      },
+      {
+        "id": "main-content",
+        "type": "main-content",
+        "x": 260,
+        "y": 0,
+        "width": 860,
+        "height": 900
+      }
+    ]
+  }
+}
+```
+
+La configuration de production inclut un style supplémentaire, un comportement réactif et des paramètres spécifiques aux composants.
+
+## Comportement de publication
+
+Lorsque Canvas Layout est activé :
+
+1. Le tableau de bord enregistre la configuration du canevas.
+2. Une publication ou une mise à jour synchronise la configuration.
+3. Le runtime public lit le mode de mise en page depuis l'API du thème du site.
+4. Le frontend affiche le runtime Canvas pour ce site.
+
+Si Canvas Layout est désactivé, le site utilise le Docs Shell standard.
+
+## Garde-fous
+
+- N'utilisez pas Canvas Layout pour masquer des informations légales, de facturation ou de support.
+- Assurez-vous que la navigation reste utilisable aux points de rupture desktop et mobile.
+- Maintenez le contenu des pages en MDX afin que la recherche, le MCP, l'assistant et la revue de source fonctionnent correctement.
+- Validez les modes clair et sombre avant de publier.

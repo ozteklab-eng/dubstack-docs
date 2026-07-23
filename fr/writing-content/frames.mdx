@@ -1,0 +1,34 @@
+---
+title: Cadres
+description: Enveloppez les images et les exemples visuels dans un cadre bordé.
+icon: scan
+---
+
+Les cadres offrent un espacement cohérent, des bordures et des légendes optionnelles pour les images et les exemples visuels.
+
+<Frame caption="Utilisez des légendes pour expliquer ce que le lecteur voit.">
+  <img src="/logo/light.svg" alt="dubstack logo" />
+</Frame>
+
+```mdx
+<Frame caption="Use captions to explain what the reader is seeing.">
+  <img src="/logo/light.svg" alt="dubstack logo" />
+</Frame>
+```
+
+## Quand utiliser les cadres
+
+- Captures d'écran de produits.
+- Schémas.
+- Exemples visuels courts.
+- Médias nécessitant une légende.
+
+## Propriétés prises en charge
+
+<ResponseField name="caption" type="string">
+  Texte optionnel affiché en dessous du contenu encadré.
+</ResponseField>
+
+<ResponseField name="children" type="HTML or MDX content" required>
+  Le contenu visuel à l'intérieur du cadre. Les images sont résolues via le pipeline d'actifs du locataire.
+</ResponseField>

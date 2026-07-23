@@ -1,0 +1,105 @@
+---
+title: Extraits réutilisables
+description: Réutilisez des blocs de contenu courants sur toutes les pages.
+icon: recycle
+---
+
+Les extraits réutilisables maintiennent le contenu répété cohérent sur toutes les pages.
+
+Utilisez des extraits pour les avertissements, les prérequis, les notes de configuration partagées, les concepts d'API répétés et le contenu qui doit être mis à jour à un seul endroit.
+
+## Quand utiliser un extrait
+
+Utilisez un extrait lorsque le même bloc apparaît sur plusieurs pages et doit être mis à jour à partir d'un seul fichier source.
+
+Bons candidats :
+
+- prérequis d'authentification
+- avis sur les fonctionnalités bêta
+- instructions d'escalade du support
+- notes d'installation du SDK partagées
+- avertissements de sécurité courants
+
+Évitez les extraits pour le contenu unique qui n'apparaît que sur une seule page.
+
+## Créez un fichier d'extrait
+
+Placez les fichiers MDX réutilisables sous `snippets/` dans le même dépôt que le reste de vos documents.
+
+```text
+snippets/
+  security-note.mdx
+  manual-update-note.mdx
+  support-contact.mdx
+```
+
+Un extrait peut contenir du contenu MDX normal et des composants dubstack pris en charge.
+
+```mdx snippets/security-note.mdx
+<Callout type="warning">
+  Never commit production credentials, API keys, private keys, or magic links to your docs repository. Use environment variables or your provider's secret store instead.
+</Callout>
+```
+
+## Importer un extrait
+
+Importez l'extrait depuis `/snippets/`, puis affichez-le là où le contenu partagé doit apparaître.
+
+```mdx
+import SecurityNote from "/snippets/security-note.mdx";
+
+Before you publish, review the shared security guidance:
+
+<SecurityNote />
+```
+
+import SecurityNote from "/snippets/security-note.mdx";
+
+Avant de publier, consultez la guidance de sécurité partagée :
+
+<SecurityNote />
+
+## Utilisez l'étiquette d'extrait
+
+Vous pouvez également inclure un extrait directement avec le composant `Snippet`.
+
+```mdx
+<Snippet file="security-note.mdx" />
+```
+
+Sortie rendue :
+
+<Snippet file="security-note.mdx" />
+
+Les deux formes résolvent à partir du dossier `snippets/` du dépôt. `security-note.mdx` et `snippets/security-note.mdx` pointent vers le même fichier d'extrait.
+
+## Support actuel
+
+Les documents hébergés prennent en charge les extraits `.mdx` et `.md` basés sur le dépôt provenant du dossier `snippets/`.
+
+Un extrait peut inclure un autre extrait, mais gardez le nesting peu profond. Les boucles d'extraits récursifs sont ignorées lors du rendu.
+
+Le rendu hébergé ne prend pas actuellement en charge les extraits JSX publics visibles aux clients, les importations de variables nommées ou l'interpolation de props à l'intérieur des fichiers d'extraits. Gardez ces modèles hors des documents de production jusqu'à ce qu'ils soient explicitement pris en charge.
+
+## Publication des extraits
+
+Les extraits sont des fichiers sources, donc ils suivent le même flux de publication que le reste de vos documents.
+
+1. Validez le fichier d'extrait et chaque page qui l'importe.
+2. Poussez les modifications vers la branche connectée.
+3. Exécutez une mise à jour manuelle si vous avez besoin que le site se rafraîchisse immédiatement.
+4. Ouvrez la page publiée et vérifiez que le fragment s'affiche là où il est importé.
+
+Si un fragment ne s'affiche pas après la publication :
+
+- vérifiez que le fichier de fragment existe dans le dépôt
+- vérifiez que le chemin pointe vers le dossier `snippets/`
+- vérifiez que la syntaxe correspond à l'une des formes prises en charge ci-dessus
+- vérifiez que la branche connectée s'est synchronisée correctement
+
+## Règles de qualité des fragments
+
+- Maintenez les fragments courts.
+- Utilisez les fragments pour un sens partagé, et non pour cacher des instructions spécifiques à la page.
+- Évitez les fragments contenant des secrets ou des identifiants spécifiques à l'environnement.
+- Examinez chaque page qui utilise un fragment avant de modifier son sens.

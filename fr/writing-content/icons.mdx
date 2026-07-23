@@ -1,0 +1,84 @@
+---
+title: Icônes
+description: "Ajoutez des icônes en ligne aux pages de documentation et configurez les noms d'icônes, la taille, la couleur et la source de la bibliothèque."
+icon: icons
+---
+
+Utilisez des icônes pour ajouter un accent visuel aux étiquettes courtes, titres, cartes, badges et entrées de navigation.
+
+## Icône basique
+
+<Icon icon="flag" size={32} />
+
+```mdx
+<Icon icon="flag" size={32} />
+```
+
+## Icônes en ligne
+
+Les icônes s'affichent en ligne avec le texte environnant.
+
+Documentation publiée <Icon icon="check" color="#15803D" /> est disponible après une synchronisation réussie.
+
+```mdx
+Published docs <Icon icon="check" color="#15803D" /> are available after a successful sync.
+```
+
+## Bibliothèques d'icônes
+
+Par défaut, les icônes utilisent la bibliothèque d'icônes configurée du site. Vous pouvez remplacer la bibliothèque sur une seule icône.
+
+```mdx
+<Icon icon="flag" library="standard" size={24} />
+```
+
+Les alias de bibliothèque pris en charge incluent :
+
+| Alias | Utilisation |
+| --- | --- |
+| `standard` | Ensemble d'icônes standard intégré. |
+| `lucide` | Alias pour `standard`. |
+| `fa` | Source Font Awesome lorsqu'elle est configurée. |
+| `fontawesome` | Alias pour `fa`. |
+| `font-awesome` | Alias pour `fa`. |
+| `tabler` | Alias pour la source compatible Tabler. |
+
+## Variantes d'icônes
+
+Utilisez `iconType` lorsque la bibliothèque d'icônes sélectionnée prend en charge les variantes.
+
+```mdx
+<Icon icon="flag" library="fa" iconType="solid" size={24} />
+```
+
+## Propriétés
+
+<ResponseField name="icon" type="string" required>
+  Nom de l'icône à afficher. `name` est également accepté en tant qu'alias.
+</ResponseField>
+
+<ResponseField name="library" type="string">
+  Remplacement de la bibliothèque d'icônes facultatif. `iconLibrary` est également accepté.
+</ResponseField>
+
+<ResponseField name="iconType" type="string">
+  Variante d'icône facultative pour les bibliothèques qui prennent en charge les variantes.
+</ResponseField>
+
+<ResponseField name="size" type="number" default="16">
+  Taille de l'icône en pixels.
+</ResponseField>
+
+<ResponseField name="color" type="string">
+  Valeur de couleur CSS pour l'icône.
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Nom de classe facultatif pour un style avancé.
+</ResponseField>
+
+## Directives
+
+- Utilisez des icônes comme indicateurs secondaires, et non comme seule source de sens.
+- Maintenez les noms d'icônes cohérents dans la navigation, les cartes et le contenu de la documentation.
+- Privilégiez l'utilisation d'icônes en ligne courtes. Utilisez des cartes ou des rappels lorsqu'un contenu nécessite une explication.

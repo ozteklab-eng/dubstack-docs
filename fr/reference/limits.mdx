@@ -1,0 +1,52 @@
+---
+title: Limites
+description: Comprenez les limites du produit et les limites opérationnelles.
+icon: gauge
+---
+
+Les limites assurent la fiabilité et la prévisibilité des sites de documentation.
+
+Le tableau de bord affiche l'état actuel de l'espace de travail où les limites s'appliquent. Cette page explique les types de limites auxquels vous devriez vous attendre.
+
+## Domaines courants de limites
+
+| Domaine | Ce qui peut être limité |
+| --- | --- |
+| Sites de documentation | Nombre de sites de documentation actifs dans un espace de travail. |
+| Membres de l'équipe | Nombre d'utilisateurs ou de sièges. |
+| Domaines personnalisés | Nombre de domaines configurés. |
+| Intégrations Git | Dépôts connectés et accès aux fournisseurs. |
+| Spécifications OpenAPI | Taille des spécifications, nombre de spécifications et pages de points de terminaison générées. |
+| Utilisation de l'IA | Utilisation de l'assistant et des agents par plan, crédits ou contrôles d'utilisation équitable. |
+| Stockage et ressources | Ressources téléchargées et artefacts de contenu publiés. |
+
+Voyez [crédits et utilisation de l'IA](/fr/ai/credits-usage) pour les champs du registre d'utilisation et le modèle de rapport.
+
+## Conseils pratiques
+
+- Maintenez les spécifications OpenAPI centrées sur les API publiques.
+- Masquez les points de terminaison internes de la navigation générée.
+- Divisez les ensembles de documentation très volumineux en sections claires.
+- Compressez les grandes images avant de les valider.
+- Utilisez des extraits réutilisables pour le contenu répétitif.
+- Maintenez les exécutions de flux de travail et d'agents centrées sur une seule tâche.
+
+## Ce qui se produit lorsqu'une limite est atteinte
+
+Selon la limite, dubstack peut :
+
+- bloquer une nouvelle modification de configuration
+- nécessitent une mise à niveau
+- mettre en attente les tâches jusqu'à ce que la capacité soit disponible
+- vous demander de réduire la taille du contenu ou sa portée
+- afficher un avertissement du tableau de bord avec les étapes suivantes
+
+## Besoin d'une limite plus élevée
+
+Si votre site de documentation a besoin de limites plus élevées, contactez le support depuis le tableau de bord en indiquant :
+
+- nom de l'espace de travail
+- nom du site
+- la limite atteinte
+- croissance attendue
+- si cela bloque la publication en production

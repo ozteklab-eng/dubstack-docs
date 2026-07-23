@@ -1,0 +1,70 @@
+---
+title: Assistant
+description: "Ajoutez une surface d'assistant IA pour aider les lecteurs à utiliser vos documents."
+icon: bot
+---
+
+L'assistant aide les lecteurs à poser des questions sur votre documentation publiée sans quitter le site de documentation.
+
+Il utilise le contenu publié du site actuel, puis fournit une réponse accompagnée de sources lorsqu'elles sont pertinentes.
+
+## Ce que l'assistant peut faire
+
+- Répondre aux questions de configuration et d'utilisation de vos documents.
+- Créer des liens vers les pages sources afin que les lecteurs puissent vérifier les détails.
+- Utiliser la page actuelle comme contexte lorsqu'elle est ouverte depuis une action de page.
+- Aider les lecteurs à découvrir des pages liées lorsqu'ils ne connaissent pas le nom exact de la page.
+
+## Ce que l'assistant ne peut pas faire
+
+- Accéder aux paramètres privés du tableau de bord depuis le site de documentation publique.
+- Modifier des fichiers ou créer des pull requests depuis la surface publique de l'assistant.
+- Utiliser des modifications locales non publiées qui n'ont pas été synchronisées sur le site.
+- Contourner les limites de visibilité, d'autorisation ou de déploiement.
+
+## Améliorer les réponses de l'assistant
+
+Rédigez des pages que les humains et les outils d'IA peuvent comprendre :
+
+- Utilisez des titres descriptifs.
+- Définissez les termes spécifiques au produit avant d'utiliser des acronymes.
+- Maintenez les procédures en étapes ordonnées.
+- Ajoutez des exemples pour la configuration et l'utilisation des API.
+- Liez les pages liées.
+- N'incluez pas d'informations internes ou confidentielles dans les pages publiques.
+
+## Rafraîchissement des sources
+
+L'assistant consulte l'index de la documentation publiée. Certains déploiements utilisent également un index de réponses avancées pour une récupération plus approfondie.
+
+Si une réponse manque un changement récent :
+
+1. Vérifiez que le changement est enregistré dans la source connectée.
+2. Vérifiez que la mise à jour de déploiement ou la mise à jour manuelle est terminée.
+3. Ouvrez les vérifications de préparation de l'assistant dans le tableau de bord.
+4. Utilisez **Synchronisation avancée** lorsque l'index de réponses avancé est activé et doit être rafraîchi.
+5. Rafraîchissez la page de documentation et posez à nouveau la question.
+
+## Configurer l'assistant
+
+Utilisez [Configurer l'assistant](/fr/ai/assistant-settings) pour gérer l'état, le traitement des réponses, les domaines de recherche, la protection contre les bots, les questions de démarrage et les vérifications de préparation depuis le tableau de bord.
+
+## Rapport d'utilisation
+
+Les réponses de l'assistant peuvent être enregistrées dans le registre d'utilisation de l'IA avec les métadonnées de source, de statut, de profil, de tokens et d'estimation des crédits.
+
+Voir [crédits et utilisation de l'IA](/fr/ai/credits-usage) pour le modèle d'utilisation et l'emplacement de consultation de l'utilisation dans le tableau de bord.
+
+## Applications personnalisées
+
+L'assistant hébergé est l'expérience de chat prise en charge pour les sites de documents publiés.
+
+Pour les applications personnalisées, utilisez le [MCP public](/fr/ai/mcp), l'[export Markdown](/fr/ai/markdown-export) ou les [index LLM](/fr/ai/llms-indexes) comme interfaces de récupération de documentation prises en charge. Aucune API publique de messages ne permet actuellement d'intégrer l'assistant hébergé dans une application tierce.
+
+## Avertissement aux lecteurs
+
+Les réponses de l'IA peuvent contenir des erreurs. Vérifiez les sources liées avant de faire confiance à une réponse générée pour des modifications en production.
+
+<Callout type="info">
+  L'agent du tableau de bord est distinct de l'assistant public. L'agent du tableau de bord aide les membres de l'équipe de confiance à rédiger des modifications de documentation, tandis que l'assistant public répond aux questions des lecteurs provenant des documents publiés.
+</Callout>

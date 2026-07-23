@@ -1,0 +1,114 @@
+---
+title: Créer des flux de travail
+description: "Créez des flux de travail personnalisés avec des déclencheurs, contextes et comportements de mise à jour restreints."
+icon: plus
+---
+
+Les flux de travail personnalisés vous permettent de définir un flux de travail de maintenance des documents pour le processus spécifique de votre équipe.
+
+Utilisez-les lorsque les flux de travail intégrés sont proches, mais que vos règles de déclenchement, de demande, de contexte ou de notification doivent être plus précises.
+
+Les flux de travail personnalisés utilisent le même vocabulaire de fournisseur que les flux de travail intégrés : **Requérir une revue** ouvre une demande de revue native du fournisseur, telle qu'une pull request GitHub, une demande de fusion GitLab ou une pull request Forgejo.
+
+## Créer un flux de travail personnalisé
+
+1. Ouvrez le tableau de bord.
+2. Sélectionnez le déploiement que vous souhaitez configurer.
+3. Allez dans **Automate > Workflows**.
+4. Choisissez **Créer un flux de travail personnalisé**.
+5. Ajoutez un nom et une description.
+6. Sélectionnez le déclencheur.
+7. Ajoutez des dépôts de contexte ou des intégrations si nécessaire.
+8. Rédigez des instructions claires.
+9. Choisissez le mode de mise à jour.
+10. Enregistrez le flux de travail.
+
+## Choisir un déclencheur
+
+| Déclencheur | Quand l'utiliser |
+| --- | --- |
+| Mise à jour du contenu | Exécuter lorsqu'un contenu de documentation change. |
+| Changement de code | Exécuter lorsqu'un code source sélectionné est fusionné. |
+| Calendrier personnalisé | Exécuter selon un calendrier récurrent. |
+
+Choisissez le déclencheur le plus étroit qui convient au flux de travail. Les déclencheurs larges peuvent générer des mises à jour bruyantes.
+
+## Ajouter des dépôts de contexte
+
+Les dépôts de contexte sont clonés dans l'environnement du flux de travail afin que l'agent puisse lire le code pendant son exécution.
+
+Ils ne déclenchent pas automatiquement le flux de travail à moins que vous ne choisissiez également un déclencheur de changement de code et que le dépôt soit sélectionné comme source de déclenchement.
+
+Vous pouvez ajouter jusqu'à 10 dépôts de contexte. Gardez la liste axée sur les dépôts nécessaires au flux de travail.
+
+## Ajouter un contexte d'intégration
+
+Les intégrations connectées peuvent fournir un contexte délimité pour une exécution.
+
+Exemples :
+
+- Utilisez le contexte Slack lorsque la discussion source a eu lieu dans un canal ou un fil.
+- Utilisez le contexte Jira lorsque les problèmes décrivent une fonctionnalité, un bug ou une portée de version.
+
+Activez uniquement les intégrations pertinentes pour le flux de travail. Cela réduit la taille des invites et facilite la révision des mises à jour.
+
+## Rédigez des instructions efficaces
+
+De bonnes instructions sont spécifiques :
+
+```text
+Draft a short troubleshooting page when the linked issue describes a recurring setup failure.
+Use the existing troubleshooting page structure.
+Keep code examples minimal.
+Open a pull request for review.
+```
+
+Évitez les instructions trop générales :
+
+```text
+Improve the docs.
+```
+
+### Modèle d'instruction fort
+
+Utilisez cette structure pour des flux de travail personnalisés fiables :
+
+```text
+Goal: describe the exact outcome.
+Scope: list the pages, directories, repositories, or issue filters to inspect.
+Procedure: list the steps the agent should follow.
+Constraints: define terms, tone, file naming, and what not to change.
+Output: say whether to open a review request or direct update.
+Review notes: describe what reviewers should check.
+```
+
+## Choisissez un mode de mise à jour
+
+| Mode | Comportement |
+| --- | --- |
+| Exiger une revue | Ouvrez une demande de revue native du fournisseur et attendez la revue. |
+| Automatiquement | Appliquez la mise à jour directement lorsque le flux de travail est autorisé à écrire. |
+
+Privilégiez le mode de revue pour les nouveaux flux de travail. Passez au mode de mises à jour automatiques uniquement après que le flux de travail ait produit un résultat prévisible sur plusieurs exécutions.
+
+Les mises à jour automatiques nécessitent que le fournisseur connecté autorise les validations directes sur la branche cible. Si la protection de branche, les règles ou la politique de dépôt bloquent les validations directes, conservez le flux de travail en mode de revue.
+
+## Validez un flux de travail personnalisé
+
+Après enregistrement :
+
+1. Exécutez-le manuellement si le flux de travail est exécutable.
+2. Vérifiez l'historique des exécutions.
+3. Revoyez les sources de contexte collectées.
+4. Revoyez la demande de revue créée ou la mise à jour directe.
+5. Ajustez les instructions si le résultat est trop large ou trop étroit.
+
+<Callout type="warning">
+  Les flux de travail peuvent modifier la documentation. Gardez les flux de travail de production en mode de revue jusqu'à ce que l'invite, le contexte et le modèle de sortie soient bien compris.
+</Callout>
+
+## Sujets connexes
+
+- [Gérer les flux de travail](/fr/workflows/manage)
+- [Configurer les exécutions de flux de travail](/fr/workflows/configuration)
+- [Référence des flux de travail](/fr/workflows/reference)

@@ -1,0 +1,152 @@
+---
+title: Fichier de compétence généré
+description: Utilisez le fichier skill.md généré pour aider les agents à comprendre votre site de documentation et votre serveur MCP public.
+icon: badge-check
+---
+
+dubstack publie un fichier `skill.md` généré pour les sites de documentation publics lorsqu'un fichier de compétence personnalisé n'est pas fourni par le dépôt de documentation.
+
+Le fichier de compétence donne aux agents une description concise sur la manière d'utiliser le site de documentation, l'endroit où se connecter au serveur MCP public et les pages qui constituent de bons points de départ.
+
+## Ouvrez le fichier de compétence
+
+Ajoutez `/skill.md` à votre domaine de documentation.
+
+```text
+https://your-docs-domain.com/skill.md
+```
+
+Pour un site monté à `/docs`, utilisez :
+
+```text
+https://your-domain.com/docs/skill.md
+```
+
+La réponse est au format Markdown et est destinée aux agents IA, aux clients MCP et aux outils de développement capables de charger les instructions produit.
+
+Si l'authentification des documents est activée, le fichier de compétence généré suit la même politique d'accès aux lecteurs que le reste du site. Un agent public ne peut pas utiliser `/skill.md` pour contourner les documents protégés par mot de passe.
+
+## Ce qu'il contient
+
+Le fichier de compétence généré inclut :
+
+- le nom et la description du site
+- l'URL publique de la documentation
+- le point de terminaison public MCP
+- les pages de démarrage recommandées dans la navigation
+- les instructions pour utiliser les documents publiés comme source de vérité
+- les instructions pour fournir un retour d'expérience lorsque le retour d'expérience des agents est activé
+
+## Découverte des ressources MCP
+
+Le serveur MCP public expose également `skill.md` en tant que ressource.
+
+Les clients prenant en charge les ressources MCP peuvent découvrir les mêmes instructions après s'être connectés à :
+
+```text
+https://your-docs-domain.com/mcp
+```
+
+Cela permet à un agent d'utiliser à la fois le fichier de compétence de haut niveau et le système de fichiers de documentation recherchable du même serveur.
+
+## Découverte via `.well-known`
+
+dubstack publie également des métadonnées de découverte de compétences et d'agents sous les chemins `.well-known`.
+
+Les chemins utiles incluent :
+
+| Chemin | Objectif |
+| --- | --- |
+| `/skill.md` | Fichier de compétence principal généré ou personnalisé. |
+| `/.well-known/agent-skills/index.json` | Manifeste recommandé pour la découverte des compétences d'agents avec des métadonnées d'intégrité. |
+| `/.well-known/agent-skills/<skill-id>/skill.md` | URL de la compétence listée dans le manifeste des compétences d'agents. |
+| `/.well-known/skills/index.json` | Index des compétences compatibles pour les clients utilisant le format original de découverte des compétences. |
+| `/.well-known/skills/<skill-id>/SKILL.md` | URL de la compétence listée dans l'index des compétences compatibles. |
+| `/.well-known/agent-card.json` | Fiche d'agent qui décrit le site de documentation et relie aux compétences disponibles. |
+
+Utilisez les URLs renvoyées par les manifestes de découverte comme URL des fichiers de compétence canoniques. dubstack conserve les alias de compatibilité disponibles pour les cas courants `skill.md` et `SKILL.md`, mais les clients ne devraient pas compter sur un chemin supposé.
+
+### Manifeste des compétences de l'agent
+
+`/.well-known/agent-skills/index.json` retourne un manifeste avec un hachage `sha256` pour chaque fichier de compétence.
+
+```json
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "my-docs-site",
+      "type": "skill-md",
+      "description": "Use when answering questions about this documentation site.",
+      "url": "https://docs.example.com/.well-known/agent-skills/my-docs-site/skill.md",
+      "digest": "sha256:..."
+    }
+  ]
+}
+```
+
+### Index des compétences de compatibilité
+
+`/.well-known/skills/index.json` retourne la structure d'index des compétences originale pour les clients qui n'ont pas adopté le manifeste des compétences de l'agent.
+
+```json
+{
+  "skills": [
+    {
+      "name": "my-docs-site",
+      "description": "Use when answering questions about this documentation site.",
+      "files": ["SKILL.md"]
+    }
+  ]
+}
+```
+
+### Carte de l'agent
+
+`/.well-known/agent-card.json` retourne une carte JSON pour les agents qui découvrent des sites via une seule requête de métadonnées.
+
+La carte inclut :
+
+- le nom et la description du site de documentation
+- l'URL de documentation canonique
+- les modes d'entrée et de sortie de texte pris en charge
+- les méta-données des capacités non en flux
+- un tableau `skills` pointant vers les fichiers de compétence disponibles
+
+Pour les domaines personnalisés ou les proxys inversés, les URLs de découverte sont générées à partir de l'hôte public et du point de montage de la route. Assurez-vous que votre proxy transmet les en-têtes d'hôte public et de protocole décrits dans [Reverse proxy](/fr/deployment/reverse-proxy).
+
+## Quand l'utiliser
+
+Utilisez `skill.md` lorsque vous souhaitez donner à un agent des instructions durables sur votre produit ou site de documentation.
+
+Utilisez MCP lorsque l'agent doit chercher ou lire des pages publiées exactes.
+
+Utilisez `llms.txt` lorsque l'agent n'a besoin que d'un répertoire de pages.
+
+## Fichiers de compétences personnalisés
+
+Pour remplacer le fichier de compétence généré, ajoutez un fichier `skill.md` à la racine de votre dépôt de documentation.
+
+Pour publier plusieurs compétences spécifiques à un sujet, ajoutez des fichiers `SKILL.md` sous `.dubstack/skills/<skill-name>/`.
+
+Pour les détails de configuration, voir [Fichiers de compétences personnalisés](/fr/ai/custom-skill-files).
+
+## Dépannage
+
+Si `/skill.md` retourne `404` :
+
+1. Vérifiez que le site de documentation est public.
+2. Vérifiez que la découverte/indice de l'IA est activée.
+3. Exécutez une mise à jour manuelle depuis le tableau de bord.
+4. Vérifiez que `/.well-known/mcp` retourne les métadonnées de découverte et pointe vers le point de terminaison `/mcp` attendu.
+
+Si `/skill.md` redirige vers une page de connexion ou retourne une réponse d'authentification, l'authentification du site est activée. Déverrouillez le site en premier, ou utilisez une interface d'auteur authentifiée si l'agent a besoin d'un contexte de documentation privé.
+
+Si le fichier de compétence fait référence à des pages obsolètes, publiez les derniers changements de navigation et attendez la fin de la mise à jour de déploiement.
+
+## Sujets connexes
+
+- [MCP](/fr/ai/mcp)
+- [Fichiers de compétences personnalisés](/fr/ai/custom-skill-files)
+- [Fichiers d'index IA](/fr/ai/llms-indexes)
+- [Fichiers de découverte IA](/fr/ai/ai-discovery-files)

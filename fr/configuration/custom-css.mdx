@@ -1,0 +1,128 @@
+---
+title: CSS personnalisé
+description: Ajoutez des remplacements CSS avancés pour les sites de documentation éligibles.
+icon: paintbrush
+---
+
+Le CSS personnalisé permet aux espaces de travail éligibles d'appliquer des surcharges visuelles avancées à l'interface de documentation publiée.
+
+Utilisez ceci uniquement lorsque les paramètres de thème standards, les jetons de palette, les polices et les options de composants ne suffisent pas.
+
+<Warning>
+  Le CSS personnalisé est une fonctionnalité Enterprise avancée. Limitez les surcharges, validez-les dans la source et liez-les à des sélecteurs stables. N'utilisez pas le CSS personnalisé pour les changements de thème déjà couverts par des paramètres dédiés.
+</Warning>
+
+## Configurer le CSS personnalisé
+
+Définissez `custom_css` dans `dubstack.json`.
+
+```json
+{
+  "custom_css": "#content-area { max-width: 980px; }"
+}
+```
+
+Lors de la publication, dubstack injecte le CSS dans l'interface de documentation de ce site.
+
+## Utilisez des sélecteurs stables
+
+Préférez les identifiants et attributs documentés. Évitez de cibler les noms de classes générés car ils peuvent changer lors des déploiements.
+
+### Mise en page de la page
+
+| Accroche | Objectif |
+| --- | --- |
+| `#background-color` | Arrière-plan du conteneur le plus externe de l'interface de documentation. |
+| `#content-area` | Zone principale de contenu. |
+| `#content` | Contenu de la page MDX rendue. |
+| `#sidebar-content` | Conteneur de la colonne de la barre latérale. |
+| `#table-of-contents-content` | Enveloppe du contenu de la table des matières. |
+| `[data-docs-shell-scroll-root]` | Racine de défilement principale pour les pages de documentation. |
+
+### En-tête et assistant
+
+| Accroche | Objectif |
+| --- | --- |
+| `#assistant-entry` | Bouton d'entrée de l'assistant pour ordinateur de bureau. |
+| `#assistant-entry-mobile` | Bouton d'entrée de l'assistant mobile. |
+| `[data-docs-theme-preset]` | Préréglage de l'interface de thème actuelle. |
+| `[data-docs-color-preset]` | Préconfiguration de la palette actuelle. |
+| `[data-docs-theme-layout]` | Disposition actuelle de l'interface de documentation. |
+| `[data-docs-language-nav]` | Présent lorsqu'un sélecteur de langue est configuré. |
+
+### Feedback
+
+| Accroche | Objectif |
+| --- | --- |
+| `#feedback-thumbs-up` | Bouton de feedback positif sur la page. |
+| `#feedback-thumbs-down` | Bouton de feedback négatif. |
+| `#feedback-form` | Conteneur du formulaire de feedback. |
+| `#feedback-form-input` | Champ de saisie du message de feedback. |
+| `#feedback-form-email` | Champ de saisie du courriel de feedback (optionnel). |
+| `#feedback-form-cancel` | Action d'annulation du feedback. |
+| `#feedback-form-submit` | Action d'envoi du feedback. |
+
+## Remplacements de portée par thème
+
+Utilisez les attributs de données lorsqu'une surcharge ne doit s'appliquer qu'à une seule interface ou palette.
+
+```css
+[data-docs-theme-preset="prism"] #content-area {
+  max-width: 1040px;
+}
+
+[data-docs-color-preset="classic"] #assistant-entry {
+  border-radius: 999px;
+}
+```
+
+## Polices personnalisées
+
+Le CSS personnalisé peut charger des fichiers de police stockés dans le dépôt de documentation lorsqu'un espace de travail a le CSS personnalisé activé.
+
+```json
+{
+  "custom_css": "@font-face { font-family: 'Acme Sans'; src: url('/assets/fonts/acme-sans.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }",
+  "fonts": {
+    "body": "Acme Sans, Inter, sans-serif"
+  }
+}
+```
+
+Voir [Polices](/fr/configuration/fonts) pour la configuration de la typographie et les directives de sauvegarde.
+
+## Ce que le CSS personnalisé ne doit pas faire
+
+N'utilisez pas le CSS personnalisé pour :
+
+- masquer l'attribution de la plateforme obligatoire sur les plans où l'attribution est requise
+- masquer les contrôles de consentement, de feedback, de facturation ou de sécurité
+- compter sur les noms de classes générés
+- charger du JavaScript tiers
+- insérer des scripts de suivi
+- rendre le contenu illisible en mode clair ou sombre
+
+<Note>
+  dubstack prend ici en charge les surcharges CSS, mais pas l'exécution arbitraire de JavaScript. Utilisez les intégrations approuvées pour les analyses, le comportement de l'assistant et les outils externes.
+</Note>
+
+## Liste de vérification
+
+Avant de publier un changement de CSS personnalisé :
+
+- Testez la page en mode clair et sombre.
+- Testez les largeurs pour ordinateur de bureau et mobile.
+- Vérifiez les pages de référence API, les pages MDX régulières, la recherche, l'assistant et les surfaces de feedback.
+- Gardez un commit de retour en arrière prêt.
+- Privilégiez les jetons de thème ou les paramètres du tableau de bord lorsqu'ils peuvent exprimer le même changement.
+
+## Sujets connexes
+
+<CardGroup cols={2}>
+  <Card title="Thématisation" icon="palette" href="/fr/configuration/theming">
+    Configurez les paramètres de thème, palette, couleur, logo et bloc de code de premier plan.
+  </Card>
+  <Card title="Polices" icon="text-cursor-input" href="/fr/configuration/fonts">
+    Configurez la typographie des titres, du corps et du code.
+  </Card>
+</CardGroup>

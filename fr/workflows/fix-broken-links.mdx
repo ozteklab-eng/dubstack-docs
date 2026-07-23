@@ -1,0 +1,91 @@
+---
+title: Flux de travail de correction des liens rompus
+description: Recherche des liens internes et externes rompus et ouverture de corrections révisables à partir des exécutions du flux de travail.
+icon: link
+---
+
+Le flux de travail de correction des liens rompus vérifie les liens de la documentation après des modifications de contenu et propose des corrections avant que les lecteurs ne tombent sur des liens brisés.
+
+Utilisez-le après avoir réorganisé des pages, migré des documents, modifié des redirections ou publié du contenu liant des services externes.
+
+## Ce qu'il fait
+
+Lorsqu'il est activé pour un déploiement, le flux de travail est conçu pour :
+
+- scanner le contenu de documentation modifié pour détecter les liens internes et externes
+- vérifier que les routes internes, les redirections, les ancres et les liens de référence API générés sont accessibles
+- détecter les liens externes qui échouent ou retournent des codes d'état non sécurisés
+- proposer des corrections de liens dans le dépôt de documentation connecté
+- ouvrir une demande de révision native au fournisseur à moins que les mises à jour automatiques ne soient explicitement activées
+- enregistrer l'état de l'exécution, les pages inspectées, les fichiers modifiés et l'utilisation des crédits dans l'historique du flux de travail
+
+Le flux de travail s'exécute via le fournisseur Git connecté. Il ne modifie pas directement les artefacts R2 publiés.
+
+## Ce qu'il vérifie
+
+| Type de lien | Ce que le flux de travail valide |
+| --- | --- |
+| Pages internes | La route existe dans l'arborescence des documents publiés ou redirige vers une page valide. |
+| Ancres de titre | Les identifiants d'ancrage sont résolus après le rendu MDX et les identifiants de titre générés sont pris en compte. |
+| Routes de référence API | Les pages de points de terminaison et les pages OpenAPI générées sont accessibles. |
+| Fichiers statiques | Les images, les téléchargements et les fichiers publics sont présents. |
+| URL externes | La cible répond correctement, ou l'exécution enregistre la raison pour laquelle elle n'a pas pu être validée. |
+
+La validation des liens externes doit être prudente. Certains fournisseurs bloquent les vérifications automatisées, limitent les requêtes ou retournent des codes d'état différents selon la géographie. Gardez le mode révision activé lorsque les liens externes sont importants.
+
+## Configuration requise
+
+Avant d'activer l'automatisation des liens rompus :
+
+1. Connectez un dépôt de documentation basé sur Git.
+2. Confirmez que le dépôt de documentation dispose d'un accès en écriture.
+3. Confirmez que le profil du modèle d'écriture est disponible.
+4. Gardez les premières exécutions en mode **Requiert une revue**.
+
+Aucun connecteur supplémentaire n'est requis.
+
+## Déclencheurs et mode de mise à jour
+
+| Paramétrage | Comportement |
+| --- | --- |
+| Déclencheur | Mise à jour du contenu ou planification personnalisée |
+| Mode recommandé en premier | Requiert une revue |
+| Mode automatique | Utilisez-le uniquement après des exécutions de nettoyage répétées |
+| Cible d'écriture | Dépôt de documents connecté |
+| Dépôts de contexte | Non pris en charge |
+
+Les déclencheurs de mise à jour du contenu détectent rapidement les régressions liées aux liens. Les exécutions planifiées sont plus économiques en crédits lorsque votre équipe effectue de nombreuses petites modifications chaque jour.
+
+## Utilisation des crédits
+
+Les exécutions de détection de liens rompus sont des exécutions de flux de travail de maintenance et comptent dans l'utilisation des crédits du flux de travail.
+
+L'estimation actuelle de planification est de **285 crédits par exécution**. L'utilisation réelle peut varier selon :
+
+- nombre de pages modifiées
+- nombre de liens internes et externes
+- profondeur des redirections
+- comportement des fournisseurs externes
+- nombre de fichiers modifiés par la correction
+
+Voyez [crédits et utilisation de l'IA](/fr/ai/credits-usage) pour le modèle de partage.
+
+## Checklist de revue
+
+Avant de fusionner une correction générée, vérifiez :
+
+- les liens internes modifiés pointent vers la page canonique souhaitée
+- les ancres supprimées n'ont pas été remplacées par un lien vers une page moins spécifique
+- les URL de remplacement externes sont fiables
+- les redirections ne masquent pas un problème de navigation plus important
+- les liens générés ont toujours un sens dans la phrase environnante
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/workflows/reference#fix-broken-links">Référence des flux de travail</a>
+  <a href="/fr/workflows/manage">Gérer les flux de travail</a>
+  <a href="/fr/configuration/redirects">Redirections</a>
+  <a href="/fr/guides/linking">Guide de liens</a>
+  <a href="/fr/ai/credits-usage">Crédits et utilisation de l'IA</a>
+</RelatedTopics>

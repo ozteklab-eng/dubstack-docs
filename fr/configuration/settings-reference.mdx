@@ -1,0 +1,206 @@
+---
+title: Référence des paramètres
+description: Référence des champs de dubstack.json utilisés par le rendu des documents et le pipeline de synchronisation.
+icon: list-checks
+---
+
+`dubstack.json` est le fichier de paramètres source d'un site de documentation dubstack.
+
+Cette référence couvre les champs actuellement utilisés par le moteur de rendu public, le worker de synchronisation, les paramètres du tableau de bord et les surfaces d'IA publiques.
+
+## Référence rapide
+
+| Champ | Type | Objectif |
+| --- | --- | --- |
+| `$schema` | chaîne de caractères | URL de schéma facultative pour l'aide de l'éditeur. |
+| `site.name` | chaîne de caractères | Nom du site public. |
+| `site.tagline` | chaîne de caractères | Slogan court du site. |
+| `site.logo.light` | chaîne de caractères | Chemin du logo en mode clair. |
+| `site.logo.dark` | chaîne de caractères | Chemin du logo en mode sombre. |
+| `site.favicon` | chaîne de caractères | Chemin du favicon. |
+| `theme` | chaîne de caractères | Préconfiguration de l'enveloppe de thème. |
+| `palette` | chaîne de caractères | Préconfiguration de jeton de couleur superposée à l'enveloppe. |
+| `colors.primary` | chaîne de caractères | Couleur d'accentuation principale. |
+| `colors.light` | chaîne de caractères | Couleur d'accentuation utilisée dans les contextes sombres. |
+| `colors.dark` | chaîne de caractères | Couleur d'accentuation utilisée dans les contextes clairs et les boutons. |
+| `styling.codeblocks` | chaîne de caractères | Mode de thème des blocs de code. |
+| `navigation.tabs` | tableau | Onglets de navigation de niveau supérieur dans les documents. |
+| `navigation.groups` | tableau | Navigation regroupée lorsqu'aucun onglet n'est utilisé. |
+| `navigation.languages` | tableau | Sélecteur de langue et options de routage avec préfixe de localisation. |
+| `redirects` | tableau | Redirections source-vers-destination. |
+| `contextual.options` | tableau | Options du menu d'action de la page. |
+| `search.prompt` | chaîne | Espace réservé de recherche publique canonique géré par les paramètres de recherche. |
+| `widgets.search.enabled` | booléen | Active la recherche sur le site. |
+| `widgets.assistant` | objet | Étiquettes d'assistant public et texte de bienvenue. |
+| `api.openapi` | chaîne | Chemin de spécification OpenAPI par défaut. |
+| `api.playground.display` | chaîne | Mode d'affichage de l'aire de jeu API. |
+| `addons.feedback` | objet | Contrôles de retour des lecteurs. |
+| `navbar.primary` | objet | CTA de titre principal facultatif. |
+| `errors.404` | objet | Texte de page non trouvée personnalisé et redirection de secours facultative. |
+
+## Site
+
+```json
+{
+  "site": {
+    "name": "Acme Docs",
+    "tagline": "Developer documentation for Acme.",
+    "logo": {
+      "light": "/logo/light.svg",
+      "dark": "/logo/dark.svg"
+    },
+    "favicon": "/img/favicon.ico"
+  }
+}
+```
+
+## Thème et couleurs
+
+```json
+{
+  "theme": "prism",
+  "palette": "classic",
+  "colors": {
+    "primary": "#15803D",
+    "light": "#07C983",
+    "dark": "#15803D"
+  },
+  "styling": {
+    "codeblocks": "system"
+  }
+}
+```
+
+`theme` contrôle la mise en page et le rythme de l'interface. `palette` contrôle les jetons par défaut. `colors` applique les substitutions de marque.
+
+## Navigation
+
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "default": true,
+        "groups": [
+          {
+            "group": "Getting started",
+            "icon": "rocket",
+            "pages": ["index", "quickstart"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Les entrées de page peuvent être des chaînes ou des objets :
+
+```json
+{
+  "slug": "configuration/navigation",
+  "title": "Navigation",
+  "icon": "map"
+}
+```
+
+## Référence API
+
+```json
+{
+  "api": {
+    "openapi": "api-reference/openapi.json",
+    "playground": {
+      "display": "interactive"
+    }
+  }
+}
+```
+
+Le fichier OpenAPI est synchronisé avec le reste du dépôt de documentation. Les pages de points de terminaison générées sont publiées à partir de cette source.
+
+## Redirections
+
+```json
+{
+  "redirects": [
+    {
+      "source": "/old-page",
+      "destination": "/new-page"
+    }
+  ]
+}
+```
+
+## Page 404 personnalisée
+
+```json
+{
+  "errors": {
+    "404": {
+      "title": "Page not found",
+      "description": "This page may have moved. Use search or return to the docs homepage.",
+      "redirect": ""
+    }
+  }
+}
+```
+
+Laissez `redirect` vide pour afficher la page non trouvée. Définissez-le sur un chemin relatif à la racine uniquement lorsque toutes les pages manquantes doivent utiliser la même page de secours.
+
+## Actions contextuelles
+
+```json
+{
+  "contextual": {
+    "enabled": true,
+    "options": ["copy", "view", "claude", "chatgpt", "perplexity"],
+    "default": "copy"
+  }
+}
+```
+
+## Recherche
+
+```json
+{
+  "search": {
+    "prompt": "Search docs..."
+  },
+  "widgets": {
+    "search": {
+      "enabled": true,
+      "placeholder": "Search docs..."
+    },
+    "sidebar_search": {
+      "placeholder": "Search docs..."
+    }
+  }
+}
+```
+
+`search.prompt` est le texte indicatif canonique utilisé par les paramètres de recherche. `widgets.search.placeholder` et `widgets.sidebar_search.placeholder` sont synchronisés pour assurer la compatibilité avec le moteur de rendu et le thème.
+
+## Complément de feedback
+
+```json
+{
+  "addons": {
+    "feedback": {
+      "thumbs_rating": true,
+      "agent_feedback": true,
+      "collect_reader_emails": false
+    },
+    "related_topics": {
+      "enabled": true
+    }
+  }
+}
+```
+
+Les contrôles de feedback peuvent également être gérés depuis la page des compléments du tableau de bord lorsqu'un déploiement prend en charge les mises à jour des paramètres basés sur la source.
+
+<Callout type="warning">
+  `dubstack.json` est la configuration du site public. Stockez les identifiants et les secrets d'intégration privés dans le stockage de secrets géré par le tableau de bord, et non dans la configuration source.
+</Callout>

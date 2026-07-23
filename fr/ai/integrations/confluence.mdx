@@ -1,0 +1,131 @@
+---
+title: Intégration Confluence
+description: "Connectez Confluence pour que les flux de travail puissent utiliser le contexte des pages provenant des espaces sélectionnés."
+icon: file-stack
+---
+
+L'intégration Confluence fournit aux flux de travail pris en charge un accès contrôlé au contexte des pages de la base de connaissances.
+
+Utilisez-le lorsque la mise à jour de la documentation dépend de notes de produit, de plans de version, de runbooks, de décisions d'implémentation ou de pages de transfert de support qui se trouvent dans Confluence.
+
+## Ce que Confluence peut faire
+
+Confluence peut fournir :
+
+- titres de page, type de page, clé d'espace, horodatage de mise à jour, liens et extraits délimités pour les flux de travail pris en charge
+- contexte de page basé sur CQL pour les flux de documentation récurrents
+- contexte de la base de connaissances côté à côté des dépôts sources, des problèmes Jira ou des fils Slack
+
+Confluence est une source de contexte en lecture seule. Il ne rédige pas de documentation, ne modifie pas les pages Confluence, n'inspecte pas les pièces jointes ni ne scanne un espace entier sans une requête explicite. Les modifications de documentation sont toujours écrites via le fournisseur Git connecté.
+
+## Portée de la connexion
+
+L'intégration Confluence est partagée. Un administrateur ou un éditeur connecte un espace de travail Atlassian pour l'organisation, et les surfaces de flux de travail éligibles peuvent utiliser cette connexion lorsqu'un contexte Confluence est sélectionné explicitement.
+
+Le flux de travail hérite des accès du compte Atlassian qui a autorisé la connexion. Il ne peut lire que les pages que ce compte peut déjà voir dans Confluence.
+
+Pour restreindre l'accès, restreignez le compte Atlassian connecté dans Confluence ou connectez un compte qui n'appartient qu'aux espaces que vous souhaitez que les flux de documentation inspectent.
+
+## Exigences
+
+Avant de connecter Confluence, vérifiez :
+
+- votre organisation dispose d'un accès Enterprise ou d'un essai actif incluant les fonctionnalités d'intégration
+- vous connaissez le sous-domaine du site Atlassian à connecter, ou vous êtes confortable de laisser Atlassian retourner le premier espace accessible pendant l'autorisation
+- l'application OAuth Atlassian est configurée pour l'environnement
+- votre compte Atlassian peut accéder aux pages et espaces que vous souhaitez que les flux utilisent
+- le déploiement dispose d'un accès en écriture des dépôts si vous souhaitez des pull requests
+
+## Connectez Confluence
+
+1. Ouvrez le tableau de bord.
+2. Sélectionnez le déploiement.
+3. Allez dans **Paramètres > Organisation > Intégrations**.
+4. Choisissez **Confluence**.
+5. Entrez éventuellement le sous-domaine du site Atlassian pour lier la connexion à un espace spécifique.
+6. Autorisez l'accès à Confluence.
+7. Retournez au tableau de bord et vérifiez que Confluence est connecté.
+
+Si vous laissez le sous-domaine vide, dubstack utilise le premier espace Confluence accessible retourné par Atlassian pour le compte d'autorisation. Le tableau de bord stocke l'espace sélectionné et les portées accordées pour cette organisation ou cette portée de déploiement.
+
+## Portées OAuth
+
+Confluence utilise l'OAuth Atlassian et demande un accès classique en lecture seule afin que les flux de travail puissent rechercher et récupérer un contexte de page délimité.
+
+| Portée | Objectif |
+| --- | --- |
+| `read:confluence-content.all` | Autorise la lecture du contenu des pages limitées pour les pages visibles au compte connecté. |
+| `read:confluence-content.summary` | Recherche et prévisualise les pages avant l'obtention du contexte limité. |
+| `read:confluence-space.summary` | Liste et identifie les espaces visibles au compte connecté. |
+| `read:confluence-user` | Identifie les auteurs et éditeurs de page en noms lisibles. |
+| `offline_access` | Rafraîchit le jeton OAuth pour que l'intégration continue de fonctionner sans demande de consentement répétée. |
+
+dubstack ne demande pas les portées Confluence d'écriture, de suppression, de gestion des pièces jointes ou d'administration.
+
+Si votre organisation Atlassian restreint les applications connectées, un administrateur Atlassian doit peut-être approuver l'application OAuth de dubstack avant que la connexion ne soit complète. Consultez l'écran de consentement avant d'autoriser et révoquez l'application depuis Atlassian ou le tableau de bord de dubstack si l'accès doit cesser.
+
+## Utiliser le contexte Confluence dans les workflows
+
+Les workflows prenant en charge les intégrations peuvent activer le contexte Confluence.
+
+Lors de la configuration du workflow, définissez :
+
+| Paramètre | Objectif |
+| --- | --- |
+| CQL | Restreint les pages que le workflow peut lire. |
+| Limite | Limite le nombre de pages incluses dans une exécution. La valeur par défaut est 5 et le maximum est 10. |
+
+Maintenez le CQL restreint. Un contexte plus petit produit généralement de meilleures mises à jour de documentation et réduit l'utilisation inutile de jetons.
+
+Le CQL non limité est bloqué. Utilisez un type de contenu, un espace, une étiquette, un titre, un propriétaire, un parent ou une fenêtre de date pour que le workflow lise uniquement les pages pertinentes pour la mise à jour de la documentation.
+
+Pour chaque page, le workflow peut inclure le titre de la page, le type de page, la clé de l'espace, l'horodatage de la mise à jour, le lien et un extrait limité. Il ne comprend pas les pièces jointes ni ne stocke les extraits bruts dans l'historique des exécutions.
+
+Exemple de CQL :
+
+```text
+type = page AND space = DOC ORDER BY lastmodified DESC
+```
+
+## Bonnes portées Confluence
+
+Utilisez Confluence lorsque le workflow a besoin de connaissances rédigées par une équipe, et non lorsque le dépôt source contient déjà les détails de l'implémentation définitive.
+
+Exemples pertinents :
+
+```text
+type = page AND space = RUNBOOKS AND label = "release-note-source" ORDER BY lastmodified DESC
+```
+
+```text
+type = page AND space = API AND title ~ "authentication" ORDER BY lastmodified DESC
+```
+
+Évitez les requêtes larges :
+
+```text
+ORDER BY lastmodified DESC
+```
+
+Les requêtes larges sont rejetées car elles peuvent lire des pages d'espace non pertinentes, augmenter les coûts et rendre la sortie du workflow plus difficile à examiner.
+
+## Historique des exécutions
+
+Les détails de l'exécution du workflow indiquent si Confluence a été sélectionné, quel espace a été utilisé, la requête CQL, l'état de la collecte et les résumés de pages sécurisés.
+
+L'historique des exécutions stocke les titres des pages, les espaces, les liens, les horodatages et les nombres. Les extraits bruts sont utilisés pour la requête d'exécution mais ne sont pas stockés dans les résultats de l'exécution.
+
+## Désactiver Confluence
+
+1. Ouvrez **Paramètres > Organisation > Intégrations**.
+2. Rechercher Confluence.
+3. Choisir **Déconnecter**.
+
+La déconnexion de Confluence arrête la collecte du contexte des nouvelles pages. Les documents existants, les pull requests et les enregistrements des exécutions précédentes ne sont pas supprimés.
+
+## Sujets connexes
+
+- [Intégrations de workflow](/fr/workflows/integrations)
+- [Capacités du connecteur](/fr/ai/connector-capabilities)
+- [Permissions et portées d'intégration](/fr/ai/integration-permissions)
+- [Intégration Jira](/fr/ai/integrations/jira)

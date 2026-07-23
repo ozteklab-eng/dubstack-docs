@@ -1,0 +1,76 @@
+---
+title: Mises en page personnalisées
+description: "Découvrez les modes de mise en page, Theme Studio et les situations dans lesquelles utiliser Canvas Layout."
+icon: layout-template
+---
+
+Utilisez ce guide lorsque le shell de documentation standard n'est pas suffisant pour un site.
+
+dubstack propose deux modes de mise en page :
+
+| Mode de mise en page | Utilisez-le pour |
+| --- | --- |
+| Docs Shell | Navigation, pages de contenu, référence API, recherche, assistant et publication de documentation standard. |
+| Canvas Layout | Pages d'accueil fortement personnalisées et sections adaptées à l'identité de marque. |
+
+La plupart des sites de documentation devraient commencer avec Docs Shell. Utilisez Canvas Layout lorsque la page nécessite une composition élaborée plutôt qu'un format d'article standard.
+
+## Commencer avec Docs Shell
+
+Docs Shell est le mode par défaut, car il garantit une expérience de lecture prévisible :
+
+- navigation de la barre latérale
+- table des matières de la page
+- export Markdown
+- pages de référence API
+- recherche
+- assistant
+- retours des lecteurs
+- sujets connexes
+
+Utilisez les paramètres du thème, la navigation, les icônes, les cartes, les panneaux et les composants MDX avant de recourir à une disposition personnalisée.
+
+## Utiliser Canvas Layout pour les pages personnalisées
+
+Canvas Layout est utile pour :
+
+- pages d'accueil de documentation de style marketing
+- pages d'accueil des portails de produit
+- points d'entrée conformes à l'identité de marque Enterprise
+- centres de navigation visuels
+- blocs de contenu nécessitant une position personnalisée
+
+Il ne doit pas remplacer les pages de documentation standard que les lecteurs s'attendent à parcourir, rechercher et exporter.
+
+## Maintenez les contenus basés sur la source
+
+Les mises en page personnalisées doivent toujours respecter la source de vérité de la documentation.
+
+Utilisez les fichiers MDX et `dubstack.json` pour :
+
+- contenu de la page
+- navigation
+- configuration de la référence API
+- paramètres du thème
+- ressources
+
+Évitez de vous fier à des modifications visuelles manuelles qui ne peuvent pas être révisées ou reproduites.
+
+## Liste de vérification
+
+Avant de publier une mise en page personnalisée :
+
+- Testez les points de rupture sur ordinateur et sur mobile.
+- Ouvrez la recherche et l'assistant.
+- Vérifiez les liens des documents connexes.
+- Vérifiez l'export Markdown pour les pages de contenu.
+- Confirmez que les pages de référence API utilisent toujours le bon shell.
+- Vérifiez les chemins d'accès pour les commentaires et les domaines personnalisés.
+
+## Sujets connexes
+
+- [Theme Studio](/fr/theme-studio/overview)
+- [Canvas Layout](/fr/theme-studio/canvas-layout)
+- [Accès Enterprise](/fr/theme-studio/enterprise-gating)
+- [Thèmes](/fr/configuration/theming)
+- [Cartes](/fr/writing-content/cards)

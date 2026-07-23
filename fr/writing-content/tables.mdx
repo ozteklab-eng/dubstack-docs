@@ -1,0 +1,56 @@
+---
+title: Tableaux
+description: Documentez des données structurées avec des tableaux Markdown et MDX.
+icon: table
+---
+
+Les tableaux sont utiles pour des comparaisons compactes, des listes de champs, des limites et des matrices de statut.
+
+Utilisez-les lorsque les lecteurs doivent comparer des valeurs entre les lignes.
+
+## Tableau Markdown
+
+```mdx
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `string` | Unique identifier. |
+| `created_at` | `string` | ISO timestamp for creation. |
+| `status` | `string` | Current state. |
+```
+
+Résultat rendu :
+
+| Champ | Type | Description |
+| --- | --- | --- |
+| `id` | `string` | Identifiant unique. |
+| `created_at` | `string` | Horodatage ISO pour la création. |
+| `status` | `string` | État actuel. |
+
+## Tableau de comparaison
+
+```mdx
+| Option | Best for | Tradeoff |
+| --- | --- | --- |
+| Connect Git | Teams with an existing docs repo. | Requires provider authorization. |
+| Hosted repository | Teams that want to start quickly. | Move to customer-owned Git later if needed. |
+```
+
+## Maintenez les tableaux lisibles
+
+- Utilisez des noms de colonnes courts.
+- Maintenez les cellules concises.
+- Déplacez les explications longues en dessous du tableau.
+- Évitez les tableaux avec trop de colonnes sur mobile.
+- Utilisez la mise en forme du code pour les valeurs littérales.
+
+## Champs API
+
+Pour les schémas de requête et de réponse, utilisez les composants de champ de paramètre ou de réponse lorsque le contenu est plus proche d'un schéma que d'une comparaison :
+
+```mdx
+<ParamField path="limit" type="number">
+  Maximum number of records to return.
+</ParamField>
+```
+
+Utilisez des tableaux pour des comparaisons d'ensemble, pas pour des schémas API profondément imbriqués.

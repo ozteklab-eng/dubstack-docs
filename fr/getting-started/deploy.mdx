@@ -1,0 +1,71 @@
+---
+title: Déploiement
+description: Publiez les modifications de la documentation via le pipeline Git et de synchronisation du contenu.
+icon: upload-cloud
+---
+
+Un déploiement publie le contenu de documentation le plus récent sur le site en direct.
+
+Les déploiements dubstack sont des déploiements de contenu. La source commence dans Git ou dans la source hébergée, puis les artefacts synchronisés sont servis par le frontend public des documents.
+
+## Flux de publication
+
+```text
+Edit docs
+-> save or commit
+-> publish/manual update
+-> sync content artifacts
+-> update live site
+```
+
+Le site public doit servir la version précédente stable jusqu'à ce qu'une nouvelle synchronisation soit terminée avec succès.
+
+## Mise à jour manuelle
+
+Utilisez la mise à jour manuelle lorsque vous souhaitez importer le contenu source le plus récent dans le site en direct immédiatement.
+
+La mise à jour manuelle est utile après :
+
+- La connexion d'un dépôt pour la première fois.
+- Le changement de la navigation dans `dubstack.json`.
+- Le téléchargement ou le remplacement d'une spécification API.
+- La correction d'un déploiement échoué ou obsolète.
+- Vérifier que le tableau de bord et le site en direct sont synchronisés.
+
+Le tableau de bord enregistre la mise à jour dans l'activité afin que vous puissiez voir quand elle a commencé et terminé.
+
+## Aperçus des branches
+
+Les déploiements d'aperçu vous permettent de consulter les modifications avant qu'elles ne deviennent la version de production.
+
+Utilisez les déploiements d'aperçu pour :
+
+- La revue des pull requests ou de fusion.
+- Les branches non de production.
+- Les grands changements de navigation ou de référence API.
+- Vérifier les documents générés avant de les publier.
+
+Un aperçu doit être lié à une branche ou à un contexte de revue. La branche de production reste la source du site en direct.
+
+## Valider un déploiement
+
+Après un déploiement ou une mise à jour manuelle, vérifiez :
+
+- Le panneau d'activité indique que la mise à jour est terminée.
+- Le site en direct s'affiche sans revenir au contenu ancien.
+- Les pages modifiées affichent le contenu attendu.
+- La navigation et les liens correspondent à `dubstack.json`.
+- Les ressources s'affichent depuis le site en direct sans liens brisés.
+- Les pages de l'API playground trouvent la spécification OpenAPI attendue lorsqu'elle est configurée.
+
+## Dépannage
+
+Si le site en direct ne se met pas à jour :
+
+1. Vérifiez le panneau d'activité pour la dernière mise à jour.
+2. Vérifiez que la branche source est correcte.
+3. Vérifiez que `dubstack.json` est valide.
+4. Exécutez une mise à jour manuelle.
+5. Effectuez un rafraîchissement complet du site en direct après la fin de la mise à jour.
+
+Si le déploiement échoue, conservez le dernier site en direct fonctionnel disponible pendant que vous réparez le contenu source ou le problème de connexion.

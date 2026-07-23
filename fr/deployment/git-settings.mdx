@@ -1,0 +1,415 @@
+---
+title: Paramètres Git
+description: "Configurez le dépôt, la branche, l'accès du fournisseur et les connexions d'auteur utilisés par un site dubstack."
+---
+
+Les paramètres Git contrôlent d'où un site lit la documentation et quelles actions Git du fournisseur sont disponibles pour le déploiement, les aperçus, les enregistrements de l'éditeur, les agents et les workflows.
+
+Ouvrez **Paramètres > Déploiement > Paramètres Git** depuis le tableau de bord.
+
+## Ce que contrôlent les paramètres Git
+
+Les paramètres Git comportent cinq tâches distinctes :
+
+| Tâche | Ce qu'elle contrôle |
+| --- | --- |
+| Source de déploiement | Le dépôt, la branche et le répertoire de documentation facultatif utilisés pour publier le site de documentation en direct. |
+| Accès du fournisseur | L'application GitHub, le jeton GitLab ou le jeton Forgejo qui permet à dubstack de lire les fichiers sources et de recevoir les événements de dépôt lorsque le fournisseur les prend en charge. |
+| Accès d'auteur | Autorisations OAuth ou d'application qui permettent aux agents approuvés, aux demandes Slack, aux enregistrements de l'éditeur et aux workflows de créer des modifications de documentation révisables. |
+| Dépôts sources | Des dépôts supplémentaires de code ou de produits que les workflows peuvent lire en tant que contexte délimité. |
+| Cibles de copie de dépôt | Dépôts secondaires utilisés pour la migration, la sauvegarde ou l'évaluation du fournisseur. |
+
+Gardez ces tâches séparées lors de la résolution des problèmes. Un site peut lire un dépôt pendant que l'auteur est bloqué, et une connexion OAuth peut être saine alors que la source de déploiement pointe encore ailleurs.
+
+<Callout type="info">
+  Le dépôt de documentation reste la source de vérité. La publication du tableau de bord, les agents, Slack et les workflows écrivent via le fournisseur Git configuré au lieu de contourner la revue du dépôt.
+</Callout>
+
+## Source de déploiement active
+
+La carte source active affiche le dépôt qui publie le site.
+
+Vérifiez ces champs avant de déboguer les mises à jour de contenu :
+
+- fournisseur
+- organisation ou espace de noms
+- dépôt ou projet
+- branche
+- répertoire de documentation, si les documents se trouvent dans un sous-répertoire
+- dernière heure de synchronisation
+- dernier résultat de mise à jour manuelle
+
+Si la mauvaise branche est sélectionnée, les poussées vers la branche attendue ne mettront pas à jour le site de documentation en direct.
+
+## Sélecteur de fournisseur
+
+Utilisez le sélecteur de fournisseur Git pour choisir le fournisseur que vous souhaitez configurer.
+
+Changer le fournisseur visible ne migre pas automatiquement le trafic de production. Enregistrez et validez la source avant de considérer un nouveau fournisseur comme actif.
+
+| Fournisseur | Utilisation typique |
+| --- | --- |
+| GitHub | Source de dépôt principal avec accès à l'application GitHub, déploiements de prévisualisation, validations de l'éditeur et création de pull requests. |
+| GitLab | Cible de copie de dépôt unique ou planifiée, source basée sur GitLab lorsqu'elle est activée, et création de demandes de fusion via l'OAuth GitLab. |
+| GitLab auto-hébergé | Rédaction via OAuth contre une instance GitLab auto-hébergée accessible après la configuration de l'espace de travail. |
+| Forgejo | Dépôt source de workflow auto-hébergé, cible de copie de dépôt unique ou planifiée, et source de déploiement actif lorsqu'elle est activée. |
+
+Pour les fournisseurs auto-hébergés, l'instance doit être accessible depuis dubstack et le jeton configuré doit avoir les autorisations de dépôt nécessaires pour le workflow sélectionné.
+
+Lorsque vous basculez explicitement la source de déploiement active vers un autre fournisseur activé alors qu'un autre fournisseur est déjà actif, dubstack copie la source des documents actuelle dans le nouveau dépôt avant la fin du basculement. Si cette copie initiale échoue, la source active existante reste en place et le tableau de bord affiche l'erreur de copie. Si vous configurez uniquement une cible de copie, la production reste sur la source active actuelle.
+
+## Matrice des capacités du fournisseur
+
+Le support des fournisseurs est basé sur les capacités. Un fournisseur peut être utilisable pour une tâche tandis qu'une autre tâche reste indisponible ou bloquée.
+
+| Fournisseur | Source de déploiement | Rédaction | Contexte du dépôt source | Cible de copie de dépôt |
+| --- | --- | --- | --- | --- |
+| GitHub | Pris en charge via l'application GitHub | Pris en charge via l'application GitHub | Pris en charge pour les dépôts sélectionnés avec accès à l'application | Pris en charge lorsqu'une cible de copie est configurée |
+| GitLab | Pris en charge lorsque la source de déploiement GitLab est activée | Pris en charge via l'OAuth GitLab | Pris en charge pour les projets sélectionnés lorsque l'accès GitLab est opérationnel | Pris en charge via un jeton d'accès au dépôt |
+| GitLab auto-hébergé | Prise en charge lorsque l'instance est accessible et que la source de déploiement GitLab est activée | Prise en charge via l'OAuth GitLab auto-hébergé | Prise en charge lorsque l'instance et les projets sélectionnés sont accessibles | Prise en charge via un jeton d'accès au dépôt |
+| Forgejo | Fonctionnalité conditionnée | Prise en charge via un jeton de dépôt lorsqu'il est activé | Prise en charge pour les dépôts sélectionnés et les instances capables de webhooks | Prise en charge via un jeton de dépôt |
+
+Utilisez les étiquettes du tableau de bord pour confirmer le job actif. Par exemple, un fournisseur marqué **Cible de copie de dépôt** ou **Cible de copie planifiée** ne publie pas le site en direct, et un fournisseur marqué **Source de workflow** est un contexte en lecture seule pour les workflows.
+
+## Lisez les étiquettes de statut
+
+Un site peut avoir plus d'une connexion de fournisseur, mais un seul fournisseur est la source de déploiement active.
+
+Utilisez les étiquettes de statut pour identifier à quel chemin appartient une connexion :
+
+| Étiquette de statut | Ce que cela signifie |
+| --- | --- |
+| Source active | Ce fournisseur est la source de déploiement qui publie le site de documentation en direct. |
+| Installé | L'application du fournisseur ou le consentement OAuth est connecté au compte ou à l'organisation listée. |
+| Reconnexion nécessaire | Un consentement d'auteur, un jeton OAuth ou une permission côté fournisseur doit être actualisé avant que les actions d'auteur ne puissent l'utiliser. |
+| Prêt du jeton de copie | Le compteur de vue d'ensemble de la copie de dépôt pour les cibles avec un jeton de dépôt valide ou des identifiants du fournisseur. Cela ne signifie pas que l'auteur OAuth est en bonne santé. |
+| Cible de copie de dépôt | Le dépôt peut recevoir des copies explicites depuis la source de documentation active pour une sauvegarde, un test de fournisseur ou une répétition de migration. |
+| Prêt pour les copies | L'accès via le jeton de dépôt est en bon état pour les copies manuelles depuis les paramètres Git et les workflows de copie de dépôt planifiés. |
+| Cible de copie planifiée | Un workflow de copie de dépôt est activé pour cette cible. Les exécutions se produisent uniquement selon l'horaire configuré ou lorsqu'elles sont déclenchées manuellement depuis les Workflows. |
+| Source de workflow | Le dépôt peut être sélectionné comme contexte en lecture seule pour les workflows tels que les mises à jour de documentation des modifications de code. |
+| Webhook configuré | dubstack a configuré l'abonnement aux événements du fournisseur pour le dépôt source. Vérifiez la livraison dans l'historique des exécutions de workflow après un événement de revue pris en charge. |
+| Webhook en attente | Le dépôt reste utilisable en tant que contexte planifié ou manuel, mais les exécutions de workflow déclenchées par des événements nécessitent la correction du chemin du webhook. |
+| Configuré | Le dépôt ou la connexion a des paramètres enregistrés, mais il ne peut pas être la source de déploiement active. |
+
+Ces étiquettes sont indépendantes intentionnellement. Par exemple, un dépôt GitHub peut rester **Source active** pour la publication tandis qu'un dépôt GitLab affiche **Cible de copie de dépôt** ou **Cible de copie planifiée** et un compte OAuth GitLab affiche **À reconnecter**. Dans cet état, les poussées vers GitHub publient toujours le site, la copie du dépôt GitLab peut rester valide si son jeton de dépôt est sain, et uniquement les actions d'écriture GitLab nécessitent la reconnecte OAuth.
+
+<Callout type="info">
+  Traitez **source active**, **accès d'écriture**, **source de workflow** et **cible de copie de dépôt** comme des tâches distinctes. Corrigez la tâche qui échoue au lieu de tourner tous les identifiants de fournisseur.
+</Callout>
+
+## Configuration GitHub
+
+La synchronisation source GitHub utilise l'application GitHub de dubstack.
+
+Utilisez la section application GitHub pour :
+
+- installer l'application dans une organisation
+- accorder l'accès au dépôt
+- ouvrir les paramètres d'installation côté fournisseur
+- vérifier les organisations et dépôts installés
+
+Accordez l'accès uniquement au dépôt docs et aux dépôts intentionnellement utilisés en tant que contexte d'agent ou de workflow.
+
+<Callout type="warning">
+  Ne pas utiliser de jetons d'accès personnels pour la synchronisation de source de déploiement GitHub. La synchronisation source GitHub doit utiliser l'installation de l'application GitHub afin que l'accès au dépôt, les événements et les actions de demande de fusion restent traçables.
+</Callout>
+
+Voir [GitHub](/fr/deployment/github) pour la configuration complète et le modèle de permissions.
+
+## Configuration GitLab
+
+GitLab dispose de deux connexions qui servent des objectifs différents.
+
+| Connexion | Objectif |
+| --- | --- |
+| Jeton de dépôt GitLab | Lit ou copie le contenu du dépôt, valide les branches et prend en charge la configuration source GitLab lorsqu'elle est activée. |
+| OAuth GitLab | Permet aux agents et workflows d'agir en tant qu'utilisateur GitLab autorisé pour créer des branches, des validations et des demandes de fusion. |
+
+Utilisez les paramètres de déploiement GitLab lorsque vous devez configurer le projet, la branche, le jeton ou l'URL de l'instance.
+
+Utilisez la section OAuth GitLab lorsque les workflows, Slack ou l'agent du tableau de bord doivent créer des demandes de fusion GitLab ou utiliser des projets GitLab sélectionnés en tant que contexte de dépôt.
+
+Si GitLab est configuré uniquement en tant que cible de copie, les poussées vers GitLab ne publient pas le site en direct. La source de déploiement active continue de contrôler la publication en production.
+
+Voir [GitLab](/fr/deployment/gitlab) et [OAuth GitLab auto-hébergé](/fr/deployment/gitlab-self-hosted-oauth) pour les détails de configuration.
+
+## Configuration Forgejo
+
+La configuration Forgejo utilise une URL d'instance Forgejo et un jeton de dépôt.
+
+Utilisez Forgejo lorsque votre équipe exécute une instance Forgejo auto-hébergée et souhaite l'utiliser pour le contexte de source de workflow, les cibles de copie de dépôt ou une source de déploiement active lorsque ce mode est activé.
+
+1. Ouvrez le sélecteur de fournisseur Git.
+2. Choisissez Forgejo.
+3. Entrez l'URL de l'instance Forgejo.
+4. Entrez le propriétaire du dépôt, le nom du dépôt, la branche et le répertoire docs facultatif.
+5. Entrez un jeton qui peut lire le dépôt et écrire des branches ou des pull requests lors de l'activation de l'écriture.
+6. Enregistrez la connexion.
+7. Confirmez si le tableau de bord affiche Forgejo en tant que cible de copie de dépôt ou en tant que source de déploiement active.
+
+Forgejo fonctionne le mieux lorsque l'instance est disponible via HTTPS et peut envoyer des événements de fournisseur au point de terminaison configuré.
+
+Si Forgejo est configuré en tant que cible de copie de dépôt, il reçoit des copies explicites de dépôt à partir de la source de documentation active. Il ne publie pas le site en direct et les poussées vers Forgejo n'actualisent pas les documents de production.
+
+Si le mode source de déploiement actif de Forgejo est activé pour l'espace de travail, enregistrez la connexion Forgejo, exécutez une mise à jour manuelle et confirmez que la carte source de déploiement active affiche le dépôt Forgejo attendu. Ne dites pas à vos collègues de pousser les modifications de documents vers Forgejo jusqu'à ce que la carte source de déploiement active confirme que Forgejo sert le site.
+
+### Réutilisez l'accès Forgejo pour les dépôts de source de workflow
+
+Si la source de déploiement active utilise déjà Forgejo, les dépôts de source de workflow peuvent réutiliser le même accès Forgejo lorsqu'ils sont sur la même instance.
+
+Utilisez ceci lorsque le dépôt de documentation et le dépôt de code produit vivent sur le même serveur Forgejo et que le jeton existant a les autorisations pour lire le dépôt source.
+
+Lors de l'ajout d'un dépôt source Forgejo :
+
+- gardez l'URL de l'instance identique à la source de déploiement Forgejo active
+- entrez le propriétaire, le dépôt et la branche pour le dépôt source
+- laissez le jeton vide uniquement lorsque le jeton Forgejo actif peut lire ce dépôt
+- enregistrez le dépôt source et confirmez que le tableau de bord le valide
+
+Si la validation échoue, fournissez un jeton spécifique au dépôt avec l'accès en lecture requis, ou mettez à jour le jeton Forgejo actif pour qu'il puisse lire les deux dépôts.
+
+<Callout type="warning">
+  Les cibles de copie de dépôt ponctuelles ne sont pas des miroirs automatiques. Utilisez les cibles de copie pour la migration, les vérifications de sauvegarde ou l'évaluation du fournisseur, puis conservez une source de production active.
+</Callout>
+
+## Documents dans un sous-répertoire
+
+Activez **Les documents sont dans un sous-répertoire** lorsque `dubstack.json` n'est pas à la racine du dépôt.
+
+Exemple :
+
+```text
+product-repo/
+|-- apps/
+|-- packages/
+`-- docs/
+    |-- dubstack.json
+    |-- index.mdx
+    `-- quickstart.mdx
+```
+
+Définissez le répertoire de documentation sur `docs` pour cette structure.
+
+N'incluez pas de slash en début ou en fin. Le chemin doit être relatif à la racine du dépôt.
+
+Pour des conseils sur les monorépots, consultez [Configuration du monorépôt](/fr/deployment/monorepo).
+
+## Mise à jour manuelle
+
+Utilisez la mise à jour manuelle lorsque vous souhaitez relire la source active sans attendre un autre événement du fournisseur Git.
+
+La mise à jour manuelle est utile après :
+
+- modification du dépôt, de la branche ou du répertoire docs
+- accorder l'accès au dépôt à l'application GitHub
+- rotation d'un jeton GitLab
+- rotation d'un jeton Forgejo
+- résolution d'un problème de livraison de webhook
+- importation ou copie de docs entre les fournisseurs
+
+Après la fin de la mise à jour, vérifiez que le site public et les interfaces MCP/recherche reflètent le contenu le plus récent.
+
+Voir [Mises à jour manuelles et historique](/fr/deployment/manual-updates-history).
+
+## Préparation à la rédaction
+
+La préparation à la rédaction est distincte de la lisibilité de la source.
+
+L'agent, Slack, l'éditeur et la rédaction de workflows peuvent nécessiter :
+
+- accès d'écriture au dépôt via le fournisseur configuré
+- autorisation de créer des branches
+- autorisation d'ouvrir des pull requests ou des demandes de fusion
+- protection de branche permettant des modifications révisables
+- accès d'authentification OAuth lorsque le fournisseur exige une autorisation utilisateur
+- éligibilité du workflow pour le site actuel
+
+Si la rédaction est bloquée, conservez la source de déploiement en direct intacte et corrigez l'autorisation de rédaction manquante affichée par le panneau de préparation.
+
+Les demandes de révision natives du fournisseur utilisent des noms spécifiques au fournisseur. GitHub et Forgejo utilisent des pull requests ; GitLab utilise des demandes de fusion. Dans les paramètres des workflows du tableau de bord, **Exiger une révision** signifie que DubStack doit créer cette demande de révision native du fournisseur au lieu de valider directement.
+
+Les mises à jour automatiques exigent que la branche cible autorise l'identité du fournisseur connecté à écrire. Si la politique du dépôt bloque les validations directes, conservez les workflows en mode **Exiger une révision** et fusionnez la demande de révision générée après approbation.
+
+## Dépôts sources pour les workflows
+
+Les dépôts sources des workflows sont des dépôts de contexte en lecture seule sélectionnés par les workflows tels que **Mise à jour à partir des modifications de code**.
+
+Ils sont distincts de la source de déploiement active :
+
+- la source de déploiement active publie le site de documentation en direct
+- les dépôts sources fournissent le contexte du code ou du produit pour les exécutions de workflow
+- les modifications de documentation générées ciblent toujours le dépôt de documentation
+- les exécutions de modifications de code sont enfileées à partir d'événements de pull request ou de fusion fusionnés validés où l'intégration du fournisseur les prend en charge
+
+Utilisez les dépôts sources lorsque le code du produit et les documents vivent dans des dépôts différents, ou lorsque vous souhaitez qu'un workflow surveille un dépôt de code sans en faire la source de vérité des documents.
+
+Exemple de configuration :
+
+| Rôle | Exemple |
+| --- | --- |
+| Source de déploiement active | `acme/docs` publie le site de documentation. |
+| Dépôt source | `acme/api` fournit le contexte source pour les workflows de modification de code. |
+| Cible d'écriture du workflow | Les mises à jour générées ouvrent une pull request ou une demande de fusion contre `acme/docs`. |
+
+Cela permet aux développeurs de conserver les workflows normaux dans le dépôt du produit tout en maintenant les mises à jour de documentation révisables dans le dépôt de documentation.
+
+La carte du dépôt source affiche les métadonnées opérationnelles pour chaque dépôt connecté.
+
+| Champ | Signification |
+| --- | --- |
+| Portée | Si le dépôt source est connecté pour le contexte du site actuel ou l'espace de travail plus large. |
+| Événements | Les événements du fournisseur qui peuvent enfiler des exécutions de workflow, tels que les pull requests ou les demandes de fusion. |
+| Configuré | Lorsque dubstack a configuré ou rafraîchi pour la dernière fois l'abonnement aux événements du dépôt source. |
+| Dernière livraison | Le dernier événement signé reçu par dubstack pour ce dépôt source. |
+
+Si la carte affiche **Webhook configuré**, dubstack a enregistré l'abonnement aux événements du fournisseur. **Dernière livraison** confirme si un événement a effectivement atteint dubstack. Vérifiez le comportement du workflow en fusionnant un petit événement de revue et en consultant l'historique des exécutions du workflow. Si la carte affiche **Webhook en attente**, **Aucun événement reçu** ou si la connexion signale un avertissement sur la configuration du webhook, le dépôt reste connecté en tant que contexte de workflow en lecture seule, mais les exécutions déclenchées par des événements nécessitent la correction du chemin du webhook avant que les événements de revue fusionnés ne puissent enclencher automatiquement des exécutions.
+
+### Dépôts source Forgejo
+
+Les dépôts source Forgejo utilisent le même modèle d'URL d'instance que les sources de déploiement Forgejo.
+
+Utilisez les dépôts source Forgejo lorsque :
+
+- le dépôt de documentation est sur un autre fournisseur, mais le dépôt de code est hébergé sur Forgejo
+- les dépôts de documentation et de code sont sur la même instance Forgejo
+- vous souhaitez que **Mise à jour à partir des modifications de code** examine un dépôt de code autohébergé sans déplacer la source de documentation
+
+Lors de l'ajout d'un dépôt source Forgejo, fournissez :
+
+- URL de l'instance
+- propriétaire
+- dépôt
+- branche
+- un jeton avec accès en lecture au dépôt source, sauf si l'accès Forgejo existant peut le lire
+
+Si la carte source affiche **Webhook configuré**, les événements de demande de fusion devraient pouvoir enclencher des exécutions de workflow. Utilisez **Dernière livraison** pour confirmer que Forgejo peut atteindre dubstack, puis utilisez l'historique des exécutions comme source de vérité pour savoir si l'événement a correspondu à un workflow. Si le support d'événements est indisponible, en attente ou bloqué par votre réseau, conservez le dépôt sélectionné et utilisez des exécutions de workflow planifiées ou manuelles après la fusion de la modification source.
+
+### Contexte source à portée de chemin
+
+Pour les grands dépôts, définissez un espace de chemin facultatif dans la configuration du workflow après que le dépôt source ait été connecté.
+
+L'espace de chemin doit être un chemin de dépôt relatif, par exemple :
+
+```text
+apps/web
+services/api
+packages/sdk
+```
+
+Ne pas inclure une barre oblique au début, `..`, ou une URL complète.
+
+L'espace de chemin indique au workflow quelle partie du dépôt est pertinente pour la tâche de documentation. Le workflow écrit toujours les modifications de documentation générées dans le dépôt de documentation connecté, et non dans le dépôt source.
+
+<Callout type="info">
+  Lorsqu'un événement de fournisseur inclut des métadonnées sur les fichiers modifiés, les workflows de modification de code ignorent les événements qui ne touchent pas l'espace de chemin configuré. Si l'événement de fournisseur ne comprend pas de chemins modifiés, le workflow revient à la correspondance au niveau du dépôt et utilise toujours l'espace de chemin pour limiter le contexte d'exécution.
+</Callout>
+
+## Cibles de copie de dépôt
+
+Une cible de copie est un dépôt secondaire utilisé pour la sauvegarde, la migration ou l'évaluation du fournisseur.
+
+Les cibles de copie ne sont pas les mêmes que la source de déploiement active.
+
+Utilisez une cible de copie lorsque vous souhaitez :
+
+- conserver une sauvegarde auprès d'un autre fournisseur Git
+- tester une migration de fournisseur avant de basculer en production
+- valider les flux GitLab ou Forgejo sans perturber un site basé sur GitHub
+- préserver un chemin de sortie propre si un fournisseur modifie ses termes ou sa disponibilité
+
+Avant de basculer en production vers une cible de copie, vérifiez que le dépôt cible possède `dubstack.json`, toutes les pages MDX, les actifs, les spécifications OpenAPI et une branche de déploiement valide.
+
+Les cibles de copie de dépôt prennent en charge les copies ponctuelles explicites à partir des paramètres Git et les copies planifiées via le workflow **Cibles de copie de dépôt**. Une copie réussie prouve que dubstack peut lire la source active et écrire vers le fournisseur cible, mais cela ne crée pas de mise en miroir continue, de basculement de fournisseur ou de réplication de webhook.
+
+Les copies de dépôt ponctuelles ne consomment pas de crédits AI lorsqu'elles copient uniquement des fichiers. Les workflows de copie de dépôt planifiés consomment des crédits d'automatisation car ils sont des exécutions de workflow, et leurs résultats apparaissent dans l'historique des workflows et le rapport d'utilisation. Les workflows de copie de dépôt planifiés commencent à 35+ crédits par exécution. Avant l'exécution, le workflow réserve des crédits à partir du nombre de fichiers de la source active et du nombre de cibles de copie configurées ; l'utilisation finale est enregistrée à partir du résultat de la copie réelle.
+
+Les cibles de copie Forgejo peuvent prendre plus de temps que les cibles GitHub ou GitLab pour les grands dépôts, car dubstack écrit les fichiers via l'API de contenu du dépôt Forgejo séquentiellement. Cela maintient la branche cible cohérente pendant l'exécution de la copie.
+
+Le basculement de fournisseur utilise le même pipeline de copie. Une copie ratée bloque le basculement, de sorte que le site en direct continue à publier à partir de la source active précédente.
+
+Utilisez la carte de la source de déploiement active pour confirmer ce qui alimente la production avant d'informer vos collègues de pousser vers un autre dépôt.
+
+## Déploiements protégés
+
+Certains déploiements sont intentionnellement protégés contre les modifications du dépôt.
+
+Les déploiements protégés peuvent toujours être lus et indexés, mais les actions d'écriture ne devraient pas créer de branches, de validations, de pull requests ou de demandes de fusion depuis Slack, des agents ou des workflows.
+
+Utilisez des déploiements de test à usage unique pour l'écriture des tests de fumée.
+
+## Dépannage
+
+### La liste des dépôts est vide
+
+Vérifiez que le compte du fournisseur est connecté et que l'application ou le jeton a accès au propriétaire du dépôt.
+
+Pour GitHub, ouvrez l'installation de l'application et confirmez que le dépôt est sélectionné.
+
+Pour GitLab, confirmez que le jeton peut lire le projet et que l'ID ou le chemin du projet est correct.
+
+Pour Forgejo, confirmez que l'URL de l'instance est accessible depuis dubstack et que le jeton peut lire le dépôt sélectionné.
+
+### La liste des branches manque la branche attendue
+
+Confirmez que les identifiants du fournisseur peuvent lire les branches et que la branche existe dans le dépôt sélectionné.
+
+Si la branche vient d'être créée, révalidez les paramètres Git ou exécutez une mise à jour manuelle.
+
+### Les documents en direct ne se mettent pas à jour après une poussée
+
+Vérifiez que la poussée a été envoyée vers la branche de déploiement active. Ensuite, vérifiez la livraison des événements du fournisseur et exécutez une mise à jour manuelle.
+
+Si la mise à jour manuelle fonctionne mais que la synchronisation automatique ne fonctionne pas, le chemin d'événement ou de webhook du fournisseur nécessite une attention.
+
+### Le dépôt source affiche un webhook en attente
+
+Le dépôt peut toujours être utilisé en tant que contexte de workflow lorsque les identifiants enregistrés sont valides.
+
+Un webhook en attente signifie que dubstack n'a pas pu confirmer l'abonnement aux événements du fournisseur pour ce dépôt source. Pour Forgejo, vérifiez que :
+
+- l'instance est accessible depuis dubstack via HTTPS
+- le jeton du dépôt peut gérer les webhooks pour ce dépôt
+- le tableau de bord n'a pas affiché un avertissement de configuration du webhook lors de l'enregistrement du dépôt source
+
+Après avoir corrigé les paramètres du fournisseur ou du réseau, enregistrez à nouveau le dépôt source pour actualiser la configuration du webhook.
+
+### Le dépôt source affiche aucune livraison d'événement
+
+Le webhook peut être configuré, mais le fournisseur n'a pas encore livré d'événement à dubstack.
+
+Vérifiez que :
+
+- le fournisseur source peut accéder à l'URL du webhook via HTTPS
+- le webhook du fournisseur est actif et abonné aux événements de pull request ou de demande de fusion
+- l'historique de livraison côté fournisseur montre un succès récent
+- le changement a été fusionné via un événement de revue, et non seulement poussé directement
+
+Si la livraison est bloquée par votre réseau, utilisez une exécution de workflow planifiée ou manuelle après la fusion du changement source.
+
+### L'agent ou le workflow ne peut pas créer une pull request
+
+Vérifiez la préparation à l'écriture, et non seulement la synchronisation source.
+
+Pour GitHub, vérifiez que l'application GitHub a les autorisations d'écriture et de pull request pour le dépôt.
+
+Pour GitLab, vérifiez que l'OAuth est connecté, que le projet sélectionné est activé pour le contexte de workflow et que l'utilisateur connecté peut créer des branches et des demandes de fusion.
+
+Pour Forgejo, vérifiez que le jeton du dépôt peut créer des branches et des pull requests sur le dépôt sélectionné.
+
+### L'OAuth GitLab est connecté mais la production lit toujours GitHub
+
+Cela est attendu lorsque GitHub reste la source de déploiement active. L'OAuth GitLab active les fonctionnalités d'écriture/contenu. Il ne bascule pas automatiquement la publication de la production vers GitLab.
+
+### Un webhook de dépôt source est configuré mais le site en direct n'a pas changé
+
+Cela est attendu. Les webhooks de dépôt source mettent en file d'attente les workflows éligibles et fournissent un contexte. Ils ne publient pas directement le contenu des documents. Vérifiez l'exécution du workflow, examinez la branche générée ou la pull request, puis fusionnez le changement dans le dépôt de documentation actif avant d'attendre que le site public change.
+
+## Sujets connexes
+
+- [GitHub](/fr/deployment/github)
+- [GitLab](/fr/deployment/gitlab)
+- [OAuth GitLab auto-hébergé](/fr/deployment/gitlab-self-hosted-oauth)
+- [Fournisseurs Git](/fr/deployment/forgejo-github-gitlab)
+- [Workflow Git local](/fr/deployment/local-git-workflow)
+- [Mises à jour manuelles et historique](/fr/deployment/manual-updates-history)
+- [Dépannage du contrôle de version](/fr/deployment/source-control-troubleshooting)

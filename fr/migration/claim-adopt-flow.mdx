@@ -1,0 +1,54 @@
+---
+title: Réclamer et adopter
+description: Promouvoir une prévisualisation publique en un site dubstack géré par un client.
+icon: badge-check
+---
+
+Réclamer et adopter permet de promouvoir une prévisualisation publique en un site dubstack propriétaire.
+
+Cela crée une frontière claire entre une prévisualisation non réclamée et un site de documentation de production géré par le client.
+
+## Cycle de vie
+
+```text
+Public preview
+-> claim request
+-> workspace ownership check
+-> site creation or adoption
+-> source connection
+-> production publish
+```
+
+## Qu'est-ce qui change après l'adoption
+
+| Avant la réclamation | Après l'adoption |
+| --- | --- |
+| La prévisualisation est hébergée sur `dubstack.wiki`. | Le site est hébergé sur `*.dubstack.live` ou un domaine personnalisé. |
+| La prévisualisation n'est pas réclamée. | Le site appartient à un espace de travail. |
+| La source peut être générée ou importée. | La source est connectée à un dépôt géré ou à une source hébergée. |
+| La prévisualisation peut être nettoyée sauf si elle est protégée. | Le site client suit les règles de rétention et de facturation de l'espace de travail. |
+
+## Liste de vérification pour l'adoption
+
+Avant d'adopter une prévisualisation :
+
+- confirmez que vous contrôlez ou que vous êtes autorisé à gérer le dépôt source
+- examinez le contenu généré ou importé
+- décidez de la branche de production
+- vérifiez le slug ou le sous-domaine souhaité du site
+- connectez-vous à Git ou à une source hébergée
+- publiez et testez l'URL en direct
+
+## Après l'adoption
+
+Après qu'une prévisualisation devienne un site propriétaire :
+
+- configurez un domaine personnalisé si nécessaire
+- invitez les membres de l'équipe
+- ajoutez des redirections depuis les anciennes URLs de documentation
+- examinez le comportement de l'assistant/recherche
+- supprimez ou archivez la prévisualisation ancienne si elle ne doit plus être découverte
+
+## Frontière de sécurité
+
+Une prévisualisation publique ne devrait jamais devenir silencieusement un site de production client. La propriété, la connexion source et le contexte de l'espace de travail doivent être explicites.

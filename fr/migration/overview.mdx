@@ -1,0 +1,49 @@
+---
+title: Migration
+description: Transférez les projets de documentation existants vers dubstack.
+icon: route
+---
+
+La migration transfère une source de documentation existante vers dubstack tout en préservant la propriété, les URLs et le workflow de révision.
+
+Il existe deux chemins de migration principaux.
+
+| Chemin | Utilisez-le lorsque | Résultat |
+| --- | --- | --- |
+| Import de configuration rédigée | Le dépôt possède déjà une configuration docs et du contenu au format MDX. | Convertissez la structure existante en `dubstack.json` et affichez-la via dubstack. |
+| Reconstruction générée | Le dépôt n’a pas déjà une structure docs utilisable. | Générez une structure de prévisualisation à partir des signaux du dépôt, puis examinez-la avant adoption. |
+
+## Ordre de migration recommandé
+
+1. Inventaire de la source docs actuelle.
+2. Identifiez la branche de production.
+3. Décidez si le dépôt a une configuration docs rédigée.
+4. Créez un site de prévisualisation ou de staging.
+5. Examinez la navigation, le rendu des pages, la recherche et les pages OpenAPI.
+6. Ajoutez des redirections pour les anciennes URLs.
+7. Connectez la source de production.
+8. Changez le domaine après validation.
+
+## Ce à valider
+
+Avant de basculer le trafic :
+
+- page d'accueil et démarrage rapide
+- navigation de la barre latérale
+- onglets ou ancres de niveau supérieur
+- pages des points d'entrée OpenAPI
+- images et ressources
+- blocs de code
+- redirections des anciens chemins
+- domaine personnalisé ou routage de sous-chemin `/docs`
+- assistant et comportement de recherche
+
+## Assurer une propriété claire
+
+Les prévisualisations publiques et les sites gérés par les clients sont distincts.
+
+Une prévisualisation publique sur `dubstack.wiki` n'est pas un site client en production. Un site revendiqué/adopté a un propriétaire, une connexion source, un contexte de facturation/espace de travail et une URL en production.
+
+<Callout type="info">
+  Traiter la migration comme un workflow de revue, et non un import aveugle. L'objectif est un site de documentation que votre équipe peut maintenir après le cutover.
+</Callout>

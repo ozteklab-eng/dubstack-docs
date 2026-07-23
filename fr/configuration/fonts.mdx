@@ -1,0 +1,129 @@
+---
+title: Polices
+description: "Configurez la typographie des titres, du corps et du code pour votre site de documentation."
+icon: text-cursor-input
+---
+
+Les polices contrôlent la typographie utilisée par votre site de documentation publié.
+
+Utilisez le tableau de bord lorsque vous souhaitez un aperçu visuel. Utilisez `dubstack.json` lorsque votre équipe examine les modifications de configuration via Git.
+
+## Configurer les polices depuis le tableau de bord
+
+1. Ouvrez le tableau de bord.
+2. Accédez à **Éditeur**.
+3. Ouvrez **Configuration du site**.
+4. Accédez à la section d'apparence ou de style.
+5. Sélectionnez les polices des titres, du corps et du code.
+6. Prévisualisez le site de documentation avant la publication.
+
+Les modifications de police effectuées depuis le tableau de bord sont stockées dans la même configuration de site qui alimente le shell de documentation publié.
+
+## Configurer les polices dans la source
+
+Définissez `fonts` dans `dubstack.json`.
+
+```json
+{
+  "fonts": {
+    "heading": "Space Grotesk",
+    "body": "Inter",
+    "code": "JetBrains Mono"
+  }
+}
+```
+
+| Champ | Objectif |
+| --- | --- |
+| `fonts.heading` | Police utilisée pour les titres de page, les sous-titres et les étiquettes importantes. |
+| `fonts.body` | Police utilisée pour le texte principal, les étiquettes de navigation, les tableaux et la plupart du contenu de l'interface utilisateur. |
+| `fonts.code` | Police utilisée pour les blocs de code, le code en ligne, les exemples d'API et les extraits de terminal. |
+
+Si `heading` est omis, dubstack utilise la police du corps pour les titres. Si `code` est omis, dubstack utilise la police monospace par défaut du thème.
+
+## Valeurs de police prises en charge
+
+Utilisez l'un des noms de famille de police du tableau de bord pour un rendu prévisible sur l'aperçu local, les aperçus de branche, les captures d'écran et la production.
+
+### Polices sans serif
+
+- `Inter`
+- `Manrope`
+- `Plus Jakarta Sans`
+- `DM Sans`
+- `Space Grotesk`
+- `IBM Plex Sans`
+- `Merriweather Sans`
+- `Public Sans`
+
+### Polices monospace
+
+- `JetBrains Mono`
+- `Fragment Mono`
+- `IBM Plex Mono`
+- `Fira Code`
+- `Source Code Pro`
+
+Vous pouvez également fournir une pile de polices CSS complète lorsque vous avez besoin de solutions de repli contrôlées.
+
+```json
+{
+  "fonts": {
+    "body": "Inter, system-ui, sans-serif",
+    "code": "JetBrains Mono, SFMono-Regular, Menlo, monospace"
+  }
+}
+```
+
+## Chargement de polices personnalisées
+
+Le shell standard de documentation précharge l'ensemble des polices prises en charge du tableau de bord. Un nom de famille personnalisé peut être inscrit dans `fonts`, mais le navigateur doit toujours pouvoir charger cette police.
+
+Pour les fichiers de police qui ne font pas partie de l'ensemble standard, utilisez uniquement du CSS personnalisé lorsque votre espace de travail a le CSS personnalisé activé.
+
+```json
+{
+  "custom_css": "@font-face { font-family: 'Acme Sans'; src: url('/assets/fonts/acme-sans.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }",
+  "fonts": {
+    "body": "Acme Sans, Inter, sans-serif"
+  }
+}
+```
+
+<Warning>
+  Gardez les fichiers de police personnalisés dans le dépôt de documentation et chargez uniquement les ressources que vous contrôlez. Le CSS personnalisé est une configuration avancée et peut être soumis à votre abonnement.
+</Warning>
+
+## Combinaisons recommandées
+
+| Cas d'utilisation | Titre | Corps | Code |
+| --- | --- | --- | --- |
+| Documents de développeur propres | `Space Grotesk` | `Inter` | `JetBrains Mono` |
+| Base de connaissances d'entreprise | `Manrope` | `Manrope` | `IBM Plex Mono` |
+| Référence API dense | `Inter` | `Inter` | `Source Code Pro` |
+| Guide produit éditorial | `Merriweather Sans` | `Public Sans` | `JetBrains Mono` |
+
+## Dépannage
+
+### La police n'a pas changé
+
+Vérifiez que `dubstack.json` a été publié et que la page ne montre pas encore une version de prévisualisation plus ancienne.
+
+### La police revient à une police système
+
+Le nom de la famille peut ne pas faire partie de l'ensemble standard de polices préchargées, ou un fichier de police personnalisé peut ne pas être chargé. Utilisez un nom de police du tableau de bord ou ajoutez une pile de secours explicite.
+
+### Les exemples de code sont trop larges
+
+Utilisez une police monospace plus étroite telle que `JetBrains Mono` ou `IBM Plex Mono`, puis vérifiez les pages de référence API et les blocs de code réguliers en mode clair et sombre.
+
+## Sujets connexes
+
+<CardGroup cols={2}>
+  <Card title="Thématisation" icon="palette" href="/fr/configuration/theming">
+    Configurez le thème, la palette, le logo, le favicon et les jetons de bloc de code.
+  </Card>
+  <Card title="Référence d'apparence" icon="list-checks" href="/fr/configuration/appearance-reference">
+    Examinez chaque champ d'apparence pris en charge dans `dubstack.json`.
+  </Card>
+</CardGroup>

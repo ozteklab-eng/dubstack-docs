@@ -1,0 +1,65 @@
+---
+title: "Journal d'audit"
+description: "Suivre les changements importants de l'organisation, des fonctionnalités et des opérations."
+icon: clipboard-list
+---
+
+Les journaux d'audit aident les administrateurs à comprendre qui a modifié les paramètres importants et à quel moment ces modifications ont eu lieu.
+
+<Callout type="info">
+  Les journaux d'audit axés sur l'organisation sont une fonctionnalité Enterprise. Les surfaces d'audit opérationnelles peuvent également apparaître dans le plan de contrôle pour les opérateurs dubstack.
+</Callout>
+
+## À quoi servent les journaux d'audit
+
+Utilisez les journaux d'audit lorsque vous devez investiguer ou examiner :
+
+- les invitations de membre et les changements de rôle
+- les changements liés à la facturation et aux droits
+- les mises à jour des indicateurs de fonctionnalité
+- l'installation ou la suppression d'intégrations
+- les changements de source Git
+- les changements de configuration de domaine et de déploiement
+- les changements de configuration des assistants, des workflows ou des agents
+- les actions destructrices sur l'organisation
+
+## Champs utiles
+
+Les entrées d'audit doivent être lues avec ce contexte :
+
+| Champ | Signification |
+| --- | --- |
+| Horodatage | Quand l'action a été enregistrée. |
+| Acteur | L'utilisateur ou le composant système qui a effectué l'action. |
+| Catégorie | La zone de produit affectée par le changement. |
+| Action | L'opération spécifique qui s'est exécutée. |
+| Résultat | Si l'action a réussi, échoué ou été bloquée. |
+| Métadonnées | Détails supplémentaires tels que les identifiants d'organisation, de site, de fonctionnalité ou d'intégration. |
+
+## Liste de vérification
+
+Lors de l'enquête sur un changement :
+
+1. Filtrez sur l'organisation ou le site affecté.
+2. Affiner la plage de dates pour la période où le comportement a changé.
+3. Comparer l'entrée d'audit avec le flux d'activité de déploiement.
+4. Vérifier si l'acteur avait le rôle attendu.
+5. Examiner les événements liés des fournisseurs dans GitHub, GitLab, Forgejo, Slack ou Jira si l'action impliquait une intégration.
+
+## Conseils de sécurité
+
+Les journaux d'audit sont les plus utiles lorsqu'ils sont associés à des rôles à privilèges minimaux.
+
+Pratique recommandée :
+
+- limiter l'accès administrateur
+- examiner régulièrement les rôles des membres
+- supprimer les invitations non utilisées
+- renouveler les clés API après des changements de personnel
+- garder l'accès des applications des fournisseurs limité aux dépôts requis
+
+## Sujets connexes
+
+- [Rôles](/fr/dashboard/roles)
+- [Permissions de déploiement](/fr/dashboard/deployment-permissions)
+- [Fournisseurs Git](/fr/deployment/forgejo-github-gitlab)

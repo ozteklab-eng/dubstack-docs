@@ -1,0 +1,299 @@
+---
+title: URL de base et authentification
+description: "Configurez les serveurs OpenAPI, les schémas de sécurité et le comportement des requêtes de l'API Playground."
+icon: shield-check
+---
+
+Les URL de base et l'authentification déterminent où l'API Playground envoie les requêtes et les identifiants que les lecteurs doivent fournir avant d'essayer un point de terminaison.
+
+Configurez-les d'abord dans votre spécification OpenAPI. Utilisez `dubstack.json` pour la présentation de la plateforme et le comportement de routage des requêtes.
+
+## Source de vérité des URL de base
+
+La plateforme résout les URL de requête dans cet ordre :
+
+1. L'URL de l'opération depuis la spécification OpenAPI.
+2. La première entrée correspondante `servers` dans la spécification OpenAPI.
+3. L'URL de base enregistrée dans les paramètres de spécification du tableau de bord, lorsque la spécification ne définit pas de serveur.
+
+Privilégiez la définition des serveurs dans la spécification OpenAPI afin que le dépôt de documentation reste reproductible.
+
+```json
+{
+  "openapi": "3.1.0",
+  "servers": [
+    {
+      "url": "https://api.example.com",
+      "description": "Production"
+    },
+    {
+      "url": "https://sandbox.example.com",
+      "description": "Sandbox"
+    }
+  ]
+}
+```
+
+Utilisez un serveur de test lorsque les lecteurs doivent pouvoir essayer des requêtes sans toucher aux données de production.
+
+## Serveurs spécifiques à l'opération
+
+Vous pouvez remplacer la liste des serveurs globaux sur une opération lorsqu'un point de terminaison utilise une origine différente.
+
+```json
+{
+  "paths": {
+    "/uploads": {
+      "post": {
+        "summary": "Create upload",
+        "servers": [
+          {
+            "url": "https://uploads.example.com",
+            "description": "Upload API"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Utilisez avec modération les serveurs au niveau de l'opération. Ils sont plus difficiles à comprendre pour les lecteurs qu'une seule URL de base API claire.
+
+## Authentification porteur
+
+Utilisez l'authentification porteur pour les JWT, les jetons d'accès OAuth ou toute API qui attend un en-tête `Authorization: Bearer ...`.
+
+```json
+{
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+}
+```
+
+La plateforme affiche un champ d'authentification. Les lecteurs saisissent leur propre jeton au moment de la requête.
+
+## Authentification par clé API
+
+Utilisez l'authentification par clé API lorsque votre API attend une clé dans un en-tête, une chaîne de requête ou un cookie.
+
+Exemple d'en-tête :
+
+```json
+{
+  "components": {
+    "securitySchemes": {
+      "apiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key"
+      }
+    }
+  },
+  "security": [
+    {
+      "apiKeyAuth": []
+    }
+  ]
+}
+```
+
+Exemple de chaîne de requête :
+
+```json
+{
+  "components": {
+    "securitySchemes": {
+      "queryKeyAuth": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "api_key"
+      }
+    }
+  },
+  "security": [
+    {
+      "queryKeyAuth": []
+    }
+  ]
+}
+```
+
+Privilégiez les clés API basées sur les en-têtes pour les documents publics. Les paramètres de requête sont plus susceptibles d'apparaître dans les journaux, l'historique du navigateur et les URL partagées.
+
+## Authentification basique
+
+Utilisez l'authentification basique uniquement lorsque votre API la nécessite déjà.
+
+```json
+{
+  "components": {
+    "securitySchemes": {
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  },
+  "security": [
+    {
+      "basicAuth": []
+    }
+  ]
+}
+```
+
+Les lecteurs fournissent les valeurs de nom d'utilisateur et de mot de passe dans la plateforme. Ne placez pas d'identifiants réels dans vos exemples OpenAPI.
+
+## Sécurité par opération
+
+Définissez `security` à la racine lorsque la plupart des points de terminaison utilisent la même authentification. Remplacez `security` sur une opération lorsqu'un point de terminaison spécifique est public ou utilise un schéma différent.
+
+Remplacement pour point de terminaison public :
+
+```json
+{
+  "paths": {
+    "/status": {
+      "get": {
+        "summary": "Get status",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Remplacement pour schéma différent :
+
+```json
+{
+  "paths": {
+    "/admin/jobs": {
+      "post": {
+        "summary": "Create admin job",
+        "security": [
+          {
+            "adminKeyAuth": []
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+## Routage des requêtes de la plateforme
+
+Configurez le comportement de la plateforme dans `dubstack.json`.
+
+```json
+{
+  "api": {
+    "openapi": "api-reference/openapi.json",
+    "playground": {
+      "display": "interactive",
+      "proxy": true,
+      "credentials": false
+    }
+  }
+}
+```
+
+| Champ | Utiliser |
+| --- | --- |
+| `display` | Contrôle si l'API Playground est interactif, simplifié ou masqué. |
+| `proxy` | Redirige les requêtes déclenchées par les lecteurs via le proxy de l'API Playground des documents lorsqu'il est activé. |
+| `credentials` | Inclut les identifiants gérés par le navigateur pour les requêtes directes du navigateur lorsqu'I`proxy` est désactivé. |
+
+Le mode par défaut et recommandé pour les documents publics est `proxy: true`. Le proxy de l'API Playground vérifie que les requêtes ciblent des URL autorisées par la spécification OpenAPI publiée et bloque les cibles réseau privées, locales ou réservées.
+
+## Paramètres des exemples de code
+
+Utilisez `api.examples` lorsque vous souhaitez plus de contrôle sur les exemples générés.
+
+```json
+{
+  "api": {
+    "examples": {
+      "languages": ["bash", "javascript", "python"],
+      "defaults": "required",
+      "prefill": true,
+      "autogenerate": true
+    }
+  }
+}
+```
+
+| Champ | Utiliser |
+| --- | --- |
+| `languages` | Contrôle l'ordre des langages des extraits générés. |
+| `defaults` | Contrôle l'affichage des valeurs optionnelles dans les exemples. |
+| `prefill` | Initialise les champs de l'API Playground à partir des valeurs d'exemple OpenAPI lorsqu'elles sont disponibles. |
+| `autogenerate` | Génère des extraits à partir de la spécification lorsqu'activé. Définissez sur `false` pour afficher uniquement les exemples de requêtes rédigés dans votre spécification. |
+
+Maintenez les exemples réalistes mais sécurisés. Utilisez des espaces réservés pour les identifiants et des charges utiles non destructrices pour les documents publics.
+
+## Liste de vérification de sécurité
+
+Avant d'activer les requêtes en direct sur les documents publics :
+
+- Utilisez une API de test publique pour les points de terminaison destructifs lorsque c'est possible.
+- Définissez `servers` explicitement.
+- Définissez `components.securitySchemes` et `security` de l'opération avec précision.
+- Ne commettez pas de clés API, de jetons porteurs, de cookies de session ou de données clients dans Git.
+- Masquez ou simplifiez l'API Playground pour les opérations internes ou dangereuses.
+- Confirmez que votre API dispose de son propre système d'autorisation, de limites de taux et de journaux d'audit.
+
+## Dépannage
+
+### L'API Playground envoie les requêtes à l'hôte incorrect
+
+Vérifiez d'abord le tableau `servers` d'OpenAPI. Si la spécification ne contient pas `servers`, vérifiez l'URL de base enregistrée dans les paramètres de spécification du tableau de bord.
+
+### Le champ d'authentification n'apparaît pas
+
+Vérifiez que la spécification définit `components.securitySchemes` et applique le schéma via `security` au niveau racine ou de l'opération.
+
+### Un point de terminaison public demande toujours des identifiants
+
+Définissez `security: []` sur cette opération pour remplacer la demande d'authentification racine.
+
+### Une requête est bloquée avant d'atteindre l'API
+
+La cible peut être privée, locale, réservée ou absente de la liste `servers` de la spécification OpenAPI publiée. Utilisez une origine d'API publique intentionnellement exposée aux lecteurs.
+
+## Sujets connexes
+
+- [Configuration d'OpenAPI](/fr/api-reference/openapi-setup)
+- [Aperçu de l'API Playground](/fr/api-reference/playground-overview)
+- [Demandes API en direct](/fr/api-reference/live-requests)
+- [Générateur de requêtes](/fr/api-reference/request-builder)
+- [Dépannage](/fr/api-reference/troubleshooting)

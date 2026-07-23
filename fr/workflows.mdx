@@ -1,0 +1,167 @@
+---
+title: Flux de travail
+description: Configurez des flux de travail de documentation qui maintiennent votre site à jour lorsque votre produit évolue.
+icon: workflow
+---
+
+Les flux de travail exécutent l'agent du tableau de bord à partir d'un déclencheur clair, d'un contexte délimité et d'un mode de mise à jour.
+
+Utilisez-les pour la maintenance régulière de la documentation et pour rédiger des mises à jour lorsque le code produit, le comportement de l'API, les retours utilisateurs ou les conversations avec l'assistant indiquent que le contenu nécessite une attention.
+
+## Fonctionnement des flux de travail
+
+```text
+Trigger
+-> snapshot repository and integration context
+-> run the dashboard agent
+-> create a documentation update
+-> open a provider-native review request or direct commit
+-> record the run and notify Slack if configured
+```
+
+Le dépôt de documentation reste la source unique de vérité. Les flux de travail écrivent via le fournisseur Git connecté, et les documents publiés continuent de s'afficher à partir des artefacts synchronisés.
+
+## Conditions requises
+
+Avant d'activer les flux de travail, connectez :
+
+- un dépôt de documentation basé sur Git
+- un accès en écriture pour le dépôt de documentation via un fournisseur Git pris en charge
+- un profil de modèle d'écriture
+
+Certains flux de travail nécessitent des signaux supplémentaires :
+
+- **Mise à jour à partir des modifications de code** nécessite au moins un dépôt source sélectionné.
+- **Améliorer la documentation à partir des retours utilisateurs** nécessite la collecte de retours.
+- **Mise à jour à partir des retours du support** nécessite une intégration prise en charge pour les retours du support. Il apparaît dans le catalogue, mais il est bloqué jusqu'à ce que des collecteurs de retours du support soient disponibles.
+- **Appliquer votre guide de style** nécessite des instructions de guide de style sauvegardées.
+- **Traduire le contenu** apparaît dans le catalogue, mais il est bloqué jusqu'à ce que le routage et le support des politiques de traduction soient disponibles.
+
+## Types de flux de travail disponibles
+
+### Flux de travail pour le contenu auto-mis à jour
+
+<CardGroup cols={2}>
+  <Card title="Mise à jour à partir des modifications de code" icon="git-branch" href="/fr/workflows/update-from-code-changes">
+    Rédigez des mises à jour de contenu lorsque le code source, les fonctionnalités du produit ou le comportement de l'API changent.
+  </Card>
+  <Card title="Brouillon de journal des modifications" icon="history" href="/fr/workflows/draft-changelog">
+    Préparez des brouillons de journal des modifications à partir des mises à jour récentes du produit selon un calendrier.
+  </Card>
+  <Card title="Compléter les lacunes à partir des conversations avec l'assistant" icon="message-square" href="/fr/workflows/assistant-conversation-gaps">
+    Examinez les tendances des questions des assistants et lancez des mises à jour ciblées de la documentation.
+  </Card>
+  <Card title="Améliorer la documentation à partir des retours utilisateurs" icon="thumbs-up" href="/fr/workflows/user-feedback-improvements">
+    Utilisez les tendances des retours des pages pour rédiger des améliorations de contenu ciblées.
+  </Card>
+  <Card title="Mise à jour à partir des retours du support" icon="mail" href="/fr/workflows/support-feedback">
+    Flux de travail visible dans le catalogue pour les thèmes récurrents du support. Bloqué jusqu'à ce que des collecteurs de retours du support soient disponibles.
+  </Card>
+</CardGroup>
+
+### Flux de travail de maintenance
+
+<CardGroup cols={2}>
+  <Card title="Traduire le contenu" icon="languages" href="/fr/workflows/translate-content">
+    Flux de travail visible dans le catalogue pour la synchronisation des langues. Bloqué jusqu'à ce que le routage et le support des politiques de traduction soient disponibles.
+  </Card>
+  <Card title="Corriger les liens cassés" icon="link" href="/fr/workflows/fix-broken-links">
+    Trouver et réparer les liens internes ou externes cassés avant que les lecteurs ne les rencontrent.
+  </Card>
+  <Card title="Corriger les problèmes SEO" icon="search" href="/fr/workflows/fix-seo-issues">
+    Auditer les titres, les descriptions, les titres de section et les balises canoniques.
+  </Card>
+  <Card title="Corriger la grammaire et les fautes de frappe" icon="text" href="/fr/workflows/fix-grammar-typos">
+    Trouver et corriger les fautes d'orthographe, les fautes de frappe et les erreurs de grammaire.
+  </Card>
+  <Card title="Appliquer votre guide de style" icon="check-circle" href="/fr/workflows/enforce-style-guide">
+    Appliquer les règles de voix, de ton, de terminologie et de formatage sur toutes les mises à jour de documentation.
+  </Card>
+  <Card title="Cibles de copie de dépôt" icon="copy" href="/fr/workflows/repository-copy-targets">
+    Copier la source des documents actifs vers les cibles de dépôt configurées selon un calendrier.
+  </Card>
+</CardGroup>
+
+### Flux de travail personnalisés
+
+<CardGroup cols={2}>
+  <Card title="Créer un flux de travail personnalisé" icon="plus" href="/fr/workflows/create">
+    Définir des déclencheurs personnalisés, des instructions, des dépôts de contexte, des intégrations et des modes de mise à jour.
+  </Card>
+</CardGroup>
+
+## Types de déclencheurs
+
+Les flux de travail peuvent s'exécuter à partir des types de déclencheurs pris en charge :
+
+| Déclencheur | Cas d'utilisation |
+| --- | --- |
+| Mise à jour du contenu | Exécuter après que les modifications du contenu des documents soient synchronisées depuis le dépôt de documents connecté. |
+| Changement de code | Exécuter après la fusion d'un changement d'un dépôt source pris en charge sélectionné. |
+| Calendrier personnalisé | Exécuter selon un calendrier récurrent tel que quotidien, hebdomadaire ou deux fois par semaine. |
+
+Chaque flux de travail ne prend en charge que les types de déclencheurs qu'il peut gérer en toute sécurité. Une exécution de flux de travail a exactement une source de déclencheur.
+
+## Modes de mise à jour
+
+| Mode | Comportement |
+| --- | --- |
+| Revue requise | Ouvrir une demande de pull ou une demande de fusion pour qu'un collègue la révise avant la fusion. |
+| Automatique | Appliquer la mise à jour directement lorsque le flux de travail est autorisé à écrire. |
+
+Utiliser le mode de revue pour les documents de production, sauf si vous avez un flux de travail étroit, un résultat prévisible et des attentes claires de retour en arrière.
+
+## Contexte
+
+Les workflows peuvent lire le contexte délimité à partir de :
+
+- le dépôt de documents connecté
+- les dépôts sources sélectionnés
+- les intégrations connectées telles que Slack ou Jira
+- les documents publiés, les analyses de l'assistant et les signaux de feedback lorsqu'ils sont requis par le workflow
+
+Le contexte reste limité à l'organisation actuelle, au déploiement et aux paramètres d'intégration activés. Les dépôts de contexte sont en lecture seule ; les écritures de workflow ciblent toujours le dépôt de documents connecté.
+
+## Cycle de vie des exécutions
+
+Les exécutions sont placées en file d'attente et traitées par le runner de workflow.
+
+| Statut | Signification |
+| --- | --- |
+| En attente | L'exécution attend un worker. |
+| En cours | L'agent collecte le contexte et prépare une mise à jour. |
+| Réussi | L'exécution s'est terminée et a enregistré une demande de revue ou un résultat de validation. |
+| Échoué | L'exécution n'a pas pu être complétée. Les exécutions échouées ne comptent pas dans la limite quotidienne d'exécutions. |
+
+Un workflow peut être configuré même si le runner est désactivé, mais il ne devient exécutable qu'une fois que l'accès au dépôt, le routage du modèle, les exigences de configuration et le support du runner sont tous prêts.
+
+## Limites d'utilisation
+
+Chaque workflow est limité à 500 exécutions en attente, en cours ou réussies par jour UTC par défaut. Les exécutions échouées ne comptent pas dans cette limite.
+
+Les exécutions enregistrent également des métadonnées d'utilisation de l'IA afin que le rapport de crédit puisse attribuer les coûts au workflow, au profil de modèle sélectionné, au connecteur de rédacteur, aux connecteurs de contexte, au type de déclencheur et au mode de mise à jour.
+
+Voir [Crédits et utilisation de l'IA](/fr/ai/credits-usage) pour les champs du registre d'utilisation partagé et le modèle de rapport.
+
+## Étapes suivantes
+
+<CardGroup cols={2}>
+  <Card title="Référence des workflows" icon="list-checks" href="/fr/workflows/reference">
+    Examinez les workflows intégrés, les déclencheurs par défaut et les exigences de configuration.
+  </Card>
+  <Card title="Gérer les workflows" icon="toggle-right" href="/fr/workflows/manage">
+    Activez les workflows, exécutez-les manuellement, consultez l'historique des exécutions et configurez les notifications.
+  </Card>
+  <Card title="Configurer les exécutions" icon="settings-2" href="/fr/workflows/configuration">
+    Configurez les déclencheurs, les calendriers, les dépôts de contexte, les intégrations et les modes de mise à jour.
+  </Card>
+  <Card title="Intégrations de workflow" icon="plug-zap" href="/fr/workflows/integrations">
+    Utilisez Slack, Jira et les outils connectés futurs en tant que contexte de workflow délimité ou canaux de notifications.
+  </Card>
+  <Card title="Créer des flux de travail" icon="plus" href="/fr/workflows/create">
+    Créez un flux de travail personnalisé avec vos propres instructions et contexte.
+  </Card>
+  <Card title="Crédits IA et utilisation" icon="gauge" href="/fr/ai/credits-usage">
+    Comprenez comment l'utilisation de l'assistant, de l'agent, de Slack et des flux de travail est suivie.
+  </Card>
+</CardGroup>

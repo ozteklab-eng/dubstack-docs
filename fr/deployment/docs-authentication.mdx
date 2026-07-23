@@ -1,0 +1,134 @@
+---
+title: Authentification des documents
+description: "Restreindre l'accès aux documents publiés avec des sessions de lecteur protégées par mot de passe."
+icon: lock-keyhole
+---
+
+Utilisez l'authentification des documents lorsque le site publié ne doit pas être lisible par tous les internautes.
+
+Le premier mode privé pris en charge est l'authentification par mot de passe. Il attribue au site un mot de passe partagé unique et protège la coque des documents publics, les exports Markdown, les réponses de l'assistant, les points d'entrée MCP, les fichiers de découverte de l'IA, les pages de référence API, la sortie de la carte du site et les routes de métadonnées publiques pouvant exposer du contenu protégé.
+
+<Info>
+  L'authentification par mot de passe contrôle l'accès en lecture. Elle ne permet pas d'identifier les lecteurs individuels ni de fournir une personnalisation basée sur les groupes. Les modes de lecteur membres, OAuth/OIDC et JWT sont prévus pour un accès plus strict basé sur l'identité.
+</Info>
+
+## Quand utiliser l'authentification par mot de passe
+
+L'authentification par mot de passe est utile lorsque :
+
+- vous devez partager les documents avec un client, un partenaire ou un groupe interne avant le lancement
+- vous souhaitez un contrôle d'accès grossier sans configurer un fournisseur d'identité
+- le mot de passe peut être distribué en toute sécurité via votre processus d'équipe normal
+- chaque lecteur autorisé peut utiliser le même mot de passe
+
+Utilisez un mode basé sur l'identité au lieu de cela lorsque vous avez besoin de traçabilité par utilisateur, d'accès basé sur les groupes, de déprovisionnement automatique ou de valeurs de playground API personnalisées.
+
+## Activer les documents privés
+
+1. Ouvrez le site dans le tableau de bord dubstack.
+2. Allez à **Paramètres → Authentification**.
+3. Définissez **Visibilité du site** sur **Privé**.
+4. Choisissez **Mot de passe** comme méthode d'authentification.
+5. Entrez un mot de passe d'au moins 8 caractères.
+6. Cliquez sur **Enregistrer la politique**.
+
+Après l'enregistrement de la politique, les lecteurs doivent déverrouiller le site avant que le contenu protégé ne soit renvoyé.
+
+## Expérience du lecteur
+
+Lorsqu'un lecteur ouvre une page protégée sans session de lecteur valide, dubstack le redirige vers la page de connexion des documents.
+
+| Mode de routage du site | Chemin d'accès de connexion |
+| --- | --- |
+| Par défaut ou domaine basé sur l'hôte | `/login` |
+| Sous-chemin `/docs` | `/docs/login` |
+
+Après soumission d'un mot de passe correct, dubstack émet un cookie de lecteur Secure, HttpOnly. Le cookie est limité à l'hôte des documents et est valide pendant sept jours, sauf si la session est invalidée plus tôt.
+
+## Qu'est-ce qui est protégé
+
+Le mode mot de passe protège les routes contenant du contenu, notamment :
+
+- pages de documentation rendues
+- exports Markdown tels que `.md` et `Accept: text/markdown`
+- `llms.txt` et `llms-full.txt`
+- `skill.md`
+- Découverte MCP et routes du serveur MCP
+- Fichiers de découverte des cartes d'agent et des compétences d'agent
+- Réponses de l'assistant et de la recherche
+- Pages de référence de l'API et routes OpenAPI/spec
+- Sortie sitemap
+
+Les actifs statiques requis par la page de connexion, le chargement du thème et la vérification du mot de passe restent disponibles afin que le flux de déverrouillage puisse s'afficher et soumettre.
+
+## Changer le mot de passe
+
+Pour changer le mot de passe du lecteur :
+
+1. Allez dans **Paramètres → Authentification**.
+2. Gardez **Privé** et **Mot de passe** sélectionnés.
+3. Entrez un nouveau mot de passe.
+4. Cliquez sur **Enregistrer la politique**.
+
+Le changement de mot de passe invalide également les sessions de lecteur existantes. Les lecteurs doivent déverrouiller le site à nouveau avec le nouveau mot de passe.
+
+## Déconnecter les lecteurs
+
+Utilisez **Déconnecter les lecteurs** lorsque vous souhaitez invalider les cookies de lecteur existants sans changer le mot de passe.
+
+Cela est utile lorsque :
+
+- un mot de passe a été partagé plus largement que prévu
+- l'engagement client a pris fin
+- vous souhaitez obliger les lecteurs à saisir à nouveau le mot de passe actuel
+- vous testez le comportement des documents protégés
+
+Cette action met à jour la version de la session du lecteur pour ce site. Elle ne modifie pas le mode de visibilité ou le mot de passe configuré.
+
+## Désactiver l'authentification des documents
+
+Pour rendre le site public à nouveau :
+
+1. Allez dans **Paramètres → Authentification**.
+2. Paramétrez **Visibilité du site** sur **Public**.
+3. Cliquez sur **Enregistrer la politique**.
+
+La désactivation de l'authentification des documents efface le mode mot de passe et invalide les sessions de lecteur privées existantes.
+
+## Comportement de sous-chemin `/docs`
+
+L'authentification par mot de passe fonctionne avec le routage de sous-chemin `/docs`
+
+Pour un site monté sur `example.com/docs` :
+
+- les pages protégées redirigent vers `example.com/docs/login`
+- la vérification du mot de passe est envoyée à `example.com/docs/api/docs-auth/password`
+- assistant, recherche, MCP, découverte de l'IA et demandes de référence API restent sous `/docs`
+- le déblocage réussi redirige les lecteurs vers le chemin des docs montés
+
+Pour les détails de configuration, voir [/docs sous-chemin](/fr/deployment/docs-subpath).
+
+## Dépannage
+
+### Les lecteurs reviennent constamment à la page de connexion
+
+Vérifiez que le navigateur accepte les cookies sécurisés pour le nom d'hôte des docs. Si le site est monté sous `/docs`, vérifiez que le proxy transfère `/docs/api/docs-auth/password` vers l'origine dubstack sans supprimer le préfixe `/docs`.
+
+### Le mot de passe est accepté mais les demandes de l'assistant échouent
+
+Confirmez que la demande de l'assistant est envoyée au même nom d'hôte où le lecteur a débloqué le site. Les cookies des lecteurs sont limités au nom d'hôte.
+
+### Les clients MCP publics ne peuvent pas lire les docs
+
+C'est normal pour les docs protégés. Les clients MCP publics doivent se connecter via une session de lecteur authentifié avant de pouvoir lire le contenu protégé.
+
+### Le site utilise `/docs` et les actifs statiques échouent sur la page de connexion
+
+Vérifiez que votre proxy transfère `/docs/_next/*`, `/docs/api/*`, `/docs/api/static/*`, `/docs/img/*` et `/docs/assets/*` vers le nom d'hôte d'origine généré.
+
+## Sujets connexes
+
+- [/docs sous-chemin](/fr/deployment/docs-subpath)
+- [Domaines personnalisés](/fr/deployment/custom-domains)
+- [Permissions de déploiement](/fr/dashboard/deployment-permissions)
+- [MCP](/fr/ai/mcp)

@@ -1,0 +1,92 @@
+---
+title: Flux de travail de brouillon de journal des modifications
+description: "Brouillon d'entrées de journal des modifications à partir des activités récentes du produit, des documents ou du dépôt source."
+icon: history
+---
+
+Le flux de travail de brouillon de journal des modifications prépare des entrées de journal des modifications prêtes à être examinées à partir des mises à jour récentes du produit.
+
+Utilisez-le lorsque votre équipe livre régulièrement et souhaite un premier brouillon cohérent pour les notes de version sans transformer chaque changement fusionné en annonce publique automatiquement.
+
+## Ce qu'il fait
+
+Lorsqu'il est activé pour un déploiement, le flux de travail est conçu pour :
+
+- inspecter les changements récents du dépôt de documents et des dépôts contextuels sélectionnés
+- identifier les mises à jour qui appartiennent au journal des modifications
+- rédiger une entrée de journal des modifications dans le dépôt de documents connecté
+- ouvrir une demande de révision native au fournisseur à moins que les mises à jour automatiques ne soient activées explicitement
+- enregistrer l'état de l'exécution, le contexte source, les fichiers modifiés et l'utilisation des crédits dans l'historique du flux de travail
+
+Sans dépôts contextuels sélectionnés, le flux de travail fonctionne à partir des activités de documentation et des modèles de journal des modifications existants. Avec des dépôts contextuels, il peut inclure plus de détails sur le produit à partir des changements récents du code source.
+
+## Configuration requise
+
+Avant d'activer l'automatisation du journal des modifications :
+
+1. Connectez un dépôt de documents basé sur Git avec un accès en écriture.
+2. Confirmez l'emplacement du journal des modifications et le modèle de contenu dans votre dépôt de documents.
+3. Ajoutez des dépôts source en tant que contexte lorsque les entrées de journal des modifications nécessitent un contexte sur le code du produit.
+4. Confirmez que le profil de modèle de rédaction est disponible.
+5. Commencez en mode **Exiger une revue**.
+
+Aucun connecteur supplémentaire n'est requis.
+
+## Déclencheurs et mode de mise à jour
+
+| Paramètre | Comportement |
+| --- | --- |
+| Déclencheur par défaut | Calendrier personnalisé, hebdomadaire |
+| Déclencheur facultatif | Exécution manuelle ou flux de travail planifié déclenché par l'API |
+| Mode recommandé en premier | Exiger une revue |
+| Mode automatique | Utilisez-le uniquement après des exécutions répétées et correctement revues |
+| Cible d'écriture | Dépôt de documents connectés |
+| Dépôts de contexte | Pris en charge |
+
+Une exécution planifiée du changelog doit créer une demande de révision distincte pour cette exécution. Elle ne doit pas continuer à ajouter des éléments à des demandes de révision non liées.
+
+## Bonnes instructions pour le changelog
+
+Ajoutez des instructions lorsque votre changelog a des règles strictes.
+
+Les instructions utiles incluent :
+
+- quelles sont les zones de produit à inclure
+- les conventions de nommage des étiquettes de version
+- si les changements internes doivent être exclus
+- comment regrouper les changements majeurs, les nouvelles fonctionnalités, les correctifs et les dépréciations
+- quand lier aux pages de référence API ou de migration
+
+## Utilisation des crédits
+
+Les exécutions de changelog sont des exécutions de flux de travail auto-mises à jour et comptent dans l'utilisation des crédits de flux de travail.
+
+L'estimation actuelle de la planification est de **223 crédits par exécution**. L'utilisation réelle peut varier selon :
+
+- le nombre de dépôts sources inspectés
+- le nombre de changements récents depuis la dernière exécution
+- la quantité d'historique de changelog lue pour le style et le format
+- le nombre de fichiers de changelog mis à jour
+- le routage du modèle et le profil du flux de travail
+
+Voir [crédits et utilisation de l'IA](/fr/ai/credits-usage) pour le modèle de crédit partagé.
+
+## Liste de vérification
+
+Avant de fusionner une entrée de changelog générée, vérifiez :
+
+- chaque affirmation publique correspond à un changement livré
+- les changements exclusivement internes sont exclus
+- les changements majeurs et les étapes de migration sont explicites
+- les liens pointent vers des documents en ligne ou des mises à jour prévues des documents
+- l'entrée suit votre format de changelog
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/workflows/reference#draft-changelog">Référence des flux de travail</a>
+  <a href="/fr/writing-content/changelog-updates">Mises à jour du changelog</a>
+  <a href="/fr/workflows/update-from-code-changes">Flux de travail de mise à jour à partir des changements de code</a>
+  <a href="/fr/workflows/manage">Gérer les flux de travail</a>
+  <a href="/fr/ai/credits-usage">Crédits IA et utilisation</a>
+</RelatedTopics>

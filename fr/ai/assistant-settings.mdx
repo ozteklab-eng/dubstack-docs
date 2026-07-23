@@ -1,0 +1,104 @@
+---
+title: "Configurer l'assistant"
+description: "Contrôlez le comportement de l'assistant public, sa disponibilité, sa protection et ses suggestions."
+icon: settings
+---
+
+L'assistant public est configuré depuis le tableau de bord et publié dans le déploiement sélectionné.
+
+Ouvrez **Assistant** depuis le tableau de bord pour gérer le comportement de l'assistant visible par les lecteurs et vérifier si le pipeline de récupération est prêt.
+
+## Statut et contrôle
+
+Utilisez **Statut de l'assistant** pour activer ou mettre en pause l'assistant public.
+
+Lorsqu'il est mis en pause, le site de documentation ne doit pas exposer l'expérience normale de l'assistant lecteur pour ce déploiement. Les documents publiés restent disponibles.
+
+## Gestion des réponses
+
+La gestion des réponses contrôle le comportement de l'assistant lorsqu'il ne peut pas produire une réponse utile.
+
+| Paramètre | Comportement |
+| --- | --- |
+| Redirection vers le support | Permet à l'assistant de rediriger les questions sans réponse vers votre processus de support lorsque cette option est activée. |
+| Email de support | Adresse e-mail utilisée lorsqu'une action de contact au support est disponible. |
+| Bouton d'aide | Affiche une action de support dans l'interface de chat lorsque la redirection est activée. |
+
+Les options de redirection peuvent être limitées par le plan et les capacités de l'environnement. Si une option est désactivée, le tableau de bord en indique la raison.
+
+## Domaines de recherche
+
+Les domaines de recherche permettent à l'assistant d'utiliser des domaines externes approuvés comme contexte supplémentaire lorsqu'une fonctionnalité est disponible.
+
+Maintenez les domaines étroits. Privilégiez la documentation produit, les références API, les journaux de modifications ou les bases de connaissances de support qui sont sécurisés pour que l'assistant les lise.
+
+Exemples :
+
+```text
+docs.example.com
+api.example.com
+*.support.example.com
+docs.example.com/api
+```
+
+Utilisez des entrées au niveau du chemin lorsqu'une seule zone d'un site doit être disponible pour l'assistant. Les domaines doivent être publics et accessibles sans procédure de connexion réservée au navigateur.
+
+## Protection contre les bots
+
+Le CAPTCHA invisible peut protéger les points de terminaison de l'assistant public contre les abus automatisés lorsqu'un environnement est configuré.
+
+Si la fonctionnalité n'est pas disponible, le tableau de bord maintient l'interrupteur désactivé et affiche la raison.
+
+## Questions de démarrage
+
+Les questions de démarrage apparaissent comme des suggestions dans l'interface utilisateur de chat de l'assistant.
+
+Utilisez des questions courtes qui correspondent aux points d'entrée de documents à haute valeur :
+
+- Comment connecter Git ?
+- Comment ajouter un domaine personnalisé ?
+- Comment publier une référence API ?
+
+Le tableau de bord prend en charge jusqu'à trois questions de démarrage pour l'assistant public.
+
+## Instructions pour l'assistant
+
+Les déploiements Enterprise peuvent ajouter des instructions propres au site depuis le tableau de bord.
+
+Ces instructions complètent les règles de sécurité de la plateforme et les consignes de l'assistant stockées dans le dépôt. Utilisez-les pour définir le style, le vocabulaire métier, les préférences d'escalade vers le support et la portée des réponses.
+
+Lorsque aucune instruction du tableau de bord n'est enregistrée, le déploiement utilise la valeur par défaut de la plateforme. Les instructions du tableau de bord sont limitées à 4 000 caractères.
+
+Les instructions de l'assistant peuvent également être stockées dans le dépôt à l'emplacement suivant :
+
+```text
+.dubstack/Assistant.md
+```
+
+Utilisez le fichier du dépôt lorsque le comportement de l'assistant doit suivre la source de la documentation. Utilisez les instructions du tableau de bord lorsqu'un espace de travail Enterprise nécessite un comportement propre au déploiement sans modifier le dépôt.
+
+Ne placez pas les identifiants, les secrets clients ou les détails d'incidents privés dans les instructions de l'assistant.
+
+## Utilisation et crédits
+
+Les demandes adressées à l'assistant peuvent être enregistrées dans le registre d'utilisation de l'IA avec les métadonnées de source, de statut, de profil, de tokens et d'estimation des crédits.
+
+Si un espace de travail atteint son quota ou si le profil de l'assistant est indisponible, l'assistant peut être mis en pause jusqu'à ce que l'utilisation soit augmentée ou que la configuration soit corrigée.
+
+## Vérifications de préparation
+
+La page Assistant affiche la préparation pour l'index des documents publiés, l'index de récupération géré et le chemin de réponse avancé.
+
+Si les réponses sont obsolètes ou incomplètes :
+
+1. Vérifiez que le changement de documents est enregistré et publié.
+2. Exécutez une mise à jour manuelle si la source a changé en dehors du chemin du webhook.
+3. Utilisez **Rafraîchir** pour vérifier à nouveau la préparation actuelle.
+4. Utilisez **Synchronisation avancée** pour reconstruire l'index de réponses avancées lorsque cette fonctionnalité est activée.
+5. Interrogez de nouveau l'assistant lorsque les vérifications de préparation indiquent un état sain.
+
+## Sujets connexes
+
+- [Assistant](/fr/ai/assistant)
+- [MCP](/fr/ai/mcp)
+- [Analyse des retours](/fr/dashboard/feedback-analytics)

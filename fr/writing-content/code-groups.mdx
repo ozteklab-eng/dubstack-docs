@@ -1,0 +1,65 @@
+---
+title: Groupes de code
+description: Afficher plusieurs exemples de code liés dans un bloc à onglets.
+icon: square-terminal
+---
+
+Utilisez les groupes de code lorsque les lecteurs doivent comparer des commandes, demander des exemples ou des formats de configuration.
+
+<CodeGroup>
+```bash cURL
+curl https://your-site.dubstack.live/mcp \
+  -H 'Content-Type: application/json' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+```
+
+```js JavaScript
+await fetch('https://your-site.dubstack.live/mcp', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list' })
+})
+```
+</CodeGroup>
+
+````mdx
+<CodeGroup>
+```bash cURL
+curl https://your-site.dubstack.live/mcp \
+  -H 'Content-Type: application/json' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+```
+
+```js JavaScript
+await fetch('https://your-site.dubstack.live/mcp', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list' })
+})
+```
+</CodeGroup>
+````
+
+## Bonnes utilisations
+
+- Exemples demandés dans plusieurs langages.
+- Variants de configuration pour le local, le staging et la production.
+- Commandes équivalentes pour différents outils.
+
+## Règles d'écriture
+
+Chaque bloc de code encadré à l'intérieur de `CodeGroup` doit inclure un langage et une courte étiquette. L'étiquette devient le texte de l'onglet.
+
+````mdx
+```json Production
+{
+  "theme": "prism"
+}
+```
+````
+
+## Propriétés prises en charge
+
+<ResponseField name="children" type="code fences" required>
+  Un ou plusieurs blocs de code encadrés. Chaque bloc devient un exemple sélectionnable.
+</ResponseField>

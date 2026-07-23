@@ -1,0 +1,149 @@
+---
+title: Mise en forme du texte
+description: "Formatez les paragraphes, l'accentuation, les liens, les listes, le code en ligne, les blocs de code, les citations et les tableaux sur les pages MDX."
+icon: pilcrow
+---
+
+Utilisez le Markdown standard pour la plupart de l'écriture. Ajoutez des composants MDX uniquement lorsque le contenu nécessite une surface structurée telle que des cartes, des rappels, des onglets, des onglets déroulants ou des champs d'API.
+
+## Paragraphes
+
+Maintenez les paragraphes courts et ciblés. Une ligne vide commence un nouveau paragraphe.
+
+```mdx
+Use short paragraphs for setup instructions.
+
+Start a new paragraph when the reader moves to a new idea.
+```
+
+## Accentuation
+
+```mdx
+Use **bold** for important terms.
+Use _italic_ for light emphasis.
+Use `inline code` for literal values, paths, commands, and field names.
+```
+
+Résultat affiché :
+
+Utilisez **gras** pour les termes importants.
+Utilisez _italique_ pour un soulignement léger.
+Utilisez `inline code` pour les valeurs littérales, les chemins, les commandes et les noms de champs.
+
+## Liens
+
+Utilisez des liens relatifs à la racine pour les pages du même site de documentation :
+
+```mdx
+Read the [quickstart](/quickstart) before configuring Git.
+```
+
+Utilisez des URL complètes pour les ressources externes :
+
+```mdx
+Open the [status page](https://status.example.com).
+```
+
+Préférez le texte des liens descriptifs. Évitez les liens vagues tels que « cliquez ici » car les moteurs de recherche, les systèmes d'assistance et les lecteurs d'écran bénéficient tous d'étiquettes explicites.
+
+## Listes
+
+Utilisez des listes non ordonnées pour des éléments liés où l'ordre n'a pas d'importance :
+
+```mdx
+- Create the page.
+- Add it to navigation.
+- Publish the change.
+```
+
+Utilisez des listes ordonnées pour les procédures :
+
+```mdx
+1. Create a branch.
+2. Edit the MDX file.
+3. Open a pull request.
+4. Publish after review.
+```
+
+Maintenez la cohérence des éléments de liste. Si un élément commence par un verbe, les autres devraient généralement commencer par des verbes aussi.
+
+## Blocs de code
+
+Utilisez des blocs de code délimités pour les commandes, les configurations et les exemples.
+
+````mdx
+```bash
+npm install
+npm run dev
+```
+````
+
+Incluez un langage si possible afin que la mise en évidence syntaxique et les actions de copie fonctionnent correctement.
+
+Identifiants de langage courants :
+
+| Langage | Délimiteur |
+| --- | --- |
+| Shell | `bash` |
+| JSON | `json` |
+| JavaScript | `javascript` |
+| TypeScript | `typescript` |
+| MDX | `mdx` |
+| YAML | `yaml` |
+
+## Citations
+
+Utilisez les citations pour du matériel cité court ou des notes importées. Utilisez les rappels pour des conseils produits, des avertissements ou des instructions spécifiques à une tâche.
+
+```mdx
+> This quote came from a migration note.
+```
+
+Pour un guide de première partie, privilégiez :
+
+```mdx
+<Callout type="info">
+  Store credentials in secret storage, not in documentation source.
+</Callout>
+```
+
+## Tableaux
+
+Utilisez des tableaux pour des comparaisons compactes et des listes de champs.
+
+```mdx
+| Field | Type | Purpose |
+| --- | --- | --- |
+| `title` | string | Page title. |
+| `description` | string | Page summary. |
+```
+
+Déplacez les explications longues en dessous du tableau afin que les lecteurs mobiles n'aient pas à défiler horizontalement à travers des cellules denses.
+
+## Échappement des caractères MDX
+
+MDX traite `{}` et les balises JSX comme de la syntaxe. Lorsque vous devez les afficher en tant que texte, placez l'exemple dans du code en ligne ou un bloc de code.
+
+```mdx
+Use `{{customer_id}}` as the placeholder in the template.
+```
+
+Pour des exemples plus longs, utilisez un bloc de code :
+
+````mdx
+```mdx
+<Card title="Example">
+  Content goes here.
+</Card>
+```
+````
+
+## Rédaction optimisée pour la recherche
+
+La recherche, l'assistant et les outils publics MCP fonctionnent mieux lorsque les pages sont explicites.
+
+- Placez le but de l'utilisateur dans le titre de la page ou dans la première en-tête.
+- Utilisez des termes concrets que les utilisateurs recherchent.
+- Gardez les exemples proches du concept qu'ils expliquent.
+- Liez aux pages de configuration, de dépannage et de référence adjacentes.
+- Évitez de cacher des instructions importantes uniquement à l'intérieur d'images.

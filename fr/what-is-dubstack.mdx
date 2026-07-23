@@ -1,0 +1,79 @@
+---
+title: "Qu'est-ce que dubstack ?"
+description: "Découvrez ce que fait dubstack et comment son tableau de bord, son interface de documentation, sa référence API, ses fonctionnalités d'IA et ses workflows Git s'articulent."
+icon: circle-help
+---
+
+dubstack est une plateforme de documentation destinée aux produits techniques.
+
+La plateforme réunit une source de documentation basée sur Git, un éditeur intégré au tableau de bord, des références API générées, un hébergement de production et des fonctionnalités d'IA capables de lire votre documentation et d'agir sur son workflow.
+
+## Ce que dubstack vous aide à livrer
+
+Utilisez dubstack lorsque vous devez publier et maintenir :
+
+- documentation destinée aux développeurs
+- références API générées à partir de spécifications OpenAPI
+- guides de produit et journaux des modifications
+- bases de connaissances internes ou destinées aux partenaires
+- documentation lisible par l'IA grâce à la recherche, à l'export Markdown et au MCP public
+
+## Surfaces principales
+
+| Surface | Objectif |
+| --- | --- |
+| Tableau de bord | Gestion des sites, du contrôle de version, de la facturation, des accès de l'équipe, des analyses et des paramètres de déploiement. |
+| Éditeur | Modification des pages MDX, de la navigation, des ressources et de la configuration du site directement dans le navigateur. |
+| Interface de documentation | Affichage du site publié à partir du contenu stocké dans Git et de `dubstack.json`. |
+| Référence API | Génération de la documentation des points de terminaison et des générateurs de requêtes interactifs à partir de spécifications OpenAPI. |
+| Assistant | Réponse aux questions des lecteurs à partir de la documentation publiée, avec des liens vers les sources. |
+| Agent | Maintenance de la documentation depuis le tableau de bord et les workflows d'intégration. |
+| MCP public | Recherche et lecture de la documentation publiée par les outils d'IA via un serveur MCP en lecture seule. |
+| Theme Studio | Personnalisation des expériences de documentation avancées avec les offres Enterprise. |
+
+## Source de vérité
+
+La source de la documentation se trouve dans Git.
+
+`dubstack.json` contrôle la structure du site, le thème, la configuration de la référence API, les widgets, les redirections et d'autres comportements du site. Les fichiers MDX contiennent le contenu réel.
+
+Lorsqu'un contenu change, dubstack synchronise la source dans le pipeline de publication et sert le site rendu à partir de la dernière version publiée.
+
+## Édition du contenu
+
+Il existe deux méthodes d'édition prises en charge, et les équipes peuvent en utiliser les deux.
+
+- Utilisez l'éditeur du tableau de bord pour modifier et publier des pages dans le navigateur. La publication écrit les modifications dans la source connectée lorsque celle-ci autorise les écritures de l'éditeur.
+- Utilisez un éditeur local et Git lorsque les développeurs souhaitent cloner le dépôt, modifier les fichiers MDX ou `dubstack.json`, créer un commit, pousser les changements et les réviser via le fournisseur Git.
+
+Toute personne ayant le droit d'écrire dans le dépôt connecté peut mettre à jour la documentation via le workflow du dépôt. Les autorisations du tableau de bord et celles du fournisseur Git sont gérées séparément.
+
+## Comment les équipes l'utilisent
+
+Les workflows courants incluent :
+
+- connecter un dépôt GitHub, GitLab ou Forgejo
+- commencer avec un dépôt de démarrage hébergé
+- modifier les pages et la navigation depuis le tableau de bord
+- cloner le dépôt et pousser les modifications des documents depuis un éditeur local
+- publier des déploiements de prévisualisation pour les branches
+- générer des pages de points de terminaison API à partir de spécifications OpenAPI
+- attacher un domaine personnalisé
+- activer les retours des lecteurs, les analyses, l'assistant et le MCP
+
+## Étapes suivantes
+
+<CardGroup cols={2}>
+  <Card title="Démarrage rapide" icon="zap" href="/fr/quickstart">
+    Créez, modifiez et publiez votre premier site de documentation.
+  </Card>
+  <Card title="Guides" icon="map" href="/fr/guides">
+    Choisissez le parcours d'implémentation adapté à votre équipe.
+  </Card>
+  <Card title="Référence API" icon="terminal" href="/fr/api-reference/introduction">
+    Ajoutez des spécifications OpenAPI et publiez la documentation des points de terminaison.
+  </Card>
+  <Card title="Surfaces d'IA" icon="sparkles" href="/fr/ai/ai-surfaces">
+    Découvrez l'assistant, l'agent, les actions contextuelles et le MCP.
+  </Card>
+</CardGroup>

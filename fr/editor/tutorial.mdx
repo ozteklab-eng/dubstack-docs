@@ -1,0 +1,163 @@
+---
+title: "Tutoriel de l'éditeur"
+sidebarTitle: Tutoriel
+summary: Effectuez votre première modification de documentation depuis l'éditeur du tableau de bord.
+description: "Créez un changement ciblé dans l'éditeur, prévisualisez-le, publiez-le via le flux basé sur la source, puis vérifiez le site de documentation en direct."
+icon: graduation-cap
+---
+
+Ce tutoriel présente un cycle complet de modification dans l'éditeur du tableau de bord.
+
+Vous ouvrirez l'éditeur, apporterez une petite mise à jour de contenu, la prévisualiserez, la publierez via le flux basé sur la source, puis vérifierez le site de documentation en direct.
+
+## Avant de commencer
+
+Vous avez besoin de :
+
+- accès au déploiement dans le tableau de bord
+- des autorisations d'éditeur ou d'administrateur pour apporter des modifications au contenu
+- une source connectée, soit une source hébergée, soit un dépôt Git
+- une page que vous pouvez mettre à jour en toute sécurité
+
+<Callout type="tip">
+  Commencez par une petite modification, comme la mise à jour de la description d'une page ou l'ajout d'un paragraphe court. Gardez la première modification facile à réviser et facile à annuler.
+</Callout>
+
+## Procédure pas à pas
+
+<Steps>
+  <Step title="Ouvrir l'éditeur">
+    Ouvrez le tableau de bord, sélectionnez le déploiement, puis allez à **Éditeur**.
+
+    Utilisez le **panneau de navigation** lorsque vous souhaitez modifier une page déjà présente dans la barre latérale des documents. Utilisez **l'explorateur de fichiers** lorsque vous connaissez le chemin source ou lorsque vous devez ouvrir un fichier non listé dans la navigation.
+  </Step>
+
+  <Step title="Choisir la branche de travail">
+    Utilisez le sélecteur de branche de la barre d'outils de l'éditeur pour confirmer l'emplacement où le changement sera enregistré.
+
+    Si votre source prend en charge les branches, créez ou sélectionnez une branche de fonctionnalité pour les changements nécessitant une revue. Utilisez uniquement la branche de déploiement pour des modifications mineures lorsque votre politique de dépôt le permet.
+
+    <Callout type="warning">
+      Si votre branche de déploiement est protégée, publiez via une branche et une pull request au lieu d'écrire directement dans la branche protégée.
+    </Callout>
+  </Step>
+
+  <Step title="Modifier une page existante">
+    Sélectionnez une page dans **Navigation** ou **Explorateur de fichiers**.
+
+    Apportez une modification MDX ciblée. Par exemple, mettez à jour le frontmatter ou ajoutez un paragraphe sous l'introduction.
+
+    ```mdx
+    ---
+    title: Quickstart
+    description: Launch your first docs update from the dashboard editor.
+    ---
+    ```
+
+    Utilisez les commandes slash pour insérer un bloc pris en charge, tel qu'un encadré, une carte, des onglets, des étapes ou un accordéon, sans écrire manuellement toute la structure MDX.
+  </Step>
+
+  <Step title="Créer une nouvelle page lorsqu'il le faut">
+    Si le changement nécessite une nouvelle page, ouvrez **Explorateur de fichiers**, sélectionnez le dossier, puis créez un fichier `.mdx`.
+
+    Ajoutez le frontmatter et le contenu initial :
+
+    ```mdx
+    ---
+    title: Troubleshooting setup
+    description: Common setup issues and how to resolve them.
+    ---
+
+    Start with the problem readers are likely to search for, then add the fix.
+    ```
+
+    Ajoutez la page à la navigation avant de publier si les lecteurs doivent la voir dans la barre latérale.
+  </Step>
+
+  <Step title="Prévisualiser la page rendue">
+    Ouvrez la prévisualisation depuis la barre d'outils de l'éditeur et vérifiez la page rendue avant de publier.
+
+    Vérifiez :
+
+    - les titres et les liens fonctionnent ;
+    - les encadrés, les cartes, les onglets, les étapes et les accordéons s'affichent correctement ;
+    - les images et les ressources se chargent ;
+    - les pages de référence API affichent toujours la méthode, le chemin, les paramètres et les exemples attendus lorsqu'une modification affecte le contenu OpenAPI ;
+    - les modes clair et sombre s'affichent correctement pour les modifications visuelles.
+  </Step>
+
+  <Step title="Revoir le changement source">
+    Avant de publier, examinez les fichiers modifiés.
+
+    Vérifiez les fichiers de page, `dubstack.json`, les ressources téléversées, les extraits, les redirections et les spécifications OpenAPI lorsqu'ils font partie de la modification.
+
+    Évitez les modifications sans rapport dans la même action de publication afin que les réviseurs comprennent rapidement le changement.
+  </Step>
+
+  <Step title="Publier ou ouvrir une demande de révision">
+    Utilisez **Publier** depuis la barre d'outils de l'éditeur.
+
+    L'action exacte dépend de votre source et de la politique de branche :
+
+    | État de la source | Action attendue |
+    | --- | --- |
+    | Source initiale hébergée | Enregistrer et publier via le flux du tableau de bord |
+    | Dépôt Git avec publication directe autorisée | Valider et synchroniser la branche de déploiement |
+    | Branche protégée ou changement nécessitant une révision | Créer une pull request ou une demande de fusion à partir de la branche de travail |
+
+    Si une demande de révision est créée, partagez le déploiement de prévisualisation avec les réviseurs avant de fusionner.
+  </Step>
+
+  <Step title="Vérifier le site en direct">
+    Lorsque l'activité ou l'historique de déploiement indique que la synchronisation est terminée, ouvrez l'URL de la documentation en direct.
+
+    Confirmez que la page publiée, la navigation, les résultats de recherche, l'export Markdown et les index lisibles par l'IA ont changé comme prévu.
+
+    Pour les surfaces lisibles par l'IA, vérifiez les fichiers générés lorsqu'ils sont pertinents :
+
+    ```text
+    /llms.txt
+    /llms-full.txt
+    /skill.md
+    /mcp
+    ```
+  </Step>
+</Steps>
+
+## Vérifications courantes pour la première édition
+
+| Vérifier | Pourquoi c'est important |
+| --- | --- |
+| La page s'ouvre à partir de la navigation | Confirme que `dubstack.json` pointe vers la bonne page source |
+| La page s'ouvre par URL directe | Confirme que le chemin source a généré la route attendue |
+| L'export en markdown fonctionne | Confirme que les agents et les outils d'IA peuvent lire la page directement. |
+| La recherche trouve la page | Confirme que l'index publié a récupéré le contenu. |
+| L'aperçu et le site en direct correspondent | Confirme que la branche de déploiement est la source du site en direct. |
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="Je ne peux pas publier">
+    Vérifiez votre rôle, la branche sélectionnée et la connexion source. Certaines branches nécessitent une pull request ou une demande de fusion au lieu de la publication directe.
+  </Accordion>
+
+  <Accordion title="La page s'affiche en aperçu mais n'apparaît pas dans la navigation">
+    Ajoutez la page à la configuration de navigation avant de publier, ou confirmez qu'elle est intentionnellement masquée et accessible uniquement par une URL directe.
+  </Accordion>
+
+  <Accordion title="Le site en direct affiche toujours du contenu obsolète">
+    Vérifiez l'historique du déploiement et lancez une mise à jour manuelle si le webhook du dépôt n'a pas déclenché une synchronisation.
+  </Accordion>
+
+  <Accordion title="La référence API n'a pas été mise à jour">
+    Confirmez que le fichier de spécification OpenAPI ou l'URL a changé sur la branche de déploiement et que la route du point de terminaison généré est visible dans la navigation de la référence API.
+  </Accordion>
+</AccordionGroup>
+
+## Liens
+
+- [Pages et fichiers](/fr/editor/pages)
+- [Aperçu en direct](/fr/editor/live-preview)
+- [Gestion des branches et publication](/fr/editor/branching-and-publishing)
+- [Concepts de base de Git](/fr/editor/git-essentials)
+- [Déploiements d'aperçu](/fr/deployment/preview-deployments)

@@ -1,0 +1,168 @@
+---
+title: Notions essentielles de Git
+description: "Comprenez les branches, les commits, les pull requests, les aperçus et la synchronisation dans l'éditeur dubstack."
+icon: git-branch
+---
+
+L'éditeur dubstack est basé sur le même modèle de gestion de version que votre dépôt de documentation.
+
+Vous pouvez utiliser le tableau de bord sans mémoriser les commandes Git, mais comprendre les concepts sous-jacents facilite la publication, les revues, les aperçus et la résolution des problèmes.
+
+## Source de vérité
+
+dubstack utilise un modèle de publication basé sur Git.
+
+```text
+Authoring change
+-> Git commit or pull request
+-> Sync into published artifacts
+-> Live site reads published artifacts
+```
+
+Git reste la source de vérité d'écriture. Les artefacts publiés sont le chemin en lecture utilisé par le site de documentation en direct.
+
+## Flux de travail du tableau de bord et local
+
+Vous pouvez modifier le même site depuis le tableau de bord ou depuis une copie de travail Git locale.
+
+| Flux de travail | Utiliser quand |
+| --- | --- |
+| Éditeur du tableau de bord | Vous souhaitez une édition basée sur le navigateur, des aperçus visuels et des contrôles de publication sans utiliser de commandes Git. |
+| Flux de travail Git local | Les développeurs souhaitent utiliser un IDE, une ligne de commande, des vérifications CI, des pull requests ou des demandes de fusion. |
+
+Les deux flux de travail écrivent dans la source configurée. Les poussées externes synchronisent les artefacts publiés et doivent être visibles dans l'éditeur après la synchronisation de la source.
+
+## Concepts clés
+
+<AccordionGroup>
+  <Accordion title="Dépôt">
+    Un dépôt stocke vos fichiers de documentation et leur historique.
+
+    Un dépôt de documentation typique inclut `dubstack.json`, des pages MDX, des images, des extraits et des spécifications OpenAPI optionnelles.
+  </Accordion>
+
+  <Accordion title="Branche de déploiement">
+    La branche qui publie sur votre site en direct. Beaucoup d'équipes utilisent `main`, mais la branche de déploiement active est celle que vous configurez dans les paramètres Git.
+
+    Les modifications sur cette branche sont éligibles au déploiement en direct après la synchronisation.
+  </Accordion>
+
+  <Accordion title="Branche de fonctionnalité">
+    Une branche séparée utilisée pour rédiger et reviewer les modifications avant qu'elles n'atteignent la branche de déploiement.
+
+    Les branches de fonctionnalité sont utiles pour des éditions plus importantes, des brouillons rédigés par l'agent et des modifications nécessitant une revue avant la publication.
+  </Accordion>
+
+  <Accordion title="Commit">
+    Un changement enregistré dans le dépôt. Un commit enregistre ce qui a changé, quand le changement a été effectué et le message qui le décrit.
+
+    L'éditeur du tableau de bord et les mises à jour rédigées par l'agent deviennent des commits via le fournisseur Git connecté lors de la publication.
+  </Accordion>
+
+  <Accordion title="Pull request ou demande de fusion">
+    Une demande de revue depuis une branche de fonctionnalité vers la branche de déploiement.
+
+    Utilisez les pull requests ou de fusion lorsque votre équipe exige une revue, une protection de branche ou une URL d'aperçu avant que le changement ne soit en ligne.
+  </Accordion>
+
+  <Accordion title="Aperçu du déploiement">
+    Un site de documentation temporaire affiché pour une branche ou un changement proposé.
+
+    Utilisez les aperçus pour examiner la navigation, les pages de référence de l'API, la recherche, le comportement de l'assistant et les changements visuels avant de fusionner.
+  </Accordion>
+
+  <Accordion title="Artéfact publié">
+    L'ensemble de contenu compilé servi par le site de documentation public.
+
+    Le frontend en direct lit les artefacts publiés. Il ne doit pas dépendre des fichiers locaux ou de l'état incomplet du tableau de bord.
+  </Accordion>
+</AccordionGroup>
+
+## Comment les actions de l'éditeur correspondent à Git
+
+| Action de l'éditeur ou du tableau de bord | Effet de contrôle de version |
+| --- | --- |
+| Modifier une page | Crée un changement de contenu en attente dans la session de l'éditeur |
+| Enregistrer ou publier depuis le tableau de bord | Écrit le changement vers le chemin source configuré lorsque la source autorise les écritures de l'éditeur |
+| Créer une branche | Crée ou sélectionne une ligne de travail isolée |
+| Enregistrer sur une branche de fonctionnalité | Valide les changements vers cette branche |
+| Créer une pull request | Ouvre une revue depuis la branche de fonctionnalité vers la branche de déploiement |
+| Fusionner une pull request | Transfère les changements approuvés vers la branche de déploiement |
+| Mise à jour manuelle | Synchronise à nouveau le chemin source configuré vers les artefacts publiés |
+| Push Git externe | Déclenche une synchronisation lorsque le webhook du fournisseur est configuré, ou peut être récupéré via une mise à jour manuelle |
+| Brouillon de l'agent | Crée une branche et une pull request brouillon lorsqu'accès au dépôt est activé |
+
+Les actions exactes visibles dans l'éditeur dépendent de votre fournisseur connecté, de la protection des branches, des autorisations du dépôt et de l'accès aux fonctionnalités.
+
+## Dépôts de démarrage hébergés
+
+Si vous sautez Git pendant l'inscription, dubstack peut commencer avec une source hébergée. Cela vous permet d'éditer et de publier sans vous connecter à votre propre fournisseur Git immédiatement.
+
+Passer à un dépôt appartenant à un client lorsque vous le souhaitez :
+
+- propriété du dépôt au sein de votre organisation
+- protection de branche et revues requises
+- workflows de développement local
+- vérifications CI externes
+- pull requests rédigées par l'agent contre votre propre dépôt
+- portabilité à long terme des sources
+
+Voyez [GitHub](/fr/deployment/github) pour le chemin principal de configuration de la source connectée.
+
+## Dépôts connectés
+
+Pour les dépôts connectés, la branche de déploiement et le chemin de source sont configurés dans **Paramètres → Déploiement → Paramètres Git**.
+
+Le site en direct se met à jour lorsque :
+
+- un webhook arrive du fournisseur connecté
+- un éditeur de tableau de bord publie des écritures sur la source
+- une pull request est fusionnée dans la branche de déploiement
+- vous déclenchez une mise à jour manuelle depuis le tableau de bord
+
+Utilisez [Mises à jour manuelles et historique](/fr/deployment/manual-updates-history) lorsque le webhook est en retard ou si vous devez réinitialiser la branche actuelle.
+
+Pour le flux en ligne de commande, consultez [Workflow Git local](/fr/deployment/local-git-workflow).
+
+## Protection de branche
+
+La protection de branche doit rester activée pour les dépôts de documentation de production.
+
+Lorsque la protection de branche exige des revues, publiez les modifications via une branche et une pull request au lieu de les pousser directement vers la branche de déploiement. Cela maintient les modifications de documentation sur le même chemin de revue que les modifications de code.
+
+Si une action est bloquée par la protection de branche, utilisez le flux de pull request du fournisseur ou ajustez les règles du dépôt dans votre fournisseur Git.
+
+## Propriété des fichiers
+
+Gardez le contenu généré et le contenu rédigé séparés.
+
+- Rédigez les pages MDX directement dans la source de documentation.
+- Gardez `dubstack.json` comme fichier de configuration du site.
+- Gardez les spécifications OpenAPI dans un chemin prévisible, tel que `api-reference/openapi.json`.
+- Stockez les images et les extraits réutilisables dans des dossiers commis à la même source.
+- Évitez d’éditer le même fichier indépendamment à partir de plusieurs sources déconnectées.
+
+## Sujets connexes
+
+- [Workflow Git local](/fr/deployment/local-git-workflow)
+- [Branchement et publication](/fr/editor/branching-and-publishing)
+- [GitHub](/fr/deployment/github)
+- [GitLab](/fr/deployment/gitlab)
+
+## Dépannage
+
+### L'éditeur affiche une version plus ancienne d'une page
+
+Exécutez une mise à jour manuelle, puis rechargez l'éditeur. Si la page est toujours obsolète, vérifiez la branche et le chemin source configurés dans les paramètres Git.
+
+### L'aperçu ne correspond pas au site en direct
+
+Vérifiez la branche utilisée par l'aperçu. Une branche d'aperçu peut différer de la branche de déploiement jusqu'à ce qu'elle soit fusionnée.
+
+### Les modifications de l'agent ou du workflow n'apparaissent pas en tant que pull requests
+
+Vérifiez que le fournisseur Git est connecté, que l'application ou le jeton a accès au dépôt et que le dépôt cible autorise la création de branches.
+
+### Une page en direct n'a pas été mise à jour après une fusion
+
+Vérifiez l'historique de déploiement pour la dernière synchronisation. Si aucune synchronisation n'a eu lieu, vérifiez le webhook du fournisseur et utilisez une mise à jour manuelle.

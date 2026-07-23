@@ -1,0 +1,148 @@
+---
+title: "Référence des paramètres de l'API"
+description: "Référence par champ pour les spécifications OpenAPI, la génération des points de terminaison, le comportement de l'éditeur, l'affichage des paramètres et les exemples de code."
+icon: terminal
+---
+
+Utilisez ces champs pour publier des pages de référence API à partir de spécifications OpenAPI basées sur la source.
+
+## Sources de spécifications
+
+| Champ | Type | Objectif |
+| --- | --- | --- |
+| `api.openapi` | chaîne ou tableau | Chemins ou URL de spécifications OpenAPI. Utilisez des chemins relatifs au dépôt pour les spécifications basées sur la source. |
+| `openapi` | chaîne | Alias hérité pour la première spécification OpenAPI. Conservé pour la compatibilité. |
+| `api.asyncapi` | chaîne ou tableau | Chemins de spécifications AsyncAPI. Disponibles dans la configuration du tableau de bord pour les sites qui optent pour les références d'API asynchrones. |
+| `navigation.tabs[].groups[].openapi` | chaîne | Génère la navigation des points de terminaison à partir d'une spécification OpenAPI spécifique. |
+
+```json
+{
+  "api": {
+    "openapi": "api-reference/openapi.json"
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Docs runtime API",
+            "icon": "terminal",
+            "openapi": "api-reference/openapi.json"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Conservez les spécifications dans le même dépôt que la documentation lorsque c'est possible. Chaque aperçu de branche dispose ainsi de la référence API correspondante.
+
+## Affichage de l'éditeur
+
+| Champ | Type | Par défaut | Objectif |
+| --- | --- | --- | --- |
+| `api.playground.display` | `interactive` \| `simple` \| `none` \| `auth` | `interactive` | Contrôle comment les pages de point de terminaison exposent l'éditeur de requête. |
+| `api.playground.proxy` | booléen | `true` | Redirige les requêtes « Essayer » vers le proxy de l'éditeur dubstack. |
+| `api.playground.credentials` | booléen | `false` | Inclut les identifiants du navigateur pour les requêtes cross-origin directes lorsque le proxy est désactivé. |
+
+```json
+{
+  "api": {
+    "playground": {
+      "display": "interactive",
+      "proxy": true,
+      "credentials": false
+    }
+  }
+}
+```
+
+Utilisez `interactive` pour les documents de développeurs publics. Utilisez `none` lorsque les pages de point de terminaison doivent rester en lecture seule.
+
+## Affichage de l'URL de base
+
+| Champ | Type | Objectif |
+| --- | --- | --- |
+| `api.url` | `full` | Affiche l'URL de base complète sur les pages de point de terminaison. Laissez-le vide pour l'affichage compact par défaut. |
+
+```json
+{
+  "api": {
+    "url": "full"
+  }
+}
+```
+
+## Affichage des paramètres
+
+| Champ | Type | Défaut | Objectif |
+| --- | --- | --- | --- |
+| `api.params.expanded` | `all` \| `closed` | `closed` | Ouvre ou ferme par défaut les sections détaillant les paramètres. |
+| `api.params.post` | tableau | Aucun | Clés de champ OpenAPI affichées sous forme de pilules de paramètre après le nom du champ. |
+
+```json
+{
+  "api": {
+    "params": {
+      "expanded": "closed",
+      "post": ["nullable", "deprecated"]
+    }
+  }
+}
+```
+
+Utilisez les pilules de paramètre pour des métadonnées de petite taille qui aident les lecteurs à parcourir rapidement une référence.
+
+## Exemples de code
+
+| Champ | Type | Défaut | Objectif |
+| --- | --- | --- | --- |
+| `api.examples.languages` | tableau | Défaut du rendu | Langages et ordre des extraits de code. |
+| `api.examples.defaults` | `required` \| `all` | `all` | Contrôle l'inclusion des paramètres optionnels dans les exemples générés. |
+| `api.examples.prefill` | booléen | `false` | Préremplit les champs de l'interface de test avec des valeurs d'exemple issues de la spécification. |
+| `api.examples.autogenerate` | booléen | `true` | Génère des exemples de code de requête à partir de la spécification. Définissez sur `false` pour afficher uniquement les exemples rédigés. |
+
+```json
+{
+  "api": {
+    "examples": {
+      "languages": ["curl", "javascript", "python"],
+      "defaults": "required",
+      "prefill": true,
+      "autogenerate": true
+    }
+  }
+}
+```
+
+Utilisez les exemples rédigés dans la spécification OpenAPI pour les flux importants. Utilisez les exemples générés pour une couverture complète des points de terminaison.
+
+## Markdown de l'agent
+
+| Champ | Type | Défaut | Objectif |
+| --- | --- | --- | --- |
+| `api.mdx` | booléen | `true` | Inclut les spécifications API dans le markdown fourni aux surfaces lues par l'IA. |
+
+```json
+{
+  "api": {
+    "mdx": true
+  }
+}
+```
+
+Laissez cela activé lorsque vous souhaitez que `/llms.txt`, `/llms-full.txt` et le serveur public MCP fournissent un contexte API complet.
+
+## Configuration pratique
+
+1. Ajoutez la spécification sous `api-reference/openapi.json`.
+2. Définissez `api.openapi` sur ce chemin.
+3. Ajoutez un groupe de navigation `openapi` où les points de terminaison doivent apparaître.
+4. Configurez le comportement de l'interface de test.
+5. Publiez et vérifiez les pages de points de terminaison générées.
+
+<Callout type="warning">
+  Ne stockez pas les tokens porteurs, les clés API ou les identifiants clients dans `dubstack.json` ou dans les exemples OpenAPI. Utilisez des espaces réservés dans la source et configurez les identifiants réels dans le tableau de bord ou votre propre backend.
+</Callout>

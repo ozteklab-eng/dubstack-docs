@@ -1,0 +1,119 @@
+---
+title: Rédiger de la documentation avec Claude Code
+description: Configurez Claude Code avec les instructions du projet et le serveur MCP public pour travailler sur une documentation gérée dans la source.
+icon: terminal
+---
+
+Claude Code peut aider à rédiger, réviser et maintenir la documentation depuis une session terminal locale.
+
+Utilisez-le avec dubstack de deux manières différentes :
+
+| Surface | Objectif |
+| --- | --- |
+| Instructions du projet | Maintenez Claude Code aligné avec vos normes d'écriture, votre structure de dépôt et vos attentes de revue. |
+| MCP public | Permettez à Claude Code de rechercher et de lire le site de documentation publié via le point de terminaison `/mcp`. |
+
+Pour apporter des modifications authentifiées au contenu, continuez à utiliser le tableau de bord, le fournisseur Git connecté, l'agent Slack ou les workflows configurés jusqu'à ce qu'une surface d'écriture MCP de confiance soit disponible pour votre espace de travail.
+
+## Exigences
+
+Avant de commencer, vérifiez :
+
+- votre documentation est stockée dans un dépôt Git
+- Claude Code est installé et authentifié
+- votre site de documentation contient du contenu publié
+- le MCP public est activé si vous souhaitez que Claude Code recherche le site publié
+
+## Ajoutez les instructions du projet
+
+Créez un fichier `CLAUDE.md` à la racine de votre dépôt de docs.
+
+```text
+docs/
+  CLAUDE.md
+  dubstack.json
+  index.mdx
+  api-reference/
+```
+
+Utilisez ce fichier pour décrire le modèle de contenu et les règles de revue.
+
+```md title="CLAUDE.md"
+# Documentation project
+
+## Source of truth
+
+- Docs are MDX files in this repository.
+- Navigation and site settings are configured in `dubstack.json`.
+- Published docs are served by dubstack after the connected branch syncs.
+
+## Writing standards
+
+- Use clear second-person instructions.
+- Keep pages focused on one user outcome.
+- Add frontmatter with `title` and `description` to every page.
+- Prefer relative links for internal pages.
+- Do not include secrets, private customer data, or unreleased commitments.
+
+## Git workflow
+
+- Check existing pages before creating a duplicate.
+- Keep changes small enough to review.
+- Use a branch or pull request when repository policy requires review.
+- Run the docs preview or publish flow before telling reviewers a change is ready.
+```
+
+## Connecter le MCP public
+
+Le serveur MCP public est conçu pour la lecture. Il permet à Claude Code d'inspecter la documentation publiée et d'envoyer des retours lorsqu'une fonctionnalité de feedback d'agent est activée.
+
+```bash
+claude mcp add --transport http my-docs https://your-docs-domain.com/mcp
+```
+
+Pour un site de documentation monté sous un chemin, utilisez l'URL complète :
+
+```bash
+claude mcp add --transport http my-docs https://your-domain.com/docs/mcp
+```
+
+## Questions utiles
+
+Demandez à Claude Code d'utiliser les docs publiées comme contexte avant de rédiger des modifications locales.
+
+```text
+Use the docs MCP to search for custom domains, then suggest the smallest update needed in the local deployment guide.
+```
+
+```text
+Review the changed MDX files and check whether the new page should be added to dubstack.json navigation.
+```
+
+```text
+Compare the local page with the published version through MCP and list what changed before I open a pull request.
+```
+
+## Maintenez l'écriture révisable
+
+Claude Code peut modifier des fichiers locaux, mais le site publié suit toujours le workflow source connecté :
+
+1. Apportez des modifications locales dans le dépôt de documentation.
+2. Validez les modifications.
+3. Poussez vers la branche connectée ou ouvrez une pull request.
+4. Permettez à dubstack de synchroniser les artefacts du site publié.
+5. Vérifiez la page en direct et les résultats du MCP après la publication.
+
+<Callout type="warning">
+  Ne collez pas de clés API, de données privées des utilisateurs ni de conversations clients dans les fichiers d'instructions locaux ou les pages de documentation publiques.
+</Callout>
+
+## Sujets connexes
+
+<CardGroup cols={2}>
+  <Card title="MCP public" icon="plug" href="/fr/ai/mcp">
+    Connectez les clients IA au serveur de documentation publiée.
+  </Card>
+  <Card title="Rédiger la documentation à partir de modifications du code" icon="git-pull-request" href="/fr/guides/draft-docs-from-code">
+    Utilisez les dépôts sources des flux de travail pour rédiger des mises à jour révisables.
+  </Card>
+</CardGroup>

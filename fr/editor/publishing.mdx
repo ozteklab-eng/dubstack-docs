@@ -1,0 +1,195 @@
+---
+title: Publication
+description: "Examinez les modifications en attente, publiez-les dans la source, exécutez la synchronisation et vérifiez la documentation publiée."
+icon: upload-cloud
+---
+
+La publication transfère les modifications de la source vers le site de documentation public.
+
+Le flux exact dépend de votre source connectée, de la branche sélectionnée, des autorisations du dépôt et des règles de protection de branche. Le contrat reste le même : les modifications sont écrites dans Git, synchronisées avec les artefacts publiés, puis servies par le site public.
+
+```text
+Editor or Git change
+-> branch, commit, or pull request
+-> deployment branch
+-> sync job
+-> published docs site
+```
+
+## Enregistrer, publier et synchroniser
+
+| Étape | Ce que cela signifie |
+| --- | --- |
+| Éditer | Modifiez le contenu, la navigation, les actifs ou la configuration du site dans l'éditeur du tableau de bord |
+| Enregistrer | Conservez la modification dans l'éditeur ou le chemin de la source connectée, selon le type de source |
+| Publier | Validez la modification, créez une branche ou une pull request, ou mettez à jour la branche de déploiement selon les règles du dépôt |
+| Synchroniser | Générez les artefacts publiés à partir de la source configurée |
+| En ligne | Diffusez la documentation mise à jour sur le site public |
+
+Un aperçu dans le tableau de bord est utile pendant l'édition, mais le site publié reste la cible de vérification finale.
+
+## États du menu de publication
+
+Cliquez sur **Publier** dans la barre d'outils de l'éditeur pour inspecter l'état de publication actuel.
+
+| État | Ce que le menu affiche |
+| --- | --- |
+| Aucune modification en attente | Le site cible, `0 file changes` et **Aucune modification en attente**. |
+| Modifications en attente | Le nombre de fichiers modifiés, une action **Annuler toutes les modifications** et chaque fichier source modifié avec son statut. |
+| Fichier modifié sélectionné | Une vue de différences pour ce fichier, incluant le nombre de lignes ajoutées et supprimées. |
+
+Utilisez la liste des fichiers modifiés avant de publier pour confirmer que l'édition n'affecte que les pages, actifs multimédias, extraits, spécifications OpenAPI ou paramètres `dubstack.json` attendus.
+
+Si une modification en attente est incorrecte, utilisez **Annuler toutes les modifications** ou révisez le fichier concerné avant de publier. Réouvrez la page dans l'éditeur après avoir annulé une modification temporaire pour confirmer que le contenu source est propre.
+
+Pour la création de branches, les pull requests, les demandes de fusion et les processus de révision, consultez [Branchement et publication](/fr/editor/branching-and-publishing).
+
+## Publication basée sur la source
+
+Utilisez ce flux lorsque votre site est connecté à un dépôt Git géré par le client.
+
+<Steps>
+  <Step title="Choisissez la branche de travail">
+    Utilisez le sélecteur de branche dans la barre d'outils de l'éditeur ou votre fournisseur Git pour choisir où la modification doit être apportée.
+
+    Utilisez la branche de déploiement pour des modifications directes de petite taille lorsque votre dépôt permet une publication directe. Utilisez une branche de fonctionnalité lorsque la modification nécessite une revue.
+  </Step>
+
+  <Step title="Apportez la modification">
+    Modifiez les pages, la navigation, la configuration du site, les actifs ou les spécifications OpenAPI.
+
+    Pour les modifications de source effectuées en dehors du tableau de bord, validez et poussez-les vers la branche configurée. Voir [Workflow Git local](/fr/deployment/local-git-workflow) pour le chemin en ligne de commande.
+  </Step>
+
+  <Step title="Examinez le diff">
+    Avant de publier, examinez les fichiers modifiés et confirmez que le changement est limité aux pages et configurations prévues.
+
+    Vérifiez soigneusement `dubstack.json` lorsqu'il y a des changements dans la navigation, le thème, les redirections, le référencement (SEO) ou les paramètres de référence API.
+  </Step>
+
+  <Step title="Publier ou ouvrir une pull request">
+    Si la branche de déploiement permet une publication directe, publiez pour valider et synchroniser le changement.
+
+    Si la branche est protégée ou que le changement nécessite une revue, créez une pull request à partir de la branche de fonctionnalité vers la branche de déploiement.
+  </Step>
+
+  <Step title="Examinez l'aperçu">
+    Ouvrez le déploiement d'aperçu pour la branche ou la pull request.
+
+    Vérifiez le rendu des pages, la navigation, la recherche, les pages de référence API, les réponses de l'assistant et toutes les ressources modifiées.
+  </Step>
+
+  <Step title="Fusionnez et vérifiez le site publié">
+    Fusionnez la pull request révisée dans la branche de déploiement.
+
+    Une fois la synchronisation terminée, ouvrez le site publié et vérifiez directement la page mise à jour.
+  </Step>
+</Steps>
+
+## Publication via un dépôt hébergé
+
+Utilisez ce flux lorsque le site a été créé avec la source de démarrage hébergée pendant l'inscription.
+
+<Steps>
+  <Step title="Modifiez dans le tableau de bord">
+    Ouvrez l'éditeur et apportez les modifications au contenu ou à la configuration.
+  </Step>
+
+  <Step title="Enregistrez le changement">
+    Enregistrez via le flux du tableau de bord et attendez que l'élément d'activité soit terminé.
+  </Step>
+
+  <Step title="Vérifiez le site publié">
+    Ouvrez l'URL publique et confirmez que la page, la navigation, le résultat de recherche ou la référence API a changé comme prévu.
+  </Step>
+</Steps>
+
+Vous pouvez passer d'une source hébergée à un dépôt Git géré par le client plus tard. Voir [Essentiels Git](/fr/editor/git-essentials) et [GitHub](/fr/deployment/github).
+
+## Publier depuis Git local
+
+Les développeurs peuvent publier sans ouvrir l'éditeur du tableau de bord.
+
+```bash
+git pull
+git add .
+git commit -m "docs: describe the change"
+git push
+```
+
+Poussez directement uniquement si votre politique de dépôt le permet et que la branche cible est la branche de déploiement configurée. Sinon, poussez vers une branche de fonctionnalité et ouvrez une pull request ou une demande de fusion.
+
+Après le push ou la fusion, dubstack synchronise la source configurée avec les artefacts publiés. Si le webhook n'aboutit pas, exécutez une mise à jour manuelle depuis le tableau de bord.
+
+## Déploiements d'aperçu
+
+Les déploiements d'aperçu permettent aux réviseurs d'inspecter une branche avant son passage en production.
+
+Utilisez les aperçus pour vérifier :
+
+- nouvelles pages et pages supprimées
+- changements de navigation
+- rendu des points de terminaison de la référence API
+- blocs de code, encarts, onglets, accordéons et tableaux
+- comportement de chemin de domaine personnalisé ou `/docs` lorsqu'il est pertinent
+- réponses de l'assistant et découverte publique de MCP après les mises à jour de la source
+
+Les URL d'aperçu sont des surfaces de révision temporaires. La branche de déploiement reste la source du site de documentation en production.
+
+Pour le workflow complet de revue de branche, consultez [Branchement et publication](/fr/editor/branching-and-publishing).
+
+## Mise à jour manuelle
+
+Utilisez la mise à jour manuelle lorsque :
+
+- un webhook n'est pas arrivé
+- une fenêtre de maintenance du fournisseur a retardé les événements du dépôt
+- vous avez modifié l'URL d'une spécification OpenAPI hébergée
+- vous devez resynchroniser la branche actuelle après un déploiement échoué
+- le support vous demande de rafraîchir les artefacts publiés
+
+La mise à jour manuelle ne remplace pas le contrôle de source. Elle relance le chemin de publication à partir de la source configurée.
+
+## Vérifications de déploiement
+
+Après la publication, vérifiez :
+
+- l'élément d'activité s'est terminé avec succès
+- l'historique de déploiement montre la dernière synchronisation attendue
+- les pages modifiées s'ouvrent sur le site publié
+- la navigation et la recherche incluent les nouvelles pages
+- les pages des points de terminaison API s'affichent si le changement implique OpenAPI
+- `llms.txt`, `llms-full.txt`, `skill.md` et le MCP public reflètent le changement lorsqu'une découverte par IA est activée
+
+<Callout type="warning">
+  Ne comptez pas uniquement sur l'aperçu du tableau de bord pour la vérification en production. Ouvrez toujours l'URL publique après la publication.
+</Callout>
+
+## Sujets connexes
+
+- [Branchement et publication](/fr/editor/branching-and-publishing)
+- [Essentiels Git](/fr/editor/git-essentials)
+- [Déploiements d'aperçu](/fr/deployment/preview-deployments)
+- [Mises à jour manuelles et historique](/fr/deployment/manual-updates-history)
+
+## Dépannage
+
+### Publier est désactivé
+
+Vérifiez qu'il y a des modifications en attente, que votre compte peut écrire dans la source et que la branche sélectionnée autorise l'action que vous essayez d'effectuer.
+
+### Une pull request est requise
+
+Votre branche de déploiement est protégée. Créez une branche et une pull request, puis fusionnez après examen.
+
+### Le site publié affiche toujours l'ancien contenu
+
+Vérifiez l'historique du déploiement. Si aucune synchronisation n'a eu lieu, utilisez la mise à jour manuelle et vérifiez que le webhook du fournisseur est toujours configuré.
+
+### L'aperçu fonctionne, mais pas le site publié
+
+Confirmez que la pull request a été fusionnée dans la branche de déploiement configurée dans les paramètres Git.
+
+### Une page d'API générée est manquante
+
+Confirmez que le chemin de la spécification OpenAPI est configuré, validé dans la source et inclus dans la branche qui a déclenché la synchronisation.

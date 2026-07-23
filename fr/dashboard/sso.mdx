@@ -1,0 +1,94 @@
+---
+title: Connexion unique
+shortTitle: SSO
+description: "Configurez les contrôles d'identité d'entreprise pour l'accès au tableau de bord."
+icon: building-2
+---
+
+La connexion unique permet aux organisations Enterprise de rediriger l'accès au tableau de bord vers leur fournisseur d'identité.
+
+<Callout type="info">
+  La connexion unique est une fonctionnalité entreprise. Si les contrôles SSO ne sont pas visibles dans votre tableau de bord, vérifiez le plan actuel et l'état des droits dans la facturation.
+</Callout>
+
+## Fonctionnement des contrôles SSO
+
+Les contrôles SSO déterminent comment les membres de l'équipe s'authentifient sur le tableau de bord de dubstack. Cela ne remplace pas les autorisations des fournisseurs Git, la protection des branches de dépôt ou l'authentification des visiteurs du site de documentation.
+
+Utilisez la connexion unique lorsque votre organisation a besoin de :
+
+- gestion centralisée des identités
+- méthodes de connexion d'entreprise obligatoires
+- déprovisionnement simplifié des utilisateurs
+- revues d'accès d'entreprise
+- séparation entre l'accès au tableau de bord et l'accès au dépôt
+
+## Modèle de configuration pris en charge
+
+Le tableau de bord stocke la configuration SSO au niveau de l'organisation. Les organisations Enterprise peuvent configurer les détails du fournisseur depuis la page Paramètres d'authentification.
+
+Préparez ces valeurs avant de configurer la connexion unique :
+
+| Valeur | Objectif |
+| --- | --- |
+| Fournisseur | Le fournisseur d'identité utilisé par votre organisation. |
+| Domaine de l'organisation | Le domaine de courriel attendu pour les membres. |
+| ID client | Identifiant client OAuth/OIDC public fourni par le fournisseur. |
+| Secret client | Secret émis par le fournisseur. Stockez-le uniquement dans le champ du tableau de bord. |
+| URL d'autorisation | Point d'accès du fournisseur qui démarre le flux de connexion. |
+| URL du jeton | Point d'accès du fournisseur utilisé pour échanger le code de connexion. |
+| URL des informations utilisateur | Point d'accès du fournisseur utilisé pour récupérer les détails d'identité lorsqu'ils sont requis. |
+
+La disponibilité exacte des champs dépend du fournisseur activé et des droits d'accès de l'espace de travail.
+
+## Statut de provisionnement SCIM
+
+Le provisionnement SCIM fait partie de la feuille de route de l'identité Enterprise, mais il n'est pas encore disponible en libre-service dans le tableau de bord.
+
+Aujourd'hui, utilisez le SSO pour contrôler la connexion et gérez l'accès de l'équipe depuis **Tableau de bord > Membres de l'équipe**. Lorsque SCIM est activé pour un espace de travail Enterprise, il doit rester distinct de la configuration de connexion :
+
+| Contrôle | Objectif |
+| --- | --- |
+| SSO | Contrôle la manière dont les membres s'authentifient sur le tableau de bord. |
+| Membres de l'équipe | Contrôle l'appartenance actuelle à l'espace de travail et les rôles. |
+| SCIM | Provisionnera, mettra à jour et désapprovisionnera les membres provenant d'un fournisseur d'identité lorsqu'il est activé pour l'espace de travail. |
+
+Jusqu'à ce que le SCIM soit activé pour votre espace de travail, continuez à supprimer les utilisateurs à la fois de l'adhésion à dubstack et des systèmes connectés lors de l'offboarding.
+
+## Configurer le SSO
+
+1. Ouvrez le tableau de bord.
+2. Allez dans **Paramètres > Authentification**.
+3. Confirmez que l'espace de travail utilise une offre Enterprise ou un essai avec le SSO activé.
+4. Choisissez le type de fournisseur disponible pour votre espace de travail.
+5. Copiez l'URL de redirection affichée par dubstack dans votre fournisseur d'identité.
+6. Entrez les détails du client et du point de terminaison du fournisseur dans dubstack.
+7. Enregistrez la configuration.
+8. Testez la connexion avec un membre non propriétaire avant d'imposer le SSO en production.
+
+## Accès de secours
+
+Maintenez au moins un compte de propriétaire ou d'administrateur avec un chemin de récupération testé avant de modifier les paramètres d'identité.
+
+Pratique recommandée :
+
+- maintenez la propriété sur une boîte aux lettres contrôlée par l'entreprise pérenne
+- stockez les identifiants de récupération dans un gestionnaire de mots de passe
+- testez le SSO avec un membre secondaire avant de vous y fier
+- documentez qui peut désactiver ou réparer le SSO si le fournisseur est indisponible
+
+## Départ d'un utilisateur avec le SSO
+
+La suppression d'un utilisateur du fournisseur d'identité devrait empêcher ses connexions futures via le SSO, mais vous devriez également examiner :
+
+- adhésion à l'organisation dubstack
+- accès au dépôt du fournisseur Git
+- accès à l'espace de travail Slack ou Jira utilisé par les intégrations
+- invitations en attente
+- clés API actives créées ou gérées par l'utilisateur
+
+## Sujets connexes
+
+- [Membres de l'équipe](/fr/dashboard/team-members)
+- [Rôles](/fr/dashboard/roles)
+- [Facturation et abonnements](/fr/dashboard/billing-plans)

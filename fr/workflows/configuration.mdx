@@ -1,0 +1,174 @@
+---
+title: Configurer les exécutions de flux de travail
+description: "Configurer les déclencheurs, les planifications, le contexte, les intégrations, les notifications et les modes d'exécution"
+icon: settings-2
+---
+
+La configuration du flux de travail contrôle quand le flux de travail s'exécute, quel contexte il peut lire et comment les modifications de documentation sont appliquées
+
+Ouvrez **Automate > Workflows**, sélectionnez un flux de travail, puis utilisez le panneau de configuration.
+
+Dans les documents de flux de travail, **pull request** désigne la demande de revue native du fournisseur pour le fournisseur Git connecté. Pour GitLab, il s'agit d'une demande de fusion ; pour Forgejo, il s'agit d'une pull request sur l'instance Forgejo
+
+## Types de déclencheurs
+
+Chaque flux de travail n'expose que les types de déclencheurs qu'il prend en charge
+
+| Déclencheur | Comportement |
+| --- | --- |
+| Mise à jour du contenu | S'exécute après que les modifications du contenu des documents soient synchronisées depuis le dépôt de documentation connecté |
+| Changement de code | S'exécute lorsqu'un changement d'un dépôt source pris en charge est fusionné |
+| Planification personnalisée | S'exécute selon une planification récurrente |
+
+Pour les flux de travail de changement de code, sélectionnez les dépôts sources qui doivent déclencher ou informer l'exécution
+
+## Planifications
+
+Les flux de travail planifiés utilisent l'une des préconfigurations de planification prises en charge :
+
+| Préconfiguration | Comportement |
+| --- | --- |
+| Journalier | Ajoute à la file d'attente après l'expiration de l'intervalle journalier |
+| Tous les lundis | Ajoute à la file d'attente à la prochaine limite de lundi UTC après l'exécution planifiée précédente |
+| Tous les vendredis | Ajoute à la file d'attente à la prochaine limite de vendredi UTC après l'exécution planifiée précédente |
+| Deux fois par semaine | Ajoute à la file d'attente à la prochaine limite de mardi ou jeudi UTC après l'exécution planifiée précédente |
+
+Le planificateur scanne les flux de travail planifiés activés et ajoute à la file d'attente les exécutions dues dans la fenêtre de délai d'attente configurée, normalement dans les 10 minutes
+
+## Exécutions déclenchées par l'API
+
+Les flux de travail utilisant le déclencheur **Planification personnalisée** peuvent également être déclenchés par un système backend de confiance via l'API Admin
+
+Utilisez ceci lorsque votre propre planificateur, pipeline CI, outil de libération ou plateforme interne doit décider quand le flux de travail s'exécute
+
+Les exécutions déclenchées par l'API Admin utilisent toujours la configuration sauvegardée du flux de travail :
+
+- mode de mise à jour
+- dépôts de contexte
+- contexte d'intégration
+- paramètres de notification
+- instructions supplémentaires
+- champs de configuration spécifiques au flux de travail
+
+L'API Admin ne contourne pas les vérifications de préparation. Le flux de travail doit être activé, utiliser le déclencheur **Planification personnalisée**, avoir un accès d'écriture sur les dépôts, respecter les exigences de configuration et rester dans la limite quotidienne d'exécutions.
+
+Voir [clés API](/fr/dashboard/api-keys) pour la création, la portée et des exemples de déclenchement.
+
+## Modes de mise à jour
+
+| Mode | Comportement |
+| --- | --- |
+| Exiger une revue | Ouvre une demande de revue native du fournisseur pour la revue. |
+| Automatiquement | Applique la modification directement lorsque le flux de travail est autorisé à écrire. |
+
+Utilisez **Exiger une revue** pour les documents de production, sauf si le flux de travail est limité, à faible risque et facile à annuler.
+
+Les mises à jour automatiques suivent toujours les autorisations du fournisseur Git et la politique de branche configurées. Si les validations directes sont bloquées par la protection de branche ou les règles du dépôt, passez le flux de travail en **Exiger une revue** ou mettez intentionnellement à jour la politique du fournisseur.
+
+Pour les dépôts GitHub qui doivent autoriser les mises à jour de flux de travail sélectionnées à fusionner automatiquement, voir [Configurer l'automerge](/fr/deployment/configure-automerge).
+
+## Dépôts de contexte
+
+Les dépôts de contexte permettent au flux de travail d'inspecter le code source ou les dépôts de produit en plus du dépôt de documentation.
+
+Utilisez-les lorsque les modifications de documentation dépendent des détails d'implémentation du produit.
+
+Le dépôt de contexte peut être différent du dépôt de documentation et utiliser un fournisseur différent. Le flux de travail lit le contexte du dépôt source sélectionné, puis écrit les modifications de documentation générées dans le dépôt de documentation actif.
+
+Un flux de travail peut utiliser jusqu'à 10 dépôts de contexte. Sélectionnez un nombre plus restreint de dépôts lorsque possible ; un contexte étendu augmente le bruit et l'utilisation des crédits.
+
+Maintenez un contexte ciblé :
+
+- sélectionnez uniquement les dépôts pertinents pour le flux de travail
+- privilégiez la branche par défaut sauf si le flux de travail cible une branche de version
+- évitez d'ajouter des dépôts larges qui augmentent le bruit et l'utilisation des jetons
+
+Les dépôts de contexte sont en lecture seule. Le flux de travail écrit toujours dans le dépôt de documentation connecté.
+
+### Définir le contexte du dépôt par chemin
+
+Pour les grands dépôts, ajoutez une portée de chemin pour maintenir le contexte du flux de travail ciblé sur la partie du dépôt qui compte.
+
+Exemples :
+
+```text
+apps/marketing
+services/content-service
+packages/sdk
+```
+
+Le chemin doit être relatif à la racine du dépôt. N'incluez pas de slash initial, `..`, ou une URL complète.
+
+Utilisez la portée de chemin lorsqu’
+
+- le dépôt est un monorepo
+- seulement un service, un package ou une application devrait influencer la tâche de documentation
+- vous souhaitez que les détails de l'exécution et les invites montrent la limite source souhaitée
+
+La portée de chemin limite le contexte et les instructions pour le flux de travail. Lorsqu'un événement de fournisseur inclut des métadonnées de fichiers modifiés, les flux de travail de changement de code ignoreront les événements qui ne touchent pas la portée de chemin configurée. Si les chemins modifiés ne sont pas disponibles à partir de l'événement, le flux de travail passe à la correspondance au niveau du dépôt.
+
+## Contexte d'intégration
+
+Les flux de travail pris en charge peuvent utiliser des intégrations connectées.
+
+| Intégration | Utilisation typique |
+| --- | --- |
+| Slack | Lire le contexte du canal ou du fil sélectionné et envoyer les notifications du flux de travail. |
+| Jira | Lire le contexte des problèmes délimités à partir d'une requête JQL et d'une limite d'issues. |
+
+Le contexte d'intégration n'est disponible que lorsque l'intégration est connectée et que le flux de travail prend en charge ce type de contexte.
+
+Le contexte Slack nécessite un canal sélectionné. Un horodatage de fil peut restreindre le contexte à un seul fil.
+
+Le contexte Jira nécessite une requête JQL. Le flux de travail lit un nombre délimité d'issues, limité à 10 par exécution.
+
+Le flux de travail utilise le contexte d'intégration comme outil en temps réel pour l'exécution. Il ne lit pas activement depuis les applications connectées, et il n'utilise pas les fournisseurs non sélectionnés pour le flux de travail.
+
+## Paramètres de traduction
+
+Les flux de travail de traduction nécessitent au moins une langue cible et un routage de traduction au niveau du déploiement.
+
+Les langues cibles sont lues à partir des langues configurées dans votre configuration de documentation. Si le site n'a pas encore configuré les langues, le tableau de bord peut afficher les langues du catalogue comme des modèles de configuration, mais la traduction en production doit utiliser les itinéraires de langue configurés que les lecteurs peuvent naviguer.
+
+Si le routage de traduction n'est pas disponible pour le déploiement, le flux de travail reste visible mais bloqué avec un message d'indisponibilité du runner.
+
+## Instructions supplémentaires
+
+Certains flux de travail acceptent des instructions facultatives qui sont ajoutées à l'invite intégrée.
+
+Utilisez les instructions pour définir des règles spécifiques au produit, du vocabulaire, du style, des répertoires cibles ou des attentes de revue. Gardez les instructions ciblées ; les invites générales augmentent les coûts et rendent les résultats plus difficiles à réviser.
+
+Le flux de travail **Appliquer votre guide de style** nécessite des instructions de guide de style sauvegardées avant d'être activé.
+
+## Notifications
+
+Lorsque Slack est connecté, les flux de travail peuvent envoyer les résultats de l'exécution à des canaux sélectionnés.
+
+Utilisez **Paramètres > Espace de travail > Notifications** pour consulter la préparation des notifications et l'historique récent de livraison à travers les flux de travail pour le site sélectionné.
+
+Modes de notification :
+
+| Mode | Comportement |
+| --- | --- |
+| Tous les résultats des exécutions | Notifier lorsqu'une exécution réussit ou échoue. |
+| Seuls les échecs | Notifier uniquement lorsqu'une exécution échoue. |
+
+Les flux de travail de pull request peuvent également envoyer des mises à jour Slack lorsqu'une pull request générée a été en attente de révision et lorsqu'elle est fusionnée.
+
+Invitez l'application au canal cible avant de la sélectionner.
+
+## Exécuter maintenant
+
+Utilisez **Exécuter une fois** pour ajouter manuellement un flux de travail pris en charge après sa configuration et son activation.
+
+Le runner vérifie la disponibilité avant de commencer. Si l'accès au dépôt requis, la configuration du modèle, les champs de configuration ou le contexte d'intégration est manquant, le tableau de bord affiche la raison de l'obstruction.
+
+## Sujets connexes
+
+- [Flux de travail](/fr/workflows)
+- [Gérer les flux de travail](/fr/workflows/manage)
+- [Référence des flux de travail](/fr/workflows/reference)
+- [Intégrations de flux de travail](/fr/workflows/integrations)
+- [Notifications](/fr/dashboard/notifications)
+- [Intégration Slack](/fr/ai/integrations/slack)
+- [Intégration Jira](/fr/ai/integrations/jira)

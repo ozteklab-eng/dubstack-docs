@@ -1,0 +1,67 @@
+---
+title: Créer un site
+description: Créez un site de documentation depuis le tableau de bord.
+icon: plus
+---
+
+Un site est la surface de documentation publique pour un produit, une API ou une base de connaissances.
+
+Chaque site dispose de son propre dépôt source, de sa navigation, de son historique de déploiement, de ses branches de prévisualisation et de son URL en direct.
+
+## Créer le site
+
+Depuis le tableau de bord :
+
+1. Choisissez l'organisation qui devrait posséder le site.
+2. Démarrer le flux du nouveau site.
+3. Sélectionnez le type de documentation que vous êtes en train de créer.
+4. Choisissez si vous souhaitez connecter Git ou utiliser un dépôt de démarrage hébergé.
+5. Confirmez le nom du site et le profil de démarrage.
+6. Continuez vers le tableau de bord une fois que la configuration est terminée.
+
+Le tableau de bord s'ouvre sur la page d'accueil du nouveau site après sa création.
+
+## Options de source
+
+### Connecter Git
+
+Connectez Git lorsque votre équipe souhaite conserver la propriété du dépôt de documentation.
+
+Utilisez cela pour la documentation de production lorsque vous avez déjà :
+
+- Un dépôt GitHub, GitLab ou Forgejo.
+- Une branche par défaut préférée.
+- Des documents MDX existants ou une spécification OpenAPI.
+- Un flux de revue basé sur des pull requests ou des demandes de fusion.
+
+### Dépôt hébergé
+
+Utilisez le flux de dépôt hébergé lorsque vous souhaitez commencer sans préparer un dépôt en premier.
+
+Cela crée un site basé sur un démarrage pouvant être modifié depuis le tableau de bord. Vous pouvez connecter un fournisseur Git du client plus tard lorsque votre équipe est prête à posséder directement le dépôt.
+
+## Ce qui est créé
+
+Un nouveau site inclut :
+
+- Un domaine de prévisualisation `dubstack.live`.
+- Une connexion source ou une source de démarrage hébergée.
+- Un fichier de configuration `dubstack.json`.
+- Pages MDX de démarrage.
+- Une vue d'ensemble du tableau de bord avec une activité de publication.
+- Accès éditeur pour les modifications de contenu.
+
+## Vérifier la configuration
+
+Après la création du site :
+
+- Ouvrez la prévisualisation en direct depuis le tableau de bord.
+- Confirmez que le titre du site et la navigation sont corrects.
+- Ouvrez l'éditeur et vérifiez que les fichiers sont visibles.
+- Effectuez une mise à jour manuelle si la prévisualisation en direct attend la première synchronisation.
+
+## Dépannage
+
+Si le site s'ouvre mais que le contenu est manquant, effectuez une mise à jour manuelle depuis le tableau de bord et vérifiez le panneau d'activité.
+
+Si la connexion Git échoue, vérifiez que le dépôt existe, que l'application Git installée a accès à celui-ci et que la branche sélectionnée existe.

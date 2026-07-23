@@ -1,0 +1,172 @@
+---
+title: Style et ton
+description: "Rédigez des documents directs, utiles et cohérents sur toutes les pages de produit, d'API et de flux de travail."
+icon: pen-line
+---
+
+Une bonne documentation est spécifique à l'objectif du lecteur, honnête sur le comportement du produit et cohérente sur toutes les pages.
+
+Utilisez ce guide lors de la rédaction ou de la relecture des documents de produit, des guides d'API, des pages de migration, des instructions destinées à l'assistant et des documents de flux de travail.
+
+## Principes de rédaction
+
+| Principe | Ce que cela signifie |
+| --- | --- |
+| Soyez directif | Dites au lecteur ce qu'il doit faire et pourquoi cela importe. |
+| Soyez concret | Utilisez les termes précis du produit, les noms de page, les chemins de fichier et les résultats attendus. |
+| Soyez honnête | Ne documentez pas les fonctionnalités non livrées ou non validées. |
+| Soyez cohérent | Utilisez les mêmes noms pour les mêmes concepts dans l'ensemble des documents. |
+| Soyez facile à parcourir | Utilisez des sections courtes, des tableaux et des listes lorsque cela réduit l'effort. |
+
+## Privilégiez les résultats des tâches
+
+Commencez les pages par le résultat attendu par le lecteur.
+
+Bon :
+
+```mdx
+Use this guide to connect a GitHub repository and publish docs from your deployment branch.
+```
+
+Faible :
+
+```mdx
+This page explains GitHub.
+```
+
+Les lecteurs devraient savoir en quelques secondes s'ils sont sur la bonne page.
+
+## Utilisez des termes de produit cohérents
+
+Utilisez ces termes de manière cohérente :
+
+| Utilisez | Signification |
+| --- | --- |
+| Site | Un site de documentation publié et géré à partir du tableau de bord. |
+| Espace de travail | L'espace d'équipe ou de compte qui gère les sites, les membres, la facturation et les intégrations. |
+| Branche de déploiement | La branche Git utilisée pour publier le site de documentation en ligne. |
+| Artifacts publiés | Le contenu construit servi par l'interface publique des documents. |
+| Assistant | L'assistant de documentation visible par les lecteurs sur le site public. |
+| Agent | L'agent de rédaction du tableau de bord ou de Slack qui peut proposer des modifications de documentation. |
+| Flux de travail | Une automatisation planifiée ou déclenchée par un événement qui examine ou met à jour les documents. |
+| MCP public | La surface MCP en lecture seule pour les documents publiés. |
+
+Évitez d'utiliser plusieurs noms pour la même chose.
+
+## Soyez clair sur la disponibilité
+
+Si une fonction dépend d'un plan, d'un fournisseur, d'un accès au dépôt ou de l'état du produit, précisez-le en haut de la page.
+
+Exemples :
+
+- "Les domaines personnalisés nécessitent un plan payant."
+- "GitLab autohébergé doit être accessible via HTTPS."
+- "Les pull requests rédigées par l'agent nécessitent un accès d'écriture au dépôt."
+- "L'authentification SSO d'entreprise nécessite un espace de travail Enterprise."
+
+Ne pas cacher la disponibilité dans les sections de dépannage.
+
+## Écrivez les procédures sous forme d'étapes
+
+Utilisez des étapes numérotées lorsque l'ordre compte.
+
+```mdx
+1. Open **Settings > Deployment > Git settings**.
+2. Select the provider.
+3. Choose the repository and branch.
+4. Save changes.
+5. Run a manual update if the site does not sync automatically.
+```
+
+Utilisez des puces lorsque l'ordre n'a pas d'importance.
+
+## Maintenez les exemples réalistes
+
+Utilisez des exemples qui ressemblent à des projets de documentation réels sans exposer de secrets.
+
+Valeurs d'exemple pertinentes :
+
+- `your-org`
+- `your-docs-repo`
+- `docs.example.com`
+- `api.example.com`
+- `<token>`
+
+Évitez les domaines clients réels, les jetons privés, les adresses e-mail personnelles ou les noms d'hôte internes dans les documents publics.
+
+## Structurez les pages de produit
+
+La plupart des pages de produit doivent suivre cette structure :
+
+1. Résumé des résultats.
+2. Prérequis.
+3. Étapes de configuration.
+4. Ce qui se passe après la configuration.
+5. Dépannage.
+6. Pages connexes.
+
+Les pages de référence courtes peuvent utiliser une structure plus simple, mais elles doivent toujours expliquer quand utiliser la fonctionnalité.
+
+## Structurer les pages API
+
+Les pages API doivent rendre claires la requête et la réponse avant de demander aux lecteurs de l'essayer.
+
+Inclure :
+
+- URL de base et contexte d'authentification
+- méthode et chemin
+- paramètres requis
+- champs du corps de la requête
+- réponse de succès
+- erreurs courantes
+- exemple de requête
+- points de terminaison connexes
+
+Voir [introduction à la référence API](/fr/api-reference/introduction) et [Générateur de requêtes](/fr/api-reference/request-builder).
+
+## Rédiger soigneusement les sections de dépannage
+
+Le dépannage doit identifier la limite susceptible de provoquer un échec.
+
+Bon :
+
+```mdx
+If manual update succeeds but automatic updates do not run, check the provider webhook.
+```
+
+Faible :
+
+```mdx
+If it does not work, try again later.
+```
+
+Utilisez le chemin du contrôle de version lors du débogage des problèmes de publication :
+
+```text
+Git repository
+-> webhook or manual update
+-> sync worker
+-> published artifacts
+-> public docs site, search, assistant, and MCP
+```
+
+## Aligner les documents sur le comportement livré
+
+Avant de publier une page, vérifiez :
+
+- La fonctionnalité existe dans le produit.
+- Les étiquettes de l'interface utilisateur dans les documents correspondent au tableau de bord.
+- Les exigences de plan ou de permissions sont précises.
+- Les liens fonctionnent sur le site de documentation en direct.
+- Les commandes et les exemples de code sont copiables.
+- L'assistant et le MCP public peuvent citer la page après synchronisation.
+
+Si une fonctionnalité est planifiée mais non livrée, conservez-la dans les documents de planification internes au lieu des documents publics.
+
+## Sujets connexes
+
+- [Accessibilité](/fr/guides/accessibility)
+- [Pages et fichiers](/fr/writing-content/pages-files)
+- [Branchement et publication](/fr/editor/branching-and-publishing)
+- [Dépannage de la gestion de version](/fr/deployment/source-control-troubleshooting)
+- [Public MCP](/fr/ai/mcp)

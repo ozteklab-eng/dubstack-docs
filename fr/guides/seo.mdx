@@ -1,0 +1,92 @@
+---
+title: Améliorer le référencement des documents
+description: "Utilisez les métadonnées de page, les titres, les liens internes, les cartes du site et les vérifications de flux de travail pour améliorer la découvrabilité de la documentation."
+icon: search
+---
+
+Les moteurs de recherche et la recherche intégrée au produit dépendent tous deux d'une structure de contenu claire. Une page avec un titre spécifique, une description utile, des titres descriptifs et des liens internes solides est plus facile à trouver pour les lecteurs et les agents.
+
+## Commencez par les métadonnées de page
+
+Chaque page importante doit avoir un frontmatter qui explique le contenu de la page.
+
+```mdx
+---
+title: Configure custom domains
+description: Point a domain or docs subdomain at your published docs site.
+---
+```
+
+Utilisez des titres qui correspondent à l'intention des lecteurs. Une page nommée `Authentication` est moins claire qu'une page nommée `Authenticate API requests`.
+
+Bonnes descriptions :
+
+- expliquez ce que le lecteur peut faire
+- utilisez un langage de produit clair
+- restez spécifique à la page
+- évitez de répéter le titre sans ajouter de détails
+
+## Structurez les pages pour faciliter le scan
+
+Utilisez un seul H1 issu du titre de la page, puis organisez le corps avec des titres H2 et H3.
+
+```mdx
+## Configure the provider
+
+### Add the redirect URL
+
+### Verify the connection
+```
+
+Les titres doivent être utiles en eux-mêmes car ils apparaissent dans la table des matières, les extraits de recherche et les exports lisibles par l'IA.
+
+## Liez les pages connexes
+
+Les liens internes aident les lecteurs à poursuivre une tâche et aident les systèmes de recherche à comprendre le contenu connexe.
+
+Utilisez des liens descriptifs :
+
+```mdx
+See [custom-domain troubleshooting](/deployment/custom-domains#troubleshooting).
+```
+
+Évitez les liens vagues :
+
+```mdx
+See [this page](/deployment/custom-domains).
+```
+
+Utilisez [Sujets connexes](/fr/writing-content/related-topics) en bas des pages de guide et de référence pour que les lecteurs puissent accéder à la page suivante utile.
+
+## Maintenez un référencement technique sain
+
+dubstack publie des documents avec des paramètres par défaut optimisés pour le référencement, mais les équipes de contenu doivent toujours gérer la qualité au niveau de la page.
+
+Vérifiez :
+
+- les titres et les descriptions sont uniques
+- les chemins canoniques sont corrects après les redirections
+- les pages importantes ne sont pas masquées ou marquées noindex
+- les images ont un texte alternatif descriptif
+- les pages obsolètes redirigent vers les pages actuelles
+- les cartes du site et les paramètres robots correspondent à la surface publique souhaitée
+
+Voyez [Référencement et paramètres de recherche](/fr/configuration/seo-search-reference) et [Référencement](/fr/optimize/seo) pour les détails de configuration.
+
+## Utilisez des flux de travail pour les vérifications récurrentes
+
+Utilisez **Corriger les problèmes de référencement** lorsqu'il faut réviser régulièrement les titres, les descriptions, les titres et les paramètres canoniques.
+
+Utilisez **Corriger les liens rompus** avant et après de grands changements de navigation.
+
+Exécutez des vérifications approfondies selon un planning et maintenez les changements à haut risque en mode **Requiert une revue**.
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/optimize/seo">Référencement</a>
+  <a href="/fr/configuration/seo-search-reference">Référencement et recherche</a>
+  <a href="/fr/guides/geo">Optimiser les documents pour la découverte de l'IA</a>
+  <a href="/fr/guides/linking">Lier les pages de documentation</a>
+  <a href="/fr/workflows/reference#fix-seo-issues">Flux de travail pour corriger les problèmes de référencement</a>
+</RelatedTopics>

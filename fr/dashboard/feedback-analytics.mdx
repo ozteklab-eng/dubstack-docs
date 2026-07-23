@@ -1,0 +1,121 @@
+---
+title: Analyse des commentaires
+description: "Examinez les commentaires des lecteurs et des agents collectés lors d'un déploiement."
+icon: chart-no-axes-combined
+---
+
+L'analyse des commentaires montre comment les lecteurs et les agents notent les pages de documentation, les réponses de l'assistant et les actions prises par les agents.
+
+Ouvrez **Analyse > Commentaires** depuis le tableau de bord pour consulter les commentaires du déploiement sélectionné.
+
+## Ce qui est suivi
+
+La vue des commentaires peut inclure :
+
+- nombre total de commentaires pour la plage de dates sélectionnée
+- nombre de notes positives et négatives
+- volume quotidien des commentaires
+- analyse de l'émotion
+- pages où les commentaires ont été soumis
+- analyse des sources des commentaires
+- analyse de l'état de révision
+- entrées de commentaires récents
+- notes de révision internes
+- adresses e-mail des lecteurs optionnelles lors de l'activation de la collecte
+
+Les commentaires sont limités au déploiement actuel. Le changement de déploiement modifie la portée de l'analyse.
+
+## Tableaux de commentaires
+
+| Tableau | Utilisez-le pour |
+| --- | --- |
+| Commentaires au fil du temps | Voyez si le volume des commentaires augmente ou diminue sur la plage de dates sélectionnée. |
+| Émotion | Comparez les notes positives et négatives. |
+| Pages les plus consultées | Trouvez les pages qui reçoivent le plus de commentaires. |
+| Sources | Séparez les commentaires sur les pages, les commentaires sur l'assistant et les commentaires sur les agents. |
+| État de révision | Voyez combien d'entrées de commentaires sont en attente, en cours, résolues ou rejetées. |
+| Commentaires récents | Examinez les dernières soumissions détaillées, les chemins des pages, les sources, les adresses e-mail des lecteurs optionnelles, l'état de révision et les notes internes. |
+
+## Statuts de révision
+
+Chaque entrée de feedback commence par **En attente**.
+
+Utilisez les statuts pour maintenir la file d'attente des feedbacks actionnable :
+
+| Statut | Signification |
+| --- | --- |
+| En attente | En attente de révision. |
+| En cours | Un suivi des documents ou du produit est en cours. |
+| Résolu | Le problème a été résolu. |
+| Rejeté | Le feedback n'est pas exploitable, est un doublon ou n'est plus pertinent. |
+
+Modifiez le statut à partir du sélecteur à côté d'une entrée de feedback récente. Le panneau **Statut de révision** s'actualise avec les derniers comptes pour la plage de dates sélectionnée.
+
+## Notes internes
+
+Utilisez les notes internes pour suivre le contexte uniquement accessible à l'équipe pour une entrée de feedback.
+
+Exemples :
+
+- `Assigned to docs owner`
+- `Duplicate of Jira DOC-42`
+- `Resolved by PR #128`
+- `Dismissed because the page already documents this behavior`
+
+Les notes sont stockées avec l'événement de feedback et sont visibles uniquement aux utilisateurs du tableau de bord ayant accès au déploiement.
+
+## Activer le feedback de page
+
+Le feedback de page dépend de l'extension **Évaluation par pouce**.
+
+1. Ouvrez **Paramètres > Déploiement > Extensions**.
+2. Activez **Évaluation par pouce**.
+3. Publiez ou actualisez le site de documentation.
+4. Vérifiez que les pages publiques affichent le contrôle de feedback.
+5. Consultez les évaluations soumises dans **Analytique > Feedback**.
+
+Si l'extension est désactivée, les soumissions de feedback des pages publiques sont rejetées pour ce déploiement.
+
+## Adresses e-mail des lecteurs (optionnelles)
+
+Le feedback de page peut collecter de manière optionnelle une adresse e-mail du lecteur.
+
+Activez cette fonctionnalité dans **Paramètres > Déploiement > Extensions** :
+
+1. Activez **Évaluation par pouce**.
+2. Activez **Collecter les adresses e-mail des lecteurs**.
+3. Ajoutez un avertissement par e-mail court.
+4. Publiez ou actualisez le site de documentation.
+
+La collecte des adresses e-mail des lecteurs est facultative. Si elles soumettent une adresse, le formulaire de feedback la valide avant d'envoyer l'événement. L'adresse e-mail apparaît dans la liste **Feedback récent** afin que votre équipe puisse suivre le suivi.
+
+Les adresses e-mail des lecteurs ne sont pas collectées pour le feedback de page à moins que l'add-on de déploiement ne soit activé.
+
+## Sources de feedback
+
+| Source | Signification |
+| --- | --- |
+| Feedback de page | Note soumise par un lecteur depuis une page de documentation. |
+| Feedback de l'assistant | Note soumise à une réponse de l'assistant. |
+| Feedback d'agent | Feedback structuré soumis par une surface d'agent activée. |
+
+Toutes les sources ne sont pas disponibles pour chaque offre ou déploiement. Utilisez la page des extensions pour consulter l'état des capacités actuelles.
+
+Le feedback d'agent n'apparaît que si l'extension **Feedback d'agent** est activée et que la surface de soumission envoie un problème de qualité de documentation via une interface d'agent publique, telle que l'outil public MCP `submit_feedback`.
+
+## Utiliser le feedback avec les workflows
+
+Le feedback peut alimenter des workflows d'amélioration de la documentation lorsqu'un workflow et les capacités nécessaires sont disponibles.
+
+Pour de meilleurs résultats :
+
+- collecter les chemins de page avec le feedback
+- demander aux lecteurs des commentaires courts lorsqu'une information n'est pas utile
+- garder le feedback négatif lié à des lacunes concrètes dans les documents
+- examiner les demandes de fusion générées avant de les intégrer
+
+## Sujets connexes
+
+- [Extensions](/fr/settings/deployment/addons)
+- [Référence sur les workflows](/fr/workflows/reference)
+- [Configurer les exécutions de workflow](/fr/workflows/configuration)

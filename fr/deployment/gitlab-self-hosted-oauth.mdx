@@ -1,0 +1,149 @@
+---
+title: OAuth GitLab auto-hébergé
+description: "Connectez une instance GitLab auto-hébergée accessible pour la création d'agents et de workflows."
+icon: gitlab
+---
+
+L'OAuth GitLab auto-hébergé permet aux workflows dubstack d'agir en tant qu'utilisateur GitLab autorisé sur une instance GitLab accessible.
+
+Utilisez-le lorsque votre dépôt de documentation ou les dépôts de contexte des workflows se trouvent sur une instance GitLab auto-hébergée et que vous souhaitez que les agents, Slack ou les actions de workflow créent des modifications de documentation sous forme de branches, de validations et de demandes de fusion.
+
+<Callout type="info">
+  L'OAuth GitLab auto-hébergé n'est qu'une connexion d'auteur. Configurez séparément le jeton d'accès au dépôt GitLab afin que dubstack puisse lire ou copier le contenu du dépôt. Voir [GitLab](/fr/deployment/gitlab).
+</Callout>
+
+## Ce que l'OAuth permet
+
+Lorsque l'OAuth GitLab auto-hébergé est connecté, les workflows éligibles peuvent :
+
+- lire les métadonnées utilisateur et de projet GitLab
+- créer une branche de fonctionnalité
+- écrire ou mettre à jour les fichiers de documentation
+- valider les modifications générées de documentation
+- ouvrir une demande de fusion contre la branche configurée
+- collecter le contexte limité des demandes de fusion pour les exécutions de workflow
+
+Les permissions GitLab s'appliquent toujours. L'utilisateur GitLab connecté doit avoir les permissions nécessaires pour lire le projet et créer des branches ou des demandes de fusion.
+
+## Prérequis
+
+Avant de vous connecter, vérifiez :
+
+- l'instance GitLab est accessible depuis dubstack via HTTPS
+- l'instance utilise un certificat TLS fiable
+- le dépôt de documentation existe sur cette instance
+- la connexion du jeton d'accès au dépôt est configurée dans [Paramètres Git](/fr/deployment/gitlab)
+- votre espace de travail dubstack a l'OAuth GitLab auto-hébergé activé
+- l'utilisateur GitLab qui autorise l'OAuth peut créer des branches et des demandes de fusion dans le projet
+
+Si vous ne voyez pas **Connecter GitLab auto-hébergé** dans les paramètres Git, contactez l'opérateur ou l'équipe d'assistance dubstack pour activer la configuration de l'espace de travail.
+
+<Callout type="warning">
+  Les instances derrière un VPN, un réseau privé ou un pare-feu bloquant le HTTPS entrant ne peuvent pas terminer l'OAuth ou les appels d'API de projet. L'URL de l'instance que vous saisissez doit être accessible par dubstack en utilisant la même URL de base publique que GitLab annonce.
+</Callout>
+
+## Inscrire l'application OAuth
+
+Votre administrateur GitLab doit inscrire une application OAuth sur l'instance GitLab auto-hébergée.
+
+Utilisez ces paramètres :
+
+| Paramètre | Valeur |
+| --- | --- |
+| Nom de l'application | `dubstack` |
+| URI de redirection | Utilisez l'URI de redirection fourni pour votre espace de travail dubstack. |
+| Confidentiel | Activé |
+| Fiable | Désactivé sauf si votre équipe de sécurité souhaite intentionnellement ignorer la validation utilisateur |
+| Portées | `api`, `read_repository`, `write_repository` |
+
+<Callout type="warning">
+  Gardez le secret de l'application en dehors du dépôt de documentation. Les secrets des clients OAuth ne doivent être stockés que dans la configuration des secrets de l'espace de travail.
+</Callout>
+
+Utilisez les portées ci-dessus pour la rédaction. La portée `api` permet à dubstack d'inspecter les métadonnées du projet et de gérer les demandes de fusion, tandis que les portées de lecture/écriture du dépôt permettent aux exécutions de workflows autorisées de cloner, créer des branches et pousser des modifications de documentation.
+
+## Connecter l'accès à la rédaction
+
+Après avoir configuré l'espace de travail avec l'application OAuth GitLab auto-hébergée :
+
+1. Ouvrez le tableau de bord.
+2. Allez dans **Paramètres > Déploiement > Paramètres Git**.
+3. Choisissez **GitLab**.
+4. Entrez l'URL de l'instance GitLab auto-hébergée.
+5. Confirmez que le jeton d'accès au dépôt GitLab et la branche sont enregistrés.
+6. Cliquez sur **Connecter GitLab auto-hébergé**.
+7. Autorisez l'application OAuth dans GitLab.
+8. Retournez aux paramètres Git et confirmez que le statut OAuth GitLab est connecté.
+
+La connexion OAuth peut être limitée au site actuel ou utilisée comme sauvegarde organisationnelle, selon la configuration de votre espace de travail.
+
+## Sélectionner des projets
+
+Après la connexion OAuth, développez le compte GitLab dans les paramètres Git et sélectionnez les projets qui doivent être disponibles pour les workflows et les agents.
+
+Utilisez la sélection de projets pour contrôler la portée de la rédaction :
+
+- sélectionnez uniquement le dépôt de documentation lorsque les workflows doivent mettre à jour la documentation mais ne pas inspecter le code produit
+- sélectionnez les dépôts de code produit lorsque **Mise à jour à partir des modifications de code** doit les utiliser comme contexte
+- sélectionnez les dépôts de la même instance auto-hébergée que l'utilisateur OAuth peut accéder
+
+La sélection d'un projet ne le rend pas automatiquement la source de déploiement active. La source de déploiement active est toujours configurée par les champs de dépôt et de branche dans les paramètres Git.
+
+## Comportement des événements et des webhooks
+
+Pour les dépôts sources de workflow sélectionnés, dubstack peut enregistrer ou rafraîchir l'abonnement aux événements du fournisseur lorsqu'une instance le prend en charge et que l'utilisateur connecté a les autorisations nécessaires.
+
+Utilisez les événements du fournisseur pour les workflows réactifs tels que les mises à jour de documentation liées aux modifications de code. Les exécutions manuelles et planifiées de workflows peuvent toujours utiliser les dépôts sélectionnés en tant que contexte en lecture seule lorsque les événements ne sont pas disponibles.
+
+Si votre instance GitLab restreint les webhooks sortants, autorisez les appels HTTPS de GitLab vers le point de terminaison de l'API dubstack configuré pour votre espace de travail. Gardez les secrets des webhooks dans le tableau de bord ou le gestionnaire de secrets ; ne les collez pas dans les dépôts de documentation.
+
+## Valider la connexion
+
+Utilisez une action de rédaction sécurisée avant de faire confiance à la connexion dans un workflow de production :
+
+1. Ouvrez une branche de documentation non critique ou un site de test éphémère.
+2. Exécuter un agent ou une action de workflow qui rédige des modifications de documentation.
+3. Confirmer qu'une branche est créée dans GitLab.
+4. Confirmer que le commit contient uniquement les fichiers de documentation attendus.
+5. Confirmer que la demande de fusion cible la branche configurée.
+
+Ne pas tester la rédaction sur un déploiement protégé contre les modifications du dépôt. Les déploiements protégés bloquent intentionnellement les modifications du dépôt provenant des agents et de Slack.
+
+## Renouveler les identifiants
+
+Si le secret de l'application OAuth de GitLab change :
+
+1. Mettre à jour la configuration des secrets de l'espace de travail.
+2. Reconnecter l'OAuth de GitLab dans les paramètres Git.
+3. Relancer une validation de rédaction sécurisée.
+
+Si un utilisateur GitLab quitte l'équipe ou perd l'accès au projet, déconnectez-vous puis reconnectez-vous avec un compte de service ou un autre utilisateur autorisé.
+
+## Dépannage
+
+### La connexion à GitLab auto-hébergé est absente
+
+L'espace de travail n'est pas configuré pour l'OAuth de GitLab auto-hébergé. Contactez votre opérateur dubstack ou votre équipe de support.
+
+### L'autorisation OAuth échoue
+
+Vérifiez l'URI de redirection, l'ID client, le secret client et les étendues de l'application OAuth. Un secret client obsolète ou un URI de redirection non correspondant provoque généralement des échecs d'autorisation.
+
+### La rédaction indique que l'OAuth de GitLab n'est pas connecté
+
+Reconnectez l'OAuth de GitLab dans les paramètres Git. Le jeton d'accès au dépôt seul ne peut pas créer de branches, de validations ou de demandes de fusion.
+
+### La création de demande de fusion échoue
+
+Confirmez que l'utilisateur GitLab connecté a les autorisations nécessaires pour créer des branches et des demandes de fusion dans le dépôt, et vérifiez que la protection des branches permet l'opération.
+
+### Le contexte du workflow ignore les demandes de fusion
+
+Confirmez que le workflow a le contexte du dépôt GitLab sélectionné, que la connexion OAuth de GitLab est connectée, et que le type d'exécution prend en charge le contexte de demande de fusion délimité.
+
+## Sujets connexes
+
+- [GitLab](/fr/deployment/gitlab)
+- [Fournisseurs Git](/fr/deployment/forgejo-github-gitlab)
+- [Dépannage du contrôle de source](/fr/deployment/source-control-troubleshooting)
+- [Workflows](/fr/workflows)

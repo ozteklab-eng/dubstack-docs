@@ -1,0 +1,76 @@
+---
+title: Prévisualisation des déploiements
+description: Prévisualisez les modifications de la documentation avant de les publier en production.
+icon: eye
+---
+
+Les prévisualisations de déploiement permettent à votre équipe d'examiner les modifications de la documentation avant qu'elles ne deviennent les documents de production en direct.
+
+Utilisez les prévisualisations pour les pull requests, les revues de branche et les modifications de contenu nécessitant une validation visuelle.
+
+## Quand utiliser les prévisualisations
+
+Utilisez une prévisualisation lorsque vous souhaitez vérifier :
+
+- une nouvelle page ou section
+- les changements de navigation
+- les pages de points de terminaison générées par OpenAPI
+- les captures d'écran et les ressources
+- les changements de thème ou de mise en page
+- le comportement de l'assistant/recherche après des modifications de contenu
+
+Ne pas utiliser les prévisualisations comme site de production à long terme. Gardez une branche de production configurée pour les documents en direct.
+
+## Comment fonctionnent les prévisualisations
+
+Une prévisualisation est créée à partir d'une branche non de production ou d'un événement de revue.
+
+```text
+Branch or pull request
+-> preview sync
+-> preview URL
+-> review and approve
+-> merge to production branch
+-> live sync
+```
+
+La prévisualisation utilise le même rendu que le site en direct, donc les problèmes visuels détectés en prévisualisation sont généralement des problèmes de publication réels.
+
+## Quoi examiner
+
+Avant de fusionner une modification de documentation :
+
+- Ouvrez l'URL de la prévisualisation.
+- Vérifiez les pages modifiées.
+- Vérifiez la navigation de la barre latérale et l'ordre des pages.
+- Vérifiez les liens vers les pages renommées ou déplacées.
+- Vérifiez les pages de points de terminaison si OpenAPI a changé.
+- Vérifiez la largeur mobile pour les pages contenant des tableaux ou des exemples de code volumineux.
+
+## Comportement des branches
+
+Les documents de production doivent provenir de la branche de déploiement configurée. Les branches de prévisualisation sont des surfaces de revue temporaires.
+
+Si une branche de prévisualisation est supprimée, sa prévisualisation peut être supprimée ou laissée expirer en fonction de la politique de l'espace de travail.
+
+## Accès aux prévisualisations
+
+Les URLs de prévisualisation sont des surfaces de revue pour votre déploiement.
+
+Si l'authentification de prévisualisation est disponible pour le déploiement, activez-la depuis **Paramètres > Déploiement > Compléments**. Lorsque le complément n'est pas disponible, le tableau de bord désactive le contrôle et explique quelle fonctionnalité est manquante.
+
+Ne considérez pas une URL de prévisualisation comme étant réservée aux membres, sauf si l'authentification de prévisualisation est activée et que l'URL de prévisualisation impose un accès authentifié de l'organisation.
+
+## Dépannage
+
+### L'aperçu n'est pas affiché
+
+Vérifiez que le fournisseur de dépôt est connecté et que la branche ou l'événement de pull request a atteint dubstack.
+
+### L'aperçu est obsolète
+
+Exécutez une mise à jour manuelle ou envoyez un nouveau commit à la branche d'aperçu.
+
+### L'aperçu diffère de la version en direct après la fusion
+
+Vérifiez que la fusion a atteint la branche de production configurée et que la synchronisation en direct s'est terminée avec succès.

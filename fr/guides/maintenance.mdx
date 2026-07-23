@@ -1,0 +1,99 @@
+---
+title: Maintenir la documentation au fil du temps
+description: "Créez une boucle de maintenance avec une responsabilité claire, une cadence de révision, des flux de travail et des règles de suppression explicites."
+icon: calendar-check
+---
+
+La documentation commence à dériver dès que le produit évolue. Une boucle de maintenance maintient les documents à jour sans dépendre d'un nettoyage final avant chaque lancement.
+
+Utilisez ce guide pour définir la responsabilité, la cadence de révision, le soutien aux flux de travail et les règles de suppression.
+
+## Attribuer la responsabilité
+
+Chaque section importante doit avoir quelqu'un responsable de sa précision.
+
+Modèles courants :
+
+| Modèle | Utilisé lorsque |
+| --- | --- |
+| Responsable central | Un petit groupe ou un responsable de documentation maintient l'ensemble des documents de base. |
+| Responsables distribués | Les équipes de produit, d'ingénierie, de support ou de solutions gèrent les domaines proches de leur travail. |
+| Gestion hybride | Un responsable de documentation central maintient la structure et le style, tandis que les équipes de domaine assurent la précision technique. |
+
+Rendez la responsabilité visible dans votre processus d'équipe. Par exemple, reliez une zone de documentation à une équipe, un canal Slack, une étiquette de ticket ou une liste de vérification de version.
+
+## Réviser lorsque le produit évolue
+
+Le déclencheur de révision le plus fiable est un changement réel du produit.
+
+Ajoutez des vérifications de documentation à :
+
+- listes de vérification de lancement de fonctionnalité
+- modèles de pull request ou de fusion
+- étapes de publication d'API
+- suites d'incidents
+- revues d'escalade du support
+- changements d'intégration des partenaires ou clients
+
+Pour les changements pilotés par le code, connectez les dépôts sources et utilisez [Mise à jour à partir des changements de code](/fr/workflows/reference#update-from-code-changes) afin que l'agent puisse rédiger une mise à jour de documentation révisable à partir du contexte des changements fusionnés.
+
+## Planifiez des vérifications récurrentes
+
+Certaines problématiques ne sont pas liées à une seule version. Utilisez des revues planifiées pour le contenu nécessitant une attention périodique.
+
+Cadence recommandée :
+
+| Cadence | Révision |
+| --- | --- |
+| Hebdomadaire | Retour d'information avec des signaux négatifs répétés, des pages de lancement importantes et des brouillons de journal des modifications actifs. |
+| Mensuel | Guides à fort trafic, lacunes de recherche, tendances des questions de l'assistant, liens cassés et méta-données SEO. |
+| Trimestriel | Structure de navigation, captures d'écran obsolètes, chemins d'orientation et exemples d'API à haute valeur. |
+
+Délimitez les flux de travail afin que les vérifications planifiées restent ciblées. Un flux de travail qui examine une seule zone du produit produit généralement de meilleures modifications qu'un flux de travail trop large qui tente d'inspecter l'ensemble du site de documentation.
+
+## Automatisez les tâches spécifiques
+
+Automatisez les vérifications répétitives et à faible risque.
+
+Bons candidats :
+
+- liens internes cassés
+- corrections de grammaire et d'orthographe répétées
+- titres ou descriptions SEO manquants
+- brouillons de journal des modifications obsolètes provenant d'activités récentes dans la source
+- améliorations ciblées issues de retours ou de conversations avec l'assistant
+
+Gardez les modifications à risque élevé révisables. Le comportement de l'API, les instructions d'authentification, les tarifs, la sécurité et les directives de migration devraient normalement passer par une pull request avant publication.
+
+## Supprimez ou redirigez le contenu obsolète
+
+La documentation erronée est pire que la documentation manquante lorsqu'un lecteur s'en sert.
+
+Lorsqu'une page n'appartient plus :
+
+1. Confirmez qu'il existe une meilleure destination.
+2. Ajoutez une redirection depuis l'ancien chemin.
+3. Mettez à jour les liens internes qui pointent encore vers l'ancienne page.
+4. Mentionnez le changement dans le journal des modifications lorsque les utilisateurs ont peut-être enregistré l'ancien chemin.
+5. Gardez le contenu obsolète uniquement lorsque les utilisateurs en ont encore besoin pour les versions plus anciennes ou les fenêtres de migration.
+
+Utilisez [Redirections](/fr/configuration/redirects) et [Pages cachées](/fr/configuration/hidden-pages) pour gérer la suppression sans perturber les lecteurs.
+
+## Liste de vérification de maintenance
+
+- Les responsables sont définis pour les zones importantes de documentation.
+- Les changements de produit incluent une étape de revue de documentation.
+- Les pages à fort trafic sont revues selon un calendrier.
+- Les retours et les tendances de l'assistant sont triés régulièrement.
+- Les flux de travail s'exécutent avec un périmètre étroit et un mode de revue là où c'est approprié.
+- Les pages obsolètes ont des redirections ou des chemins de migration clairs.
+- Les entrées du journal des modifications captent les changements importants de documentation et de produit.
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/guides/improving-docs">Améliorer la qualité de la documentation</a>
+  <a href="/fr/workflows/reference">Référence du flux de travail</a>
+  <a href="/fr/deployment/configure-automerge">Configurer l'automerge</a>
+  <a href="/fr/configuration/redirects">Redirections</a>
+</RelatedTopics>

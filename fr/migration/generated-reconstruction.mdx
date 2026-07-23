@@ -1,0 +1,55 @@
+---
+title: Reconstruction générée
+description: Générer des aperçus de documentation pour les dépôts sans configuration de documentation écrite.
+icon: wand-sparkles
+---
+
+La reconstruction générée crée un aperçu de documentation pour les dépôts qui n'ont pas déjà une structure de documentation complète.
+
+Cela est utile pour évaluer comment une base de code pourrait devenir un site de documentation, mais cela doit être revu avant de devenir de la documentation de production.
+
+## Quand utiliser la reconstruction générée
+
+Utilisez-le lorsqu'un dépôt a :
+
+- du code source mais peu ou pas de documentation
+- des fichiers Markdown épars sans navigation
+- des exemples ou des gestionnaires d'API qui nécessitent une explication
+- un besoin d'un aperçu d'acquisition ou de migration
+
+## Sortie
+
+Une reconstruction peut produire :
+
+- navigation proposée
+- pages MDX générées
+- contenu d'introduction et de configuration
+- descriptions d'API ou de modules où des signaux existent
+- un site d'aperçu pour examen
+
+## Examen requis
+
+La documentation générée doit être examinée par un humain avant son utilisation en production.
+
+Vérifier :
+
+- hypothèses incorrectes
+- préalables manquants
+- chemins de code décrits comme des API publiques alors qu'ils sont internes
+- noms de paquets ou commandes obsolètes
+- notes de sécurité incomplètes
+- pages qui devraient être supprimées ou réécrites
+
+## Promouvoir vers une documentation propriétaire
+
+Après que l'aperçu généré soit utile :
+
+1. Revendiquez ou adoptez l'aperçu dans un espace de travail.
+2. Connectez le dépôt ou la source hébergée appropriés.
+3. Examinez et éditez les pages générées.
+4. Publiez à partir de la source propriétaire.
+5. Ajoutez des redirections et un domaine personnalisé si nécessaire.
+
+<Callout type="warning">
+  La reconstruction générée n'est pas un remplacement pour la propriété du produit. Traitez-la comme un point de départ qui accélère la création de documents.
+</Callout>

@@ -1,0 +1,97 @@
+---
+title: Webhooks et CI
+sidebarTitle: Webhooks et CI
+description: "Comprenez comment les événements du fournisseur Git, les vérifications CI et les branches de déploiement maintiennent les documents publiés synchronisés."
+icon: workflow
+---
+
+dubstack utilise les événements du fournisseur Git pour maintenir les documents publiés synchronisés avec votre dépôt source.
+
+Pour la plupart des équipes, l'application du fournisseur ou l'intégration du jeton gère les mises à jour automatiquement. Le CI peut être placé avant dubstack dans votre workflow de dépôt pour valider les documents avant que les modifications n'atteignent la branche de déploiement. Consultez [CI/CD checks](/fr/deployment/ci) pour les contrôles du module complémentaire du tableau de bord et les modes de vérification.
+
+## Flux de mise à jour
+
+```text
+Docs change
+-> Git provider event
+-> sync worker
+-> published artifacts
+-> live docs site
+```
+
+Pour les dépôts basés sur GitHub, l'application GitHub reçoit les événements du dépôt et démarre le chemin de synchronisation pour la source de documents configurée.
+
+Pour les dépôts basés sur GitLab, la disponibilité dépend du mode de connexion GitLab activé pour votre espace de travail. Vérifiez [GitLab](/fr/deployment/gitlab) avant d'utiliser GitLab comme source de production.
+
+## Branche de déploiement
+
+Choisissez une branche comme source des documents en direct.
+
+Modèles courants :
+
+| Modèle | Utilisé lorsque |
+| --- | --- |
+| `main` publie les documents | Votre dépôt de documentation est dédié à la documentation. |
+| `docs` publie les documents | Votre dépôt produit conserve les documents sur une branche séparée. |
+| Branche de déploiement protégée | Vous avez besoin de pull requests et de vérifications CI avant la publication. |
+
+Les poussées vers les branches non de déploiement doivent être examinées via des aperçus ou des pull requests avant de fusionner dans la branche en direct.
+
+## Utilisation du CI avec dubstack
+
+Exécutez le CI avant de fusionner dans la branche de déploiement.
+
+Des vérifications utiles incluent :
+
+- Validation de la syntaxe MDX
+- Vérifications des liens
+- Validation du schéma OpenAPI
+- Vérifications de mise en forme
+- Vérifications d'orthographe ou de terminologie
+- Tests personnalisés pour les extraits générés
+
+Après que le CI ait réussi et que le changement atteigne la branche de déploiement, la mise à jour du fournisseur Git devrait déclencher la synchronisation de dubstack.
+
+## Flux de pull request recommandé
+
+1. Créez une branche pour le changement des documents.
+2. Exécuter des vérifications locales ou en CI.
+3. Ouvrir une pull request.
+4. Examiner le déploiement de prévisualisation lorsqu'il est disponible.
+5. Fusionner dans la branche de déploiement.
+6. Confirmer que l'élément d'activité en direct réussit.
+
+Si l'événement du fournisseur n'arrive pas, utilisez [Mises à jour manuelles](/fr/deployment/manual-updates-history) pour réessayer la synchronisation à partir de la branche configurée.
+
+## Dépannage des webhooks
+
+### Les poussées ne mettent pas à jour le site
+
+Vérifier :
+
+- la poussée a été envoyée à la branche de déploiement configurée
+- l'application ou le jeton du fournisseur Git est toujours connecté
+- le dépôt n'a pas été renommé ou transféré
+- la branche existe et contient `dubstack.json`
+- le fil d'activité montre une tentative de mise à jour récente
+
+### Les prévisualisations des pull requests n'apparaissent pas
+
+Vérifiez que les déploiements de prévisualisation sont disponibles pour le site et le chemin du fournisseur, puis confirmez que la pull request cible la branche de déploiement.
+
+### CI a réussi mais le site n'a pas été mis à jour
+
+CI ne valide que le dépôt. L'événement du fournisseur doit toujours atteindre dubstack et le worker de synchronisation doit toujours avoir accès au dépôt.
+
+Exécutez une mise à jour manuelle pour déterminer si le problème provient de la livraison de l'événement du fournisseur ou de la synchronisation du dépôt.
+
+### Plusieurs sources de documents sont connectées
+
+Maintenez une seule source de documents de production active par site. Si vous maintenez une copie de sauvegarde dans un autre fournisseur, assurez-vous qu'uniquement la source souhaitée est marquée comme active pour la publication.
+
+## Sujets connexes
+
+- [Synchronisation Git](/fr/deployment/git-sync)
+- [GitHub](/fr/deployment/github)
+- [GitLab](/fr/deployment/gitlab)
+- [Déploiements de prévisualisation](/fr/deployment/preview-deployments)

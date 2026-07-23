@@ -1,0 +1,84 @@
+---
+title: Base de connaissances interne
+description: "Organisez la documentation interne avec une propriété claire, une navigation, une recherche et des limites d'accès."
+icon: building-2
+---
+
+Utilisez ce guide lorsque le site de documentation est principalement destiné aux équipes internes.
+
+Les bases de connaissances internes fonctionnent le mieux lorsqu'elles sont traitées comme un produit : possédées, révisées, recherchables et régulièrement maintenues. Le même shell de documentation peut soutenir des runbooks internes, des notes de produit, des résumés d'architecture, des contenus d'onboarding et des manuels d'équipe.
+
+## Décidez du modèle d'accès
+
+Avant d'écrire des pages, décidez qui devrait pouvoir les lire.
+
+| Type d'accès | Utilisez-le lorsque |
+| --- | --- |
+| Documentation publique | Le contenu peut être partagé externement. |
+| Documentation protégée par mot de passe | Une petite audience a besoin d'un mot de passe partagé pour les lecteurs. |
+| Accès privé ou contrôlé par l'entreprise | Les documents ont besoin de limites d'identité, de rôle ou de SSO plus strictes. |
+
+Ne traitez pas la navigation masquée comme une limite de sécurité. Les pages masquées sont toujours accessibles si quelqu'un connaît l'URL.
+
+## Structure recommandée
+
+Commencez par quelques groupes stables :
+
+| Groupe | Exemples de pages |
+| --- | --- |
+| Commencez ici | Aperçu de l'équipe, comment utiliser la base de connaissances, où poser des questions. |
+| Runbooks | Étapes d'incident, vérifications de déploiement, étapes de restauration. |
+| Architecture | Diagrammes système, limites de service, enregistrements de décisions. |
+| Produit | Notes sur les fonctionnalités, plans de lancement, résumés de roadmap. |
+| Opérations | Service d'urgence, support, facturation, sécurité, demandes d'accès. |
+
+Utilisez des dossiers lorsque le groupe a de nombreuses pages. Utilisez des titres et des sujets liés lorsque le groupe est petit.
+
+## Maintenez la propriété visible
+
+Utilisez le frontmatter, les introductions de page ou une courte section de responsable pour indiquer qui entretient une page.
+
+Les champs de responsabilité utiles incluent :
+
+- équipe responsable
+- dernière date de révision
+- contact d'escalade
+- dépôt ou tableau de bord associé
+- manuel ou flux de travail lié
+
+Si une page n'a pas de responsable, planifiez une revue avant de vous y fier pendant les incidents.
+
+## Utilisez la recherche et les commentaires
+
+Les lecteurs internes recherchent souvent avant d'explorer la navigation.
+
+Avant le lancement :
+
+- rédiger des titres de page clairs
+- inclure des synonymes courants
+- ajouter des résumés courts en haut des pages longues
+- activer les commentaires des lecteurs lorsque le site doit collecter des demandes de correction
+- examiner les analyses de recherche pour les requêtes échouées
+
+## Flux de maintenance
+
+Pour les documents internes, la revue récurrente est plus importante que la finition initiale.
+
+Utilisez un flux mensuel ou trimestriel pour :
+
+- trouver les pages obsolètes
+- réparer les liens cassés
+- vérifier les titres et les métadonnées
+- résumer les tendances des commentaires
+- rédiger des améliorations ciblées
+
+Maintenez le mode de revue activé jusqu'à ce que l'équipe fasse confiance aux résultats du flux.
+
+## Sujets connexes
+
+- [Authentification des documents](/fr/deployment/docs-authentication)
+- [Pages cachées](/fr/configuration/hidden-pages)
+- [Recherche](/fr/optimize/search)
+- [Commentaires](/fr/optimize/feedback)
+- [Référence des flux](/fr/workflows/reference)
+

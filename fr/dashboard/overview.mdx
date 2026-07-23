@@ -1,0 +1,57 @@
+---
+title: Tableau de bord
+description: "Gérez les sites dubstack, les paramètres, les flux de contenu et la configuration du compte."
+icon: layout-dashboard
+---
+
+Le tableau de bord est la surface de contrôle pour votre site de documentation.
+
+Utilisez-le pour surveiller les déploiements, éditer le contenu, configurer les intégrations, gérer l'accès de l'équipe et examiner comment les utilisateurs interagissent avec vos documents.
+
+## Zones principales
+
+| Zone | Ce qu'elle gère |
+| --- | --- |
+| Accueil | Statut du site, aperçu, mise à jour manuelle, activité et guide de configuration. |
+| Éditeur | Contenu des pages, navigation, fichiers, ressources et configuration du site. |
+| Analytique | Visiteurs, vues, utilisation de l'assistant, activité de recherche et commentaires. |
+| API | Spécifications OpenAPI et configuration du playground API. |
+| Flux de travail | Flux de maintenance et mises à jour automatisés de la documentation. |
+| Agent | Agent de documentation connecté aux dépôts et aux intégrations d'équipe. |
+| Assistant | Configuration et diagnostics de l'assistant de documentation publique. |
+| Paramètres | Déploiement, domaines, membres, facturation, utilisation, intégrations et paramètres du compte. |
+
+## Page d'accueil
+
+La page d'accueil offre une vue opérationnelle rapide :
+
+- Aperçu du site en direct ou capture d'écran.
+- Statut du déploiement actuel.
+- Action de mise à jour manuelle.
+- Activité récente.
+- [Checklist de configuration](/fr/dashboard/setup-checklist) lorsque le site nécessite encore une configuration principale.
+
+Utilisez la mise à jour manuelle lorsque la source a changé en dehors du chemin webhook normal ou lorsqu'une URL de spécification hébergée a changé sans commit Git.
+
+## Paramètres du site
+
+Les paramètres sont divisés par responsabilité :
+
+- Les paramètres de déploiement contrôlent les connexions sources et les domaines.
+- Les paramètres d'organisation contrôlent les préoccupations liées aux équipes et aux intégrations.
+- Les paramètres du compte contrôlent le profil de l'utilisateur connecté.
+- La configuration du site contrôle le comportement des documents publiés à partir de `dubstack.json`.
+
+## Accès à l'équipe
+
+Invitez les membres de l'équipe depuis le tableau de bord après avoir connecté la source du site. Attribuez le rôle le plus restreint qui permet à la personne d'effectuer son travail.
+
+## Dépannage depuis le tableau de bord
+
+Lorsqu'un élément n'apparaît pas sur le site public :
+
+1. Vérifiez le fil d'activité.
+2. Confirmez la branche connectée et l'heure de la dernière synchronisation.
+3. Vérifiez que `dubstack.json` fait référence à la page ou à la spécification.
+4. Ouvrez la page en direct directement.
+5. Utilisez les diagnostics des paramètres pour les intégrations et la préparation de l'assistant.

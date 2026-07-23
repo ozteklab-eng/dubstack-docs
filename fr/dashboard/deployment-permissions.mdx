@@ -1,0 +1,84 @@
+---
+title: Autorisations de déploiement
+description: Comprenez comment les rôles du tableau de bord et les autorisations du fournisseur Git affectent la publication.
+icon: lock-keyhole
+---
+
+Les autorisations de déploiement déterminent qui peut déplacer les modifications de documentation depuis un état brouillon ou de branche vers un site publié.
+
+Il existe deux systèmes d'autorisation à comprendre :
+
+| Système d'autorisation | Contrôles |
+| --- | --- |
+| Rôle dubstack | Actions du tableau de bord telles que l'édition, la publication, les mises à jour manuelles, les aperçus, les paramètres de l'assistant et la configuration des workflows. |
+| Accès du fournisseur Git | Actions sur le dépôt telles que la revue des pull requests, la fusion des branches et le changement de la protection des branches. |
+
+Un utilisateur peut avoir besoin des deux. Par exemple, un éditeur peut créer une mise à jour de documentation dans dubstack, mais la pull request suit toujours les règles de revue et de fusion du dépôt.
+
+## Qui peut publier
+
+| Action | Rôle dubstack requis |
+| --- | --- |
+| Visualiser l'état du déploiement | Visionneur |
+| Déclencher une mise à jour manuelle | Éditeur |
+| Publier le contenu depuis l'éditeur | Éditeur |
+| Créer ou mettre à jour les déploiements d'aperçu | Éditeur |
+| Configurer le comportement de l'aperçu | Éditeur |
+| Changer la source Git de production | Administrateur |
+| Modifier les paramètres du domaine personnalisé | Administrateur |
+
+Le fournisseur Git connecté peut appliquer des règles plus strictes. Si une branche est protégée, le fournisseur peut exiger une revue de la pull request avant qu'un changement n'atteigne la branche de production.
+
+## Mises à jour manuelles
+
+La mise à jour manuelle est utile lorsque :
+
+- le webhook du fournisseur n'a pas été déclenché
+- une spécification OpenAPI hébergée a changé sans commit Git
+- vous souhaitez actualiser l'artefact publié après avoir corrigé l'accès du fournisseur
+- vous devez vérifier la branche actuelle et l'état du site
+
+La mise à jour manuelle ne contourne pas les vérifications de rôles ou les autorisations du fournisseur.
+
+## Pull requests et aperçus
+
+Lorsque les documents sont connectés à un dépôt, utilisez les pull requests pour les modifications nécessitant une revue.
+
+Flux recommandé :
+
+1. Créez ou recevez une branche avec le changement des documents.
+2. Ouvrez le déploiement d'aperçu.
+3. Revoyez les pages modifiées, la navigation, les pages de référence API et la mise en page mobile.
+4. Fusionnez selon les règles de votre dépôt.
+5. Confirmez que le déploiement de production est terminé.
+
+## Contributeurs externes
+
+Les personnes ayant accès au dépôt mais pas à l'interface dubstack peuvent toujours proposer des modifications via Git. Ces modifications ne sont publiées qu'après leur intégration dans la branche de production connectée et l'exécution d'un déploiement.
+
+Pour une collaboration plus sécurisée :
+
+- gardez la protection de la branche de production activée
+- exigez une revue pour les grands changements de navigation ou de spécification API
+- évitez d'accorder l'accès administrateur du dépôt aux utilisateurs qui n'ont besoin que de l'édition de documents
+- limitez l'accès administrateur de l'interface
+
+## Dépannage
+
+### Le bouton de publication est indisponible
+
+Vérifiez le rôle de l'utilisateur. L'accès lecteur est en lecture seule. Un éditeur ou un niveau supérieur est requis pour les actions de publication de contenu.
+
+### Le déploiement n'a pas démarré après la fusion
+
+Vérifiez l'installation de l'application du fournisseur, la livraison du webhook, la branche connectée et le flux d'activité. Exécutez une mise à jour manuelle après avoir corrigé l'accès du fournisseur.
+
+### Un utilisateur peut modifier mais ne peut pas fusionner
+
+C'est normal lorsque le fournisseur Git exige une revue du dépôt ou applique une protection de branche. Mettez à jour les autorisations du dépôt ou demandez à un administrateur de relire la pull request.
+
+## Sujets connexes
+
+- [Rôles](/fr/dashboard/roles)
+- [Fournisseurs Git](/fr/deployment/forgejo-github-gitlab)
+- [Déploiements d'aperçu](/fr/deployment/preview-deployments)

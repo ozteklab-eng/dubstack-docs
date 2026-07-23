@@ -1,0 +1,85 @@
+---
+title: Types de contenu
+description: "Choisissez le bon type de page pour les guides, les références, les journaux de modifications, les extraits, les ressources et les pages masquées."
+icon: files
+---
+
+Utilisez ce guide pour planifier le contenu d'un dépôt de documentation.
+
+Les sites DubStack sont basés sur des sources. La plupart du contenu est en Markdown ou MDX, avec une configuration dans `dubstack.json` et des ressources supplémentaires stockées à côté des pages.
+
+## Types de contenu courants
+
+| Type | Forme du fichier | Utilisez-le pour |
+| --- | --- | --- |
+| Page d'accueil | `index.mdx` | Aperçu du site, positionnement du produit, points d'entrée importants. |
+| Guide | `guides/*.mdx` | Documentation axée sur les tâches. |
+| Référence API | `api-reference/openapi.json` et pages de point de terminaison générées | Documentation du point de terminaison et exemples de requêtes. |
+| Journal de modifications | `changelog.mdx` ou pages de mises à jour regroupées | Notes de version et changements du produit. |
+| Référence de composant | `writing-content/*.mdx` | Documents de composants réutilisables en écriture et en MDX. |
+| Extrait | `snippets/*.mdx` | Contenu réutilisable inclus par d'autres pages. |
+| Ressource | `assets/*`, `img/*`, `logo/*` | Images, icônes et fichiers téléchargeables. |
+| Page masquée | Toute page exclue de la navigation | Brouillons, pages à lien direct ou pages exclusivement destinées au support. |
+
+## Guides
+
+Utilisez les guides pour les résultats attendus.
+
+Les titres de guides efficaces sont orientés action :
+
+- Connectez GitHub
+- Ajoutez un domaine personnalisé
+- Publier une référence d'API
+- Rédiger des documents à partir des modifications de code
+
+Maintenez les guides axés sur une seule tâche. Si un guide comporte plusieurs résultats non liés, séparez-le.
+
+## Pages de référence
+
+Utilisez les pages de référence pour l'information structurée que les lecteurs doivent consulter.
+
+Les bons sujets de référence incluent :
+
+- champs de paramètres
+- limites
+- rôles
+- paramètres d'API
+- entrées du catalogue de workflows
+- clés de configuration prises en charge
+
+Les pages de référence doivent être complètes et prévisibles, mais elles n'ont pas besoin d'être lues de haut en bas.
+
+## Entrées de journal des modifications
+
+Utilisez les journaux de modifications pour les mises à jour basées sur le temps.
+
+Une entrée de journal des modifications correcte inclut :
+
+- ce qui a changé
+- qui est affecté
+- si une action est requise
+- liens vers les documents mis à jour
+
+Évitez d'utiliser le journal des modifications comme seule documentation pour une fonctionnalité.
+
+## Pages cachées et extraits
+
+Les pages cachées sont utiles lorsque le contenu doit exister mais ne pas apparaître dans la navigation.
+
+Exemples :
+
+- notes de migration
+- pages de support à lien direct
+- notes de lancement temporaires
+- instructions pour les réviseurs internes
+
+Les extraits sont préférables lorsqu'un même contenu doit apparaître sur plusieurs pages.
+
+## Liens connexes
+
+- [Pages et fichiers](/fr/writing-content/pages-files)
+- [MDX](/fr/writing-content/mdx)
+- [Navigation](/fr/configuration/navigation)
+- [Pages cachées](/fr/configuration/hidden-pages)
+- [Extraits réutilisables](/fr/writing-content/reusable-snippets)
+

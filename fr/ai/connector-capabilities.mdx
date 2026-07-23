@@ -1,0 +1,105 @@
+---
+title: Capacités du connecteur
+description: "Comprenez comment les intégrations s'alignent sur des capacités stables telles que le contexte de conversation, le contexte d'incident, les notifications et la rédaction de documents."
+icon: plug-zap
+---
+
+Les capacités du connecteur décrivent ce qu'un fournisseur connecté est autorisé à faire dans dubstack.
+
+Elles sont axées sur les capacités plutôt que sur les fournisseurs. Cela signifie qu'un fournisseur de messagerie, un outil de suivi d'incidents ou une base de connaissances s'inscrit dans un contrat de produit stable au lieu que chaque agent et fonctionnalité de workflow apprenne séparément le comportement spécifique au fournisseur.
+
+## Pourquoi les capacités comptent
+
+Les capacités rendent les intégrations prévisibles :
+
+- Le tableau de bord peut indiquer pourquoi un fournisseur est disponible, bloqué ou bientôt disponible.
+- L'agent ne peut utiliser que les outils connectés, configurés et autorisés pour l'utilisateur actuel.
+- Les workflows peuvent valider les intégrations avant le démarrage d'une exécution.
+- Les fournisseurs équivalents futurs peuvent réutiliser le même comportement sans modifier la frontière d'édition.
+
+<Callout type="info">
+  Les intégrations fournissent du contexte ou des notifications. Les modifications de documentation s'effectuent toujours via le fournisseur Git connecté et doivent générer des modifications du dépôt révisables, sauf si un workflow est configuré explicitement pour des mises à jour directes.
+</Callout>
+
+## Familles de capacités actuelles
+
+| Famille | Ce qu'elle fournit | Fournisseurs actuellement disponibles |
+| --- | --- | --- |
+| Conversation | Messages Slack, fils de discussion, messages directs et contexte de suivi. | Slack ; catalogue uniquement : Mattermost |
+| Notification | Notifications de lancement de workflow et mises à jour de l'avancement de l'agent. | Slack ; catalogue uniquement : Mattermost |
+| Suivi d'incidents | Métadonnées d'incidents et commentaires récents d'incidents sélectionnés pour les éléments de travail. | Jira ; catalogue uniquement : Linear, Plane |
+| Base de connaissances et fichiers | Pages externes, documents ou fichiers pouvant être utilisés comme contexte délimité. | Confluence ; catalogue uniquement : Notion, Google Drive, Nextcloud |
+| Calendrier | Contexte d'événement spécifique à l'utilisateur pour les documents et les tâches de workflow. | Catalogue uniquement : Google Calendar |
+| CRM et support | Contexte client, ticket ou compte pour les mises à jour des documents. | Catalogue uniquement : Plain, Intercom, Salesforce, HubSpot |
+| Contexte du dépôt | Dépôts sources utilisés en tant que contexte en lecture seule. | Fournisseur Git connecté |
+| Rédaction des documents | Mises à jour documentaires révisables via le dépôt de documentation. | Fournisseur Git connecté plus agent de rédaction |
+
+Le mode catalogue uniquement signifie que le fournisseur peut apparaître en tant que surface d'interface planifiée, mais il ne peut pas être sélectionné pour une exécution ou utilisé par l'agent jusqu'à ce que son autorisation, les portées, le contrôle d'accès, les collecteurs et les tests soient actifs.
+
+## Fournisseurs actifs
+
+| Fournisseur | Portée | Fonctionnalités |
+| --- | --- | --- |
+| Slack | Organisation | Surface de conversation de l'agent, contexte de chat délimité, suivi de fil, mises à jour de progression, sélection de déploiement, demandes d'approbation et notifications de workflow. |
+| Jira | Organisation | Contexte de suivi d'incidents délimité pour les demandes de l'agent du tableau de bord et les workflows pris en charge. |
+| Confluence | Organisation | Contexte de page de base de connaissances délimité pour les workflows pris en charge. |
+
+Les fournisseurs exacts que vous voyez sur le tableau de bord dépendent du plan, de la configuration de l'environnement et des autorisations de l'organisation.
+
+## Portée partagée et personnelle
+
+Les intégrations peuvent être configurées de deux manières.
+
+| Portée | Signification |
+| --- | --- |
+| Organisation | Une installation autorisée est disponible pour les membres autorisés de l'espace de travail et les workflows pris en charge. |
+| Personnelle | Chaque collègue autorise son propre compte, et l'agent ne peut utiliser ce fournisseur que pour le compte de ce collègue. |
+
+Les fournisseurs actuellement disponibles sont configurés à l.échelle de l.organisation. Le support des fournisseurs personnels est réservé aux fournisseurs où les données spécifiques à l'utilisateur ne doivent pas être partagées au sein de toute l'organisation.
+
+## Comment l'agent choisit les intégrations
+
+L'agent ou l'exécuteur de workflow peut utiliser une intégration uniquement lorsque toutes les vérifications réussissent :
+
+1. Le fournisseur est actif dans l'environnement.
+2. Le fournisseur est connecté au niveau de l'organisation ou de la portée de déploiement.
+3. L'utilisateur actuel ou le workflow a permission de l'utiliser.
+4. L'intégration dispose des portées OAuth nécessaires ou des autorisations d'application.
+5. La demande ou le workflow a besoin explicitement de ce contexte de fournisseur.
+6. Le workflow sélectionné prend en charge cette famille de capacités.
+
+Si l'une des vérifications échoue, le fournisseur n'est pas utilisé. Le tableau de bord doit afficher une raison bloquante au lieu de s'exécuter silencieusement avec un contexte manquant.
+
+## Fournisseurs équivalents
+
+Les fournisseurs équivalents doivent être mappés à la même famille de capacités.
+
+Exemples :
+
+| Famille de capacités | Fournisseur actuel | Forme équivalente future |
+| --- | --- | --- |
+| Conversation et notifications | Slack | Un fournisseur de chat auto-hébergé peut réutiliser le contexte de chat, le suivi des fils de discussion et les capacités de notification. |
+| Suivi des problèmes | Jira | Un autre suiveur de problèmes peut réutiliser le contexte des problèmes délimités et, plus tard, les actions de problèmes protégés. |
+| Base de connaissances et fichiers | Confluence | Un fournisseur de fichiers ou de wikis peut réutiliser le contexte des fichiers une fois que la pagination, les étiquettes d'accès et la rédaction sont implémentées. |
+
+Ce modèle permet à dubstack d'ajouter un choix de fournisseur sans modifier la façon dont les utilisateurs raisonnent sur la sécurité de l'agent.
+
+## Limites de sécurité
+
+Le contexte d'intégration suit ces limites :
+
+- Les dépôts sources et les outils externes sont un contexte en lecture seule, sauf si une capacité d'écriture spécifique est mise en œuvre et approuvée.
+- La rédaction des documents n'écrit que dans le dépôt de documents connecté.
+- Les lecteurs peuvent poser des questions mais ne peuvent pas demander des modifications de documentation.
+- Les éditeurs et les administrateurs peuvent demander des modifications de documentation lorsque le déploiement est prêt à la rédaction.
+- Les actions d'écriture tierces nécessitent une approbation explicite avant l'exécution.
+- Le contenu d'intégration ne doit pas être stocké sous forme de transcriptions brutes persistantes, sauf si le produit indique explicitement qu'il est enregistré.
+
+## Sujets connexes
+
+- [Intégrations](/fr/ai/integrations)
+- [Autorisations et portées d'intégration](/fr/ai/integration-permissions)
+- [Intégration Slack](/fr/ai/integrations/slack)
+- [Intégration Jira](/fr/ai/integrations/jira)
+- [Intégration Confluence](/fr/ai/integrations/confluence)
+- [Configurer les exécutions de workflow](/fr/workflows/configuration)

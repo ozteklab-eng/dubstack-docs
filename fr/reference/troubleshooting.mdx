@@ -1,0 +1,79 @@
+---
+title: Dépannage
+description: Résoudre les problèmes courants de configuration et de publication de dubstack.
+icon: wrench
+---
+
+Utilisez cette page lorsque le site de documentation ne s'affiche pas ou ne se comporte pas comme prévu.
+
+## Vérifications initiales
+
+Commencez ici avant de modifier la configuration :
+
+1. Ouvrez le flux d'activité du tableau de bord.
+2. Vérifiez que la dernière synchronisation s'est terminée avec succès.
+3. Vérifiez que le dépôt et la branche connectés sont corrects.
+4. Ouvrez l'URL en direct dans un nouvel onglet.
+5. Rafraîchissez le navigateur de manière forcée.
+
+## Page non trouvée
+
+Vérifiez :
+
+- le fichier MDX existe dans le dépôt
+- le slug de la page est listé dans `dubstack.json`
+- le chemin du fichier correspond au slug de navigation
+- le dernier commit a été synchronisé
+- les redirections ne pointent pas vers la page manquante
+
+## La navigation est incorrecte
+
+Vérifiez :
+
+- la section `navigation` dans `dubstack.json`
+- si la page est masquée
+- si la mauvaise branche est connectée
+- si une mise à jour manuelle est nécessaire
+
+## Le thème n'a pas été mis à jour
+
+Vérifiez :
+
+- le changement de thème a été enregistré
+- le changement de configuration a été validé dans la source
+- la dernière synchronisation s'est terminée
+- les chemins des logos clair et sombre existent
+- le navigateur ne montre pas les actifs mis en cache obsolètes
+
+## La référence de l'API manque des points de terminaison
+
+Vérifiez :
+
+- le chemin de la spécification OpenAPI dans `dubstack.json`
+- si `pages` liste uniquement les opérations sélectionnées
+- si les opérations utilisent `x-hidden: true`
+- si les méthodes et les chemins correspondent exactement à la spécification
+- si la spécification est un JSON OpenAPI 3.x valide
+
+## La réponse de l'Assistant est obsolète
+
+Vérification :
+
+- la page concernée est publiée
+- la dernière synchronisation a été effectuée
+- la réponse comporte des sources liées
+- la page utilise des titres clairs et des exemples
+- une mise à jour manuelle a été exécutée après le changement de source
+
+## Le domaine personnalisé ne se vérifie pas
+
+Vérification :
+
+- Le DNS pointe vers la cible affichée dans le tableau de bord
+- `/docs` configure un proxy pour `/docs` et `/docs/*`
+- les en-têtes d'hôte/proto transférés sont préservés pour les configurations de sous-chemin
+- la propagation du certificat/DNS est terminée
+
+<Callout type="info">
+  Si le flux d'activité du tableau de bord affiche une erreur d'infrastructure, ne modifiez pas continuellement le contenu des documents. Attendez que le chemin de la plateforme se rétablisse ou contactez le support avec l'ID d'activité défaillant.
+</Callout>

@@ -1,0 +1,189 @@
+---
+title: Branches et publication
+description: "Comprenez comment les branches, les pull requests, les aperçus et la publication fonctionnent dans l'éditeur du tableau de bord."
+icon: git-pull-request
+---
+
+Les branches déterminent où un changement est enregistré. La publication détermine quand le changement devient partie de la source qui alimente vos documents en direct.
+
+L'éditeur fonctionne avec la même source basée sur Git que votre workflow de dépôt :
+
+```text
+Editor change
+-> branch, commit, or pull request
+-> deployment branch
+-> sync job
+-> published docs site
+```
+
+## Enregistrement et publication
+
+| Action | Ce qui se passe |
+| --- | --- |
+| Éditer | Vous modifiez le contenu, la navigation, les ressources, les spécifications OpenAPI ou les paramètres `dubstack.json` dans l'éditeur. |
+| Enregistrer | Le tableau de bord conserve l'état actuel de l'éditeur et le prépare au flux de publication basé sur la source. |
+| Publier | Le changement est écrit dans la source configurée sous forme de commit, de mise à jour de branche, de pull request ou de demande de fusion, selon la configuration de votre dépôt. |
+| Synchroniser | La branche de déploiement configurée est synchronisée dans les artefacts publiés. |
+| En direct | Le site public lit les derniers artefacts publiés. |
+
+L'aperçu du tableau de bord est utile pendant l'édition, mais le site en direct est la cible de vérification finale.
+
+## Types de branches
+
+| Type de branche | Utilisé pour |
+| --- | --- |
+| Branche de déploiement | Petits changements directs lorsque la politique de votre dépôt permet une publication directe. Cette branche alimente le site en direct. |
+| Branche de fonctionnalité | Grands changements, revue d'équipe, brouillons rédigés par l'agent, mises à jour OpenAPI et changements à prévisualiser avant de devenir en direct. |
+
+Beaucoup d'équipes utilisent `main` en tant que branche de déploiement, mais la branche active est celle configurée dans **Paramètres > Déploiement > Paramètres Git**.
+
+## Actions de publication
+
+Les actions visibles dans l'éditeur dépendent de la branche sélectionnée, du fournisseur connecté, des autorisations du dépôt et des règles de protection des branches.
+
+| Situation | Chemin attendu |
+| --- | --- |
+| La branche de déploiement autorise les écritures directes | Publier directement sur la branche de déploiement. |
+| La branche de déploiement nécessite une revue | Créez une branche fonctionnelle ou basculez vers celle-ci, puis ouvrez une pull request ou une demande de fusion. |
+| La branche fonctionnelle a des modifications en attente | Enregistrez la branche ou créez une pull request / demande de fusion. |
+| Aucune modification en attente | Les actions de publication sont désactivées jusqu'à ce qu'il y ait quelque chose à valider. |
+
+Si une action est désactivée, vérifiez la branche, l'accès au dépôt, la connexion du fournisseur et votre rôle dans le tableau de bord.
+
+## Créez une branche
+
+Utilisez une branche lorsqu'un changement nécessite une revue avant d'être mis en ligne.
+
+1. Ouvrez l'éditeur.
+2. Utilisez le sélecteur de branche dans la barre d'outils.
+3. Créez ou sélectionnez une branche fonctionnelle.
+4. Apportez les modifications au contenu, à la navigation, à la configuration ou aux actifs.
+5. Revoyez la liste des fichiers modifiés avant la publication.
+6. Créez une pull request ou une demande de fusion lorsque le changement est prêt pour la revue.
+
+Utilisez des noms de branche descriptifs afin que les réviseurs comprennent le changement avant d'ouvrir le diff.
+
+## Revoyez les changements
+
+Avant la publication, inspectez la liste des fichiers modifiés.
+
+Revoyez ces fichiers soigneusement :
+
+- `dubstack.json`, lorsqu'une navigation, des redirections, un thème, des actions contextuelles, des paramètres OpenAPI ou des compléments ont changé
+- spécifications OpenAPI, lorsqu'une page de point de terminaison ou le comportement du playground a changé
+- fichiers multimédias sous `images/` ou `videos/`
+- extraits réutilisés sur plusieurs pages
+- pages supprimées, car la navigation et les redirections peuvent nécessiter des mises à jour également
+
+Maintenez chaque branche axée. Évitez de mélanger une réécriture de contenu, un réfactoring de navigation et un changement de thème dans la même revue, sauf s'ils font partie d'une seule version.
+
+## Prévisualisez avant de fusionner
+
+Les déploiements de prévisualisation permettent aux réviseurs d'inspecter une branche avant qu'elle ne devienne en ligne.
+
+Utilisez les prévisualisations pour vérifier :
+
+- pages nouvelles, renommées ou supprimées
+- navigation de la barre latérale et de l'en-tête
+- blocs de code, boîtes d'alerte, onglets, cartes et tableaux
+- pages de référence API et pages de points de terminaison générées
+- résultats de recherche
+- réponses de l'assistant et liens sources
+- découverte publique de MCP après les mises à jour de la source
+- comportement de chemin pour un domaine personnalisé ou `/docs` lorsqu'il est pertinent
+
+Les URL de prévisualisation sont des surfaces de révision. La branche de déploiement reste la source du site de documentation en production.
+
+## Flux de travail des pull requests et de fusion
+
+Utilisez votre flux de révision de fournisseur Git lorsqu'un changement nécessite une approbation.
+
+1. Créez une pull request ou une demande de fusion à partir de la branche fonctionnelle.
+2. Demandez aux réviseurs d'inspecter la différence et la prévisualisation du déploiement.
+3. Résolvez les changements demandés sur la même branche.
+4. Fusionnez dans la branche de déploiement lorsqu'elle est approuvée.
+5. Attendez que le travail de synchronisation se termine.
+6. Ouvrez le site en direct et vérifiez la page publiée directement.
+
+Pour les dépôts GitHub, GitLab et Forgejo, le tableau de bord peut créer des branches de révision et des pull requests ou de fusion lorsqu'une application connectée ou un jeton a l'accès requis au dépôt.
+
+## Ouvrez les modifications de workflow dans l'éditeur
+
+Lorsqu'un workflow crée une branche de révision, vous pouvez passer de l'historique des exécutions ou d'une notification Slack à l'éditeur sur cette branche.
+
+- Depuis **Automate > Workflows**, ouvrez l'historique des exécutions, sélectionnez une exécution terminée et cliquez sur **Ouvrir dans l'éditeur** lorsque l'action est disponible.
+- À partir d'une notification de workflow Slack, cliquez sur **Voir les modifications** lorsque la notification inclut un lien vers l'éditeur.
+
+L'éditeur s'ouvre sur la branche de workflow générée, vous permettant de consulter les fichiers modifiés, d'inspecter la différence, de continuer à éditer et de publier via la même branche ou le flux de travail de pull request utilisé pour les éditions manuelles.
+
+Les exécutions de workflow de copie de dépôt ne s'ouvrent pas dans l'éditeur car elles copient la source de documentation active dans les cibles de copie configurées au lieu de créer des changements de contenu révisables.
+
+## Édition locale Git et tableau de bord
+
+Vous pouvez utiliser Git local et l'éditeur du tableau de bord sur le même projet de documentation.
+
+| Flux de travail | Bon pour |
+| --- | --- |
+| Éditeur du tableau de bord | Éditions rapides dans le navigateur, édition visuelle, rédaction par des non-développeurs et publication basée sur la source sans configuration locale. |
+| Git local | Flux de travail IDE, revue de code, vérifications CI, éditions en masse, fichiers générés et automatisation native du dépôt. |
+
+Les deux flux de travail écrivent sur la source configurée. Après une poussée ou une fusion externe, le travail de synchronisation met à jour les artefacts publiés. Si le webhook n'arrive pas, utilisez la mise à jour manuelle depuis le tableau de bord.
+
+Voyez [Flux de travail Git local](/fr/deployment/local-git-workflow) pour le chemin en ligne de commande.
+
+## Sources de démarrage hébergées
+
+Si vous avez sauté Git lors de l'inscription, votre site peut commencer à partir d'une source hébergée.
+
+Les sources hébergées sont utiles pour commencer rapidement, mais les dépôts gérés par les clients sont meilleurs lorsque vous avez besoin de :
+
+- protection de branche
+- révision des demandes de pull ou de fusion
+- édition locale
+- vérifications CI externes
+- propriété du dépôt au sein de votre organisation
+- portabilité des sources
+- pull requests créées par l'agent dans votre propre dépôt
+
+Vous pouvez passer à un dépôt Git connecté ultérieurement depuis les paramètres de déploiement.
+
+## Décisions de branche
+
+| Situation | Chemin recommandé |
+| --- | --- |
+| Petite erreur de frappe et pas de protection de branche | Publier directement si la politique de votre dépôt le permet. |
+| Nouveau guide, page de migration ou changement de référence API | Utilisez une branche fonctionnelle et effectuez une revue. |
+| Mise à jour de la documentation rédigée par l'agent | Examinez la branche générée et la pull request en brouillon. |
+| Modification de `dubstack.json` | Utilisez une branche et un aperçu, sauf si le changement est trivial. |
+| Mise à jour de la spécification OpenAPI | Utilisez une branche et vérifiez les pages de points de terminaison générées en aperçu. |
+| Correction d'urgence | Publier directement uniquement lorsque la politique de votre dépôt le permet. |
+
+## Dépannage
+
+### La publication est désactivée
+
+Vérifiez qu'il y a des modifications en attente, que votre compte peut écrire dans la source et que la branche sélectionnée autorise l'action que vous essayez d'effectuer.
+
+### Une pull request est requise
+
+Votre branche de déploiement est protégée. Utilisez une branche fonctionnelle et ouvrez une pull request ou de fusion.
+
+### L'aperçu fonctionne mais le site en direct ne fonctionne pas
+
+Confirmez que le changement a été fusionné dans la branche de déploiement configurée dans les paramètres Git.
+
+### Le site en direct affiche toujours du contenu ancien
+
+Vérifiez l'historique des déploiements. Si aucune synchronisation n'a été exécutée, utilisez la mise à jour manuelle et vérifiez que le webhook du fournisseur est toujours configuré.
+
+### Une page API générée est manquante
+
+Confirmez que le chemin de spécification OpenAPI est configuré, validé dans la source et inclus dans la branche qui a déclenché la synchronisation.
+
+## Sujets connexes
+
+- [Publication](/fr/editor/publishing)
+- [Essentiels Git](/fr/editor/git-essentials)
+- [Déploiements de prévisualisation](/fr/deployment/preview-deployments)
+- [Mises à jour manuelles et historique](/fr/deployment/manual-updates-history)
+- [Flux de travail Git local](/fr/deployment/local-git-workflow)

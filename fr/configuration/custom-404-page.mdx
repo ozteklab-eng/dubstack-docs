@@ -1,0 +1,89 @@
+---
+title: Page 404 personnalisée
+description: "Configurez le message ou la redirection de secours utilisée lorsqu'un lecteur ouvre une page de documentation manquante."
+icon: file-question
+---
+
+Utilisez les paramètres de la page 404 pour contrôler ce que les lecteurs voient lorsqu'une URL de documentation ne correspond pas à une page publiée.
+
+Vous pouvez soit afficher une page d'erreur personnalisée, soit rediriger les pages manquantes vers un emplacement de secours connu.
+
+## Configurer la page 404
+
+Ajoutez `errors.404` à `dubstack.json` :
+
+```json
+{
+  "errors": {
+    "404": {
+      "title": "Page not found",
+      "description": "This page may have moved. Use search or return to the docs homepage.",
+      "redirect": ""
+    }
+  }
+}
+```
+
+Laissez `redirect` vide lorsque vous souhaitez que dubstack affiche la page 404.
+
+## Champs 404
+
+| Champ | Type | Par défaut | Objectif |
+| --- | --- | --- | --- |
+| `errors.404.title` | chaîne de caractères | `Page not found` | En-tête affiché sur la page d'erreur. |
+| `errors.404.description` | chaîne de caractères | `The page you requested could not be found.` | Texte d'accompagnement affiché sous l'en-tête. |
+| `errors.404.redirect` | chaîne | Aucun | Chemin de secours optionnel pour les pages manquantes. |
+
+## Rediriger les pages manquantes
+
+Définir `errors.404.redirect` lorsque chaque page manquante doit atterrir à un seul endroit :
+
+```json
+{
+  "errors": {
+    "404": {
+      "redirect": "/"
+    }
+  }
+}
+```
+
+Utilisez un chemin relatif à la racine pour une page sur le même site de documentation.
+
+<Callout type="warning">
+  Une redirection 404 est une solution de secours générale. Utilisez des [redirections](/fr/configuration/redirects) explicites pour les pages renommées afin que les lecteurs et les moteurs de recherche atterrissent sur la destination la plus proche.
+</Callout>
+
+## Quand utiliser des redirections à la place
+
+Utilisez `redirects` au lieu d'une redirection 404 globale lorsque :
+
+- une page a été renommée
+- une section a été déplacée
+- vous migrez d'une autre structure d'URL
+- un lien externe pointe vers une ancienne page
+- une page à fort trafic nécessite un remplacement précis
+
+Utilisez le message 404 personnalisé pour tout le reste.
+
+## Configuration du tableau de bord
+
+Vous pouvez modifier ces champs depuis la page de configuration du tableau de bord :
+
+1. Ouvrez le tableau de bord.
+2. Sélectionnez le déploiement.
+3. Ouvrez **Éditeur**.
+4. Ouvrez **Configurations du site**.
+5. Sélectionnez **Page 404**.
+6. Enregistrez le titre, la description ou le chemin de redirection.
+
+Les sites basés sur une source écrivent les paramètres dans `dubstack.json` lorsqu'ils sont pris en charge.
+
+## Testez la page
+
+Après avoir publié le changement :
+
+1. Ouvrez un chemin qui n'existe pas.
+2. Confirmez que le titre et la description s'affichent, ou que la redirection atterrit sur la page attendue.
+3. Confirmez que le chemin manquant n'est pas listé dans la navigation.
+4. Confirmez que toutes les pages renommées utilisent des redirections explicites au lieu de compter sur le comportement de secours.

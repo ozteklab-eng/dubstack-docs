@@ -1,0 +1,127 @@
+---
+title: "Prompts d'agent efficaces"
+sidebarTitle: Prompts efficaces
+description: "Rédigez des prompts d'agent ciblés qui décrivent le résultat de la documentation, le contexte source, les contraintes et les attentes de revue."
+icon: pen-line
+---
+
+L'agent du tableau de bord fonctionne mieux lorsque les prompts décrivent le résultat attendu pour la documentation, le contexte source et les critères de révision.
+
+Les prompts courts conviennent pour de petites modifications. Les travaux plus importants doivent inclure suffisamment de détails pour que l'agent puisse planifier, rédiger et ouvrir un changement révisable.
+
+## Commencez par le résultat
+
+Dites à l'agent ce qui doit être vrai une fois le travail terminé.
+
+Les bons résultats sont précis :
+
+```text
+Draft a troubleshooting page for users who see a 401 response from the API playground.
+```
+
+```text
+Update the GitHub deployment guide so it explains app installation, default branch selection, and manual update behavior.
+```
+
+Évitez les prompts vagues tels que :
+
+```text
+Improve the docs.
+```
+
+Si vous voulez un audit de qualité large, nommez le type d'audit :
+
+```text
+Review the quickstart for missing prerequisites and draft a pull request with only those fixes.
+```
+
+## Incluez la source de vérité
+
+Indiquez le contexte source que l'agent doit utiliser.
+
+Le contexte utile inclut :
+
+- un chemin de page de documentation
+- un lien de pull request
+- une clé d'incident Jira ou un filtre JQL délimité
+- un fil de Slack
+- une entrée du journal des modifications
+- une note de version du produit
+- un nom de branche ou de dépôt
+
+Exemples :
+
+```text
+Use Jira issue DOCS-42 and update /api-reference/playground-authentication with the new token rotation note.
+```
+
+```text
+Based on this Slack thread, draft a short guide under /deployment about manual updates and preview screenshots.
+```
+
+## Définissez la portée du changement
+
+Une demande dont la portée est définie est plus facile à réviser.
+
+Ajoutez des limites telles que :
+
+- quelle page ou dossier modifier
+- si créer une nouvelle page
+- si la navigation doit changer
+- si les exemples doivent être en TypeScript, Python, cURL ou du texte générique
+- si le résultat doit être une pull request en brouillon
+
+Exemple :
+
+```text
+Create one new page under /configuration. Add it to the Configuration group. Do not change API reference pages.
+```
+
+## Demander des modifications révisables
+
+Utilisez l'agent pour rédiger des modifications que votre équipe peut inspecter.
+
+Pour les déploiements basés sur un dépôt, privilégiez les prompts comme :
+
+```text
+Open a draft pull request with the proposed docs change.
+```
+
+```text
+Make the smallest safe change and explain what files changed in the pull request description.
+```
+
+## Utilisez des prompts de suivi
+
+Lorsque l'agent crée un brouillon, conservez les retours de suivi dans la même conversation ou le même fil lorsque c'est possible.
+
+Exemples :
+
+```text
+Make the intro shorter and add a prerequisite section.
+```
+
+```text
+Keep the page, but remove the unreleased feature mention.
+```
+
+```text
+Add one cURL example and one TypeScript example.
+```
+
+## Liste de vérification des prompts
+
+Avant d'envoyer une demande importante, vérifiez que le prompt répond aux questions suivantes :
+
+- Quelle page ou quel workflow doit changer ?
+- Quel contexte source l'agent doit-il faire confiance ?
+- Qu'est-ce que l'agent doit éviter de modifier ?
+- Le résultat doit-il être une pull request en brouillon ?
+- Qui doit le réviser ?
+
+## Sujets connexes
+
+- [Agent](/fr/ai/agent)
+- [Intégration Slack](/fr/ai/integrations/slack)
+- [Cas d'utilisation de l'Agent](/fr/ai/agent-use-cases)
+- [Flux de travail](/fr/workflows)

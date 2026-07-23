@@ -1,0 +1,103 @@
+---
+title: "Requêtes API en direct"
+description: "Configurez et testez en toute sécurité les requêtes envoyées depuis les pages publiques de référence API."
+icon: send
+---
+
+Les requêtes API en direct permettent aux lecteurs d'envoyer une requête documentée depuis une page de point de terminaison et d'inspecter la réponse sans quitter la documentation.
+
+Cette fonction est utile pour les API de sandbox, les parcours d'intégration et les points de terminaison pour lesquels les lecteurs disposent de leurs propres identifiants.
+
+## Flux de demande
+
+Lorsqu'un lecteur clique sur **Envoyer** ou **Essayez-le**, dubstack utilise ce flux :
+
+1. La page de point de terminaison publique charge la spécification OpenAPI publiée pour le site actuel.
+2. Le générateur de requêtes crée une URL, une méthode, des en-têtes et un corps à partir de l'opération sélectionnée.
+3. Le navigateur envoie le corps de la requête au proxy de l'API Playground de dubstack.
+4. Le proxy vérifie l'URL cible et l'origine en fonction de la spécification publiée.
+5. Le proxy transfère la requête et renvoie à la page le statut et le corps de la réponse du serveur en amont.
+
+La réponse s'affiche dans le panneau de réponse de l'API Playground.
+
+## Configurer l'URL de base
+
+Définissez `servers` dans votre spécification OpenAPI.
+
+```json
+{
+  "servers": [
+    {
+      "url": "https://api.example.com",
+      "description": "Production"
+    }
+  ]
+}
+```
+
+L'API Playground utilise l'URL du serveur pour créer les URL des demandes en direct.
+
+Pour les documents publics, choisissez un environnement sûr pour les lecteurs. Une API de sandbox ou de démonstration est généralement préférable à la production pour les exemples non authentifiés.
+
+## Vérifications de sécurité du proxy
+
+Le proxy public de l'API Playground vérifie chaque cible avant de transférer une requête.
+
+Il bloque :
+
+- les protocoles non HTTP
+- les noms d'hôtes locaux ou privés
+- les noms de services internes
+- les plages d'adresses IP réservées ou privées
+- les noms d'hôtes qui résolvent vers des réseaux privés ou réservés
+- les origines non listées dans le tableau `servers` de la spécification OpenAPI publiée
+
+Cela empêche une page de documents publics d'être utilisée comme proxy pour l'infrastructure privée.
+
+<Callout type="warning">
+  Les vérifications du proxy ne remplacent pas la sécurité de l'API. Votre API a toujours besoin d'autorisation, de limites de débit, de validation et de journalisation d'audit.
+</Callout>
+
+## En-têtes et corps transférés
+
+L'API Playground transfère les en-têtes fournis par les lecteurs, à l'exception des en-têtes de transport non sécurisés tels que `Host` et `Content-Length`.
+
+Pour les corps JSON, le proxy envoie `Content-Type: application/json` lorsqu'une requête a un objet comme corps et qu'aucun type de contenu n'est spécifié.
+
+Les requêtes GET et HEAD ne transmettent pas de corps.
+
+## Authentification
+
+Utilisez les schémas de sécurité OpenAPI pour afficher les entrées d'autorisation.
+
+Les lecteurs fournissent leurs propres identifiants dans l'API Playground. Les valeurs saisies dans l'API Playground sont des entrées en temps de requête et ne doivent pas être stockées dans votre dépôt de documentation.
+
+Voyez [Authentification de l'API Playground](/fr/api-reference/playground-authentication) pour des exemples de schémas de sécurité.
+
+## Modèles recommandés
+
+| Type d'API | Configuration recommandée |
+| --- | --- |
+| Sandbox publique | Activez les requêtes en direct et pointez `servers` vers l'URL de base de la sandbox. |
+| API de production | Activez uniquement si chaque point de terminaison dispose d'une autorisation appropriée et de contrôles contre l'abus. |
+| Opérations destructrices | Considérez `playground: none` et fournissez des exemples de code à la place. |
+| API interne | Maintenez le point de terminaison masqué ou désactivez l'API Playground. |
+
+## Dépannage
+
+Si une requête en direct échoue avant d'atteindre votre API :
+
+1. Vérifiez que la spécification dispose d'un `servers[0].url` valide.
+2. Vérifiez que l'origine cible correspond à l'une des origines des serveurs de la spécification.
+3. Vérifiez que le nom d'hôte est résolu publiquement.
+4. Vérifiez que l'URL n'est pas privée, locale ou réservée aux internes.
+5. Vérifiez que la page du point de terminaison est associée à l'opération OpenAPI correcte.
+
+Si la requête atteint votre API mais renvoie une erreur, inspectez le panneau de réponse. Le code d'état et le corps de la réponse du serveur en amont sont renvoyés à la page.
+
+## Sujets connexes
+
+- [Générateur de requêtes](/fr/api-reference/request-builder)
+- [Exemples de code](/fr/api-reference/code-examples)
+- [Authentification de l'API Playground](/fr/api-reference/playground-authentication)
+- [Dépannage](/fr/api-reference/troubleshooting)

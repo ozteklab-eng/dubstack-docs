@@ -1,0 +1,123 @@
+---
+title: Rédiger de la documentation avec Cursor
+description: "Configurez les règles de Cursor et l'accès MCP pour que Cursor fonctionne de manière cohérente avec les documents MDX de dubstack."
+icon: code
+---
+
+Cursor peut aider à rédiger et à revoir la documentation lorsqu'il dispose de règles de dépôt claires et d'accès au site de documentation publié.
+
+Utilisez-le avec dubstack de deux manières différentes :
+
+| Surface | Objectif |
+| --- | --- |
+| Règles de Cursor | Dites à Cursor comment votre dépôt de documentation est structuré et comment le contenu doit être rédigé. |
+| MCP public | Permettez à Cursor de rechercher et de lire le site de documentation publié via le point de terminaison `/mcp`. |
+
+## Exigences
+
+Avant de commencer, vérifiez :
+
+- Cursor est installé et authentifié
+- votre dépôt de documentation est ouvert dans Cursor
+- votre site de documentation a du contenu publié
+- le MCP public est activé si vous souhaitez que Cursor recherche le site de documentation en direct
+
+## Ajoutez des règles de projet
+
+Créez un fichier de règles sous `.cursor/rules`.
+
+```text
+.cursor/
+  rules/
+    docs.mdc
+dubstack.json
+index.mdx
+```
+
+Utilisez la règle pour définir la structure de la page, le style et les limites de sécurité.
+
+```md title=".cursor/rules/docs.mdc"
+# Documentation writing rule
+
+## Project context
+
+- This repository publishes docs through dubstack.
+- Pages are MDX files.
+- Navigation and site settings are configured in `dubstack.json`.
+
+## Writing standards
+
+- Use clear second-person instructions.
+- Add frontmatter with `title` and `description`.
+- Keep headings descriptive and scannable.
+- Prefer relative links for internal pages.
+- Use components only when they improve clarity.
+
+## Safety rules
+
+- Do not include secrets, tokens, private customer data, or unreleased commitments.
+- Do not invent product behavior. Check existing docs or source context first.
+- Keep generated changes small enough to review.
+```
+
+## Connecter le MCP public
+
+Ouvrez les paramètres MCP de Cursor et ajoutez un serveur HTTP streamable.
+
+```json
+{
+  "mcpServers": {
+    "my-docs": {
+      "url": "https://your-docs-domain.com/mcp"
+    }
+  }
+}
+```
+
+Pour un site de documentation monté sur un chemin, utilisez :
+
+```json
+{
+  "mcpServers": {
+    "my-docs": {
+      "url": "https://your-domain.com/docs/mcp"
+    }
+  }
+}
+```
+
+Rechargez Cursor après avoir enregistré la configuration MCP.
+
+## Prompts utiles
+
+```text
+Use the docs MCP to find the current deployment guide, then update this local page without duplicating existing instructions.
+```
+
+```text
+Review this new MDX page for missing frontmatter, broken relative links, and unclear headings.
+```
+
+```text
+Check whether the new page should be added to dubstack.json navigation.
+```
+
+## Publier les modifications
+
+Cursor modifie les fichiers locaux. Le site de documentation publique ne s'actualise qu'après que la source connectée publie :
+
+1. Examinez le diff dans votre fournisseur Git ou votre éditeur local.
+2. Validez et poussez vers la branche connectée, ou ouvrez une pull request.
+3. Laissez dubstack synchroniser les artefacts de documentation publiés.
+4. Vérifiez la page en direct et les résultats MCP.
+
+## Sujets connexes
+
+<CardGroup cols={2}>
+  <Card title="MCP public" icon="plug" href="/fr/ai/mcp">
+    Connectez les clients IA au serveur de documentation publiée.
+  </Card>
+  <Card title="Publication par l'éditeur" icon="upload-cloud" href="/fr/editor/publishing">
+    Comprenez comment fonctionne la publication basée sur la source.
+  </Card>
+</CardGroup>

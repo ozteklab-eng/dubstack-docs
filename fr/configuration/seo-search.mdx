@@ -1,0 +1,83 @@
+---
+title: SEO et recherche
+description: "Configurez les métadonnées, les invites de recherche, l'indexation et les surfaces de documents lisibles par l'IA."
+icon: search
+---
+
+De bonnes métadonnées aident les lecteurs, les moteurs de recherche et les outils d'IA à comprendre votre documentation.
+
+Commencez par des titres et des descriptions de page solides, puis ajoutez des redirections et des surfaces lisibles par l'IA à mesure que les documents s'étoffent.
+
+<CardGroup cols={2}>
+  <Card title="Guide SEO" icon="search-check" href="/fr/optimize/seo">
+    Configurez les métadonnées, les URLs canoniques, les sitemaps, le fichier robots.txt et les paramètres d'indexation.
+  </Card>
+
+  <Card title="Guide de recherche" icon="search" href="/fr/optimize/search">
+    Améliorez la qualité de la recherche intégrée avec des titres, des descriptions, des en-têtes et des résumés OpenAPI.
+  </Card>
+</CardGroup>
+
+## Métadonnées de page
+
+Définissez `title` et `description` dans le frontmatter :
+
+```mdx
+---
+title: Authentication
+description: Learn how to authenticate API requests.
+---
+```
+
+Le titre doit être spécifique. La description doit expliquer ce que le lecteur peut faire après avoir lu la page.
+
+## Qualité de la recherche
+
+Améliorez la recherche en rédigeant des pages avec :
+
+- en-têtes descriptifs
+- termes spécifiques du produit
+- étapes procédurales courtes
+- exemples proches de l'explication qu'ils soutiennent
+- liens vers des pages connexes
+
+Évitez les titres génériques tels que `Overview` dans les sections profondes, sauf si le contexte de navigation rend le sujet clair.
+
+## Documents lisibles par l'IA
+
+Les documents publiés exposent des surfaces lisibles par les machines afin que les outils d'IA puissent utiliser le contenu des documents actuels :
+
+| Surface | Objectif |
+| --- | --- |
+| `/llms.txt` | Point d'entrée pour les outils d'IA pour découvrir le contenu des documents. |
+| `/llms-full.txt` | Les grands documents sont indexés lorsqu'ils sont disponibles. |
+| `/mcp` | Point de terminaison MCP en lecture seule publique pour la recherche et l'accès aux documents au format fichier. |
+| `/skill.md` | Instructions de compétence pour les outils d'IA pris en charge. |
+| Markdown de la page | Représentation Markdown des pages de documentation lorsqu'elle est prise en charge par le moteur de rendu. |
+
+## Liste de vérification d'indexation
+
+- Maintenez les pages publiques utiles sans nécessiter l'accès au tableau de bord.
+- Ne publiez pas les identifiants privés ou les runbooks réservés aux internes.
+- Utilisez des redirections lors du changement d'URLs établies.
+- Maintenez les résumés et descriptions d'OpenAPI précis.
+- Républiez après des changements importants dans la navigation ou les métadonnées.
+
+## Dépannage de la recherche
+
+Si une page est absente de la recherche ou des réponses de l'assistant :
+
+1. Vérifiez que la page est dans la navigation ou intentionnellement découvrable.
+2. Vérifiez que la page est synchronisée avec le site en direct.
+3. Vérifiez que la page n'est pas masquée de la sortie publique.
+4. Exécutez une mise à jour manuelle.
+5. Demandez à nouveau en utilisant les termes qui apparaissent dans le titre de la page ou les titres.
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/optimize/seo">SEO</a>
+  <a href="/fr/optimize/search">Recherche</a>
+  <a href="/fr/configuration/seo-search-reference">Référence SEO et recherche</a>
+  <a href="/fr/ai/llms-indexes">Indices lisibles par l'IA</a>
+</RelatedTopics>

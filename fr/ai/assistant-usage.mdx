@@ -1,0 +1,98 @@
+---
+title: "Utiliser l'assistant"
+sidebarTitle: "Utiliser l'assistant"
+description: "Posez des questions ciblées à l'assistant public et comprenez comment les réponses utilisent le contexte des documents publiés."
+icon: messages-square
+---
+
+L'assistant public aide les lecteurs à obtenir des réponses à partir de vos documents publiés.
+
+Il est conçu pour le support des lecteurs, pas pour la rédaction de documentation. Il ne peut pas modifier des fichiers, changer les paramètres ou accéder au contexte privé du tableau de bord.
+
+## Ouvrir l'assistant
+
+Les lecteurs peuvent ouvrir l'assistant à partir de l'en-tête des documents ou à partir d'une action contextuelle activée sur une page.
+
+Lorsqu'il est ouvert à partir d'une action de page, l'assistant peut utiliser la page actuelle comme contexte supplémentaire pour la conversation.
+
+## Poser des questions ciblées
+
+Les bonnes questions à l'assistant incluent la tâche ou la section qui intéresse le lecteur.
+
+Exemples :
+
+```text
+How do I connect a GitHub repository?
+```
+
+```text
+What DNS records do I need for a custom domain?
+```
+
+```text
+Where is the OpenAPI spec configured?
+```
+
+```text
+Why is my preview deployment not updating?
+```
+
+## Consulter les sources
+
+Les réponses de l'assistant peuvent inclure des liens vers les sources.
+
+Ouvrez les pages de documentation liées lorsque :
+
+- vous modifiez la configuration de production
+- la réponse inclut des détails sur l'API
+- la réponse mentionne le plan ou le comportement des droits d'accès
+- la réponse affecte l'authentification, les domaines ou le déploiement
+
+Les réponses de l'IA peuvent contenir des erreurs. Traitez les sources comme le chemin de vérification final.
+
+## Poser des questions complémentaires
+
+L'assistant conserve le contexte de la conversation actuelle.
+
+Exemples :
+
+```text
+Show me the shorter version.
+```
+
+```text
+Give me the steps as a checklist.
+```
+
+```text
+Where is that configured in dubstack.json?
+```
+
+## Lorsque les réponses sont obsolètes
+
+L'assistant lit l'index des documents publiés.
+
+Si la réponse ne contient pas un changement récent :
+
+1. Confirmez que le changement de documentation est enregistré.
+2. Confirmez que la mise à jour du déploiement est terminée.
+3. Rafraîchissez la page.
+4. Posez à nouveau la question avec le chemin de la page ou le nom de la fonctionnalité.
+
+## Lorsque l'assistant ne peut pas répondre
+
+L'assistant doit éviter de deviner lorsqu'il n'y a pas assez d'informations dans les documents.
+
+S'il ne peut pas répondre :
+
+- recherchez la documentation avec la recherche du site
+- vérifiez les pages sources liées
+- contactez le propriétaire de la documentation ou utilisez le canal d'assistance indiqué par le site
+- envoyez un retour sur la page lorsque cette fonctionnalité est activée
+
+## Sujets connexes
+
+- [Assistant](/fr/ai/assistant)
+- [Configurer l'assistant](/fr/ai/assistant-settings)
+- [Fichiers de découverte IA](/fr/ai/ai-discovery-files)
+- [MCP](/fr/ai/mcp)

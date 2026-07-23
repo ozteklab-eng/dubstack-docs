@@ -1,0 +1,117 @@
+---
+title: Notifications
+description: "Vérifiez la préparation des notifications de workflow, les canaux Slack configurés et l'historique des livraisons récentes."
+icon: bell
+---
+
+La page Notifications offre aux administrateurs d'espace de travail un emplacement unique pour examiner l'état des notifications de workflow du site sélectionné.
+
+Utilisez-la pour confirmer si Slack est prêt, quels workflows envoient des notifications et si les dernières livraisons de notifications ont réussi.
+
+## Ouvrir les notifications
+
+Ouvrez **Paramètres > Espace > Notifications** depuis le tableau de bord.
+
+La page est limitée au site actuel. Si vous gérez plusieurs sites, basculez entre les sites à partir de la barre latérale du tableau de bord avant de comparer les statuts des notifications.
+
+## Ce que la page affiche
+
+La page Notifications résume :
+
+| Zone | Ce qu'elle vous indique |
+| --- | --- |
+| Préparation de Slack | Si l'intégration Slack est connectée et disponible comme canal de notification. |
+| Workflows envoyant des notifications | Le nombre de workflows ayant configuré des canaux de notification Slack. |
+| Livraisons récentes | Envois récents de notifications de workflow, incluant l'état de succès ou d'échec. |
+| Notifications de workflow configurées | Les canaux Slack sélectionnés, le mode de notification, l'horaire et l'état du workflow. |
+
+Les paramètres de notification restent configurés à l'intérieur de chaque workflow. La page Notifications est une vue opérationnelle en lecture seule, donc le panneau de workflow reste la source de vérité pour le comportement du workflow.
+
+## Préparation de Slack
+
+Les notifications de workflow utilisent Slack comme canal de notification.
+
+Une connexion Slack prête signifie :
+
+- Slack est connecté pour l'espace.
+- L'intégration expose la capacité de notification.
+- L'application a accès aux canaux sélectionnés dans les paramètres du workflow.
+
+Si Slack n'est pas connecté, ouvrez **Paramètres > Espace > Intégrations** et connectez Slack avant de configurer les notifications de workflow.
+
+<Callout type="info">
+  Les canaux Slack privés nécessitent généralement d'inviter l'application dubstack au canal avant qu'elle ne puisse envoyer des notifications là-bas.
+</Callout>
+
+## Notifications de workflow configurées
+
+La liste des notifications de workflow configurées est lue à partir de la configuration du workflow sauvegardée.
+
+Chaque ligne peut afficher :
+
+- nom du workflow
+- état du workflow activé
+- mode de notification sélectionné
+- planification
+- canaux Slack sélectionnés
+
+Les modes de notification sont :
+
+| Mode | Comportement |
+| --- | --- |
+| Tous les résultats | Envoie des notifications pour les exécutions réussies et échouées. |
+| Seulement les échecs | Envoie des notifications uniquement lorsqu'une exécution échoue. |
+
+Pour modifier la cible des notifications d'un workflow, ouvrez **Automate > Workflows**, sélectionnez le workflow et mettez à jour les paramètres de notification dans le panneau de workflow.
+
+## Livraisons récentes
+
+Les livraisons de notifications récentes sont capturées à partir des résultats des exécutions de workflow.
+
+Une livraison peut afficher :
+
+- nom du workflow
+- canaux Slack
+- heure de livraison
+- statut de livraison
+- message d'erreur en cas d'échec de l'envoi
+
+Utilisez cette section lorsqu'un workflow s'est exécuté mais qu'un canal Slack n'a pas reçu le message attendu.
+
+## Dépannage
+
+### Slack est connecté mais les notifications sont indisponibles
+
+Ouvrez **Paramètres > Espace de travail > Intégrations** et vérifiez que Slack est connecté pour le même espace de travail et la même portée de site.
+
+Vérifiez ensuite que l'intégration Slack dispose de la capacité de notification. Si cette capacité est absente, reconnectez Slack.
+
+### Aucun workflow n'est listé
+
+Ouvrez **Automate > Workflows** et vérifiez qu'au moins un workflow a les notifications Slack activées.
+
+La page Notifications ne crée pas automatiquement les paramètres de notification.
+
+### Une livraison a échoué
+
+Vérifiez le message d'erreur dans la ligne de livraison récente, puis vérifiez :
+
+- l'application Slack est toujours installée
+- l'application est invitée au canal cible
+- le canal n'a pas été archivé
+- le workflow a toujours une cible de notification valide
+
+### Notifications des workflows de copie de dépôt
+
+Les workflows de copie de dépôt peuvent envoyer des notifications Slack comme les autres workflows. Les exécutions planifiées de copie de dépôt consomment des crédits d'automatisation, et les résultats de livraison s'affichent dans la même liste récente des livraisons.
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/workflows/configuration">Configurer les exécutions de workflow</a>
+  <a href="/fr/workflows/manage">Gérer les workflows</a>
+  <a href="/fr/workflows/reference">Référence des workflows</a>
+  <a href="/fr/workflows/integrations">Intégrations de workflows</a>
+  <a href="/fr/ai/integrations/slack">Intégration Slack</a>
+  <a href="/fr/dashboard/usage">Utilisation</a>
+</RelatedTopics>

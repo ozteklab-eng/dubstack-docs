@@ -1,0 +1,144 @@
+---
+title: "Fichiers de découverte de l'IA"
+description: "Comprenez les fichiers llms.txt, llms-full.txt, skill.md et de découverte de MCP générés sur les sites de documentation publiés."
+icon: file-search
+---
+
+dubstack publie des fichiers lisibles par l'IA pour chaque site de documentation public afin que les agents puissent découvrir la documentation actuelle sans gratter l'interface du site.
+
+Ces fichiers sont générés à partir de la navigation et du contenu de la documentation publiée. Ils sont mis à jour lors de la publication du site.
+
+## Fichiers générés
+
+| Chemin | Objectif |
+| --- | --- |
+| `/llms.txt` | Index compact des pages de documentation publique, des descriptions de page et des spécifications OpenAPI déclarées. |
+| `/llms-full.txt` | Ensemble de contenu complet dédoublonné pour les outils qui intègrent de grands fichiers texte. |
+| `/skill.md` | Instructions pour les agents qui décrivent comment utiliser le site de documentation et son serveur MCP. |
+| `/mcp` | Point d'extrémité HTTP de transport Streamable public MCP. |
+| `/.well-known/mcp` | Document de découverte MCP pour les outils qui détectent automatiquement les serveurs. |
+| `/.well-known/mcp.json` | Alias JSON du document de découverte MCP. |
+| `/.well-known/mcp/server-card.json` | Métadonnées d'outil et annotations de sécurité pour le serveur MCP public. |
+| `/.well-known/mcp/server-cards.json` | Liste de cartes de serveur pour les clients qui s'attendent à plusieurs points de terminaison MCP. |
+| `/.well-known/agent-skills/index.json` | Manifeste de découverte de compétences recommandé avec métadonnées d'intégrité. |
+| `/.well-known/skills/index.json` | Index des compétences de compatibilité. |
+| `/.well-known/agent-card.json` | Carte d'agent qui décrit le site de documentation et relie les compétences disponibles. |
+
+## `llms.txt`
+
+`llms.txt` est l'index rapide.
+
+Utilisez-le lorsqu'un outil d'IA doit découvrir la liste des pages avant de décider ce qu'il doit lire.
+
+```text
+https://your-docs-domain.com/llms.txt
+```
+
+Il contient :
+
+- le titre du site
+- la description du site
+- un lien vers `/llms-full.txt`
+- liens vers les pages de documentation publique de la navigation publiée
+- descriptifs de page provenant du frontmatter lorsqu'ils sont disponibles
+- descriptions de points de terminaison générées à partir des métadonnées des opérations OpenAPI lorsqu'aucune description de frontmatter n'est présente
+- liens vers les spécifications OpenAPI déclarées telles que `/api-reference/openapi.json`
+
+Si la même page apparaît dans plus d'un onglet de navigation, `llms.txt` liste la page une seule fois en utilisant la première position de navigation publiée.
+
+## `llms-full.txt`
+
+`llms-full.txt` contient le contenu textuel rendu des pages de documentation publique.
+
+```text
+https://your-docs-domain.com/llms-full.txt
+```
+
+Utilisez-le pour les outils qui intègrent un seul ensemble de texte. Si la même page apparaît dans plus d'un onglet de navigation, l'export complet inclut le corps de cette page une seule fois.
+
+Pour les agents interactifs, privilégiez le serveur MCP public car MCP permet à l'agent de rechercher et de lire uniquement les pages dont il a besoin.
+
+## `skill.md`
+
+`skill.md` donne aux agents des instructions pour utiliser vos documents comme source de vérité.
+
+```text
+https://your-docs-domain.com/skill.md
+```
+
+Les points de compétence générés orientent vers :
+
+- le site de documentation publique
+- le serveur MCP public
+- les pages de démarrage recommandées de la navigation
+- des instructions de feedback lorsque le feedback de l'agent est activé
+
+Si votre dépôt inclut des fichiers de compétence personnalisés, dubstack les utilise au lieu de se fier uniquement à la compétence générée. Voir [Fichiers de compétence personnalisés](/fr/ai/custom-skill-files).
+
+## Ressources MCP
+
+Le serveur MCP public expose `skill.md` en tant que ressource. Les clients MCP qui prennent en charge les ressources peuvent découvrir la compétence sans demander à l'utilisateur d'installer séparément la compétence.
+
+## Manifestes de découverte d'agents
+
+Le manifeste agent-skills est la méthode préférée pour que les outils découvrent les fichiers de compétence hébergés.
+
+```text
+https://your-docs-domain.com/.well-known/agent-skills/index.json
+```
+
+Il inclut un hachage `sha256` pour chaque fichier de compétence afin que les clients puissent vérifier le contenu qu'ils récupèrent.
+
+L'index des compétences compatibles reste disponible pour les clients utilisant le format original de découverte des compétences.
+
+```text
+https://your-docs-domain.com/.well-known/skills/index.json
+```
+
+Les deux index pointent vers les fichiers de compétence disponibles pour le site. Utilisez l'URL renvoyée par l'index au lieu de deviner le chemin final de la compétence.
+
+## Carte d'agent
+
+dubstack publie également une carte d'agent.
+
+```text
+https://your-docs-domain.com/.well-known/agent-card.json
+```
+
+La carte d'agent décrit le site de documentation, l'URL de documentation canonique, les modes de texte pris en charge et les fichiers de compétence disponibles pour le site.
+
+## Désactiver la découverte d'IA publique
+
+Les fichiers de découverte d'IA suivent les contrôles d'indexation publique du déploiement.
+
+Lorsque l'indexation publique est désactivée, les fichiers d'IA lisibles et l'index MCP public doivent renvoyer `404`.
+
+Utilisez cela pour les sites qui doivent rester publics pour les lecteurs mais ne doivent pas être exposés via des index lisibles par les machines.
+
+## Comportement des documents protégés
+
+L'authentification des documents protège les fichiers lisibles par l'IA de la même manière qu'elle protège les pages rendues.
+
+Lorsque l'authentification par mot de passe est activée :
+
+- les requêtes non authentifiées vers les fichiers de découverte `/llms.txt`, `/llms-full.txt`, `/skill.md`, `/mcp` et `.well-known` ne révèlent pas le contenu protégé
+- les lecteurs doivent déverrouiller le site avant que le contenu d'IA lisible protégé ne puisse être renvoyé
+- les sites du sous-chemin `/docs` conservent tous les chemins de découverte d'IA sous `/docs`, tels que `/docs/llms.txt` et `/docs/.well-known/mcp`
+- les clients MCP publics sans session de lecteur valide ne peuvent pas rechercher ou lire les pages protégées
+
+Pour la configuration du contrôle d'accès, voir [Authentification des documents](/fr/deployment/docs-authentication).
+
+## Checklist de sécurité
+
+- Ne publiez pas de secrets, de jetons privés ou de données clients non libérées dans la documentation publique.
+- Maintenez les titres et descriptions de page spécifiques pour que les résultats de recherche et MCP soient utiles.
+- Utilisez des redirections lors du déplacement de pages établies.
+- Républiez après de grands changements de navigation ou d'OpenAPI.
+- Testez `/llms.txt`, `/skill.md`, `/.well-known/mcp`, `/.well-known/mcp/server-card.json`, `/.well-known/agent-skills/index.json` et `/.well-known/agent-card.json` après avoir modifié les paramètres de découverte de l'IA. Utilisez un client MCP pour tester `/mcp`.
+
+## Sujets connexes
+
+- [MCP](/fr/ai/mcp)
+- [Fichiers de compétences personnalisées](/fr/ai/custom-skill-files)
+- [Actions contextuelles](/fr/ai/contextual-actions)
+- [SEO et recherche](/fr/configuration/seo-search)

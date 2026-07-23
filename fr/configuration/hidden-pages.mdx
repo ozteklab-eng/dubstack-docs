@@ -1,0 +1,131 @@
+---
+title: Pages cachées
+description: Gardez les pages hors de la navigation générée tout en préservant le contenu lié à la source.
+icon: eye-off
+---
+
+Les pages cachées restent dans votre dépôt de documentation, mais sont supprimées de la navigation générée et des scans de workflow qui ignorent les pages cachées.
+
+Utilisez les pages cachées pour les brouillons, les outils de migration ou les pages liées à la source qui ne devraient pas apparaître dans la barre latérale pour l'instant.
+
+## Masquer une page avec le frontmatter
+
+Ajoutez `hidden: true` au frontmatter de la page :
+
+```mdx
+---
+title: Internal migration notes
+hidden: true
+---
+```
+
+Lorsque le worker de synchronisation voit ce champ, les métadonnées de la page sont marquées comme cachées.
+
+Le `hidden: true` au niveau de la page l'emporte sur les paramètres de recherche de groupe de navigation caché. Si une page est elle-même cachée, elle est exclue de la recherche, de la sortie de la carte du site, des index accessibles par l'IA, de la recherche publique MCP et de la récupération par l'assistant, sauf si vous activez l'indexation des pages cachées au niveau du site.
+
+## Supprimer une page de la navigation
+
+Une page non listée dans la navigation de `dubstack.json` n'apparaît pas dans la barre latérale rendue.
+
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Guides",
+            "pages": ["index", "quickstart"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Dans cet exemple, seuls `index` et `quickstart` sont listés dans le groupe Guides.
+
+## Masquer un groupe mais le garder recherchable
+
+Définissez `hidden: true` et `searchable: true` sur un groupe de navigation lorsqu'il faut garder les pages hors de la navigation mais toujours visibles dans les surfaces de découverte publique.
+
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Migration helpers",
+            "hidden": true,
+            "searchable": true,
+            "pages": [
+              "migration/old-endpoints",
+              "migration/legacy-auth"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Les pages d'un groupe caché mais recherchable sont incluses dans :
+
+- recherche sur le site
+- sortie de la carte du site
+- `/llms.txt` et `/llms-full.txt`
+- recherche publique MCP et accès au système de fichiers
+- contexte de récupération par l'assistant
+
+## Indexer toutes les pages cachées
+
+Définissez `seo.indexing` sur `all` lorsque chaque page cachée doit être découvrable par la recherche, la sortie de la carte du site, le MCP public, les index accessibles par l'IA et la récupération par l'assistant.
+
+```json
+{
+  "seo": {
+    "indexing": "all"
+  }
+}
+```
+
+Utilisez cela uniquement lorsque les pages cachées sont accessibles par lien direct, et non du contenu privé.
+
+## Exclure une page de la découverte
+
+Utilisez `searchable: false` lorsqu'une page doit rester accessible mais ne pas apparaître dans la recherche ou la récupération. Utilisez `noindex: true` lorsqu'une page doit être exclue de la sortie de la carte du site et des surfaces de découverte publique par l'IA.
+
+```mdx
+---
+title: Internal redirect helper
+searchable: false
+---
+```
+
+## Cacher n'est pas privé
+
+La navigation cachée n'est pas un contrôle d'accès. Ne l'utilisez pas pour du contenu confidentiel.
+
+Pour le contenu qui ne doit pas être publié du tout, excluez le fichier avec [`.dubstackignore`](/fr/configuration/dubstackignore) ou gardez-le en dehors du dépôt de documentation.
+
+<Callout type="warning">
+  Si un fichier est publié et que quelqu'un connaît l'URL, la navigation cachée seule ne doit pas être considérée comme une limite de confidentialité.
+</Callout>
+
+## Quand utiliser les pages cachées
+
+- Garder temporairement une page en attente de la réorganisation d'une section.
+- Garder les notes de migration disponibles pour l'équipe pendant une transition.
+- Publier une page d'aide accessible uniquement par lien direct qui ne doit pas distraire les lecteurs dans la navigation.
+
+## Quand ne pas utiliser les pages cachées
+
+- Secrets ou identifiants.
+- Runbooks internes uniquement.
+- Documents privés spécifiques aux clients.
+- Tout ce qui nécessite une authentification ou un accès basé sur les rôles.

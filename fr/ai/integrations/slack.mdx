@@ -1,0 +1,252 @@
+---
+title: Intégration Slack
+description: "Connectez Slack afin que l'agent puisse répondre aux questions sur les documents, rédiger des mises à jour de documentation et informer les équipes depuis Slack."
+icon: message-circle
+---
+
+L'intégration Slack ajoute l'agent dubstack à votre espace de travail Slack.
+
+Une fois connecté, les membres autorisés de l'espace de travail peuvent poser des questions à l'agent depuis Slack et demander des modifications de documentation pour le déploiement sélectionné.
+
+Utilisez Slack lorsque le contexte d'une mise à jour de documentation existe déjà dans une conversation d'équipe, un fil de publication, un suivi d'incident ou un fichier texte court.
+
+## Ce que Slack peut faire
+
+Slack peut être utilisé pour :
+
+- poser des questions sur les documents publiés
+- lancer des demandes de mise à jour de documentation depuis Slack
+- ouvrir des propositions de pull request lorsque le déploiement dispose d'un accès Git prêt à l'écriture
+- mettre à jour la même proposition de pull request à partir de réponses suivantes dans le même fil
+- utiliser un contexte de fil ou de canal Slack limité dans les exécutions de l'agent et des workflows
+- envoyer des notifications de workflow vers des canaux sélectionnés
+
+Slack ne remplace pas la revue de dépôt. Les modifications de documentation passent toujours par le fournisseur Git connecté.
+
+## Exigences
+
+Avant de connecter Slack, vérifiez :
+
+- le déploiement est sélectionné dans le tableau de bord
+- l'application Slack est configurée pour votre espace de travail
+- votre plan et votre organisation sont éligibles pour la surface de l'agent
+- le dépôt de documentation est connecté si vous souhaitez que l'agent crée des pull requests
+- les autorisations Slack sont complètes après l'installation
+- le fournisseur Git connecté peut créer des branchements de révision et des pull requests ou des demandes de fusion
+- l'agent d'écriture est activé pour l'environnement
+
+Si Slack a été installé avant l'ajout de nouvelles autorisations, reconnectez l'application depuis le tableau de bord afin d'obtenir les autorisations manquantes.
+
+Si votre espace de travail Slack nécessite une approbation d'application, demandez à un administrateur ou propriétaire de l'espace de travail d'approbuer l'application dubstack avant de la connecter depuis le tableau de bord.
+
+Pour Slack Enterprise Grid, assurez-vous que l'application est installée dans l'espace de travail spécifique où les collègues mentionneront l'agent. Une approbation d'application au niveau de l'organisation n'est pas toujours suffisante pour que le bot réponde à l'intérieur d'un espace de travail.
+
+## Connectez Slack
+
+1. Ouvrez le tableau de bord.
+2. Sélectionnez le déploiement.
+3. Allez vers **Agent**.
+4. Choisissez **Connecter Slack**.
+5. Approuvez l'autorisation de l'espace de travail Slack.
+6. Retour à la page de l'Agent.
+7. Confirmez que la ligne de l'application Slack indique que l'agent est connecté.
+
+Vous pouvez également gérer la connexion depuis **Paramètres > Organisation > Intégrations**.
+
+## Reconnecter Slack
+
+Reconnectez l'application Slack lorsque :
+
+- les portées Slack ont changé après l'installation initiale
+- le jeton du bot a été révoqué
+- un administrateur d'espace a réapprouvé l'application
+- l'application semble installée mais le tableau de bord signale des autorisations manquantes
+
+La réinstallation depuis le tableau de bord rafraîchit la connexion Slack stockée. Les canaux, fils de discussion et pull requests existantes ne sont pas supprimés.
+
+## Choisissez un déploiement
+
+Un espace Slack peut être connecté à plusieurs déploiements.
+
+Lorsque l'agent ne peut pas déduire en toute sécurité le déploiement, il vous demande de choisir un déploiement avant de répondre ou de créer des modifications de documentation.
+
+Utilisez les boutons de déploiement dans Slack, ou répondez avec :
+
+```text
+@dub use docs-production
+```
+
+Le choix de déploiement sauvegardé est personnel à votre utilisateur Slack dans cet espace. Vos collègues peuvent choisir un déploiement différent.
+
+Vous pouvez changer plus tard en envoyant un autre message `@dub use <deployment>`.
+
+## Utiliser l'agent dans Slack
+
+Une fois connecté, ouvrez Slack et mentionnez l'agent dans une conversation prise en charge.
+
+Exemples :
+
+```text
+@dub what can you do for this deployment?
+```
+
+```text
+@dub draft a short troubleshooting page from this thread and open a pull request.
+```
+
+```text
+@dub explain where our API authentication docs mention token rotation.
+```
+
+Utilisez les messages directs pour des questions privées. Mentionnez l'agent dans un canal lorsque la réponse ou la mise à jour doit rester associée à une discussion d'équipe.
+
+Si la demande est uniquement une question de documentation, l'agent répond à partir de l'index de documentation publié du déploiement sélectionné et inclut les liens sources lorsqu'ils sont pertinents.
+
+Si Jira est connecté, les réponses de Slack peuvent inclure le contexte de l'incident Jira si votre demande demande explicitement le contexte Jira, inclut une clé d'incident Jira ou inclut une requête `jql:`.
+
+## Référencer les dépôts sources
+
+Les demandes de Slack peuvent référencer des dépôts sources connectés lorsque le changement de documentation dépend du code produit, du comportement de l'API ou des détails de l'implémentation en dehors du dépôt de documentation.
+
+Les dépôts sources sont un contexte en lecture seule. L'agent peut inspecter des fichiers limités, des pull requests ou des demandes de fusion provenant du dépôt source connecté, mais le changement de documentation généré cible toujours le dépôt de documentation actif.
+
+Exemples :
+
+```text
+@dub update the authentication guide based on the changes in acme/api-server#1234 and open a draft pull request.
+```
+
+```text
+@dub review the source repository context under services/billing and draft a docs update for the new invoice webhook behavior.
+```
+
+Utilisez les références de dépôt source lorsque :
+
+- le code produit se trouve en dehors du dépôt de documentation
+- un chemin de monorepo doit déclencher une mise à jour de documentation ciblée
+- une demande de fusion explique un comportement que la documentation doit capturer
+
+Si le dépôt n'est pas connecté dans les paramètres Git, l'agent demande à un administrateur ou un éditeur de le connecter avant de l'utiliser comme contexte source.
+
+## Rôles et autorisations
+
+Les autorisations de l'agent Slack suivent le rôle dubstack de l'équipe pour l'organisation et le déploiement sélectionnés.
+
+| Rôle | Comportement de Slack |
+| --- | --- |
+| Propriétaire ou administrateur | Peut se connecter et se déconnecter de Slack, poser des questions sur la documentation et demander des modifications de documentation lorsque l'écriture Git est prête. |
+| Éditeur | Peut poser des questions sur la documentation et demander des modifications de documentation lorsque l'écriture Git est prête. |
+| Visionneur | Peut poser des questions sur la documentation. Les actions d'écriture sont bloquées. |
+
+Si un collègue ne peut pas créer une pull request de brouillon depuis Slack, vérifiez son rôle dubstack, le déploiement sélectionné et la disponibilité de l'écriture Git.
+
+## Rédaction de documentation depuis Slack
+
+Lorsque votre demande demande un changement de documentation, l'agent suit ce cycle de vie :
+
+1. Vérifie le déploiement sélectionné.
+2. Vérifie l'accès à l'écriture Git.
+3. Lit les instructions d'écriture Git lorsqu'elles sont présentes.
+4. Rédige une mise à jour MDX à partir de votre demande et du contexte Slack délimité.
+5. Crée une branche dans le fournisseur Git connecté.
+6. Écrit la page ou la mise à jour générée.
+7. Ouvre une pull request ou une demande de fusion en brouillon pour examen.
+
+Exemple :
+
+```text
+@dub draft a short troubleshooting page from this release thread and open a draft pull request.
+```
+
+L'agent poste les progrès dans le fil de discussion Slack pendant qu'il travaille. La réponse finale inclut la branche créée, le fichier modifié, le lien d'examen et le lien de l'éditeur lorsqu'ils sont disponibles.
+
+## Suivre un brouillon
+
+Gardez les demandes de suivi dans le même fil de discussion Slack lorsque vous souhaitez réviser le brouillon.
+
+Par exemple :
+
+```text
+@dub make the troubleshooting steps shorter and add a warning about protected branches.
+```
+
+Lorsque le fil dispose déjà d'une session d'écriture active, l'agent charge le fichier de brouillon existant depuis la branche de revue et met à jour le même pull request ou demande de fusion au lieu d'en créer un séparé.
+
+Si le dépôt connecté change après le début du fil, l'agent s'arrête au lieu de mettre à jour le mauvais dépôt.
+
+## Joindre des fichiers en tant que contexte
+
+Vous pouvez joindre des fichiers textuels petits à une demande d'écriture.
+
+Les exemples pris en charge incluent :
+
+- Fichiers Markdown et MDX
+- Fichiers JSON et YAML
+- Fichiers CSV et TSV
+- JavaScript, TypeScript, HTML, XML et fichiers journaux
+- fichiers texte brut
+
+Les fichiers non pris en charge ou non lisibles ne sont pas utilisés comme contexte. Si tous les fichiers joints sont non pris en charge, l'agent vous demande de fournir un contexte texte à la place.
+
+Maintenez les fichiers joints ciblés. Par défaut, l'agent lit jusqu'à trois fichiers de type texte, jusqu'à 64 Ko par fichier. Les fichiers volumineux peuvent être tronqués et les fichiers binaires sont ignorés.
+
+## Préparation à l'écriture du dépôt
+
+Pour les demandes Slack qui créent des modifications de documentation, le déploiement a besoin d'une intégration Git prête à l'écriture.
+
+Les déploiements basés sur GitHub doivent avoir l'application GitHub installée sur le dépôt avec un accès aux pull requests.
+
+Les déploiements basés sur GitLab doivent avoir un accès d'écriture GitLab connecté avant la création des demandes de fusion.
+
+L'écriture via Slack n'est pas disponible lorsque :
+
+- le déploiement est géré ou protégé contre les mutations du dépôt
+- le déploiement utilise un dépôt de secours hébergé
+- aucun dépôt de documentation n'est connecté
+- le fournisseur connecté ne prend pas en charge l'écriture
+- l'application GitHub manque des autorisations requises pour le dépôt
+- l'accès d'écriture GitLab n'est pas connecté
+- le modèle d'écriture n'est pas configuré
+- L'écriture via Slack est désactivée pour l'environnement
+
+Lorsque l'écriture n'est pas disponible, l'agent peut toujours répondre aux questions sur la documentation si l'index de documentation publié est prêt.
+
+## Notifications des workflows
+
+Les workflows peuvent envoyer les résultats d'exécution à Slack lorsqu'il est connecté.
+
+Utilisez les paramètres de notification dans le panneau des workflows pour choisir le canal et indiquer si vous souhaitez être notifié pour toutes les exécutions ou uniquement les échecs.
+
+Les notifications des workflows sont distinctes des demandes d'écriture. La connexion à Slack n'envoie pas automatiquement chaque exécution de workflow dans un canal ; choisissez la cible de notification dans les paramètres du workflow.
+
+## Dépannage
+
+<AccordionGroup>
+  <Accordion title="L'agent me demande de choisir un déploiement">
+    Plus d'un déploiement est connecté à l'espace de travail Slack. Utilisez les boutons dans Slack ou répondez avec `@dub use <deployment>` avant de demander à l'agent de répondre ou de rédiger des modifications.
+  </Accordion>
+
+  <Accordion title="L'agent répond aux questions mais ne crée pas de pull request">
+    Vérifiez la préparation à l'écriture du dépôt. Le déploiement a besoin d'un fournisseur Git connecté, d'un accès écriture du fournisseur et d'un modèle d'écriture activé.
+  </Accordion>
+
+  <Accordion title="L'agent dit que le déploiement est protégé">
+    Certains déploiements sont intentionnellement en lecture seule pour l'écriture de l'agent. Choisissez un déploiement avec un accès d'écriture du dépôt, ou demandez à un administrateur de confirmer que les mutations du dépôt sont autorisées pour le déploiement sélectionné.
+  </Accordion>
+
+  <Accordion title="Les fichiers joints sont rejetés">
+    Les fichiers joints doivent être de type texte et suffisamment petits pour être lus en toute sécurité. Coller l'extrait important dans le fil, ou attacher un fichier Markdown, JSON, YAML, CSV, journal ou code à la place.
+  </Accordion>
+
+  <Accordion title="Un suivi crée un résultat incorrect">
+    Gardez les demandes de suivi dans le même fil Slack que le brouillon original. Lancer un nouveau message direct ou un fil de canal démarre une nouvelle session d'écriture.
+  </Accordion>
+</AccordionGroup>
+
+## Déconnecter Slack
+
+1. Ouvrez **Agent** ou **Paramètres > Organisation > Intégrations**.
+2. Trouver Slack
+3. Choisissez **Déconnecter**.
+
+La déconnexion de Slack arrête les nouvelles interactions de l'agent Slack pour cette organisation ou cette portée de déploiement. Les pull requests existantes et les documents publiés ne sont pas supprimés.

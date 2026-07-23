@@ -1,0 +1,160 @@
+---
+title: Schémas imbriqués
+description: "Documentez les objets imbriqués, les tableaux, les références et les schémas composés de manière claire dans les pages de référence API générées."
+icon: brackets
+---
+
+Les schémas imbriqués facilitent la lecture des pages de référence API lorsque les charges utiles de demande ou de réponse contiennent des objets à l'intérieur d'autres objets.
+
+dubstack lit la structure des schémas à partir d'OpenAPI et affiche les champs de corps et de réponse imbriqués sur les pages de points de terminaison générées.
+
+## Utilisez les schémas de composants
+
+Définissez des modèles réutilisables dans `components.schemas` et référencez-les depuis les opérations.
+
+```json
+{
+  "components": {
+    "schemas": {
+      "Project": {
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique project identifier.",
+            "example": "proj_123"
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable project name.",
+            "example": "Developer docs"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Ensuite, référencez le schéma depuis les réponses ou les corps de demande.
+
+```json
+{
+  "responses": {
+    "200": {
+      "description": "Project details",
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/Project"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+## Objets imbriqués
+
+Utilisez `properties` à l'intérieur des champs d'objet.
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "description": "Custom metadata for the project.",
+      "properties": {
+        "environment": {
+          "type": "string",
+          "example": "production"
+        },
+        "owner": {
+          "type": "string",
+          "example": "platform"
+        }
+      }
+    }
+  }
+}
+```
+
+Les champs imbriqués s'affichent sous leur champ parent, permettant aux lecteurs de comprendre la forme complète de la charge utile sans lire la spécification brute.
+
+## Tableaux d'objets
+
+Utilisez `items` pour les tableaux.
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "members": {
+      "type": "array",
+      "description": "Users assigned to the project.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["owner", "editor", "viewer"]
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+L'API Playground peut également générer des valeurs d'exemple à partir des schémas d'éléments de tableau.
+
+## Schémas composés
+
+dubstack résout les modèles de composition OpenAPI courants pour les exemples générés et l'affichage des champs.
+
+| Modèle | Comportement |
+| --- | --- |
+| `$ref` | Résout les schémas de composants. |
+| `allOf` | Fusionne les propriétés d'objet là où c'est possible. |
+| `oneOf` | Utilise le premier candidat non nul pour les exemples générés. |
+| `anyOf` | Utilise le premier candidat non nul pour les exemples générés. |
+
+Pour les API polymorphes complexes, incluez des exemples explicites afin que les lecteurs voient la forme exacte que vous attendez.
+
+## Les descriptions comptent
+
+Ajoutez des descriptions aux champs imbriqués, pas seulement aux objets de niveau supérieur.
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "pagination": {
+      "type": "object",
+      "description": "Pagination state for the current result set.",
+      "properties": {
+        "nextCursor": {
+          "type": "string",
+          "nullable": true,
+          "description": "Cursor for the next page, or null when there are no more results."
+        }
+      }
+    }
+  }
+}
+```
+
+Des descriptions claires rendent les pages de points de terminaison générées utiles pour les humains et améliorent les réponses des agents du serveur MCP public.
+
+## Sujets connexes
+
+- [Exemples de réponse](/fr/api-reference/response-examples)
+- [Générateur de demande](/fr/api-reference/request-builder)
+- [Configuration OpenAPI](/fr/api-reference/openapi-setup)

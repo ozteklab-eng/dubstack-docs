@@ -1,0 +1,103 @@
+---
+title: "Brouillons de l'éditeur"
+description: "Comprenez comment l'éditeur conserve les modifications non enregistrées avant leur publication dans le système de gestion de versions."
+icon: file-clock
+---
+
+Les brouillons de l'éditeur protègent les modifications en cours avant leur publication.
+
+L'éditeur conserve les modifications non enregistrées des pages Markdown et MDX dans le navigateur afin qu'une actualisation ou une navigation accidentelle ne supprime pas immédiatement votre travail. Les brouillons représentent un état d'édition temporaire. Ils ne constituent pas la source de vérité publiée.
+
+```text
+Open page
+-> edit content
+-> draft saved in this browser
+-> review changed files
+-> publish to Git
+-> draft cleared after successful publish
+```
+
+## Ce que les brouillons préservent
+
+Les brouillons aident à gérer les interruptions courantes lors de l'édition :
+
+- actualiser l'onglet du tableau de bord
+- quitter l'éditeur et y revenir plus tard
+- perdre temporairement la vue de la page en cours
+- créer des pages ou des dossiers avant que la mise à jour de la source ne soit terminée
+
+Pour les fichiers Markdown et MDX, l'éditeur restaure le brouillon s'il correspond toujours à la version actuelle du fichier. Cela évite de réappliquer des modifications locales obsolètes par rapport à une version plus récente de la source.
+
+## Ce que ne font pas les brouillons
+
+Les brouillons ne constituent pas un état d'espace de travail partagé.
+
+| Comportement des brouillons | Signification |
+| --- | --- |
+| Local au navigateur | Un brouillon est lié au profil du navigateur dans lequel il a été créé. |
+| Non publié | Les lecteurs ne peuvent pas voir un brouillon avant qu'il ne soit publié. |
+| Pas une branche de révision | Utilisez des branches ou des pull requests pour la révision en équipe. |
+| Pas un stockage permanent | Publiez ou validez le travail important avant de supprimer les données du navigateur. |
+
+Si un collègue modifie le même fichier dans le système de gestion de versions, rechargez la page et vérifiez la dernière version de la source avant de continuer.
+
+## Examiner les brouillons avant la publication
+
+Utilisez le menu **Publier** pour inspecter les modifications en attente.
+
+Le menu affiche :
+
+- nombre de fichiers modifiés
+- fichiers avec des modifications en attente
+- si aucun changement n'est en attente
+- actions de publication, de création de branche ou de révision disponibles pour la source actuelle
+
+Avant de publier, vérifiez que les fichiers modifiés correspondent à l'édition souhaitée. Portez une attention particulière à `dubstack.json`, aux spécifications OpenAPI, aux extraits, aux fichiers multimédias et aux pages supprimées.
+
+## Effacer un brouillon
+
+Utilisez **Annuler toutes les modifications** du menu de publication lorsque le brouillon doit être supprimé.
+
+Après l'annulation des modifications :
+
+1. Rouvrez la page dans l'éditeur.
+2. Confirmer que le contenu source est restauré.
+3. Vérifier que le menu de publication ne montre aucune modification en attente.
+
+## Quand utiliser une branche au lieu d'un brouillon
+
+Utilisez une branche ou une pull request lorsque la modification doit être révisée ou touche plusieurs zones.
+
+Les bonnes options pour les branches incluent :
+
+- nouveaux guides
+- refonte de la navigation
+- modifications de la spécification OpenAPI
+- réécritures importantes
+- mises à jour rédigées par l'agent
+- modifications du thème ou `dubstack.json`
+
+Pour le processus complet de révision, voir [Branchement et publication](/fr/editor/branching-and-publishing).
+
+## Dépannage
+
+### Mon brouillon n'a pas été restauré
+
+L'éditeur restaure un brouillon uniquement s'il correspond toujours à la version source sur laquelle il était basé. Si la source a changé pendant ce temps, l'éditeur conserve la version source actuelle pour éviter d'appliquer un contenu obsolète.
+
+Vérifiez l'historique Git, l'historique des déploiements et les changements récents de l'équipe avant de recréer l'édition.
+
+### J'ai effectué des modifications dans un autre navigateur et je ne vois pas le brouillon
+
+Les brouillons sont propres au navigateur. Ouvrez le profil de navigateur dans lequel vous avez commencé les modifications, ou utilisez une branche ou une pull request pour un travail partagé.
+
+### Le site publié n'affiche pas mon brouillon
+
+Les brouillons ne sont pas du contenu publié. Publiez la modification et attendez la fin de la synchronisation, puis ouvrez directement la page publiée.
+
+## Sujets connexes
+
+- [Publication](/fr/editor/publishing)
+- [Branchement et publication](/fr/editor/branching-and-publishing)
+- [Essentiels Git](/fr/editor/git-essentials)
+- [Mises à jour manuelles et historique](/fr/deployment/manual-updates-history)

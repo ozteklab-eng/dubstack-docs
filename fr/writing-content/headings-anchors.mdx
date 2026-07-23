@@ -1,0 +1,99 @@
+---
+title: Titres et ancres
+description: "Structurez les pages MDX avec des titres prévisibles, des entrées de sommaire et des liens d'ancre stables."
+icon: heading
+---
+
+Les titres rendent une page facile à parcourir, alimentent le sommaire et créent des liens directs vers les sections.
+
+## Niveaux de titres
+
+Utilisez un titre de page depuis le frontmatter, puis structurez le corps avec les titres `##` et `###`.
+
+```mdx
+---
+title: GitHub deployment
+---
+
+## Connect the GitHub app
+
+### Choose repositories
+
+### Select the production branch
+
+## Publish changes
+```
+
+Évitez de commencer le corps avec un titre `#` en double qui correspond au titre du frontmatter. Le rendeur possède déjà le titre de la page.
+
+## Liens d'ancre
+
+Les titres reçoivent des identifiants d'ancre à partir du texte du titre. L'ancre générée est en minuscules, supprime la mise en forme et remplace les caractères non alphanumériques par des tirets.
+
+| Titre | Ancre |
+| --- | --- |
+| `## Publish changes` | `#publish-changes` |
+| `## API keys and secrets` | `#api-keys-and-secrets` |
+| `## Step 2: Configure Git` | `#step-2-configure-git` |
+
+Utilisez ces ancres pour des liens directs :
+
+```mdx
+See [Publish changes](#publish-changes).
+```
+
+Utilisez les chemins complets de page pour les liens d'ancre entre pages :
+
+```mdx
+See [Git publishing](/editor/publishing#save-publish-and-sync).
+```
+
+## Ancres stables
+
+Changer le texte du titre modifie l'ancre générée. Si des liens externes pointent déjà vers un titre, évitez de renommer ce titre facilement.
+
+Lorsqu'un titre doit changer :
+
+1. Ajoutez une redirection si le chemin de la page a changé.
+2. Gardez un titre de compatibilité proche lorsque l'ancre est largement liée.
+3. Mettez à jour les liens internes dans le dépôt de documentation.
+4. Vérifiez la page dans le navigateur après publication.
+
+## Comportement du sommaire
+
+Le sommaire est construit à partir des titres visibles de la page. Gardez les titres concis pour que la barre latérale reste utile.
+
+Étiquettes de titre pertinentes :
+
+- `Connect GitHub`
+- `Configure redirects`
+- `Troubleshoot failed syncs`
+
+Étiquettes de titre faibles :
+
+- `More details`
+- `Other stuff`
+- `Important`
+
+## Ancres de journal des modifications
+
+Les entrées `Update` créent des ancres à partir de leur valeur `label`.
+
+```mdx
+<Update label="2026-07-05" description="Configuration references">
+  Added field-by-field configuration reference pages.
+</Update>
+```
+
+L'exemple ci-dessus crée `#2026-07-05`.
+
+Utilisez des étiquettes uniques sur une page de journal des modifications pour que les liens directs restent prévisibles.
+
+## Vérification des titres
+
+- Utilisez le `title` du frontmatter pour le titre de la page.
+- Utilisez le `##` pour les sections principales de la page.
+- Utilisez le `###` pour les sous-sections.
+- Maintenez les titres assez courts pour le sommaire.
+- Utilisez des termes que les lecteurs recherchent.
+- Vérifiez les ancres avant de partager des liens profonds publiquement.

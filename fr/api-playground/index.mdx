@@ -1,0 +1,78 @@
+---
+title: API Playground
+description: "Configurez des pages interactives de points de terminaison API à partir des spécifications OpenAPI et des métadonnées MDX."
+icon: terminal
+---
+
+L'API Playground permet aux lecteurs d'inspecter les détails des points de terminaison, de copier des exemples de requêtes et d'envoyer des requêtes en direct depuis les pages de référence API publiées lorsque le point de terminaison est sûr pour une utilisation interactive.
+
+Utilisez cette page comme point de départ pour configurer, sécuriser et déboguer la documentation API interactive.
+
+<CardGroup cols={2}>
+  <Card title="Aperçu de l'API Playground" icon="terminal" href="/fr/api-reference/playground-overview">
+    Découvrez comment les opérations OpenAPI deviennent de la documentation et des vues « Essayer ».
+  </Card>
+  <Card title="Générateur de requêtes" icon="panel-top" href="/fr/api-reference/request-builder">
+    Comprenez comment les paramètres, les corps, les exemples et les schémas d'authentification deviennent des entrées de requête.
+  </Card>
+  <Card title="Authentification de l'API Playground" icon="key" href="/fr/api-reference/playground-authentication">
+    Configurez les jetons porteurs, les clés API, l'authentification de base et la gestion sécurisée des identifiants.
+  </Card>
+  <Card title="Requêtes API en direct" icon="send" href="/fr/api-reference/live-requests">
+    Configurez le routage des requêtes, les vérifications de sécurité du proxy et les environnements de test.
+  </Card>
+  <Card title="Exemples de code" icon="code" href="/fr/api-reference/code-examples">
+    Générez des extraits de code à partir de l'état courant de l'API Playground.
+  </Card>
+  <Card title="Exemples de réponses" icon="braces" href="/fr/api-reference/response-examples">
+    Ajoutez des exemples de requête et de réponse qui facilitent le test des pages de point de terminaison générées.
+  </Card>
+</CardGroup>
+
+## Configurer l'API Playground
+
+Le paramètre de l'API Playground au niveau du site se trouve dans l'objet `api` de `dubstack.json`.
+
+```json dubstack.json
+{
+  "api": {
+    "openapi": "api-reference/openapi.json",
+    "playground": {
+      "display": "interactive"
+    }
+  }
+}
+```
+
+Utilisez `interactive` lorsque les lecteurs doivent voir le générateur de requêtes complet. Utilisez `none` lorsque les pages de point de terminaison doivent afficher uniquement la documentation.
+
+Pour les pages MDX manuelles des points de terminaison, reliez la page à une opération dans le frontmatter.
+
+```mdx
+---
+title: Create project
+openapi: "POST /v1/projects"
+playground: interactive
+---
+```
+
+## Liste de vérification de sécurité
+
+Avant d'activer les requêtes en direct sur les documents publics :
+
+- gardez les identifiants réels hors de Git et des exemples
+- pointez `servers` vers un environnement API public sécurisé
+- désactivez l'API Playground pour les points de terminaison destructifs ou réservés aux internes
+- gardez les contrôles CORS, l'autorisation, la limitation de débit et la journalisation d'audit sur l'API elle-même
+- vérifiez que les documents avec domaine personnalisé et montés sur un chemin routent correctement les requêtes de l'API Playground
+
+L'API Playground améliore l'expérience utilisateur. Il ne remplace pas les contrôles de sécurité de l'API.
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/api-reference/introduction">Référence API</a>
+  <a href="/fr/api-reference/openapi-setup">Configuration OpenAPI</a>
+  <a href="/fr/api-reference/spec-management">Gérer les spécifications API</a>
+  <a href="/fr/api-reference/troubleshooting">Dépannage de la référence API</a>
+</RelatedTopics>

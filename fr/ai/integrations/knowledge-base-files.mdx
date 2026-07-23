@@ -1,0 +1,46 @@
+---
+title: Intégrations de base de connaissances et de fichiers
+description: Utilisez des pages et des fichiers externes comme contexte délimité pour les workflows de documentation.
+icon: file-stack
+---
+
+Les intégrations de base de connaissances et de fichiers permettent aux workflows de lire des pages ou fichiers externes sélectionnés lorsque les détails sources sont en dehors du dépôt de documentation.
+
+Utilisez cette famille pour les notes de version, les décisions d'implémentation, les runbooks, les spécifications produit et les documents de transfert interne qui devraient informer une mise à jour de documentation.
+
+## Fournisseurs pris en charge
+
+| Fournisseur | Statut | Portée | Capacités |
+| --- | --- | --- | --- |
+| [Confluence](/fr/ai/integrations/confluence) | Actif | Partagé | Contexte de page délimité pour les workflows pris en charge. |
+| Notion | Catalogue | Partagé | Contexte de page et de base de connaissances planifié. |
+| Google Drive | Catalogue | Personnel | Contexte de fichier, de dossier et de disque partagé planifié. |
+| Nextcloud | Catalogue | Partagé | Contexte de fichier et de base de connaissances autohébergé planifié. |
+
+Les fournisseurs uniquement catalogués restent indisponibles pour les exécutions jusqu'à ce que l'autorisation, la pagination, les vérifications d'accès, la rédaction et les tests soient mis en œuvre.
+
+## Cas d'utilisation
+
+Utilisez le contexte de base de connaissances lorsque :
+
+- les notes de produit sont dans un wiki interne
+- un plan de version explique le comportement des fonctionnalités
+- un runbook devient de la documentation de dépannage publique
+- un workflow a besoin d'un contexte non-code délimité en parallèle d'un dépôt source
+
+Utilisez le contexte du dépôt au lieu de l'implémentation source lorsqu'elle est la source la plus fiable.
+
+## Limites
+
+L'intégration Confluence active nécessite un CQL délimité. Utilisez un espace, un titre, une étiquette, un type de contenu, un propriétaire, un parent ou une fenêtre de date.
+
+Les futurs fournisseurs de fichiers et de wikis devraient suivre le même modèle. L'agent ne devrait récupérer que les pages ou fichiers sélectionnés nécessaires à l'exécution, et il ne devrait pas stocker les documents externes bruts dans l'historique d'exécution, sauf si le produit le précise explicitement.
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/ai/integrations/confluence">Intégration Confluence</a>
+  <a href="/fr/workflows/integrations">Intégrations de workflow</a>
+  <a href="/fr/ai/integration-permissions">Permissions et portées d'intégration</a>
+  <a href="/fr/ai/connector-capabilities">Capacités du connecteur</a>
+</RelatedTopics>

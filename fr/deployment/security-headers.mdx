@@ -1,0 +1,99 @@
+---
+title: En-têtes de sécurité
+description: Comprenez les en-têtes de sécurité de base des sites de documentation hébergés dubstack.
+icon: shield-check
+---
+
+Les sites de documentation hébergés dubstack incluent des en-têtes de sécurité de base dans les réponses publiques.
+
+Ces en-têtes réduisent l'exposition accidentnelle des données et limitent l'accès aux fonctionnalités de navigateur sensibles sans bloquer les prévisualisations du tableau de bord ou les configurations de proxy de domaine personnalisé.
+
+## En-têtes par défaut
+
+Les pages de documentation publiques, les fichiers texte lisibles par l'API et les exports en markdown incluent ces en-têtes :
+
+| En-tête | Valeur par défaut | Objectif |
+| --- | --- | --- |
+| `X-Content-Type-Options` | `nosniff` | Empêche les navigateurs de traiter une réponse comme un autre type de contenu. |
+| `Referrer-Policy` | `strict-origin-when-cross-origin` | Envoie les chemins de référence complets lors de la navigation sur le même origine et uniquement l'origine entre les sites. |
+| `Permissions-Policy` | `camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), browsing-topics=()` | Désactive les fonctionnalités de navigateur que les pages de documentation n'ont pas besoin par défaut. |
+| `X-Permitted-Cross-Domain-Policies` | `none` | Empêche les fichiers de politique cross-domain hérités d'étendre l'accès. |
+
+Ces paramètres par défaut s'appliquent aux pages de documentation normales et aux surfaces lues par les agents tels que `/llms.txt`, `/llms-full.txt`, `/skill.md` et les exports de niveau de page `.md`.
+
+## Renforcement des actifs statiques
+
+Les actifs statiques proxys tels que les SVG conservent leur type de contenu et leurs en-têtes de mise en cache d'origine.
+
+Pour les actifs SVG servis via la route d'actif statique hébergée, dubstack préserve également une politique de sécurité du contenu verrouillée provenant du service d'actif :
+
+```text
+Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; sandbox
+```
+
+Cela permet aux actifs SVG téléchargés d'être affichés tout en empêchant leur chargement de scripts, de ressources externes ou d'API de navigateur privilégiées.
+
+## Intégration et prévisualisations du tableau de bord
+
+dubstack ne définit pas `X-Frame-Options` de manière globale sur les pages de documentation hébergées.
+
+Cela est intentionnel. Le tableau de bord, le système de capture d'écran de déploiement et certains flux de prévisualisation propriétaires clients ont besoin d'intégrer des pages de documentation provenant d'un hôte différent.
+
+Si votre organisation a besoin d'un contrôle strict des iframes, appliquez un `Content-Security-Policy` avec une directive `frame-ancestors` sur votre propre reverse proxy ou couche edge après avoir confirmé que vos workflows de tableau de bord et de prévisualisation fonctionnent toujours.
+
+## En-têtes de domaine personnalisé et de proxy
+
+Lorsque vous montez des documents derrière votre propre reverse proxy, gardez ces règles à l'esprit :
+
+- Transmettez les en-têtes de réponse de dubstack à moins que vous n'ayez une politique plus stricte.
+- Ne remplacez pas `Content-Type` pour les réponses markdown, texte, JSON ou SVG.
+- Gardez les requêtes `/docs/api/*`, assistant, feedback et MCP non mis en cache.
+- Évitez d'ajouter un en-tête `X-Frame-Options: DENY` global à moins d'être certain que vous n'avez pas besoin de tableaux de bord ou de prévisualisations internes.
+
+## Politique de sécurité du contenu
+
+Une CSP complète pour l'ensemble du site dépend de vos polices choisies, analyse, scripts personnalisés, images, intégrations, fonctionnalités d'assistant et points de terminaison de l'assistant de jeu d'API.
+
+dubstack ne propose actuellement pas de paramètre de tableau de bord pour une CSP globale personnalisée. Si vous terminez le trafic via votre propre proxy, configurez la CSP là-bas et incluez uniquement les domaines utilisés par vos documents.
+
+Pour des listes de contrôle de CSP détaillées et des exemples de proxy, voir [Politique de sécurité du contenu](/fr/deployment/csp-configuration).
+
+Un point de départ prudent pour un CSP géré par un proxy est :
+
+```text
+default-src 'self';
+img-src 'self' data: https:;
+font-src 'self' https://fonts.gstatic.com;
+style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+script-src 'self';
+connect-src 'self' https://<your-api-host> https://*.dubstack.live;
+frame-ancestors 'self';
+base-uri 'self';
+form-action 'self'
+```
+
+Adaptez la politique à votre hôte API de production, vos outils d'analyse personnalisés, votre contenu intégré et tous les services tiers que vous utilisez intentionnellement.
+
+## Valider les en-têtes
+
+Utilisez `curl` pour inspecter les en-têtes en direct d'une page :
+
+```bash
+curl -I https://docs.example.com/quickstart
+```
+
+Vérifiez séparément les surfaces en markdown et lisibles par l'IA :
+
+```bash
+curl -I https://docs.example.com/llms.txt
+curl -I https://docs.example.com/quickstart.md
+```
+
+## Dépannage
+
+| Problème | À vérifier |
+| --- | --- |
+| La prévisualisation du tableau de bord est vide | Supprimez le `X-Frame-Options` global ou relâchez votre politique `frame-ancestors` de proxy pour les hôtes de tableau de bord fiables. |
+| Les polices ou les icônes sont manquantes | Votre CSP personnalisé pourrait manquer l'hôte de police ou de feuille de style. |
+| L'assistant ou la recherche ne peut pas se connecter | Votre CSP `connect-src` pourrait manquer l'hôte de documentation, l'hôte API ou le point de terminaison de l'assistant. |
+| Les logos SVG ne s'affichent pas | Confirmez que la réponse SVG conserve `Content-Type: image/svg+xml` et n'est pas réécrite en HTML. |

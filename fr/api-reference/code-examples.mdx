@@ -1,0 +1,169 @@
+---
+title: Exemples de code
+description: "Générez des exemples de requêtes à partir des métadonnées OpenAPI et des entrées de l'API Playground."
+icon: code
+---
+
+Les exemples de code offrent aux lecteurs un point de départ prêt à copier pour appeler chaque point de terminaison.
+
+dubstack génère des exemples à partir de l'état de la requête utilisé par l'API Playground, de sorte que les extraits restent alignés avec la méthode, l'URL, les entrées, les en-têtes, l'autorisation et le corps affichés sur la page.
+
+## Comment les exemples sont générés
+
+Les exemples générés proviennent de l'opération OpenAPI publiée et des entrées actuelles de l'API Playground.
+
+| Source | Comportement des exemples |
+| --- | --- |
+| `servers` | Définit l'URL de base utilisée dans les extraits. |
+| Paramètres de chemin | Remplace les espaces réservés de chemin tels que `{projectId}`. |
+| Paramètres de requête | Ajoute les chaînes de requête URL. |
+| Paramètres d'en-tête | Ajoute les en-têtes de requête. |
+| Schémas de sécurité | Ajoute l'en-tête d'autorisation ou le champ affiché dans l'API Playground. |
+| Corps de la requête | Ajoute une charge utile JSON lorsqu'une opération accepte un corps. |
+| Exemples et valeurs par défaut | Fournit des valeurs de départ plus sécurisées lorsqu'elles sont incluses dans la spécification. |
+
+Lorsqu'un lecteur modifie une entrée de l'API Playground, l'exemple généré est mis à jour pour correspondre à cette requête.
+
+## Langues pour lesquelles des exemples sont générés
+
+Les exemples générés sont disponibles depuis les pages de points de terminaison publics dans ces langages :
+
+| Langue | Pages de points de terminaison publics | Environnement interactif du tableau de bord |
+| --- | --- | --- |
+| cURL | Pris en charge | Pris en charge |
+| Python | Pris en charge | Pris en charge |
+| JavaScript | Pris en charge | Pris en charge |
+| PHP | Pris en charge | Pris en charge |
+| Go | Pris en charge | Pris en charge |
+| Java | Pris en charge | Pris en charge |
+| Ruby | Pris en charge | Pris en charge |
+
+Utilisez la page publique du point de terminaison comme source de vérité pour ce que les lecteurs voient dans vos documents publiés.
+
+## Ajoutez des exemples de requête utiles
+
+Les meilleurs exemples générés commencent par une spécification OpenAPI utile.
+
+Ajoutez des exemples de corps de requête lorsque le point de terminaison accepte du JSON.
+
+```yaml
+paths:
+  /v1/projects:
+    post:
+      summary: Create project
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectRequest'
+            examples:
+              minimal:
+                summary: Minimal project
+                value:
+                  name: Developer docs
+```
+
+Les exemples au niveau des champs sont également utiles lorsqu'un exemple de requête complet n'est pas disponible.
+
+```yaml
+components:
+  schemas:
+    CreateProjectRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: Developer docs
+        visibility:
+          type: string
+          enum:
+            - public
+            - private
+          example: public
+```
+
+## Gardez les exemples sécurisés
+
+Utilisez des valeurs de remplacement pour les identifiants, les identifiants clients et les données spécifiques à l'environnement.
+
+```json
+{
+  "projectId": "proj_123",
+  "name": "Developer docs"
+}
+```
+
+Ne commettez pas de données clients réelles ou d'identifiants en direct dans un fichier OpenAPI public.
+
+## Ajoutez des exemples de SDK au point de terminaison
+
+Les exemples générés sont les meilleurs pour les requêtes HTTP directes.
+
+Utilisez `x-codeSamples` sur une opération OpenAPI lorsque les lecteurs doivent voir directement des exemples de SDK, de CLI ou de flux de travail sur la page générée du point de terminaison.
+
+```yaml
+paths:
+  /mcp:
+    get:
+      summary: Get MCP discovery
+      x-codeSamples:
+        - lang: bash
+          label: Fetch the discovery document
+          source: |
+            curl --request GET \
+              --url https://dubstack.ai/docs/mcp
+        - lang: javascript
+          label: Load tools from the discovery document
+          source: |
+            const response = await fetch('https://dubstack.ai/docs/mcp');
+            const discovery = await response.json();
+
+            console.log(discovery.capabilities.tools);
+```
+
+Chaque exemple prend en charge :
+
+| Champ | Requis | Objectif |
+| --- | --- | --- |
+| `lang` | Oui | Langue ou alias pour la mise en évidence de la syntaxe. |
+| `label` | Non | Titre compréhensible par l'utilisateur pour l'exemple. |
+| `source` | Oui | Code source prêt à copier. |
+
+Utilisez les exemples SDK du point de terminaison lorsque vous devez expliquer :
+
+- Utilisation du SDK
+- Comportement de réessai
+- Boucles de pagination
+- Vérification des webhooks
+- Tâches longues
+- Modèles de gestion des erreurs
+
+Utilisez des exemples MDX classiques lorsque le contenu appartient au guide environnant plutôt qu'à la page du point de terminaison.
+
+````mdx
+```javascript Node.js SDK
+const project = await client.projects.create({
+  name: 'Developer docs',
+});
+```
+````
+
+## Exemples de dépannage
+
+Si un exemple généré semble incorrect :
+
+1. Vérifiez la méthode et le chemin de l'opération dans la spécification OpenAPI.
+2. Vérifiez `servers` pour l'URL de base correcte.
+3. Confirmez que les paramètres de chemin et de requête obligatoires disposent de descriptions et de schémas.
+4. Ajoutez des exemples de corps de requête pour les charges utiles complexes.
+5. Confirmez que la page du point de terminaison est associée à l'opération OpenAPI souhaitée.
+
+## Liens
+
+- [Aperçu de l'API Playground](/fr/api-reference/playground-overview)
+- [Générateur de requêtes](/fr/api-reference/request-builder)
+- [Demandes API en direct](/fr/api-reference/live-requests)
+- [Exemples de réponses](/fr/api-reference/response-examples)

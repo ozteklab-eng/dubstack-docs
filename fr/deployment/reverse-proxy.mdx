@@ -1,0 +1,201 @@
+---
+title: Proxy inversé
+description: "Redirigez un chemin d'accès racine de site web, tel que /docs, vers une origine dubstack."
+icon: route
+---
+
+Utilisez un proxy inversé lorsque une autre application possède déjà votre domaine racine et que vous souhaitez que la documentation soit hébergée sur le même hôte.
+
+```text
+example.com          -> main website
+example.com/docs     -> dubstack docs
+example.com/docs/api -> dubstack docs API routes
+```
+
+Un proxy inversé est nécessaire pour les documents basés sur les chemins, car le DNS ne peut router que les noms d'hôte, pas les chemins d'URL individuels.
+
+## Quand utiliser cela
+
+Utilisez un proxy inversé lorsque :
+
+- Votre site marketing, application produit ou passerelle sert déjà `example.com`.
+- Vous souhaitez que la documentation soit montée à `example.com/docs`.
+- Vous pouvez contrôler les règles de routage pour `/docs` et `/docs/*`.
+- Vous pouvez transmettre les en-têtes d'hôte publics à l'origine amont.
+
+Si vos documents peuvent être hébergés à `docs.example.com`, utilisez plutôt [Domaines personnalisés](/fr/deployment/custom-domains). Les domaines basés sur l'hôte sont plus simples car ils nécessitent uniquement le DNS et la vérification du domaine.
+
+## Exigences de routage
+
+Proxiez ces chemins d'accès vers le nom d'hôte de l'origine indiqué dans le tableau de bord dubstack.
+
+| Chemin d'accès public | Cible amont | Requis |
+| --- | --- | --- |
+| `/docs` | `https://<site>--origin.dubstack.live/docs` | Oui |
+| `/docs/*` | `https://<site>--origin.dubstack.live/docs/*` | Oui |
+| `/docs/_next/*` | `https://<site>--origin.dubstack.live/docs/_next/*` | Oui |
+| `/docs/api/*` | `https://<site>--origin.dubstack.live/docs/api/*` | Oui |
+| `/docs/api/static/*` | `https://<site>--origin.dubstack.live/docs/api/static/*` | Si des actifs de dépôt sont utilisés |
+| `/docs/assets/*` | `https://<site>--origin.dubstack.live/docs/assets/*` | Si des URLs d'actifs bruts sont utilisées |
+| `/docs/images/*` | `https://<site>--origin.dubstack.live/docs/images/*` | Si des URLs d'images brutes sont utilisées |
+| `/docs/img/*` | `https://<site>--origin.dubstack.live/docs/img/*` | Si utilisé |
+| `/docs/fonts/*` | `https://<site>--origin.dubstack.live/docs/fonts/*` | Si des polices personnalisées ou empaquetées sont utilisées |
+| `/docs/llms.txt` | `https://<site>--origin.dubstack.live/docs/llms.txt` | Si la découverte IA est activée |
+| `/docs/llms-full.txt` | `https://<site>--origin.dubstack.live/docs/llms-full.txt` | Si la découverte IA est activée |
+| `/docs/skill.md` | `https://<site>--origin.dubstack.live/docs/skill.md` | Si la découverte des compétences de l'agent est activée |
+| `/docs/mcp` | `https://<site>--origin.dubstack.live/docs/mcp` | Si le MCP public est activé |
+| `/docs/feedback` | `https://<site>--origin.dubstack.live/docs/feedback` | Si le retour page ou agent est activé |
+| `/docs/.well-known/mcp` | `https://<site>--origin.dubstack.live/docs/.well-known/mcp` | Si le MCP public est activé |
+| `/docs/.well-known/mcp.json` | `https://<site>--origin.dubstack.live/docs/.well-known/mcp.json` | Si le MCP public est activé |
+| `/docs/.well-known/mcp/*` | `https://<site>--origin.dubstack.live/docs/.well-known/mcp/*` | Si le MCP public est activé |
+| `/docs/.well-known/agent-card.json` | `https://<site>--origin.dubstack.live/docs/.well-known/agent-card.json` | Si la découverte des compétences des agents est activée |
+| `/docs/.well-known/agent-skills/*` | `https://<site>--origin.dubstack.live/docs/.well-known/agent-skills/*` | Si la découverte des compétences des agents est activée |
+| `/docs/.well-known/skills/*` | `https://<site>--origin.dubstack.live/docs/.well-known/skills/*` | Si la découverte des compétences des agents est activée |
+
+Ne pas supprimer le préfixe `/docs` avant d'envoyer la requête à l'origine. L'origine génère les liens, les ressources, la recherche, les demandes d'assistant, les soumissions de feedback, la découverte du MCP et les index LLM sous ce préfixe.
+
+Certains extraits d'edge-worker mappent des points de terminaison d'exécution tels que `/docs/mcp`, `/docs/api/*` et `/docs/_next/*` vers des chemins d'origine canoniques sans le préfixe `/docs`. Cela est également valide lorsqu'ils transmettent les en-têtes de montage public ci-dessous. Le contrat important est que l'URL publique reste sous `/docs` et que les métadonnées de découverte annoncent l'URL du MCP monté publique.
+
+Les logos, favicons et images MDX basés sur le dépôt sont servis par `/api/static/*` après publication. Par exemple, un chemin source tel que `/assets/favicon.svg` est disponible à `/docs/api/static/assets/favicon.svg` sur un site monté. Les chemins `/docs/assets/*` et `/docs/images/*` sont pris en charge pour la compatibilité, mais `/docs/api/static/*` est le chemin utilisé par la configuration générée et les documents rendus. Si votre proxy modifie les balises HTML ou CSS, réécrivez également les URLs CSS absolues telles que `url(/fonts/...)` vers le chemin monté afin que les polices de marque continuent à charger sous `/docs`.
+
+## Exigences des en-têtes
+
+Transmettez ces en-têtes depuis la requête publique à l'origine en amont.
+
+| En-tête | Valeur |
+| --- | --- |
+| `X-Forwarded-Host` | Hôte public, par exemple `example.com` |
+| `X-Public-Host` | Hôte public, par exemple `example.com` |
+| `X-Forwarded-Proto` | Protocole public, généralement `https` |
+| `X-Docs-Base-Path` | Chemin d'accès de base monté, par exemple `/docs` |
+| `X-Public-Mcp-Url` | Point d'accès MCP public, par exemple `https://example.com/docs/mcp` |
+| `X-Forwarded-For` | Chaîne d'IP client, si votre proxy le prend en charge |
+| `User-Agent` | Agent utilisateur original |
+
+Le nom d'hôte en amont doit rester l'origine affichée par dubstack, par exemple `<site>--origin.dubstack.live`. L'hôte public est transmis via les en-têtes de transfert.
+
+## Exemple Nginx
+
+```nginx
+server {
+  listen 443 ssl http2;
+  server_name example.com;
+
+  location = /docs {
+    proxy_pass https://<site>--origin.dubstack.live/docs;
+    proxy_ssl_server_name on;
+    proxy_set_header Host <site>--origin.dubstack.live;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Public-Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Docs-Base-Path /docs;
+    proxy_set_header X-Public-Mcp-Url https://$host/docs/mcp;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header User-Agent $http_user_agent;
+  }
+
+  location /docs/ {
+    proxy_pass https://<site>--origin.dubstack.live;
+    proxy_ssl_server_name on;
+    proxy_set_header Host <site>--origin.dubstack.live;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Public-Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Docs-Base-Path /docs;
+    proxy_set_header X-Public-Mcp-Url https://$host/docs/mcp;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header User-Agent $http_user_agent;
+  }
+}
+```
+
+## Exemple Caddy
+
+```caddyfile
+example.com {
+  handle /docs* {
+    reverse_proxy https://<site>--origin.dubstack.live {
+      header_up Host <site>--origin.dubstack.live
+      header_up X-Forwarded-Host {host}
+      header_up X-Public-Host {host}
+      header_up X-Forwarded-Proto https
+      header_up X-Docs-Base-Path /docs
+      header_up X-Public-Mcp-Url https://{host}/docs/mcp
+      header_up User-Agent {header.User-Agent}
+    }
+  }
+
+  handle {
+    reverse_proxy localhost:3000
+  }
+}
+```
+
+Si votre proxy supprime par défaut les préfixes de chemin, désactivez ce comportement ou utilisez une réécriture explicite qui conserve `/docs` dans l'URL en amont.
+
+## Mise en cache
+
+Utilisez une mise en cache conservatrice pour le trafic de documents proxyé jusqu'à ce que la route soit vérifiée.
+
+- Ne pas mettre en cache `/docs/api/*`.
+- Ne pas mettre en cache `/docs/mcp`.
+- Ne pas mettre en cache `/docs/feedback`.
+- Ne pas mettre en cache `/docs/llms.txt`, `/docs/llms-full.txt` ou `/docs/skill.md` pendant les tests.
+- Les ressources statiques sous `/docs/_next/static/*` peuvent être mises en cache par le navigateur ou le CDN après que le site soit stable.
+
+En cas de doute, commencez par ne pas utiliser le cache CDN pour `/docs` et ajoutez le cache après que les chargements directs de pages, les recherches, les demandes d'assistant et les requêtes de l'explorateur d'API fonctionnent.
+
+## Liste de vérification de validation
+
+Après avoir configuré le proxy, vérifiez ces URLs sur le domaine public :
+
+```text
+https://example.com/docs
+https://example.com/docs/quickstart
+https://example.com/docs/api/theme
+https://example.com/docs/llms.txt
+https://example.com/docs/skill.md
+https://example.com/docs/feedback
+https://example.com/docs/.well-known/mcp
+https://example.com/docs/.well-known/mcp/server-card.json
+https://example.com/docs/.well-known/agent-card.json
+https://example.com/docs/.well-known/agent-skills/index.json
+```
+
+Vérifiez également le panneau réseau du navigateur :
+
+- Le document HTML est chargé depuis `/docs`, et non depuis le nom d'hôte d'origine brut.
+- Les fichiers statiques sont chargés depuis `/docs/_next/...`.
+- Les appels API sont chargés depuis `/docs/api/...`.
+- Les liens maintiennent les utilisateurs à l'intérieur de `/docs`.
+- Le site public ne révèle pas l'URL `--origin.dubstack.live`.
+- La découverte MCP et les valeurs de carte de serveur `url` pointent vers `https://example.com/docs/mcp`.
+- Les soumissions de feedback, si activées, sont envoyées à `/docs/feedback`.
+
+## Dépannage
+
+### La page d'accueil des documents fonctionne, mais les pages imbriquées renvoient une erreur 404
+
+Ajoutez une route wildcard pour `/docs/*`. Une règle uniquement pour `/docs` ne peut pas gérer les pages de documents imbriquées, les fichiers statiques, les appels API ou les fichiers de découverte d'IA.
+
+### Les fichiers statiques sont chargés depuis `/_next`
+
+Le proxy ou l'application racine supprime le préfixe `/docs`. Gardez le préfixe sur les demandes en amont et évitez de modifier le HTML rendu par dubstack.
+
+### La page redirige vers le nom d'hôte d'origine
+
+Transférez `X-Forwarded-Host`, `X-Public-Host` et `X-Forwarded-Proto`. Ces en-têtes indiquent à dubstack quelle URL publique doit être utilisée pour les liens générés.
+
+### Les requêtes de recherche ou d'assistant échouent
+
+Assurez-vous que `/docs/api/*` est acheminé vers l'origine et non mis en cache par l'application racine ou le CDN.
+
+### Les fichiers LLM ou la découverte MCP sont absents
+
+Proxyez les fichiers de découverte d'IA sous `/docs`, y compris `/docs/llms.txt`, `/docs/llms-full.txt`, `/docs/skill.md`, `/docs/mcp`, `/docs/.well-known/mcp*`, `/docs/.well-known/agent-card.json`, `/docs/.well-known/agent-skills/*` et `/docs/.well-known/skills/*` lors de l'activation de ces fonctionnalités.
+
+Si le feedback de l'agent échoue via un chemin de documentation monté, proxyez également `/docs/feedback` et ne le mettez pas en cache.
+
+### Le client MCP se connecte mais n'affiche aucun outil
+
+Récupérez `/docs/.well-known/mcp/server-card.json`. Si la réponse liste des outils mais que `url` pointe vers le nom d'hôte `--origin`, transférez `X-Public-Mcp-Url: https://example.com/docs/mcp` et purgez les réponses de découverte mises en cache. Si `url` est correct mais que les outils ne s'affichent pas ou que les appels d'outils échouent, transférez `X-Docs-Base-Path: /docs`, vérifiez que `/docs/mcp` accepte les requêtes `POST`, acheminez `/docs/feedback` lors de l'activation du feedback, et gardez les deux chemins non mis en cache.

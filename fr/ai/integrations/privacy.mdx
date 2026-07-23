@@ -1,0 +1,49 @@
+---
+title: Intégrations de confidentialité
+description: "Plan de consentement aux cookies, avis de confidentialité et contrôles de conformité pour les sites de documentation publiés."
+icon: shield-check
+---
+
+Les intégrations de confidentialité contrôlent la manière dont les sites de documentation publiés gèrent le consentement, les cookies, les balises d'analyse et les exigences de confidentialité régionales.
+
+dubstack prend actuellement en charge la configuration sensible à la confidentialité via les paramètres d'analyse, les scripts personnalisés, le CSS personnalisé, la configuration CSP et les modules complémentaires contrôlés par le tableau de bord. Les connecteurs de fournisseurs de confidentialité dédiés ne sont pas encore actifs.
+
+## Statut actuel
+
+| Domaine | Statut | Remarques |
+| --- | --- | --- |
+| Identifiants d'analyse | Actif | Configurer les balises d'analyse prises en charge depuis le tableau de bord ou `dubstack.json`. |
+| Configuration CSP | Actif | Restreindre les sources des scripts, images, connexions et cadres pour le site de documentation publié. |
+| Modules complémentaires de feedback | Actif | Configurer la collecte de feedback et la collecte d'emails des lecteurs optionnelle via les modules complémentaires de déploiement. |
+| Fournisseurs de consentement dédiés | Planification du catalogue | Les intégrations de gestionnaires de consentement spécifiques aux fournisseurs ne sont pas encore actives. |
+
+## Quel paramétrage effectuer aujourd'hui
+
+Avant d'ajouter des analyses ou des scripts intégrés :
+
+1. Revoyez votre politique de confidentialité.
+2. Décidez quelles régions nécessitent un consentement avant le chargement des balises d'analyse ou marketing.
+3. Configurez les fournisseurs d'analyse uniquement avec des identifiants publics.
+4. Mettez à jour le CSP pour autoriser uniquement les hôtes de fournisseurs requis.
+5. Activez la collecte d'emails des lecteurs uniquement lorsque votre politique explique comment les données sont utilisées.
+
+## Modèle de fournisseur futur
+
+Les fournisseurs de confidentialité devraient être configurés comme des intégrations de sites publiés plutôt que comme des fournisseurs de contexte d'agent.
+
+Cela signifie qu'ils devraient :
+
+- ne charger que sur les pages de documentation publiques où elles sont activées
+- respecter le domaine personnalisé et le chemin d'accès du site
+- intégrer les directives CSP
+- éviter d'exposer les secrets de compte privés dans `dubstack.json`
+- fournir des étapes claires de vérification en prévisualisation et en production
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/optimize/analytics-integrations">Intégrations d'analyse</a>
+  <a href="/fr/deployment/csp-configuration">Configuration CSP</a>
+  <a href="/fr/optimize/feedback">Commentaires</a>
+  <a href="/fr/settings/deployment/addons">Compléments</a>
+</RelatedTopics>

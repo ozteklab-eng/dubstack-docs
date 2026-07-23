@@ -1,0 +1,53 @@
+---
+title: "Référence API"
+description: "Publiez une documentation API interactive à partir de spécifications OpenAPI et de pages de points de terminaison MDX."
+icon: book
+---
+
+dubstack peut générer une documentation API à partir de spécifications OpenAPI, de pages de points de terminaison MDX rédigées manuellement ou d'un mélange des deux.
+
+Utilisez cette section pour deux tâches liées :
+
+- apprendre à documenter vos propres API de produits dans un site de documentation dubstack
+- explorer les points de terminaison publics exposés par chaque site dubstack publié pour le MCP, les index LLM, le chat de l'assistant et le playground API
+
+## Chemins de documentation d'API pris en charge
+
+| Approche | À utiliser lorsque |
+| --- | --- |
+| Pages générées par OpenAPI | Vous disposez déjà d'une spécification JSON OpenAPI 3.x et souhaitez que dubstack génère les pages de points de terminaison correspondantes. |
+| Pages MDX manuelles | Vous souhaitez contrôler entièrement le contenu tout en reliant chaque page à une opération API. |
+| Playgrounds intégrés | Vous souhaitez placer un exemple de point de terminaison exécutable dans un guide ou un tutoriel. |
+| API d'exécution de la documentation | Vous souhaitez inspecter les points de terminaison publics qui alimentent les fonctionnalités d'IA et le playground d'un site publié. |
+
+## Source de vérité
+
+Gardez les spécifications API dans le même dépôt Git que le reste de vos documents.
+
+L'emplacement canonique pour la spécification principale est :
+
+```text
+api-reference/openapi.json
+```
+
+Vous pouvez également stocker des spécifications nommées sous :
+
+```text
+api-reference/openapi/payments.json
+api-reference/openapi/admin.json
+```
+
+Après la synchronisation du dépôt, dubstack stocke la spécification avec les artefacts publiés et l'utilise pour générer les pages de référence API et les playgrounds.
+
+## Que lire ensuite
+
+- [Configuration OpenAPI](/fr/api-reference/openapi-setup) : ajouter une spécification et générer les pages de points de terminaison.
+- [Gestion des spécifications d'API](/fr/api-reference/spec-management) : charger, actualiser et contrôler la visibilité des points de terminaison depuis le tableau de bord.
+- [Authentification du playground](/fr/api-reference/playground-authentication) : configurer la manière dont les utilisateurs testent les requêtes depuis le site de documentation.
+- [Déclencheurs d'API de workflow](/fr/api-reference/workflow-triggers) : mettre en file d'attente les workflows activés depuis l'automatisation fiable du backend.
+- [Exports d'API d'analyse](/fr/api-reference/analytics-exports) : exporter les analyses d'utilisation et de feedback depuis les systèmes backend fiables.
+- API d'exécution de la documentation : ouvrir n'importe quel point de terminaison généré dans cette section pour inspecter le MCP, l'assistant, l'index LLM ou le contrat du playground.
+
+<Callout type="info">
+  Les points de terminaison d'exécution générés sont accessibles publiquement sur le site de documentation. Les API de gestion du tableau de bord sont distinctes et ne doivent être publiées qu'une fois l'interface d'API correspondante protégée par jeton disponible.
+</Callout>

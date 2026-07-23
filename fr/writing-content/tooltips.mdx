@@ -1,0 +1,67 @@
+---
+title: "Bulles d'explication"
+description: "Ajoutez des définitions contextuelles courtes et du texte d'aide au contenu des documents en ligne."
+icon: message-circle-question
+---
+
+Les bulles d'explication ajoutent un contexte léger lorsqu'un terme nécessite une définition rapide sans interrompre la page.
+
+Utilisez les bulles d'explication pour les abréviations, les termes spécifiques au produit ou les clarifications courtes. Ne cachez pas les étapes de configuration requises à l'intérieur des bulles.
+
+## Bulle d'explication simple
+
+<Tooltip tip="Protocole de contexte du modèle : une méthode standard pour les agents d'appeler des outils et de lire le contexte.">MCP</Tooltip> permet aux agents de consulter les documents publiés.
+
+```mdx
+<Tooltip tip="Model Context Protocol: a standard way for agents to call tools and read context.">MCP</Tooltip> lets agents query published docs.
+```
+
+## Bulle d'explication avec titre et lien
+
+<Tooltip headline="Clés API" tip="Utilisez des clés API avec portée pour les workflows et remplacez-les lorsque l'accès change." cta="Lire la documentation sur les clés API" href="/fr/dashboard/api-keys">Clés API</Tooltip> doivent être stockées dans un gestionnaire de secrets.
+
+```mdx
+<Tooltip
+  headline="API keys"
+  tip="Use scoped API keys for workflow and rotate them when access changes."
+  cta="Read API key docs"
+  href="/dashboard/api-keys"
+>
+  API keys
+</Tooltip>
+```
+
+## Markdown dans le déclencheur
+
+Le déclencheur de la bulle d'explication peut contenir du Markdown en ligne tel que `code`, **texte en gras**, ou texte en italique.
+
+<Tooltip tip="La branche source connectée au déploiement.">branche `product-docs`</Tooltip>
+
+```mdx
+<Tooltip tip="The docs source branch connected to the deployment.">`product-docs` branch</Tooltip>
+```
+
+## Propriétés
+
+<ResponseField name="tip" type="string" required>
+  Texte affiché à l'intérieur de la bulle d'explication.
+</ResponseField>
+
+<ResponseField name="headline" type="string">
+  En-tête facultatif affiché avant le texte de la bulle d'explication.
+</ResponseField>
+
+<ResponseField name="cta" type="string">
+  Texte de lien d'appel à l'action facultatif.
+</ResponseField>
+
+<ResponseField name="href" type="string">
+  URL utilisée par `cta`. Requise lorsque `cta` est définie.
+</ResponseField>
+
+## Directives
+
+- Maintenez le texte de la bulle d'explication court.
+- Utilisez un lien normal lorsque le lecteur doit cliquer.
+- Ne placez pas les secrets, les URLs privées ou les détails spécifiques à l'environnement dans les bulles d'explication.
+- Assurez-vous que la phrase environnante soit compréhensible même si la bulle d'explication n'est pas ouverte.

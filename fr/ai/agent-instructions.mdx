@@ -1,0 +1,100 @@
+---
+title: "Instructions pour l'agent"
+sidebarTitle: "Instructions pour l'agent"
+description: Définissez les instructions du dépôt qui guident les agents de documentation sans exposer de secrets ni d'informations opérationnelles privées.
+icon: file-cog
+---
+
+Les instructions pour l'agent vous permettent de définir les conventions de documentation que l'agent de rédaction doit suivre.
+
+Utilisez les instructions pour le ton, le vocabulaire, le style des exemples et la structure des pages. Gardez les secrets et les détails opérationnels privés hors des fichiers d'instructions.
+
+## Emplacements des instructions
+
+dubstack lit les instructions de rédaction dans l'instantané publié du dépôt.
+
+| Chemin | Utilisation |
+| --- | --- |
+| `.dubstack/AGENTS.md` | Chemin préféré pour les instructions de l'agent de rédaction. |
+| `.dubstack/Agents.md` | Chemin accepté pour assurer la compatibilité. |
+| `AGENTS.md` | Chemin de secours accepté. Ajoutez-le à `.dubstackignore` si vous ne souhaitez pas qu'il soit servi publiquement. |
+| `Agents.md` | Chemin de secours accepté. Ajoutez-le à `.dubstackignore` si vous ne souhaitez pas qu'il soit servi publiquement. |
+
+Préférez `.dubstack/AGENTS.md` car les fichiers dans `.dubstack/` sont destinés à la configuration de la plateforme et ne sont pas des pages de documentation normales.
+
+## Ce qu'il faut inclure
+
+Les bons fichiers d'instructions sont pratiques et spécifiques.
+
+Incluez des directives telles que :
+
+- voix et ton préférés
+- terminologie du produit
+- langues des exemples de code
+- sections obligatoires pour les guides API
+- comment nommer les pages
+- quand ajouter des notes de dépannage
+- comment gérer les fonctionnalités non libérées
+- quels fichiers ou dossiers ne devraient pas être modifiés
+
+Exemple :
+
+```markdown
+# Documentation agent instructions
+
+## Voice
+- Use direct, action-oriented language.
+- Write for developers who are setting up production docs.
+- Avoid marketing claims inside task guides.
+
+## Examples
+- Prefer TypeScript and cURL examples.
+- Include required environment variables before commands.
+- Do not invent endpoints or configuration fields.
+
+## Review rules
+- Open draft pull requests for generated changes.
+- Keep changes small unless the prompt explicitly asks for a restructure.
+```
+
+## Protéger les instructions
+
+N'incluez pas :
+
+- clés API
+- jetons privés
+- secrets des clients
+- détails de sécurité non libérés
+- notes de support privées ou détails d'incident
+- identifiants pour les comptes de test
+
+Si les instructions mentionnent des processus internes, tenez-les suffisamment générales pour qu'elles puissent être stockées en toute sécurité avec le dépôt de documentation.
+
+## Instructions pour l'assistant
+
+L'assistant public a un fichier d'instructions séparé :
+
+```text
+.dubstack/Assistant.md
+```
+
+Les instructions pour l'assistant guident les réponses destinées aux lecteurs. Les instructions pour l'agent guident son comportement de rédaction.
+
+Les instructions personnalisées pour l'assistant Enterprise peuvent également être configurées depuis le tableau de bord lorsque cette fonctionnalité est activée.
+
+## Publier à nouveau après les modifications
+
+Les fichiers d'instructions sont lus dans l'instantané publié du dépôt.
+
+Après avoir modifié les instructions :
+
+1. Validez le fichier dans le dépôt de documentation.
+2. Exécutez une mise à jour manuelle si le webhook ne s'est pas synchronisé automatiquement.
+3. Vérifiez le journal d'activité pour une mise à jour réussie.
+4. Posez une courte question de test à l'agent avant de lui confier une tâche de rédaction plus importante.
+
+## Sujets connexes
+
+- [Agent](/fr/ai/agent)
+- [Surfaces d'IA](/fr/ai/ai-surfaces)
+- [Configurer l'assistant](/fr/ai/assistant-settings)

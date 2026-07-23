@@ -1,0 +1,111 @@
+---
+title: "Flux de travail de retour d'assistance"
+description: "Rédiger des améliorations de documentation à partir de conversations d'assistance récurrentes lorsque un connecteur pris en charge est activé."
+icon: life-buoy
+---
+
+Le flux de travail de retour d'assistance transforme les questions d'assistance répétées en mises à jour de documentation révisables.
+
+Utilisez-le lorsque les conversations d'assistance révèlent des étapes de configuration manquantes, un comportement d'API confus, une orientation de dépannage peu claire ou des instructions de produit obsolètes.
+
+<Warning>
+  Le flux de travail de retour d'assistance est visible dans le catalogue de flux de travail, mais il n'est pas encore exécutable jusqu'à ce que les connecteurs, les collecteurs et les vérifications de préparation de retour d'assistance soient activés pour le déploiement sélectionné.
+</Warning>
+
+## Ce qu'il fait
+
+Lorsqu'il est activé pour un déploiement, le flux de travail est conçu pour :
+
+- lire le contexte des conversations d'assistance limitées auprès des fournisseurs pris en charge
+- regrouper les problèmes liés en un petit nombre de thèmes de documentation
+- rédiger des mises à jour de documentation ciblées pour chaque thème
+- ouvrir des demandes de révision via le fournisseur Git connecté
+- enregistrer le fournisseur, les sources, l'état et l'utilisation des crédits dans l'historique du flux de travail
+
+Le flux de travail devrait améliorer les documents à partir de schémas récurrents, et non à partir de conversations privées ponctuelles.
+
+## Famille de fournisseurs pris en charge
+
+Le retour d'assistance appartient à la famille d'intégration d'assistance.
+
+| Fournisseur | Statut actuel | Type de connexion | Utilisation prévue |
+| --- | --- | --- | --- |
+| Simple | Catalogue | Connecteur d'organisation partagée | Conversations d'assistance résolues et contexte client. |
+| Intercom | Catalogue | Connecteur d'organisation partagée | Conversations, contacts et contexte d'assistance. |
+| Pylon | Catalogue | Connecteur d'organisation partagée | Conversations clients, comptes et contexte d'assistance. |
+
+Voir [Intégrations de retour d'assistance](/fr/ai/integrations/support) pour la limite de préparation d'intégration.
+
+## Configuration requise
+
+Avant d'utiliser l'automatisation des retours d'assistance :
+
+1. Connectez un dépôt de documentation avec accès en écriture.
+2. Connectez un fournisseur de retours d'assistance pris en charge.
+3. Vérifiez que le connecteur est configuré pour l'organisation et le déploiement corrects.
+4. Configurez les états de conversation éligibles pour la revue.
+5. Activez les contrôles de rédaction et de politique de stockage.
+6. Commencez en mode **Requérir la revue**.
+
+Le flux de travail ne doit pas s'exécuter jusqu'à ce que le déploiement réussisse les vérifications de préparation pour l'accès du connecteur, les autorisations du fournisseur, la collecte des conversations, la rédaction et le comportement d'écriture du dépôt.
+
+## Regroupement des thèmes
+
+Les flux de travail de retours d'assistance doivent regrouper les problèmes répétés en thèmes ciblés.
+
+Exemples de thèmes :
+
+- les clients manquent répétitivement un en-tête d'authentification
+- les utilisateurs d'essai ne trouvent pas les étapes de configuration du fournisseur Git
+- les utilisateurs de l'API playground comprennent mal un champ requis du corps de la requête
+- les administrateurs d'entreprise demandent comment SSO, les rôles et les autorisations de déploiement interagissent
+
+Lorsque le runner est disponible, une exécution planifiée peut ouvrir des demandes de revue séparées pour des thèmes distincts afin que les réviseurs puissent approuver ou rejeter chaque modification de documentation indépendamment.
+
+## Frontière de confidentialité
+
+Le contexte des retours d'assistance peut contenir des données sensibles des clients.
+
+Le flux de travail doit :
+
+- éviter de copier des transcriptions brutes dans les documents publics
+- censurer les secrets, les jetons d'accès, les cookies et les identifiants privés
+- résumer les tendances au lieu de citer les messages privés des clients
+- stocker uniquement les métadonnées sources délimitées dans l'historique d'exécution
+- lier à nouveau les systèmes sources uniquement pour les utilisateurs autorisés du tableau de bord
+
+Ne pas activer les mises à jour automatiques jusqu'à ce que la censure et le comportement de revue soient prouvés pour le fournisseur connecté.
+
+## Utilisation des crédits
+
+Les exécutions de retours d'assistance sont des exécutions d'automatisation et comptent dans l'utilisation des crédits du flux de travail lorsqu'un collecteur exécutable met en file d'attente un travail.
+
+L'estimation actuelle de planification est de **285 crédits par exécution**. L'utilisation réelle peut varier selon :
+
+- nombre de conversations inspectées
+- nombre de thèmes identifiés
+- quantité de contexte des documents récupéré
+- si les dépôts source ou les trackers d'incidents sont sélectionnés en tant que contexte supplémentaire
+- nombre de demandes de révision créées
+
+Voir [crédits IA et utilisation](/fr/ai/credits-usage) pour le modèle d'allocation partagée.
+
+## Déploiement recommandé
+
+1. Commencez par un seul fournisseur de support et un seul déploiement.
+2. Limitez la source aux conversations résolues ou aux thèmes de support étiquetés.
+3. Exécutez manuellement avant d'activer une programmation.
+4. Examinez les modifications générées pour détecter une fuite de données clients.
+5. Maintenez le flux de travail en mode **Requérir une révision**.
+6. Élargissez la portée du fournisseur uniquement après plusieurs exécutions propres.
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/ai/integrations/support">Intégrations de feedback de support</a>
+  <a href="/fr/workflows/reference#update-from-support-feedback">Référence de flux de travail</a>
+  <a href="/fr/workflows/integrations">Intégrations de flux de travail</a>
+  <a href="/fr/optimize/feedback">Feedback</a>
+  <a href="/fr/dashboard/feedback-analytics">Analyse du feedback</a>
+  <a href="/fr/ai/credits-usage">Crédits IA et utilisation</a>
+</RelatedTopics>

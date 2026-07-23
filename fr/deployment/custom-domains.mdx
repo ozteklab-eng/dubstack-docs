@@ -1,0 +1,175 @@
+---
+title: Domaines personnalisés
+description: Attacher un domaine appartenant au client ou un sous-chemin /docs à un site de documentation dubstack.
+icon: globe
+---
+
+Utilisez un domaine personnalisé lorsque vous souhaitez que les visiteurs lisent vos documents sur un domaine que vous contrôlez au lieu de l'hôte par défaut `*.dubstack.live`.
+
+dubstack propose deux modes de routage :
+
+| Mode | Exemple | Idéal pour |
+| --- | --- | --- |
+| Domaine basé sur l'hôte | `docs.example.com` | La configuration la plus simple en production pour la plupart des sites de documentation |
+| Sous-chemin `/docs` | `example.com/docs` | Les équipes qui utilisent déjà le domaine racine pour leur site web et souhaitent avoir les documents sous le même hôte |
+
+## Choisir un mode de routage
+
+### Domaine basé sur l'hôte
+
+Utilisez un domaine basé sur l'hôte lorsque vos documents peuvent être hébergés sur un nom d'hôte distinct.
+
+```text
+docs.example.com -> your dubstack site
+```
+
+Ce mode est basé sur le DNS. Vous ajoutez le domaine dans le tableau de bord dubstack, configurez l'enregistrement DNS indiqué par l'écran de configuration, puis vérifiez le domaine.
+
+Pour une migration la plus sécurisée, ajoutez d'abord les enregistrements de vérification et attendez que le tableau de bord affiche l'hôte et le certificat comme vérifiés avant de rediriger le trafic des visiteurs avec l'enregistrement CNAME.
+
+### Sous-chemin `/docs`
+
+Utilisez le sous-chemin `/docs` lorsque votre site web principal possède déjà le domaine racine.
+
+```text
+example.com      -> your main website
+example.com/docs -> your dubstack site
+```
+
+Le DNS ne peut pas router un seul sous-chemin. L'application, le proxy inverse ou le worker de bord servant `example.com` doit faire le proxy de `/docs` et `/docs/*` vers l'hôte d'origine dubstack généré pour votre site.
+
+Pour la configuration complète du sous-chemin, consultez [sous-chemin /docs](/fr/deployment/docs-subpath).
+
+## Ajouter un domaine personnalisé
+
+1. Ouvrez votre site dans le tableau de bord dubstack.
+2. Allez dans **Paramètres → Déploiement → Domaine personnalisé**.
+3. Choisissez si vous souhaitez activer **Héberger sur `/docs`**.
+4. Saisissez le domaine que vous souhaitez que les visiteurs utilisent.
+5. Cliquez sur **Ajouter le domaine**.
+6. Configurez les instructions DNS ou le proxy indiquées dans le tableau de bord.
+7. Cliquez sur **Vérifier** après la propagation du changement DNS/proxy.
+
+Le tableau de bord affiche l'URL de la plateforme active, l'URL personnalisée et l'origine utilisée pour le proxy de sous-chemin.
+
+## DNS pour les domaines basés sur l'hôte
+
+Pour un domaine basé sur l'hôte tel que `docs.example.com`, le tableau de bord affiche deux groupes d'enregistrements DNS :
+
+- Enregistrements de vérification qui prouvent la propriété du domaine et permettent l'approbation du certificat TLS.
+- Un enregistrement de trafic qui redirige les visiteurs vers dubstack.
+
+Ajoutez d'abord les enregistrements de vérification.
+
+Configuration de vérification typique :
+
+```text
+Type:  TXT
+Name:  _cf-custom-hostname.docs.example.com
+Value: <value shown in the dashboard>
+
+Type:  TXT
+Name:  _acme-challenge.docs.example.com
+Value: <value shown in the dashboard>
+```
+
+Après l'activation des enregistrements de vérification, ajoutez l'enregistrement de trafic affiché dans le tableau de bord.
+
+Configuration typique :
+
+```text
+Type:  CNAME
+Name:  docs
+Value: cname.dubstack.live
+```
+
+Si votre fournisseur DNS proxy le trafic, conservez le mode recommandé par le tableau de bord. Certains fournisseurs exigent le mode DNS uniquement pendant la vérification et peuvent être modifiés après l'activation du certificat.
+
+<Note>
+  La propriété du nom d'hôte et la validation du certificat TLS sont des vérifications distinctes. Un domaine est prêt en production uniquement après que le tableau de bord affiche le nom d'hôte, le certificat et le routage du trafic comme prêts.
+</Note>
+
+## Noms d'hôte d'origine pour les sous-domaines de chemin
+
+Lorsque **Host at `/docs`** est activé, dubstack génère un nom d'hôte d'origine dédié :
+
+```text
+<site>--origin.dubstack.live
+```
+
+Proxyez ces chemins vers cet origine :
+
+```text
+https://example.com/docs     -> https://<site>--origin.dubstack.live/docs
+https://example.com/docs/... -> https://<site>--origin.dubstack.live/docs/...
+```
+
+Ne envoyez pas directement les visiteurs vers l'hôte `--origin`. Il existe pour que votre site web principal, votre worker de bord ou votre proxy inverse le récupère.
+
+Lorsque le MCP public est activé, le proxy doit également transférer :
+
+```text
+X-Docs-Base-Path: /docs
+X-Public-Mcp-Url: https://example.com/docs/mcp
+```
+
+Cela garantit que les URLs publiques générées utilisent le montage `/docs` et que les métadonnées de découverte MCP et de carte de serveur annoncent le point de terminaison public monté au lieu du nom d'hôte d'origine brut.
+
+## Comportement de vérification
+
+Les vérifications de domaine s'assurent que le domaine atteint le site dubstack attendu. Cela empêche un domaine de vérifier contre le mauvais locataire si une règle DNS ou un proxy pointe vers l'origine incorrecte.
+
+Pour les domaines basés sur l'hôte, la vérification s'attend à :
+
+- L'enregistrement TXT de propriété existe à l'hôte affiché dans le tableau de bord.
+- L'enregistrement TXT du certificat existe à l'hôte affiché dans le tableau de bord.
+- Le CNAME de trafic pointe vers la cible SaaS de dubstack après la validation.
+
+Le tableau de bord stocke l'état du fournisseur et affiche le dernier nom d'hôte, certificat et états de vérification.
+
+Pour les sous-chemins `/docs`, la vérification s'attend à :
+
+- `/docs` atteint l'origine générée.
+- Le proxy transfère le contexte d'hôte public.
+- La découverte MCP, lorsqu'elle est activée, pointe vers le point de terminaison public `/docs/mcp`.
+- Le site généré reste monté sous `/docs`.
+- Les actifs statiques et les appels API restent sous le préfixe `/docs`.
+
+## Dépannage
+
+### Le domaine vérifie contre le mauvais site
+
+Vérifiez que votre enregistrement DNS ou la cible du proxy pointe vers l'origine affichée pour le même site dans le tableau de bord.
+
+### L'hôte est vérifié mais le HTTPS est toujours en attente
+
+Vérifiez l'enregistrement TXT du certificat dans votre fournisseur DNS. La propriété de l'hôte peut être vérifiée avant l'émission du certificat TLS.
+
+### Le certificat est actif mais les visiteurs voient toujours le vieux site
+
+Vérifiez le CNAME de trafic. Les enregistrements de vérification prouvent le contrôle du nom d'hôte, mais le trafic des visiteurs ne se déplace pas jusqu'à ce que le CNAME pointe vers la cible dubstack.
+
+### `/docs` charge, mais les actifs échouent
+
+Votre proxy transfère probablement la page mais ne préserve pas les chemins des actifs. Vérifiez que les requêtes telles que `/docs/_next/...`, `/docs/api/theme`, `/docs/api/static/...`, `/docs/img/...` et `/docs/assets/...` atteignent l'origine dubstack.
+
+### Le rafraîchissement direct sur une page imbriquée échoue
+
+Assurez-vous que `/docs` et `/docs/*` sont proxyés. Une règle ne gérant que `/docs` ne gérera pas `/docs/quickstart` ou les pages plus profondes.
+
+### Le navigateur quitte `/docs`
+
+Vérifiez que le proxy transfère `X-Forwarded-Host`, `X-Public-Host` et `X-Forwarded-Proto`. Ces en-têtes permettent à dubstack de générer des URL publiques pour le domaine monté au lieu de l'origine brute.
+
+### MCP se connecte mais aucun outil n'apparaît
+
+Vérifiez `/docs/.well-known/mcp/server-card.json`. Si les outils sont listés mais que `url` pointe vers `--origin.dubstack.live`, transférez `X-Public-Mcp-Url: https://example.com/docs/mcp` et videz le cache CDN pour `/docs/.well-known/mcp*`.
+
+Si le connecteur s'ajoute mais que les outils n'apparaissent pas ou que les appels d'outils échouent, transférez `X-Docs-Base-Path: /docs` et conservez `/docs/mcp` non mis en cache.
+
+Pour les exemples de proxy incluant des en-têtes upstream explicites, définissez les deux en-têtes sur chaque route `/docs` et `/docs/*` :
+
+```text
+X-Docs-Base-Path: /docs
+X-Public-Mcp-Url: https://example.com/docs/mcp
+```

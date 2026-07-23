@@ -1,0 +1,68 @@
+---
+title: CLI
+description: Découvrez la CLI prévue de dubstack et les méthodes actuelles de travail local sur la documentation à partir de la source.
+---
+
+La CLI de dubstack est prévue comme un outil local pour les équipes qui privilégient les workflows de documentation dans le terminal.
+
+Aujourd'hui, les modifications de documentation de production doivent utiliser l'une des méthodes basées sur le code source prises en charge :
+
+- éditer dans le tableau de bord et publier via le dépôt connecté
+- éditer localement dans votre dépôt Git et pousser vers la branche configurée
+- utiliser CI ou des webhooks pour déclencher la synchronisation après les modifications du dépôt
+- utiliser l'API Admin pour une automatisation fiable
+
+<Note>
+  La CLI n'est pas encore disponible publiquement. Cette section décrit son fonctionnement prévu afin que les équipes puissent préparer leur workflow sans dépendre de commandes qui ne sont pas encore publiées.
+</Note>
+
+## Responsabilités prévues
+
+Le CLI vise à aider avec des tâches qui peuvent être exécutées localement :
+
+- valider `dubstack.json`
+- prévisualiser le contenu de la documentation avant la publication
+- vérifier les références OpenAPI et les fichiers liés
+- inspecter la structure du dépôt pour identifier les problèmes de configuration courants
+- déclencher des synchronisations de déploiement lorsqu'authentifié
+
+## Alternatives actuelles
+
+| Interface | Disponibilité | Utilisez-la pour |
+| --- | --- | --- |
+| Éditeur du tableau de bord | Disponible | Modifications de pages, aperçus et publication via le code source depuis un navigateur. |
+| Commandes slash | Disponible | Insérer des blocs MDX pris en charge depuis l'éditeur du tableau de bord. |
+| Configuration publique de l'API MCP | Disponible | Connecter des clients IA à la recherche et à la récupération des documents publiés. |
+| Actions contextuelles | Disponible | Copier le Markdown, les commandes d'installation de l'API MCP et ouvrir des outils IA pris en charge depuis une page de documentation. |
+| Clés d'API d'administration | Disponible | Automatisation fiable nécessitant des actions backend avec portée. |
+| CLI dubstack | Prévue | Validation locale, aperçu et déploiement. |
+| Extensions dédiées aux IDE | Planifié | Intégrations natives des éditeurs au-delà des commandes de configuration MCP. |
+
+<CardGroup cols={2}>
+  <Card title="Flux de travail Git local" icon="terminal" href="/fr/deployment/local-git-workflow">
+    Travaillez directement dans votre dépôt de documentation et poussez vers la branche configurée dans les paramètres Git.
+  </Card>
+  <Card title="CI et webhooks" icon="workflow" href="/fr/deployment/ci">
+    Exécutez des validations et des actions de synchronisation à partir de votre système CI existant.
+  </Card>
+  <Card title="Clés d'API d'administration" icon="key-round" href="/fr/dashboard/api-keys">
+    Créez des clés avec portée pour l'automatisation fiable nécessitant de déclencher des opérations de documentation.
+  </Card>
+  <Card title="Déploiements d'aperçu" icon="git-pull-request" href="/fr/deployment/preview-deployments">
+    Examinez les modifications des branches et des pull requests avant de les publier aux lecteurs.
+  </Card>
+</CardGroup>
+
+## État de disponibilité
+
+Lors de sa publication, la CLI suivra le même modèle fondé sur la source que le tableau de bord :
+
+```bash
+# planned shape, not yet generally available
+dubstack login
+dubstack preview
+dubstack validate
+dubstack deploy
+```
+
+N'utilisez pas ces commandes dans une automatisation de production tant que cette page ne les indique pas comme disponibles publiquement.

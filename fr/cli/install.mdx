@@ -1,0 +1,35 @@
+---
+title: "Installer la CLI"
+description: "Découvrez la méthode d'installation prévue pour la CLI de dubstack et utilisez les solutions actuelles jusqu'à sa disponibilité publique."
+---
+
+La CLI de dubstack n'est pas encore disponible publiquement.
+
+Pour l'instant, utilisez les workflows du tableau de bord, Git, CI et API d'administration documentés ci-dessous :
+
+- [Workflow Git local](/fr/deployment/local-git-workflow)
+- [CI](/fr/deployment/ci)
+- [Webhooks et CI](/fr/deployment/webhooks-ci)
+- [Clés d'API d'administration](/fr/dashboard/api-keys)
+
+<Warning>
+  N'installez pas de paquets non officiels portant le nom de dubstack. Les instructions d'installation de la CLI apparaîtront ici uniquement après la finalisation du nom officiel du paquet, du canal de distribution et de la politique de signature.
+</Warning>
+
+## Canaux d'installation prévus
+
+La première version de la CLI devrait proposer une installation avec un gestionnaire de paquets et une commande de vérification de la version.
+
+```bash
+# planned shape, not yet generally available
+dubstack --version
+```
+
+## Ce qu'il faut préparer maintenant
+
+Avant d'adopter la CLI, assurez-vous que votre projet de documentation fonctionne déjà avec Git :
+
+1. Connectez un fournisseur Git dans [Paramètres Git](/fr/deployment/git-settings).
+2. Gardez `dubstack.json` à la racine du dépôt ou configurez le sous-répertoire docs.
+3. Confirmez que les envois sur la branche de production déployent correctement.
+4. Ajoutez une validation CI pour les spécifications OpenAPI et les fichiers MDX là où c'est possible.

@@ -1,0 +1,233 @@
+---
+title: GitHub
+description: "Connectez un dépôt GitHub avec l'application dubstack GitHub."
+icon: github
+---
+
+GitHub est le fournisseur principal de sources connectées pour la documentation dubstack.
+
+Utilisez l'application GitHub lorsque votre documentation provient d'un dépôt GitHub et que vous souhaitez des mises à jour automatiques, des déploiements de prévisualisation, des validations par l'éditeur, des pull requests de l'agent et des modifications de documentation pilotées par des workflows.
+
+Les développeurs peuvent toujours utiliser le workflow GitHub normal. Clonez le dépôt connecté, éditez les fichiers MDX ou `dubstack.json`, faites un commit et poussez. L'application GitHub reçoit l'événement du dépôt et démarre le même chemin de synchronisation utilisé par la publication depuis le tableau de bord.
+
+## Quand vous avez besoin de l'application GitHub
+
+| Type de dépôt | Application GitHub requise ? |
+| --- | --- |
+| Dépôt de démarrage hébergé créé par dubstack | Non, la source hébergée est gérée pour vous. |
+| Votre propre dépôt GitHub | Oui, installez l'application et accordez-lui l'accès au dépôt de documentation. |
+| Dépôt GitHub privé | Oui, installez l'application avec accès au dépôt privé. |
+
+Le tableau de bord affiche le dépôt actif, la branche, la dernière synchronisation et l'état d'installation de l'application dans **Paramètres > Déploiement > Paramètres Git**.
+
+## Se connecter à GitHub
+
+<Steps>
+  <Step title="Ouvrir les paramètres Git">
+    Dans le tableau de bord, allez dans **Paramètres > Déploiement > Paramètres Git**.
+  </Step>
+
+  <Step title="Choisir GitHub">
+    Sélectionnez **GitHub** parmi les cartes de fournisseurs.
+  </Step>
+
+  <Step title="Installer ou gérer l'application GitHub">
+    Cliquez sur **Installer l'application GitHub** ou **Accorder l'accès au dépôt**.
+
+    GitHub ouvre le processus d'installation de l'application. Choisissez le compte ou l'organisation propriétaire du dépôt de documentation.
+  </Step>
+
+  <Step title="Sélectionner l'accès au dépôt">
+    Accordez l'accès au dépôt de documentation.
+
+    Vous pouvez choisir tous les dépôts, mais le choix le plus sécurisé est **Seuls les dépôts sélectionnés** puis de sélectionner le dépôt de documentation ainsi que tous les dépôts que vous souhaitez intentionnellement que l'agent ou les workflows lisent en tant que contexte.
+  </Step>
+
+  <Step title="Sélectionner la source">
+    Retournez dans les paramètres Git et sélectionnez le dépôt, la branche de déploiement et la racine de la documentation.
+
+    Activez **La documentation se trouve dans un sous-répertoire** uniquement lorsque `dubstack.json` se trouve en dessous de la racine du dépôt.
+  </Step>
+
+  <Step title="Enregistrer et vérifier">
+    Enregistrez la connexion, puis lancez une mise à jour manuelle.
+
+    La mise à jour manuelle vérifie que dubstack peut lire le dépôt sélectionné et publier les artefacts pour le site en direct.
+  </Step>
+</Steps>
+
+## Structure recommandée du dépôt
+
+Au minimum, le dépôt doit inclure :
+
+```text
+dubstack.json
+index.mdx
+quickstart.mdx
+```
+
+Pour des sites plus complets, incluez :
+
+- `api-reference/openapi.json` ou un autre chemin de spécification OpenAPI configuré
+- fichiers d'images et d'actifs utilisés par les pages
+- extraits réutilisables
+- dossiers correspondant aux slugs dans `dubstack.json`
+
+## Publier à partir d'une copie locale
+
+Utilisez cela lorsque votre équipe préfère les branches GitHub, les pull requests, la revue de code ou le CI.
+
+```bash
+git clone https://github.com/your-org/your-docs-repo.git
+cd your-docs-repo
+git checkout -b docs/update-guide
+git add .
+git commit -m "docs: update guide"
+git push -u origin docs/update-guide
+```
+
+Ouvrez une pull request et fusionnez-la dans la branche de déploiement après examen.
+
+Pour de petites modifications, vous pouvez pousser directement dans la branche de déploiement si la politique de votre dépôt le permet. Voir [Flux Git local](/fr/deployment/local-git-workflow) pour le processus complet.
+
+## Accès à l'application GitHub
+
+Accordez l'accès uniquement aux dépôts dont dubstack a besoin.
+
+L'application GitHub est utilisée pour :
+
+- lecture des fichiers sources des docs
+- réception des événements du dépôt
+- création de branches et de pull requests en brouillon lorsqu'on active l'auteur de l'agent
+- création de déploiements de prévisualisation pour les workflows de branche ou de pull request pris en charge
+- mise à jour des fichiers de documentation depuis l'éditeur du tableau de bord là où c'est autorisé
+
+Si votre organisation utilise la protection des branches, gardez-la activée. Les modifications de l'agent et de l'éditeur doivent toujours suivre les règles de revue du dépôt.
+
+Si vous souhaitez intentionnellement que certains workflows mettent à jour GitHub automatiquement, configurez les règles GitHub pertinentes avant de désactiver le mode de revue de ces workflows. Voir [Configurer l'automerge](/fr/deployment/configure-automerge).
+
+## Contexte supplémentaire du dépôt
+
+Vous pouvez accorder à l'application GitHub l'accès aux dépôts qui ne sont pas le dépôt de documentation actif.
+
+Utilisez un accès supplémentaire au dépôt lorsque :
+
+- le code produit se trouve en dehors du dépôt de documentation
+- un workflow doit inspecter les modifications de l'API, du SDK ou de l'application
+- l'agent a besoin du contexte source avant de rédiger une mise à jour de la documentation
+- un monorepo a un chemin de package ou de service étroit qui doit informer un workflow
+
+Les dépôts supplémentaires sont des dépôts de contexte. Ils ne publient pas de pages et ne deviennent pas automatiquement des cibles de copie.
+
+| Rôle du dépôt | Comportement |
+| --- | --- |
+| Dépôt de documentation actif | Publie le site en direct et reçoit les modifications des éditeurs, agents et workflows. |
+| Accès supplémentaire au dépôt | Permet à l'agent ou au workflow de lire des fichiers sources sélectionnés en tant que contexte. |
+| Cible de copie du dépôt | Reçoit des copies explicites manuelles ou planifiées depuis la source de documentation active lorsqu'elle est configurée. |
+
+Les modifications de documentation générées doivent toujours être validées dans, ou ouvertes en tant que pull request contre, le dépôt de documentation actif.
+
+Pour la configuration du workflow, voir [Rédiger des documents à partir des modifications du code](/fr/guides/draft-docs-from-code) et [Intégrations de workflow](/fr/workflows/integrations).
+
+## Autorisations
+
+GitHub affiche les autorisations demandées par l'application lors de l'installation ou lorsqu'elles changent.
+
+| Autorisation | Pourquoi dubstack l'utilise |
+| --- | --- |
+| `metadata: read` | Identifier les dépôts et la propriété de l'installation. |
+| `contents: read` | Lire les fichiers sources pendant la synchronisation, la prévisualisation, la recherche, l'assistant et l'indexation MCP. |
+| `contents: write` | Valider les modifications des éditeurs, agents et workflows lors de l'activation de la rédaction. |
+| `pull_requests: write` | Créer des pull requests brouillon pour les mises à jour des agents et workflows. |
+| `checks` ou autorisations liées au déploiement | Attacher des signaux d'état natifs du fournisseur pour les flux de prévisualisation et de déploiement pris en charge. |
+
+<Callout type="info">
+  Les sources GitHub utilisent l'application GitHub. Ne collez pas de jetons d'accès personnels pour la synchronisation des sources GitHub.
+</Callout>
+
+Si la rédaction n'est pas prête, le panneau de préparation peut indiquer des autorisations d'écriture GitHub manquantes. Mettez à jour l'installation de l'application sur GitHub, puis retournez dans les paramètres Git et lancez une mise à jour manuelle.
+
+## États du tableau de bord
+
+Utilisez la carte Paramètres Git pour confirmer la source active.
+
+| État | Signification |
+| --- | --- |
+| Dépôt hébergé | dubstack gère la source initiale pour vous. Une installation séparée de l'application GitHub n'est pas nécessaire jusqu'à ce que vous passiez à votre propre dépôt. |
+| Dépôt GitHub actif | Le site est publié à partir du dépôt et de la branche indiqués. |
+| Application GitHub non installée | La source pointe vers GitHub, mais dubstack n'a pas d'installation utilisable pour le dépôt. |
+| Dernière synchronisation | Le moment de la dernière synchronisation réussie pour le fournisseur actif. |
+
+Utilisez **Paramètres > Déploiement > Application GitHub** pour installer l'application, ouvrir les paramètres d'installation GitHub ou accorder l'accès à des dépôts supplémentaires.
+
+Utilisez **Paramètres > Compte** pour vérifier si votre utilisateur a une autorisation GitHub connectée pour les flux de création au niveau du compte.
+
+## Validez à nouveau après les modifications du dépôt
+
+Validez à nouveau la connexion après toute modification externe GitHub affectant l'accès ou la structure source.
+
+Déclencheurs courants :
+
+- renommage ou transfert du dépôt
+- renommage de branche
+- désinstallation ou réinstallation de l'application GitHub
+- modification de l'accès au dépôt lors de l'installation
+- modification de la propriété organisationnelle ou des autorisations d'administrateur de dépôt
+- modification de la protection de branche
+- déplacer `dubstack.json` dans ou hors d'un sous-répertoire
+
+Chemin de récupération recommandé :
+
+1. Ouvrez **Paramètres > Déploiement > Application GitHub**.
+2. Vérifiez que le compte ou l'organisation GitHub correct est installé.
+3. Ouvrez les paramètres d'installation GitHub et vérifiez que le dépôt est sélectionné.
+4. Retournez sur **Paramètres > Déploiement > Paramètres Git**.
+5. Vérifiez les paramètres du dépôt, de la branche et du sous-répertoire.
+6. Exécutez une mise à jour manuelle.
+7. Vérifiez le flux d'activité ou l'historique de déploiement pour le statut de synchronisation résultant.
+
+## Modèle hébergé vers GitHub
+
+Si vous avez sauté Git pendant l'inscription, votre site peut commencer avec un dépôt hébergé. Passez à votre propre dépôt GitHub lorsque vous souhaitez un contrôle complet du dépôt.
+
+Chemin recommandé :
+
+1. Ouvrez **Paramètres > Déploiement > Paramètres Git**.
+2. Choisissez GitHub comme fournisseur cible.
+3. Installez l'application GitHub si nécessaire.
+4. Clonez ou copiez la source des documents hébergés dans votre organisation GitHub.
+5. Sélectionnez le nouveau dépôt et la branche.
+6. Exécutez une mise à jour manuelle.
+7. Vérifiez que le site en direct correspond à la version hébergée précédente.
+
+## Dépannage
+
+### Le dépôt n'est pas présent dans le sélecteur
+
+Vérifiez que l'application GitHub est installée sur l'organisation ou le compte propriétaire du dépôt, et que le dépôt est inclus dans la liste d'accès au dépôt de l'installation.
+
+### Les mises à jour ne s'exécutent pas après un push
+
+Vérification :
+
+- le push a été effectué sur la branche configurée
+- l'application GitHub est toujours installée
+- le dépôt n'a pas été renommé ou transféré
+- le fil d'activité affiche la dernière mise à jour par webhook ou manuelle
+
+### L'agent ne peut pas ouvrir une pull request
+
+Vérifiez que l'application GitHub a accès au dépôt et que la protection des branches permet les branches et les pull requests créées par l'application. L'application ne devrait pas avoir besoin de contourner les revues obligatoires.
+
+### La mise à jour manuelle fonctionne mais pas les mises à jour par webhook
+
+Réinstallez ou réautorisiez l'application GitHub, puis effectuez une autre mise à jour manuelle pour vérifier la connexion.
+
+## Sujets connexes
+
+- [Dépannage du contrôle de version](/fr/deployment/source-control-troubleshooting)
+- [Workflow Git local](/fr/deployment/local-git-workflow)
+- [Fournisseurs Git](/fr/deployment/forgejo-github-gitlab)
+- [Déploiements de prévisualisation](/fr/deployment/preview-deployments)
+- [Permissions de déploiement](/fr/dashboard/deployment-permissions)
+- [Configurer l'automerge](/fr/deployment/configure-automerge)

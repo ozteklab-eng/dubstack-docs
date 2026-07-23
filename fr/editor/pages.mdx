@@ -1,0 +1,95 @@
+---
+title: Pages et fichiers
+description: "Créez, ouvrez, renommez, téléversez et supprimez des fichiers de documentation depuis l'éditeur."
+icon: file-text
+---
+
+Utilisez la barre latérale de l'éditeur pour travailler avec la navigation publiée et les fichiers sources.
+
+La zone de navigation affiche la structure des documents utilisée par les lecteurs. L'explorateur de fichiers affiche les fichiers sources provenant du dépôt de documents connecté, y compris les fichiers non listés dans la navigation.
+
+## Ouvrir une page
+
+1. Ouvrez le tableau de bord.
+2. Allez dans **Éditeur**.
+3. Utilisez **Navigation** pour parcourir la structure des documents publiés, ou ouvrez **Explorateur de fichiers** depuis le menu de la barre d'outils.
+4. Sélectionnez une page ou un fichier.
+5. Modifiez le contenu.
+6. Enregistrez ou publiez via le flux basé sur Git.
+
+## Créer un fichier
+
+Utilisez l'explorateur de fichiers lorsque vous souhaitez créer un fichier source directement.
+
+1. Ouvrez **Explorateur de fichiers**.
+2. Choisissez le dossier dans lequel le fichier doit être placé.
+3. Cliquez sur l'action de création de fichier.
+4. Choisissez un type de contenu.
+5. Saisissez un nom de fichier.
+6. Ajoutez du contenu initial facultatif.
+7. Créez le fichier.
+
+Pour les pages de documents, utilisez `.mdx`. Pour la configuration, utilisez des fichiers JSON tels que `dubstack.json` ou `api-reference/openapi.json`.
+
+## Créer un dossier
+
+Utilisez les dossiers pour organiser les fichiers sources par thème.
+
+1. Ouvrez **Explorateur de fichiers**.
+2. Choisissez le dossier parent.
+3. Cliquez sur l'action de création de dossier.
+4. Saisissez un nom de dossier.
+5. Créez le dossier.
+
+Les modifications des dossiers doivent être publiées avec les pages qui font référence aux nouveaux chemins.
+
+## Renommer des fichiers et dossiers
+
+Passez la souris sur un fichier ou un dossier, puis ouvrez son menu de paramètres.
+
+À partir de là, vous pouvez renommer l'élément et consulter le chemin actuel. Le renommage modifie les chemins sources, donc mettez à jour tous les liens qui font référence au chemin ancien avant de publier.
+
+## Télécharger des fichiers
+
+Utilisez le téléchargement pour les images, les icônes, les spécifications OpenAPI ou d'autres actifs de documentation.
+
+Les types de téléchargement pris en charge incluent le MDX, le Markdown, le JSON, le YAML, le texte, les images, le SVG et les actifs web courants.
+
+Lors du téléchargement d'un actif :
+
+- choisissez le type de contenu
+- sélectionnez le fichier
+- définissez le chemin de destination
+- ajoutez un message de commit lorsque cela est nécessaire
+
+Pour les workflows d'images, de galeries, de vidéos et d'intégrations dans une page, voir [Médias dans l'éditeur](/fr/editor/media).
+
+## Panneau des actifs
+
+Utilisez le **Panneau des actifs** lorsque vous souhaitez naviguer dans les médias et fichiers statiques sans quitter la page actuelle.
+
+1. Ouvrez le menu **Options de l'éditeur** dans la barre d'outils.
+2. Activez **Actifs**.
+3. Recherchez un actif existant ou cliquez sur **Télécharger** pour en ajouter un nouveau.
+
+Les actifs sont toujours des fichiers sources. Publiez le changement d'actif avec la page, le composant ou la configuration qui le référence pour que les aperçus et le site en direct restent alignés.
+
+<Callout type="tip">
+  Maintenez les chemins d'image stables lors du remplacement d'une capture d'écran existante. Utilisez un nouveau nom de fichier lorsque l'image montre une zone différente du produit ou pourrait invalider les aperçus mis en cache.
+</Callout>
+
+## Supprimer des fichiers et dossiers
+
+La suppression d'un fichier ou d'un dossier l'efface du dépôt source lors de la publication.
+
+<Callout type="warning">
+  Avant de supprimer une page, supprimez ou mettez à jour les liens vers cette page et vérifiez que la navigation ne la référence plus.
+</Callout>
+
+## Sujets connexes
+
+- [Navigation](/fr/editor/navigation)
+- [Publication](/fr/editor/publishing)
+- [Médias dans l'éditeur](/fr/editor/media)
+- [MDX](/fr/writing-content/mdx)
+- [Images et actifs](/fr/writing-content/images-assets)

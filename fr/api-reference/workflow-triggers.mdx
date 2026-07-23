@@ -1,0 +1,194 @@
+---
+title: Déclencheurs API des flux de travail
+description: "Déclenchez des flux de travail actifs depuis une automatisation back-end fiable."
+icon: workflow
+---
+
+Utilisez les déclencheurs de flux de travail API lorsqu'un système externe doit lancer un flux de travail activé sans session de navigateur.
+
+Les cas d'utilisation courants incluent :
+
+- ajout à une file d'attente d'un flux de travail de journal des modifications après une version publiée
+- exécution d'un contrôle de liens rompus depuis CI
+- lancement d'une analyse SEO depuis un planificateur interne
+- déclenchement d'un flux de travail personnalisé depuis des outils de versionnement
+
+<Callout type="warning">
+  Les déclencheurs API des flux de travail utilisent des clés d'API Admin. Stockez les clés dans un gestionnaire de secrets back-end et ne les exposez jamais dans le code côté client, le contenu de la documentation, les captures d'écran ou les discussions de support.
+</Callout>
+
+## Point de terminaison
+
+```http
+POST https://api.dubstack.ai/api/agent/workflows/{workflowId}/api-trigger
+```
+
+La clé doit inclure la portée `workflows:run`.
+
+```bash
+curl --request POST \
+  --url "https://api.dubstack.ai/api/agent/workflows/{workflowId}/api-trigger" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY" \
+  --header "Content-Type: application/json" \
+  --data '{}'
+```
+
+Si la clé d'API Admin est restreinte à un déploiement, omettez `site_id`. dubstack utilise la portée de déploiement de la clé.
+
+Si la clé est portée organisationnelle, incluez l'ID de déploiement cible.
+
+```bash
+curl --request POST \
+  --url "https://api.dubstack.ai/api/agent/workflows/{workflowId}/api-trigger" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "site_id": "site-id-for-unscoped-keys"
+  }'
+```
+
+## Identifiants de flux de travail
+
+Utilisez l'identifiant de flux de travail affiché par le tableau de bord et la référence API.
+
+| Type de flux de travail | Valeur de route |
+| --- | --- |
+| Flux de travail intégré | L'identifiant du flux de travail intégré, comme `fix_broken_links` ou `audit_seo_metadata`. |
+| Configuration de flux de travail personnalisé sauvegardée | `custom_workflow` |
+| Flux de travail personnalisé créé par l'utilisateur | `custom_workflow:{id}` |
+
+## État requis du flux de travail
+
+L'API Admin ne contourne pas les vérifications de préparation.
+
+Avant que le déclencheur ne puisse lancer une exécution :
+
+- le moteur d'exécution des flux de travail doit être activé pour le déploiement
+- le flux de travail doit être activé
+- le déclencheur sélectionné doit être **Planification personnalisée**
+- le flux de travail doit prendre en charge le mode de mise à jour actuel
+- la rédaction du dépôt doit être prête lorsque le flux de travail écrit des modifications de documents
+- les champs de configuration requis doivent être complets
+- aucune exécution du même flux de travail ne peut déjà être en file d'attente ou en cours
+- la limite quotidienne d'exécutions de flux de travail doit avoir une capacité restante
+
+Si l'une des vérifications échoue, l'API renvoie une réponse d'erreur avec un champ `reason` stable.
+
+## Réponse
+
+Les requêtes réussies renvoient `202 Accepted` avec une exécution du flux de travail en file d'attente.
+
+```json
+{
+  "run": {
+    "id": "workflow-run-id",
+    "workflow_id": "fix_broken_links",
+    "status": "queued",
+    "trigger_source": "api",
+    "trigger_type": "custom_schedule",
+    "update_mode": "pull_request"
+  }
+}
+```
+
+Les exécutions déclenchées par l'API apparaissent dans l'historique des flux de travail avec la source de déclenchement `api`. Le rapport d'utilisation stocke le préfixe de la clé API Admin pour l'audit, et non la clé brute.
+
+Les exécutions déclenchées utilisent la même comptabilité des crédits que les autres exécutions de flux de travail. Les crédits réels dépendent de la configuration enregistrée, des dépôts de contexte sélectionnés, des intégrations activées, des fichiers modifiés et de la durée d'exécution.
+
+## Exemples de CI
+
+Utilisez les déclencheurs CI lorsque votre dépôt source doit décider quand mettre un flux de travail sauvegardé en file d'attente. Le flux de travail utilise toujours la configuration sauvegardée dans dubstack.
+
+### GitHub Actions
+
+Stockez la clé API Admin en tant que secret de dépôt ou d'organisation nommé `DUBSTACK_ADMIN_API_KEY`.
+
+```yaml .github/workflows/dubstack-workflow.yml
+name: Trigger dubstack workflow
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Queue workflow
+        env:
+          DUBSTACK_API_URL: https://api.dubstack.ai
+          DUBSTACK_ADMIN_API_KEY: ${{ secrets.DUBSTACK_ADMIN_API_KEY }}
+          DUBSTACK_WORKFLOW_ID: fix_broken_links
+        run: |
+          curl --fail --show-error --request POST \
+            --url "${DUBSTACK_API_URL}/api/agent/workflows/${DUBSTACK_WORKFLOW_ID}/api-trigger" \
+            --header "Authorization: Bearer ${DUBSTACK_ADMIN_API_KEY}" \
+            --header "Content-Type: application/json" \
+            --data '{}'
+```
+
+### Forgejo ou Gitea Actions
+
+Stockez la clé API Admin en tant que secret d'action nommé `DUBSTACK_ADMIN_API_KEY`.
+
+```yaml .forgejo/workflows/dubstack-workflow.yml
+name: Trigger dubstack workflow
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  trigger:
+    runs-on: docker
+    steps:
+      - name: Queue workflow
+        env:
+          DUBSTACK_API_URL: https://api.dubstack.ai
+          DUBSTACK_ADMIN_API_KEY: ${{ secrets.DUBSTACK_ADMIN_API_KEY }}
+          DUBSTACK_WORKFLOW_ID: fix_broken_links
+        run: |
+          curl --fail --show-error --request POST \
+            --url "${DUBSTACK_API_URL}/api/agent/workflows/${DUBSTACK_WORKFLOW_ID}/api-trigger" \
+            --header "Authorization: Bearer ${DUBSTACK_ADMIN_API_KEY}" \
+            --header "Content-Type: application/json" \
+            --data '{}'
+```
+
+<Callout type="info">
+  Les déclencheurs API conviennent à l'automatisation CI, aux versions et aux planificateurs. Pour les mises à jour réactives issues de pull requests ou de demandes de fusion dans un dépôt source, utilisez le déclencheur **Modification de code** dans les paramètres du flux de travail.
+</Callout>
+
+## Raisons des erreurs
+
+| Raison | Signification |
+| --- | --- |
+| `workflow_runner_disabled` | Le moteur d'exécution des flux de travail n'est pas activé pour le déploiement. |
+| `workflow_runner_not_supported` | Le flux de travail sélectionné est visible, mais le moteur ne peut pas encore l'exécuter. |
+| `site_required` | La clé n'est pas limitée au déploiement et la requête n'inclut pas `site_id`. |
+| `admin_api_key_site_scope_denied` | La clé est restreinte à un autre déploiement. |
+| `workflow_not_enabled` | Activez le flux de travail depuis le tableau de bord avant de le déclencher. |
+| `workflow_not_api_triggerable` | Seuls les flux de travail configurés avec **Calendrier personnalisé** peuvent être déclenchés via l'API Admin. |
+| `workflow_setup_incomplete` | La configuration requise, comme les instructions du guide de style, est absente. |
+| `workflow_update_mode_not_supported` | Le moteur d'exécution ne prend pas en charge le mode de mise à jour sélectionné. |
+| `workflow_run_already_active` | Une exécution pour le même flux de travail est déjà en file d'attente ou en cours d'exécution. |
+| `workflow_daily_limit_exceeded` | Le déploiement a atteint sa limite quotidienne d'exécutions de flux de travail. |
+
+## Déclenchement sécurisé
+
+- Utilisez des clés limitées au site, sauf si une tâche back-end doit fonctionner sur plusieurs déploiements.
+- Utilisez une clé par système externe afin que la rotation soit ciblée.
+- Déclenchez les flux de travail larges selon un calendrier délibéré au lieu de chaque poussée.
+- Maintenez un contexte étroit pour les flux de travail avec les paramètres de dépôt source et de portée de chemin.
+- Examinez l'historique des flux de travail après les premières exécutions déclenchées par l'API avant de les utiliser dans l'automatisation de version.
+
+## Sujets connexes
+
+- [Clés d'API](/fr/dashboard/api-keys)
+- [Configurer les exécutions de flux de travail](/fr/workflows/configuration)
+- [Gérer les flux de travail](/fr/workflows/manage)
+- [Référence des flux de travail](/fr/workflows/reference)

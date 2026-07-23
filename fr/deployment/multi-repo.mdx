@@ -1,0 +1,207 @@
+---
+title: Plusieurs dépôts
+description: "Comprenez comment utiliser plus d'un dépôt avec un site de documentation sans confondre la source de production."
+icon: git-fork
+---
+
+Beaucoup d'équipes conservent le contenu lié à la documentation dans plus d'un dépôt.
+
+dubstack prend en charge plusieurs workflows multi-dépôts, mais la source des documents de production pour un site doit rester explicite.
+
+## Limite actuelle
+
+Pour un déploiement standard de documentation, un seul dépôt et branche actifs constituent la source de production pour chaque site de documentation.
+
+Cette source contient :
+
+- `dubstack.json`
+- Pages MDX
+- images et ressources
+- extraits réutilisables
+- spécifications OpenAPI lorsqu'un site possède une référence API
+
+Lorsque la branche de déploiement change, le worker de synchronisation publie cette source dans les artefacts utilisés par le site public.
+
+<Callout type="warning">
+  Ne connectez pas plusieurs dépôts en tant que sources de production concurrentes pour le même type de contenu de documentation. Gardez une source active pour le site en ligne, puis utilisez des branches, des pull requests, des copies de dépôt ou des dépôts de contexte supplémentaires pour les workflows associés.
+</Callout>
+
+## Choisissez le bon modèle
+
+| Objectif | Modèle recommandé |
+| --- | --- |
+| Les documents se trouvent dans un sous-répertoire d'un dépôt de produit plus large | Utilisez [configuration monorépertoire](/fr/deployment/monorepo). |
+| Les documents de produit, les spécifications API et les guides SDK se trouvent dans des dépôts séparés mais doivent être publiés en tant que site unique | Choisissez une source de documentation de production et importez ou copiez le contenu supplémentaire dans cette source jusqu'à ce que le déploiement multi-source combiné soit activé pour votre espace de travail. |
+| Gardez une copie des documents chez un autre fournisseur | Utilisez une cible de copie de dépôt lorsque disponible. Traitez-le comme une copie jusqu'à ce que vous le rendiez explicitement la source active. |
+| Donnez à l'agent ou aux workflows un contexte supplémentaire pour le dépôt | Accordez l'accès au dépôt en tant que contexte, mais gardez la source de documentation de production inchangée. |
+| Publiez des sites de documentation séparés à partir de dépôts séparés | Créez des sites séparés, chacun avec son propre dépôt source et une stratégie de domaine personnalisé ou de chemin. |
+
+## Une seule source de production
+
+La source de production est le dépôt, la branche et le répertoire de documentation facultatif configurés dans **Paramètres > Déploiement > Paramètres Git**.
+
+Utilisez cette source pour :
+
+- contenu de page
+- navigation
+- thème et paramètres du site
+- Spécifications de référence de l'API
+- contenu de découverte public MCP et AI
+- indexation de l'assistant
+- indexation de recherche
+
+Le tableau de bord affiche la source active, la branche et l'heure de la dernière synchronisation. La mise à jour manuelle relit la source active et republie les artefacts.
+
+## Configuration monorépertoire
+
+Utilisez la configuration monorépertoire lorsque tous les fichiers de documentation se trouvent dans un seul dépôt, mais pas à la racine du dépôt.
+
+Exemple :
+
+```text
+product-platform/
+├── apps/
+├── packages/
+└── docs/
+    ├── dubstack.json
+    ├── index.mdx
+    └── api-reference/
+```
+
+Configurez le chemin des documents comme `docs`. Les URLs publiées n'incluent pas le nom du répertoire source, sauf si votre navigation l'inclut.
+
+Voir [Configuration monorépertoire](/fr/deployment/monorepo) pour la configuration complète.
+
+## Copies de dépôt
+
+Les copies de dépôt déplacent le contenu entre les fournisseurs Git ou les dépôts pour sauvegarde, migration ou évaluation du fournisseur.
+
+Utilisez une copie de dépôt lorsque vous souhaitez :
+
+- garder une copie de GitLab tandis que GitHub reste la source de production
+- migrer une source de documentation d'un fournisseur à un autre
+- préserver l'historique de la source pendant une transition de fournisseur
+- tester des flux d'écriture spécifiques au fournisseur sans modifier immédiatement la source en ligne
+
+Les copies de dépôt ne sont pas identiques à la mise en déploiement multi-source. Un objectif de copie ne publie pas le site en ligne à moins que vous ne rendiez explicitement ce fournisseur la source active dans les paramètres Git.
+
+<Callout type="info">
+  Les cibles de copie sont sur demande. Elles ne créent pas un miroir automatique entre fournisseurs.
+</Callout>
+
+Après la fin d'une copie, continuez à considérer la source de déploiement active comme le seul dépôt qui publie la production jusqu'à ce que vous changiez délibérément la source dans les paramètres Git et exécutiez une mise à jour manuelle réussie.
+
+## Dépôts de contexte
+
+Les fonctionnalités de l'agent et des workflows peuvent utiliser des dépôts supplémentaires comme contexte.
+
+Les dépôts de contexte peuvent aider à :
+
+- expliquer le comportement du produit à partir du code source
+- rédiger des mises à jour de documentation à partir de changements d'API ou de SDK
+- examiner les notes de version ou les entrées du journal des modifications
+- vérifier les fichiers d'implémentation associés avant d'ouvrir une pull request de documentation
+
+Les dépôts de contexte ne deviennent pas automatiquement du contenu de documentation publié. L'agent écrit toujours les modifications de documentation revues vers la source de documentation active.
+
+Pour les monorépertoires, ajoutez une portée de chemin à un dépôt de contexte afin que les exécutions de workflow se concentrent sur l'application, le package ou le service pertinent.
+
+Exemple :
+
+```text
+source repository: product-platform
+path scope: services/billing
+```
+
+La portée de chemin est une limite de contexte de workflow. Elle ne fait pas du sous-répertoire une source de documentation de production séparée.
+
+Lorsque les dépôts de contexte sont connectés via un webhook de fournisseur, l'activité d'événement de revue peut mettre en file d'attente les workflows éligibles. La sortie du workflow reste toujours sous forme de branche de brouillon ou de pull request contre la source de documentation active.
+
+## Sites séparés
+
+Utilisez des sites séparés lorsque différents dépôts devraient avoir des expériences de documentation indépendantes.
+
+Exemples :
+
+```text
+docs.example.com        -> product docs repository
+api.example.com         -> API reference repository
+sdk.example.com         -> SDK docs repository
+```
+
+Vous pouvez également utiliser un hébergement basé sur le chemin devant des origines distinctes lorsque vous avez besoin d'adresses URL telles que :
+
+```text
+example.com/docs
+example.com/api
+example.com/sdk
+```
+
+Chaque site conserve sa propre source, son historique de synchronisation, ses paramètres et ses vérifications de déploiement.
+
+## Déploiements multi-source combinés
+
+Un déploiement multi-source combiné signifie que plusieurs dépôts sont fusionnés en un seul site rendu, chaque source étant montée à un chemin d'URL spécifique.
+
+C'est un modèle de déploiement Enterprise distinct du site à source unique standard. Il nécessite une propriété claire pour :
+
+- la configuration de base du site
+- les règles de collision de chemin
+- les liens entre sources
+- la navigation spécifique à la source
+- la gestion des échecs de synchronisation lorsqu'une source échoue et une autre réussit
+- la portée de l'assistant, de la recherche, de l'MCP et de l'analyse
+
+Si votre équipe a besoin d'un déploiement multi-source combiné, contactez votre opérateur dubstack afin que l'espace de travail puisse être examiné avant le lancement.
+
+## Évitez les collisions de chemin
+
+Si vous concevez un layout multi-source futur, gardez les chemins uniques.
+
+Bon :
+
+```text
+/product
+/api
+/sdks
+```
+
+Risqué :
+
+```text
+/docs
+/docs/api
+```
+
+Les chemins superposés rendent les redirections, l'indexation de recherche, les aperçus spécifiques à la source et les citations de l'assistant plus difficiles à comprendre.
+
+## Dépannage
+
+### Les mises à jour proviennent du mauvais dépôt
+
+Ouvrez **Paramètres > Déploiement > Paramètres Git** et vérifiez le dépôt actif, la branche et le chemin des documents.
+
+### Une copie d'un dépôt a été mise à jour mais le site en direct ne l'a pas été
+
+Vérifiez si la cible de copie est la source de production active. Si c'est seulement une cible de copie, elle ne mettra pas à jour le site public jusqu'à ce que vous la rendiez active.
+
+### Un dépôt de contexte a changé mais aucune page n'a changé
+
+Vérifiez qu'un workflow était éligible à s'exécuter, que le dépôt a été sélectionné comme contexte de workflow, et que le changement de documentation généré a été examiné et fusionné dans la source de documentation active.
+
+### Les modifications de l'agent apparaissent dans un autre dépôt
+
+Vérifiez le tableau de bord de préparation de l'agent et les paramètres d'accès au dépôt. La rédaction de l'agent doit cibler la source de documentation active, sauf si un workflow cible explicitement un autre dépôt.
+
+### Le contenu d'un autre dépôt est manquant
+
+Si le contenu doit être publié, déplacez-le ou copiez-le dans la source de documentation active, ou utilisez un site séparé pour ce dépôt.
+
+## Sujets connexes
+
+- [Configuration du monorepo](/fr/deployment/monorepo)
+- [Fournisseurs Git](/fr/deployment/forgejo-github-gitlab)
+- [Synchronisation Git](/fr/deployment/git-sync)
+- [GitHub](/fr/deployment/github)
+- [GitLab](/fr/deployment/gitlab)
+- [Gestion des branches et de la publication](/fr/editor/branching-and-publishing)

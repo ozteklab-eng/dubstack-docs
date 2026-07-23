@@ -1,0 +1,128 @@
+---
+title: Rédiger de la documentation avec Devin Desktop
+description: "Configurez les règles de l'espace de travail Devin Desktop et l'accès MCP pour le travail de documentation dubstack à partir de la source."
+icon: sparkles
+---
+
+Devin Desktop peut aider à rédiger et à réviser la documentation lorsqu'il dispose de règles d'espace de travail claires et d'une source de vérité limitée.
+
+Utilisez-le avec dubstack de deux façons différentes :
+
+| Surface | Objectif |
+| --- | --- |
+| Règles de l'espace de travail | Expliquez votre dépôt de documentation, vos normes d'écriture et votre processus de révision. |
+| MCP public | Permettez à Devin Desktop de rechercher et de lire le site de documentation publié via le point de terminaison `/mcp` lorsqu'un client prend en charge les serveurs MCP personnalisés. |
+
+## Exigences
+
+Avant de commencer, vérifiez :
+
+- Devin Desktop est installé et authentifié
+- votre dépôt de documentation est ouvert dans l'espace de travail
+- votre site de documentation contient du contenu publié
+- le MCP public est activé si vous souhaitez que Devin Desktop recherche le site de documentation en temps réel
+
+## Ajoutez des règles d'espace de travail
+
+Créez un fichier de règles partagé dans le dépôt de documentation.
+
+```text
+.devin/
+  rules/
+    docs.md
+dubstack.json
+index.mdx
+```
+
+Utilisez la règle pour préserver la cohérence des modifications apportées à la documentation.
+
+```md title=".devin/rules/docs.md"
+# Documentation workspace rule
+
+## Project context
+
+- This repository publishes docs through dubstack.
+- Pages are MDX files.
+- Navigation and site settings are configured in `dubstack.json`.
+- Published docs update after the connected branch syncs.
+
+## Writing standards
+
+- Use second person for instructions.
+- Add `title` and `description` frontmatter to every page.
+- Prefer short sections with descriptive headings.
+- Use relative links for internal docs pages.
+- Match existing component patterns before adding new ones.
+
+## Safety rules
+
+- Do not include secrets, tokens, private customer data, or unreleased commitments.
+- Do not invent product behavior.
+- Ask for source context when a feature is unclear.
+
+## Review workflow
+
+- Keep changes focused.
+- Update `dubstack.json` when navigation changes.
+- Open reviewable changes rather than silently editing the production branch.
+```
+
+## Connecter le MCP public
+
+Si votre espace de travail Devin Desktop prend en charge la configuration personnalisée du MCP, ajoutez l'URL du MCP public en tant que serveur HTTP streamable.
+
+```json
+{
+  "mcpServers": {
+    "my-docs": {
+      "url": "https://your-docs-domain.com/mcp"
+    }
+  }
+}
+```
+
+Pour un site de documentation hébergé sur un chemin, utilisez :
+
+```json
+{
+  "mcpServers": {
+    "my-docs": {
+      "url": "https://your-domain.com/docs/mcp"
+    }
+  }
+}
+```
+
+## Prompts utiles
+
+```text
+Search the published docs through MCP, then update the local guide with only the missing setup step.
+```
+
+```text
+Review this branch for docs changes that need navigation updates.
+```
+
+```text
+Draft a short troubleshooting section, but do not change API reference pages.
+```
+
+## Publier les modifications
+
+Le point de terminaison MCP public ne permet pas d'écrire du contenu. Devin Desktop modifie les fichiers locaux, puis le site publié est mis à jour via le workflow source connecté :
+
+1. Examinez le diff.
+2. Validez et poussez les modifications, ou ouvrez une pull request.
+3. Attendez que dubstack mette à jour le site.
+4. Vérifiez la page publiée et le résultat de la recherche MCP.
+
+## Sujets connexes
+
+<CardGroup cols={2}>
+  <Card title="MCP public" icon="plug" href="/fr/ai/mcp">
+    Connectez les clients d'IA au serveur de documentation publiée.
+  </Card>
+  <Card title="Cas d'utilisation de l'agent" icon="sparkles" href="/fr/ai/agent-use-cases">
+    Utilisez l'agent du tableau de bord pour les modifications des documents soumis à révision.
+  </Card>
+</CardGroup>

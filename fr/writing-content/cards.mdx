@@ -1,0 +1,81 @@
+---
+title: Cartes
+description: Utilisez des cartes et des groupes de cartes pour créer des liens visuels et des actions regroupées.
+icon: panels-top-left
+---
+
+Les cartes sont des conteneurs compacts pour des liens importants, des résumés courts et des appels à l'action regroupés.
+
+## Carte basique
+
+<Card title="Configurer la navigation" icon="map" href="/fr/configuration/navigation">
+  Découvrez comment organiser les pages destinées aux lecteurs à partir de `dubstack.json` ou de l'éditeur.
+</Card>
+
+```mdx
+<Card title="Configure navigation" icon="map" href="/configuration/navigation">
+  Learn how to organize reader-facing pages.
+</Card>
+```
+
+## Groupes de cartes
+
+Utilisez `CardGroup` lorsque plusieurs cartes appartiennent ensemble.
+
+<CardGroup cols={2}>
+  <Card title="Rédigez du MDX" icon="file-code" href="/fr/writing-content/mdx">
+    Rédigez des pages avec Markdown, des composants MDX et du frontmatter.
+  </Card>
+
+  <Card title="Ajouter des documents API" icon="terminal" href="/fr/api-reference/introduction">
+    Générez des pages de points d'entrée à partir d'une spécification OpenAPI.
+  </Card>
+</CardGroup>
+
+```mdx
+<CardGroup cols={2}>
+  <Card title="Write MDX" icon="file-code" href="/writing-content/mdx">
+    Author pages with Markdown and MDX components.
+  </Card>
+
+  <Card title="Add API docs" icon="terminal" href="/api-reference/introduction">
+    Generate endpoint pages from an OpenAPI specification.
+  </Card>
+</CardGroup>
+```
+
+## Cartes typées
+
+Les cartes typées utilisent les mêmes couleurs d'intention que les rappels.
+
+<Card title="Revoyez avant la publication" type="warning">
+  Utilisez des cartes typées pour des avertissements, des conseils ou des états de succès regroupés nécessitant plus de structure qu'un rappel.
+</Card>
+
+```mdx
+<Card title="Review before publishing" type="warning">
+  Use typed cards for grouped warnings, tips, or success states.
+</Card>
+```
+
+## Propriétés prises en charge
+
+<ResponseField name="title" type="string" required>
+  Étiquette principale de la carte.
+</ResponseField>
+
+<ResponseField name="href" type="string">
+  Cible de lien facultatif. Utilisez des chemins internes pour les pages de documentation ou des URLs complètes pour les liens externes.
+</ResponseField>
+
+<ResponseField name="icon" type="string">
+  Nom d'icône facultatif.
+</ResponseField>
+
+<ResponseField name="type" type="string">
+  Style d'intention facultatif. Les valeurs prises en charge incluent `info`, `note`, `tip`, `warning`, `check` et `danger`.
+</ResponseField>
+
+<ResponseField name="cols" type="number">
+  Nombre de colonnes utilisées par `CardGroup` sur les écrans larges.
+</ResponseField>

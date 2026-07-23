@@ -1,0 +1,101 @@
+---
+title: Aperçu de l'API Playground
+description: "Permet aux lecteurs d'explorer et de tester les points de terminaison API documentés depuis la documentation."
+icon: terminal
+---
+
+L'API Playground transforme une spécification OpenAPI en documentation interactive des points de terminaison.
+
+Les lecteurs peuvent consulter les détails du point de terminaison, inspecter les paramètres et les schémas, copier les exemples générés et envoyer des requêtes de test depuis la page de documentation lorsque le point de terminaison est sécurisé pour une exposition interactive.
+
+## Fonctionnement
+
+dubstack utilise votre fichier OpenAPI comme source de vérité.
+
+```text
+api-reference/openapi.json
+```
+
+Lorsque le site est synchronisé, dubstack lit la spécification, génère les pages de points de terminaison et utilise la même spécification pour afficher le générateur de requêtes, les exemples de réponses et les extraits de code.
+
+<Steps>
+  <Step title="Ajoutez un fichier OpenAPI 3.x valide au format JSON">
+    Gardez la spécification dans le même dépôt Git que votre documentation pour que chaque déploiement soit reproductible.
+  </Step>
+  <Step title="Référencez la spécification dans dubstack.json">
+    Ajoutez un champ `openapi` à un groupe ou un onglet de référence API.
+  </Step>
+  <Step title="Publiez ou gérez les pages de points de terminaison">
+    Choisissez si toutes les opérations doivent s'afficher, ou gérez la visibilité opération par opération depuis le tableau de bord.
+  </Step>
+  <Step title="Testez les requêtes depuis la documentation">
+    Les lecteurs peuvent entrer les valeurs d'authentification requises et envoyer des requêtes via l'API Playground lorsque le point de terminaison possède une URL de serveur et des métadonnées de requête valides.
+  </Step>
+</Steps>
+
+## Modes de l'API Playground
+
+Les pages de points de terminaison générées disposent de deux vues :
+
+| Vue | Objectif |
+| --- | --- |
+| Documentation | Affiche la méthode du point de terminaison, le chemin, la description, l'autorisation, les paramètres, les champs du corps et le schéma de réponse. |
+| Essayez-le | Ouvre le générateur de requêtes interactif pour envoyer une requête et afficher la réponse. |
+
+Le générateur de requêtes n'est affiché que lorsqu'une page possède des métadonnées d'opération OpenAPI et que son frontmatter ne désactive pas l'API Playground.
+
+```mdx
+---
+title: Create project
+openapi: "POST /v1/projects"
+playground: interactive
+---
+```
+
+Définissez `playground: none` sur une page manuelle de point de terminaison lorsque vous souhaitez documenter l'opération sans afficher le générateur de requêtes interactif.
+
+## Acheminement des requêtes
+
+Les requêtes de l'API Playground peuvent être proxyées via le site de documentation afin que les lecteurs n'aient pas besoin d'accès CORS depuis leur navigateur vers votre API.
+
+Le proxy n'envoie des requêtes qu'aux origines autorisées par la spécification OpenAPI publiée. Gardez le champ `servers` précis afin que les requêtes soient envoyées à l'environnement souhaité.
+
+```json
+{
+  "servers": [
+    {
+      "url": "https://api.example.com",
+      "description": "Production"
+    }
+  ]
+}
+```
+
+<Callout type="warning">
+  Ne pointez pas les documents publics vers un environnement pouvant modifier des données de production à moins que l'API ne dispose d'autorisation, de limitation de débit et de protection contre l'abus appropriés.
+</Callout>
+
+## Ce que l'API Playground lit dans OpenAPI
+
+Le rendu utilise ces champs OpenAPI pour la page publique :
+
+| Champ OpenAPI | Utilisé pour |
+| --- | --- |
+| `summary` | Titre du point de terminaison et étiquettes compactes en cas de repli. |
+| `description` | Contenu du corps du point de terminaison. |
+| `servers` | URL de base pour l'exécution des requêtes. |
+| `parameters` | Entrées de chemin, de requête, d'en-tête et de cookie. |
+| `requestBody` | Champs du corps et exemples de requête. |
+| `responses` | Codes de statut, schémas et exemples de réponse. |
+| `components.securitySchemes` | Contrôles d'autorisation. |
+| `security` | Authentification requise par opération ou spécification. |
+| `tags` | Groupes de navigation générés. |
+
+## Sujets connexes
+
+- [Configuration OpenAPI](/fr/api-reference/openapi-setup)
+- [Exemples de code](/fr/api-reference/code-examples)
+- [Authentification de l'API Playground](/fr/api-reference/playground-authentication)
+- [Visibilité des points de terminaison](/fr/api-reference/endpoint-visibility)
+- [Exemples de réponse](/fr/api-reference/response-examples)
+- [Dépannage](/fr/api-reference/troubleshooting)

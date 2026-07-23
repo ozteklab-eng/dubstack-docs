@@ -1,0 +1,45 @@
+---
+title: Intégrations de gestion de projet
+description: "Utilisez les gestionnaires de tickets comme contexte limité pour les réponses de l'agent et les workflows de documentation."
+icon: panels-top-left
+---
+
+Les intégrations de gestion de projet permettent à l'agent de lire le contexte sélectionné des gestionnaires de tickets lorsqu'un travail de documentation dépend de changements de produit planifiés, livrés ou triés.
+
+Utilisez cette famille pour les problèmes de fonctionnalité, les rapports de bogues, les épics de version, les étiquettes de backlog et les éléments de roadmap qui expliquent quels changements de documentation doivent être effectués.
+
+## Fournisseurs pris en charge
+
+| Fournisseur | Statut | Portée | Fonctionnalités |
+| --- | --- | --- | --- |
+| [Jira](/fr/ai/integrations/jira) | Actif | Partagé | Contexte limité des tickets pour les demandes de l'agent de tableau de bord et les workflows pris en charge. |
+| Linear | Catalogue | Partagé | Contexte des tickets, projets et roadmap planifiés. |
+| Plane | Catalogue | Partagé | Contexte des tickets auto-hébergés, cycles, modules et projets planifiés. |
+
+Les fournisseurs uniquement présents dans le catalogue ne peuvent pas être connectés ou sélectionnés pour les exécutions de workflow jusqu'à ce que leur flux d'autorisation, leurs autorisations, leurs collecteurs et leurs tests soient activés pour l'environnement.
+
+## Cas d'utilisation
+
+Utilisez le contexte des gestionnaires de tickets lorsque :
+
+- un ticket décrit plus clairement le changement de produit qu'une différence de code
+- un épique de version liste les tâches de documentation
+- les rapports de bogues montrent des problèmes de configuration ou de dépannage répétés
+- un workflow doit analyser les tickets récents à intervalles réguliers et ouvrir une mise à jour de documentation pour révision
+
+Maintenez les requêtes étroites. Les requêtes de tickets larges augmentent les coûts et rendent la documentation générée plus difficile à réviser.
+
+## Limites des requêtes
+
+L'intégration Jira active nécessite un JQL limité. Utilisez des filtres tels que le projet, la clé de ticket, l'étiquette, le statut, la version de correction ou une fenêtre de date de mise à jour.
+
+Les futurs fournisseurs de gestionnaires de tickets devraient suivre la même limite : le workflow doit lire les tickets sélectionnés, et non scanner l'ensemble de l'espace de travail par défaut.
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/ai/integrations/jira">Intégration Jira</a>
+  <a href="/fr/workflows/integrations">Intégrations de workflow</a>
+  <a href="/fr/ai/connector-capabilities">Capacités du connecteur</a>
+  <a href="/fr/guides/draft-docs-from-code">Brouillons de documents à partir du code</a>
+</RelatedTopics>

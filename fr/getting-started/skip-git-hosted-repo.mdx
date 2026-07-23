@@ -1,0 +1,72 @@
+---
+title: Flux de dépôt hébergé
+description: "Commencez par un dépôt hébergé lorsque vous ne souhaitez pas connecter Git pour l'instant."
+icon: cloud
+---
+
+Utilisez le flux de dépôt hébergé lorsque vous souhaitez créer un site avant de connecter votre propre dépôt GitHub, GitLab ou Forgejo.
+
+Cela est utile pour les essais, les démonstrations et les premiers brouillons où la priorité est de voir le site de documentation s'exécuter rapidement.
+
+## Quand l'utiliser
+
+Choisissez le flux de dépôt hébergé lorsque :
+
+- Vous n'avez pas encore de dépôt de documentation.
+- Vous souhaitez explorer l'éditeur du tableau de bord en premier.
+- Vous voulez un site de départ sans installer immédiatement une application de fournisseur Git.
+- Vous validez la structure des documents avant de la transférer vers un dépôt appartenant à l'équipe.
+
+Choisissez un dépôt Git connecté plutôt lorsque votre équipe possède déjà un dépôt de documentation de production ou si elle nécessite une revue de pull request dès le début.
+
+## Ce qui est créé
+
+Le flux hébergé crée un site de documentation basé sur un modèle de départ avec :
+
+- Une URL en direct `dubstack.live`.
+- Des pages MDX de modèle.
+- Un fichier de configuration `dubstack.json`.
+- Accès à l'éditeur du tableau de bord.
+- Activité de mise à jour et de publication manuelle dans le tableau de bord.
+
+Le site suit toujours le modèle de publication normal. Les modifications du contenu sont synchronisées dans les artefacts de documentation publiés avant que le site public ne les affiche.
+
+## Créer un site hébergé
+
+Lors de l'inscription :
+
+1. Créez ou sélectionnez une organisation.
+2. Choisissez le type de documentation et le profil de démarrage.
+3. Sélectionnez l'option pour ignorer la connexion Git pour l'instant.
+4. Laissez DubStack créer le site basé sur un modèle de départ.
+5. Continuez vers le tableau de bord du site.
+6. Ouvrez le site en direct une fois la configuration terminée.
+
+## Modifier le site hébergé
+
+Après la configuration :
+
+1. Ouvrez l'éditeur.
+2. Modifiez une page MDX existante ou créez-en une nouvelle.
+3. Prévisualisez la page.
+4. Enregistrer le changement.
+5. Publier ou lancer une mise à jour manuelle depuis le tableau de bord.
+
+Utilisez le panneau d'activité pour confirmer que la mise à jour a été terminée.
+
+## Passer à votre propre fournisseur Git plus tard
+
+Lorsque votre équipe est prête, connectez GitHub, GitLab ou Forgejo depuis les paramètres Git.
+
+Avant de changer la propriété de la source, vérifiez :
+
+- Le dépôt cible contient les fichiers de documentation actuels.
+- `dubstack.json` est présent.
+- La branche sélectionnée existe.
+- Les membres de l'équipe savent où doivent avoir lieu les futures revues.
+
+Après la connexion du dépôt, lancez une mise à jour manuelle et vérifiez que le site en direct affiche toujours le contenu attendu.
+
+## Limites
+
+Un flux de dépôt hébergé est idéal pour commencer. Pour les workflows d'équipe en production, connectez un dépôt appartenant à votre organisation afin que les revues, la protection des branches et l'historique d'audit restent intégrés à votre processus Git normal.

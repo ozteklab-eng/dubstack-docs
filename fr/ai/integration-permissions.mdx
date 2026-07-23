@@ -1,0 +1,123 @@
+---
+title: "Autorisations et portées d'intégration"
+description: "Comprenez comment les intégrations sont configurées, autorisées et déconnectées."
+icon: shield-check
+---
+
+Les intégrations sont connectées via des flux d'autorisation des fournisseurs et configurées pour l'organisation et le déploiement actuels.
+
+Utilisez **Paramètres > Organisation > Intégrations** pour afficher les fournisseurs connectés et disponibles.
+
+## Portée de la connexion
+
+Les intégrations peuvent être partagées ou personnelles.
+
+| Portée | Qui l'autorise | Qui peut l'utiliser |
+| --- | --- | --- |
+| Partagée | Un administrateur ou un éditeur autorise le fournisseur pour l'organisation. | Les agents et surfaces de workflow éligibles dans l'organisation. |
+| Personnelle | Un collègue autorise son propre compte de fournisseur. | Uniquement le contexte de l'agent ou du workflow de ce collègue, sauf si le fournisseur prend en charge explicitement la délégation partagée. |
+
+La plupart des intégrations de collaboration, de gestion de projet, de CRM, de support et de documentation sont partagées. Les systèmes spécifiques aux utilisateurs, tels que le calendrier et le contexte de stockage, sont personnels.
+
+Certaines données partagées peuvent également être associées à un déploiement sélectionné lorsqu'une intégration est utilisée par des agents ou surfaces de workflow spécifiques au déploiement.
+
+Le tableau de bord résout l'installation connectée la plus spécifique pour le site actuel avant de se reporter au contexte au niveau de l'organisation.
+
+## Statut du fournisseur
+
+| Statut | Signification |
+| --- | --- |
+| Connecté | Le fournisseur a une installation active pour la portée actuelle. |
+| Disponible | Le fournisseur est dans le catalogue mais non connecté. |
+| Non configuré | L'environnement manque de la configuration OAuth ou d'application requise. |
+| Non éligible | Le plan ou le rôle actuel ne peut pas connecter ce fournisseur. |
+
+Lorsqu'un fournisseur ne peut pas être connecté, le tableau de bord affiche la raison renvoyée par le test de capacité d'intégration.
+
+## Fournisseurs actifs et du catalogue
+
+Les fournisseurs actifs peuvent être connectés lorsque la configuration, le plan et les autorisations le permettent.
+
+Les fournisseurs de catalogue sont visibles en tant que catégories d'intégration planifiées, mais ne peuvent pas être connectés avant que le fournisseur ne soit activé pour l'environnement.
+
+## Ce que l'agent peut lire
+
+L'agent hérite des accès du compte ayant autorisé la connexion. Il ne peut lire que le contenu que le compte d'espace connecté ou l'utilisateur connecté peut déjà accéder chez le fournisseur.
+
+| Intégration | Contexte lisible typique |
+| --- | --- |
+| Slack | Canaux et fils de discussion que l'application est autorisée à lire. Les canaux privés nécessitent que l'application soit invitée. |
+| Mattermost | Canaux, fils de discussion et messages que le compte d'espace connecté peut lire. |
+| Jira | Problèmes et commentaires visibles pour le compte connecté. |
+| Linear | Problèmes, projets, commentaires et contexte de planification visibles pour le compte connecté. |
+| Plane | Problèmes, cycles, modules, projets et commentaires visibles pour le compte connecté. |
+| Notion | Pages et bases de données partagées avec l'intégration. |
+| Google Drive | Fichiers et dossiers visibles pour l'utilisateur connecté, y compris les disques partagés lorsqu'ils sont autorisés. |
+| Nextcloud | Fichiers, dossiers et contenus de base de connaissance partagés visibles pour le compte connecté. |
+| Google Calendar | Événements sur les calendriers visibles pour l'utilisateur connecté. |
+| Confluence | Pages et espaces visibles pour le compte connecté. Les exécutions de workflows utilisent les métadonnées des pages, les liens et les extraits limités ; elles ne inspectent pas les pièces jointes. |
+| Plain | Conversations de support et dossiers clients disponibles avec la clé API fournie. |
+| Intercom | Conversations, contacts et dossiers du centre d'aide visibles pour le compte connecté. |
+| Salesforce | Objets standards et personnalisés visibles pour le compte connecté. |
+| HubSpot | Contacts, entreprises, affaires et tickets visibles pour le compte connecté. |
+
+Pour restreindre l'accès, limitez les autorisations du compte connecté dans l'application source. Par exemple, ajoutez l'application Slack uniquement dans les canaux qu'elle doit lire, partagez uniquement des pages Notion sélectionnées, ou utilisez un compte de service du fournisseur avec un accès projet restreint.
+
+## Autorisation et rôles
+
+La connexion ou la déconnexion des intégrations nécessite une autorisation pour configurer les intégrations de l'organisation ou du déploiement actuel.
+
+| Rôle | Configurer les intégrations partagées | Utiliser le contexte connecté en lecture seule |
+| --- | --- | --- |
+| Visionneur | Non | Oui, lorsque l'interface permet les questions en lecture seule. |
+| Éditeur | Oui | Oui. |
+| Administrateur | Oui | Oui. |
+| Propriétaire | Oui | Oui. |
+
+Le contexte d'intégration ne doit être utilisé que lorsqu'
+
+- le fournisseur est connecté
+- l'installation dispose des portées nécessaires
+- l'utilisateur ou le flux de travail est autorisé à utiliser cette intégration
+- la demande nécessite le contexte de ce fournisseur
+
+## Portées manquantes
+
+Si un fournisseur était connecté avant l'ajout de nouvelles portées, le tableau de bord peut afficher les portées manquantes.
+
+Reconnectez le fournisseur depuis le tableau de bord pour approuver l'ensemble de portées mis à jour.
+
+Les portées manquantes ne donnent pas accès partiel en silence. Le tableau de bord doit afficher un état de reconnexion, et les flux de travail nécessitant ce fournisseur doivent rester bloqués jusqu'à ce que l'ensemble de portées requis soit approuvé.
+
+## Comportement de déconnexion
+
+La déconnexion d'une intégration empêche les exécutions futures des agents et des flux de travail d'utiliser le contexte de ce fournisseur.
+
+La déconnexion ne supprime pas :
+
+- documentation existante
+- les anciennes pull requests ou de fusion
+- enregistrements d'exécutions historiques
+- contenu des documents déjà publiés
+
+L'agent récupère le contenu du fournisseur lorsqu'une exécution en a besoin. dubstack ne lit pas activement les applications connectées, et il n'utilise pas les intégrations déconnectées pour récupérer le contexte futur après la fin de la déconnexion.
+
+## Dépannage
+
+Si une intégration cesse de fonctionner :
+
+1. Vérifiez si la carte du fournisseur indique **Connecté**, **À reconnecter**, **Indisponible** ou **Mise à niveau**.
+2. Confirmez que le compte connecté peut toujours lire le contenu source directement dans le fournisseur.
+3. Reconnectez le fournisseur si le jeton OAuth a expiré ou si l'ensemble des autorisations a changé.
+4. Pour les fournisseurs à clé API, faites tourner la clé du fournisseur et mettez-la à jour dans le tableau de bord.
+5. Pour les exécutions de workflow, vérifiez que le workflow a sélectionné cette intégration dans le menu des paramètres.
+6. Pour Slack, vérifiez que l'application est membre du canal ou du canal privé dont elle a besoin pour lire.
+
+Si la reconnexion réussit mais que le flux de travail ne peut toujours pas utiliser le fournisseur, consultez les détails de son exécution pour connaître la source de contexte sélectionnée et l'erreur renvoyée par le fournisseur.
+
+## Sujets connexes
+
+- [Intégrations](/fr/ai/integrations)
+- [Intégration Slack](/fr/ai/integrations/slack)
+- [Intégration Jira](/fr/ai/integrations/jira)
+- [Intégration Confluence](/fr/ai/integrations/confluence)

@@ -1,0 +1,165 @@
+---
+title: Démarrage rapide
+description: "Créez, modifiez et publiez votre premier site de documentation dubstack."
+icon: zap
+---
+
+Ce guide vous accompagne d'un espace de travail vide à un site de documentation publié, avec un véritable contrôle de version, une navigation et une URL publique.
+
+Vous pouvez connecter votre propre dépôt Git, ou utiliser le flux de dépôt hébergé lorsque vous souhaitez que dubstack crée la source de départ pour vous.
+
+## Ce que vous allez construire
+
+À la fin, vous aurez :
+
+- un site de documentation avec une URL `dubstack.live`
+- un dépôt source ou une source de départ hébergée
+- un fichier de configuration `dubstack.json`
+- au moins une page MDX modifiée
+- une activité de publication terminée
+- une page publiée que vous pouvez ouvrir et vérifier
+
+## Avant de commencer
+
+Vous avez besoin de :
+
+- un compte dubstack
+- un espace de travail ou une organisation pour le site
+- un compte GitHub, GitLab ou Forgejo si vous souhaitez connecter votre propre dépôt
+- accès DNS uniquement si vous prévoyez d'attacher un domaine personnalisé plus tard
+
+## 1. Créer un site
+
+Ouvrez le tableau de bord et lancez le processus de création d'un nouveau site.
+
+Choisissez le type de documentation que vous créez, puis sélectionnez une option de source.
+
+| Option de source | À utiliser lorsque |
+| --- | --- |
+| Connecter Git | Vous avez déjà un dépôt de documentation ou votre équipe souhaite le conserver sur son propre compte fournisseur Git dès le début. |
+| Dépôt hébergé | Vous voulez un modèle fonctionnel immédiatement et prévoyez d'éditer depuis le tableau de bord en premier. |
+
+Une fois la configuration terminée, le tableau de bord s'ouvre sur la page d'accueil du site.
+
+## 2. Examiner la source du modèle de départ
+
+La source du modèle de départ inclut des pages MDX, des actifs et `dubstack.json`.
+
+Une source minimale ressemble généralement à ceci :
+
+```text
+.
+├── dubstack.json
+├── index.mdx
+├── quickstart.mdx
+├── api-reference/
+│   └── openapi.json
+└── assets/
+    ├── logo-dark.svg
+    └── logo-light.svg
+```
+
+Les fichiers disponibles dépendent du profil du modèle de départ et de la présence éventuelle d'une référence API sur votre site.
+
+## 3. Vérifier `dubstack.json`
+
+`dubstack.json` contrôle la navigation, le thème, la configuration de la référence API, les widgets, les redirections et le comportement du pied de page.
+
+Une petite configuration peut commencer comme ceci :
+
+```json
+{
+  "site": {
+    "name": "Product Docs"
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "default": true,
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": [
+              { "slug": "index" },
+              { "slug": "quickstart" }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Conservez la configuration sous contrôle de version avec la source de la documentation afin que chaque publication soit reproductible.
+
+## 4. Effectuer votre première modification
+
+Ouvrez l'éditeur depuis le tableau de bord.
+
+Une bonne première modification est d'éditer `quickstart.mdx` ou de créer une page courte dans une section de démarrage.
+
+Utilisez l'éditeur pour :
+
+1. mettre à jour le contenu MDX
+2. insérer des composants pris en charge avec les commandes slash
+3. prévisualiser la page rendue
+4. enregistrer le fichier dans la source connectée
+
+Par exemple, ajoutez une note à une page :
+
+```mdx
+<Callout type="info">
+  This page is now managed through dubstack.
+</Callout>
+```
+
+## 5. Publier
+
+Lorsque vous publiez, dubstack suit le même chemin de production utilisé pour les mises à jour normales.
+
+```text
+Git commit
+-> sync worker
+-> published content artifacts
+-> docs frontend
+```
+
+Utilisez le panneau **Activité** du tableau de bord pour confirmer que la mise à jour est terminée.
+
+Si votre source a changé en dehors du chemin normal du webhook, lancez une **Mise à jour manuelle** depuis la page d'accueil.
+
+## 6. Vérifier le site publié
+
+Après la publication, vérifiez :
+
+- le site publié s'ouvre sur le domaine `dubstack.live`
+- la page modifiée est visible après un rafraîchissement complet
+- la navigation de la barre latérale correspond à `dubstack.json`
+- la recherche s'ouvre à partir de l'en-tête
+- l'assistant s'ouvre et affiche l'avis destiné aux lecteurs
+- aucun contenu réservé aux brouillons n'est visible sur le site public
+
+## 7. Connecter les prochains éléments de production
+
+Une fois la première publication fonctionnelle, poursuivez avec les éléments nécessaires à votre site :
+
+<CardGroup cols={2}>
+  <Card title="Connecter Git" icon="git-branch" href="/fr/getting-started/connect-git">
+    Utilisez GitHub comme source principale, reliez GitLab si nécessaire ou ajoutez Forgejo comme source de workflow ou cible de copie.
+  </Card>
+  <Card title="Configurer la navigation" icon="map" href="/fr/configuration/navigation">
+    Organisez les onglets, les groupes, les pages et les points de terminaison générés par OpenAPI.
+  </Card>
+  <Card title="Ajouter une référence API" icon="terminal" href="/fr/api-reference/openapi-setup">
+    Soumettez une spécification OpenAPI et publiez les pages des points de terminaison avec un environnement interactif.
+  </Card>
+  <Card title="Utiliser un domaine personnalisé" icon="globe" href="/fr/deployment/custom-domains">
+    Attachez votre propre nom d'hôte après que le site soit prêt pour le trafic de production.
+  </Card>
+</CardGroup>
+
+<Callout type="info">
+  Git est la source de vérité. Les documents publiés sont générés à partir d'artefacts de contenu synchronisés, et non à partir de fichiers locaux ou d'un état uniquement accessible via le tableau de bord.
+</Callout>

@@ -1,0 +1,45 @@
+---
+title: Journal des modifications
+description: Suivez les mises à jour de la documentation produit.
+icon: history
+rss: true
+---
+
+Suivez ce journal des modifications pour les mises à jour importantes de la documentation du produit dubstack.
+
+<Update label="2026-07-15" description="Guide de récupération des brouillons de l'éditeur ajouté." tags={["docs", "editor"]}>
+  Ajout d'un guide sur les brouillons de l'éditeur, qui explique quelles modifications non enregistrées sont conservées dans le navigateur, quand les brouillons sont effacés et quand utiliser des branches ou des pull requests plutôt que des brouillons locaux.
+
+  La documentation des paramètres Git décrit désormais **l'état du jeton de copie** et précise que celui-ci est distinct de l'état de reconnexion OAuth de GitLab pour la rédaction.
+</Update>
+
+<Update label="2026-07-14" description="Guides sur la planification, Git, workflow, qualité, maintenance, SEO, médias, liens, internationalisation, découverte de l'IA et sécurité ajoutés." tags={["docs", "guides", "workflows"]}>
+  Ajout de guides de préparation au lancement pour la documentation destinée aux développeurs, les bases de connaissances internes, les centres d'aide, les types et modèles de contenu, les dispositions personnalisées, l'analyse du public, les concepts Git, les workflows de branche, l'utilisation des workflows, les limites des dépôts de contexte, la qualité documentaire, les cycles de maintenance, le SEO, la découverte par l'IA, les médias, les liens, la planification multilingue et la limite de sécurité actuelle du tableau de bord.
+
+  La documentation des paramètres Git reprend désormais les libellés d'état du tableau de bord : **Source active**, **Cible de copie du dépôt**, **Cible de copie planifiée** et **Source de workflow**. Elle distingue ainsi les cibles de copie utilisant un jeton fournisseur, les reconnexions OAuth pour la rédaction et les changements de source de déploiement.
+</Update>
+
+<Update label="2026-07-13" description="États du fournisseur Git et redirections de l'API MCP clarifiés." tags={["deployment", "workflows", "api", "mcp"]}>
+  - Les anciens liens de référence de l'API de découverte MCP redirigent désormais vers les pages des points de terminaison MCP actuels.
+  - La documentation des paramètres Git distingue désormais les sources de déploiement actives, les reconnexions pour la rédaction, les dépôts sources, les cibles de copie et les états des webhooks.
+  - La documentation Forgejo sépare désormais les cibles de copie de dépôt, les dépôts sources de workflow et le mode de source de déploiement activé par l'environnement.
+</Update>
+
+<Update label="2026-07-12" description="Les workflows de copie de dépôt et la validation MCP montée sont documentés." tags={["workflows", "deployment", "mcp"]}>
+  - Les workflows de copie de dépôt peuvent copier la source de documentation active vers une cible fournisseur configurée pour la sauvegarde, les tests ou une répétition de migration, sans modifier la source de déploiement publiée.
+  - Les points de terminaison MCP publics fonctionnent désormais avec les sites basés sur un nom d'hôte et les domaines personnalisés montés sur un chemin lorsque le proxy transmet les routes MCP, de découverte et de feedback.
+</Update>
+
+<Update label="2026-07-07" description="Les documents de vérification des domaines personnalisés ont été élargis." tags={["deployment", "docs"]}>
+  Le guide des domaines personnalisés explique désormais pourquoi les domaines basés sur l'hôte utilisent des enregistrements distincts pour la propriété du nom d'hôte, la validation du certificat et le routage du trafic avant qu'un domaine ne soit prêt pour la production.
+</Update>
+
+<Update label="2026-06-27" description="Les documents publics ont été élargis dans les domaines de l'IA, du Theme Studio, de l'API, du déploiement et de la configuration." tags={["docs", "api", "ai"]}>
+  La documentation distingue désormais les guides produit publics des notes d'architecture internes et utilise le dépôt Git canonique de la documentation produit comme source de vérité.
+
+  Cette mise à jour a également ajouté la référence API générée, les guides du playground API, les points de terminaison de découverte MCP, les exemples de requêtes de l'assistant, les outils publics de récupération MCP, les retours facultatifs de l'agent, les chemins de découverte, les guides des fichiers de compétences et les limites actuelles de rédaction.
+</Update>
+
+<Update label="2026-05-26" description="Échafaudage initial des documents de produit créé." tags={["docs"]}>
+  La première version a défini l'architecture de l'information des documents orientés client et l'a séparée des modèles de démarrage et des notes d'opérations internes.
+</Update>

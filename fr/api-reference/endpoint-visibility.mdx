@@ -1,0 +1,104 @@
+---
+title: Visibilité des points de terminaison
+description: "Contrôlez les pages de points de terminaison API générées qui sont publiées, masquées ou exclues."
+icon: eye-off
+---
+
+La visibilité des points de terminaison détermine quelles opérations d'une spécification OpenAPI deviennent des pages de documentation publique.
+
+Utilisez les contrôles de visibilité lorsque la spécification contient des points de terminaison internes, des points de terminaison bêta, des points de terminaison obsolètes ou des opérations qui doivent rester accessibles par lien direct mais ne pas être promues dans la navigation.
+
+## États de visibilité
+
+| État | Comportement |
+| --- | --- |
+| Publié | La page du point de terminaison est générée et apparaît dans la navigation de la référence API publique. |
+| Masqué | Le point de terminaison est suivi par le gestionnaire de spécification mais ne doit pas être promu dans la navigation publique. |
+| Exclu | Le point de terminaison est intentionnellement omis des artefacts de documentation générés. |
+| Non publié | Le point de terminaison existe dans la spécification mais n'a pas été publié en tant que page générée. |
+
+## Utilisez les extensions OpenAPI
+
+Ajoutez des métadonnées de visibilité directement à l'opération lorsque la règle doit suivre la spécification.
+
+```json
+{
+  "paths": {
+    "/internal/jobs": {
+      "post": {
+        "summary": "Create internal job",
+        "x-excluded": true,
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Utilisez `x-excluded: true` lorsque l'opération ne doit pas générer d'artefacts de point de terminaison publics.
+
+```json
+{
+  "paths": {
+    "/beta/reports": {
+      "get": {
+        "summary": "List beta reports",
+        "x-hidden": true,
+        "responses": {
+          "200": {
+            "description": "Reports"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Utilisez `x-hidden: true` pour marquer l'opération comme masquée dans l'état des points de terminaison gérés. Le tableau de bord peut alors maintenir ce point de terminaison hors de la navigation publique promue tout en conservant l'opération dans le catalogue de spécification.
+
+## Publier des opérations sélectionnées depuis la navigation
+
+Lorsque vous souhaitez un contrôle strict depuis `dubstack.json`, listez uniquement les opérations qui doivent apparaître dans un groupe.
+
+```json
+{
+  "group": "Projects API",
+  "openapi": "api-reference/openapi.json",
+  "pages": [
+    "GET /v1/projects",
+    "POST /v1/projects",
+    "GET /v1/projects/{projectId}"
+  ]
+}
+```
+
+Utilisez les méthodes HTTP en majuscules et le chemin exact de la spécification OpenAPI.
+
+## Gérer la visibilité depuis le tableau de bord
+
+La page **Spécifications API** du tableau de bord peut inspecter les opérations d'une spécification et gérer l'état des points de terminaison sans éditer manuellement chaque page générée.
+
+Utilisez-la pour :
+
+- publier les pages de points de terminaison
+- masquer les points de terminaison de la navigation promue
+- exclure les opérations internes
+- régénérer les extraits et les pages de points de terminaison après une mise à jour de la spécification
+
+## Politique recommandée
+
+- Publiez les points de terminaison stables et sécurisés pour que les lecteurs les découvrent.
+- Masquez les points de terminaison utiles par lien direct mais qui ne doivent pas être mis en avant.
+- Exclure les points de terminaison internes uniquement et les opérations non prises en charge.
+- Conserver les métadonnées de visibilité près de la spécification lors de la génération de la spécification par votre pipeline d'API.
+
+## Sujets connexes
+
+- [Gérer les spécifications d'API](/fr/api-reference/spec-management)
+- [Configuration OpenAPI](/fr/api-reference/openapi-setup)
+- [Aperçu de l'API Playground](/fr/api-reference/playground-overview)

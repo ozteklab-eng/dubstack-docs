@@ -1,0 +1,119 @@
+---
+title: "Exports de l'API Analytics"
+description: "Exportez les données d'utilisation et les retours depuis des systèmes back-end fiables."
+icon: chart-no-axes-combined
+---
+
+Utilisez les exports d'analyse lorsqu'une tâche back-end doit synchroniser les données d'utilisation ou les retours de dubstack avec un entrepôt BI, un système de reporting interne ou un tableau de bord de suivi client.
+
+<Callout type="warning">
+  Les exports d'analyse utilisent des clés d'API Admin. Stockez les clés dans un gestionnaire de secrets back-end et ne les exposez jamais dans du code côté client, du contenu de documentation, des captures d'écran ou des discussions de support.
+</Callout>
+
+## Points d'accès
+
+```http
+GET https://api.dubstack.ai/api/v1/admin/analytics/usage
+GET https://api.dubstack.ai/api/v1/admin/analytics/feedback
+```
+
+La clé doit inclure la portée `analytics:read`.
+
+## Portée site
+
+Les clés à portée site exportent automatiquement les analyses pour le déploiement auquel elles sont restreintes.
+
+```bash
+curl --request GET \
+  --url "https://api.dubstack.ai/api/v1/admin/analytics/usage?days=30" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY"
+```
+
+Les clés à portée organisationnelle peuvent cibler un déploiement avec `site_id`, `site_slug` ou `subdomain`.
+
+```bash
+curl --request GET \
+  --url "https://api.dubstack.ai/api/v1/admin/analytics/usage?subdomain=docs&days=30" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY"
+```
+
+Si aucune portée de déploiement n'est fournie pour une clé à portée organisationnelle, le point de terminaison d'utilisation renvoie des totaux globaux par organisation.
+
+## Fenêtres de temps
+
+Utilisez `days` pour des fenêtres glissantes, ou `from` et `to` pour des exports par date calendrier.
+
+```bash
+curl --request GET \
+  --url "https://api.dubstack.ai/api/v1/admin/analytics/feedback?from=2026-07-01&to=2026-07-16" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY"
+```
+
+Les dates utilisent `YYYY-MM-DD`. Ajoutez `timezoneOffsetMinutes` lorsque votre journée de rapport doit s'aligner sur un fuseau horaire local.
+
+## Export d'utilisation
+
+L'export d'utilisation inclut l'activité de récupération et la comptabilisation de l'utilisation de l'IA.
+
+```json
+{
+  "available": true,
+  "periodDays": 30,
+  "scope": {
+    "siteId": "site-id",
+    "siteSlug": "docs",
+    "subdomain": "docs"
+  },
+  "retrieval": {
+    "totals": {
+      "requests": 124,
+      "sourceCount": 420,
+      "averageLatencyMs": 184
+    }
+  },
+  "aiUsage": {
+    "totals": {
+      "runs": 82,
+      "creditsEstimated": 1886,
+      "creditsCharged": 1886,
+      "totalTokens": 91000
+    }
+  }
+}
+```
+
+Les lignes récentes sont incluses pour le débogage et la conciliation. Utilisez les totaux regroupés pour les rapports.
+
+## Export de retours
+
+L'export des retours inclut les totaux, les dimensions regroupées, les séries quotidiennes et les événements récents.
+
+```bash
+curl --request GET \
+  --url "https://api.dubstack.ai/api/v1/admin/analytics/feedback?subdomain=docs&status=pending,resolved" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY"
+```
+
+`status` peut contenir un ou plusieurs statuts de traitement des retours :
+
+| Statut | Signification |
+| --- | --- |
+| `pending` | Le retour est en attente de revue. |
+| `in_progress` | Votre équipe est en cours de revue. |
+| `resolved` | Le retour a été traité. |
+| `dismissed` | Le retour ne nécessite aucune action. |
+
+## Raisons d'erreur
+
+| Statut | Signification |
+| --- | --- |
+| `401` | La clé d'API Admin est absente, invalide, révoquée, expirée ou mal configurée. |
+| `403` | La clé ne comprend pas `analytics:read`, ou une clé à portée site a été utilisée pour un autre déploiement. |
+| `404` | Le déploiement demandé n'a pas été trouvé pour une clé à portée organisationnelle. |
+
+## Sujets connexes
+
+- [Clés API](/fr/dashboard/api-keys)
+- [Analyse des retours](/fr/dashboard/feedback-analytics)
+- [Utilisation et crédits](/fr/dashboard/usage)
+- [Déclencheurs d'API de flux de travail](/fr/api-reference/workflow-triggers)

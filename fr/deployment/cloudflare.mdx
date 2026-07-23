@@ -1,0 +1,192 @@
+---
+title: Worker Cloudflare
+description: Montez les documents dubstack à /docs avec un Worker Cloudflare.
+icon: cloud
+---
+
+Utilisez un Worker Cloudflare lorsque votre domaine racine est sur Cloudflare et que vous souhaitez que `example.com/docs` serve vos documents dubstack.
+
+Cette configuration maintient votre site principal au niveau du domaine racine et redirige uniquement le trafic docs vers l'origine dubstack.
+
+```text
+example.com          -> main site
+example.com/docs     -> dubstack origin
+example.com/docs/... -> dubstack origin
+```
+
+## Prérequis
+
+Avant de commencer, assurez-vous d'avoir :
+
+- Un site dubstack publié.
+- Accès au compte Cloudflare qui gère le domaine racine.
+- **Hébergement à `/docs`** activé dans **Paramètres → Déploiement → Domaine personnalisé**.
+- Le nom d'hôte d'origine généré, par exemple `<site>--origin.dubstack.live`.
+
+## Script Worker
+
+Créez un Worker qui proxy `/docs` et `/docs/*` vers le nom d'hôte d'origine généré.
+
+```js
+const DOCS_PREFIX = '/docs';
+const DOCS_ORIGIN_HOST = '<site>--origin.dubstack.live';
+const PUBLIC_HOST = 'example.com';
+
+const DOCS_ROOT_FILES = new Set([
+  '/llms.txt',
+  '/llms-full.txt',
+  '/skill.md'
+]);
+
+function shouldProxy(pathname) {
+  return pathname === DOCS_PREFIX || pathname.startsWith(`${DOCS_PREFIX}/`);
+}
+
+function buildProxyRequest(request) {
+  const upstreamUrl = new URL(request.url);
+  upstreamUrl.hostname = DOCS_ORIGIN_HOST;
+  upstreamUrl.protocol = 'https:';
+
+  const headers = new Headers(request.headers);
+  headers.set('Host', DOCS_ORIGIN_HOST);
+  headers.set('X-Forwarded-Host', PUBLIC_HOST);
+  headers.set('X-Public-Host', PUBLIC_HOST);
+  headers.set('X-Forwarded-Proto', 'https');
+  headers.set('X-Docs-Base-Path', DOCS_PREFIX);
+  headers.set('X-Public-Mcp-Url', `https://${PUBLIC_HOST}${DOCS_PREFIX}/mcp`);
+
+  const clientIp = request.headers.get('CF-Connecting-IP');
+  if (clientIp) headers.set('X-Forwarded-For', clientIp);
+
+  return new Request(upstreamUrl, {
+    method: request.method,
+    headers,
+    body: request.body,
+    redirect: 'manual'
+  });
+}
+
+export default {
+  async fetch(request) {
+    const url = new URL(request.url);
+
+    if (!shouldProxy(url.pathname)) {
+      return fetch(request);
+    }
+
+    return fetch(buildProxyRequest(request));
+  }
+};
+```
+
+Conservez le préfixe `/docs` dans la requête upstream. L'origine utilise ce préfixe pour générer des liens et des URLs d'actifs corrects.
+
+`X-Docs-Base-Path` indique à dubstack que ce site est monté sous `/docs`. `X-Public-Mcp-Url` est requis lorsqu'un MCP public est activé. Il garantit que la découverte MCP et les métadonnées de carte serveur pointent vers `https://example.com/docs/mcp` au lieu du nom d'hôte généré `--origin.dubstack.live`.
+
+## Route du Worker
+
+Attachez le Worker à la route du domaine racine qui doit gérer le trafic docs.
+
+Route typique :
+
+```text
+example.com/docs*
+```
+
+Si le Worker est également responsable du site racine, conservez la branche non docs dans le script et redirigez le trafic non docs vers votre site principal.
+
+## Fichiers de découverte IA au niveau racine
+
+Par défaut, les fichiers lisibles par l'IA sont servis sous le chemin docs :
+
+```text
+example.com/docs/llms.txt
+example.com/docs/llms-full.txt
+example.com/docs/skill.md
+example.com/docs/mcp
+```
+
+Si vous souhaitez que ces fichiers existent également au niveau du domaine racine, ajoutez des routes explicites dans votre Worker et mappez-les vers l'origine docs.
+
+```js
+function shouldProxy(pathname) {
+  return pathname === DOCS_PREFIX ||
+    pathname.startsWith(`${DOCS_PREFIX}/`) ||
+    DOCS_ROOT_FILES.has(pathname) ||
+    pathname.startsWith('/.well-known/skills/') ||
+    pathname.startsWith('/.well-known/agent-skills/');
+}
+
+function normalizePath(pathname) {
+  if (DOCS_ROOT_FILES.has(pathname)) return `${DOCS_PREFIX}${pathname}`;
+  if (pathname.startsWith('/.well-known/')) return `${DOCS_PREFIX}${pathname}`;
+  return pathname;
+}
+```
+
+Lorsque vous utilisez la découverte IA au niveau racine, définissez `upstreamUrl.pathname = normalizePath(url.pathname)` avant de créer la requête upstream.
+
+## DNS et domaines personnalisés
+
+Cloudflare peut servir le site racine, le Worker et le chemin docs depuis le même nom d'hôte. Le nom d'hôte racine pointe toujours vers votre application ou votre configuration de Worker racine.
+
+Le nom d'hôte `--origin.dubstack.live` généré n'est que la cible upstream. Ne créez pas de liens publics vers celui-ci.
+
+## Mise en cache
+
+Commencez par désactiver la mise en cache de Cloudflare pour les routes docs pendant la validation.
+
+```js
+return fetch(buildProxyRequest(request), {
+  cf: { cacheTtl: 0, cacheEverything: false }
+});
+```
+
+Après validation, les actifs statiques sous `/docs/_next/static/*` peuvent être mis en cache. Gardez les routes dynamiques telles que `/docs/api/*`, `/docs/mcp` et les demandes d'assistant non mis en cache.
+
+## Validez la configuration
+
+Vérifiez ces URLs depuis le domaine public :
+
+```text
+https://example.com/docs
+https://example.com/docs/quickstart
+https://example.com/docs/api/theme
+https://example.com/docs/llms.txt
+https://example.com/docs/feedback
+https://example.com/docs/mcp
+https://example.com/docs/.well-known/mcp
+https://example.com/docs/.well-known/mcp/server-card.json
+https://example.com/docs/robots.txt
+```
+
+Ensuite, ouvrez les outils de développement du navigateur et confirmez :
+
+- L'URL de la page reste sur `example.com/docs`.
+- Les ressources statiques sont chargées à partir de `/docs/_next/...`.
+- Les appels API sont chargés à partir de `/docs/api/...`.
+- Les requêtes de recherche et d'assistance ne sont pas bloquées par les règles de cache ou de pare-feu.
+- La découverte MCP et les réponses des cartes serveur pointent vers `https://example.com/docs/mcp`.
+- Le corps final `robots.txt` contient la politique de robot de navigation que vous attendez. Désactivez ou ajustez les paramètres des robots de bord gérés si ceux-ci injectent des règles qui entrent en conflit avec votre politique d'indexation des documents ou de préparation à l'IA.
+
+## Problèmes courants
+
+### Le Worker sert le site racine au lieu des documents
+
+Vérifiez que la route Worker inclut `/docs*` et que le script teste les chemins `/docs` et `/docs/`.
+
+### Le site des documents perd le préfixe `/docs`
+
+Le Worker réécrit les chemins de manière trop agressive. Transférez le même chemin à l'origine sauf si vous mappez intentionnellement les fichiers AI au niveau racine.
+
+### L'hôte d'origine brut apparaît dans les liens
+
+Définissez `X-Forwarded-Host`, `X-Public-Host` et `X-Forwarded-Proto` sur la requête en amont.
+
+### MCP se connecte mais aucun outil n'apparaît
+
+Récupérez `/docs/.well-known/mcp/server-card.json`. Si `url` pointe vers l'hôte d'origine, définissez `X-Public-Mcp-Url` sur `https://example.com/docs/mcp` et purgez les réponses de découverte mises en cache. Si l'URL est correcte mais que les outils n'apparaissent pas ou que les appels d'outils échouent, définissez `X-Docs-Base-Path` sur `/docs` et laissez `/docs/mcp` non mis en cache.
+
+### Les requêtes du navigateur sont mises en cache pendant la configuration
+
+Contournez temporairement le cache Cloudflare pour `/docs*` jusqu'à ce que la route soit vérifiée.

@@ -1,0 +1,59 @@
+---
+title: Sujets connexes
+description: "Liez les lecteurs et les outils d'IA à des pages adjacentes ou sélectionnées manuellement."
+icon: file-search
+---
+
+Les sujets connexes aident les lecteurs à passer de la page actuelle à la page suivante utile.
+
+Ils améliorent également la recherche, la récupération par l'assistant et les résultats publics de MCP, car les pages connectées donnent aux agents un contexte plus clair sur l'organisation de vos documents.
+
+## Sujets connexes automatiques
+
+Les pages publiées peuvent afficher des sujets connexes générés lorsque la page ne comporte pas déjà une section de sujets connexes rédigés.
+
+Les suggestions générées sont sélectionnées dans la même zone de navigation active lorsqu'elles sont disponibles. dubstack évite de dupliquer les liens des pages précédentes et suivantes, puis affiche jusqu'à trois pages connexes.
+
+Pour les pages de points d'entrée d'API générées, les pages de présentation d'API sont privilégiées par rapport aux pages adjacentes.
+
+## Sujets connexes rédigés
+
+Utilisez un bloc `RelatedTopics` lorsque vous souhaitez un contrôle complet sur les liens.
+
+<RelatedTopics>
+  <a href="/fr/configuration/navigation">Navigation</a>
+  <a href="/fr/writing-content/cards">Cartes</a>
+  <a href="/fr/optimize/search">Recherche</a>
+</RelatedTopics>
+
+```mdx
+<RelatedTopics>
+  <a href="/configuration/navigation">Navigation</a>
+  <a href="/writing-content/cards">Cards</a>
+  <a href="/optimize/search">Search</a>
+</RelatedTopics>
+```
+
+Un bloc `RelatedTopics` rédigé remplace les suggestions générées pour cette page.
+
+## Retour en Markdown
+
+Vous pouvez également utiliser un titre normal et une liste lorsque vous souhaitez une section uniquement en Markdown.
+
+```mdx
+## Related topics
+
+- [Navigation](/configuration/navigation)
+- [Cards](/writing-content/cards)
+- [Search](/optimize/search)
+```
+
+Le titre rédigé empêche la duplication des sujets connexes générés en bas de la page.
+
+## Consignes
+
+- Utilisez des sujets connexes pour les pages qui font partie du même workflow ou du même concept.
+- Privilégiez trois à cinq liens.
+- Utilisez un texte de lien descriptif, et non des phrases génériques comme « en savoir plus ».
+- Gardez les étapes principales dans le corps de la page ; les sujets connexes sont une navigation secondaire.
+- Liez aux pages canoniques stables plutôt qu'aux URLs de prévisualisation temporaires.

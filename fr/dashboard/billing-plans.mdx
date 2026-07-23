@@ -1,0 +1,115 @@
+---
+title: Facturation et plans
+description: "Comprenez les offres Gratuit, Pro et Enterprise, ainsi que leurs accès aux fonctionnalités."
+icon: credit-card
+---
+
+Les paramètres de facturation et de plan affichent l'état actuel de l'abonnement de l'espace de travail et les fonctionnalités activées.
+
+Utilisez cette page pour comprendre comment l'état du plan affecte le comportement du produit.
+
+## Plans
+
+Le tableau de bord est la source de vérité pour les noms de plans actuels, les prix, les allocations et l'état d'essai.
+
+Les états d'espace de travail courants incluent :
+
+| État du plan | Utilisation typique | Prix publics actuels |
+| --- | --- |
+| Gratuit | Évaluez le site de documentation, l'éditeur, la connexion source et le flux de publication de base. | Inclus. |
+| Pro | Utilisez des domaines personnalisés, un assistant IA, des workflows d'agents, une publication basée sur Git, un accès d'équipe et les fonctionnalités de documentation de production. | 199 USD/mois, ou 1 908 USD/an lorsqu'il est facturé annuellement. |
+| Entreprise | Ajoutez des termes commerciaux personnalisés, SSO, un branding avancé, les contrôles de Theme Studio et des allocations IA plus importantes ou personnalisées. | Personnalisé. |
+
+Les espaces de travail Pro peuvent être facturés mensuellement ou annuellement lorsque les deux options sont disponibles pour l'espace de travail.
+
+Le plan Pro est facturé à un tarif forfaitaire pour l'abonnement à l'espace de travail. Il n'est pas basé sur le nombre de sièges par défaut. L'accès d'équipe, les limites et l'utilisation de l'IA sont contrôlés via les droits d'accès de l'espace de travail et l'autorisation mensuelle de crédits IA affichée sur le tableau de bord.
+
+<Callout type="info">
+  La facturation annuelle du Pro est affichée à 159 USD/mois sur le tableau de bord et est facturée à 1 908 USD/an.
+</Callout>
+
+## Ce que contrôle la facturation
+
+La facturation peut affecter :
+
+- domaines personnalisés
+- taille de l'équipe
+- accès à Theme Studio
+- SSO et contrôles d'entreprise
+- utilisation de l'assistant et des agents
+- disponibilité des workflows et des intégrations
+- niveau de support
+
+Le tableau de bord est la source de vérité pour votre plan actuel, l'état d'essai et les chemins d'actualisation disponibles.
+
+Pour l'utilisation de l'assistant, de l'agent, de Slack et des flux de travail, consultez [Utilisation](/fr/dashboard/usage) et [Crédits d'IA et utilisation](/fr/ai/credits-usage).
+
+## Mettre à niveau ou gérer un abonnement
+
+Les administrateurs de l'espace de travail peuvent ouvrir **Paramètres > Espace de travail > Facturation** pour consulter les offres disponibles et commencer le paiement.
+
+Le flux de mise à niveau utilise une page de paiement hébergée. Après le paiement, dubstack met à jour l'état de l'abonnement et les droits d'accès aux fonctionnalités de l'espace de travail.
+
+La page de paiement peut collecter les coordonnées de facturation, les informations fiscales et le moyen de paiement lorsqu'ils sont requis pour l'espace de travail et le pays de facturation. Ne partagez pas les données de carte, les identifiants fiscaux ou les secrets de facturation avec le support, sauf si celui-ci vous demande explicitement d'utiliser un canal sécurisé.
+
+Utilisez le portail de facturation depuis la même page pour :
+
+- mettre à jour la méthode de paiement
+- consulter les factures et reçus
+- mettre à jour les détails de facturation
+- gérer les informations fiscales lorsqu'elles sont disponibles
+- annuler ou modifier l'abonnement lorsque l'espace de travail est éligible
+
+Si le tableau de bord affiche toujours l'ancienne offre après le paiement, actualisez la page de facturation. Si l'état ne se met pas à jour, contactez le support avec le slug de l'espace de travail et l'heure du paiement.
+
+<Callout type="info">
+  La facturation et la gestion des abonnements sont réservées aux administrateurs du tableau de bord. Elles ne font pas partie de l'API d'exécution des documents publics exposée depuis un site de documentation publié.
+</Callout>
+
+## Taxes et factures
+
+La collecte d'impôts dépend de votre pays de facturation, de votre statut d'entreprise et de vos détails fiscaux.
+
+Lorsque la collecte d'impôts est activée, saisissez des détails de facturation précis avant de finaliser le checkout. Les clients professionnels doivent fournir le nom de l'entreprise correct et l'identifiant fiscal applicable.
+
+Les factures et reçus sont disponibles depuis le portail de facturation après un paiement réussi.
+
+## Essais
+
+Les nouveaux espaces de travail peuvent commencer par un essai Pro de 14 jours. Les essais peuvent temporairement activer des fonctionnalités de niveau supérieur. Pendant un essai, vérifiez les fonctionnalités dont votre équipe a réellement besoin :
+
+- configuration d'un domaine personnalisé
+- accès à l'équipe
+- flux de travail des agents
+- comportement de l'assistant
+- branding avancé ou Theme Studio
+
+Avant la fin de l'essai, décidez si l'espace de travail doit mettre à niveau ou réduire son utilisation à l'abonnement actuel.
+
+## Fonctionnalité non disponible
+
+Si une fonctionnalité est verrouillée :
+
+1. Vérifiez le badge du plan ou le message de verrouillage.
+2. Confirmez que vous êtes dans le bon espace de travail.
+3. Confirmez que la fonctionnalité n'est pas désactivée par l'état d'intégration.
+4. Ouvrez les paramètres de facturation pour consulter les options de mise à niveau.
+
+## Sécurité de la facturation
+
+Seuls les administrateurs de confiance de l'espace de travail devraient gérer la facturation, les changements d'offre et les annulations.
+
+Les changements de plan peuvent affecter le comportement des documents publics lorsqu'une fonctionnalité dépend d'un droit.
+
+Les éditeurs et les lecteurs n'ont pas besoin d'un accès à la facturation pour le travail de documentation normal. Voir [Rôles](/fr/dashboard/roles) pour le modèle de permissions.
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/credits">Crédits</a>
+  <a href="/fr/dashboard/usage">Utilisation</a>
+  <a href="/fr/ai/credits-usage">Crédits et utilisation d'IA</a>
+  <a href="/fr/dashboard/roles">Rôles</a>
+  <a href="/fr/dashboard/team-members">Membres de l'équipe</a>
+  <a href="/fr/reference/tiers">Niveaux</a>
+</RelatedTopics>

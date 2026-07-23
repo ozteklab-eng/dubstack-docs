@@ -1,0 +1,255 @@
+---
+title: Référence des flux de travail
+description: "Examinez les déclencheurs, les exigences et le comportement des flux de travail intégrés."
+icon: list-checks
+---
+
+Cette page décrit les flux de travail intégrés disponibles depuis le tableau de bord.
+
+La disponibilité dépend de votre dépôt connecté, de vos autorisations d'écriture, des modules complémentaires activés et des capacités d'exécution.
+
+Dans cette référence, **pull request** désigne la demande de révision native du fournisseur pour le fournisseur Git connecté, y compris les demandes de fusion GitLab et les pull requests Forgejo.
+
+## En un coup d'œil
+
+| Flux de travail | Disponibilité | Déclencheur par défaut | Mode de mise à jour par défaut | Crédits estimés par exécution | Dépôts de contexte | Configuration requise |
+| --- | --- | --- | --- | --- | --- | --- |
+| Mise à jour à partir des modifications de code | Pris en charge | Planification personnalisée, deux fois par semaine | Exiger une revue | 180 | Pris en charge | Au moins un dépôt source |
+| Brouillon du journal des modifications | Pris en charge | Planification personnalisée, hebdomadaire | Exiger une revue | 223 | Pris en charge | Aucun |
+| Compléter les lacunes des conversations avec l'assistant | Pris en charge | Planification personnalisée, hebdomadaire | Exiger une revue | 212 | Non pris en charge | Aucun |
+| Améliorer les documents grâce aux retours utilisateurs | Pris en charge | Calendrier personnalisé, hebdomadaire | Requiert une revue | 285 | Non pris en charge | Collecte de retours |
+| Mise à jour à partir des retours du support | Bientôt disponible | Calendrier personnalisé | Requiert une revue | 285 | Pris en charge | Intégration des retours du support |
+| Traduire le contenu | Bientôt disponible | Mise à jour du contenu | Automatiquement | 913 | Non pris en charge | Langues cibles et routage de traduction |
+| Corriger les liens cassés | Pris en charge | Mise à jour du contenu | Requiert une revue | 285 | Non pris en charge | Aucun |
+| Corriger les problèmes SEO | Pris en charge | Mise à jour du contenu | Requiert une revue | 422 | Non pris en charge | Aucun |
+| Corriger la grammaire et les fautes | Pris en charge | Mise à jour du contenu | Requiert une revue | 330 | Non pris en charge | Aucun |
+| Appliquez votre guide de style | Pris en charge | Mise à jour du contenu | Requiert une revue | 235 | Non pris en charge | Instructions du guide de style |
+| Cibles de copie de dépôt | Pris en charge | Calendrier personnalisé | Cibles de copie de dépôt | 35+ | Non pris en charge | Au moins une cible de copie de dépôt |
+
+Les estimations de crédits constituent des bases de planification. L'utilisation réelle dépend de la quantité de contenu lue pendant l'exécution, du nombre de dépôts sélectionnés en tant que contexte, du nombre de fichiers modifiés et de la durée de l'exécution. La copie de dépôt commence à 35 crédits et peut varier en fonction du nombre de cibles et du volume de fichiers. Les exécutions planifiées de copie de dépôt réservent des crédits après un contrôle préalable des fichiers sources et du nombre de cibles, puis finalisent l'utilisation en fonction des résultats de la copie réelle.
+
+<Callout type="warning">
+  La traduction est répertoriée dans le catalogue, mais elle n'est pas encore exécutable jusqu'à ce que le routage de traduction et le support des politiques soient disponibles pour le déploiement sélectionné.
+</Callout>
+
+<Callout type="warning">
+  Les retours d'assistance sont répertoriés dans le catalogue, mais ils ne sont pas encore exécutables jusqu'à ce que les collecteurs d'intégration des retours d'assistance soient disponibles pour le déploiement sélectionné.
+</Callout>
+
+## Flux de travail de contenu auto-mis à jour
+
+### Mise à jour à partir des modifications de code
+
+Met à jour le contenu lorsqu'une modification est apportée au code source des produits, fonctionnalités ou API.
+
+| Paramètre | Valeur |
+| --- | --- |
+| Déclencheurs | Calendrier personnalisé, modification de code |
+| Calendrier par défaut | Deux fois par semaine |
+| Modes de mise à jour | Requiert une revue, automatiquement |
+| Capacités requises | Dépôt de documentation, accès en écriture au dépôt, modèle d'écriture |
+| Configuration requise | Au moins un dépôt source |
+| Dépôts de contexte | Pris en charge |
+| Intégrations | Pris en charge |
+
+Utilisez ce workflow lorsque les modifications du code source du produit doivent générer un brouillon de documentation. Ajoutez les dépôts source sélectionnés en tant que contexte afin que l'agent puisse inspecter le code pertinent pendant son exécution.
+
+Les exécutions planifiées lisent le contexte des modifications sources délimitées depuis la dernière exécution planifiée comparable. Les exécutions basées sur des modifications de code sont enfilées à partir d'événements de dépôt source validés.
+
+Les événements de modification de code sont déclenchés par des événements de revue. Configurez les dépôts source qui doivent agir comme contexte, puis fusionnez une demande d'extraction ou une demande de fusion dans ce dépôt source. Les poussées directes peuvent toujours être inspectées par une exécution planifiée, mais elles ne remplacent pas le chemin de déclenchement des événements de revue.
+
+Si le dépôt source est un monorepo, ajoutez une portée de chemin dans la configuration du workflow afin que l'exécution se concentre sur l'application, le package ou le service pertinent. Lorsque les métadonnées des fichiers modifiés sont disponibles, les événements de modification de code en dehors de cette portée de chemin sont ignorés. La portée de chemin n'affecte pas le dépôt de documentation qui reçoit les mises à jour générées.
+
+Les dépôts sources pris en charge peuvent provenir d'un fournisseur différent du dépôt de documentation. Par exemple, un site de documentation hébergé sur GitHub peut utiliser un dépôt de code Forgejo comme contexte source tout en ouvrant les modifications de documentation générées contre le dépôt de documentation GitHub.
+
+Lorsque les intégrations sont sélectionnées, le workflow peut inclure un contexte délimité tel que des problèmes Jira ou des pages Confluence. Gardez les requêtes JQL et CQL étroites afin que l'exécution utilise le contexte externe pertinent sans scanner des données de l'espace de travail non liées.
+
+Avant d'activer les mises à jour automatiques, exécutez ce workflow en mode **Requiert une revue** et vérifiez :
+
+- la carte du dépôt source est validée dans les paramètres Git
+- le workflow a le dépôt source attendu sélectionné
+- la portée de chemin exclut le code non pertinent
+- la modification générée cible le dépôt de documentation, et non le dépôt source
+- l'événement du fournisseur est une demande d'extraction ou une demande de fusion fusionnée lors de l'utilisation du déclencheur de modification de code
+
+### Brouillon du journal des modifications
+
+Génère un brouillon d'entrée de journal des modifications à partir des mises à jour récentes du produit selon un calendrier récurrent.
+
+| Paramètre | Valeur |
+| --- | --- |
+| Déclencheurs | Calendrier personnalisé |
+| Calendrier par défaut | Hebdomadaire |
+| Modes de mise à jour | Revue requise, automatiquement |
+| Capacités requises | Dépôt de documentation, accès en écriture au dépôt, modèle d'élaboration |
+| Dépôts de contexte | Pris en charge |
+
+Utilisez ce workflow pour maintenir à jour les notes de version et les pages du journal des modifications sans nécessiter un premier brouillon manuel.
+
+Lorsque des dépôts de contexte sont sélectionnés, les exécutions planifiées du journal des modifications peuvent inspecter l'activité récente des sources de ces dépôts. Le dépôt de documentation reste la cible d'écriture pour le brouillon du journal des modifications généré.
+
+### Comblez les lacunes des conversations de l'assistant
+
+Analyse les tendances des questions de l'assistant et ouvre des mises à jour de contenu ciblées selon un planning.
+
+| Paramètre | Valeur |
+| --- | --- |
+| Déclencheurs | Calendrier personnalisé |
+| Calendrier par défaut | Hebdomadaire |
+| Modes de mise à jour | Revue requise, automatiquement |
+| Capacités requises | Dépôt de documentation, accès en écriture au dépôt, modèle d'élaboration |
+
+Utilisez ce workflow lorsque des questions répétées des lecteurs révèlent des lacunes dans la documentation.
+
+### Améliorer la documentation grâce aux retours utilisateurs
+
+Analyse les retours des pages et ouvre des mises à jour ciblées selon un planning.
+
+| Paramètre | Valeur |
+| --- | --- |
+| Déclencheurs | Calendrier personnalisé |
+| Calendrier par défaut | Hebdomadaire |
+| Modes de mise à jour | Exiger une revue, automatiquement |
+| Capacités requises | Dépôt de documentation, accès en écriture au dépôt, modèle d'écriture, collecte de feedback |
+
+Activez la collecte de feedback avant d'utiliser ce workflow.
+
+### Mise à jour à partir des retours d'assistance
+
+Analyse les retours d'assistance et ouvre des mises à jour de contenu ciblées selon un calendrier.
+
+| Paramètre | Valeur |
+| --- | --- |
+| Déclencheurs | Calendrier personnalisé |
+| Mode de mise à jour par défaut | Exiger une revue |
+| Capacités requises | Dépôt de documentation, accès en écriture au dépôt, modèle d'écriture, intégration des retours d'assistance |
+| Dépôts de contexte | Pris en charge |
+| Intégrations | Pris en charge |
+| Statut actuel du runner | Non exécutable pour l'instant jusqu'à ce que les collecteurs d'intégration des retours d'assistance soient disponibles |
+
+Utilisez ce flux de travail lorsque des conversations d'assistance récurrentes révèlent une documentation manquante ou obsolète.
+
+Le workflow est conçu pour lire le contexte des retours d'assistance, identifier les thèmes récurrents et ouvrir des mises à jour de documentation révisables par rapport au dépôt de documentation connecté. Les dépôts sources peuvent être sélectionnés comme contexte supplémentaire lorsque les thèmes d'assistance doivent être liés au comportement du produit ou de l'API.
+
+Le workflow reste visible dans le tableau de bord afin que les équipes puissent voir la surface de configuration prévue, mais il ne peut pas être activé jusqu'à ce que le déploiement ait un connecteur et un runner de retours d'assistance pris en charge.
+
+## Flux de travail de maintenance
+
+### Traduire le contenu
+
+Maintient les langues sélectionnées synchronisées lorsque le contenu change.
+
+| Paramètre | Valeur |
+| --- | --- |
+| Déclencheurs | Mise à jour du contenu, calendrier personnalisé |
+| Mode de mise à jour par défaut | Automatiquement |
+| Capacités requises | Dépôt de documentation, accès en écriture au dépôt, modèle d'écriture, routage des langues |
+| Configuration requise | Au moins une langue cible |
+| Statut actuel du runner | Pas encore exécutable jusqu'à ce que le routage des traductions et la prise en charge des politiques soient disponibles |
+
+Utilisez ce workflow après avoir configuré le routage des langues pour le déploiement.
+
+Les langues cibles sont sélectionnées parmi les entrées de langue configurées pour le site de documentation. Si aucune langue n'est encore configurée, le tableau de bord peut afficher les langues du catalogue en tant que modèles de configuration, mais le workflow reste bloqué jusqu'à ce que le routage des traductions et la prise en charge des politiques soient disponibles pour le déploiement.
+
+### Réparer les liens cassés
+
+Recherche et répare les liens internes et externes cassés chaque fois que le contenu change.
+
+| Paramètre | Valeur |
+| --- | --- |
+| Déclencheurs | Mise à jour du contenu, calendrier personnalisé |
+| Mode de mise à jour par défaut | Exiger une revue |
+| Capacités requises | Dépôt de documentation, accès en écriture au dépôt, modèle d'écriture |
+
+Utilisez le mode revue lorsque le comportement des liens externes nécessite une évaluation humaine.
+
+### Corriger les problèmes SEO
+
+Audit des titres, des méta-descriptions, des en-têtes et des balises canoniques chaque fois que le contenu change.
+
+| Paramètre | Valeur |
+| --- | --- |
+| Déclencheurs | Mise à jour du contenu, calendrier personnalisé |
+| Mode de mise à jour par défaut | Exiger une revue |
+| Capacités requises | Dépôt de documentation, accès en écriture au dépôt, modèle d'écriture |
+
+Utilisez ce workflow pour détecter les titres manquants, les descriptions faibles, les structures d'en-têtes redondantes et les problèmes canoniques.
+
+### Corriger la grammaire et les fautes de frappe
+
+Détecte et corrige les fautes de frappe, les erreurs d'orthographe et les erreurs de grammaire chaque fois que le contenu est modifié.
+
+| Paramètre | Valeur |
+| --- | --- |
+| Déclencheurs | Mise à jour du contenu, calendrier personnalisé |
+| Mode de mise à jour par défaut | Exiger une revue |
+| Compétences requises | Docs repository, accès en écriture au dépôt, modèle d'écriture |
+
+Ce workflow est utile en tant que premier workflow à faible risque, car les modifications sont généralement petites et faciles à examiner.
+
+### Appliquer votre guide de style
+
+Applique les règles, le ton, le style et la voix de votre guide chaque fois que le contenu est modifié.
+
+| Paramètre | Valeur |
+| --- | --- |
+| Déclencheurs | Mise à jour du contenu, calendrier personnalisé |
+| Mode de mise à jour par défaut | Exiger une revue |
+| Compétences requises | Docs repository, accès en écriture au dépôt, modèle d'écriture |
+| Configuration requise | Instructions du guide de style |
+
+Ajoutez les règles du guide de style avant d'activer ce workflow.
+
+### Cibles de copie du dépôt
+
+Copie la source des documents actifs vers les cibles de copie du dépôt configurées selon un calendrier.
+
+| Paramètre | Valeur |
+| --- | --- |
+| Déclencheurs | Calendrier personnalisé |
+| Mode de mise à jour par défaut | Cibles de copie du dépôt |
+| Capacités requises | Dépôt de documentation |
+| Configuration requise | Au moins une cible de copie de dépôt |
+| Dépôts de contexte | Non pris en charge |
+| Crédits estimés | Commence à 35 crédits par exécution ; la réservation préalable est proportionnelle au nombre de fichiers source et au nombre de cibles, puis l'utilisation finale est enregistrée à partir du résultat de la copie réelle |
+
+Utilisez ce flux de travail lorsque vous souhaitez une sauvegarde planifiée, un test de migration ou un contrôle de portabilité du fournisseur.
+
+Ce flux de travail n'effectue pas de mise en miroir continue des dépôts. Il s'exécute uniquement lorsque la programmation configurée est déclenchée ou lorsque vous l'exécutez manuellement depuis le tableau de bord. Chaque exécution copie la source de documentation active dans les cibles de copie configurées et enregistre le résultat dans l'historique du flux de travail et le rapport d'utilisation.
+
+Les cibles de copie de dépôt sont configurées dans **Paramètres > Déploiement > Paramètres Git**. Elles ne deviennent pas la source de déploiement active à moins que vous ne changiez délibérément les fournisseurs depuis les paramètres Git.
+
+Pendant qu'une exécution de copie de dépôt est active, l'historique des exécutions affiche la cible actuelle et le point de vérification du nombre de fichiers. Ouvrez le panneau des détails de l'exécution pour voir la même progression accompagnée du résultat par cible.
+
+Le panneau des paramètres du flux de travail liste les cibles de copie actuelles avant d'activer la programmation, y compris le fournisseur, le dépôt, la branche et si la cible est limitée au site ou à l'organisation.
+
+Les copies de dépôt utilisent les identifiants du fournisseur sauvegardés pour la source active et chaque cible. Avant l'exécution, dubstack lit l'arborescence du dépôt source actif et les cibles de copie configurées pour réserver les crédits d'automatisation pour cette exécution. Les grands dépôts ou les cibles auto-hébergées peuvent prendre plus de temps car l'exécution doit lire, valider et écrire les fichiers via les API du fournisseur. Si une cible échoue en raison de la limite du fournisseur, de la protection de branche, des autorisations du jeton ou de l'accessibilité réseau, les détails de l'exécution affichent cette cible comme échouée tout en laissant la source de déploiement active inchangée.
+
+## Flux de travail personnalisés
+
+Les flux de travail personnalisés vous permettent de définir le déclencheur, les instructions, les dépôts de contexte, les intégrations et le mode de mise à jour.
+
+| Paramètre | Valeur |
+| --- | --- |
+| Déclencheurs | Mise à jour du contenu, changement de code, programmation personnalisée |
+| Modes de mise à jour | Exiger une revue, automatiquement |
+| Capacités requises | Dépôt de documentation, accès en écriture au dépôt, modèle d'auteur |
+| Dépôts de contexte | Pris en charge |
+| Intégrations | Pris en charge |
+
+Voir [Créer des flux de travail](/fr/workflows/create) pour obtenir des instructions de configuration.
+
+## Notifications Slack
+
+Lorsque Slack est connecté, les flux de travail peuvent publier les résultats des exécutions dans les canaux sélectionnés.
+
+Modes de notification :
+
+| Mode | Comportement |
+| --- | --- |
+| Tous les résultats des exécutions | Publier lorsqu'une exécution de workflow est terminée ou échoue. |
+| Seulement les échecs | Publier uniquement lorsqu'un workflow échoue. |
+
+Les workflows de pull request peuvent également envoyer des rappels de revue et des mises à jour des pull requests fusionnées.
+
+Invitez l'application à un canal avant de sélectionner ce canal pour les notifications de workflow.

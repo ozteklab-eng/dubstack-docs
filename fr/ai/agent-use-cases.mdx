@@ -1,0 +1,103 @@
+---
+title: "Cas d'utilisation de l'agent"
+sidebarTitle: "Cas d'utilisation"
+description: "Utilisez l'agent du tableau de bord pour créer des modifications de documentation révisables à partir du contexte produit, des mises à jour du dépôt, des retours et de la publication."
+icon: list-checks
+---
+
+Utilisez l'agent du tableau de bord pour les tâches de documentation qui bénéficient du contexte du dépôt, des intégrations connectées et de modifications Git révisables.
+
+## Créez une nouvelle page à partir du contexte produit
+
+Utilisez cela lorsque les détails du produit existent dans un fil de discussion Slack, un ticket Jira, une pull request ou une note de version.
+
+Exemple :
+
+```text
+Create a new guide explaining the manual update flow from this Slack thread. Add it under Deployment and open a draft pull request.
+```
+
+L'agent doit utiliser le contexte fourni, rédiger une page et mettre à jour la navigation lorsqu'il est demandé.
+
+## Mettez à jour la documentation après un changement de fonctionnalité
+
+Lorsqu'un changement de produit est mis en œuvre, demandez à l'agent de mettre à jour la documentation pertinente.
+
+Exemple :
+
+```text
+This pull request changes the preview screenshot pipeline. Update the deployment preview docs and include any new dashboard behavior users need to know.
+```
+
+Gardez le lien source dans la demande afin que les réviseurs puissent comparer le changement de documentation avec le changement de produit.
+
+## Corriger la documentation obsolète ou ambiguë
+
+Utilisez l'agent pour réviser les pages qui génèrent une charge de support ou une confusion chez les lecteurs.
+
+Exemple :
+
+```text
+Users keep asking what custom domain records to create. Review /deployment/custom-domains and add clearer setup and troubleshooting steps.
+```
+
+Associez cette démarche à l'analyse des retours lorsqu'elle est disponible.
+
+## Rédigez des entrées de journal des modifications
+
+Utilisez l'agent pour résumer les changements de produit en une entrée de journal des modifications.
+
+Exemple :
+
+```text
+Draft a changelog entry for the new page feedback controls and include the dashboard path where users enable them.
+```
+
+L'agent ne doit pas publier le journal des modifications sans révision.
+
+## Examinez le contenu existant
+
+Utilisez des prompts de révision pour la grammaire, les liens cassés, les prérequis manquants ou les vérifications de cohérence.
+
+Exemples :
+
+```text
+Review /api-reference/openapi-setup for missing prerequisites and draft only the required fixes.
+```
+
+```text
+Find inconsistent naming between Git sync, manual update, and deployment preview docs.
+```
+
+## Utilisez les intégrations comme contexte délimité
+
+Les intégrations connectées peuvent fournir un contexte sans nécessiter que l'agent lise tout le contenu de ce fournisseur.
+
+Exemples :
+
+```text
+Use Jira issue DOCS-124 as context and update the troubleshooting page.
+```
+
+```text
+Use this Slack thread as context and draft a short FAQ page.
+```
+
+Gardez les filtres Jira et le contexte Slack concentrés. Un contexte plus petit et délimité produit généralement de meilleurs changements de documentation.
+
+## Quand utiliser les workflows
+
+Utilisez [Workflows](/fr/workflows) lorsque la même tâche doit s'exécuter de manière répétée ou déclenchée.
+
+Exemples :
+
+- rédiger des journaux des modifications selon un calendrier
+- analyser les tendances des retours de l'assistant hebdomadairement
+- corriger les liens rompus après les mises à jour du contenu
+- auditer régulièrement les métadonnées SEO
+
+## Sujets connexes
+
+- [Prompts d'agents efficaces](/fr/ai/effective-agent-prompts)
+- [Intégrations](/fr/ai/integrations)
+- [Référence des workflows](/fr/workflows/reference)

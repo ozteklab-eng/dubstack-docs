@@ -1,0 +1,101 @@
+---
+title: Flux de travail de correction des problèmes SEO
+description: "Audit des titres, descriptions, en-têtes, URLs canoniques et métadonnées d'indexation à partir des exécutions du flux de travail."
+icon: search-check
+---
+
+Le flux de travail de correction des problèmes SEO examine les métadonnées de la documentation et la structure des pages pour que le contenu important soit plus facile à découvrir et à partager.
+
+Utilisez-le lorsque vous publiez de nouvelles sections, migrez des routes, actualisez le positionnement produit ou avez besoin de vérifications récurrentes pour les pages affectant l'acquisition.
+
+## Ce qu'il fait
+
+Lorsqu'il est activé pour un déploiement, le flux de travail est conçu pour :
+
+- identifier les pages avec des titres ou descriptions manquants ou faibles
+- signaler une structure d'en-têtes dupliquée ou confuse
+- vérifier la cohérence des URLs canoniques et des redirections
+- examiner les métadonnées `robots`, `noindex` et relatives au sitemap
+- rédiger des métadonnées ciblées et des modifications de contenu dans le dépôt de documentation connecté
+- enregistrer l'état de l'exécution, les pages inspectées, les fichiers modifiés et l'utilisation des crédits dans l'historique du flux de travail
+
+Ce flux de travail améliore les métadonnées et la structure des pages rédigées. Il ne remplace pas votre stratégie de contenu globale, vos recherches de mots-clés ou votre communication de lancement.
+
+## Métadonnées examinées
+
+| Domaine | Ce que le flux de travail vérifie |
+| --- | --- |
+| Titre de page | Clair, unique et aligné sur le sujet de la page. |
+| Description | Résumé utile pour les résultats de recherche et les aperçus de lien. |
+| En-têtes | Un seul titre de page clair et une hiérarchie d'en-têtes lisible. |
+| URL canonique | La route canonique correspond aux redirections et au comportement des domaines personnalisés. |
+| Métadonnées d'indexation | `noindex`, robots et paramètres de visibilité correspondent à l'état de publication souhaité. |
+| Métadonnées sociales | Les champs Open Graph et aperçus utilisent les métadonnées de la page attendues lors de la configuration. |
+
+## Configuration requise
+
+Avant d'activer l'automatisation SEO :
+
+1. Connectez un dépôt de documentation basé sur Git.
+2. Confirmez que le dépôt de documentation dispose d'un accès en écriture.
+3. Confirmez que le profil du modèle d'auteur est disponible.
+4. Ajoutez des instructions SEO spécifiques au projet si vous avez des termes cibles, des règles de nommage ou des pages qui doivent rester cachées.
+5. Commencez en mode **Exiger une revue**.
+
+## Déclencheurs et mode de mise à jour
+
+| Paramètre | Comportement |
+| --- | --- |
+| Déclencheur | Mise à jour du contenu ou horaire personnalisé |
+| Mode recommandé initial | Exiger une revue |
+| Mode automatique | Utilisez-le uniquement pour des mises à jour limitées des métadonnées après des exécutions correctement revues |
+| Destination d'écriture | Dépôt de documentation connecté |
+| Dépôts de contexte | Non pris en charge |
+
+Les exécutions planifiées sont utiles pour la maintenance trimestrielle. Les déclencheurs de mise à jour du contenu sont utiles lorsqu'un grand nombre de contributeurs publient des pages et que le frontmatter nécessite une revue cohérente.
+
+## Instructions
+
+Utilisez les instructions du flux de travail pour aligner les correctifs SEO avec la langue de votre produit.
+
+Les bonnes instructions incluent :
+
+- les noms de produits préférés et leur mise en majuscule
+- les termes qui ne doivent pas être réécrits
+- les publics prioritaires et les cas d'utilisation
+- les pages qui doivent rester cachées ou non indexées
+- les routes canoniques après une migration
+
+## Utilisation des crédits
+
+Les exécutions d'audit SEO sont des exécutions de flux de travail de maintenance et comptent dans l'utilisation des crédits du flux de travail.
+
+L'estimation actuelle de planification est de **422 crédits par exécution**. L'utilisation réelle peut varier selon :
+
+- le nombre de pages modifiées ou inspectées
+- la quantité de métadonnées déjà présentes
+- le nombre de redirections et de routes canoniques prises en compte
+- la quantité de texte révisé par l'exécution
+- routage du modèle et profil du flux de travail
+
+Voir [Crédits et utilisation de l'IA](/fr/ai/credits-usage) pour le modèle d'allocation partagée.
+
+## Checklist de vérification
+
+Avant de fusionner une correction SEO générée, confirmez :
+
+- les titres et les descriptions sont précis et non uniquement axés sur les mots-clés
+- les pages cachées ou internes restent cachées lorsqu'elles sont censées l'être
+- les routes canoniques correspondent au domaine actuel et à la structure des routes
+- les titres restent naturels pour les humains
+- les pages de référence API conservent les noms et les méthodes des points de terminaison clairs
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/workflows/reference#fix-seo-issues">Référence du flux de travail</a>
+  <a href="/fr/configuration/seo-search">SEO et configuration de la recherche</a>
+  <a href="/fr/optimize/seo">Optimisation SEO</a>
+  <a href="/fr/workflows/manage">Gérer les flux de travail</a>
+  <a href="/fr/ai/credits-usage">Crédits et utilisation de l'IA</a>
+</RelatedTopics>

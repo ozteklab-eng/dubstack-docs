@@ -1,0 +1,210 @@
+---
+title: Référence de la structure
+description: "Référence par champ pour la navigation, l'en-tête, le pied de page, la bannière, les redirections, les actions contextuelles et la structure de la page."
+icon: layout-list
+---
+
+Utilisez ces champs pour contrôler l'architecture de l'information et l'interface utilisateur persistante autour de votre contenu de documentation.
+
+## Points d'entrée de la navigation
+
+| Champ | Type | Objectif |
+| --- | --- | --- |
+| `navigation.tabs` | tableau | Onglets de niveau supérieur dans l'en-tête. Chaque onglet contient un ou plusieurs groupes. |
+| `navigation.groups` | tableau | Groupes de la barre latérale lorsque le site n'utilise pas d'onglets. |
+| `navigation.auto_generate` | booléen | Autorise la navigation générée lorsque l'arborescence source peut être déduite. Gardez `false` pour les documents de produits révisés. |
+
+```json
+{
+  "navigation": {
+    "auto_generate": false,
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "default": true,
+        "groups": [
+          {
+            "group": "Getting started",
+            "icon": "rocket",
+            "pages": ["index", "quickstart"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Utilisez des onglets lorsque le site a des zones de produit claires telles que les documents, la référence API, les guides et le journal des modifications.
+
+## Onglets
+
+| Champ | Type | Objectif |
+| --- | --- | --- |
+| `navigation.tabs[].tab` | chaîne de caractères | Étiquette affichée dans l'en-tête. |
+| `navigation.tabs[].default` | booléen | Indique l'onglet par défaut du site. |
+| `navigation.tabs[].groups` | tableau | Groupes de la barre latérale affichés lorsque cet onglet est actif. |
+
+Un seul onglet doit être marqué comme par défaut.
+
+## Groupes
+
+| Champ | Type | Objectif |
+| --- | --- | --- |
+| `navigation.tabs[].groups[].group` | chaîne de caractères | Étiquette du groupe de la barre latérale. |
+| `navigation.tabs[].groups[].icon` | chaîne de caractères | Nom de l'icône affichée à côté du groupe. |
+| `navigation.tabs[].groups[].pages` | tableau | Pages ordonnées dans le groupe. |
+| `navigation.tabs[].groups[].openapi` | chaîne de caractères | Chemin de la spécification OpenAPI qui génère les pages de points de terminaison pour le groupe. |
+
+```json
+{
+  "group": "Docs runtime API",
+  "icon": "terminal",
+  "openapi": "api-reference/openapi.json"
+}
+```
+
+Utilisez les groupes `openapi` pour la navigation des points de terminaison générés. Utilisez les groupes `pages` pour les pages MDX rédigées.
+
+## Pages
+
+| Champ | Type | Objectif |
+| --- | --- | --- |
+| `pages[]` | chaîne de caractères | Identifiant de la page rédigée, sans l'extension `.mdx`. |
+| `pages[].slug` | chaîne de caractères | Identifiant de page explicite. |
+| `pages[].title` | chaîne de caractères | Titre de navigation facultatif. |
+| `pages[].icon` | chaîne de caractères | Icône de page facultative. |
+| `pages[].href` | chaîne de caractères | Cible de lien externe ou interne lorsque l'élément est un lien et non une page source. |
+| `pages[].external` | booléen | Marque le lien comme externe. |
+
+```json
+{
+  "slug": "configuration/navigation",
+  "title": "Navigation",
+  "icon": "map"
+}
+```
+
+Utilisez des entrées d'objet lorsque vous avez besoin d'icônes, de titres ou de liens externes. Utilisez des entrées de chaîne pour les pages rédigées simples.
+
+## Contrôles de l'en-tête
+
+| Champ | Type | Valeur par défaut | Objectif |
+| --- | --- | --- | --- |
+| `topbar.showTabs` | booléen | `true` | Affiche les onglets de navigation dans l'en-tête. |
+| `topbar.showSearch` | booléen | `true` | Affiche la recherche dans l'en-tête. |
+| `navbar.primary.type` | `button` \| `github` \| `discord` | `button` | Style du CTA de l'en-tête. |
+| `navbar.primary.label` | chaîne | Aucun | Étiquette du CTA de l'en-tête. Requise pour les CTA de type bouton. |
+| `navbar.primary.href` | chaîne | Aucun | Destination du CTA de l'en-tête. |
+| `anchors` | booléen | `true` | Affiche les liens d'ancrage sur les titres de page. |
+
+```json
+{
+  "topbar": {
+    "showTabs": true,
+    "showSearch": true
+  },
+  "navbar": {
+    "primary": {
+      "type": "button",
+      "label": "Get started",
+      "href": "/quickstart"
+    }
+  },
+  "anchors": true
+}
+```
+
+<Note>
+  Les anciens dépôts peuvent encore contenir `topbarCtaButton`. dubstack continue à le lire comme un alias de compatibilité, mais les nouvelles configurations devraient utiliser `navbar.primary`.
+</Note>
+
+## Bannière
+
+| Champ | Type | Objectif |
+| --- | --- | --- |
+| `banner.content` | chaîne | Texte d'annonce court affiché au-dessus de l'enveloppe de documentation. |
+| `banner.type` | `info` \| `warning` \| `critical` | Traitement de la bannière. |
+| `banner.color` | chaîne \| objet | Couleur d'arrière-plan facultative. Utilisez une chaîne hexadécimale ou `{ "light": "...", "dark": "..." }`. |
+| `banner.dismissible` | booléen | Permet aux visiteurs de masquer la bannière localement. |
+
+```json
+{
+  "banner": {
+    "content": "New API version available.",
+    "type": "info",
+    "dismissible": true
+  }
+}
+```
+
+Voyez [Bannières](/fr/configuration/banners) pour des exemples et le comportement de fermeture.
+
+## Actions contextuelles
+
+| Champ | Type | Objectif |
+| --- | --- | --- |
+| `contextual.enabled` | booléen | Active le menu d'actions de page. |
+| `contextual.options` | tableau | Actions ordonnées à afficher. |
+| `contextual.default` | chaîne | Action par défaut lorsqu'une interface compacte a besoin d'une action principale. |
+| `contextual.display` | `header` \| `toc` | Emplacement du menu d'action. |
+| `contextual.location` | `header` \| `toc` | Alias compatible avec les versions précédentes de `display`. |
+| `contextual.labels` | objet | Remplacements de libellé facultatifs par clé d'action. |
+
+Les clés d'action prises en charge incluent `copy`, `view`, `assistant`, `claude`, `chatgpt`, `perplexity`, `grok`, `aistudio`, `devin`, `windsurf`, `mcp`, `add-mcp`, `cursor`, `vscode`, `devin-mcp`, et `download-spec`.
+
+```json
+{
+  "contextual": {
+    "enabled": true,
+    "options": ["copy", "view", "mcp", "chatgpt"],
+    "default": "copy",
+    "display": "header"
+  }
+}
+```
+
+Ne placez pas les secrets d'intégration privés dans les paramètres contextuels. Ces champs ne contrôlent que les actions publiques des pages.
+
+## Pied de page
+
+| Champ | Type | Objectif |
+| --- | --- | --- |
+| `footer.style` | chaîne de caractères | Préconfiguration du style de pied de page. |
+| `footer.socials.github` | chaîne de caractères | Lien vers le profil GitHub ou le dépôt. |
+| `footer.socials.linkedin` | chaîne de caractères | URL LinkedIn. |
+| `footer.socials.twitter` | chaîne de caractères | URL X/Twitter. |
+| `footer.socials.discord` | chaîne de caractères | URL Discord. |
+| `footer.branding.show_powered_by` | booléen | Affiche ou masque l'attribution de la plateforme en fonction du plan et de la politique. |
+
+```json
+{
+  "footer": {
+    "style": "default",
+    "socials": {
+      "github": "https://github.com/acme/docs"
+    }
+  }
+}
+```
+
+## Redirections
+
+| Champ | Type | Objectif |
+| --- | --- | --- |
+| `redirects[].source` | chaîne de caractères | Ancien chemin. |
+| `redirects[].destination` | chaîne de caractères | Nouveau chemin ou URL externe. |
+| `redirects[].permanent` | booléen | Indication optionnelle de redirection permanente. |
+
+```json
+{
+  "redirects": [
+    {
+      "source": "/old-page",
+      "destination": "/new-page"
+    }
+  ]
+}
+```
+
+Les redirections sont des règles de routage publiques. Examinez-les dans les demandes de fusion de la même manière que les déplacements de pages.

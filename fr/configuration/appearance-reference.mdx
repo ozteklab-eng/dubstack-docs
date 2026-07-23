@@ -1,0 +1,191 @@
+---
+title: "Référence d'apparence"
+description: "Référence par champ pour la marque, le thème, la palette, les couleurs, les polices, les logos, le favicon et l'apparence des blocs de code."
+icon: palette
+---
+
+Utilisez ces champs pour contrôler depuis la source l'identité visuelle d'un site de documentation dubstack.
+
+Préférez l'éditeur de configuration du tableau de bord pour les modifications visuelles lorsque votre équipe souhaite un aperçu avant la publication. Validez les mêmes valeurs dans `dubstack.json` lorsque votre site est révisé en Git.
+
+## Shell de thème et palette
+
+| Champ | Type | Défaut | Objectif |
+| --- | --- | --- | --- |
+| `theme` | chaîne de caractères | Défaut du site | Sélectionne le shell de mise en page, le rythme des espacements, le traitement de la barre latérale/en-tête et la mise en page de la référence API. |
+| `palette` | chaîne de caractères | Défaut du site | Sélectionne le jeu de tokens de couleur superposé sur le shell de thème. |
+| `themeToggle` | booléen | `true` | Affiche ou masque le contrôle du mode clair/sombre. |
+
+```json
+{
+  "theme": "prism",
+  "palette": "classic",
+  "themeToggle": true
+}
+```
+
+`theme` et `palette` sont séparés intentionnellement. Utilisez le shell qui donne la bonne mise en page, puis appliquez la palette et les couleurs de marque qui correspondent à votre produit.
+
+## Couleurs de marque
+
+| Champ | Type | Objectif |
+| --- | --- | --- |
+| `colors.primary` | chaîne de caractères | Couleur de marque/primaire. Utilisée pour les états actifs, les liens et les contrôles clés. |
+| `colors.light` | chaîne de caractères | Jeton de marque utilisé là où le rendu a besoin d'un accent plus clair, généralement dans des contextes sombres. |
+| `colors.dark` | chaîne de caractères | Jeton de marque utilisé là où le rendu a besoin d'un accent plus sombre, généralement dans des contextes clairs. |
+| `theme.colors.background` | chaîne de caractères | Jeton de fond avancé pour le shell sélectionné. |
+| `theme.colors.foreground` | chaîne de caractères | Jeton de texte d'avant-plan avancé. |
+| `theme.colors.muted` | chaîne | Jeton avancé de texte atténué. |
+| `theme.colors.border_default` | chaîne | Jeton de bordure par défaut avancé |
+| `theme.colors.border_subtle` | chaîne | Jeton de bordure subtile avancé |
+
+```json
+{
+  "colors": {
+    "primary": "#15803D",
+    "light": "#07C983",
+    "dark": "#15803D"
+  }
+}
+```
+
+Utilisez `colors.*` pour les substitutions de marque courantes. Utilisez `theme.colors.*` uniquement lorsque vous avez besoin d'un contrôle plus fin des jetons dans l'ensemble de l'interface de documentation.
+
+## Logo et favicon
+
+| Champ | Type | Objectif |
+| --- | --- | --- |
+| `site.name` | chaîne | Nom du site public utilisé par l'en-tête, les métadonnées du navigateur, la découverte par l'IA et les étiquettes MCP. |
+| `site.tagline` | chaîne | Description courte du site utilisée dans les métadonnées et les surfaces de découverte. |
+| `site.logo.light` | chaîne | Logo affiché en mode clair. |
+| `site.logo.dark` | chaîne | Logo affiché en mode sombre. |
+| `site.favicon` | chaîne ou objet | Favicon du navigateur. Utilisez un chemin ou des chemins clair/sombre lorsque le contraste diffère. |
+| `site_header.logo_url` | chaîne | Remplacement avancé du logo de l'en-tête. Généralement géré par le tableau de bord. |
+| `site_header.show_logo` | booléen | Affiche ou masque le logo de l'en-tête. |
+| `site_header.show_brand` | booléen | Affiche ou masque le nom du site à côté du logo. |
+
+```json
+{
+  "site": {
+    "name": "Acme Docs",
+    "tagline": "Developer documentation for Acme.",
+    "logo": {
+      "light": "/logo/light.svg",
+      "dark": "/logo/dark.svg"
+    },
+    "favicon": {
+      "light": "/assets/favicon-light.svg",
+      "dark": "/assets/favicon-dark.svg"
+    }
+  }
+}
+```
+
+Les chemins des actifs sont résolus à partir du dépôt de documentation publié. Gardez les fichiers dans la source afin que les aperçus, la production et les déploiements de branche utilisent les mêmes actifs.
+
+## Polices
+
+| Champ | Type | Objectif |
+| --- | --- | --- |
+| `fonts.heading` | chaîne | Famille de polices d'en-tête. |
+| `fonts.body` | chaîne | Famille de polices du texte principal. |
+| `fonts.code` | chaîne | Famille de polices pour le code et le code en ligne. |
+
+```json
+{
+  "fonts": {
+    "heading": "Inter",
+    "body": "Inter",
+    "code": "JetBrains Mono"
+  }
+}
+```
+
+Utilisez les polices disponibles dans le sélecteur du tableau de bord, sauf si votre déploiement dispose d'un plan personnalisé de chargement de polices.
+
+Pour des exemples, des noms de familles pris en charge et des indications de sauvegarde, consultez [Polices](/fr/configuration/fonts).
+
+## Blocs de code et code en ligne
+
+| Champ | Type | Par défaut | Objectif |
+| --- | --- | --- | --- |
+| `styling.codeblocks` | chaîne | `system` | Mode de thème des blocs de code. Utilisez `system` sauf si vous avez besoin d'un thème fixe. |
+| `theme_config.code_block.syntax_theme` | chaîne | Défaut du thème | Remplacement avancé du thème de syntaxe. |
+| `theme_config.code_block.background` | chaîne | Défaut du thème | Arrière-plan avancé du contenu des blocs de code. |
+| `theme_config.code_block.surface` | chaîne | Défaut du thème | Arrière-plan avancé de la surface des blocs de code. |
+| `theme_config.code_block.header_background` | chaîne | Défaut du thème | Arrière-plan avancé de l'en-tête des blocs de code. |
+| `theme_config.code_block.border_color` | chaîne | Défaut du thème | Couleur avancée de la bordure des blocs de code. |
+| `theme_config.code_block.comment_color` | chaîne | Défaut du thème | Couleur d'accent pour les commentaires/tokens avancés. |
+| `theme_config.code_block.radius` | nombre | Défaut du thème | Rayon de bordure des blocs de code avancés. |
+| `theme_config.code_block.content_radius` | nombre | Défaut du thème | Rayon de contenu des blocs de code avancés. |
+
+```json
+{
+  "theme": "prism",
+  "styling": {
+    "codeblocks": "system"
+  },
+  "theme_config": {
+    "code_block": {
+      "syntax_theme": "github-dark",
+      "background": "#0d0d0d",
+      "header_background": "#18171A",
+      "border_color": "#2d2d2d"
+    }
+  }
+}
+```
+
+Les champs des blocs de code avancés sont utiles pour les auteurs de thèmes. La plupart des sites devraient garder `styling.codeblocks` sur `system` pour que les modes clair et sombre restent cohérents.
+
+## Apparence de l'assistant
+
+| Champ | Type | Défaut | Objectif |
+| --- | --- | --- | --- |
+| `widgets.assistant.title` | chaîne de caractères | `Assistant` | Étiquette affichée dans l'en-tête de l'assistant. |
+| `widgets.assistant.welcome_title` | chaîne de caractères | Défaut adapté au site | Titre de l'état vide avant que le lecteur ne pose une question. |
+| `widgets.assistant.welcome_subtitle` | chaîne de caractères | Défaut du thème | Texte d'aide pour l'état vide. |
+| `widgets.assistant.user_bubble_color` | chaîne de caractères | Jeton de thème | Arrière-plan des messages du lecteur. |
+| `widgets.assistant.user_bubble_text_color` | chaîne de caractères | Jeton de thème | Couleur du texte des messages du lecteur. |
+| `widgets.assistant.ai_bubble_color` | chaîne de caractères | Jeton de thème | Arrière-plan des messages de l'assistant pour les dispositions qui affichent des bulles d'assistant. Les réponses de docs-shell peuvent rester non encadrées. |
+| `widgets.assistant.ai_bubble_text_color` | chaîne de caractères | Jeton de thème | Couleur du texte de la réponse de l'assistant. |
+| `widgets.assistant.source_card_background_color` | chaîne | Jeton de thème | Arrière-plan des cartes de source de l'assistant. |
+| `widgets.assistant.source_card_border_color` | chaîne | Jeton de thème | Bordure des cartes de source de l'assistant. |
+| `widgets.assistant.source_card_text_color` | chaîne | Jeton de thème | Couleur du titre de la source. |
+| `widgets.assistant.source_card_muted_color` | chaîne | Jeton de thème | Couleur du chemin de la source et du fragment de texte. |
+
+```json
+{
+  "widgets": {
+    "assistant": {
+      "title": "Assistant",
+      "welcome_title": "How can I help with Acme?",
+      "welcome_subtitle": "Ask about setup, publishing, and API workflows.",
+      "user_bubble_color": "color-mix(in srgb, var(--assistant-bg) 86%, var(--foreground) 14%)",
+      "user_bubble_text_color": "var(--assistant-text)",
+      "source_card_background_color": "color-mix(in srgb, var(--assistant-bg) 94%, var(--foreground) 6%)",
+      "source_card_border_color": "color-mix(in srgb, var(--assistant-border) 70%, transparent)",
+      "source_card_text_color": "var(--assistant-text)",
+      "source_card_muted_color": "var(--docs-muted-text, var(--gray-400))"
+    }
+  }
+}
+```
+
+Préférez les variables de thème ou les valeurs `color-mix(...)` lorsque la même configuration doit s'adapter aux modes clair et sombre.
+
+## CSS personnalisé
+
+| Champ | Type | Objectif |
+| --- | --- | --- |
+| `custom_css` | chaîne | CSS personnalisé inline pour des substitutions avancées dans docs-shell. Fonctionnalité entreprise. |
+
+```json
+{
+  "custom_css": "#content-area { max-width: 980px; }"
+}
+```
+
+Utilisez le CSS personnalisé avec modération. Privilégiez d'abord les paramètres de thème basés sur la source pour que les aperçus, les captures d'écran générées et les pages lisibles par l'IA restent prévisibles.
+
+Consultez [CSS personnalisé](/fr/configuration/custom-css) pour connaître les sélecteurs stables, les consignes de révision et les limites.

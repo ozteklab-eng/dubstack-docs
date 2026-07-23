@@ -1,0 +1,98 @@
+---
+title: Aperçu de la sécurité
+description: "Comprenez les contrôles de sécurité actuellement disponibles sur l'accès au tableau de bord, la publication de documents, les intégrations et les surfaces de documents publics."
+icon: shield-check
+---
+
+Utilisez cette page pour comprendre les limites de sécurité actuelles dans dubstack.
+
+## Accès au compte et à l'espace de travail
+
+L'accès au tableau de bord est limité à un espace de travail et un contexte de site.
+
+Utilisez :
+
+- [membres de l'équipe](/fr/dashboard/team-members)
+- [rôles](/fr/dashboard/roles)
+- [permissions de déploiement](/fr/dashboard/deployment-permissions)
+- [SSO](/fr/dashboard/sso)
+- [journaux d'audit](/fr/dashboard/audit-logs)
+
+## Limites de contrôle de source
+
+L'accès au fournisseur Git est distinct de l'accès au tableau de bord.
+
+Un utilisateur peut avoir un accès au tableau de bord sans avoir un accès d'écriture direct au dépôt, et un jeton de dépôt peut avoir uniquement les autorisations nécessaires à la publication ou au contexte de workflow.
+
+Consultez :
+
+- [Paramètres Git](/fr/deployment/git-settings)
+- [GitHub](/fr/deployment/github)
+- [GitLab](/fr/deployment/gitlab)
+- [GitLab auto-hébergé](/fr/deployment/gitlab-self-hosted-oauth)
+- [Forgejo, GitHub et GitLab](/fr/deployment/forgejo-github-gitlab)
+
+## Accès aux documents publiés
+
+Les documents publiés sont publics sauf si un mode d'authentification des documents est activé.
+
+Lorsque l'authentification des documents est activée, elle protège notamment :
+
+- pages de documents rendus
+- exports Markdown
+- réponses de l'assistant
+- points de terminaison MCP
+- fichiers lisibles par LLM
+- pages de référence de l'API
+- routes de sitemap et de métadonnées pouvant exposer du contenu protégé
+
+Voir [authentification des documents](/fr/deployment/docs-authentication).
+
+## Surfaces publiques accessibles à l'IA
+
+Les surfaces accessibles à l'IA sont conçues pour le contenu des documents publiés.
+
+Elles ne donnent pas accès au tableau de bord et ne lisent pas le contexte privé d'équipe, sauf si une surface de produit authentifiée séparée fournit explicitement cet accès.
+
+Aperçu :
+
+- [Fichiers de découverte de l'IA](/fr/ai/ai-discovery-files)
+- [MCP public](/fr/ai/mcp)
+- [Export en Markdown](/fr/ai/markdown-export)
+- [Liste de vérification de préparation de l'agent](/fr/ai/agent-readiness-checklist)
+
+## Domaines personnalisés et proxys
+
+Lors de l'utilisation d'un domaine personnalisé, transmettez tous les chemins requis et évitez de mettre en cache les points de terminaison d'écriture ou de diffusion en continu.
+
+Pour les documents montés sur un chemin, portez une attention particulière à :
+
+- Chemins de découverte du MCP
+- `/mcp`
+- `/feedback`
+- requêtes de l'assistant et de recherche
+- fichiers LLM
+- demandes d'export en Markdown
+
+Voir [proxy inverse](/fr/deployment/reverse-proxy) et [en-têtes de sécurité](/fr/deployment/security-headers).
+
+## Intégrations
+
+Les intégrations doivent être limitées à l'accès minimal requis pour le workflow.
+
+Avant d'activer un fournisseur :
+
+- confirmez si l'intégration est à portée organisationnelle ou utilisateur
+- vérifiez quels workflows peuvent l'utiliser
+- évitez de publier des détails privés de support ou de tickets dans les documents publics
+- examinez les autorisations du fournisseur après les changements de rôle
+
+Voir [autorisations d'intégration](/fr/ai/integration-permissions).
+
+## Sujets connexes
+
+- [Rôles](/fr/dashboard/roles)
+- [Journaux d'audit](/fr/dashboard/audit-logs)
+- [Authentification des documents](/fr/deployment/docs-authentication)
+- [En-têtes de sécurité](/fr/deployment/security-headers)
+- [Configuration CSP](/fr/deployment/csp-configuration)

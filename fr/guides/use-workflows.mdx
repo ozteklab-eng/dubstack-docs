@@ -1,0 +1,117 @@
+---
+title: Utiliser des flux de travail
+description: "Choisissez les déclencheurs, le contexte, les instructions, les modes de mise à jour et les contrôles de crédits pour les travaux de documentation récurrents."
+icon: workflow
+---
+
+Les flux de travail exécutent l'agent du tableau de bord à partir d'un déclencheur clair, d'un contexte délimité et d'un mode de mise à jour. Utilisez-les pour les travaux de documentation récurrents qui doivent s'exécuter selon un calendrier, après des modifications de contenu ou après la fusion de modifications de code révisées.
+
+Pour des recherches ou brouillons ponctuels, utilisez directement l'agent du tableau de bord. Pour un travail répétitif, configurez un flux de travail.
+
+## Choisissez le bon déclencheur
+
+| Déclencheur | Utilisez-le lorsque |
+| --- | --- |
+| Mise à jour du contenu | Le flux de travail doit réagir lorsque le contenu de la documentation est modifié, comme les vérifications de liens, les audits SEO, les traductions ou les corrections de grammaire. |
+| Modification de code | Le flux de travail doit inspecter les modifications de code source révisées et rédiger des mises à jour de documentation. |
+| Calendrier personnalisé | Le flux de travail doit s'exécuter selon un rythme fixe ou être déclenché par un système back-end fiable via l'API Admin. |
+| Exécution manuelle | Vous souhaitez tester une configuration de flux de travail avant de l'activer sur un déclencheur récurrent. |
+
+Commencez par le déclencheur le plus étroit qui convient à la tâche. Les déclencheurs larges provoquent des exécutions bruyantes et consomment plus de crédits.
+
+## Choisissez d'abord un flux de travail intégré
+
+Utilisez les flux de travail intégrés pour les tâches de maintenance courantes :
+
+- **Mise à jour à partir des modifications de code**
+- **Rédaction du journal des modifications**
+- **Compléter les lacunes à partir des conversations de l'assistant**
+- **Améliorer la documentation à partir des retours utilisateurs**
+- **Corriger les liens rompus**
+- **Corriger les problèmes SEO**
+- **Corriger la grammaire et les fautes d'orthographe**
+- **Appliquer votre guide de style**
+- **Cibles de copie du dépôt**
+
+Utilisez un flux de travail personnalisé uniquement lorsque le flux de travail intégré ne correspond pas au déclencheur, à la portée ou aux instructions dont vous avez besoin.
+
+## Définir la portée du flux de travail
+
+Une configuration de flux de travail efficace est précise.
+
+Définir :
+
+- le dépôt de documentation qui reçoit les modifications
+- les dépôts sources qui fournissent du code ou un contexte produit
+- plages de chemins pour les monorepos
+- sources d'intégration, comme Slack, un gestionnaire de problèmes ou un contexte de base de connaissances, lorsqu'elles sont connectées
+- le mode de mise à jour
+- les destinations de notification
+- les limites d'exécution quotidiennes
+
+Les dépôts sources sont le contexte. Ils ne deviennent pas la source des documents en direct à moins que vous ne les configuriez comme source de déploiement dans les paramètres Git.
+
+Les flux de travail peuvent utiliser jusqu'à 10 dépôts de contexte. Gardez la liste sélectionnée plus petite lorsque c'est possible pour que l'exécution reste ciblée et que l'utilisation des crédits reste prévisible.
+
+## Rédigez des instructions efficaces
+
+Les instructions doivent décrire le résultat et la procédure.
+
+```text
+Review pages under /api-reference for fields changed in the merged source pull request.
+Only edit pages that mention the changed endpoint or schema.
+Open a pull request that summarizes which endpoint pages changed and why.
+```
+
+Évitez les prompts larges comme :
+
+```text
+Improve the docs.
+```
+
+Les prompts trop larges ralentissent les exécutions, les rendent moins prévisibles et augmentent leur coût.
+
+## Choisissez le mode de mise à jour
+
+| Mode | Utilisé lors de |
+| --- | --- |
+| Exiger une revue | Le flux de travail peut modifier le sens du contenu, le comportement de l'API, les consignes de sécurité, les prix ou les étapes d'intégration. |
+| Automatiquement | Le flux de travail est délimité, à faible risque et a produit plusieurs pull requests fiables. |
+| Cible de copie du dépôt | Le flux de travail copie le contenu du dépôt vers une cible configurée sans modifier la source des documents en direct. |
+
+Maintenez les nouveaux flux de travail en **Exiger une revue** jusqu'à ce que l'équipe fasse confiance aux résultats.
+
+## Contrôler l'utilisation des crédits
+
+Les crédits dépendent de ce que le flux de travail lit et écrit.
+
+Pour rendre l'utilisation prévisible :
+
+- utiliser des plages de chemins pour les monorepos
+- planifier des vérifications étendues hebdomadairement au lieu de quotidiennement
+- garder les sélections de dépôts sources minimales
+- garder les requêtes d'intégration étroites, comme des JQL Jira délimités ou des CQL Confluence
+- éviter de sélectionner les 10 dépôts de contexte complets à moins que le flux de travail n'en ait réellement besoin
+- séparer les tâches non liées en flux de travail distincts
+- examiner l'historique des exécutions pour les exécutions particulièrement coûteuses
+
+Voyez [les crédits et l'utilisation de l'IA](/fr/ai/credits-usage) pour les seuils actuels de planification des crédits.
+
+## Examiner les exécutions
+
+Après l'exécution d'un flux de travail :
+
+1. Ouvrez l'historique des exécutions du flux de travail.
+2. Examinez le résumé, les fichiers modifiés et toute pull request ou demande de fusion.
+3. Vérifiez si le flux de travail a respecté son périmètre.
+4. Affinez les instructions si le résultat était trop large.
+5. Désactivez ou mettez en pause le flux de travail s'il produit régulièrement des changements à faible valeur.
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/workflows/reference">Référence du flux de travail</a>
+  <a href="/fr/workflows/configuration">Configuration du flux de travail</a>
+  <a href="/fr/guides/draft-docs-from-code">Rédiger des documents à partir des modifications de code</a>
+  <a href="/fr/ai/credits-usage">Crédits et utilisation de l'IA</a>
+</RelatedTopics>

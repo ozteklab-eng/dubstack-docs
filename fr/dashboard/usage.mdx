@@ -1,0 +1,115 @@
+---
+title: Utilisation
+description: "Examinez les crédits d'IA, l'utilisation des modèles, l'activité de récupération et les dernières exécutions d'IA depuis les paramètres du tableau de bord."
+icon: gauge
+---
+
+La page Utilisation montre comment les surfaces dubstack alimentées par l'IA consomment les crédits de l'espace de travail et les opérations de récupération.
+
+Utilisez-la pour comprendre ce qui alimente l'utilisation de l'IA avant de modifier les flux de travail, les paramètres de l'assistant ou les autorisations de facturation.
+
+## Ouvrez les paramètres d'utilisation
+
+Les administrateurs d'espace de travail peuvent ouvrir **Paramètres > Organisation > Utilisation** depuis le tableau de bord.
+
+La page est limitée au site sélectionné et utilise la même identité d'espace de travail que le reste du tableau de bord. Si vous gérez plusieurs sites, vérifiez le site actuel dans la barre latérale avant de comparer l'utilisation.
+
+## Métriques récapitulatives
+
+Le résumé de l'utilisation inclut :
+
+| Métrique | Signification |
+| --- | --- |
+| Exécutions d'IA | Nombre d'exécutions d'IA d'assistant, d'agent, de Slack et de workflow pendant la période sélectionnée. |
+| Crédits utilisés | Crédits facturés lorsqu'un abonnement est actif, avec les crédits estimés comme valeur de repli pour les rapports. |
+| Allocation d'IA | Allocation mensuelle restante de l'espace de travail, plus les crédits utilisés par rapport à la limite mensuelle. |
+| Tokens | Tokens d'entrée, de sortie et totaux rapportés par le fournisseur de modèles lorsqu'ils sont disponibles. |
+| Coût du modèle | Estimation du coût du fournisseur pour le suivi interne des coûts. |
+| Demandes de récupération | Appels de récupération effectués par les surfaces d'assistant ou d'agent. |
+| Latence moyenne | Latence moyenne de récupération pour la période sélectionnée. |
+
+Le sélecteur de période vous permet de consulter les 7, 30 ou 90 derniers jours.
+
+<Callout type="info">
+  Le sélecteur de période d'utilisation modifie les lignes d'activité et les graphiques. La carte d'allocation d'IA utilise la fenêtre de facturation mensuelle actuelle de l'espace de travail afin que vous puissiez voir les crédits restants par rapport à l'allocation active.
+</Callout>
+
+## Détails
+
+L'utilisation peut être regroupée par :
+
+- surface produit
+- type d'exécution
+- fournisseur
+- modèle
+- mode de récupération
+- surface de récupération
+
+Ces détails aident à identifier si l'utilisation provient du trafic de l'assistant public, du travail de l'agent du tableau de bord, des demandes Slack ou des workflows.
+
+## Journal d'activité
+
+Le journal d'activité liste les exécutions d'IA récentes et les appels de récupération pour la période sélectionnée.
+
+Chaque exécution d'IA peut afficher :
+
+- source et type d'exécution
+- modèle ou fournisseur
+- statut
+- crédits
+- jetons
+- heure de création
+
+Chaque appel de récupération peut afficher :
+
+- surface de récupération
+- mode de récupération résolu
+- fournisseur ou modèle
+- résultat
+- nombre de sources
+- latence
+
+## Exporter l'utilisation
+
+Utilisez **Exporter en CSV** pour télécharger les lignes d'activité de la période sélectionnée.
+
+L'export inclut les mêmes exécutions d'IA récentes et événements de récupération affichés sur la page, avec des colonnes pour le type d'enregistrement, la portée, l'horodatage, la source ou la surface, le type d'exécution ou le mode de récupération, le fournisseur, le modèle, le statut, les crédits, les jetons, les sources et la latence.
+
+Les exports sont générés dans le navigateur à partir des données déjà chargées pour votre site et votre période actuels. Changez le sélecteur de période avant d'exporter si vous avez besoin d'une vue de 7 jours, 30 jours ou 90 jours.
+
+## Utilisation et facturation
+
+Les crédits sont des unités de rapport et de facturation, pas des jetons bruts. Le nombre de jetons, le routage du modèle, le travail de récupération et la complexité des workflows peuvent tous contribuer à une estimation des crédits.
+
+Le résumé de l'allocation d'IA indique si l'application des quotas est actuellement passive ou active pour l'espace de travail :
+
+- **Passif** signifie que l'utilisation est suivie et rapportée, mais les demandes ne sont pas bloquées par l'allocation.
+- **Appliqué** signifie que les demandes d'IA éligibles sont vérifiées contre l'allocation de l'espace de travail avant le début de l'exécution.
+
+La section Politique des crédits affiche l'état du plan actuel, l'allocation mensuelle incluse, les options de forfait, le mode de dépassement, les seuils d'alerte et le comportement de report.
+
+Le comportement du plan est :
+
+- Les espaces de travail gratuits n'ont aucun crédit d'IA inclus permanent, sauf si un essai ou un droit est actif.
+- Les essais Pro peuvent utiliser l'allocation Pro pendant la période d'essai.
+- Les espaces de travail Pro incluent un forfait par défaut de 10 000 crédits IA par mois.
+- Les espaces de travail d'entreprise peuvent avoir des allocations personnalisées, le routage et des contrôles opérationnels.
+
+Le dépassement est facultatif. S'il est désactivé et que l'application des quotas est active, les demandes IA éligibles peuvent être bloquées une fois l'allocation épuisée.
+
+Si l'utilisation semble plus élevée que prévu :
+
+1. Vérifiez quelle surface de produit consomme le plus de crédits.
+2. Revoyez les plannings de workflows et les portées.
+3. Vérifiez si un contexte étendu de dépôt ou d'intégration est récupéré inutilement.
+4. Ajustez les paramètres de l'assistant ou du workflow avant de modifier le plan de facturation.
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/ai/credits-usage">Crédits IA et utilisation</a>
+  <a href="/fr/dashboard/billing-plans">Facturation et plans</a>
+  <a href="/fr/workflows">Workflows</a>
+  <a href="/fr/ai/assistant">Assistant</a>
+  <a href="/fr/ai/agent">Agent</a>
+</RelatedTopics>

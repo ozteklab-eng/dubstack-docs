@@ -1,0 +1,95 @@
+---
+title: Authentification de l'API Playground
+description: "Configurez la manière dont les utilisateurs s'authentifient lorsqu'ils envoient des requêtes API depuis votre documentation."
+icon: key
+---
+
+L'API Playground permet aux lecteurs d'essayer des points de terminaison à partir d'une page de documentation.
+
+Le comportement d'authentification est contrôlé par votre spécification OpenAPI et votre configuration du site.
+
+<Callout type="warning">
+  Les identifiants de l'API Playground authentifient les demandes adressées à votre API documentée. Ils ne correspondent pas aux clés API d'administrateur dubstack. Ne demandez jamais aux lecteurs de coller une clé API d'administrateur dubstack dans un site public.
+</Callout>
+
+## Définir la sécurité dans OpenAPI
+
+Utilisez les schémas de sécurité OpenAPI standards pour les jetons porteurs, les clés API ou l'authentification basique.
+
+```json
+{
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key"
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ]
+}
+```
+
+Lorsque l'API Playground détecte un schéma de sécurité, il affiche un contrôle d'autorisation pour la demande.
+
+## Maintenez les secrets hors de Git
+
+Ne commettez pas de vraies clés API, de jetons porteurs ou d'identifiants clients dans votre dépôt de documentation.
+
+Utilisez des espaces réservés dans les exemples :
+
+```bash
+curl https://api.example.com/v1/projects \
+  -H "x-api-key: <your-api-key>"
+```
+
+Les lecteurs entrent leur propre valeur dans l'API Playground avant d'envoyer une demande.
+
+Si votre équipe utilise également des clés API d'administrateur dubstack pour l'automatisation des flux de travail, conservez ces clés dans un gestionnaire de secrets back-end et utilisez-les uniquement avec des tâches côté serveur fiables. Voir [Clés API d'administrateur](/fr/dashboard/api-keys) pour le modèle de clé d'automatisation séparé.
+
+## Comportement de proxy
+
+Pour la sécurité du navigateur, l'API Playground peut envoyer les requêtes via le back-end de documentation dubstack au lieu de les envoyer directement depuis le navigateur de l'utilisateur.
+
+Cela permet d'éviter les problèmes courants de CORS, mais votre API décide toujours si les identifiants fournis sont valides.
+
+## Serveurs spécifiques à l'environnement
+
+Utilisez OpenAPI `servers` pour définir l'endroit où les demandes de l'API Playground doivent être envoyées :
+
+```json
+{
+  "servers": [
+    {
+      "url": "https://api.example.com",
+      "description": "Production"
+    },
+    {
+      "url": "https://api-staging.example.com",
+      "description": "Staging"
+    }
+  ]
+}
+```
+
+Assurez-vous que les documents publics pointent vers un environnement API que vous pouvez exposer aux lecteurs en toute sécurité.
+
+## Quand cacher l'API Playground
+
+Masquez ou désactivez l'API Playground interactif pour les points de terminaison qui :
+
+- modifient les données de production de manière risquée
+- exigent des identifiants privés que les lecteurs n'ont pas
+- sont réservés aux internes
+- ne sont pas prêts pour une utilisation externe
+
+Pour ces pages, utilisez des exemples de code et du texte explicatif au lieu de cela.
+
+<Callout type="info">
+  L'API Playground sert à tester votre API documentée. Il ne remplace pas l'autorisation côté serveur, la limitation de débit, l'audit ni la protection contre les abus sur votre API.
+</Callout>

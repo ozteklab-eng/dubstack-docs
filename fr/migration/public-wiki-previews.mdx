@@ -1,0 +1,76 @@
+---
+title: Aperçus de wikis publics
+description: "Utilisez les aperçus de dépôts publics comme surface d'acquisition et de migration."
+icon: scan-search
+---
+
+Les aperçus de wikis publics permettent à dubstack d'afficher à quoi ressemblerait la documentation d'un dépôt public sur dubstack avant que le dépôt ne soit revendiqué par un client.
+
+## Format d'URL
+
+Les aperçus publics sont hébergés sur :
+
+```text
+https://dubstack.wiki/<owner>/<repo>
+```
+
+C'est une surface d'acquisition non revendiquée. Les sites de documentation propriétaires des clients sont hébergés sur `*.dubstack.live` ou sur un domaine personnalisé configuré après la revendication/la prise en charge.
+
+## Modes d'import
+
+dubstack sépare deux modes d'import.
+
+| Mode | Lorsqu'il est utilisé | Comportement |
+| --- | --- | --- |
+| Import de configuration rédigée | Le dépôt possède une configuration de documentation rédigée telle que `docs.json` | Convertir la configuration rédigée en `dubstack.json` et l'afficher via le rendu partagé de documentation. |
+| Reconstruction générée | Le dépôt ne possède pas de configuration de documentation rédigée | Construire une structure de documentation à partir des fichiers sources et des signaux du dépôt. La planification par IA ne s'exécute que sur le chemin de reconstruction générée. |
+
+Les deux modes doivent rester séparés. L'import de configuration rédigée correspond à un travail de migration déterministe. La reconstruction générée est un workflow de génération de documentation.
+
+## Groupes de présentation
+
+La page d'accueil du wiki public sépare les exemples curatifs des surfaces de découverte générées ou en vogue.
+
+- Les exemples rédigés montrent des dépôts de haute valeur avec une configuration de documentation rédigée.
+- Les exemples générés montrent des dépôts reconstruits à partir du contenu source.
+- Les entrées en vogue/découverte peuvent provenir de la recherche de dépôts et peuvent ou non avoir déjà une configuration de documentation.
+
+Les exemples curatifs sont protégés contre le nettoyage des déchets. Les aperçus générés non revendiqués peuvent être nettoyés sauf s'ils sont protégés, revendiqués ou explicitement conservés.
+
+## Bannière de provenance
+
+Les aperçus publics affichent une bannière de provenance pour que les visiteurs sachent qu'il s'agit d'une copie d'acquisition, et non du site officiel de documentation de la source.
+
+La bannière enregistre la date de génération/import et établit clairement la limite avant que les visiteurs ne comparent l'aperçu avec le site source.
+
+## Limite de revendication/prise en charge
+
+Un aperçu public ne devient pas automatiquement une stack client.
+
+Le cycle de vie est :
+
+```text
+Public preview on dubstack.wiki
+-> claim/adopt request
+-> customer/dashboard stack creation
+-> Git integration and ownership setup
+-> customer site on *.dubstack.live or custom domain
+```
+
+Cette limite protège la propriété client, la facturation, les autorisations Git, les règles de nettoyage des déchets et le comportement des domaines hébergés.
+
+## Contrôles opérationnels
+
+Les opérateurs internes gèrent les aperçus depuis le Control Plane. Le Control Plane devrait exposer :
+
+- mode importé/généré
+- dépôt source
+- commit source
+- horodatage de génération/importation
+- statut du travail de transformation
+- problèmes de validation
+- état protégé/collection de déchets
+- contrôles de régénération/suppression
+- état du cycle de vie d'attribution/prise en charge
+
+Le Control Plane gère la visibilité du cycle de vie et les actions des opérateurs. Il n'est pas le moteur de transformation lui-même.

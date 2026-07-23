@@ -1,0 +1,95 @@
+---
+title: Améliorer la qualité de la documentation
+description: "Utilisez les analyses, la recherche, les commentaires, l'activité de l'assistant et les flux de travail pour identifier et corriger les lacunes dans la documentation."
+icon: chart-line
+---
+
+Une bonne documentation s'améliore grâce à une boucle répétitive : mesurez ce que les lecteurs font, examinez où ils rencontrent des difficultés, apportez un changement ciblé et vérifiez si le signal s'améliore.
+
+Ce guide montre comment utiliser les signaux dubstack pour déterminer ce qui doit être mis à jour en premier.
+
+## Commencez par les pages les plus impactantes
+
+Ouvrez **Analytics** pour le déploiement que vous souhaitez examiner.
+
+Priorisez les pages qui ont :
+
+- un fort trafic et des commentaires négatifs
+- un fort volume de recherche mais un taux de clic faible
+- des questions répétées de l'assistant concernant la même étape de configuration ou une erreur
+- des exemples d'API obsolètes après des changements de produit ou de spécification
+- des rapports de support ou d'équipe qui pointent vers la même page
+
+Les pages à fort trafic méritent l'attention la plus rapide, car un paragraphe confus peut affecter de nombreux lecteurs.
+
+## Utilisez les données de recherche pour trouver du contenu manquant
+
+Les analyses de recherche vous aident à voir les mots que les lecteurs utilisent lorsqu'ils ne trouvent pas de réponse.
+
+Recherchez :
+
+- des requêtes répétées sans résultat clairement cliqué
+- des termes de produit qui diffèrent de vos titres de page
+- des messages d'erreur qui devraient avoir des pages de dépannage
+- des noms d'API ou des champs qui nécessitent des descriptions plus claires
+
+Lorsqu'une requête a un résultat faible, essayez l'une de ces solutions :
+
+1. Ajoutez la page manquante.
+2. Renommez le titre ou la description de la page pour correspondre au langage des lecteurs.
+3. Ajoutez un titre plus clair à une page existante.
+4. Liez la page à un guide de niveau supérieur.
+
+Voyez [Search](/fr/optimize/search) pour des conseils sur la qualité de la recherche.
+
+## Examinez les commentaires avant de réécrire
+
+Les commentaires vous disent ce que les lecteurs et les agents n'ont pas pu résoudre à partir de la page publiée.
+
+Utilisez **Analytics > Feedback** pour regrouper les rapports par page, source et statut de révision.
+
+Modèles courants :
+
+| Signal | Solution probable |
+| --- | --- |
+| Beaucoup de retours négatifs sur les pages | Réécrire l'introduction, ajouter les prérequis ou diviser la page en tâches plus petites. |
+| Retours négatifs sur un point de terminaison API | Améliorer les descriptions OpenAPI, les exemples, les champs de réponse ou les notes d'authentification. |
+| Retours des agents sur des instructions obsolètes | Vérifier le dépôt source, les paramètres de déploiement et les changements récents du produit. |
+| Questions répétées de l'assistant | Ajouter une réponse directe, une section de dépannage ou un lien vers un sujet connexe. |
+
+Garder les notes de révision dans le tableau de bord afin que l'équipe puisse voir si le feedback est en attente, en cours, résolu ou ignoré.
+
+## Transformer les problèmes répétés en exécutions de flux de travail
+
+Utiliser les flux de travail lorsque la même tâche d'amélioration se répète.
+
+Exemples :
+
+- exécuter **Corriger les liens cassés** après des modifications de contenu
+- exécuter **Corriger les problèmes SEO** avant un lancement
+- exécuter **Corriger les fautes de grammaire et d'orthographe** lors de déclencheurs de mise à jour de contenu
+- exécuter **Améliorer la documentation à partir des retours utilisateurs** après avoir recueilli suffisamment de retours
+- exécuter **Combler les lacunes à partir des conversations de l'assistant** lorsqu'une question répétée révèle une lacune dans la documentation
+
+Commencer de nouveaux flux de travail en mode **Exiger une révision**. Examiner les premières pull requests, puis décider si le flux de travail peut s'exécuter automatiquement.
+
+Voir [Référence des flux de travail](/fr/workflows/reference) pour les détails sur les déclencheurs, les modes de mise à jour et les crédits.
+
+## Valider le changement
+
+Après la publication d'une amélioration :
+
+1. Ouvrir la page en direct et confirmer que le changement est visible.
+2. Rechercher la requête originale et confirmer que la page apparaît.
+3. Demander à l'assistant la question originale et vérifier s'il cite la page améliorée.
+4. Surveiller les retours et les tendances de recherche pendant la prochaine période de révision.
+5. Ajouter une entrée dans le journal des modifications si le changement affecte un comportement important des utilisateurs.
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/optimize/analytics">Analyse</a>
+  <a href="/fr/optimize/feedback">Retours</a>
+  <a href="/fr/optimize/search">Recherche</a>
+  <a href="/fr/workflows/reference">Référence des flux de travail</a>
+</RelatedTopics>

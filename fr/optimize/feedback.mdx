@@ -1,0 +1,123 @@
+---
+title: Commentaires
+description: "Collectez les évaluations des pages et les retours des agents, puis consultez les résultats depuis le tableau de bord."
+icon: thumbs-up
+---
+
+Les commentaires montrent où les lecteurs et les agents rencontrent des difficultés avec votre documentation.
+
+Activez les commentaires provenant des compléments de déploiement, puis consultez les évaluations et les commentaires depuis la vue d'analyse du tableau de bord.
+
+<Info>
+  Les commentaires sont spécifiques au déploiement. Activez le complément pour chaque déploiement qui doit collecter les évaluations.
+</Info>
+
+## Types de commentaires
+
+| Type | Ce qu'il collecte | Où il apparaît |
+| --- | --- | --- |
+| Commentaires sur la page | Évaluations Oui/Non et commentaires écrits optionnels depuis les pages de documentation. | **Analyse > Commentaires** |
+| Commentaires sur l'assistant | Évaluations soumises en réponse aux réponses de l'assistant lorsqu'un feedback d'assistant est activé. | **Analyse > Commentaires** |
+| Commentaires sur l'agent | Retours structurés sur la qualité du contenu provenant des interfaces d'agent prises en charge. | **Analyse > Commentaires** et enregistrements de l'API de commentaires publics |
+
+## Activer les commentaires sur la page
+
+Les commentaires sur la page sont contrôlés par déploiement.
+
+1. Ouvrez **Paramètres > Déploiement > Compléments**.
+2. Activez **Évaluation par pouce**.
+3. Publiez ou actualisez le site de documentation.
+4. Ouvrez une page de documentation publique et vérifiez que les contrôles de feedback **Oui** et **Non** s'affichent.
+
+Les lecteurs peuvent alors soumettre des évaluations simples au niveau de la page depuis le site de documentation. Les évaluations négatives peuvent inclure un commentaire écrit optionnel.
+
+## Collecte d'adresses e-mail des lecteurs
+
+La collecte d'adresses e-mail des lecteurs est facultative.
+
+1. Ouvrez **Paramètres > Déploiement > Compléments**.
+2. Activez **Collecte d'adresses e-mail des lecteurs**.
+3. Ajoutez un court avertissement expliquant comment votre équipe utilise les adresses e-mail soumises.
+4. Enregistrez et publiez à nouveau.
+
+Lorsqu'activé, les lecteurs peuvent inclure une adresse e-mail avec leurs commentaires afin que votre équipe puisse les contacter. Ne demandez pas d'informations sensibles dans l'avertissement ou dans la demande de commentaires.
+
+## Activer les commentaires de l'agent
+
+Les commentaires de l'agent permettent aux surfaces d'IA prises en charge de soumettre des commentaires structurés sur les pages qu'elles lisent. Ils sont destinés aux problèmes de qualité de documentation, tels que des instructions obsolètes, des étapes de configuration manquantes ou des descriptions d'API peu claires.
+
+1. Ouvrez **Paramètres > Déploiement > Compléments**.
+2. Activez **Commentaires de l'agent**.
+3. Maintenez les routes publiques MCP et lisibles par l'IA disponibles pour le déploiement.
+
+Lorsqu'activé :
+
+- le serveur MCP public publie l'outil `submit_feedback`
+- les fichiers de découverte générés par l'IA incluent les instructions pour les commentaires
+- les exports Markdown peuvent inclure les instructions de l'agent pour la page actuelle
+- les commentaires acceptés sont stockés avec les analyses de la version sélectionnée
+
+Les agents ne devraient pas utiliser ce canal pour les questions des lecteurs normaux ou les conversations de support.
+
+Les commentaires des agents doivent faire référence à une page publiée disponible via le serveur MCP public. Si une page est masquée du MCP par `searchable: false`, `noindex: true`, ou les paramètres d'indexation au niveau du site, les commentaires des agents pour ce chemin sont rejetés.
+
+## Examiner les commentaires
+
+Ouvrez **Analytique > Commentaires** depuis le tableau de bord.
+
+La vue des commentaires affiche :
+
+- commentaires au fil du temps pour la plage de dates sélectionnée
+- analyse du sentiment pour les évaluations positives et négatives
+- pages les plus consultées avec des commentaires soumis
+- analyse des sources parmi les pages, les réponses de l'assistant et les actions des agents
+- comptes de statut d'examen pour les commentaires collectés
+- entrées récentes de commentaires avec le chemin de la page et les métadonnées de source
+- adresses e-mail des lecteurs optionnelles lors de l'activation de la collecte
+
+Les commentaires sont limités à la version sélectionnée. Changez de version pour examiner un autre site de documentation.
+
+## Gérer le statut des commentaires
+
+Utilisez le statut d'examen pour suivre les commentaires du triage jusqu'à leur clôture.
+
+| Statut | Utilisez-le lorsque |
+| --- | --- |
+| En attente | Le commentaire est nouveau et n'a pas encore été examiné. |
+| En cours | Quelqu'un met à jour activement les documents ou examine le rapport. |
+| Résolu | Le changement des documents est terminé ou le problème signalé est résolu. |
+| Refusé | Le commentaire est en double, non pertinent ou inexploitable. |
+
+Ouvrez **Analyses > Commentaires**, puis utilisez le sélecteur de statut à côté d'un commentaire récent. Les modifications sont enregistrées pour le déploiement sélectionné et s'affichent dans le panneau **Statut d'examen**.
+
+## Ajouter des notes internes
+
+Les notes internes aident votre équipe à suivre les actions sans exposer les détails aux lecteurs.
+
+Utilisez les notes pour :
+
+- attribuer la responsabilité
+- lier des tickets de support ou des problèmes techniques
+- enregistrer pourquoi le feedback a été refusé
+- résumer le changement des documents qui a résolu le rapport
+
+Les notes internes sont visibles uniquement dans le tableau de bord.
+
+## Transformer le feedback en correctifs
+
+Utilisez le feedback comme entrée pour les workflows de maintenance du contenu.
+
+- Grouper les retours négatifs répétés par page.
+- Ajouter les étapes ou exemples manquants directement dans le fichier MDX concerné.
+- Mettez à jour les descriptions OpenAPI lorsque le feedback sur le point de terminaison API est ambigu.
+- Utilisez les workflows pour rédiger des améliorations ciblées lorsque les prérequis du workflow sont configurés.
+- Examinez les pull requests générées avant de les fusionner.
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/optimize/analytics">Analytics</a>
+  <a href="/fr/dashboard/feedback-analytics">Analyse des feedbacks</a>
+  <a href="/fr/settings/deployment/addons">Compléments de déploiement</a>
+  <a href="/fr/workflows/reference">Référence des workflows</a>
+</RelatedTopics>

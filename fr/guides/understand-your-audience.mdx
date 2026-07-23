@@ -1,0 +1,109 @@
+---
+title: Comprendre votre audience de documentation
+description: "Identifiez qui chaque page de documentation sert afin que la navigation, les exemples et la maintenance restent ciblés."
+icon: users
+---
+
+Une bonne documentation commence par un lecteur clair. Une page qui tente de servir toutes les audiences devient généralement trop large, trop longue et difficile à maintenir.
+
+Utilisez ce guide avant de restructurer la navigation, d'écrire une nouvelle section ou de demander à un agent d'améliorer un ensemble de pages.
+
+## Définir le lecteur principal
+
+Pour chaque page importante, notez le lecteur principal et la tâche qu'il tente d'accomplir.
+
+Énoncés d'audience pertinents :
+
+- "Un développeur ajoutant l'authentification API pour la première fois."
+- "Un ingénieur de support dépannant un déploiement défaillant."
+- "Un administrateur d'espace de travail décidant s'il faut activer le SSO."
+- "Un auteur de contenu examinant les tendances des retours de l'assistant."
+
+Évitez les étiquettes vagues telles que "utilisateurs" ou "clients" sauf si la page est véritablement générale.
+
+## Correspondre le type de contenu à l'intention
+
+Les différents lecteurs ont besoin de types de pages différents.
+
+| Intention de l'utilisateur | Type de page fort | Notes |
+| --- | --- | --- |
+| Apprendre un concept | Aperçu ou explication | Maintenez les prérequis et le vocabulaire visibles. |
+| Effectuer une tâche | Guide ou tutoriel | Utilisez des étapes ordonnées, des vérifications et un dépannage. |
+| Rechercher un comportement précis | Référence | Maintenez les descriptions précises et faciles à naviguer. |
+| Comprendre les modifications | Journal des modifications | Liez les versions aux guides et références mis à jour. |
+| Résoudre un problème | Dépannage | Commencez par les symptômes, les causes et les vérifications. |
+
+Voyez [types de contenu](/fr/guides/content-types) et [modèles de contenu](/fr/guides/content-templates) pour des structures réutilisables.
+
+## Séparer les publics dans la navigation
+
+Si les lecteurs ont des objectifs différents, séparez les points d'entrée au lieu de tout fusionner sur une seule page.
+
+Utilisez :
+
+- onglets pour les grandes zones de produit ou les publics
+- groupes pour les tâches liées
+- pages cachées pour le contenu exclusif au support ou en cours de développement
+- sujets liés pour les liens croisés entre tâches proches
+
+Voyez [navigation](/fr/configuration/navigation), [pages cachées](/fr/configuration/hidden-pages) et [sujets liés](/fr/writing-content/related-topics).
+
+## Utilisez l'analyse et les retours pour valider les hypothèses
+
+La planification du public ne doit pas rester théorique. Utilisez les signaux du produit pour identifier où les lecteurs ont des difficultés.
+
+Vérifiez :
+
+- retours sur les pages importantes
+- requêtes de recherche avec peu ou pas de résultats
+- conversations avec l'assistant qui répètent la même question
+- supports ou fils Slack qui pointent vers des documents manquants
+- suggestions de workflow qui touchent constamment la même zone
+
+Voyez [analyse des retours](/fr/dashboard/feedback-analytics), [optimisation de la recherche](/fr/optimize/search) et [utilisation de l'assistant](/fr/ai/assistant-usage).
+
+## Écrivez pour un seul résultat à la fois
+
+Une page doit rendre l'action suivante évidente.
+
+Bons résultats de page :
+
+- connecter un dépôt
+- publier un déploiement de prévisualisation
+- configurer un domaine personnalisé
+- examiner la sortie du workflow
+- authentifier une requête API
+
+Si une page a plusieurs résultats non liés, divisez-la et reliez les morceaux avec des liens.
+
+## Donnez aux agents un contexte d'écriture utile
+
+Quand vous demandez à un agent IA de mettre à jour la documentation, incluez le public cible et le résultat dans l'instruction.
+
+```text
+Update this guide for a workspace admin who has never connected Git before.
+Keep the steps concrete, include verification, and link to troubleshooting only at the end.
+```
+
+Pour des directives au niveau du dépôt, ajoutez [instructions pour l'agent](/fr/ai/agent-instructions) ou [fichiers de compétences personnalisées](/fr/ai/custom-skill-files).
+
+## Revoyez le décalage du public
+
+Revoyez les hypothèses sur le public lorsque :
+
+- un workflow de produit change
+- un nouveau rôle commence à utiliser le produit
+- les requêtes de recherche se concentrent autour d'un sujet manquant
+- le feedback sur la page indique que la page est confuse
+- les réponses de l'assistant citent la mauvaise page pour les questions courantes
+
+Utilisez [boucles de qualité de la documentation](/fr/guides/improving-docs) et [flots de travail de maintenance](/fr/guides/maintenance) pour rendre cette revue récurrente.
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/guides/content-types">Types de contenu</a>
+  <a href="/fr/guides/content-templates">Modèles de contenu</a>
+  <a href="/fr/guides/improving-docs">Améliorer la qualité de la documentation</a>
+  <a href="/fr/ai/effective-agent-prompts">Prompts d'agent efficaces</a>
+</RelatedTopics>

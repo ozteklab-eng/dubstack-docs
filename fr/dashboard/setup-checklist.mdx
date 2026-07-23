@@ -1,0 +1,90 @@
+---
+title: Liste de vérification de configuration
+description: Comprenez comment la progression de la configuration du tableau de bord est calculée et où mène chaque action.
+icon: list-checks
+---
+
+La liste de vérification de configuration aide les nouveaux sites à terminer les étapes essentielles qui rendent l'espace documentaire opérationnel.
+
+Elle s'affiche dans la barre d'outils supérieure lorsque des actions de configuration sont disponibles pour votre rôle et votre site. L'icône de progression se remplit à mesure que chaque action est accomplie.
+
+## Ce que suit la liste de vérification
+
+La liste de vérification est calculée à partir de l'état en temps réel du tableau de bord, et non à partir d'un compteur statique.
+
+| Élément | Complété lorsque |
+| --- | --- |
+| Connecter GitHub ou activer les mises à jour automatiques | Un dépôt pris en charge est connecté et prêt pour les mises à jour d'auteur. |
+| Effectuer une mise à jour | Un déploiement non initial ou une mise à jour de contenu a été exécuté pour le site actuel. |
+| Inviter un collègue | L'organisation compte plus d'un membre ou au moins une invitation en attente. |
+| Ajouter un domaine personnalisé | Le site actuel a un domaine personnalisé configuré. |
+| Créer un workflow | Au moins un workflow est configuré ou activé pour le site. |
+| Installer l'application Slack | Slack est éligible pour le site et l'installation dispose des autorisations nécessaires. |
+
+Certaines entrées n'apparaissent que lorsque votre rôle peut les effectuer. Par exemple, la configuration des dépôts et des domaines personnalisés nécessite des droits de propriétaire ou d'administrateur, tandis que les éléments de configuration pour les éditeurs sont affichés aux propriétaires, administrateurs et éditeurs.
+
+## Entrées visibles et destinations
+
+La liste de vérification n'affiche que les actions pertinentes pour le site actuel, le rôle et l'état des capacités de déploiement.
+
+| Élément | Qui le voit | Ouvre |
+| --- | --- | --- |
+| Connecter GitHub ou activer les mises à jour automatiques | Propriétaires et administrateurs | **Paramètres > Déploiement > Paramètres Git** |
+| Effectuer une mise à jour | Propriétaires, administrateurs et éditeurs | **Éditeur** |
+| Inviter un collègue | Propriétaires, administrateurs et éditeurs | **Paramètres > Organisation > Membres** |
+| Ajouter un domaine personnalisé | Propriétaires et administrateurs | **Paramètres > Déploiement > Domaine personnalisé** |
+| Créer un flux de travail | Propriétaires, administrateurs et éditeurs | **Flux de travail** |
+| Installer l'application Slack | Propriétaires, administrateurs et éditeurs lorsque Slack est configuré et éligible | **Agent** ou flux d'installation de Slack |
+
+Les déploiements qui ne permettent pas la rédaction depuis un dépôt ou via Slack peuvent masquer ces éléments de configuration.
+
+## Ouvrir un élément de configuration
+
+1. Ouvrez le tableau de bord du site.
+2. Cliquez sur **Compléter votre configuration** dans la barre d'outils supérieure.
+3. Sélectionnez l'élément de configuration que vous souhaitez terminer.
+4. Complétez le flux lié.
+5. Retournez au tableau de bord et actualisez si le statut n'a pas encore été mis à jour.
+
+La liste de vérification accède directement à la zone de tableau de bord pertinente, comme les paramètres Git, l'éditeur, les membres, les paramètres de domaine personnalisé, les flux de travail ou la page de l'agent.
+
+## Comportement de progression
+
+La progression est basée sur les éléments terminés divisés par les éléments visibles de la liste de vérification.
+
+Si votre rôle ne peut pas terminer un élément, celui-ci n'est pas inclus dans votre liste de vérification visible. Si un déploiement ne permet pas la rédaction depuis un dépôt ou via Slack, les éléments correspondants ne sont pas inclus dans le calcul de la progression.
+
+La barre d'outils supérieure affiche la même progression qu'un petit indicateur circulaire. La liste de vérification agrandie affiche le pourcentage numérique.
+
+Vous pouvez masquer la liste de vérification depuis la barre d'outils. Le masquage est stocké dans votre navigateur pour l'organisation et le site actuels, donc masquer un site ne masque pas les autres déploiements.
+
+## Dépannage
+
+### La progression affiche toujours zéro
+
+Vérifiez que vous êtes sur le site souhaité, et non un autre site de la même organisation. Ensuite, ouvrez la liste de vérification et suivez les actions liées.
+
+Si le tableau de bord était ouvert pendant que vous avez terminé une action de configuration, actualisez la page afin que la liste de vérification récupère à nouveau l'état du dépôt, du déploiement, des membres, de Slack et des flux de travail.
+
+### La configuration du dépôt ne se termine pas
+
+Ouvrez **Paramètres > Déploiement > Paramètres Git** et vérifiez que le fournisseur, le propriétaire du dépôt, le nom du dépôt, la branche de déploiement et l'installation de l'application sont présents.
+
+GitHub exige que l'installation de l'application soit disponible. GitLab exige que la capacité d'écriture soit opérationnelle.
+
+### La mise à jour n'est pas terminée
+
+Les déploiements initiaux d'onboarding ne comptent pas comme une mise à jour utilisateur. Modifiez une page, mettez à jour la configuration, fusionnez un changement de contenu ou exécutez une mise à jour manuelle après la présence des changements de source.
+
+### Slack n'apparaît pas
+
+Slack n'apparaît que lorsque le site est éligible pour la configuration d'agent Slack et que le rôle actuel peut éditer le site. Ouvrez [Intégrations](/fr/ai/integrations) si vous devez consulter l'état de l'intégration.
+
+## Sujets connexes
+
+- [Tableau de bord](/fr/dashboard/overview)
+- [Essentiels Git](/fr/editor/git-essentials)
+- [Mises à jour manuelles](/fr/deployment/manual-updates-history)
+- [Membres de l'équipe](/fr/dashboard/team-members)
+- [Flux de travail](/fr/workflows)
+- [Intégrations](/fr/ai/integrations)

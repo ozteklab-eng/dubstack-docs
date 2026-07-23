@@ -1,0 +1,105 @@
+---
+title: Plan de documentation multilingue
+description: "Structurer les répertoires par langue, la navigation traduite et les processus de revue pour les documents multilingues."
+icon: languages
+---
+
+L'internationalisation permet aux lecteurs d'utiliser la documentation dans leur langue préférée. Elle fonctionne le mieux lorsque le contenu traduit suit la même structure que les documents sources et dispose d'un processus de maintenance clair.
+
+## Décider ce qui doit être traduit en premier
+
+Commencez par les pages qui ont le plus d'impact sur les lecteurs :
+
+- page d'accueil et guide de démarrage rapide
+- authentification et guides de configuration
+- introductions aux références API
+- pages de tarification, limites et facturation
+- pages de dépannage à fort trafic
+- notes de version ou guides de migration pour les régions concernées
+
+Évitez de traduire les pages à faible trafic jusqu'à ce que les parcours utilisateur principaux soient couverts.
+
+## Maintenir une structure de fichiers prévisible
+
+Utiliser des répertoires par langue et maintenir les noms de fichiers alignés entre les langues.
+
+```text
+index.mdx
+quickstart.mdx
+fr/
+  index.mdx
+  quickstart.mdx
+es/
+  index.mdx
+  quickstart.mdx
+```
+
+Les chemins identiques facilitent l'identification des traductions manquantes et la cohérence des liens.
+
+## Configurer la navigation par langue
+
+La navigation spécifique à la langue se trouve dans `dubstack.json`.
+
+```json
+{
+  "navigation": {
+    "languages": [
+      {
+        "language": "en",
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": ["index", "quickstart"]
+          }
+        ]
+      },
+      {
+        "language": "fr",
+        "groups": [
+          {
+            "group": "Premiers pas",
+            "pages": ["fr/index", "fr/quickstart"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Utiliser un chemin canonique par page. Ne pas placer le même chemin de page dans plusieurs arbres de navigation par langue.
+
+## Maintenir les traductions
+
+Traiter les traductions comme du contenu vivant.
+
+Flux de travail recommandé :
+
+1. Mettre à jour la page en langue source.
+2. Marquer les pages traduites affectées pour révision.
+3. Exécuter un flux de traduction lorsque le routage et la politique sont configurés pour le déploiement.
+4. Revoir la traduction générée avant la publication.
+5. Vérifier les liens, les exemples de code, les captures d'écran et les noms de produits.
+
+Les flux de traduction doivent commencer en mode **Requérir une revue** car les traductions peuvent affecter le sens, le langage juridique, les attentes en matière de support et l'exactitude de l'onboarding.
+
+## Surveiller les problèmes de localisation
+
+Revoir :
+
+- captures d'écran montrant une interface utilisateur spécifique à la langue
+- formats de date, heure, nombre et devise
+- liens vers des pages de support ou juridiques spécifiques à la région
+- Exemples d'API avec des paramètres de localisation ou de région
+- Comportement de secours lorsqu'une traduction est manquante
+
+Voir [Internationalisation](/fr/configuration/internationalization) pour les champs de configuration et les exemples.
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/configuration/internationalization">Internationalisation</a>
+  <a href="/fr/configuration/languages">Langues</a>
+  <a href="/fr/workflows/reference#translate-content">Flux de travail de traduction du contenu</a>
+  <a href="/fr/guides/maintenance">Maintenir la documentation au fil du temps</a>
+</RelatedTopics>

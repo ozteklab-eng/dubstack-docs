@@ -1,0 +1,45 @@
+---
+title: Intégrations de communication
+description: "Utilisez les espaces de chat en tant que contextes délimités, surfaces d'agent et canaux de notifications de workflow."
+icon: message-circle
+---
+
+Les intégrations de communication connectent l'agent aux conversations d'équipe.
+
+Utilisez cette famille lorsque le travail de documentation commence à partir d'un fil de version, d'une discussion d'incident, d'une question produit ou d'un canal d'équipe où les personnes coordonnent déjà les changements.
+
+## Fournisseurs pris en charge
+
+| Fournisseur | Statut | Portée | Fonctionnalités |
+| --- | --- | --- | --- |
+| [Slack](/fr/ai/integrations/slack) | Actif | Partagé | Conversations d'agent, contexte de fil délimité, demandes de brouillon de documentation, éditions suivantes, sélection de déploiement, approbations et notifications de workflow. |
+| Mattermost | Catalogue | Partagé | Contexte de chat auto-hébergé prévu, suivi de fil, approbations et notifications de workflow. |
+| Google Calendar | Catalogue | Personnel | Contexte d'événement et d'emploi du temps prévu pour les workflows de documentation. |
+
+Les fournisseurs uniquement catalogués sont visibles pour la planification, mais ils ne peuvent pas être sélectionnés pour un agent ou une exécution de workflow jusqu'à ce que l'autorisation, les portées, les collecteurs, les vérifications d'accès et les tests soient actifs.
+
+## Quand utiliser le contexte de chat
+
+Utilisez le contexte de chat lorsque le matériel source pertinent est conversationnel :
+
+- un fil de version explique pourquoi le comportement a changé
+- un canal d'incident inclut des étapes de dépannage qui deviendront des documents
+- un transfert de support résume les confusions répétées des clients
+- une équipe produit demande un brouillon à partir d'une courte discussion
+
+Ne pas utiliser le contexte de chat comme remplacement de la revue du dépôt. Les modifications de documentation s'écrivent toujours via le dépôt de documentation connecté.
+
+## Limites de sécurité
+
+L'agent lit le contexte de chat uniquement lorsqu'une demande ou un workflow le sélectionne.
+
+Pour les canaux privés Slack, invitez d'abord l'application au canal. Pour les fournisseurs de chat auto-hébergés futurs, utilisez un compte de service restreint ou une installation d'application qui peut lire uniquement les canaux destinés au travail de documentation.
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/ai/integrations/slack">Intégration Slack</a>
+  <a href="/fr/workflows/integrations">Intégrations de workflow</a>
+  <a href="/fr/ai/integration-permissions">Permissions et portées d'intégration</a>
+  <a href="/fr/ai/connector-capabilities">Capacités du connecteur</a>
+</RelatedTopics>

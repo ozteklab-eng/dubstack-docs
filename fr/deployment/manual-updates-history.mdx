@@ -1,0 +1,108 @@
+---
+title: Mises à jour manuelles et historique
+sidebarTitle: Mises à jour manuelles
+description: "Déclenchez des rafraîchissements manuels du dépôt, consultez l'historique des déploiements et comprenez quand réessayer une mise à jour de documents publiée."
+icon: refresh-cw
+---
+
+Les mises à jour manuelles vous permettent de rafraîchir un site de documents en direct à partir du dépôt connecté sans attendre un autre événement du fournisseur Git.
+
+Utilisez une mise à jour manuelle lorsqu'un webhook a été manqué, qu'une synchronisation doit être réessayée, ou si vous souhaitez importer la branche configurée la plus récente dans le site publié avant de continuer la validation.
+
+## Ce que fait une mise à jour manuelle
+
+Une mise à jour manuelle exécute le même chemin Git vers le contenu publié utilisé par les mises à jour normales.
+
+```text
+Dashboard manual update
+-> permission check
+-> active docs repository
+-> Git sync worker
+-> R2 published artifacts
+-> frontend cache refresh
+-> dashboard preview screenshot refresh
+```
+
+Les mises à jour manuelles ne modifient pas les fichiers. Elles lisent la branche de documents configurée et republient l'état actuel du dépôt.
+
+## Exigences
+
+Les mises à jour manuelles nécessitent :
+
+- un site sélectionné
+- la permission de déclencher des déploiements pour ce site
+- une intégration Git de documents active
+- les informations sur le propriétaire du dépôt, le nom du dépôt, la branche et l'installation de l'application pour la source active
+
+Si l'intégration active manque des informations sur le dépôt ou l'installation, reconnectez le dépôt depuis [paramètres Git](/fr/deployment/forgejo-github-gitlab) avant de réessayer.
+
+## Déclenchez une mise à jour manuelle
+
+1. Ouvrez le tableau de bord du site.
+2. Allez sur **Accueil**.
+3. Cliquez sur l'icône de rafraîchissement dans la ligne des actions du site.
+4. Attendez que l'élément d'activité soit terminé.
+5. Ouvrez le site de documents en direct et vérifiez que le contenu attendu est visible.
+
+Le tableau de bord affiche un état de chargement pendant que la demande est en file d'attente. Après la fin de la synchronisation, le flux d'activité et la carte de prévisualisation doivent être mis à jour.
+
+## Historique des déploiements
+
+L'historique des déploiements enregistre les mises à jour récentes du site en direct.
+
+Un enregistrement de déploiement peut inclure :
+
+| Champ | Signification |
+| --- | --- |
+| Statut | Si la mise à jour a réussi, échoué ou est toujours en cours. |
+| Déclencheur | Mise à jour manuelle, webhook, prévisualisation ou autre déclencheur de déploiement. |
+| Branche | La branche utilisée pour la mise à jour. |
+| SHA de commit | Le commit synchronisé lorsqu'il est disponible. |
+| Message de commit | Le message de commit source ou l'étiquette de mise à jour de la plateforme. |
+| Durée | Combien de temps a pris la mise à jour. |
+| Capture d'écran de prévisualisation | L'image de prévisualisation du tableau de bord capturée après la mise à jour. |
+
+Les mises à jour manuelles sont étiquetées comme une activité manuelle pour qu'elles puissent être distinguées des mises à jour des fournisseurs Git.
+
+## Quand utiliser les mises à jour manuelles
+
+Utilisez les mises à jour manuelles pour :
+
+- réessayer après un webhook échoué ou manqué
+- vérifier une nouvelle connexion de dépôt
+- rafraîchir la capture d'écran de prévisualisation du tableau de bord
+- extraire les modifications après avoir changé la branche de déploiement
+- confirmer une correction de support ou de migration
+
+Ne pas utiliser les mises à jour manuelles comme remplacement d'un chemin de webhook Git sain. Si la mise à jour manuelle est le seul chemin fiable, inspectez l'installation du fournisseur et la configuration du webhook.
+
+## Dépannage
+
+### La mise à jour manuelle indique qu'aucune intégration de documentation active n'existe
+
+Connectez un dépôt de documentation dans **Paramètres > Déploiement > Paramètres Git**.
+
+### La mise à jour manuelle échoue en raison de détails de dépôt manquants
+
+Reconnectez l'application ou le dépôt du fournisseur Git. L'intégration active a besoin du propriétaire du dépôt, du nom du dépôt, de la branche et des détails d'installation de l'application.
+
+### La mise à jour réussit mais la page semble toujours obsolète
+
+Vérifiez :
+
+- le changement a été validé dans la branche configurée
+- l'élément d'activité s'est terminé avec succès
+- la page n'est pas ouverte sur une ancienne URL de prévisualisation
+- le cache du navigateur a été rafraîchi
+- la page modifiée est incluse dans la navigation `dubstack.json` lorsqu'elle devrait être publique
+
+### La capture d'écran de prévisualisation est obsolète
+
+Attendez le traitement de la capture d'écran après la fin de la mise à jour. Si le contenu du site a changé mais que la prévisualisation du tableau de bord ne l'a pas fait, exécutez une autre mise à jour manuelle après avoir confirmé que le site en direct s'affiche correctement.
+
+## Sujets connexes
+
+- [Dépannage du contrôle de version](/fr/deployment/source-control-troubleshooting)
+- [Synchronisation Git](/fr/deployment/git-sync)
+- [Fournisseurs Git](/fr/deployment/forgejo-github-gitlab)
+- [Déploiements de prévisualisation](/fr/deployment/preview-deployments)

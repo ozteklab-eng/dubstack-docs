@@ -1,0 +1,112 @@
+---
+title: Connecter Git
+description: Connectez un dépôt Git en tant que source du contenu de documentation.
+icon: git-branch
+---
+
+Git est la source de vérité pour le contenu de documentation publié.
+
+Lorsque Git est connecté, dubstack lit le contenu de documentation depuis votre dépôt, publie des artefacts synchronisés et crée des mises à jour de documentation via le même processus de révision que votre équipe utilise déjà.
+
+Vous pouvez éditer depuis le tableau de bord ou depuis un checkout Git local. La publication depuis le tableau de bord écrit de retour dans la source connectée lorsque cela est pris en charge, tandis que les poussées locales déclenchent le même chemin de synchronisation via des événements du fournisseur ou une mise à jour manuelle.
+
+## Fournisseurs pris en charge
+
+dubstack prend en charge la configuration source GitHub, la configuration source ou cible de copie GitLab lorsque cela est activé, et Forgejo pour un contexte de workflow auto-hébergé et des cibles de dépôt de copie.
+
+| Fournisseur | Cas d'utilisation |
+| --- | --- |
+| GitHub | Recommandé pour l'installation de l'application GitHub, l'accès au dépôt, les déploiements de prévisualisation et la rédaction basée sur les pull requests. |
+| GitLab | Utilisez-le lorsque votre dépôt de documentation se trouve dans GitLab, lorsque vous souhaitez une cible de copie GitLab, ou lorsque votre équipe examine les modifications via des demandes de fusion. |
+| Forgejo | Utilisez-le lorsque votre équipe exécute une instance Forgejo auto-hébergée pour le contexte de workflow source ou les cibles de dépôt de copie. Le mode source d'un déploiement Forgejo actif n'apparaît que lorsqu'il est activé pour l'espace de travail. |
+
+D'autres fournisseurs peuvent s'afficher dans le tableau de bord lorsqu'ils sont activés pour un espace de travail. Maintenez un seul source de production active à la fois.
+
+## Exigences du dépôt
+
+Votre dépôt doit contenir :
+
+- Un fichier `dubstack.json` à la racine du dépôt ou à la racine configurée des documents.
+- Des pages MDX référencées par la navigation.
+- Tous les actifs utilisés par la documentation.
+- Des spécifications OpenAPI facultatives pour les pages de référence d'API.
+
+La branche sélectionnée doit exister avant d'être connectée.
+
+## Connecter GitHub
+
+1. Ouvrez les paramètres Git du site.
+2. Choisissez GitHub.
+3. Installez ou configurez l'application GitHub pour le propriétaire du dépôt.
+4. Sélectionnez le dépôt et la branche.
+5. Confirmez la connexion.
+6. Exécutez une mise à jour manuelle pour synchroniser les premiers artefacts de contenu.
+
+Après la connexion, la page des paramètres Git affiche le dépôt, la branche, le statut de synchronisation et l'activité la plus récente.
+
+## Connecter GitLab
+
+1. Ouvrez les paramètres Git du site.
+2. Choisissez GitLab.
+3. Autorisez l'accès à GitLab lorsqu'une demande apparaît.
+4. Sélectionnez le dépôt et la branche.
+5. Confirmez la connexion.
+6. Exécutez une mise à jour manuelle pour synchroniser les premiers artefacts de contenu.
+
+Les fonctionnalités d'édition GitLab peuvent nécessiter une connexion OAuth supplémentaire afin que dubstack puisse créer des demandes de fusion au nom de l'utilisateur connecté.
+
+## Connectez Forgejo
+
+1. Ouvrez les paramètres Git du site.
+2. Choisissez Forgejo.
+3. Entrez l'URL de l'instance Forgejo.
+4. Entrez le propriétaire du dépôt, le dépôt, la branche et le jeton.
+5. Confirmez si le formulaire connecte une cible de copie de dépôt ou une source de déploiement active.
+6. Enregistrez la connexion.
+
+Les instances Forgejo doivent être accessibles depuis dubstack. Lorsque Forgejo est configuré en tant que cible de copie de dépôt, il reçoit des copies explicites à partir de la source de documents active et ne publie pas le site en direct. Lorsque Forgejo est configuré en tant que source de workflow, il fournit un contexte de code limité pour les workflows sans modifier la source de déploiement des documents.
+
+Si le mode de déploiement actif de Forgejo est activé pour votre espace de travail, exécutez une mise à jour manuelle après la connexion et vérifiez que la carte de la source de déploiement active affiche le dépôt Forgejo attendu avant de demander à vos collègues d'envoyer les modifications des documents là-bas.
+
+## Ce qui se passe après la connexion
+
+Une fois connecté :
+
+```text
+Repository update
+-> webhook or manual update
+-> sync worker
+-> published content artifacts
+-> live docs site
+```
+
+Si une synchronisation échoue, le site en direct continue à servir le contenu connu et fonctionnel précédent tandis que le tableau de bord signale l'échec.
+
+## Travaillez localement après la connexion
+
+Après la connexion à Git, les développeurs peuvent cloner le dépôt, éditer les fichiers MDX ou `dubstack.json`, valider et pousser.
+
+Utilisez une branche de fonctionnalité et une pull request pour les modifications importantes ou les branches protégées. Poussez directement sur la branche de déploiement uniquement si votre politique de dépôt permet la publication directe.
+
+Voir [Flux Git local](/fr/deployment/local-git-workflow) pour le flux complet en ligne de commande.
+
+## Vérifiez la connexion
+
+Vérifiez ces éléments après la connexion :
+
+- La page des paramètres Git affiche le fournisseur, le dépôt et la branche attendus.
+- La mise à jour manuelle s'effectue correctement.
+- Le site en direct affiche le contenu le plus récent.
+- Les déploiements d'aperçu fonctionnent pour les branches non production lorsqu'ils sont activés.
+- L'agent ou l'auteur de workflow n'est activé que pour les dépôts où l'accès en écriture est configuré.
+
+## Sujets connexes
+
+- [Flux Git local](/fr/deployment/local-git-workflow)
+- [Branchements et publication](/fr/editor/publishing)
+- [Fournisseurs Git](/fr/deployment/forgejo-github-gitlab)
+- [Dépannage du contrôle de source](/fr/deployment/source-control-troubleshooting)
+
+<Callout type="warning">
+  Ne connectez pas les déploiements démo gérés à des dépôts temporaires, sauf si vous testez intentionnellement la rédaction. Maintenez les déploiements de production connectés aux dépôts que votre équipe contrôle.
+</Callout>

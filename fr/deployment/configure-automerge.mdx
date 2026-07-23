@@ -1,0 +1,103 @@
+---
+title: "Configurer l'automerge"
+description: Autoriser les mises à jour de workflow GitHub sélectionnés à fusionner automatiquement lorsque vos règles de branche le permettent.
+icon: shield-check
+---
+
+Utilisez l'automerge uniquement pour des workflows étroits et bien testés où les mises à jour directes sont sécurisées.
+
+La plupart des dépôts de documentation de production devraient garder **Exiger une revue** activé. Configurez l'automerge lorsque vous souhaitez intentionnellement qu'un workflow mette à jour la branche de déploiement sans intervention humaine, et que vos règles GitHub bloqueraient autrement cette écriture.
+
+<Callout type="warning">
+  L'automerge modifie la politique du dépôt. Consultez les règles avec un administrateur de dépôt ou d'organisation avant d'autoriser toute application à contourner les règles de branche.
+</Callout>
+
+## Quand utiliser cela
+
+L'automerge est utile pour des workflows de maintenance à faible risque tels que :
+
+- corriger des fautes de frappe après un workflow de grammaire réussi
+- mettre à jour les pages de référence générées à partir d'une spécification d'API fiable
+- appliquer des petites modifications de maintenance planifiées
+
+Gardez **Exiger une revue** lorsque :
+
+- le workflow peut apporter des changements éditoriaux importants
+- le contexte source est important ou bruyant
+- le workflow est nouveau et n'a pas encore produit plusieurs exécutions correctes
+- votre dépôt nécessite l'approbation humaine pour des raisons de conformité
+
+## Prérequis
+
+Avant de modifier les règles GitHub, vérifiez :
+
+- votre site est connecté à GitHub depuis **Paramètres > Déploiement > Paramètres Git**
+- l'application GitHub a accès au dépôt de documentation
+- le workflow a déjà fonctionné en mode **Exiger une revue**
+- vous avez des droits d'administrateur sur le dépôt, et un accès d'administrateur d'organisation si une règlementation au niveau de l'organisation s'applique
+
+## Configurer la règlementation GitHub
+
+Répétez cela pour chaque règlementation ciblant la branche de déploiement. Les règles peuvent exister au niveau du dépôt et de l'organisation.
+
+<Steps>
+  <Step title="Ouvrir les règlementations GitHub">
+    Dans GitHub, ouvrez les paramètres du dépôt ou de l'organisation, puis allez dans **Règles > Règlementations**.
+  </Step>
+
+  <Step title="Sélectionner la règlementation">
+    Ouvrez la règlementation ciblant votre branche de déploiement, telle que `main`, `docs`, ou la branche configurée dans les paramètres Git.
+  </Step>
+
+  <Step title="Ajouter une entrée de contournement">
+    Dans la section contournement de la règlementation, ajoutez l'application GitHub dubstack.
+
+    Utilisez le mode de contournement le plus étroit qui soutient votre politique. Si votre workflow doit mettre à jour la branche automatiquement, l'application doit avoir la permission de contourner la règle qui bloque cette mise à jour.
+  </Step>
+
+  <Step title="Enregistrer la règlementation">
+    Enregistrez la règle et répétez la même modification pour toute autre règlementation au niveau du dépôt ou de l'organisation ciblant la branche de déploiement.
+  </Step>
+
+  <Step title="Testez avec un workflow étroit">
+    Exécutez manuellement un petit workflow et vérifiez que les détails de l'exécution montrent le commit, la pull request ou le résultat de mise à jour directe attendu.
+  </Step>
+</Steps>
+
+## Validez dans dubstack
+
+Après avoir mis à jour GitHub :
+
+1. Ouvrez **Automate > Workflows**.
+2. Ouvrez les paramètres du workflow.
+3. Définissez le mode de mise à jour sur **Automatiquement** uniquement si le workflow doit écrire sans validation.
+4. Exécutez le workflow une fois.
+5. Ouvrez les détails de l'exécution et vérifiez que le lien de résultat pointe vers la modification GitHub attendue.
+
+Si l'exécution ne peut pas écrire, revenez à **Exiger une validation** et inspectez l'erreur de l'exécution. GitHub indique généralement si un ensemble de règles, une règle de protection de branche, une permission d'application manquante ou un paramètre d'accès au dépôt a bloqué la mise à jour.
+
+## Dépannage
+
+### Le workflow ouvre une pull request au lieu de fusionner
+
+Le workflow est toujours en mode **Exiger une validation**, ou l'ensemble de règles ne permet pas les mises à jour automatiques. Vérifiez le mode de mise à jour du workflow et les entrées de bypass de l'ensemble de règles.
+
+### Le workflow échoue avec une erreur de branche protégée
+
+Vérifiez chaque ensemble de règles qui cible la branche de déploiement. Les ensembles de règles au niveau de l'organisation s'appliquent en plus des ensembles de règles au niveau du dépôt.
+
+### L'application n'est pas disponible dans la liste de bypass
+
+Confirmez que l'application GitHub est installée sur l'organisation ou le compte propriétaire du dépôt, et que le dépôt est inclus dans l'installation de l'application.
+
+### La mauvaise branche a été mise à jour
+
+Ouvrez **Paramètres > Déploiement > Paramètres Git** et vérifiez la branche de déploiement. Le workflow écrit dans le dépôt et la branche de documentation active, sauf si une branche de révision est créée pour le mode de mise à jour sélectionné.
+
+## Sujets connexes
+
+- [GitHub](/fr/deployment/github)
+- [Configurer les exécutions de workflow](/fr/workflows/configuration)
+- [Gérer les workflows](/fr/workflows/manage)
+- [Permissions de déploiement](/fr/dashboard/deployment-permissions)
+- [Dépannage du contrôle de source](/fr/deployment/source-control-troubleshooting)

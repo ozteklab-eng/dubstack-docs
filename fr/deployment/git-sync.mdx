@@ -1,0 +1,85 @@
+---
+title: Synchronisation Git
+description: Synchroniser le contenu basé sur Git dans R2 pour le rendu du frontend.
+icon: refresh-cw
+---
+
+Git est la source de vérité à l'écrit. R2 est la source de lecture pour les sites de documentation déployés.
+
+## Flux de données
+
+```text
+Author edits docs
+-> Git commit
+-> Git webhook or manual sync
+-> Git sync worker
+-> R2 content artifacts
+-> Content API
+-> frontend renderer
+```
+
+Le frontend doit lire les artefacts publiés. Il ne doit pas lire les fichiers locaux ou créer du contenu de remplacement lorsqu'un artefact publié est manquant.
+
+## Artefacts
+
+La synchronisation Git publie la configuration des documents, la navigation, le contenu des pages, les métadonnées et les balises de version/cache dans R2.
+
+`dubstack.json` est le fichier de configuration du site canonical. Il contrôle la navigation des documents, les tokens de thème, le comportement de l'en-tête/pied de page, les widgets, les actions contextuelles et les paramètres de documentation en temps réel.
+
+## Les copies de dépôt ne sont pas des miroirs
+
+La synchronisation Git est le pipeline de publication à partir de la source de documentation active vers les artefacts de lecture déployés. Ce n'est pas la même chose que la copie de fichiers entre les fournisseurs Git.
+
+Utilisez **copies de dépôt** dans les paramètres Git lorsque vous souhaitez copier la source de documentation active vers un autre fournisseur connecté pour une sauvegarde, un test de fournisseur ou une répétition de migration. Les copies manuelles s'exécutent à partir des paramètres Git ; les copies récurrentes s'exécutent via le workflow **cibles de copie de dépôt**.
+
+Copies de dépôt :
+
+- copier les fichiers de documentation actuels sur demande
+- garder la source de déploiement actuelle inchangée
+- ne pas créer un miroir automatique
+- ne pas remplacer les webhooks du fournisseur ou la synchronisation de déploiement
+- ne pas consommer des crédits d'IA lorsqu' l'opération ne copie que les fichiers du dépôt
+
+Si vous souhaitez qu'un autre fournisseur devienne la source de déploiement en direct, configurez ce fournisseur explicitement et basculez la source de déploiement active après avoir validé le dépôt copié.
+
+## Comportement du cache
+
+Après une synchronisation ou un déploiement réussi, les caches doivent passer à la nouvelle version de l'artefact.
+
+La solution de secours acceptée est l'artefact antérieur connu et fiable pour le même locataire ou aperçu. dubstack ne doit pas utiliser des valeurs par défaut de runtime fictives comme remplacement des données d'origine manquantes.
+
+## Purge du cache de déploiement Cloudflare
+
+Les déploiements de Worker Cloudflare purgent maintenant automatiquement la zone Cloudflare pertinente après un déploiement réussi.
+
+L'assistant de purge de déploiement :
+
+- charge les identifiants Cloudflare locaux à partir des fichiers d'environnement ignorés au moment du déploiement
+- résout la zone cible à partir de la configuration de route active de Wrangler
+- prend en charge les routes frontend web à partir de `wrangler.jsonc`
+- prend en charge les routes de worker wiki à partir de `wrangler.toml`
+- purgent `dubstack.live` pour le déploiement web par défaut
+- purgent `dubstack.ai` et `dubstack.live` pour les déploiements web de production
+- purgent `dubstack.wiki` pour les déploiements de worker wiki
+
+Cela évite les URLs de buster de cache pour la validation de déploiement normal.
+
+## Validation
+
+Utilisez ces vérifications lorsque vous modifiez le comportement de synchronisation ou de déploiement :
+
+```bash
+# Web frontend deploy path
+pnpm --filter @dubstack/web run deploy:cf
+
+# Direct web zone purge validation
+apps/web/scripts/purge-cloudflare-zone-cache.sh
+
+# Production route purge validation
+DUBSTACK_WEB_DEPLOY_ENV=production apps/web/scripts/purge-cloudflare-zone-cache.sh
+
+# Wiki route purge validation
+WRANGLER_CONFIG=workers/dubstack-wiki/wrangler.toml apps/web/scripts/purge-cloudflare-zone-cache.sh
+```
+
+Un déploiement réussi doit se terminer par une ligne de complétion de purge de zone Cloudflare pour la zone attendue.

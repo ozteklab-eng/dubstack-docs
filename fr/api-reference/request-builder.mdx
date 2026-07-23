@@ -1,0 +1,143 @@
+---
+title: Générateur de requêtes
+description: "Comprenez comment l'API Playground génère les entrées de requête à partir des paramètres OpenAPI, des corps, des exemples et des schémas de sécurité."
+icon: panel-top
+---
+
+Le générateur de requêtes est le formulaire interactif des pages de points de terminaison API générées.
+
+Il lit votre opération OpenAPI et transforme ses métadonnées en entrées de requête, exemples de code et aperçus de réponse.
+
+## Source de vérité
+
+Le générateur de requêtes est produit à partir de la spécification OpenAPI publiée référencée par `dubstack.json`.
+
+```json
+{
+  "api": {
+    "openapi": "api-reference/openapi.json",
+    "playground": {
+      "display": "interactive"
+    }
+  }
+}
+```
+
+Pour chaque opération, dubstack lit :
+
+| Champ OpenAPI | Comportement du générateur de requêtes |
+| --- | --- |
+| `servers` | Fournit l'URL de base pour la requête. |
+| `parameters` | Crée les entrées de chemin, de requête, d'en-tête et de cookie. |
+| `requestBody` | Crée les champs de corps JSON et les exemples de charge utile de requête. |
+| `components.securitySchemes` | Crée les entrées d'authentification. |
+| `security` | Indique quels schémas d'authentification s'appliquent. |
+| `responses` | Crée les onglets de réponse documentés et les exemples. |
+| `examples` et `example` | Préremplit les charges utiles de requête et de réponse lorsque disponibles. |
+
+## Entrées requises
+
+Marquez les valeurs requises dans OpenAPI afin que les lecteurs sachent ce qui doit être fourni avant d'envoyer une requête.
+
+```json
+{
+  "parameters": [
+    {
+      "name": "projectId",
+      "in": "path",
+      "required": true,
+      "schema": {
+        "type": "string"
+      },
+      "description": "The project identifier."
+    }
+  ]
+}
+```
+
+Les champs requis sont signalés dans la vue de documentation et le générateur de requêtes interactif.
+
+## Exemples de corps de requête
+
+Utilisez les exemples de requête pour fournir des charges utiles initiales réalistes au générateur.
+
+```json
+{
+  "requestBody": {
+    "required": true,
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "#/components/schemas/CreateProjectRequest"
+        },
+        "examples": {
+          "minimal": {
+            "summary": "Minimal project",
+            "value": {
+              "name": "Developer docs"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Si aucun exemple n'est fourni, dubstack génère une charge utile de secours à partir du type de schéma, des valeurs par défaut, des énumérations et des exemples de champ.
+
+## Entrées d'authentification
+
+Les schémas de sécurité créent des contrôles d'authentification.
+
+```json
+{
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ]
+}
+```
+
+Les lecteurs entrent leurs propres identifiants avant d'envoyer une requête. Ne commettez pas d'identifiants réels dans votre spécification OpenAPI.
+
+## Exemples de code
+
+La colonne latérale droite génère des exemples de code à partir de la forme actuelle de la requête.
+
+Les exemples générés utilisent la méthode sélectionnée, l'URL, les en-têtes, les valeurs d'authentification et les champs de corps. Ils sont destinés à être des points de départ, et non une alternative pour la documentation complète de l'SDK.
+
+## Lorsque le générateur est désactivé
+
+Le générateur interactif est désactivé lorsque :
+
+- la page du point de terminaison contient `playground: none`
+- l'opération n'est pas mappée aux métadonnées OpenAPI
+- la spécification ne peut pas être chargée
+- la spécification ne fournit pas d'URL de base utilisable pour envoyer des requêtes
+
+Utilisez `playground: none` pour les pages internes, risquées ou explicatives qui doivent afficher la documentation sans outil interactif.
+
+```mdx
+---
+title: Delete project
+openapi: "DELETE /v1/projects/{projectId}"
+playground: none
+---
+```
+
+## Sujets connexes
+
+- [Requêtes API en direct](/fr/api-reference/live-requests)
+- [Exemples de code](/fr/api-reference/code-examples)
+- [Authentification de l'API Playground](/fr/api-reference/playground-authentication)
+- [Exemples de réponses](/fr/api-reference/response-examples)

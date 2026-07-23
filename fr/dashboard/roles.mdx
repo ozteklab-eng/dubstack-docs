@@ -1,0 +1,98 @@
+---
+title: Rôles
+description: "Comprenez les accès administrateur, éditeur et lecteur dans dubstack."
+icon: shield-check
+---
+
+Les rôles contrôlent ce que les membres peuvent visualiser, modifier, publier et configurer au sein d'une organisation dubstack.
+
+Utilisez les rôles pour fluidifier le travail quotidien sur la documentation tout en réservant les paramètres sensibles aux administrateurs de confiance.
+
+<Callout type="info">
+  Les contrôles d'accès basés sur les rôles s'appliquent aux actions du tableau de bord. Les permissions du fournisseur Git sont séparées et doivent être examinées dans votre organisation GitHub, GitLab ou Forgejo.
+</Callout>
+
+## Résumé des rôles
+
+| Capacité | Lecteur | Éditeur | Administrateur |
+| --- | :---: | :---: | :---: |
+| Visualiser le tableau de bord et le contenu | Oui | Oui | Oui |
+| Poser des questions à l'agent | Oui | Oui | Oui |
+| Modifier le contenu des documents | Non | Oui | Oui |
+| Publier du contenu | Non | Oui | Oui |
+| Déclencher les déploiements | Non | Oui | Oui |
+| Gérer la navigation et la configuration du site | Non | Oui | Oui |
+| Créer des clés d'API d'administrateur | Non | Oui | Oui |
+| Configurer les intégrations | Non | Oui | Oui |
+| Configurer l'assistant et les workflows | Non | Oui | Oui |
+| Inviter les éditeurs et les lecteurs | Non | Oui | Oui |
+| Inviter les administrateurs | Non | Non | Oui |
+| Mettre à jour les rôles des membres | Non | Non | Oui |
+| Révoquer les identifiants détenus par les membres | Non | Non | Oui |
+| Supprimer les membres | Non | Non | Oui |
+| Gérer la facturation | Non | Non | Oui |
+| Gérer le SSO | Non | Non | Oui |
+| Gérer les domaines personnalisés | Non | Non | Oui |
+| Changer la source Git | Non | Non | Oui |
+| Supprimer l'organisation | Non | Non | Oui |
+
+## Administrateur
+
+Les administrateurs gèrent les paramètres opérationnels de l'organisation.
+
+Les administrateurs peuvent :
+
+- inviter et supprimer des membres
+- changer les rôles des membres
+- gérer la facturation et les paramètres du plan
+- configurer le SSO et les domaines personnalisés
+- changer les paramètres de la source du dépôt
+- configurer les intégrations et le comportement des workflows
+
+Attribuez le rôle d'administrateur aux propriétaires de plateforme, aux responsables de la documentation ou de l'ingénierie qui supervisent les opérations de documentation en production.
+
+Le premier membre qui crée un espace de travail devient l'administrateur principal. Maintenez au moins un compte d'administrateur durable contrôlé par l'entreprise protégé par une authentification forte.
+
+## Éditeur
+
+Les éditeurs gèrent le contenu et les workflows de publication.
+
+Les éditeurs peuvent :
+
+- modifier les pages et la configuration du site
+- publier les modifications du contenu
+- déclencher les déploiements et les mises à jour manuelles
+- configurer le comportement de l'assistant et des workflows
+- créer des clés API Admin avec portée pour les déclencheurs de workflow fiables
+- inviter des collègues éditeurs ou lecteurs
+
+Les éditeurs n'ont pas besoin de facturation, de SSO, de domaine personnalisé ou de l'administration de sources Git pour le travail normal de documentation.
+
+## Lecteur
+
+Les lecteurs peuvent consulter l'état du tableau de bord sans modifier les documents de production.
+
+Les lecteurs peuvent :
+
+- voir le tableau de bord et les zones d'analyse disponibles
+- lire le contenu des documents dans l'éditeur
+- poser des questions sur la documentation via les interfaces d'agents activées
+
+Utilisez le rôle de lecteur pour les parties prenantes, le personnel de support ou les réviseurs qui ont besoin de visibilité sans pouvoir publier ni configurer les documents.
+
+## Comment les autorisations sont appliquées
+
+Les actions du tableau de bord sont vérifiées par rapport au rôle du membre dans l'organisation. dubstack reflète également ces relations dans le niveau d'autorisation des ressources d'organisation, de site, d'agent, de workflow et d'intégration.
+
+Si une action est bloquée, vérifiez :
+
+1. L'utilisateur connecté est membre de l'organisation correcte.
+2. Le membre a le rôle requis.
+3. La fonctionnalité est activée pour le niveau d'espace de travail.
+4. L'intégration ou la source Git concernée est connectée.
+
+## Sujets connexes
+
+- [Membres de l'équipe](/fr/dashboard/team-members)
+- [Permissions de déploiement](/fr/dashboard/deployment-permissions)
+- [Facturation et forfaits](/fr/dashboard/billing-plans)

@@ -1,0 +1,57 @@
+---
+title: "Intégrations d'analyse"
+description: "Envoyez le trafic des documents publiés à votre fournisseur d'analyse et conservez les analyses intégrées de dubstack disponibles dans le tableau de bord."
+icon: chart-network
+---
+
+Les intégrations d'analyse ajoutent des balises de fournisseur au site des documents publiés.
+
+Utilisez cette famille lorsque votre équipe souhaite que le trafic des documents apparaisse dans son espace de travail d'analyse existant tout en maintenant les analyses de trafic, de recherche, d'assistant et de feedback intégrées de dubstack disponibles dans le tableau de bord.
+
+<Info>
+  Les identifiants d'analyse exécutés dans le navigateur doivent être des ID de projet publics ou des ID de mesure publics. Ne publiez pas de secrets côté serveur ou de jetons d'écriture dans votre dépôt de documents.
+</Info>
+
+## Fournisseurs pris en charge
+
+dubstack documente actuellement la configuration pour :
+
+- Google Analytics 4
+- Google Tag Manager
+- Plausible, y compris Plausible auto-hébergé
+- PostHog, y compris les hôtes API auto-hébergés ou régionaux
+
+Configurez l'analyse depuis le tableau de bord ou sous l'objet `integrations` de niveau supérieur dans `dubstack.json`.
+
+Voyez [Intégrations d'analyse](/fr/optimize/analytics-integrations) pour les paramètres et exemples spécifiques au fournisseur.
+
+## Analyse intégrée
+
+Les analyses tierces ne remplacent pas les analyses de déploiement intégrées.
+
+Le tableau de bord peut toujours afficher :
+
+- vues de page et visiteurs
+- activité de recherche
+- utilisation de l'assistant
+- événements de feedback
+- exports lorsqu'ils sont activés
+
+Voyez [Analyse](/fr/optimize/analytics) pour le modèle de rapport du tableau de bord.
+
+## Domaines personnalisés et CSP
+
+Pour les domaines personnalisés :
+
+- utilisez le nom d'hôte public final dans les tableaux de bord des fournisseurs
+- autorisez les hôtes de scripts des fournisseurs dans votre Politique de Sécurité du Contenu si vous configurez les en-têtes CSP
+- vérifiez que les documents montés par route chargent toujours les scripts des fournisseurs à partir du chemin public
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/optimize/analytics-integrations">Intégrations d'analyse</a>
+  <a href="/fr/optimize/analytics">Analyse</a>
+  <a href="/fr/deployment/csp-configuration">Configuration du CSP</a>
+  <a href="/fr/ai/integrations/privacy">Intégrations de confidentialité</a>
+</RelatedTopics>

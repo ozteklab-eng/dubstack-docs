@@ -1,0 +1,103 @@
+---
+title: Bannières
+description: "Ajoutez une bannière d'annonce sur tout le site à partir de dubstack.json."
+icon: megaphone
+---
+
+Les bannières affichent une annonce courte au-dessus de l'interface de documentation.
+
+Utilisez-les pour les annonces de lancement, les périodes de maintenance, les avertissements de migration ou d'autres messages qui doivent être visibles sur tout le site publié.
+
+## Ajouter une bannière
+
+Définissez l'objet `banner` au niveau supérieur dans `dubstack.json`.
+
+```json
+{
+  "banner": {
+    "content": "API v2 is now available. Review the migration guide before upgrading.",
+    "type": "info",
+    "dismissible": true
+  }
+}
+```
+
+Après la publication, la bannière apparaît au-dessus de l'en-tête de la page.
+
+## Types de bannières
+
+| Type | Utilisez-le pour |
+| --- | --- |
+| `info` | Annonces générales, lancements et notes de version. |
+| `warning` | Maintenance planifiée, dépréciations à venir ou limitations temporaires. |
+| `critical` | Avis urgents nécessitant une attention immédiate. |
+
+Si `type` est omis, la bannière utilise `info`.
+
+## Couleurs personnalisées
+
+Utilisez `color` lorsque la bannière ne doit pas utiliser la couleur par défaut du type.
+
+```json
+{
+  "banner": {
+    "content": "Join the developer preview before July 31.",
+    "dismissible": true,
+    "color": {
+      "light": "#0F766E",
+      "dark": "#14B8A6"
+    }
+  }
+}
+```
+
+Vous pouvez également passer une chaîne hexadécimale unique lorsque la même couleur doit être utilisée en mode clair et sombre.
+
+```json
+{
+  "banner": {
+    "content": "Status update: all systems are operational.",
+    "color": "#15803D"
+  }
+}
+```
+
+## Bannières masquables
+
+Définissez `dismissible` sur `true` lorsque les lecteurs doivent pouvoir masquer la bannière.
+
+```json
+{
+  "banner": {
+    "content": "We are updating examples this week.",
+    "type": "warning",
+    "dismissible": true
+  }
+}
+```
+
+Le masquage est local au navigateur du lecteur et lié au contenu de la bannière. Si vous modifiez le texte de la bannière, la bannière mise à jour apparaît à nouveau.
+
+## Propriétés
+
+<ResponseField name="content" type="string" required>
+  Texte affiché dans la bannière. Restez concis et ajoutez un lien vers une page complète lorsque le message nécessite plus de détails.
+</ResponseField>
+
+<ResponseField name="type" type="string" default="info">
+  Traitement de la bannière. Les valeurs prises en charge sont `info`, `warning` et `critical`.
+</ResponseField>
+
+<ResponseField name="dismissible" type="boolean" default="false">
+  Si les lecteurs peuvent fermer la bannière localement.
+</ResponseField>
+
+<ResponseField name="color" type="string | object">
+  Couleur d'arrière-plan personnalisée facultative. Utilisez une chaîne hexadécimale pour une seule couleur, ou un objet avec les clés `light` et `dark` pour des couleurs spécifiques aux modes.
+</ResponseField>
+
+## Quand éviter les bannières
+
+Évitez les bannières pour les liens de navigation normaux, le contenu marketing permanent ou les messages qui ne s'appliquent qu'à une seule page.
+
+Pour les notifications propres à une page, utilisez un [encadré](/fr/writing-content/callouts) dans le contenu de la page.

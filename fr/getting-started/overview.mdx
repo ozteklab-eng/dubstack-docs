@@ -1,0 +1,63 @@
+---
+title: Aperçu
+description: "Comprenez les principaux chemins d'intégration de dubstack."
+icon: book-open
+---
+
+dubstack donne à chaque site une source de vérité basée sur Git, un éditeur de tableau de bord et un frontend de documentation publiée.
+
+La plupart des équipes commencent de l'une des deux manières :
+
+<CardGroup cols={2}>
+  <Card title="Connectez votre dépôt" icon="git-branch" href="/fr/getting-started/connect-git">
+    Utilisez un dépôt GitHub, GitLab ou Forgejo existant lorsque vos documents sont déjà hébergés avec votre code ou que votre équipe souhaite posséder le dépôt dès le premier jour.
+  </Card>
+  <Card title="Commencez par un dépôt hébergé" icon="cloud" href="/fr/getting-started/skip-git-hosted-repo">
+    Laissez dubstack créer d'abord un site de documentation basé sur un modèle de départ, puis connectez un dépôt possédé par le client plus tard.
+  </Card>
+</CardGroup>
+
+## Comment fonctionne la publication
+
+Un site dubstack a trois couches :
+
+| Couche | Objectif |
+| --- | --- |
+| Source | Vos fichiers MDX, vos actifs, vos spécifications OpenAPI et `dubstack.json` dans Git. |
+| Synchronisation | Le chemin de publication qui transforme le contenu source en artefacts de site versionnés. |
+| Exécution | Le frontend de documentation publique sur `dubstack.live` ou votre domaine personnalisé. |
+
+```text
+Git source
+-> dubstack sync
+-> published content artifacts
+-> docs frontend
+```
+
+Cela rend l'édition et la publication prévisibles. Le tableau de bord peut vous aider à éditer les fichiers, mais le site publié est toujours piloté par le contenu source synchronisé.
+
+## Quoi configurer en premier
+
+1. Créez le site et choisissez une option de source.
+2. Confirmez que la prévisualisation en direct s'ouvre sur le domaine `dubstack.live` généré.
+3. Mettez à jour la page d'accueil ou la page de démarrage rapide.
+4. Consultez `dubstack.json` afin que la navigation corresponde à votre structure souhaitée.
+5. Ajoutez une spécification OpenAPI si vous avez des documents de référence API.
+6. Invitez des collègues après que le site ait une source et un chemin de déploiement fonctionnels.
+
+## Pages recommandées en premier
+
+Commencez par un petit nombre de pages qui répondent à des questions réelles des utilisateurs :
+
+- Aperçu ou introduction
+- Démarrage rapide
+- Authentification ou guide de configuration
+- Concepts de base
+- Introduction à la référence API
+- Dépannage
+
+Ajoutez des sections plus approfondies une fois que la première publication est opérationnelle.
+
+<Callout type="info">
+  Tenez chaque première modification petite. Une première publication ciblée vérifie la source complète, la synchronisation et le chemin d'exécution avant que votre équipe ne migre des ensembles de documents plus importants.
+</Callout>

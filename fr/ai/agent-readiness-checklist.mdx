@@ -1,0 +1,177 @@
+---
+title: "Checklist de préparation de l'agent"
+description: "Vérifiez les fichiers lisibles par l'IA, le serveur MCP, l'export Markdown, le sitemap, le robots.txt, les données structurées et les chemins de découverte OpenAPI pour un site de documentation publié."
+icon: list-checks
+---
+
+Utilisez cette checklist après la publication d'un site de documentation ou après avoir modifié les paramètres d'indexation, de référence d'API, de domaine personnalisé ou de proxy inverse.
+
+Exécutez les vérifications sur le domaine public de documentation utilisé par les lecteurs et les agents.
+
+```bash
+export DOCS_URL="https://your-docs-domain.com"
+```
+
+## Fichiers IA de base
+
+Vérifiez d'abord les fichiers au niveau du site.
+
+```bash
+curl -I "$DOCS_URL/llms.txt"
+curl -I "$DOCS_URL/llms-full.txt"
+curl -I "$DOCS_URL/skill.md"
+```
+
+Résultat attendu :
+
+| Fichier | Réponse attendue |
+| --- | --- |
+| `/llms.txt` | `200` avec `text/plain`. |
+| `/llms-full.txt` | `200` avec `text/plain`. |
+| `/skill.md` | `200` avec `text/markdown`. |
+
+Si un fichier retourne `404`, vérifiez si l'indexation publique est désactivée pour le déploiement.
+
+## Export Markdown
+
+Vérifiez l'export Markdown au niveau de la page via l'URL et la négociation de contenu.
+
+```bash
+curl -I "$DOCS_URL/quickstart.md"
+curl -I -H "Accept: text/markdown" "$DOCS_URL/quickstart"
+curl -I -H "Accept: text/plain" "$DOCS_URL/quickstart"
+```
+
+Résultat attendu :
+
+- Les URLs `.md` retournent `text/markdown`.
+- `Accept: text/markdown` retourne `text/markdown`.
+- `Accept: text/plain` retourne le même contenu exporté avec `text/plain`.
+
+## Découverte MCP
+
+Vérifiez le serveur MCP public et les métadonnées de découverte.
+
+```bash
+curl -s "$DOCS_URL/.well-known/mcp" | jq
+curl -s "$DOCS_URL/.well-known/mcp/server-card.json" | jq
+curl -s "$DOCS_URL/.well-known/mcp/server-cards.json" | jq
+```
+
+Résultat attendu :
+
+- `/.well-known/mcp` et `/.well-known/mcp.json` pointent vers `$DOCS_URL/mcp`.
+- La carte du serveur liste les outils MCP disponibles.
+- Les sites de documentation publique utilisent un accès non authentifié pour le serveur MCP de recherche publique.
+
+## Découverte des compétences
+
+Vérifiez les métadonnées de découverte des compétences de l'agent.
+
+```bash
+curl -s "$DOCS_URL/.well-known/agent-skills/index.json" | jq
+curl -s "$DOCS_URL/.well-known/skills/index.json" | jq
+curl -s "$DOCS_URL/.well-known/agent-card.json" | jq
+```
+
+Résultat attendu :
+
+- Le manifeste agent-skills inclut un hachage `sha256`.
+- L'index des compétences compatibles liste `SKILL.md`.
+- La carte de l'agent contient un lien vers le fichier de compétence disponible.
+
+Utilisez l'URL de compétence renvoyée par le manifeste de découverte au lieu de deviner le chemin de la compétence.
+
+## Découverte de la recherche et de l'indexation
+
+Vérifiez les fichiers de recherche et de navigation.
+
+```bash
+curl -I "$DOCS_URL/robots.txt"
+curl -I "$DOCS_URL/sitemap.xml"
+```
+
+Résultat attendu :
+
+- Les sites indexables publiquement retournent un sitemap avec les URL de page.
+- Les sites avec l'indexation publique désactivée retournent un sitemap vide et des directives robots de blocage de navigation.
+
+Pour les exclusions au niveau de la page, définissez `noindex: true` ou `hidden: true` dans le frontmatter de la page et publiez à nouveau.
+
+<Callout type="warning">
+  Si vos documents sont derrière un proxy ou un CDN, inspectez le corps de `/robots.txt`, et non seulement le code d'état. Certains services de périphérie peuvent injecter des règles de navigation ou de signaux de contenu gérés avant les directives générées par dubstack. Pour un site de documentation publique lisible par l'IA, confirmez que la réponse finale autorise le trafic agent et navigateur que vous attendez.
+</Callout>
+
+## Données structurées
+
+Vérifiez que la page d'accueil inclut du JSON-LD.
+
+```bash
+curl -s "$DOCS_URL" | grep 'application/ld+json'
+```
+
+Résultat attendu :
+
+- La page inclut un bloc JSON-LD avec les entrées `Organization` et `WebSite` dérivées des métadonnées du site publié.
+
+## Découverte OpenAPI
+
+Si le site publie une référence d'API, vérifiez les alias OpenAPI bruts.
+
+```bash
+curl -I "$DOCS_URL/openapi.json"
+curl -I "$DOCS_URL/api/openapi.json"
+curl -I "$DOCS_URL/api-reference/openapi.json"
+```
+
+Résultat attendu :
+
+- Chaque alias retourne le document OpenAPI brut avec `application/json`.
+- La réponse contient les éléments de premier niveau `openapi`, `info` et `paths`.
+
+Le point de terminaison des métadonnées du playground du navigateur est séparé :
+
+```bash
+curl -s "$DOCS_URL/api/playground/spec" | jq
+```
+
+Cet endpoint retourne la spécification publiée plus les métadonnées d'affichage du playground.
+
+## Vérifications de proxy inverse et du sous-chemin `/docs`
+
+Si le site est monté sous un sous-chemin tel que `example.com/docs`, exécutez les mêmes vérifications avec le sous-chemin inclus :
+
+```bash
+export DOCS_URL="https://example.com/docs"
+```
+
+Confirmez que votre proxy transfère :
+
+- `$DOCS_URL/llms.txt`
+- `$DOCS_URL/skill.md`
+- `$DOCS_URL/mcp`
+- `$DOCS_URL/.well-known/mcp`
+- `$DOCS_URL/.well-known/agent-card.json`
+- `$DOCS_URL/.well-known/agent-skills/index.json`
+- `$DOCS_URL/openapi.json`, si le site dispose d'une référence d'API
+
+Voyez [Proxy inverse](/fr/deployment/reverse-proxy) pour les exigences de route et d'en-tête.
+
+## Dépannage
+
+| Symptôme | Vérifiez |
+| --- | --- |
+| Les fichiers IA retournent `404` | L'indexation publique peut être désactivée, ou le déploiement n'a pas encore terminé la mise à jour. |
+| Les chemins `.well-known` fonctionnent sur l'origine mais pas sur le domaine personnalisé | Transférez les chemins `.well-known` via le proxy inverse ou le CDN. |
+| L'export Markdown retourne du HTML | Vérifiez l'en-tête `Accept` et assurez-vous que la requête concerne une page de documentation, et non une route d'application protégée. |
+| Les alias OpenAPI renvoient `404` | Confirmez que le site dispose d'une spécification OpenAPI publiée configurée dans `dubstack.json`. |
+| La carte du site est vide | Vérifiez les contrôles d'indexation du déploiement et le frontmatter au niveau de la page `hidden` ou `noindex`. |
+
+## Sujets connexes
+
+- [Fichiers de découverte IA](/fr/ai/ai-discovery-files)
+- [Export Markdown](/fr/ai/markdown-export)
+- [Fichier de compétence généré](/fr/ai/generated-skill-file)
+- [MCP](/fr/ai/mcp)
+- [Configuration OpenAPI](/fr/api-reference/openapi-setup)
+- [Proxy inverse](/fr/deployment/reverse-proxy)

@@ -1,0 +1,130 @@
+---
+title: Colonnes
+description: Organisez le contenu MDX lié dans des colonnes réactives.
+icon: columns-3
+---
+
+Utilisez `Columns` lorsque plusieurs blocs courts sont côte à côte : comparaisons, exemples regroupés ou explications de fonctionnalités compactes.
+
+Les colonnes se replient sur les écrans plus étroits, ce qui permet de conserver une lecture lisible sur les tablettes et les téléphones.
+
+## Colonnes basiques
+
+<Columns cols={2}>
+  <Column>
+    ### Contenu géré par Git
+
+    Gardez les pages, les actifs et la configuration dans le même dépôt pour maintenir l'alignement entre les prévisualisations et la production.
+  </Column>
+
+  <Column>
+    ### Artéfacts publiés
+
+    dubstack lit les artéfacts publiés synchronisés pour un rendu rapide des documents publics.
+  </Column>
+</Columns>
+
+```mdx
+<Columns cols={2}>
+  <Column>
+    ### Git-backed content
+
+    Keep pages, assets, and configuration in the same repository.
+  </Column>
+
+  <Column>
+    ### Published artifacts
+
+    dubstack reads synchronized published artifacts for public docs.
+  </Column>
+</Columns>
+```
+
+## Cartes dans les colonnes
+
+Utilisez `Columns` pour un contenu MDX mixte et `CardGroup` pour des cartes de navigation pures. Si chaque élément est une carte de lien, privilégiez [cartes](/fr/writing-content/cards).
+
+<Columns cols={2}>
+  <Card title="Déploiements de prévisualisation" href="/fr/deployment/preview-deployments" icon="git-pull-request">
+    Examinez les documents propres à la branche avant de les fusionner.
+  </Card>
+
+  <Card title="Mises à jour manuelles" href="/fr/deployment/manual-updates-history" icon="refresh-cw">
+    Déclenchez et examinez les tâches de publication depuis le tableau de bord.
+  </Card>
+</Columns>
+
+```mdx
+<Columns cols={2}>
+  <Card title="Preview deployments" href="/deployment/preview-deployments" icon="git-pull-request">
+    Review branch-specific docs before merging.
+  </Card>
+
+  <Card title="Manual updates" href="/deployment/manual-updates-history" icon="refresh-cw">
+    Trigger and review publish jobs from the dashboard.
+  </Card>
+</Columns>
+```
+
+## Trois colonnes
+
+Utilisez trois colonnes pour des résumés très courts. Évitez les longs paragraphes, les tables larges ou les blocs de code importants dans les dispositions en trois colonnes.
+
+<Columns cols={3}>
+  <Column>
+    **Écrire**
+
+    Modifiez les fichiers MDX et `dubstack.json` dans Git.
+  </Column>
+
+  <Column>
+    **Prévisualiser**
+
+    Examinez les modifications dans les prévisualisations de branche.
+  </Column>
+
+  <Column>
+    **Publier**
+
+    Fusionnez et synchronisez les artéfacts publiés.
+  </Column>
+</Columns>
+
+```mdx
+<Columns cols={3}>
+  <Column>
+    **Write**
+
+    Edit MDX and `dubstack.json` in Git.
+  </Column>
+
+  <Column>
+    **Preview**
+
+    Review changes in branch previews.
+  </Column>
+
+  <Column>
+    **Publish**
+
+    Merge and sync published artifacts.
+  </Column>
+</Columns>
+```
+
+## Propriétés
+
+<ResponseField name="cols" type="number" default="2">
+  Nombre de colonnes sur les écrans larges. Utilisez `2` pour la plupart des dispositions et `3` uniquement pour du contenu court.
+</ResponseField>
+
+<ResponseField name="children" type="MDX content" required>
+  Le contenu rendu dans la grille de colonnes. Utilisez les enveloppes `Column` lorsque chaque colonne contient plusieurs blocs.
+</ResponseField>
+
+## Conseils
+
+- Gardez chaque colonne courte et facile à parcourir.
+- N'incluez pas de tables larges ou d'exemples d'API importants dans les colonnes.
+- Utilisez `CardGroup` lorsque chaque enfant est une carte de navigation.
+- Testez la page à la largeur mobile lors de l'utilisation de trois colonnes.

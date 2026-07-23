@@ -1,0 +1,218 @@
+---
+title: Référence SEO et recherche
+description: "Référence par champ pour l'indexation, les métadonnées, la recherche, les fichiers de découverte par IA et les surfaces de retour public."
+icon: search-check
+---
+
+Utilisez ces paramètres pour contrôler la découverte par les humains, les moteurs de recherche et les agents d'IA.
+
+## Métadonnées du site
+
+| Champ | Type | Objectif |
+| --- | --- | --- |
+| `site.name` | chaîne | Titre du site utilisé dans les métadonnées, les étiquettes de l'interface utilisateur, la découverte par IA et les étiquettes MCP. |
+| `site.tagline` | chaîne | Brève description du site utilisée dans les métadonnées et les surfaces de découverte. |
+
+```json
+{
+  "site": {
+    "name": "Acme Docs",
+    "tagline": "Developer documentation for Acme."
+  }
+}
+```
+
+Utilisez le frontmatter de la page pour les titres et descriptions spécifiques à la page. Utilisez les métadonnées du site global pour les paramètres par défaut.
+
+## Frontmatter de la page
+
+| Champ | Type | Objectif |
+| --- | --- | --- |
+| `title` | chaîne | Titre de la page et libellé de navigation de secours. |
+| `description` | chaîne | Résumé de la page utilisé par les métadonnées, les extraits de recherche et les index lisibles par l'IA. |
+| `icon` | chaîne | Icône de la page lorsqu'elle est prise en charge par la navigation. |
+| `noindex` | booléen | Exclut la page des surfaces d'indexation publique. |
+| `searchable` | booléen | Définissez sur `false` pour exclure une page publiée de la recherche interne, de la recherche MCP publique, du système de fichiers MCP public et des index de récupération par l'assistant sans supprimer la page de la navigation. |
+| `boost` | nombre | Multiplicateur de pertinence positif pour le classement des recherches et de la récupération par l'assistant. |
+
+```mdx
+---
+title: Quickstart
+description: Create and publish your first docs site.
+icon: zap
+boost: 2
+---
+```
+
+Rédigez les descriptions sous forme de résumés destinés aux lecteurs. Elles sont réutilisées par les moteurs de recherche, la découverte par IA et les aperçus.
+
+## Politique d'indexation
+
+| Champ | Type | Défaut | Objectif |
+| --- | --- | --- | --- |
+| `addons.visibility.noindex` | booléen | `false` | Interrupteur au niveau du site pour désactiver l'indexation publique et la découverte par l'IA. |
+| `seo.indexing` | chaîne de caractères | Piloté par la navigation | Définir sur `all` pour inclure toutes les pages cachées dans les recherches publiques, le sitemap, les index lisibles par l'IA, le MCP et la récupération par l'assistant. |
+| Frontmatter de la page `noindex` | booléen | `false` | Interrupteur au niveau de la page pour exclure une page du sitemap et des surfaces d'IA publiques. |
+| Frontmatter de la page `hidden` | booléen | `false` | Supprime une page de la navigation. Elle est exclue de la découverte publique à moins que `seo.indexing` soit `all`. |
+| Frontmatter de la page `searchable` | booléen | `true` | Définir sur `false` pour publier la page mais la retirer des recherches et de la récupération publique du MCP. |
+| Groupe de navigation caché `searchable` | booléen | `false` | Définir sur `true` pour maintenir un groupe caché hors de la navigation tout en incluant les pages descendantes dans les surfaces de découverte publique. |
+
+```json
+{
+  "addons": {
+    "visibility": {
+      "noindex": false
+    }
+  }
+}
+```
+
+L'indexation publique repose sur la navigation visible plus les paramètres d'indexation explicites cachés. Les groupes de navigation cachés restent hors de la barre latérale. Ajouter `searchable: true` à un groupe caché lorsque ses pages descendantes doivent toujours apparaître dans les recherches, la sortie de sitemap, le MCP public, les index lisibles par l'IA et la récupération par l'assistant. Ajouter `seo.indexing: "all"` lorsque chaque page cachée doit être incluse.
+
+`noindex: true` et `searchable: false` sont des contrôles d'exclusion. Utiliser `noindex: true` pour supprimer une page de la sortie de sitemap et de la découverte par l'IA publique. Utiliser `searchable: false` pour maintenir une page accessible mais l'exclure de la recherche interne, des recherches/fichiers publics du MCP et de la récupération par l'assistant.
+
+## Contrôles de recherche
+
+| Champ | Type | Défaut | Objectif |
+| --- | --- | --- | --- |
+| `search.prompt` | chaîne de caractères | Défaut du thème | Modèle source pour les points d'entrée de recherche publics. |
+| `widgets.search.placeholder` | chaîne de caractères | Défaut du thème | Texte d'invite dans la zone de recherche. |
+| `widgets.sidebar_search.placeholder` | chaîne | Défaut du thème | Espace réservé de compatibilité pour la recherche dans la barre latérale lorsqu'un thème utilise un widget de barre latérale séparé. |
+| Groupe de navigation `boost` | nombre | `1` | Applique un multiplicateur de classement à chaque page du groupe, sauf si un groupe ou une page enfant le remplace. |
+| Frontmatter de la page `boost` | nombre | `1` | Augmente le poids de classement pour cette page dans les résultats de recherche et de récupération par l'assistant. |
+| Frontmatter de la page `searchable` | booléen | `true` | Supprime une page de la recherche et de la récupération lorsqu'elle est définie sur `false`. |
+
+```json
+{
+  "search": {
+    "prompt": "Search docs..."
+  },
+  "widgets": {
+    "search": {
+      "placeholder": "Search docs..."
+    },
+    "sidebar_search": {
+      "placeholder": "Search docs..."
+    }
+  }
+}
+```
+
+La page Paramètres de recherche du tableau de bord écrit `search.prompt` et le copie dans les espaces réservés de widget existants afin que les anciens thèmes et les thèmes actuels affichent le même espace réservé. Les résultats de recherche sont construits à partir du contenu publié. Si une page manque dans la recherche, vérifiez d'abord la navigation, le frontmatter et la politique d'indexation.
+
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Getting started",
+            "boost": 5,
+            "pages": [
+              "quickstart",
+              "getting-started/create-site"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Une page hérite de l'augmentation de son groupe parent le plus proche. Un groupe imbriqué peut remplacer la valeur du groupe parent. Le frontmatter de la page a toujours la priorité la plus élevée.
+
+```mdx
+---
+title: Quickstart
+description: Create and publish your first docs site.
+boost: 2
+---
+```
+
+Utilisez des pondérations pour les pages canoniques qui doivent arriver en tête des requêtes générales, comme les guides de démarrage rapide, les guides de migration et les pages principales de présentation de l'API. Gardez ces pondérations modérées afin que les pages précises restent bien classées pour les requêtes spécifiques.
+
+```mdx
+---
+title: Terms of service
+description: Legal terms linked from the footer.
+searchable: false
+---
+```
+
+Utilisez `searchable: false` pour les pages d'outils qui doivent rester publiques mais ne pas apparaître dans la recherche ou la récupération d'IA publique.
+
+Utilisez les paramètres de recherche des groupes de navigation masqués lorsqu'une page doit être découverte sans apparaître dans la navigation.
+
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Migration helpers",
+            "hidden": true,
+            "searchable": true,
+            "pages": ["migration/legacy-api"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+## Surfaces de découverte par IA
+
+dubstack expose des documents lisibles par l'IA via des routes publiques lorsque l'indexation est activée :
+
+| Route | Objectif |
+| --- | --- |
+| `/llms.txt` | Index compact lisible par l'IA. |
+| `/llms-full.txt` | Index plus grand lisible par l'IA avec plus de contenu de page. |
+| `/mcp` | Serveur MCP public en lecture seule pour les agents. |
+| `/skill.md` | Instructions de compétence d'agent générées à partir des documents publiés. |
+
+Ces routes utilisent le contenu des documents publics et les métadonnées du site public. Elles ne révèlent pas les secrets du tableau de bord.
+
+## Retour public
+
+| Champ | Type | Par défaut | Objectif |
+| --- | --- | --- | --- |
+| `addons.feedback.thumbs_rating` | booléen | `false` | Affiche les retours des lecteurs Oui/Non sur les pages. |
+| `addons.feedback.agent_feedback` | booléen | `false` | Permet au serveur public MCP de soumettre des retours sur le contenu structuré. |
+| `addons.feedback.contextual_feedback` | booléen | `false` | Active les actions de feedback depuis les surfaces d'interface contextuelles. |
+| `addons.feedback.code_snippet_feedback` | booléen | `false` | Active les retours pour les surfaces de fragments de code lorsqu'elles sont prises en charge. |
+| `addons.feedback.collect_reader_emails` | booléen | `false` | Permet aux formulaires de feedback de demander les adresses e-mail des lecteurs. |
+| `addons.feedback.reader_email_disclaimer` | chaîne | Vide | Court message affiché lors de la collecte des adresses e-mail des lecteurs. |
+| `addons.related_topics.enabled` | booléen | `false` | Affiche les suggestions de pages associées générées en bas des pages de documentation. |
+
+```json
+{
+  "addons": {
+    "feedback": {
+      "thumbs_rating": true,
+      "agent_feedback": true,
+      "collect_reader_emails": false
+    },
+    "related_topics": {
+      "enabled": true
+    }
+  }
+}
+```
+
+Les paramètres de feedback peuvent être gérés sur la page des modules complémentaires du tableau de bord. Conservez les valeurs basées sur la source lors de l'utilisation de Git comme limite d'approbation de votre site.
+
+## Dépannage
+
+| Symptôme | Vérification |
+| --- | --- |
+| La page n'est pas indexable | Vérifiez qu'elle est visible dans la navigation, sous un groupe masqué avec `searchable: true`, ou couverte par `seo.indexing: "all"`. Vérifiez également que la page ne définit pas `noindex: true` ou `searchable: false`. |
+| Les outils d'IA ne peuvent pas lire les documents | Vérifiez que `addons.visibility.noindex` est `false`. |
+| Les métadonnées ont l'air génériques | Ajoutez le frontmatter `title` et `description` à la page. |
+| Le feedback est absent | Activez `addons.feedback.thumbs_rating` et publiez la configuration. |

@@ -1,0 +1,47 @@
+---
+title: Intégrations CRM
+description: Utilisez en toute sécurité le contexte client et compte lorsque le travail de documentation dépend de signaux commerciaux.
+icon: users
+---
+
+Les intégrations CRM sont des sources de contexte planifiées pour les signaux clients, comptes, offres et tickets.
+
+Cette famille est uniquement dans le catalogue. Les fournisseurs CRM ne peuvent pas être sélectionnés pour les exécutions d'agent ou de workflow avant l'implémentation de l'autorisation, des portées, des collecteurs et des contrôles de sécurité.
+
+## Fournisseurs pris en charge
+
+| Fournisseur | Statut | Portée | Capacités prévues |
+| --- | --- | --- | --- |
+| Salesforce | Catalogue | Partagé | Contexte de compte, de contact et d'opportunité. |
+| HubSpot | Catalogue | Partagé | Contexte de contact, d'entreprise, d'offre et de ticket. |
+
+## Cas d'utilisation
+
+Le contexte CRM peut aider lorsque les équipes de documentation ont besoin de comprendre :
+
+- quels segments de clients sont bloqués répétitivement
+- quelles fonctionnalités apparaissent dans les conversations commerciales ou d'onboarding
+- quels tickets ou opportunités révèlent des lacunes dans la documentation
+- quels matériaux de lancement nécessitent une couverture documentaire publique améliorée
+
+Le contexte CRM doit orienter les priorités de documentation. Il ne doit pas exposer des dossiers clients privés dans les documents publics.
+
+## Limites de sécurité
+
+Avant que le contexte CRM ne devienne exécutable, chaque fournisseur doit disposer de :
+
+- des portées à privilèges minimaux
+- des enregistrements de connexion à l'échelle de l'organisation
+- une isolation des locataires
+- des règles de suppression claires
+- des résumés de l'historique d'exécution sans enregistrements bruts de clients par défaut
+- une sélection explicite des workflows avant toute lecture de contexte CRM
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/ai/connector-capabilities">Capacités du connecteur</a>
+  <a href="/fr/ai/integration-permissions">Autorisations et portées d'intégration</a>
+  <a href="/fr/workflows/integrations">Intégrations de workflow</a>
+  <a href="/fr/dashboard/security-overview">Aperçu de la sécurité</a>
+</RelatedTopics>

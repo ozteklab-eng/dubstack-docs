@@ -1,0 +1,138 @@
+---
+title: Fournisseurs Git
+description: "Comprenez le support des sources GitHub, GitLab et Forgejo."
+icon: git-merge
+---
+
+Git est la source de vérité pour les documents dubstack.
+
+Un fournisseur connecté permet à dubstack de lire le contenu source, de recevoir des signaux de mise à jour et d'écrire des modifications de documentation lorsqu'un workflow autorisé ou une action d'agent le nécessite.
+
+## Support des fournisseurs
+
+| Fournisseur | Rôle actuel |
+| --- | --- |
+| GitHub | Source principale pour les documents de production, prévisualisations, validations de l'éditeur et pull requests d'agents. |
+| GitLab | Cible de copie, source principale facultative lorsqu'elle est activée, intégration OAuth d'auteur, workflows adaptés à GitLab et création de demandes de fusion. |
+| Forgejo | Répository de workflow autohébergé, cible de copie de répository et source de déploiement actif lorsqu'elle est activée. |
+
+La disponibilité des fournisseurs peut dépendre de votre plan, de la configuration de votre espace de travail et de l'état du déploiement.
+
+## Source de déploiement actif vs cible de copie
+
+Un seul répository est la source de déploiement actif pour un site. Cette source alimente les documents publiés, les prévisualisations et les vérifications normales de mise à jour.
+
+Des répositories connectés supplémentaires peuvent être utilisés comme cibles de copie. Une cible de copie est utile pour la sauvegarde, les tests de fournisseur ou les exercices de migration, mais elle ne devient pas un miroir automatique et ne met pas à jour le site en direct à moins que vous ne changiez explicitement la source de déploiement.
+
+Lorsqu'un répository GitLab ou Forgejo est promu de fournisseur secondaire à source de déploiement actif, dubstack copie d'abord les fichiers de documentation actuels dans ce répository. Si la copie échoue, la source de déploiement actif précédente reste active.
+
+Maintenez ces états séparés :
+
+| État | Ce que cela signifie |
+| --- | --- |
+| Source de déploiement actif | Le répository et la branche actuellement utilisés pour alimenter le site. |
+| Cible de copie de répository | Un répository connecté qui peut recevoir des copies manuelles ou planifiées de fichiers de documentation. |
+| Répository source | Un répository de code ou de produit qui peut être lu par les workflows pour obtenir un contexte et utiliser pour rédiger des mises à jour de documentation. |
+| Accès à la rédaction | Le chemin des autorisations du fournisseur utilisé pour créer des branches, validations, pull requests ou demandes de fusion dans le répository de documentation. |
+
+Les répositories sources sont en lecture seule. Ils ne publient pas de pages et ne reçoivent pas de modifications générées de documentation à moins qu'ils ne soient également la source de documentation active.
+
+## Choisissez un chemin de fournisseur
+
+| Objectif | Chemin recommandé |
+| --- | --- |
+| Documents de production depuis votre propre dépôt GitHub hébergé | [GitHub](/fr/deployment/github) |
+| Conserver une copie de GitLab ou préparer une migration | [GitLab](/fr/deployment/gitlab) |
+| Rédiger des demandes de fusion GitLab à partir d'agents ou de workflows | [GitLab](/fr/deployment/gitlab) avec un accès d'auteur OAuth |
+| Copier les documents dans un dépôt Forgejo auto-hébergé | [Forgejo](/fr/deployment/forgejo) en tant que cible de copie de dépôt dans les paramètres Git. |
+| Publier à partir d'un dépôt de documents Forgejo auto-hébergé | [Forgejo](/fr/deployment/forgejo) en tant que source de déploiement active lorsque ce mode est activé pour l'espace de travail. |
+| Utiliser un dépôt de code Forgejo auto-hébergé pour les workflows | [Forgejo](/fr/deployment/forgejo) en tant que dépôt source, puis sélectionnez-le dans [configuration du workflow](/fr/workflows/configuration). |
+| Examiner les concepts généraux des fournisseurs | Cette page |
+| Configurer un fournisseur personnalisé non pris en charge | Contactez le support ou votre opérateur dubstack avant de vous fier à celui-ci pour la publication en production. |
+
+## Connecter un dépôt
+
+Depuis le tableau de bord :
+
+1. Ouvrez **Paramètres > Déploiement > Paramètres Git**.
+2. Choisissez le fournisseur.
+3. Autorisez l'application du fournisseur, le jeton d'accès au dépôt ou le flux OAuth requis par ce fournisseur.
+4. Sélectionnez le dépôt et la branche.
+5. Enregistrez la connexion.
+6. Exécutez une mise à jour manuelle pour vérifier la première synchronisation.
+
+Si un autre fournisseur était déjà actif, attendez que la copie initiale du dépôt soit terminée avant de considérer le nouveau fournisseur comme source de production.
+
+## Exigences du dépôt
+
+Un dépôt de documents doit inclure :
+
+- Pages MDX.
+- `dubstack.json`.
+- Images et actifs référencés par les pages.
+- Spécifications OpenAPI si le site dispose d'une référence d'API.
+- Tout extrait réutilisable utilisé par les pages.
+
+## Branches et aperçus
+
+Utilisez la branche de déploiement pour les documents de production. Utilisez les branches d'aperçu pour les workflows de revue lorsque votre plan et l'intégration du fournisseur prennent en charge les aperçus.
+
+Ne pas utiliser les branches d'aperçu comme source de production à long terme.
+
+## Autorisations du fournisseur
+
+Accordez le plus petit périmètre de fournisseur qui soutient votre workflow souhaité :
+
+| Workflow | Autorisation nécessaire |
+| --- | --- |
+| Lire et publier les documents | Accès en lecture au dépôt. |
+| Modifications du tableau de bord | Accès en écriture aux fichiers de contenu et à la configuration. |
+| Rédaction de pull requests par l'agent | Accès à la création de branches et de pull requests. |
+| Mises à jour déclenchées par webhook | Livraison de webhook depuis le fournisseur. |
+| Contexte de source du workflow | Accès en lecture au dépôt source sélectionné. |
+
+Pour GitLab, l'accès en lecture/copie au dépôt et l'accès d'auteur sont séparés. Le jeton d'accès au dépôt maintient la connexion au dépôt GitLab lisible. L'accès d'auteur OAuth GitLab permet aux workflows de créer des branches, des validations et des demandes de fusion en tant qu'utilisateur GitLab autorisé.
+
+Pour Forgejo, le jeton de dépôt doit couvrir le dépôt et les actions que vous souhaitez que dubstack effectue. Les cibles de copie nécessitent un accès en lecture/écriture au dépôt de documents. Les dépôts sources des workflows nécessitent un accès en lecture au dépôt source sélectionné. Les modes de déploiement actif et d'auteur exigent que l'espace de travail expose ces fonctionnalités et que le jeton permette les actions pertinentes sur la branche ou la pull request.
+
+## Dépôts sources pour les workflows autodocs
+
+Les workflows autodocs utilisent les dépôts sources comme contexte lorsqu'un changement d'implémentation produit des mises à jour de documentation.
+
+Utilisez ce modèle lorsque :
+
+- Le code de l'API ou de l'SDK se trouve en dehors du dépôt de documentation
+- un monorepo contient plusieurs services et un seul chemin devrait influencer un workflow
+- un dépôt Forgejo auto-hébergé doit rester un contrôle source interne tandis que dubstack rédige les modifications de documentation dans le dépôt de documentation connecté
+
+Le workflow lit le dépôt source sélectionné, applique le prompt du workflow et la portée de chemin, puis écrit les modifications de documentation générées dans le dépôt de documentation actif via le mode de mise à jour configuré.
+
+Pour un déploiement initial sécurisé :
+
+1. Ajoutez le dépôt de code en tant que dépôt source dans les paramètres Git.
+2. Sélectionnez une portée de chemin étroite, telle que `services/api` ou `apps/marketing`.
+3. Configurez **Mise à jour à partir des modifications de code** avec **Exiger une revue**.
+4. Fusionnez une petite pull request source ou une demande de fusion.
+5. Revoyez la pull request des documents générés avant d'activer une couverture plus large.
+
+## Dépannage de la première synchronisation
+
+Si la première synchronisation échoue :
+
+- Vérifiez que le dépôt est installé ou autorisé pour l'application du fournisseur.
+- Vérifiez que la branche sélectionnée existe.
+- Vérifiez que `dubstack.json` est présent à la racine du dépôt.
+- Vérifiez que les slugs de page dans la carte de navigation correspondent aux fichiers.
+- Relancez la mise à jour manuelle après avoir corrigé l'accès du fournisseur.
+
+<Callout type="info">
+  Vous pouvez migrer entre des sources basées sur un fournisseur, mais gardez une seule source de production active à la fois pour éviter la confusion entre les branches et les publications.
+</Callout>
+
+## Sujets connexes
+
+- [GitHub](/fr/deployment/github)
+- [GitLab](/fr/deployment/gitlab)
+- [Forgejo](/fr/deployment/forgejo)
+- [Paramètres Git](/fr/deployment/git-settings)
+- [Permissions de déploiement](/fr/dashboard/deployment-permissions)

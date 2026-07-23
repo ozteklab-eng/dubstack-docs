@@ -1,0 +1,104 @@
+---
+title: Flux de travail des cibles de copie de dépôt
+description: "Exécutez des copies de dépôt planifiées pour les sauvegardes, les tests de migration et les vérifications de portabilité des fournisseurs."
+icon: copy
+---
+
+Le flux de travail des cibles de copie de dépôt copie la source de documentation active vers les dépôts cibles configurés selon un planning ou une exécution manuelle.
+
+Utilisez-le pour les tests de sauvegarde, les vérifications de portabilité des fournisseurs Git et les tests de migration sans modifier la source de déploiement en direct.
+
+<Info>
+  Les copies de dépôt sont des exécutions explicites, pas des miroirs continus.
+</Info>
+
+## Ce qu'il fait
+
+Lorsqu'il est activé pour un déploiement, le flux de travail est conçu pour :
+
+- lire la source de documentation active
+- valider les cibles de copie de dépôt configurées
+- réservé l'utilisation en fonction du nombre de fichiers sources et de cibles avant l'exécution
+- copier l'arborescence de documentation la plus récente dans chaque cible configurée
+- enregistrer l'état par cible, le nombre de fichiers, les erreurs et l'utilisation finale en crédits
+- laisser la source de déploiement active inchangée
+
+Les cibles de copie de dépôt sont configurées dans **Paramètres > Déploiement > Paramètres Git**. Une cible de copie peut prouver qu'un dépôt peut être écrit, mais elle ne devient la source de déploiement qu'une fois que l'administrateur change délibérément les fournisseurs.
+
+## Cas d'utilisation courants
+
+| Cas d'utilisation | Pourquoi cela aide |
+| --- | --- |
+| Test de sauvegarde | Confirmez qu'un dépôt secondaire peut recevoir l'arborescence de documentation actuelle. |
+| Test de migration | Copiez la documentation dans un nouveau fournisseur avant de changer la source de déploiement. |
+| Portabilité des fournisseurs | Validez les cibles GitHub, GitLab ou auto-hébergées sans modifier les documents de production. |
+| Archivage de conformité | Conservez des instantanés planifiés dans un dépôt cible contrôlé. |
+
+## Configuration requise
+
+Avant d'activer l'automatisation des copies de dépôt :
+
+1. Connectez un dépôt source de documentation actif.
+2. Configurez au moins une cible de copie de dépôt dans les paramètres Git.
+3. Vérifiez que les identifiants du fournisseur cible sont valides.
+4. Vérifiez que la branche cible existe ou peut être créée selon la politique du fournisseur.
+5. Exécutez une copie manuelle avant d'activer un planning.
+
+## Déclencheurs et mode de mise à jour
+
+| Paramètre | Comportement |
+| --- | --- |
+| Déclencheur | Planification personnalisée ou exécution manuelle |
+| Mode de mise à jour | Cibles de copie de dépôt |
+| Cible d'écriture | Cibles de copie configurées |
+| Source de déploiement active | Non modifié |
+| Dépôts de contexte | Non pris en charge |
+
+Ce flux de travail ne s'exécute pas à chaque mise à jour de contenu. Utilisez une planification lorsque vous souhaitez des copies prévisibles, ou exécutez-le manuellement avant une étape de migration.
+
+## Utilisation des crédits
+
+Les exécutions de copie de dépôt comptent dans l'utilisation des crédits du flux de travail, car elles consomment des travailleurs de la plateforme, des appels d'API du fournisseur, de la validation et du traitement de l'historique d'exécution.
+
+L'estimation actuelle de planification commence à **35 crédits par exécution**. L'utilisation réelle peut varier en fonction de :
+
+- nombre de fichiers du dépôt source
+- nombre total d'octets copiés
+- nombre de cibles de copie
+- pagination et limites de débit des API du fournisseur
+- latence du réseau Git autohébergé
+- comportement de réessai pour les cibles ayant échoué
+
+L'exécution doit réserver des crédits à partir d'une vérification préalable des fichiers sources et des cibles, puis finaliser l'utilisation à partir des résultats réels de la copie.
+
+## Gestion des erreurs
+
+Si une cible échoue, l'historique d'exécution doit afficher :
+
+- cible du fournisseur et du dépôt
+- branche ou portée de chemin
+- dernier point de contrôle de fichier terminé avec succès, si disponible
+- catégorie d'erreur du fournisseur
+- si le réessai est sécurisé
+
+Une cible de copie ayant échoué ne doit pas affecter la source de déploiement active ou les autres cibles réussies.
+
+## Liste de vérification
+
+Après une exécution de copie de dépôt, confirmez :
+
+- le dépôt cible contient l'arborescence de documents attendue
+- les fichiers `dubstack.json` et OpenAPI ont été copiés
+- les fichiers générés ou ignorés ont été gérés selon la politique
+- la source du déploiement en direct n'a pas changé
+- l'utilisation a été enregistrée lors de l'exécution du flux de travail
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/workflows/reference#repository-copy-targets">Référence des flux de travail</a>
+  <a href="/fr/deployment/git-settings">Paramètres Git</a>
+  <a href="/fr/deployment/forgejo-github-gitlab">Forgejo, GitHub et GitLab</a>
+  <a href="/fr/workflows/manage">Gérer les flux de travail</a>
+  <a href="/fr/ai/credits-usage">Crédits IA et utilisation</a>
+</RelatedTopics>

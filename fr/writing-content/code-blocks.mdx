@@ -1,0 +1,103 @@
+---
+title: Blocs de code
+description: "Documentez le code avec une mise en évidence de la syntaxe, des actions de copie et un contexte prêt pour l'assistant."
+icon: code
+---
+
+Utilisez des blocs de code pour les commandes, les configurations, les requêtes API et les exemples que les lecteurs doivent copier.
+
+## Bloc de code basique
+
+````mdx
+```bash
+npm install
+npm run dev
+```
+````
+
+Ajoutez un langage après la barre d'ouverture pour que la mise en évidence de la syntaxe et l'analyse par l'IA fonctionnent mieux.
+
+## Exemples de configuration
+
+Utilisez JSON pour les exemples de configuration :
+
+````mdx
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "default": true
+      }
+    ]
+  }
+}
+```
+````
+
+Maintenez les exemples valides en JSON lorsque c'est possible. N'utilisez pas de commentaires dans les exemples JSON.
+
+## Commandes
+
+Utilisez des blocs shell pour les commandes en terminal :
+
+````mdx
+```bash
+pnpm install
+pnpm run build
+```
+````
+
+Si une commande contient des espaces réservés, nommez-les clairement :
+
+````mdx
+```bash
+curl https://api.example.com/v1/projects \
+  -H "Authorization: Bearer $API_TOKEN"
+```
+````
+
+## Groupes de code
+
+Utilisez des groupes de code lorsque la même action a plusieurs variantes :
+
+````mdx
+<CodeGroup>
+```bash npm
+npm install @acme/sdk
+```
+
+```bash pnpm
+pnpm add @acme/sdk
+```
+</CodeGroup>
+````
+
+## Exemples de requête et de réponse API
+
+Maintenez les exemples de requête et de réponse proches les uns des autres :
+
+````mdx
+<RequestExample>
+```bash
+curl https://api.example.com/v1/projects \
+  -H "Authorization: Bearer $API_TOKEN"
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "data": []
+}
+```
+</ResponseExample>
+````
+
+## Règles de sécurité
+
+- Ne publiez jamais de vraies clés API, de jetons, de mots de passe ou de liens magiques.
+- Privilégiez les variables d'environnement pour les secrets dans les exemples.
+- Maintenez les domaines d'exemple clairement séparés des identifiants de production.
+- Rendez les commandes copiables et collables, mais ne cachez pas les prérequis nécessaires.

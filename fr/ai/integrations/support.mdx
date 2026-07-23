@@ -1,0 +1,53 @@
+---
+title: Intégrations de feedback de support
+description: "Comprenez comment les conversations de support alimenteront les workflows d'amélioration de la documentation."
+icon: life-buoy
+---
+
+Les intégrations de feedback de support aident les équipes de documentation à transformer les questions répétées des clients en mises à jour de documents révisables.
+
+Cette famille est actuellement uniquement cataloguée. Le tableau de bord peut afficher la catégorie du fournisseur, mais les workflows de feedback de support restent bloqués jusqu'à ce qu'un connecteur, un collecteur et un test de préparation supportés soient activés pour le déploiement.
+
+## Fournisseurs pris en charge
+
+| Fournisseur | Statut | Portée | Fonctionnalités prévues |
+| --- | --- | --- | --- |
+| Simple | Catalogue | Partagée | Contexte des conversations de support et enregistrements clients. |
+| Intercom | Catalogue | Partagée | Contexte des conversations et enregistrements clients. |
+| Pylon | Catalogue | Partagée | Conversations clients, comptes et contexte de support. |
+
+## Relation de workflow
+
+Le workflow **Mise à jour à partir du feedback de support** est visible dans le catalogue de workflows, mais il n'est pas exécutable jusqu'à ce que la collecte de feedback de support soit disponible.
+
+Lorsqu'il est activé, ce workflow devrait :
+
+- lire les conversations de support résolues ou sélectionnées provenant des systèmes de support connectés
+- regrouper les problèmes de documentation liés en thèmes ciblés
+- ouvrir des modifications de documents révisables via le fournisseur Git connecté
+- afficher les comptes sources, le fournisseur et l'utilisation de crédits dans l'historique des exécutions
+
+Elle ne doit pas copier les données clients privées dans des documents publics. Le workflow doit résumer les tendances et censurer les détails inappropriés pour la publication.
+
+## Exigences avant activation
+
+Les connecteurs de feedback de support nécessitent :
+
+- l'autorisation du fournisseur ou le stockage de la clé API
+- enregistrements de connexions spécifiques au locataire
+- collecte de conversations délimitée
+- masquage des données PII et des secrets
+- vérifications de préparation du workflow
+- estimation d'utilisation et de crédits
+- résumés de l'historique des exécutions évitant le stockage des transcriptions brutes par défaut
+
+Jusqu'à ce que ces exigences soient remplies, conservez le catalogue des fournisseurs visible mais non disponible pour les exécutions.
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/workflows/reference">Référence du workflow</a>
+  <a href="/fr/workflows/integrations">Intégrations du workflow</a>
+  <a href="/fr/optimize/feedback">Retours</a>
+  <a href="/fr/dashboard/feedback-analytics">Analyse des retours</a>
+</RelatedTopics>

@@ -1,0 +1,70 @@
+---
+title: "Gérer les spécifications d'API"
+description: "Téléchargez, actualisez et publiez les spécifications d'API depuis le tableau de bord."
+icon: file-json
+---
+
+Utilisez **API Specs** lorsque vous souhaitez gérer les fichiers OpenAPI ou AsyncAPI depuis le tableau de bord au lieu d'éditer manuellement la référence de la spécification.
+
+Le gestionnaire de spécifications est propre au déploiement. Il lit et écrit via la source de documentation connectée afin que les pages d'API publiées restent reproductibles.
+
+## Ce que vous pouvez gérer
+
+| Contrôle | Comportement |
+| --- | --- |
+| Télécharger une spécification | Ajoute un fichier JSON OpenAPI ou AsyncAPI au catalogue des spécifications de déploiement. |
+| URL de base | Définit l'origine par défaut utilisée par l'API Playground du navigateur lorsque la spécification ne définit pas d'URL de serveur. |
+| Visibilité du catalogue | Affiche ou masque la spécification dans les vues du catalogue du tableau de bord sans publier tous les points de terminaison. |
+| Générer des ressources | Crée des pages MDX de points de terminaison et des extraits réutilisables à partir de la spécification OpenAPI sélectionnée. |
+| Générer des extraits | Régénère les extraits de points de terminaison réutilisables sans modifier la visibilité de la page. |
+| Actualiser | Actualise la spécification à partir de son URL de base configurée lorsqu'une actualisation est prise en charge. |
+| Gérer les points de terminaison | Publie, masque ou exclut les pages de points de terminaison générés une opération à la fois. |
+
+## Télécharger une spécification
+
+1. Ouvrez le tableau de bord.
+2. Accédez à **API Specs**.
+3. Choisissez **Télécharger une spécification**.
+4. Téléchargez un fichier JSON OpenAPI ou AsyncAPI.
+5. Confirmez le nom, le nom d'affichage, la description, le type, la catégorie et l'URL de base.
+6. Choisissez si la spécification doit apparaître dans le catalogue.
+7. Enregistrez la spécification.
+
+Pour les spécifications OpenAPI, incluez `servers[0].url` dans la spécification ou fournissez l'**URL de base** dans le formulaire. L'API Playground utilise cette valeur pour construire les requêtes.
+
+## Générer les pages de points de terminaison
+
+Après avoir téléchargé une spécification OpenAPI, utilisez **Générer des ressources** pour créer les pages de points de terminaison et les extraits associés.
+
+Les pages de points de terminaison générés ne sont pas automatiquement visibles pour les lecteurs. Utilisez **Gérer les points de terminaison** pour choisir les opérations à publier.
+
+États des points de terminaison :
+
+| État | Signification |
+| --- | --- |
+| Publié | La page du point de terminaison est visible dans la référence de l'API publique. |
+| Masqué | Le point de terminaison est connu par le système mais n'est pas affiché dans la navigation publique. |
+| Exclu | Le point de terminaison est volontairement exclu des documents générés. |
+| Non publié | Les ressources peuvent exister, mais le point de terminaison n'a pas encore été publié. |
+
+## Maintenez la source de la spécification claire
+
+Pour les sites basés sur Git, le chemin le plus prévisible est de garder la spécification canonique dans le dépôt docs et de la référencer depuis `dubstack.json`.
+
+Utilisez les téléchargements du tableau de bord lorsque :
+
+- un collègue a besoin d'inspecter une spécification avant de valider un changement source à long terme
+- vous avez besoin de générer des pages de points de terminaison à partir d'une spécification JSON connue
+- vous souhaitez contrôler la visibilité des points de terminaison sans modifier manuellement chaque opération
+
+Utilisez les modifications du dépôt lorsque :
+
+- la spécification est générée par votre pipeline de construction d'API
+- la spécification doit être revue dans les pull requests
+- la spécification se trouve à côté du contenu de documentation versionnée
+
+## Sujets connexes
+
+- [Configuration OpenAPI](/fr/api-reference/openapi-setup)
+- [Authentification de l'API Playground](/fr/api-reference/playground-authentication)
+- [Configurer dubstack.json](/fr/configuration/dubstack-json)

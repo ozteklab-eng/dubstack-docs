@@ -1,0 +1,114 @@
+---
+title: Commandes slash
+description: "Insérez des composants de documentation structurés depuis le menu des commandes de l'éditeur."
+icon: command
+---
+
+Les commandes slash insèrent des composants de documentation structurés depuis l'éditeur visuel. Tapez `/` sur une ligne vide de l'éditeur, sélectionnez un composant, puis continuez à éditer le bloc inséré.
+
+## Commandes prises en charge
+
+L'éditeur prend en charge les blocs d'écriture courants :
+
+- Texte
+- Titre 1
+- Titre 2
+- Titre 3
+- Titre 4
+- Citation
+- Liste non ordonnée
+- Liste numérotée
+- Tableau
+
+Il prend également en charge les médias et les intégrations :
+
+- Image
+- Vidéo
+- YouTube
+- Loom
+- Vimeo
+- Intégration
+
+Les composants de documentation incluent :
+
+- Boîte d'information
+- Boîte de vérification
+- Boîte de note
+- Boîte de conseil
+- Boîte d'avertissement
+- Boîte de danger
+- Accordéon
+- Groupe d'accordéon
+- Carte
+- Carte d'information
+- Carte de vérification
+- Carte note
+- Carte astuce
+- Carte avertissement
+- Carte danger
+- 2 colonnes
+- 3 colonnes
+- 4 colonnes
+- Mermaid
+- Bloc de code
+- Groupe de code
+- Badges
+- Onglets
+- Étapes
+- Cadre
+- Mise à jour
+- Champs de paramètres
+- Champs de réponses
+- Dépliable
+- Exemple de demande
+- Exemple de réponse
+
+Les aides de l'éditeur spécifiques à DubStack peuvent également être visibles pour les aperçus de produit et les fixtures de rendu, notamment Snippet, Endpoint, Gallery, Tableau des propriétés et Tableau de comparaison.
+
+## Étapes
+
+La commande `Steps` insère une étape vide avec un numéro d'étape visible, un espace réservé de titre vide et un espace réservé de corps.
+
+Utilisez le bouton plus à côté du bloc Étapes pour ajouter plus d'étapes. Le bloc enfant interne est `step`, mais seul `Steps` est exposé en tant que commande slash accessible à l'utilisateur.
+
+## Mises à jour du journal des modifications
+
+La commande `Update` insère une entrée de timeline du journal des modifications avec la date actuelle.
+
+Le menu des attributs prend en charge :
+
+- Étiquette
+- Mots-clés
+- Description
+- Métadonnées RSS
+
+Les métadonnées RSS sont stockées avec l'entrée de mise à jour afin que les flux générés puissent utiliser des métadonnées en texte brut sans révéler le contenu de l'éditeur enrichi.
+
+## Cartes typées
+
+Les commandes de cartes typées insèrent des variantes de cartes avec un style sémantique :
+
+- Carte d'information
+- Carte de vérification
+- Carte de note
+- Carte de conseil
+- Carte d'avertissement
+- Carte de danger
+
+Ces cartes conservent leur type lors de l'importation/exportation par l'éditeur et du rendu public.
+
+## Contrat de rédaction
+
+Les commandes slash doivent insérer des nœuds d'éditeur structurés là où la fidélité de l'aller-retour est importante. Elles ne doivent pas insérer de MDX brut opaque, sauf si le composant est intentionnellement du contenu brut.
+
+Le chemin de publication reste le suivant :
+
+```text
+Visual editor
+-> MDX in Git
+-> Git sync
+-> R2 artifacts
+-> public renderer
+```
+
+Le site rendu doit être piloté par le contenu rédigé, `dubstack.json`, les paramètres du tableau de bord et les vérifications d'autorisation. Ne comptez pas sur des paramètres par défaut cachés pour le comportement visible par les clients.

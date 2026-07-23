@@ -1,0 +1,75 @@
+---
+title: Panneaux
+description: "Ancrer le contenu de support dans la barre latérale droite d'une page de documentation."
+icon: panel-right
+---
+
+Les panneaux remplacent la barre latérale droite par du contenu de support personnalisé.
+
+Utilisez un panneau lorsque la barre latérale doit afficher des actions, des exemples ou des détails de référence au lieu des titres.
+
+<Panel>
+  <Info>
+    Ce contenu est ancré dans la barre latérale droite sur les grands écrans et s'affiche en ligne sur les petits écrans.
+  </Info>
+
+  <Card title="Guide connexe" icon="book-open" href="/fr/writing-content/request-response-examples">
+    Découvrez comment les exemples de requête et de réponse utilisent la même barre latérale.
+  </Card>
+</Panel>
+
+## Panneau de base
+
+```mdx
+<Panel>
+  <Info>
+    This content is pinned to the right rail on wide screens and appears inline on smaller screens.
+  </Info>
+</Panel>
+```
+
+## Panneau avec des actions
+
+Les panneaux peuvent contenir des composants MDX normaux.
+
+```mdx
+<Panel>
+  <Card title="Git essentials" icon="settings" href="/editor/git-essentials">
+    Understand repository and branch settings.
+  </Card>
+
+  <Tip>
+    Keep panel content short so it remains useful in the side rail.
+  </Tip>
+</Panel>
+```
+
+## Exemples de requête et de réponse
+
+Si une page utilise un panneau personnalisé et a également besoin d'exemples d'API, placez les exemples de requête et de réponse dans le panneau afin que la barre latérale droite ait un seul propriétaire.
+
+````mdx
+<Panel>
+  <RequestExample>
+```bash cURL
+curl https://api.example.com/v1/sites \
+  -H "Authorization: Bearer $API_TOKEN"
+```
+  </RequestExample>
+
+  <ResponseExample>
+```json Response
+{
+  "status": "ready"
+}
+```
+  </ResponseExample>
+</Panel>
+````
+
+## Directives
+
+- Utilisez un seul panneau par page, sauf si un ordre spécifique est requis.
+- Maintenez le contenu de la barre latérale court.
+- N'utilisez pas de panneaux pour les étapes de configuration critiques que les lecteurs mobiles doivent trouver immédiatement.
+- Utilisez [exemples de requête et de réponse](/fr/writing-content/request-response-examples) pour les exemples d'API qui doivent résider dans la même barre latérale.

@@ -1,0 +1,165 @@
+---
+title: Redirections
+description: "Redirigez les anciennes URL de documentation vers de nouvelles localisations avec des redirections exactes, paramétrées et générales."
+icon: corner-up-right
+---
+
+Les redirections envoient les lecteurs depuis les anciennes URL de documentation vers les pages actuelles.
+
+Utilisez les redirections lorsque vous renommez des pages, déplacez des sections, migrez depuis une autre structure de documentation ou préservez les liens d'une plateforme précédente.
+
+## Configurez les redirections
+
+Ajoutez des redirections à `dubstack.json` :
+
+```json
+{
+  "redirects": [
+    {
+      "source": "/old-quickstart",
+      "destination": "/quickstart"
+    },
+    {
+      "source": "/guides/auth",
+      "destination": "/guides/authentication"
+    }
+  ]
+}
+```
+
+Utilisez des chemins relatifs à la racine pour les pages sur le même site de documentation.
+
+## Champs de redirection
+
+| Champ | Type | Par défaut | Objectif |
+| --- | --- | --- | --- |
+| `source` | chaîne | Requis | Ancien chemin d'accès. Les chaînes de requête et les ancres sont ignorées lors de la correspondance. |
+| `destination` | chaîne | Requis | Nouveau chemin interne ou URL externe. Peut inclure des chaînes de requête et des ancres. |
+| `permanent` | booléen | `true` | Utilise une redirection permanente sauf si elle est définie sur `false`. |
+
+```json
+{
+  "source": "/old-page",
+  "destination": "/new-page",
+  "permanent": true
+}
+```
+
+Définissez `permanent` sur `false` pour les redirections temporaires de campagne ou de maintenance que vous prévoyez de supprimer.
+
+## Redirections externes
+
+Utilisez une URL complète lorsque la destination se trouve en dehors de votre site de documentation :
+
+```json
+{
+  "source": "/status",
+  "destination": "https://status.example.com"
+}
+```
+
+Utilisez les redirections externes avec modération. Privilégiez les pages de documentation internes pour l'aide produit afin que la recherche et la récupération par l'assistant conservent un contexte utile.
+
+## Chaînes de requête et ancres
+
+Les sources de redirection correspondent uniquement aux chemins. Ne placez pas de chaînes de requête ou d'ancres dans `source`.
+
+```json
+{
+  "source": "/old-guide",
+  "destination": "/new-guide#configure"
+}
+```
+
+Les destinations peuvent inclure des chaînes de requête et des ancres.
+
+## Redirections paramétrées
+
+Utilisez des paramètres nommés pour préserver un segment de chemin.
+
+```json
+{
+  "source": "/old-guides/:slug",
+  "destination": "/guides/:slug"
+}
+```
+
+Cela correspond à :
+
+| Requête | Destination |
+| --- | --- |
+| `/old-guides/authentication` | `/guides/authentication` |
+| `/old-guides/deployments` | `/guides/deployments` |
+
+## Redirections génériques
+
+Utilisez `:name*` pour conserver plusieurs segments de chemin en fin.
+
+```json
+{
+  "source": "/docs/:slug*",
+  "destination": "/guides/:slug*"
+}
+```
+
+Cela mappe :
+
+| Demande | Destination |
+| --- | --- |
+| `/docs/api` | `/guides/api` |
+| `/docs/api/authentication` | `/guides/api/authentication` |
+
+Les redirections génériques sont utiles lors des migrations où une section entière est déplacée.
+
+## Raccourcis joker non pris en charge
+
+Les redirections de dubstack prennent en charge les paramètres nommés et les paramètres génériques. Ne comptez pas sur les raccourcis joker partiels tels que `/article-*`, sauf si votre déploiement dispose d'une règle de proxy personnalisée et testée devant dubstack.
+
+Utilisez des redirections explicites ou des paramètres nommés au lieu de cela.
+
+## Évitez les boucles de redirection
+
+Le rendu ignore les redirections vers soi-même, mais vous devriez quand même éviter les chaînes circulaires.
+
+Mauvais exemple :
+
+```json
+{
+  "redirects": [
+    {
+      "source": "/docs/:slug*",
+      "destination": "/help/:slug*"
+    },
+    {
+      "source": "/help/:slug*",
+      "destination": "/docs/:slug*"
+    }
+  ]
+}
+```
+
+Maintenez les chaînes de redirections courtes. Un lecteur devrait atterrir sur la page finale en un seul saut lorsque c'est possible.
+
+## Redirections de migration
+
+Lors de la migration d'un site de documentation existant :
+
+1. Exportez ou listez les anciens URLs.
+2. Mappez chaque ancien URL à la page la plus proche actuelle.
+3. Utilisez des redirections génériques uniquement lorsque la structure de la section est préservée.
+4. Ajoutez les redirections avant de changer de domaine.
+5. Testez les anciens URLs les plus visités.
+6. Gardez les redirections aussi longtemps que les liens externes pointent encore vers les anciens chemins.
+
+## Liste de vérification des redirections
+
+- Ne créez pas de boucles de redirection.
+- Privilégiez les redirections exactes pour les pages importantes déplacées.
+- Utilisez des redirections paramétrées uniquement lorsque les anciennes et nouvelles structures correspondent.
+- Gardez les pages de destination publiées.
+- Mettez à jour les liens internes au lieu de compter sur les redirections dans vos propres documents.
+- Testez les redirections après publication.
+
+<Callout type="warning">
+  Les redirections ne peuvent pas corriger une page manquante qui est toujours référencée dans la navigation. Corrigez la navigation et les redirections ensemble lors du déplacement des pages.
+</Callout>

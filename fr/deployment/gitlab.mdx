@@ -1,0 +1,251 @@
+---
+title: GitLab
+description: "Utilisez GitLab comme source de documentation, cible de copie et fournisseur d'écriture."
+icon: gitlab
+---
+
+Le support GitLab comporte deux connexions distinctes :
+
+- un jeton d'accès au dépôt GitLab qui permet à dubstack de lire, valider, synchroniser ou copier le contenu du dépôt
+- l'accès OAuth GitLab pour l'écriture qui permet aux workflows d'agir en tant qu'utilisateur GitLab autorisé
+
+Les développeurs peuvent toujours utiliser les workflows GitLab normaux. Clonez le projet connecté, modifiez les fichiers MDX ou `dubstack.json`, validez, poussez et examinez les modifications via des demandes de fusion.
+
+<Callout type="info">
+  Paramètres Git est la source de vérité pour le fournisseur de publication actuel. Si la carte de source de déploiement active affiche GitLab, les poussées et les mises à jour manuelles doivent être validées par rapport au projet et à la branche GitLab correspondants. Si GitLab n'est affiché qu'en tant que cible de copie, la source active continue d'éditer le site.
+</Callout>
+
+## Ce que GitLab fait aujourd'hui
+
+| Capacité | Statut |
+| --- | --- |
+| Copier les documents depuis la source de déploiement active vers GitLab | Pris en charge |
+| Utiliser GitLab comme cible de sauvegarde ou de migration | Pris en charge |
+| Connecter l'OAuth GitLab pour l'écriture des agents et des workflows | Pris en charge |
+| Créer des branches, des commits et des demandes de fusion à partir des workflows autorisés | Pris en charge lorsque l'OAuth GitLab est connecté |
+| Collecter le contexte limité des demandes de fusion pour les exécutions de workflows | Pris en charge lorsque l'OAuth GitLab et le contexte du dépôt sont connectés |
+| Utiliser GitLab comme source de déploiement de production active | Pris en charge lorsque les paramètres Git affichent GitLab comme source de déploiement active |
+| URL d'une instance GitLab auto-hébergée | Pris en charge lorsque l'instance est accessible par dubstack |
+
+## Jeton d'accès au dépôt versus OAuth
+
+Le jeton d'accès au dépôt et la connexion OAuth sont intentionnellement différents.
+
+| Connexion | À quoi cela sert |
+| --- | --- |
+| Jeton d'accès au dépôt GitLab | Lecture des fichiers du dépôt, validation des branches, synchronisation d'une source GitLab active et maintien d'une cible de copie GitLab connectée. |
+| Accès OAuth GitLab pour l'écriture | Création de branches, de commits et de demandes de fusion à partir d'actions d'écriture des agents, de Slack et des workflows. |
+
+Utilisez les deux lorsque vous souhaitez une rédaction via GitLab. Un jeton d'accès au dépôt seul peut maintenir le contenu connecté, mais les actions de rédaction nécessitent OAuth afin que dubstack agisse avec un utilisateur GitLab autorisé et respecte les autorisations GitLab de l'utilisateur.
+
+## Quelle connexion devez-vous vérifier ?
+
+Utilisez l'action défaillante pour décider quel identifiant GitLab inspecter.
+
+| Action défaillante | Vérifier |
+| --- | --- |
+| La mise à jour manuelle ne peut pas accéder au dépôt | Jeton d'accès au dépôt GitLab, ID du projet ou chemin, URL de l'instance, branche et autorisations des fichiers du dépôt. |
+| Échec de la copie des documents dans GitLab | Jeton d'accès au dépôt GitLab, autorisation d'écriture pour le projet cible, protection de branche et branche cible configurée. |
+| L'agent, Slack ou workflow ne peut pas créer une demande de fusion | Accès OAuth GitLab, autorisations de l'utilisateur connecté, protection de branche et disponibilité pour la rédaction. |
+| Le workflow ne peut pas accéder au contexte récent de la demande de fusion | Accès OAuth GitLab et contexte du dépôt du workflow sélectionné. |
+| Les poussées vers GitLab ne mettent pas à jour le site en ligne | Si GitLab est la source de déploiement active, si les webhooks sont configurés et si la mise à jour manuelle réussit. |
+
+Ne tournez pas OAuth lorsqu'un jeton d'accès au dépôt est expiré, et ne tournez pas le jeton d'accès au dépôt lorsqu'il manque uniquement la rédaction. Ils déverrouillent des chemins différents.
+
+## Connectez GitLab en tant que source de documentation ou cible de copie
+
+1. Ouvrez le tableau de bord.
+2. Allez dans **Paramètres > Déploiement > Paramètres Git**.
+3. Choisissez **GitLab**.
+4. Entrez l'URL de l'instance GitLab. Laissez-la comme `https://gitlab.com` pour GitLab hébergé.
+5. Entrez l'ID du projet ou le chemin du projet accepté par le tableau de bord.
+6. Entrez un jeton d'accès au dépôt GitLab.
+7. Choisissez la branche.
+8. Enregistrez la connexion.
+9. Confirmez si le tableau de bord affiche GitLab comme source de déploiement active ou comme cible de copie de dépôt.
+
+Après avoir enregistré, l'état du tableau de bord détermine ce qui se passe ensuite :
+
+- Si GitLab est actif, exécutez une mise à jour manuelle et confirmez que le site public reflète la branche GitLab.
+- Si un autre fournisseur est actif, utilisez l'action de copie de dépôt pour copier les documents dans GitLab pour sauvegarde, test du fournisseur ou entraînement de migration.
+
+## Publier à partir d'un checkout local
+
+Utilisez cela lorsque GitLab est la source de déploiement active du site.
+
+```bash
+git clone https://gitlab.com/your-group/your-docs-project.git
+cd your-docs-project
+git checkout -b docs/update-guide
+git add .
+git commit -m "docs: update guide"
+git push -u origin docs/update-guide
+```
+
+Ouvrez une demande de fusion et fusionnez-la dans la branche de déploiement configurée après examen.
+
+Si GitLab est configuré uniquement en tant que cible de copie, les poussées vers GitLab ne publient pas le site en direct. La source de déploiement active continue de piloter les mises à jour de production.
+
+Voir [Flux Git local](/fr/deployment/local-git-workflow) pour le flux neutre par rapport au fournisseur.
+
+## Exigences pour les jetons d'accès au dépôt
+
+Utilisez un jeton d'accès au projet GitLab lorsque c'est possible.
+
+Paramètres de jeton recommandés :
+
+| Paramètre | Valeur |
+| --- | --- |
+| Rôle | Mainteneur |
+| Portées | `api`, `read_api` |
+| Expiration | Utilisez la politique de rotation de votre organisation |
+
+Le champ du tableau de bord s'appelle **Jetons de déploiement GitLab** car il appartient à la configuration de la source de déploiement. Le jeton a toujours besoin d'accès à l'API GitLab pour que dubstack puisse valider le projet, valider les branches, récupérer les archives de dépôt et copier le contenu lorsqu'il est activé. Un simple jeton de déploiement GitLab avec uniquement `read_repository` n'est pas suffisant pour cette configuration.
+
+Si les jetons d'accès au projet ne sont pas disponibles, utilisez un jeton d'accès personnel appartenant à un compte de service. Évitez d'utiliser un jeton d'accès personnel d'employé pour les workflows de production à long terme.
+
+## Connecter l'accès d'écriture GitLab
+
+L'OAuth GitLab est facultatif pour les workflows de lecture/copie et obligatoire pour les workflows d'écriture GitLab.
+
+Connectez l'OAuth GitLab lorsque les agents, les demandes Slack ou les workflows planifiés doivent rédiger des modifications de documentation dans GitLab.
+
+Pour connecter l'OAuth :
+
+1. Ouvrez **Paramètres > Déploiement > Paramètres Git**.
+2. Ouvrez la configuration GitLab.
+3. Cliquez sur **Connecter GitLab** pour GitLab hébergé ou sur **Connecter GitLab auto-hébergé** pour une instance auto-hébergée accessible.
+4. Complétez le processus d'autorisation GitLab.
+5. Retournez dans les paramètres Git et confirmez que le compte GitLab est connecté.
+6. Développez le compte GitLab connecté.
+7. Développez **Projets personnels** ou un groupe GitLab.
+8. Recherchez les dépôts que les workflows doivent utiliser en tant que contexte d'écriture.
+9. Sélectionnez chaque projet qui doit être disponible pour les workflows et l'écriture par les agents.
+
+Après connexion de l'OAuth, les actions d'écriture pertinentes peuvent :
+
+- créer une branche de fonctionnalité
+- écrire ou mettre à jour des fichiers MDX
+- valider les modifications générées de documentation
+- ouvrir une demande de fusion contre la branche configurée
+- lire le contexte des demandes de fusion limitées pour les exécutions de workflow
+
+<Callout type="warning">
+  La création de demandes de fusion GitLab n'est pas activée pour les dépôts de démarrage hébergés ou les déploiements protégés contre les modifications de dépôt. Connectez un dépôt GitLab appartenant au client avant d'utiliser la création de demandes de fusion GitLab.
+</Callout>
+
+## États du tableau de bord
+
+Utilisez le statut dans les paramètres Git pour confirmer quelle fonctionnalité GitLab est disponible.
+
+| État du tableau de bord | Signification |
+| --- | --- |
+| Cible GitLab connectée | Le jeton d'accès au dépôt est valide et dubstack peut copier les documents dans GitLab. |
+| Connecté à GitLab via OAuth | Les workflows peuvent demander un accès à la création de contenus GitLab lorsque l'utilisateur connecté dispose des autorisations de projet. |
+| Projet GitLab sélectionné | Le projet sélectionné peut être utilisé comme contexte de dépôt de workflow ou d'agent pour la création de contenus GitLab. |
+| Source de déploiement active | Le site lit les documents de production depuis GitLab. |
+| Copie des documents disponible | GitLab est configuré en tant que cible et peut recevoir une copie fraîche depuis la source active actuelle. |
+| Création de contenus non prête | Le jeton d'accès au dépôt peut être connecté, mais l'OAuth, la portée du dépôt ou l'éligibilité du site est manquante. |
+
+Si les paramètres Git vous demandent de reconnecter l'OAuth GitLab, reconnectez le compte GitLab avant d'exécuter des actions de création de contenus d'agent, Slack ou workflow. Cela signifie généralement que le consentement OAuth a été révoqué, expiré ou que l'accès au projet sélectionné a été perdu. La reconnexion de l'OAuth ne remplace pas le jeton d'accès au dépôt ; conservez le jeton d'accès au dépôt configuré lorsque GitLab est également utilisé pour les opérations de synchronisation ou de copie.
+
+## Source de déploiement active
+
+Le mode source active GitLab signifie que le site lit ses documents de production depuis GitLab au lieu de considérer GitLab comme une cible de copie.
+
+Avant d'activer cela sur un site en production, vérifiez :
+
+- le projet et la branche GitLab sont validés dans les paramètres Git
+- une mise à jour manuelle initiale est effectuée avec succès
+- le badge de source active pointe vers le dépôt GitLab
+- votre équipe comprend quel dépôt est désormais la source de vérité
+
+## Comportement de copie
+
+Lorsque GitLab est configuré en tant que cible de copie, dubstack copie la source des documents actifs dans le dépôt GitLab.
+
+Utilisez cela pour :
+
+- copie de sauvegarde
+- tests de migration
+- validation de la structure du dépôt GitLab
+- préparer un changement de fournisseur futur
+- accorder aux équipes basées sur GitLab l'accès aux fichiers de documentation
+
+Maintenez un seul source de production actif à la fois. Ne modifiez pas le dépôt source et la cible de copie GitLab indépendamment, sauf si vous migrez intentionnellement.
+
+## signaux de mise à jour
+
+Le mode cible de copie GitLab ne fait pas de GitLab la source en direct. Les poussées vers la source de déploiement active continuent de piloter les mises à jour de production.
+
+Lorsque GitLab est actif, utilisez les contrôles de mise à jour manuelle et de validation du fournisseur du tableau de bord pour confirmer la première synchronisation avant de faire confiance aux mises à jour GitLab pour un site de production.
+
+## Préparation à la rédaction
+
+La rédaction sur GitLab est prête lorsque toutes ces conditions sont remplies :
+
+- le site a une connexion active à un dépôt de documentation GitLab
+- le dépôt n'est pas un sauvegarde hébergée et le déploiement n'est pas protégé contre les modifications du dépôt
+- L'accès à la rédaction via OAuth GitLab est connecté pour le site ou l'organisation
+- le compte GitLab a le projet personnel ou de groupe pertinent sélectionné dans les paramètres Git
+- l'utilisateur GitLab connecté peut lire le projet et créer des branches ou des demandes de fusion
+- le modèle de rédaction est activé pour l'espace de travail
+
+Si la rédaction sur GitLab n'est pas prête, les workflows du tableau de bord et les demandes Slack renvoient un message de configuration au lieu de créer des modifications de dépôt.
+
+## GitLab auto-hébergé
+
+Pour GitLab auto-hébergé, l'instance doit être accessible par dubstack via HTTPS.
+
+Avant de se connecter :
+
+- confirmez que l'URL de base publique est correcte
+- confirmez que l'ID ou le chemin du projet est résolu via l'API GitLab
+- confirmez que le jeton peut accéder au projet
+- confirmez que l'OAuth GitLab est configuré si les workflows doivent écrire des modifications
+- confirmez que le trafic des webhooks/API sortants est autorisé par votre politique réseau
+
+Pour le chemin de configuration OAuth de la rédaction, consultez [OAuth GitLab auto-hébergé](/fr/deployment/gitlab-self-hosted-oauth).
+
+## Dépannage
+
+### Le jeton GitLab est rejeté
+
+Confirmez que le jeton possède les portées `api` et `read_api` et peut lire le projet sélectionné.
+
+### La copie initiale n'a pas été complétée
+
+Vérifiez d'abord la source de déploiement active. La copie GitLab dépend d'un dépôt source valide et de fichiers de documentation publiés.
+
+### GitLab ne publie pas le site en direct
+
+Confirmez que les paramètres Git affichent GitLab comme source de déploiement active. Si GitLab n'est affiché que comme cible de copie, les actions de copie peuvent mettre à jour le dépôt GitLab, mais le fournisseur actif actuel continue de publier les documents de production.
+
+### L'OAuth est connecté mais la copie échoue toujours
+
+OAuth et les jetons d'accès au dépôt servent des objectifs différents. Vérifiez que le jeton d'accès au dépôt est toujours présent et valide.
+
+### L'agent ou Slack indique que l'auteur GitLab n'est pas connecté
+
+Connectez l'OAuth GitLab dans les paramètres Git. Le jeton d'accès au dépôt n'est pas suffisant pour l'écriture de demande de fusion, car les actions d'écriture nécessitent une connexion OAuth à portée utilisateur.
+
+### L'OAuth GitLab doit être reconnecté
+
+Reconnectez le compte GitLab depuis les paramètres Git, puis développez la section OAuth GitLab et vérifiez que les projets attendus sont visibles. Si les projets sont absents après la reconnexion, vérifiez que l'utilisateur GitLab connecté a toujours accès au projet et peut créer des branches ou des demandes de fusion.
+
+### Le contexte du workflow ignore les demandes de fusion GitLab
+
+Vérifiez que le workflow a sélectionné le contexte de dépôt GitLab, que l'OAuth GitLab est connecté et que le type d'exécution prend en charge le contexte de demande de fusion délimité. Les exécutions planifiées et les exécutions manuelles avec contexte source peuvent collecter les métadonnées des demandes de fusion délimitées lorsque la connexion est saine.
+
+### L'instance autohébergée ne peut pas se connecter
+
+Vérifiez que l'URL de l'instance est accessible depuis l'extérieur et utilise un certificat TLS fiable.
+
+## Sujets connexes
+
+- [Dépannage du contrôle de source](/fr/deployment/source-control-troubleshooting)
+- [Flux de travail Git local](/fr/deployment/local-git-workflow)
+- [OAuth GitLab autohébergé](/fr/deployment/gitlab-self-hosted-oauth)
+- [Fournisseurs Git](/fr/deployment/forgejo-github-gitlab)
+- [GitHub](/fr/deployment/github)
+- [Synchronisation Git](/fr/deployment/git-sync)

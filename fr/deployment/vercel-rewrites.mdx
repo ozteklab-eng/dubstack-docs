@@ -1,0 +1,146 @@
+---
+title: Réécritures Vercel
+description: "Réécriture /docs d'une application Vercel vers une origine dubstack."
+icon: triangle
+---
+
+Utilisez les réécritures Vercel lorsque votre site web racine est déployé sur Vercel et que les docs doivent apparaître à `example.com/docs`.
+
+```text
+Vercel app          -> example.com
+Vercel rewrite      -> example.com/docs
+Dubstack origin     -> <site>--origin.dubstack.live/docs
+```
+
+## Prérequis
+
+Avant d'ajouter les réécritures :
+
+- Publiez votre site dubstack.
+- Activez **Héberger à `/docs`** dans **Paramètres → Déploiement → Domaine personnalisé**.
+- Copiez le nom d'hôte d'origine généré.
+- Assurez-vous que votre application Vercel sert déjà le domaine racine.
+
+## Réécritures basiques
+
+Ajoutez des réécritures pour `/docs` et `/docs/:path*`.
+
+```json filename="vercel.json"
+{
+  "rewrites": [
+    {
+      "source": "/docs",
+      "destination": "https://<site>--origin.dubstack.live/docs"
+    },
+    {
+      "source": "/docs/:path*",
+      "destination": "https://<site>--origin.dubstack.live/docs/:path*"
+    }
+  ]
+}
+```
+
+Déployez l'application Vercel après avoir modifié `vercel.json`.
+
+## Quand utiliser un proxy de bord à la place
+
+Les réécritures statiques sont l'option la plus simple, mais certaines configurations nécessitent une fonction de bord ou un middleware à la place.
+
+Utilisez un proxy de bord lorsque vous avez besoin de :
+
+- Définir `X-Forwarded-Host`, `X-Public-Host` ou `X-Forwarded-Proto` explicitement.
+- Définir `X-Docs-Base-Path` sur `/docs`.
+- Définir `X-Public-Mcp-Url` afin que les points de découverte publics MCP pointent vers l'URL `/docs/mcp` montée.
+- Proxy les fichiers de découverte AI de niveau racine tels que `/llms.txt` ou `/skill.md`.
+- Contournez le cache pour `/docs/api/*` et les demandes d'assistant.
+- Préservez les en-têtes de demande personnalisés utilisés par votre passerelle.
+
+## Exemple de proxy de middleware
+
+Utilisez cette forme lorsque les réécritures ne peuvent pas définir les en-têtes de transfert requis pour votre déploiement.
+
+```ts filename="middleware.ts"
+import { NextRequest } from 'next/server';
+
+const DOCS_PREFIX = '/docs';
+const DOCS_ORIGIN_HOST = '<site>--origin.dubstack.live';
+const PUBLIC_HOST = 'example.com';
+
+export function middleware(request: NextRequest) {
+  const url = request.nextUrl.clone();
+
+  if (url.pathname !== DOCS_PREFIX && !url.pathname.startsWith(`${DOCS_PREFIX}/`)) {
+    return;
+  }
+
+  url.protocol = 'https:';
+  url.hostname = DOCS_ORIGIN_HOST;
+  url.port = '';
+
+  const headers = new Headers(request.headers);
+  headers.set('Host', DOCS_ORIGIN_HOST);
+  headers.set('X-Forwarded-Host', PUBLIC_HOST);
+  headers.set('X-Public-Host', PUBLIC_HOST);
+  headers.set('X-Forwarded-Proto', 'https');
+  headers.set('X-Docs-Base-Path', DOCS_PREFIX);
+  headers.set('X-Public-Mcp-Url', `https://${PUBLIC_HOST}${DOCS_PREFIX}/mcp`);
+
+  return fetch(url, {
+    method: request.method,
+    headers,
+    body: request.body,
+    redirect: 'manual'
+  });
+}
+
+export const config = {
+  matcher: ['/docs', '/docs/:path*']
+};
+```
+
+L'implémentation exacte du proxy dépend des paramètres de runtime Next.js et Vercel. Le comportement important est que `/docs` reste la route publique, le contexte d'hôte public est transféré, et les métadonnées MCP publiques annoncent `https://example.com/docs/mcp`.
+
+## Proxy externe devant Vercel
+
+Si Cloudflare, CloudFront, Nginx ou un autre proxy se trouve devant Vercel, autorisez les chemins de vérification et de certificat à passer à travers Vercel sans mise en cache lourde ou redirections.
+
+Chemins d'autorisation courants :
+
+```text
+/.well-known/acme-challenge/*
+/.well-known/vercel/*
+```
+
+Ces routes sont utilisées par les flux de vérification de certificat et de domaine. Bloquer ces chemins peut empêcher le domaine racine de se vérifier correctement.
+
+## Validez la configuration
+
+Après le déploiement, ouvrez :
+
+```text
+https://example.com/docs
+https://example.com/docs/quickstart
+https://example.com/docs/api/theme
+https://example.com/docs/llms.txt
+```
+
+Vérifiez que :
+
+- Le rafraîchissement direct fonctionne sur les pages de docs imbriquées.
+- Les ressources statiques sont chargées depuis `/docs/_next/...`.
+- Le site de documentation ne redirige pas les visiteurs vers l'hôte `--origin.dubstack.live`.
+- Les requêtes de recherche, d'assistant et de playground API restent sous `/docs/api/...`.
+
+## Dépannage
+
+### Vercel affiche sa propre erreur 404 pour les pages imbriquées
+
+La réécriture avec un joker est absente ou placée après une route catch-all. Ajoutez `/docs/:path*` et assurez-vous qu'aucune route d'application ne la remplace.
+
+### La page de documentation s'affiche mais les ressources échouent
+
+Confirmez que `/docs/_next/*`, `/docs/api/static/*`, `/docs/img/*` et `/docs/assets/*` sont couverts par la réécriture avec un joker ou le correspondant de middleware.
+
+### Les liens générés pointent vers l'hôte d'origine
+
+Utilisez un middleware ou un proxy de bord qui peut définir `X-Forwarded-Host`, `X-Public-Host` et `X-Forwarded-Proto`.

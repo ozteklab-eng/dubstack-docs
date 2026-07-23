@@ -1,0 +1,94 @@
+---
+title: "Membres de l'équipe"
+description: "Invitez des collègues et gérez les rôles de l'organisation."
+icon: users
+---
+
+Les membres de l'équipe permettent à plus de personnes de travailler dans la même organisation dubstack.
+
+Invitez des collègues une fois la source du site et la première publication opérationnelles, puis attribuez le rôle le plus restreint permettant à chacun d'accomplir sa tâche.
+
+## Exigences
+
+Les invitations d'équipe dépendent du plan et du rôle :
+
+| Exigence | Détails |
+| --- | --- |
+| Plan | Les invitations d'équipe sont disponibles sur les espaces de travail Pro et Enterprise. |
+| Rôle de l'inviteur | Les éditeurs peuvent inviter des éditeurs et des lecteurs. Les administrateurs peuvent inviter des administrateurs, des éditeurs et des lecteurs. |
+| Email d'invitation | L'utilisateur invité doit accepter avec la même adresse e-mail. |
+
+Les espaces de travail gratuits peuvent évaluer le produit avec le premier compte administrateur. Mettez à niveau lorsque vous avez besoin d'une collaboration d'équipe.
+
+## Inviter un membre
+
+1. Ouvrez le tableau de bord.
+2. Allez dans **Paramètres > Organisation > Membres**.
+3. Entrez l'adresse e-mail du collègue.
+4. Choisissez le rôle.
+5. Envoyez l'invitation.
+6. Demandez au collègue d'accepter à partir de l'adresse e-mail qui a reçu l'invitation.
+
+Les invitations en attente apparaissent sur la page des membres jusqu'à ce qu'elles soient acceptées, annulées ou expirées.
+
+## Choisir un rôle
+
+| Rôle | Utilisé lorsque |
+| --- | --- |
+| Administrateur | La personne gère les membres, la facturation, le SSO, les domaines, la source Git ou les paramètres de l'organisation. |
+| Éditeur | La personne écrit, révise, publie ou configure les documents. |
+| Lecteur | La personne a besoin d'une visibilité en lecture seule sur le tableau de bord. |
+
+Voir [Rôles](/fr/dashboard/roles) pour la matrice des autorisations complète.
+
+## Gérer les invitations en attente
+
+Utilisez les invitations en attente pour confirmer qui a encore besoin d'accès.
+
+Maintenance recommandée :
+
+- annuler les invitations envoyées à la mauvaise adresse e-mail
+- renvoyer les invitations uniquement après avoir confirmé que la personne a toujours besoin d'accès
+- éviter d'envoyer des invitations d'administrateur sauf si le destinataire a besoin de fonctions d'administrateur
+- examiner les invitations en attente avant de changer de plan ou d'état de propriété
+
+## Accès au fournisseur Git
+
+Le statut de membre du tableau de bord et l'accès au fournisseur Git sont séparés.
+
+Un collègue peut avoir besoin des deux :
+
+- accès au tableau de bord pour utiliser l'éditeur, les paramètres, les workflows et les analyses
+- accès au dépôt pour reviewer ou fusionner les pull requests
+- accès à l'application du fournisseur s'ils gèrent l'installation du dépôt
+
+Si un collègue peut modifier du contenu dans dubstack mais ne peut pas fusionner une pull request, mettez à jour les autorisations du fournisseur Git ou demandez à un administrateur du dépôt de relire le changement.
+
+## Retirer l'accès d'un membre
+
+Utilisez **Révoquer les identifiants** lorsqu'un retrait progressif ou une réponse à une compromission est nécessaire sans supprimer immédiatement le membre du tableau de bord.
+
+Cette action révoque les clés API d'administrateur actives créées par le membre, déconnecte leur connexion OAuth d'auteur GitLab et déconnecte les dépôts source Forgejo connectés avec le jeton de ce membre. Le membre reste dans l'organisation avec le même rôle.
+
+Utilisez **Supprimer** lorsqu'une personne ne devrait plus accéder au tableau de bord.
+
+Lors de la suppression d'un collègue :
+
+1. Supprimer le statut de membre du tableau de bord.
+2. Examiner les invitations en attente pour la même personne.
+3. Examiner l'accès au dépôt du fournisseur Git.
+4. Examiner l'accès à Slack, Jira et d'autres intégrations.
+5. Renouveler les identifiants partagés auxquels la personne avait accès.
+6. Examiner l'activité récente ou les journaux d'audit si l'espace de travail a activé la journalisation d'audit.
+
+La suppression d'un membre révoque automatiquement les clés API d'administrateur actives créées par ce membre, déconnecte leur connexion OAuth d'auteur GitLab et déconnecte les dépôts source Forgejo connectés avec le jeton de ce membre.
+
+<Callout type="warning">
+  La suppression du tableau de bord ne retire pas la personne de GitHub, GitLab, Forgejo, Slack, Jira ou de votre fournisseur d'identité. Vérifiez ces systèmes séparément, notamment pour les intégrations de workspace partagé et les autorisations de dépôt.
+</Callout>
+
+## Sujets connexes
+
+- [Rôles](/fr/dashboard/roles)
+- [Autorisations de déploiement](/fr/dashboard/deployment-permissions)
+- [Clés API](/fr/dashboard/api-keys)

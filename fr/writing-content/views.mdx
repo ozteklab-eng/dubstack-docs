@@ -1,0 +1,83 @@
+---
+title: Vues
+description: "Créez des sections de page interchangeables pour les langages, les cadres ou les variantes de configuration."
+icon: gallery-horizontal-end
+---
+
+Les vues permettent aux lecteurs de basculer le contenu visible de la page pour un langage, un cadre ou un environnement spécifiques.
+
+Utilisez les vues lorsque le même concept nécessite des versions parallèles et que vous souhaitez que la page se souvienne d'une option sélectionnée à la fois.
+
+<View title="JavaScript" icon="braces">
+  Les lecteurs JavaScript voient cette section.
+
+  ```javascript
+  console.log("Hello from JavaScript");
+  ```
+</View>
+
+<View title="Python" icon="file-code">
+  Les lecteurs Python voient cette section.
+
+  ```python
+  print("Hello from Python")
+  ```
+</View>
+
+## Vues basiques
+
+Définissez un `View` pour chaque option.
+
+````mdx
+<View title="JavaScript" icon="braces">
+  JavaScript readers see this section.
+
+  ```javascript
+  console.log("Hello from JavaScript");
+  ```
+</View>
+
+<View title="Python" icon="file-code">
+  Python readers see this section.
+
+  ```python
+  print("Hello from Python")
+  ```
+</View>
+````
+
+## Quand utiliser les vues
+
+Utilisez les vues pour des alternatives au niveau de la page :
+
+- configuration du langage de programmation
+- installation spécifique au framework
+- variantes des fournisseurs de cloud
+- différences entre les systèmes d'exploitation
+
+Utilisez [onglets et étapes](/fr/writing-content/tabs-and-steps) pour des alternatives plus courtes en ligne. Utilisez [groupes de code](/fr/writing-content/code-groups) pour des exemples de code qui diffèrent mais partagent la même explication.
+
+## Propriétés
+
+<ResponseField name="title" type="string" required>
+  Étiquette affichée dans le sélecteur de vue.
+</ResponseField>
+
+<ResponseField name="icon" type="string">
+  Icône facultative affichée à côté de la vue active dans le sélecteur.
+</ResponseField>
+
+<ResponseField name="iconType" type="string">
+  Style d'icône facultatif lorsqu'une bibliothèque d'icônes sélectionnée prend en charge plusieurs styles.
+</ResponseField>
+
+<ResponseField name="children" type="MDX content" required>
+  Contenu affiché lorsque cette vue est sélectionnée.
+</ResponseField>
+
+## Directives
+
+- Maintenez les titres à l'intérieur de chaque vue équivalents afin que les lecteurs puissent comparer les variantes.
+- Ne placez pas des sujets non liés dans des vues différentes.
+- Maintenez la vue par défaut utile pour le lecteur le plus courant.
+- Évitez d'emboîter des vues à l'intérieur d'onglets ou de panneaux coulissants.

@@ -1,0 +1,43 @@
+---
+title: Intégrations de génération de SDK
+description: "Comprenez comment les SDK générés et les dépôts sources s'intègrent dans les workflows de documentation d'API."
+icon: code
+---
+
+Les intégrations de génération de SDK relient les spécifications d'API, les bibliothèques clientes générées et les workflows de documentation.
+
+Cette famille n'est pas encore active en tant que connecteur dédié. Utilisez cette page pour comprendre la limite prévue et ce qu'il faut utiliser aujourd'hui.
+
+## Statut actuel
+
+dubstack peut déjà documenter les API à partir des spécifications OpenAPI et exposer des pages de référence d'API interactives.
+
+Pour les workflows SDK générés aujourd'hui :
+
+- gardez la source OpenAPI dans le dépôt de documentation ou un dépôt source connecté
+- documentez les étapes d'installation et d'utilisation du SDK généré en tant que pages MDX
+- utilisez les dépôts source en tant que contexte de workflow en lecture seule lorsque les modifications de code doivent produire des mises à jour de documentation
+- utilisez l'écriture de dépôt pour ouvrir des modifications de documentation révisables
+
+Les connecteurs de fournisseurs de génération de SDK dédiés sont prévus, mais ils ne sont pas encore actifs dans le catalogue d'intégration.
+
+## Limite de connecteur prévue
+
+Un connecteur de génération de SDK ne doit pas remplacer le rendu de la référence d'API. Il doit fournir un contexte supplémentaire tel que :
+
+- liens vers les dépôts SDK générés
+- noms de paquets et commandes d'installation
+- matrice de prise en charge des langages
+- méta-données de version ou de journal des modifications
+- extraits d'exemples générés lorsqu'ils sont disponibles
+
+Les modifications de documentation doivent toujours s'écrire via le dépôt de documentation connecté.
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/api-reference/introduction">Référence d'API</a>
+  <a href="/fr/api-reference/openapi-setup">Configuration OpenAPI</a>
+  <a href="/fr/api-reference/code-examples">Exemples de code</a>
+  <a href="/fr/workflows/reference">Référence des workflows</a>
+</RelatedTopics>

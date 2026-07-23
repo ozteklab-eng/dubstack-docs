@@ -1,0 +1,97 @@
+---
+title: Appliquer votre guide de style
+description: "Maintenez un ton, une terminologie et des règles d'écriture cohérents dans les mises à jour de la documentation."
+icon: check-circle
+---
+
+Le flux de travail d'application de votre guide de style applique vos règles d'écriture aux modifications de la documentation et ouvre des mises à jour à réviser.
+
+Utilisez-le lorsque votre équipe a une terminologie, des règles de ton et de style, des conventions d'accessibilité ou des modèles de mise en forme qui doivent rester cohérents entre les contributeurs.
+
+<Info>
+  Les instructions du guide de style sont nécessaires avant d'activer ce flux de travail.
+</Info>
+
+## Ce qu'il fait
+
+Lorsqu'il est activé pour un déploiement, le flux de travail est conçu pour :
+
+- lire les instructions du guide de style sauvegardées pour le déploiement sélectionné
+- examiner le contenu de la documentation modifiée par rapport à ces règles
+- suggérer des corrections de terminologie, de ton et de mise en forme
+- préserver la précision technique, les exemples de code et les identifiants API
+- rédiger des modifications dans le dépôt de documentation connecté
+- enregistrer l'état de l'exécution, les fichiers modifiés et l'utilisation des crédits dans l'historique du flux de travail
+
+Ce flux de travail applique les règles que vous définissez. Gardez les instructions précises pour que les modifications générées soient révisables.
+
+## Bonnes instructions du guide de style
+
+Les instructions fortes sont spécifiques et testables.
+
+| Type de règle | Exemple d'instruction |
+| --- | --- |
+| Terminologie | Utilisez « espace de travail » pour la zone du compte client. Ne pas utiliser « locataire » dans les documents publics. |
+| Voix | Utilisez des phrases directes et actives. Évitez les affirmations marketing dans les guides de configuration. |
+| Accessibilité | Le texte des liens doit décrire la destination. Évitez « cliquez ici ». |
+| Mise en forme | Utilisez le cas de phrase pour les titres. Gardez les éléments de liste parallèles. |
+| Exceptions | Ne réécrivez pas les valeurs d'énumération API, les noms de produits, les chemins de fichiers ou la sortie des commandes. |
+
+Évitez les instructions générales telles que « améliorez les documents » . Elles rendent le processus de révision bruyant et peuvent apporter trop de changements à la fois.
+
+## Configuration requise
+
+Avant d'activer l'automatisation du guide de style :
+
+1. Connectez un dépôt de documentation basé sur Git.
+2. Vérifiez que le dépôt de documentation a accès en écriture.
+3. Vérifiez que le profil du modèle d'auteur est disponible.
+4. Ajoutez les instructions du guide de style dans le panneau des paramètres du flux de travail.
+5. Commencez en mode **Exiger une revue**.
+
+## Déclencheurs et mode de mise à jour
+
+| Paramètre | Comportement |
+| --- | --- |
+| Déclencheur | Mise à jour du contenu ou calendrier personnalisé |
+| Premier mode recommandé | Exiger une revue |
+| Mode automatique | Utilisez uniquement pour des règles étroites et bien testées |
+| Cible d'écriture | Dépôt de documentation connecté |
+| Dépôts de contexte | Non pris en charge |
+| Configuration requise | Instructions du guide de style |
+
+Les exécutions planifiées sont utiles lorsque vous souhaitez une demande de revue éditoriale régulière. Les déclencheurs de mise à jour du contenu sont utiles lorsque la cohérence doit être vérifiée immédiatement après chaque modification des documents.
+
+## Utilisation des crédits
+
+Les exécutions du guide de style sont des flux de maintenance et comptent dans l'utilisation des crédits de flux de travail.
+
+L'estimation actuelle de planification est de **235 crédits par exécution**. L'utilisation réelle peut varier en fonction de :
+
+- nombre de pages modifiées
+- nombre et complexité des règles de style
+- quantité de texte inspecté
+- nombre d'éditions générées
+- routage du modèle et profil du flux de travail
+
+Voyez [Crédits et utilisation de l'IA](/fr/ai/credits-usage) pour le modèle d'allocation partagée.
+
+## Liste de vérification
+
+Avant de fusionner les mises à jour du guide de style générées, vérifiez :
+
+- la règle a été appliquée correctement
+- La modification n'a pas affaibli la précision technique
+- les exemples, le code et les identifiants d'API ont été préservés
+- le changement améliore la cohérence sans rendre la page générique
+- toute règle bruyante devrait être affinée avant la prochaine exécution
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/workflows/reference#enforce-your-style-guide">Référence des flux de travail</a>
+  <a href="/fr/workflows/fix-grammar-typos">Flux de travail de correction des fautes de grammaire et de frappe</a>
+  <a href="/fr/guides/style-and-tone">Style et ton</a>
+  <a href="/fr/guides/accessibility">Accessibilité</a>
+  <a href="/fr/ai/credits-usage">Crédits et utilisation de l'IA</a>
+</RelatedTopics>

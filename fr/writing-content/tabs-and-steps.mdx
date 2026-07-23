@@ -1,0 +1,73 @@
+---
+title: Onglets et étapes
+description: Organisez le contenu alternatif et les procédures séquentielles.
+icon: list-ordered
+---
+
+Utilisez des onglets pour les choix alternatifs et des étapes pour les procédures ordonnées.
+
+## Onglets
+
+<Tabs>
+  <Tab title="GitHub">
+    Connectez l'application GitHub, sélectionnez un dépôt, puis publiez depuis le tableau de bord.
+  </Tab>
+
+  <Tab title="GitLab">
+    Connectez GitLab avec un jeton, sélectionnez un projet, puis synchronisez via les paramètres du fournisseur Git.
+  </Tab>
+</Tabs>
+
+```mdx
+<Tabs>
+  <Tab title="GitHub">
+    Connect the GitHub app, choose a repository, then publish from the dashboard.
+  </Tab>
+
+  <Tab title="GitLab">
+    Connect GitLab with a token, choose a project, then sync through the Git provider settings.
+  </Tab>
+</Tabs>
+```
+
+## Étapes
+
+<Steps>
+  <Step title="Créez la page">
+    Ajoutez un fichier `.mdx` à votre dépôt de documentation.
+  </Step>
+
+  <Step title="Ajoutez-le à la navigation">
+    Référez-vous à la page `dubstack.json` afin que les lecteurs puissent la trouver.
+  </Step>
+
+  <Step title="Publiez le site">
+    Validez le changement et lancez une mise à jour manuelle si vous souhaitez actualiser immédiatement.
+  </Step>
+</Steps>
+
+```mdx
+<Steps>
+  <Step title="Create the page">
+    Add an `.mdx` file to your docs repository.
+  </Step>
+
+  <Step title="Add it to navigation">
+    Reference the page from `dubstack.json`.
+  </Step>
+</Steps>
+```
+
+## Propriétés prises en charge
+
+<ResponseField name="title" type="string" required>
+  Requis sur chaque `Tab` et `Step`.
+</ResponseField>
+
+<ResponseField name="defaultTab" type="string">
+  Propriété `Tabs` facultative pour choisir quel onglet s'ouvre en premier.
+</ResponseField>
+
+<ResponseField name="children" type="MDX content" required>
+  Contenu de chaque onglet ou étape.
+</ResponseField>

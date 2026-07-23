@@ -1,0 +1,221 @@
+---
+title: "Clés d'API"
+description: "Créez des clés d'API Admin avec des autorisations limitées pour des automatisations fiables."
+icon: key-round
+---
+
+Les clés d'API offrent aux systèmes backend fiables un moyen contrôlé d'appeler dubstack sans utiliser une session navigateur.
+
+Utilisez **Paramètres > Sécurité > Clés d'API** pour l'automatisation côté serveur, comme les déclencheurs de déploiement CI, les tâches cron, les outils de publication ou les traitements internes de plateforme.
+
+<Callout type="warning">
+  Les clés d'API Admin sont des secrets. Stockez-les dans un gestionnaire de secrets, jamais dans votre dépôt de documentation, pages publiques, captures d'écran ou code côté client.
+</Callout>
+
+## À quoi servent les clés d'API
+
+Les clés d'API Admin sont distinctes des identifiants du playground destinés aux lecteurs.
+
+Utilisez-les lorsqu'un système fiable doit appeler dubstack au nom de votre organisation :
+
+- déclencher une mise à jour de déploiement à partir d'une CI ou d'une pipeline de libération
+- créer un déploiement de prévisualisation de branche à partir d'un pipeline de pull request
+- déclencher un workflow activé à partir d'une CI ou d'outils de publication
+- exécuter une tâche backend planifiée à partir de votre planificateur
+- intégrer des outils de plateforme interne aux workflows de documentation
+- renouveler les identifiants sans partager une session de tableau de bord personnelle
+
+Les portées contrôlent les capacités d'API Admin qu'une clé peut utiliser :
+
+| Portée | Autorise |
+| --- | --- |
+| `deployments:trigger` | Mettre en file d'attente des mises à jour du déploiement en direct et des déploiements de prévisualisation de branche. |
+| `deployments:read` | Lire l'état et les journaux de déploiement. |
+| `workflows:run` | Déclencher des exécutions de workflows éligibles. |
+| `analytics:read` | Lire les exports d'analyse d'utilisation et de feedback. |
+
+## Types de clés
+
+dubstack utilise des identifiants différents pour des limites de confiance différentes.
+
+| Identifiant | Où il est géré | Qui l'utilise | Utilisez-le pour |
+| --- | --- | --- | --- |
+| Clé d'API Admin | **Paramètres > Sécurité > Clés d'API** | Vos systèmes backend, tâches CI, planificateurs et automatisation fiables | Appeler les routes d'API admin de dubstack, comme les déploiements ou les déclencheurs de workflows. |
+| Identifiant du playground | Playground API et votre schéma de sécurité OpenAPI | Lecteurs de la documentation testant votre API documentée | Fournir un jeton porteur, une clé API ou d'autres identifiants pour votre propre API au moment de la demande. |
+| Session de lecteur | Authentification des documents | Lecteurs de la documentation connectés | Déverrouiller les pages de documentation protégées. |
+
+Ne réutilisez pas un type d'identifiants pour un autre. Les clés API d'administration sont réservées à l'automatisation de dubstack uniquement. Les identifiants du playground appartiennent à votre API et doivent être entrés uniquement par les lecteurs lorsqu'ils envoient intentionnellement une demande depuis la référence API.
+
+## Créer une clé
+
+1. Ouvrez le tableau de bord.
+2. Sélectionnez l'organisation et le déploiement.
+3. Allez dans **Paramètres > Sécurité > Clés API**.
+4. Entrez un nom clair, tel que `Release deployment trigger`.
+5. Définissez éventuellement une date d'expiration.
+6. Sélectionnez les portées nécessaires pour la clé.
+7. Maintenez activée l'option **Restreindre cette clé à ce déploiement** sauf si une tâche backend doit fonctionner sur plusieurs déploiements.
+8. Cliquez sur **Créer la clé**.
+9. Stockez la clé brute immédiatement. dubstack ne montre la clé brute qu'une seule fois.
+
+Une fois que vous quittez la page, seuls le préfixe de la clé, la portée, l'état et les métadonnées d'audit sont visibles.
+
+## Champs de la clé
+
+| Champ | Objectif |
+| --- | --- |
+| Nom | Étiquette lisible par les utilisateurs affichée dans le tableau de bord. |
+| Portée | Les capacités d'API d'administration autorisées. Sélectionnez l'ensemble minimal dont le système externe a besoin. |
+| Portée site | Restreint la clé à un seul déploiement. Les clés avec portée site sont le choix par défaut le plus sûr. |
+| Expiration | Horodatage d'expiration facultatif. Les clés expirées ne s'authentifient plus. |
+| Dernière utilisation | Horodatage de la dernière utilisation réussie. |
+| Statut | Indique si la clé est active, expirée ou révoquée. |
+
+## Déclencher un déploiement
+
+Utilisez une clé avec la portée `deployments:trigger` pour mettre en file d'attente une mise à jour en direct à partir de la branche de déploiement configurée.
+
+```bash
+curl --request POST \
+  --url "https://api.dubstack.ai/api/project/update/{siteId}" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY"
+```
+
+Les requêtes réussies renvoient `202 Accepted` avec `statusId`. Utilisez cette valeur pour interroger l'état du déploiement.
+
+```bash
+curl --request GET \
+  --url "https://api.dubstack.ai/api/project/update-status/{statusId}" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY"
+```
+
+Utilisez une clé avec `deployments:trigger` ou `deployments:read` pour interroger l'état.
+
+## Déclencher un déploiement de prévisualisation
+
+Utilisez une clé avec la portée `deployments:trigger` pour créer ou actualiser un déploiement de prévisualisation pour une branche.
+
+```bash
+curl --request POST \
+  --url "https://api.dubstack.ai/api/project/preview/{siteId}" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "branch": "feature/docs-update"
+  }'
+```
+
+Les requêtes réussies renvoient `202 Accepted` avec `statusId` et `previewUrl`.
+
+## Déclencher un workflow
+
+Utilisez une clé avec la portée `workflows:run` pour déclencher un workflow activé utilisant le déclencheur **Planification personnalisée**.
+
+```bash
+curl --request POST \
+  --url "https://api.dubstack.ai/api/agent/workflows/{workflowId}/api-trigger" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "site_id": "site-id-for-unscoped-keys"
+  }'
+```
+
+Si la clé est restreinte à un déploiement, omettez `site_id` ; dubstack utilise la portée de déploiement de la clé.
+
+Les workflows intégrés utilisent leur ID de workflow. Les configurations de workflows personnalisés enregistrées utilisent `custom_workflow`. Les enregistrements de workflows personnalisés créés par l'utilisateur utilisent le formulaire `custom_workflow:{id}`.
+
+Les requêtes réussies renvoient `202 Accepted` avec les détails de l'exécution en file d'attente.
+
+Les exécutions déclenchées par l'API apparaissent dans l'historique des exécutions de workflow avec la source de déclenchement `api`. Les métadonnées de l'exécution stockent le préfixe de la clé Admin API, et non la clé brute.
+
+Voyez [Déclencheurs de l'API des workflows](/fr/api-reference/workflow-triggers) pour des exemples CI, les formats d'ID de workflow et les raisons d'erreur.
+
+## Exporter les analyses
+
+Utilisez une clé avec la portée `analytics:read` pour lire les analyses d'utilisation et de feedback à partir d'un job backend fiable.
+
+```bash
+curl --request GET \
+  --url "https://api.dubstack.ai/api/v1/admin/analytics/usage?days=30" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY"
+```
+
+Les clés limitées au site utilisent automatiquement leur portée de déploiement. Les clés limitées à l'organisation peuvent inclure `site_id`, `site_slug` ou `subdomain`.
+
+```bash
+curl --request GET \
+  --url "https://api.dubstack.ai/api/v1/admin/analytics/feedback?subdomain=docs&status=pending,resolved" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY"
+```
+
+Les exports d'analyses sont en lecture seule et renvoient du JSON. Ils sont destinés à la synchronisation BI backend, aux tableaux de bord internes et aux rapports périodiques.
+
+## État requis du workflow
+
+L'API Admin ne contourne pas les vérifications de préparation du workflow.
+
+Avant qu'un workflow ne puisse être déclenché par l'API :
+
+- le workflow doit être activé
+- le déclencheur sélectionné doit être **Planification personnalisée**
+- l'accès d'auteur du dépôt doit être prêt
+- le profil du modèle d'auteur doit être prêt
+- les champs de configuration requis du workflow doivent être complets
+- aucune exécution pour ce workflow ne doit déjà être en file d'attente ou en cours
+- la limite quotidienne d'exécution du workflow doit avoir une capacité disponible
+
+Si une vérification échoue, l'API renvoie une erreur structurée avec le champ `reason`.
+
+## Révoquer une clé
+
+Révoquez une clé lorsque le client n’a plus besoin d’accès ou si vous soupçonnez qu’elle a été exposée.
+
+1. Accédez à **Paramètres > Sécurité > Clés API**.
+2. Trouvez la clé par nom ou par préfixe.
+3. Cliquez sur **Révoquer**.
+4. Confirmez l’action.
+5. Supprimez la clé du système externe ou du magasin de secrets.
+
+La révocation est immédiate. Les clients existants utilisant la clé ne fonctionneront plus lors de leur prochaine requête.
+
+## Conseils de sécurité
+
+- Privilégiez les clés limitées au site.
+- Utilisez une clé par système externe afin que la rotation soit ciblée.
+- Définissez des dates d’expiration pour les workflows temporaires ou spécifiques à un projet.
+- Faites tourner les clés après des changements d’équipe ou de fournisseur.
+- Stockez les clés uniquement dans des magasins de secrets backend.
+- Consultez `Last used` avant de révoquer une clé pour comprendre quel client en dépend encore.
+- Ne collez pas les clés API d’administration dans les documents publics, les exemples, le code frontend ou les tickets de support.
+
+## Dépannage
+
+### L’API renvoie 401
+
+Vérifiez que l’en-tête `Authorization` utilise `Bearer` et la valeur brute de la clé. La clé n’est affichée qu’une seule fois lors de sa création.
+
+### L’API renvoie 403
+
+La clé peut être limitée à un déploiement différent, ou le déploiement demandé n’appartient pas à la même organisation.
+
+### L’API renvoie workflow_not_api_triggerable
+
+Seuls les workflows configurés avec le déclencheur **Planification personnalisée** peuvent être déclenchés via l’API d’administration.
+
+### L’API renvoie workflow_not_enabled
+
+Activez le workflow depuis **Automate > Workflows** avant d’appeler le point de terminaison de déclenchement.
+
+### Le workflow est en file d’attente mais ne s’achève pas
+
+Ouvrez **Automate > Workflows**, inspectez l'historique des exécutions et vérifiez l'état du moteur d'exécution, la préparation du dépôt, celle du modèle et la configuration de l'intégration.
+
+## Liens
+
+- [Déclencheurs de l’API des workflows](/fr/api-reference/workflow-triggers)
+- [Exports de l’API d’analyse](/fr/api-reference/analytics-exports)
+- [Configurer les exécutions de workflow](/fr/workflows/configuration)
+- [Gérer les workflows](/fr/workflows/manage)
+- [Référence des workflows](/fr/workflows/reference)
+- [Rôles](/fr/dashboard/roles)

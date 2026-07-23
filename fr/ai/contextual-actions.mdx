@@ -1,0 +1,116 @@
+---
+title: Actions contextuelles
+description: "Fournir aux lecteurs et aux outils d'IA des actions au niveau de la page pour copier, ouvrir et poser des questions sur le contenu de la documentation."
+icon: mouse-pointer-click
+---
+
+Les actions contextuelles sont les actions rapides affichées sur les pages de documentation publiées.
+
+Elles aident les lecteurs à copier le contenu de la page, à ouvrir une vue en Markdown, à envoyer la page à un assistant d'IA ou à connecter un outil d'IA externe au contexte de documentation actuel.
+
+## Actions courantes
+
+| Clé d'action | Étiquette | Ce qu'elle fait |
+| --- | --- | --- |
+| `copy` | Copier la page | Copie le contenu de la page actuelle au format Markdown. |
+| `view` | Afficher en Markdown | Ouvre une version Markdown de la page actuelle. |
+| `assistant` | Demander à l'assistant | Ouvre l'assistant de documentation avec la page actuelle en contexte. |
+| `claude`, `chatgpt`, `perplexity`, `grok`, `aistudio`, `devin`, `windsurf` | Actions d'IA externes | Ouvre ou prépare un outil d'IA externe pris en charge avec le contexte de la page. |
+| `mcp` | Copier l'URL du serveur MCP | Copie le point de terminaison public MCP pour le site de documentation. |
+| `add-mcp` | Copier la commande d'installation MCP | Copie une commande `npx add-mcp` pour le point de terminaison public MCP. |
+| `cursor` | Se connecter à Cursor | Copie un bloc JSON MCP pouvant être ajouté à Cursor. |
+| `vscode` | Se connecter à VS Code | Copie une commande CLI VS Code qui ajoute le serveur MCP public. |
+| `devin-mcp` | Se connecter à Devin | Copie un bloc JSON MCP pour une configuration MCP compatible Devin. |
+| `download-spec` | Télécharger la spécification API | Ouvre le téléchargement de la spécification OpenAPI publique pour les pages de référence API. |
+
+## Configurer les actions
+
+Configurez les actions contextuelles dans `dubstack.json`.
+
+```json
+{
+  "contextual": {
+    "enabled": true,
+    "options": ["copy", "view", "mcp", "add-mcp", "cursor", "vscode", "claude", "chatgpt", "perplexity"],
+    "default": "copy",
+    "labels": {
+      "copy": "Copy page",
+      "view": "View as Markdown",
+      "mcp": "Copy MCP server URL",
+      "add-mcp": "Copy MCP install command",
+      "cursor": "Connect to Cursor",
+      "vscode": "Connect to VS Code",
+      "claude": "Ask Claude",
+      "chatgpt": "Ask ChatGPT",
+      "perplexity": "Ask Perplexity"
+    }
+  }
+}
+```
+
+Utilisez l'ensemble le plus petit d'actions qui aide vos lecteurs. Un menu court est plus facile à comprendre et réduit le partage accidentel de données.
+
+## Comportement des pages publiques
+
+Les actions contextuelles utilisent uniquement le contenu des pages publiées. Elles ne révèlent pas les paramètres du tableau de bord, les fichiers non publiés, les notes d'équipe privées ou les données de dépôt protégées.
+
+Si une page n'est pas publiée, elle n'est pas disponible via les actions contextuelles sur le site public.
+
+## Actions d'outils d'IA
+
+Les actions d'outils d'IA sont utiles lorsque les lecteurs souhaitent poser une question en dehors de l'assistant intégré.
+
+Avant d'activer une action d'IA externe, vérifiez votre politique de contenu et assurez-vous que le contenu de la page est sécurisé pour être envoyé à cette destination. Les documents publics sont déjà visibles, mais les outils externes peuvent avoir des politiques de conservation, de confidentialité ou d'espace de travail différentes.
+
+<Callout type="warning">
+  Ne pas activer les actions externes pour les documents contenant des secrets, des informations clients privées, des plans de produits non encore lancés ou des procédures exclusives aux internes.
+</Callout>
+
+## Actions MCP
+
+Les actions MCP aident les développeurs à connecter un agent directement au site de documents publiés.
+
+Pour les documents publics, le point de terminaison MCP est disponible à :
+
+```text
+https://your-docs-domain.com/mcp
+```
+
+Les lecteurs peuvent utiliser le point de terminaison copié dans les clients qui prennent en charge les serveurs MCP HTTP. Les outils de récupération MCP sont en lecture seule et limités au contenu des documents publiés. Si le feedback de l'agent est activé, le serveur peut également publier un outil spécifique `submit_feedback` pour les problèmes liés à la qualité de la documentation.
+
+Lorsque `add-mcp` est activé, l'action copie une commande comme :
+
+```bash
+npx add-mcp https://your-docs-domain.com/mcp
+```
+
+Lorsque `vscode` est activé, l'action copie une commande VS Code avec une configuration de serveur MCP HTTP générée pour le domaine de documentation actuel.
+
+Lorsque `cursor` ou `devin-mcp` est activé, l'action copie un bloc JSON MCP avec le domaine de documentation actuel et le point de terminaison `/mcp`.
+
+## Action de spécification API
+
+Utilisez `download-spec` sur les sites de référence API lorsque vous souhaitez que les lecteurs téléchargent la spécification OpenAPI publiée depuis le menu contextuel.
+
+L'action ouvre :
+
+```text
+https://your-docs-domain.com/api/playground/spec
+```
+
+Pour les documents montés sous `/docs`, l'action utilise le sous-chemin correspondant :
+
+```text
+https://your-domain.com/docs/api/playground/spec
+```
+
+## Dépannage
+
+Si une action est absente d'une page :
+
+1. Vérifiez que `contextual.enabled` est `true`.
+2. Vérifiez que la clé d'action est listée dans `contextual.options`.
+3. Publiez la branche contenant le changement `dubstack.json`.
+4. Rafraîchissez la page publiée après la fin de la mise à jour.
+
+Si une action ouvre la mauvaise page, vérifiez que les URL canoniques et les redirections sont correctement configurées.

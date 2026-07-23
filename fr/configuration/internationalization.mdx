@@ -1,0 +1,160 @@
+---
+title: Internationalisation
+sidebarTitle: Internationalisation
+description: Planifiez et publiez la documentation traduite avec des routes préfixées par la locale et le changement de langue.
+icon: languages
+---
+
+L'internationalisation permet à un site de documentation de publier des pages traduites tout en maintenant un seul dépôt et un workflow de déploiement.
+
+Utilisez-la lorsque votre équipe gère des fichiers MDX traduits dans le contrôle de source et souhaite que les lecteurs passent entre les versions linguistiques depuis l'interface de documentation.
+
+<Info>
+  Le routage des langues est adossé aux fichiers sources. dubstack sert les pages traduites présentes dans votre dépôt ; il ne génère pas silencieusement de traduction à la demande.
+</Info>
+
+## Structure recommandée
+
+Maintenez la langue par défaut à la racine du dépôt. Placez les pages traduites dans des répertoires nommés avec des codes de langue.
+
+```text
+index.mdx
+quickstart.mdx
+configuration/navigation.mdx
+fr/
+  index.mdx
+  quickstart.mdx
+  configuration/navigation.mdx
+es/
+  index.mdx
+  quickstart.mdx
+  configuration/navigation.mdx
+```
+
+Utilisez la même structure de slug entre les langues lorsque c'est possible. Les slugs correspondants permettent au sélecteur de langue de garder les lecteurs sur la page traduite équivalente.
+
+## Configurer les options de langue
+
+Ajoutez les options de langue à `navigation.languages` dans `dubstack.json`.
+
+```json
+{
+  "navigation": {
+    "languages": [
+      {
+        "code": "en",
+        "label": "English",
+        "href": "/"
+      },
+      {
+        "code": "fr",
+        "label": "French",
+        "href": "/fr"
+      },
+      {
+        "code": "es",
+        "label": "Spanish",
+        "href": "/es"
+      }
+    ]
+  }
+}
+```
+
+Le site publié affiche un sélecteur de langue lorsqu'au moins une option de langue est configurée.
+
+Pour les détails au niveau du champ, consultez [Languages](/fr/configuration/languages).
+
+## Comportement des routes
+
+La langue par défaut reste généralement à des chemins racine :
+
+| Fichier | Chemin public |
+| --- | --- |
+| `index.mdx` | `/` |
+| `quickstart.mdx` | `/quickstart` |
+| `configuration/navigation.mdx` | `/configuration/navigation` |
+
+Les pages traduites utilisent le répertoire de langue comme préfixe d'URL :
+
+| Fichier | Chemin public |
+| --- | --- |
+| `fr/index.mdx` | `/fr` |
+| `fr/quickstart.mdx` | `/fr/quickstart` |
+| `fr/configuration/navigation.mdx` | `/fr/configuration/navigation` |
+
+Lorsqu'un lecteur change de langue, dubstack tente de préserver le chemin de la page actuelle. Si la page traduite correspondante est absente, le lecteur revient à la page d'accueil configurée pour la langue.
+
+## Bannières localisées
+
+Utilisez des bannières spécifiques à la langue lorsqu'une notice de lancement, un avertissement de migration ou un message spécifique à une région diffère selon la langue.
+
+```json
+{
+  "navigation": {
+    "languages": [
+      {
+        "code": "en",
+        "label": "English",
+        "href": "/",
+        "banner": {
+          "content": "Version 2.0 is live. See the changelog for details.",
+          "dismissible": true
+        }
+      },
+      {
+        "code": "fr",
+        "label": "French",
+        "href": "/fr",
+        "banner": {
+          "content": "La version 2.0 est disponible. Consultez le changelog.",
+          "dismissible": true
+        }
+      }
+    ]
+  }
+}
+```
+
+Si une langue ne définit pas de bannière, la [bannière](/fr/configuration/banners) au niveau du site est utilisée lorsqu'elle est configurée.
+
+## Flux de traduction
+
+Un flux de traduction fiable doit maintenir le contenu source et le contenu traduit révisables dans Git.
+
+1. Choisissez la langue par défaut
+2. Ajoutez `navigation.languages` avec les langues que vous êtes prêt à publier.
+3. Créez des répertoires de localisation pour les pages traduites.
+4. Maintenez les noms de fichiers traduits alignés avec les noms de fichiers de la langue par défaut.
+5. Vérifiez les liens à l'intérieur des pages traduites pour qu'ils pointent vers les routes traduites lorsqu'elles sont disponibles.
+6. Exécutez une prévisualisation ou une mise à jour manuelle avant d'annoncer les documents localisés.
+7. Publier depuis la branche de déploiement après validation.
+
+## Frontière du workflow
+
+Le workflow de traduction figure dans le catalogue, mais il dépend de capacités de déploiement telles que l'accès en écriture au dépôt, le routage des traductions, la configuration des politiques et un modèle d'édition.
+
+Si le workflow de traduction n'est pas disponible pour votre déploiement, maintenez manuellement les fichiers traduits ou via votre propre workflow de traduction, puis publiez les fichiers MDX traduits via Git.
+
+## Recherche et MCP public
+
+Après la publication des modifications de langue, la recherche et le MCP public utilisent le contenu synchronisé actuel.
+
+Les agents peuvent lire les pages traduites lorsqu'elles existent dans le dépôt publié. Si une traduction est absente, le MCP public ne peut ni la déduire ni la créer à partir d'une autre langue.
+
+## Liste de vérification
+
+- Maintenez une langue par défaut à la racine.
+- Ajoutez uniquement des langues avec un contenu traduit suffisant pour être utile.
+- Maintenez la structure des slugs alignée entre les langues.
+- Ajoutez un bandeau localisé uniquement lorsque le message diffère par langue.
+- Prévisualisez le changement de langue avant la publication.
+- Relancez la synchronisation après avoir modifié `navigation.languages` afin que la recherche et le MCP public reflètent le nouvel ensemble de langues.
+
+## Sujets connexes
+
+- [Langues](/fr/configuration/languages)
+- [Navigation](/fr/configuration/navigation)
+- [Publication](/fr/editor/publishing)
+- [Prévisualisation des déploiements](/fr/deployment/preview-deployments)
+- [Référence des workflows](/fr/workflows/reference)

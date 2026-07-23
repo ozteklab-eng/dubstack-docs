@@ -1,0 +1,189 @@
+---
+title: Politique de sécurité des contenus
+description: "Configurez les en-têtes CSP pour les proxys inversés, les sous-chemins /docs, l'assistant, la recherche et les requêtes de l'explorateur d'API."
+icon: shield
+---
+
+La Politique de Sécurité des Contenus (CSP) contrôle les ressources qu'un navigateur peut charger pour votre site de documentation.
+
+Les sites dubstack hébergés fournissent des en-têtes de sécurité de base. Vous avez généralement besoin d'un CSP personnalisé uniquement lorsque votre propre proxy, CDN, pare-feu ou application racine remplace les en-têtes de réponse pour un domaine personnalisé ou un sous-chemin `/docs`.
+
+## Quand configurer la CSP
+
+Configurez la CSP à votre niveau de proxy ou de périphérie lorsque :
+
+- vos documents sont servis via un proxy inversé
+- votre site web racine définit déjà une CSP globale
+- votre pare-feu d'entreprise exige des listes blanches de domaines explicites
+- les polices, images, recherche, assistant, feedback ou l'explorateur d'API ne fonctionnent plus après l'ajout des en-têtes de sécurité
+
+Si dubstack héberge l'hôte complet des documents directement, commencez par les paramètres par défaut et ajoutez uniquement une politique personnalisée lorsque vous avez un besoin spécifique.
+
+## Directives CSP
+
+| Directive | Contrôle |
+| --- | --- |
+| `default-src` | Liste de sources de secours pour les types de ressources non couverts par une directive plus spécifique. |
+| `script-src` | JavaScript chargé par le shell des documents, les outils d'analyse, les contenus intégrés et les widgets de protection optionnels. |
+| `style-src` | Feuilles de style et attributs de style en ligne utilisés par le rendu des documents. |
+| `font-src` | Polices utilisées par le thème actif. |
+| `img-src` | Logos, icônes, captures d'écran, SVG, images MDX et autres éléments visuels. |
+| `connect-src` | Recherche, assistant, feedback, analyse, explorateur d'API, MCP et autres requêtes HTTP. |
+| `frame-src` | Contenu intégré et iframes tiers utilisés par vos documents. |
+| `frame-ancestors` | Quelles origines peuvent intégrer vos documents dans un iframe. |
+
+## Liste blanche de domaines
+
+Incluez uniquement les domaines utilisés par votre site.
+
+| Source | Objectif | Directive | Requis |
+| --- | --- | --- | --- |
+| `'self'` | Pages de documentation, actifs, recherche, assistant, feedback, routes API, MCP et fichiers LLM sur l'hôte public de documentation. | La plupart des directives | Requis |
+| `*.dubstack.live` | Domaines d'hébergement par défaut et origines générées `/docs`. | `connect-src`, `frame-src`, `img-src` | Requis lors de l'utilisation d'origines hébergées par DubStack |
+| `api.dubstack.ai` | Demandes d'API de la plateforme lorsqu'un déploiement utilise directement des points de terminaison d'API hébergés par la plateforme. | `connect-src` | Facultatif |
+| `fonts.googleapis.com` | Feuilles de style Google Fonts si sélectionnées par le thème du site. | `style-src` | Facultatif |
+| `fonts.gstatic.com` | Fichiers de polices Google Fonts si sélectionnés par le thème du site. | `font-src` | Facultatif |
+| Votre hôte API | Demandes en direct de l'API playground. | `connect-src` | Requis pour les demandes en direct du playground |
+| Votre CDN d'images ou d'actifs | Images MDX externes, favicons ou logos. | `img-src` | Facultatif |
+| Vos fournisseurs d'analyse | Scripts d'analyse et points d'entrée d'ingestion. | `script-src`, `connect-src`, `img-src` | Facultatif |
+| Vos fournisseurs d'intégration | Vidéos, démos, widgets ou iframes intégrés dans les MDX. | `frame-src`, `script-src`, `connect-src` | Facultatif |
+| Fournisseur de CAPTCHA ou de protection contre les robots affiché dans les paramètres du tableau de bord | Protection contre l'abus de l'assistant ou des commentaires lorsqu'elle est activée. | `script-src`, `frame-src`, `style-src`, `connect-src` | Facultatif |
+
+## Politique de départ
+
+Utilisez cela comme point de départ pour une CSP gérée par le proxy :
+
+```text
+Content-Security-Policy:
+default-src 'self';
+script-src 'self' 'unsafe-inline';
+style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+font-src 'self' https://fonts.gstatic.com;
+img-src 'self' data: blob: https:;
+connect-src 'self' https://*.dubstack.live https://api.dubstack.ai https:;
+frame-src 'self' https:;
+frame-ancestors 'self';
+base-uri 'self';
+form-action 'self'
+```
+
+Supprimez ensuite les domaines facultatifs que vous n'utilisez pas.
+
+<Callout type="warning">
+  Ne copiez jamais une CSP large en production sans tester la recherche, l'assistant, les commentaires, le playground API, les exemples OpenAPI, les polices personnalisées et le contenu intégré.
+</Callout>
+
+## /docs politique de sous-chemin
+
+Lorsque les documents sont montés à `example.com/docs`, le navigateur considère l'origine publique comme `example.com`.
+
+Votre CSP doit autoriser le trafic de même origine `/docs` :
+
+```text
+connect-src 'self' https://*.dubstack.live https://api.dubstack.ai;
+img-src 'self' data: blob: https:;
+font-src 'self' https://fonts.gstatic.com;
+style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+```
+
+Si votre site web principal réécrit les actifs ou proxy les polices, incluez ces chemins et domaines dans la CSP du site principal également.
+
+## Assistant, recherche, commentaires et MCP
+
+La interface de documentation publique appelle normalement les chemins de même origine :
+
+| Fonctionnalité | Chemin typique |
+| --- | --- |
+| Recherche | `/api/search` ou points de terminaison de recherche de documents même origine |
+| Assistant | `/api/chat` |
+| Commentaires | `/api/feedback` ou `/feedback` |
+| MCP | `/mcp` ou `/docs/mcp` |
+| Index LLM | `/llms.txt` et `/llms-full.txt` |
+| Fichier de compétence | `/skill.md` |
+
+Pour les sous-chemins `/docs`, les mêmes chemins sont montés sous `/docs`.
+
+Assurez-vous que votre CSP et vos règles de proxy autorisent ces chemins et ne mettez pas en cache les requêtes de l'assistant, des commentaires ou de l'MCP.
+
+## Requêtes de playground API
+
+Les requêtes de playground API en direct se connectent aux serveurs API définis par votre spécification OpenAPI.
+
+Ajoutez ces hôtes à `connect-src` :
+
+```text
+connect-src 'self' https://api.example.com https://sandbox.example.com;
+```
+
+Ne pas utiliser `connect-src *` à moins que votre équipe de sécurité n'accepte explicitement cette politique.
+
+## Exemple Cloudflare
+
+Créez une règle de transformation d'en-tête de réponse qui s'applique uniquement à votre chemin de documentation.
+
+Pour un sous-chemin `/docs`, restreignez la règle à :
+
+```text
+http.request.uri.path eq "/docs" or starts_with(http.request.uri.path, "/docs/")
+```
+
+Définissez l'en-tête de réponse `Content-Security-Policy` sur votre politique approuvée.
+
+## Exemple CloudFront
+
+Attachez une politique d'en-têtes de réponse au comportement qui sert votre chemin de documentation.
+
+Utilisez un comportement séparé pour `/docs*` lorsque le site racine a une autre CSP. Cela évite d'endommager votre application principale tout en maintenant les directives spécifiques aux documents explicites.
+
+## Exemple Vercel
+
+Ajoutez un en-tête portant sur la route dans `vercel.json` :
+
+```json
+{
+  "headers": [
+    {
+      "source": "/docs/:path*",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.dubstack.live https://api.dubstack.ai https:; frame-src 'self' https:; frame-ancestors 'self'; base-uri 'self'; form-action 'self'"
+        }
+      ]
+    }
+  ]
+}
+```
+
+## Valider la CSP
+
+Après le déploiement de la politique :
+
+1. Ouvrez la page d'accueil de la documentation.
+2. Ouvrez une page imbriquée directement.
+3. Effectuez une recherche.
+4. Posez une question simple sur la documentation à l'assistant.
+5. Soumettez des commentaires si les commentaires sont activés.
+6. Ouvrez une page d'endpoint API et essayez une requête de playground.
+7. Vérifiez `/llms.txt`, `/skill.md` et `/.well-known/mcp` si la découverte IA est activée. Testez `/mcp` avec un client MCP.
+8. Examinez les violations CSP de la console du navigateur.
+
+## Dépannage
+
+| Problème | À vérifier |
+| --- | --- |
+| La recherche ou l'assistant échoue | Ajoutez l'hôte de documentation et l'hôte API à `connect-src`. |
+| Le playground API ne peut pas envoyer de requêtes | Ajoutez l'hôte du serveur OpenAPI à `connect-src`. |
+| Les polices sont absentes | Ajoutez le fournisseur de polices configuré à `style-src` et `font-src`. |
+| Les images ou logos ne s'affichent pas | Ajoutez l'hôte des ressources à `img-src`. |
+| Les vidéos ou démos intégrées sont vides | Ajoutez le fournisseur à `frame-src` et à toutes les directives de script/connect nécessaires. |
+| La prévisualisation du tableau de bord est vide | Évitez un `frame-ancestors 'none'` global ; autorisez le contexte de prévisualisation du tableau de bord fiable là où nécessaire. |
+
+<CardGroup cols={2}>
+  <Card title="En-têtes de sécurité" icon="shield-check" href="/fr/deployment/security-headers">
+    Examinez les en-têtes de sécurité hébergés que dubstack applique par défaut.
+  </Card>
+  <Card title="/docs sous-chemin" icon="folder-tree" href="/fr/deployment/docs-subpath">
+    Configurez le routage pour la documentation hébergée en dessous d'un chemin de domaine racine.
+  </Card>
+</CardGroup>

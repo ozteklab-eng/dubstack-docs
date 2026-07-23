@@ -1,0 +1,137 @@
+---
+title: Rédiger des documents à partir des modifications du code
+description: "Connectez un dépôt source, définissez le contexte et utilisez un workflow pour rédiger des mises à jour de documentation à partir des modifications du code produit."
+icon: git-pull-request
+---
+
+Utilisez ce guide lorsque les modifications du code produit doivent générer des mises à jour de documentation révisables.
+
+Dans ce guide, **pull request** désigne la demande de révision utilisée par le fournisseur connecté. GitLab l'appelle une **demande de fusion** ; Forgejo l'appelle une **pull request**.
+
+Ce modèle maintient deux dépôts séparés :
+
+| Rôle du dépôt | Ce qu'il fait |
+| --- | --- |
+| Dépôt de documentation | Publie le site de documentation en direct et reçoit les modifications de documentation générées. |
+| Dépôt source | Fournit le code ou le contexte produit pour le workflow. |
+
+Le dépôt source ne devient pas la source des documents en direct. Le workflow lit le contexte délimité à partir de celui-ci, puis rédige les modifications contre le dépôt de documentation connecté.
+
+## Quand l'utiliser
+
+Utilisez un workflow de dépôt source lorsque :
+
+- Le code API, SDK, interface utilisateur ou plateforme se trouve en dehors du dépôt de documentation
+- un monorepo contient le code qui doit influencer une zone spécifique de documentation
+- les ingénieurs fusionnent les modifications de l'implémentation avant de mettre à jour les documents
+- vous souhaitez une pull request ou de fusion révisable au lieu d'éditions directes des documents
+
+Utilisez la publication normale des documents lorsque le changement est déjà rédigé dans le dépôt de documentation.
+
+## Exigences
+
+Avant de configurer le workflow, vérifiez :
+
+- le site a un dépôt de documentation actif dans [Paramètres Git](/fr/deployment/git-settings)
+- l'accès à la rédaction du dépôt est prêt pour le dépôt de documentation
+- le dépôt source est connecté dans les Paramètres Git
+- le workflow que vous souhaitez utiliser prend en charge le déclencheur **Changement de code**
+- l'espace de travail dispose de suffisamment de crédits IA et d'accès au workflow pour l'exécution
+
+Pour la configuration spécifique au fournisseur, consultez [Fournisseurs Git](/fr/deployment/forgejo-github-gitlab).
+
+## Connectez le dépôt source
+
+1. Ouvrez le tableau de bord.
+2. Sélectionnez le site.
+3. Allez dans **Paramètres > Déploiement > Paramètres Git**.
+4. Ajoutez le dépôt de produit ou de code en tant que dépôt source.
+5. Sélectionnez le fournisseur, le dépôt et la branche.
+6. Enregistrez le dépôt source.
+7. Confirmez que la carte du dépôt source affiche une connexion valide.
+
+Pour les fournisseurs auto-hébergés, l'instance doit être accessible par dubstack et le jeton ou la connexion OAuth doit avoir les autorisations nécessaires pour lire le dépôt sélectionné.
+
+## Définir la portée du dépôt
+
+Pour les grands dépôts, ajoutez une portée de chemin dans la configuration du workflow avant d'activer le workflow.
+
+Exemples :
+
+```text
+apps/marketing
+services/api
+packages/sdk
+```
+
+La portée de chemin maintient le workflow concentré et réduit le contexte non pertinent.
+
+<Callout type="info">
+  La portée de chemin est une limite de contexte. Elle ne modifie pas l'emplacement de publication du site de documentation, et elle ne publie pas directement le dépôt source.
+</Callout>
+
+## Configurer le workflow
+
+1. Ouvrez **Automate > Workflows**.
+2. Sélectionnez **Mettre à jour à partir des modifications de code**.
+3. Choisissez **Modification de code** comme déclencheur lorsqu'il est disponible.
+4. Sélectionnez le dépôt source connecté.
+5. Définissez le mode de mise à jour sur **Exiger une revue** pour le premier déploiement.
+6. Ajoutez toutes les instructions qui décrivent la zone de documentation, le vocabulaire et les attentes de revue.
+7. Enregistrez le workflow.
+
+Utilisez **Exiger une revue** jusqu'à ce que le workflow ait produit plusieurs brouillons corrects. Les mises à jour directes doivent être limitées aux workflows étroits et à faible risque.
+
+## Valider avec une petite modification
+
+Utilisez une petite modification source pour le premier test.
+
+1. Ouvrez ou fusionnez une petite pull request ou une demande de fusion dans le dépôt source.
+2. Attendez que l'événement du fournisseur mette en file d'attente le workflow, ou exécutez le workflow manuellement si les événements ne sont pas configurés.
+3. Ouvrez les détails de l'exécution du workflow.
+4. Confirmez que l'exécution a collecté le dépôt source et la portée de chemin attendus.
+5. Examinez la branche de documentation générée ou la pull request.
+6. Fusionnez le changement de documentation uniquement après avoir confirmé que le contenu est correct.
+
+La sortie du workflow doit se trouver dans le dépôt de documentation, et non dans le dépôt source.
+
+Les poussées directes vers un dépôt source sont utiles pour la validation planifiée ou manuelle, mais le chemin du déclencheur de modification de code est piloté par des événements de revue. Utilisez une pull request ou une demande de fusion fusionnée lors de la validation de l'automatisation basée sur les événements.
+
+## Dépannage
+
+### Le workflow ne s'exécute pas après les modifications de code
+
+Vérifiez :
+
+- le workflow est activé
+- le déclencheur est configuré sur **Modification de code**
+- le dépôt source est sélectionné
+- l'abonnement aux événements du fournisseur est actif là où cela est pris en charge
+- les fichiers modifiés correspondent à la portée de chemin configurée
+- le workflow n'a pas atteint la limite quotidienne d'exécutions
+
+Si les événements du fournisseur ne sont pas disponibles, exécutez le workflow manuellement pour valider l'accès source.
+
+### Le workflow ne peut pas lire le dépôt source
+
+Vérifiez la carte du dépôt source dans les paramètres Git.
+
+Les causes courantes sont des jetons expirés, un accès au dépôt manquant, des instances auto-hébergées inaccessibles, des renommages de branche ou une portée de chemin qui n'existe pas dans la branche sélectionnée.
+
+### Le workflow ne peut pas ouvrir une pull request pour les documents
+
+L'accès au dépôt source n'est pas suffisant pour écrire les modifications de documentation.
+
+Vérifiez que le dépôt actif des documents dispose d'un accès d'auteur, des permissions de création de branche et des permissions de pull request ou de fusion via le fournisseur Git configuré.
+
+### Le brouillon généré est trop large
+
+Affinez la portée de chemin source et ajoutez des instructions de workflow qui nomment les pages de documentation ciblées, la zone de produit ou la surface d'API.
+
+## Sujets connexes
+
+- [Configurer les exécutions de workflow](/fr/workflows/configuration)
+- [Plusieurs dépôts](/fr/deployment/multi-repo)
+- [Paramètres Git](/fr/deployment/git-settings)
+- [Fournisseurs Git](/fr/deployment/forgejo-github-gitlab)
+- [Intégrations de workflow](/fr/workflows/integrations)

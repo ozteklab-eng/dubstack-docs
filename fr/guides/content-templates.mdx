@@ -1,0 +1,128 @@
+---
+title: Modèles de contenu
+description: "Utilisez des formes de page réutilisables pour les guides, les références, le dépannage, les journaux de modifications et les documents API."
+icon: layout-template
+---
+
+Utilisez des modèles pour rendre la rédaction et la relecture des documents plus faciles.
+
+Un modèle n'est pas un type de fichier spécial. C'est une structure réutilisable que votre équipe suit pour une catégorie de page.
+
+## Modèle de guide
+
+Utilisez cette structure pour les pages axées sur les tâches :
+
+```mdx
+---
+title: Connect a custom domain
+description: Point a domain or subdomain at your published docs site.
+---
+
+Explain when to use the guide.
+
+## Requirements
+
+- Requirement one
+- Requirement two
+
+## Steps
+
+1. Do the first thing.
+2. Do the second thing.
+3. Validate the result.
+
+## Troubleshooting
+
+### Problem name
+
+Explain the fix.
+
+## Related
+
+- [Style and tone](/guides/style-and-tone)
+```
+
+## Modèle de référence
+
+Utilisez cette structure pour les pages de paramètres, limites, rôles et catalogues :
+
+```mdx
+---
+title: Settings reference
+description: Field-by-field reference for site settings.
+---
+
+Explain what this reference covers.
+
+| Field | Type | Default | Description |
+| --- | --- | --- | --- |
+| `name` | string | required | Site name. |
+
+## Examples
+
+Add short examples for common cases.
+
+## Troubleshooting
+
+List common invalid states.
+```
+
+## Modèle de dépannage
+
+Utilisez cette structure lorsque les lecteurs arrivent avec un problème :
+
+```mdx
+---
+title: Source-control troubleshooting
+description: Diagnose provider access, branches, webhooks, and sync issues.
+---
+
+## Quick checks
+
+- Check one
+- Check two
+
+## Symptoms
+
+### Error or symptom
+
+Cause and fix.
+
+## Collect before support
+
+- Request ID
+- Repository
+- Branch
+- Timestamp
+```
+
+## Modèle de journal des modifications
+
+Utilisez cette structure pour les notes de version :
+
+```mdx
+<Update label="Feature name" description="Short summary." tags={["area"]}>
+  Explain what changed, who is affected, and whether the reader must do anything.
+
+  Link to the deeper docs page.
+</Update>
+```
+
+## Liste de vérification
+
+Avant de publier une page avec un modèle :
+
+- Vérifiez que le titre correspond à l'intention du lecteur.
+- Vérifiez que la description est recherchable.
+- Ajoutez des liens vers les prérequis et les pages associées.
+- Vérifiez les blocs de code et les commandes.
+- Vérifiez la page via l'export en markdown.
+- Effectuez une recherche sur le mot-clé principal après la publication.
+
+## Liens connexes
+
+- [Style et ton](/fr/guides/style-and-tone)
+- [Mise en forme du texte](/fr/writing-content/text-formatting)
+- [Cartes](/fr/writing-content/cards)
+- [Appels d'attention](/fr/writing-content/callouts)
+- [Export en markdown](/fr/ai/markdown-export)

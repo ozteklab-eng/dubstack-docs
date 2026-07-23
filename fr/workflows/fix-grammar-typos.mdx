@@ -1,0 +1,92 @@
+---
+title: Flux de détection et de correction des fautes de grammaire et de frappe
+description: "Rechercher les fautes d'orthographe, les fautes de frappe, les erreurs de grammaire et les problèmes de clarté mineurs avant qu'ils ne soient lus par les lecteurs."
+icon: spell-check
+---
+
+Le flux de détection et de correction des fautes de grammaire et de frappe identifie les problèmes d'écriture à faible risque et propose des corrections légères à revoir.
+
+Utilisez-le comme un flux de maintenance précoce, car ses modifications sont généralement limitées, faciles à revoir et utiles sur tous les sites de documentation.
+
+## Ce qu'il fait
+
+Lorsqu'il est activé pour un déploiement, le flux est conçu pour :
+
+- rechercher les fautes d'orthographe, les fautes de frappe, les mots répétés et les problèmes de grammaire
+- améliorer les problèmes de clarté mineurs sans modifier le sens technique
+- préserver les blocs de code, les noms d'API, les indicateurs CLI et la terminologie des produits
+- proposer des corrections dans le dépôt de documentation connecté
+- ouvrir une demande de relecture native du fournisseur à moins que les mises à jour automatiques ne soient activées explicitement
+- enregistrer l'état de l'exécution, les fichiers modifiés et l'utilisation des crédits dans l'historique du flux
+
+Ce flux ne doit pas réécrire des pages entières. Utilisez le flux du guide de style lorsque vous avez besoin d'imposer un ton, un style ou une terminologie.
+
+## Ce qu'il évite
+
+Le flux doit éviter de modifier :
+
+- les exemples de code et la sortie des commandes
+- les chemins d'API, les paramètres, les noms de schéma et les valeurs d'énumération
+- les noms de produits ou acronymes intentionnels
+- le texte entre guillemets qui doit rester exact
+- le langage juridique, de conformité, de facturation ou de sécurité sans relecture
+
+Ajoutez des instructions pour les termes spécifiques au projet qui ne doivent pas être modifiés.
+
+## Configuration requise
+
+Avant d'activer l'automatisation de la grammaire et des fautes de frappe :
+
+1. Connectez un dépôt de documentation basé sur Git.
+2. Vérifiez que le dépôt de documentation a un accès en écriture.
+3. Vérifiez que le profil du modèle d'écriture est disponible.
+4. Ajoutez des exceptions pour les noms de produits, les acronymes ou la terminologie interne.
+5. Commencez en mode **Exiger une relecture**.
+
+Aucun connecteur supplémentaire n'est requis.
+
+## Déclencheurs et mode de mise à jour
+
+| Paramètre | Comportement |
+| --- | --- |
+| Déclencheur | Mise à jour du contenu ou planification personnalisée |
+| Mode recommandé en premier lieu | Exiger une revue |
+| Mode automatique | Utiliser uniquement après des nettoyages répétés et des instructions précises |
+| Cible de rédaction | Dépôt de documents connecté |
+| Dépôts de contexte | Non pris en charge |
+
+Les déclencheurs de mise à jour du contenu maintiennent les changements récents propres. Les exécutions planifiées sont utiles lorsque une équipe souhaite une demande de pull de nettoyage hebdomadaire au lieu de nombreuses petites demandes de revue fréquentes.
+
+## Utilisation des crédits
+
+Les exécutions de grammaire et de fautes de frappe sont des exécutions de flux de travail de maintenance et comptent dans l'utilisation des crédits de flux de travail.
+
+L'estimation actuelle est de **330 crédits par exécution**. L'utilisation réelle peut varier en fonction de :
+
+- nombre de pages modifiées
+- volume de texte inspecté
+- nombre de corrections suggérées
+- complexité des exceptions de terminologie
+- routage du modèle et profil du flux de travail
+
+Voir [Crédits IA et utilisation](/fr/ai/credits-usage) pour le modèle d'allocation partagée.
+
+## Liste de vérification
+
+Avant de fusionner les corrections générées, vérifiez :
+
+- le sens technique n'a pas changé
+- les noms de produits et acronymes ont été préservés
+- les exemples de code n'ont pas été modifiés
+- les liens et les ancres fonctionnent toujours
+- le ton reste aligné avec le style de vos documents
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/workflows/reference#fix-grammar-and-typos">Référence des flux de travail</a>
+  <a href="/fr/workflows/enforce-style-guide">Appliquer votre guide de style</a>
+  <a href="/fr/guides/style-and-tone">Style et ton</a>
+  <a href="/fr/workflows/manage">Gérer les flux de travail</a>
+  <a href="/fr/ai/credits-usage">Crédits IA et utilisation</a>
+</RelatedTopics>

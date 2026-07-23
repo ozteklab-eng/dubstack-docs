@@ -1,0 +1,132 @@
+---
+title: Configuration du monorepo
+description: "Publier les documents depuis un sous-répertoire d'un dépôt plus large."
+icon: folder-tree
+---
+
+Utilisez la configuration monorepo lorsque vos fichiers de documentation se trouvent dans un sous-répertoire d'un dépôt plus large.
+
+Par exemple :
+
+```text
+your-repo/
+├── apps/
+│   ├── web/
+│   └── api/
+├── docs/
+│   ├── dubstack.json
+│   ├── index.mdx
+│   └── quickstart.mdx
+└── package.json
+```
+
+Dans cet exemple, configurez le chemin des documents comme `docs`.
+
+## Quand l'utiliser
+
+Utilisez la configuration monorepo lorsque :
+
+- votre code produit et vos documents sont dans le même dépôt
+- `dubstack.json` n'est pas à la racine du dépôt
+- vous souhaitez que les déploiements lisent uniquement le répertoire des documents
+- vous souhaitez que les aperçus et les mises à jour manuelles utilisent le même répertoire racine des documents
+
+Ne pas utiliser la configuration monorepo lorsque votre dépôt de documents contient déjà `dubstack.json` à la racine.
+
+## Exigences
+
+Votre répertoire de documents doit contenir :
+
+```text
+dubstack.json
+index.mdx
+```
+
+Le répertoire peut également contenir :
+
+- les spécifications d'API telles que `api-reference/openapi.json`
+- les fichiers image et ressources
+- les extraits réutilisables
+- les dossiers de pages imbriqués
+
+Les chemins de navigation dans `dubstack.json` sont résolus par rapport au répertoire des documents configuré.
+
+## Configurer le répertoire des documents
+
+1. Ouvrez le tableau de bord.
+2. Accédez à **Paramètres > Déploiement > Paramètres Git**.
+3. Connectez ou modifiez votre dépôt Git.
+4. Activez **Les documents se trouvent dans un sous-répertoire**.
+5. Saisissez le chemin relatif vers le répertoire des documents, par exemple `docs`.
+6. Enregistrez la connexion.
+7. Exécutez une mise à jour manuelle.
+8. Ouvrez le site en direct et vérifiez que les pages attendues s'affichent.
+
+Ne pas inclure de slash en début ou en fin. Utilisez `docs`, et non `/docs/`.
+
+## Comment les chemins sont résolus
+
+Si le chemin des documents est `docs`, dubstack lit :
+
+```text
+docs/dubstack.json
+docs/index.mdx
+docs/api-reference/openapi.json
+```
+
+Les URLs publiées n'incluent pas le nom du répertoire docs, sauf si votre navigation l'inclut.
+
+Par exemple, ce fichier source :
+
+```text
+docs/guides/quickstart.mdx
+```
+
+publié à :
+
+```text
+/guides/quickstart
+```
+
+## Spécifications OpenAPI dans un monorepo
+
+Maintenez les chemins des spécifications OpenAPI par rapport au répertoire docs.
+
+```json
+{
+  "api": {
+    "openapi": "api-reference/openapi.json"
+  }
+}
+```
+
+Avec le chemin docs `docs`, cela pointe vers :
+
+```text
+docs/api-reference/openapi.json
+```
+
+## Dépannage
+
+### Le site indique que `dubstack.json` est manquant
+
+Vérifiez que le chemin docs pointe vers le répertoire contenant `dubstack.json`.
+
+### Les pages ne figurent pas dans la navigation
+
+Vérifiez que chaque slug de navigation dans `dubstack.json` correspond à un fichier `.mdx` sous le répertoire docs configuré.
+
+### Les pages des points de terminaison API ne figurent pas
+
+Vérifiez que le chemin OpenAPI dans `dubstack.json` est relatif au répertoire docs et que la spécification est un JSON ou YAML valide.
+
+### La mise à jour manuelle réussit mais le contenu ancien apparaît toujours
+
+Confirmez que le dernier commit a été poussé sur la branche configurée et exécutez une autre mise à jour manuelle depuis le tableau de bord.
+
+## Sujets connexes
+
+- [GitHub](/fr/deployment/github)
+- [GitLab](/fr/deployment/gitlab)
+- [Synchronisation Git](/fr/deployment/git-sync)
+- [Dépannage du contrôle de source](/fr/deployment/source-control-troubleshooting)

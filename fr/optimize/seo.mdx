@@ -1,0 +1,131 @@
+---
+title: SEO
+description: "Configurez les métadonnées de page, les URL canoniques, les plans du site, le fichier robots.txt et les contrôles d'indexation de la documentation publiée."
+icon: search-check
+---
+
+Les paramètres SEO aident les moteurs de recherche, les prévisualisations sociales et les lecteurs d'IA à comprendre quelles pages de documents doivent être indexées et citées.
+
+dubstack génère des métadonnées publiques à partir de la configuration du site et du frontmatter des pages. Commencez par des titres et des descriptions clairs, puis utilisez les contrôles d'indexation lorsqu'une page ou un déploiement doit rester hors de la découverte publique.
+
+## Ce que génère dubstack
+
+dubstack génère les surfaces de découverte publiques suivantes pour les documents publiés :
+
+| Surface | Objectif |
+| --- | --- |
+| Métadonnées de page | Utilise le titre et la description de la page avec l'URL publique actuelle. |
+| URL canoniques | Utilise l'URL de la page déployée pour indiquer aux robots d'indexation l'adresse préférée. |
+| `/sitemap.xml` | Liste les pages de documents indexables à partir de la navigation publique. |
+| `/robots.txt` | Autorise ou bloque l'accès des crawlers en fonction des paramètres de visibilité du déploiement. |
+| Routes de découverte par l'IA | Expose `/llms.txt`, `/llms-full.txt`, `/skill.md` et `/mcp` lorsqu'une indexation est activée. |
+
+<Note>
+  Les paramètres d'indexation affectent plus que les moteurs de recherche. Les pages exclues de l'indexation publique sont également exclues des surfaces accessibles par l'IA, telles que le serveur MCP public.
+</Note>
+
+## Ajouter les métadonnées de la page
+
+Définir les métadonnées de la page dans le frontmatter en haut de chaque fichier MDX.
+
+```mdx
+---
+title: Authentication
+description: Learn how to authenticate API requests with API keys and bearer tokens.
+---
+```
+
+Utilisez des titres et des descriptions qui décrivent la tâche que le lecteur peut accomplir après avoir lu la page.
+
+<CardGroup cols={2}>
+  <Card title="Bon titre" icon="badge-check">
+    Utilisez des titres précis tels que `Créer une clé API`, `Configurer un domaine personnalisé` ou `Gérer les nouvelles tentatives de webhook`.
+  </Card>
+
+  <Card title="Bonne description" icon="text">
+    Résumez le résultat en une seule phrase. Gardez les descriptions suffisamment spécifiques pour les extraits de recherche et les citations de l'IA.
+  </Card>
+</CardGroup>
+
+## Définir une URL canonique de page
+
+Utilisez `canonical` lorsqu'une page doit orienter les robots vers une autre URL préférée.
+
+```mdx
+---
+title: Legacy API v1
+description: Reference for legacy v1 API behavior.
+canonical: https://docs.example.com/api/v2
+---
+```
+
+Les URL canoniques doivent être des URL absolues en `https://`. Utilisez-les pour la documentation versionnée, les pages de migration ou les pages qui dupliquent intentionnellement le contenu d'une autre source canonique.
+
+## Désactiver l'indexation pour une page
+
+Définir `noindex: true` dans les métadonnées pour exclure une page des surfaces d'indexation publique.
+
+```mdx
+---
+title: Internal rollout notes
+description: Draft notes for a limited rollout.
+noindex: true
+---
+```
+
+Les pages marquées `noindex` sont exclues du plan du site public et du système de fichiers MCP public. Elles ne doivent pas être utilisées pour du contenu contenant des secrets ; gardez les informations sensibles hors du dépôt de documentation.
+
+## Masquer une page de la navigation
+
+Définir `hidden: true` lorsqu'une page ne doit pas apparaître dans la navigation.
+
+```mdx
+---
+title: Migration notes
+description: Supporting notes linked from the migration guide.
+hidden: true
+---
+```
+
+Les pages cachées sont également exclues du sitemap généré. Utilisez les pages cachées pour le matériel de soutien que les lecteurs atteignent via des liens directs, et non pour le contenu privé.
+
+## Désactiver l'indexation pour un déploiement
+
+Utilisez la page des compléments de déploiement lorsque tout le site doit rester hors de l'indexation publique.
+
+1. Ouvrez **Paramètres > Déploiement > Compléments**.
+2. Activez **Ne pas indexer le projet**.
+3. Publiez ou actualisez le déploiement.
+4. Confirmez que `/robots.txt` interdit le scraping et que `/sitemap.xml` est vide.
+
+Cela est utile pour les sites de prévisualisation, les environnements de revue privés ou les migrations temporaires où le déploiement est public mais ne doit pas être découvrable.
+
+## Vérifier la sortie SEO
+
+Après la publication, vérifiez ces URL sur le domaine de documentation en direct :
+
+```txt
+https://docs.example.com/sitemap.xml
+https://docs.example.com/robots.txt
+https://docs.example.com/llms.txt
+```
+
+Pour des vérifications au niveau de la page, ouvrez la source de la page ou l'inspecteur du navigateur et confirmez que le titre, la description, l'URL canonique et les méta-informations robots correspondent au frontmatter de la page et aux paramètres de déploiement.
+
+## Dépannage
+
+| Symptôme | Vérifiez |
+| --- | --- |
+| Page manquante dans le sitemap | Confirmez que la page est dans la navigation et qu'elle ne définit pas `hidden` ou `noindex`. |
+| Page toujours présente dans les moteurs de recherche | Publiez à nouveau, puis attendez l'expiration des caches des robots. Les moteurs de recherche peuvent conserver les anciens résultats pendant un certain temps. |
+| Les utilisateurs MCP publics ne voient pas une page | Confirmez que la page n'est pas marquée `noindex` et que le déploiement n'est pas configuré en noindex. |
+| Extrait de page générique | Ajoutez un `description` spécifique dans le frontmatter de la page et publiez à nouveau. |
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/configuration/pages-frontmatter">Frontmatter de la page</a>
+  <a href="/fr/configuration/seo-search-reference">Référencement et référence de recherche</a>
+  <a href="/fr/settings/deployment/addons">Compléments de déploiement</a>
+  <a href="/fr/ai/llms-indexes">Index lisibles par l'IA</a>
+</RelatedTopics>

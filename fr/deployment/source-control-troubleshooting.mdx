@@ -1,0 +1,221 @@
+---
+title: Dépannage du contrôle de source
+description: "Diagnostiquez les problèmes Git, de déploiement, de prévisualisation et de contenu publié lorsque les modifications des documents ne s'affichent pas comme attendu."
+icon: circle-alert
+---
+
+Utilisez ce guide lorsque vous avez validé une modification des documents, mais que le site en direct, le déploiement de prévisualisation, l'éditeur ou le contenu lisible par l'assistant ne correspondent pas à ce que vous attendez.
+
+dubstack suit un seul contrat de contrôle de source :
+
+```text
+Git repository
+-> webhook or manual update
+-> sync worker
+-> published artifacts
+-> public docs site, search, assistant, and MCP
+```
+
+Le dépannage est le plus rapide lorsque vous identifiez quelle étape n'a pas avancé.
+
+## Commencez par la branche de déploiement
+
+Le site en direct publie à partir de la branche de déploiement configurée.
+
+Vérifiez ces éléments en premier :
+
+- Le commit existe dans le dépôt connecté.
+- Le commit a été poussé vers la branche de déploiement configurée.
+- Les paramètres Git du tableau de bord pointent toujours vers le dépôt et la branche souhaités.
+- Le dépôt n'a pas été renommé, transféré, archivé ou supprimé.
+- `dubstack.json` existe à la racine des documents configurée.
+
+Si le commit se trouve sur une branche fonctionnelle, utilisez un déploiement de prévisualisation ou fusionnez la branche dans la branche de déploiement avant d'attendre que le site en direct change.
+
+## Exécutez une mise à jour manuelle
+
+La mise à jour manuelle utilise le même chemin Git-vers-objets-publiés que les mises à jour automatiques, mais elle ne s'attend pas à un webhook du fournisseur.
+
+Utilisez-le lorsque :
+
+- un webhook a été retardé ou manqué
+- vous avez modifié les paramètres du fournisseur Git
+- le tableau de bord affiche des métadonnées de dépôt obsolètes
+- un cache de site semble en retard par rapport au dernier commit source
+- vous souhaitez confirmer que le worker de synchronisation peut toujours lire le dépôt
+
+1. Ouvrez le tableau de bord.
+2. Allez à l'aperçu du site ou à l'historique de déploiement.
+3. Cliquez sur **Mise à jour manuelle**.
+4. Attendez que l'élément d'activité se termine.
+5. Réouvez la page modifiée sur le site public.
+
+Si la mise à jour manuelle réussit, les identifiants du dépôt et le chemin de synchronisation fonctionnent. Le problème restant est généralement la livraison du webhook, la sélection de la branche ou le timing du cache.
+
+## Vérifiez l'activité et l'historique de déploiement
+
+Le panneau d'activité et l'historique de déploiement montrent ce que dubstack a tenté de publier.
+
+Recherchez :
+
+| Signal | Ce que cela signifie généralement |
+| --- | --- |
+| Aucune nouvelle activité après un push | Le webhook du fournisseur n'a pas atteint dubstack, ou le push n'a pas été effectué sur la branche de déploiement. |
+| Mise à jour manuelle échouée | dubstack n'a pas pu lire, analyser ou publier le dépôt. |
+| Synchronisation réussie mais la page est manquante | La navigation, le chemin du fichier, hidden/noindex, ou la configuration de l'API générée nécessitent une vérification. |
+| Aperçu échoué mais en direct fonctionne | La branche d'aperçu a une configuration invalide ou du contenu absent sur la branche en direct. |
+| La dernière source apparaît dans l'activité mais pas dans le navigateur | Le cache du navigateur/CDN peut être obsolète ; réessayez après l'invalide du cache. |
+
+Utilisez les journaux de déploiement avant d'éditer les fichiers sources. Les journaux identifient généralement si l'échec provient de l'accès du fournisseur, de l'analyse des sources, de la navigation, des actifs ou de la génération d'OpenAPI.
+
+## Validez les fichiers sources requis
+
+Chaque dépôt de documentation doit inclure les fichiers sources que dubstack nécessite pour construire le site.
+
+Structure minimale des sources :
+
+```text
+dubstack.json
+index.mdx
+```
+
+Problèmes courants avec les sources :
+
+- `dubstack.json` manque dans la racine des documents configurée.
+- `dubstack.json` a une syntaxe JSON invalide.
+- La navigation pointe vers un fichier qui n'existe pas.
+- Une page a un frontmatter invalide.
+- Un chemin d'image ou d'actif pointe vers un fichier manquant.
+- Un chemin de spécification OpenAPI dans la configuration pointe vers une spécification manquante ou invalide.
+- Une page a été renommée sans redirection.
+
+Utilisez [Pages et fichiers](/fr/writing-content/pages-files), [Frontmatter de page](/fr/configuration/pages-frontmatter) et [Redirections](/fr/configuration/redirects) pour vérifier la structure des sources.
+
+## Vérifications GitHub
+
+Pour les sites connectés à GitHub, vérifiez l'application GitHub avant de déboguer le contenu.
+
+Vérification :
+
+- l'application est installée sur le compte ou l'organisation propriétaire du dépôt
+- le dépôt est inclus dans la liste d'accès à l'installation de l'application
+- l'application dispose toujours des autorisations code, pull request, vérifications et déploiement nécessaires pour vos fonctionnalités activées
+- la branche configurée existe
+- la protection de branche permet les branches et les pull requests créées par l'application lorsqu'un éditeur, un agent ou la rédaction de workflow est activée
+
+Si le dépôt est manquant dans les paramètres Git, mettez à jour l'installation de l'application GitHub et accordez l'accès au dépôt.
+
+Si les déploiements automatiques ne se déclenchent pas mais que la mise à jour manuelle fonctionne, réinstallez ou réautentifiez l'application GitHub et vérifiez la livraison du webhook côté fournisseur.
+
+Voyez [GitHub](/fr/deployment/github) pour le chemin complet de configuration.
+
+## Vérifications GitLab
+
+Pour les sites connectés à GitLab ou les cibles de copie GitLab, vérifiez le jeton et les paramètres du projet.
+
+Vérifiez :
+
+- l'URL de l'instance GitLab est correcte et accessible via HTTPS
+- l'ID de projet ou le chemin de projet correspond au projet souhaité
+- le jeton d'accès est actif et non expiré
+- le jeton peut lire le dépôt
+- le jeton possède les autorisations nécessaires à votre mode GitLab configuré
+- la branche configurée existe
+- les paramètres du webhook sont présents si des mises à jour automatiques sont attendues de GitLab
+
+Les jetons OAuth GitLab et les jetons d'accès au dépôt GitLab servent des objectifs différents. OAuth connecte un compte utilisateur pour la rédaction et le contexte. Le jeton d'accès au dépôt ou les identifiants du fournisseur permettent à dubstack de lire les fichiers du dépôt pour les opérations de synchronisation/copie.
+
+Si une demande Slack, une action de l'agent ou un flux de travail ne peut pas ouvrir une demande de fusion GitLab, vérifiez spécifiquement le côté de la rédaction :
+
+- L'accès de rédaction OAuth GitLab est connecté dans les paramètres Git
+- l'utilisateur GitLab connecté peut créer des branches et des demandes de fusion dans le projet
+- le site n'utilise pas un dépôt de démarrage hébergé et n'est pas protégé contre les modifications de dépôt
+- le flux de travail a le contexte du dépôt GitLab sélectionné lorsqu'il a besoin de contexte de demande de fusion
+- le modèle de rédaction est activé pour l'espace de travail
+
+Voyez [GitLab](/fr/deployment/gitlab) pour la configuration spécifique au fournisseur.
+
+## Vérifications du dépôt de démarrage hébergé
+
+Si le site a été créé avec le flux de dépôt hébergé, dubstack gère le dépôt source pour vous.
+
+Vérifiez :
+
+- le site affiche toujours un dépôt hébergé dans les paramètres Git
+- les modifications de l'éditeur ont été publiées, et non seulement enregistrées localement dans le navigateur
+- la mise à jour manuelle réussit
+- le chemin de la page en direct correspond au slug de la page
+
+Passer du dépôt hébergé à votre propre dépôt lorsque votre équipe a besoin de propriété Git directe, de protection de branche, de revues natives du fournisseur ou de flux de travail externe.
+
+## Vérifications des déploiements de prévisualisation
+
+Les déploiements de prévisualisation sont spécifiques à la branche.
+
+Si un prévisualisation échoue :
+
+- confirmez que la branche existe
+- confirmez que la branche n'est pas la branche de déploiement configurée lorsque la fonctionnalité de prévisualisation nécessite une branche séparée
+- inspectez l'activité de prévisualisation et la sortie du journal
+- validez `dubstack.json` sur cette branche
+- vérifiez les chemins de navigation, le frontmatter, les images, les extraits et les spécifications OpenAPI sur cette branche
+- comparez la branche avec la branche de déploiement pour identifier la modification source qui a provoqué l'échec
+
+Si le site en direct fonctionne mais que la prévisualisation échoue, restreignez l'enquête à la branche de prévisualisation en premier lieu.
+
+Voyez [Déploiements de prévisualisation](/fr/deployment/preview-deployments) pour le workflow de prévisualisation.
+
+## La page est publiée mais non découverte
+
+Une page peut exister dans Git et ne pas apparaître là où vous vous y attendez.
+
+Vérifiez :
+
+| Symptôme | Vérifiez |
+| --- | --- |
+| L'URL directe fonctionne, mais la barre latérale ne l'affiche pas | Ajoutez le slug de la page à la navigation `dubstack.json`. |
+| La page manque dans la recherche ou le contexte de l'assistant | Vérifiez `hidden`, `noindex` et le moment de synchronisation. |
+| L'ancienne URL renvoie 404 après un renommage | Ajoutez une redirection de l'ancien chemin vers le nouveau chemin. |
+| La page du point d'entrée API est manquante | Vérifiez le chemin des spécifications OpenAPI, la visibilité de l'opération et l'état de génération. |
+| Le titre de la page est incorrect | Vérifiez le frontmatter `title` et les métadonnées d'opération API générées. |
+
+Utilisez [Navigation](/fr/configuration/navigation), [Pages cachées](/fr/configuration/hidden-pages) et [Visibilité des points d'entrée](/fr/api-reference/endpoint-visibility) pour les contrôles associés.
+
+## L'accès du fournisseur a changé
+
+L'accès au dépôt peut changer en dehors de dubstack.
+
+Validez à nouveau la connexion après :
+
+- renommage ou transfert du dépôt
+- changement de propriété de l'organisation
+- désinstallation/reinstallation de l'application du fournisseur
+- rotation des jetons
+- renommage de branche
+- autorisations ou mises à jour de la protection de branche
+- URL du fournisseur Git auto-hébergé ou modifications TLS
+
+Après avoir révalidé, exécutez une mise à jour manuelle et vérifiez que le dernier commit apparaît dans l'historique des déploiements.
+
+## Liste de vérification pour l'escalade
+
+Avant de contacter le support, collectez :
+
+- sous-domaine du site ou domaine personnalisé
+- fournisseur et nom du dépôt
+- branche de déploiement configurée
+- SHA du commit qui devrait être en ligne
+- URL de la page affectée
+- si la mise à jour manuelle réussit
+- dernier message d'erreur de déploiement ou d'activité
+- si le problème affecte le site en direct, la prévisualisation, l'éditeur, la recherche, l'assistant ou le MCP
+
+Cela donne au support suffisamment d'informations pour distinguer les problèmes d'accès du fournisseur, de validation de la source, de synchronisation des artefacts publiés et du cache frontend.
+
+## Sujets connexes
+
+- [Mises à jour manuelles et historique des déploiements](/fr/deployment/manual-updates-history)
+- [Synchronisation Git](/fr/deployment/git-sync)
+- [GitHub](/fr/deployment/github)
+- [GitLab](/fr/deployment/gitlab)
+- [Déploiements de prévisualisation](/fr/deployment/preview-deployments)

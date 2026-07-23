@@ -1,0 +1,129 @@
+---
+title: Flux de travail de traduction du contenu
+description: "Maintenez la documentation traduite alignée avec le contenu en langue source lorsqu'un routage par langue est configuré."
+icon: languages
+---
+
+Le flux de travail de traduction du contenu aide à maintenir la documentation localisée synchronisée lorsqu'un contenu en langue source change.
+
+Utilisez-le après avoir configuré le routage par langue sur votre site de documentation et que les pages traduites sont maintenues dans le même dépôt que les documents sources.
+
+<Info>
+  Le routage par langue est basé sur la source. dubstack sert les fichiers traduits à partir de votre dépôt ; il ne génère pas de traductions en temps réel.
+</Info>
+
+<Warning>
+  Le flux de travail de traduction est visible dans le catalogue des flux de travail, mais il ne peut pas être exécuté tant que le routage de traduction, les contrôles de politique et l'écriture dans le dépôt ne sont pas activés pour le déploiement sélectionné.
+</Warning>
+
+## Ce qu'il fait
+
+Lorsqu'il est activé pour un déploiement, le flux de travail est conçu pour :
+
+- détecter les modifications du contenu en langue source
+- identifier les langues cibles configurées
+- rédiger ou appliquer les mises à jour traduites dans des répertoires avec préfixe de localisation
+- garder les noms de fichiers et la structure des slugs alignés entre les langues
+- enregistrer l'utilisation des crédits dans l'historique d'exécution du flux de travail
+
+Le flux de travail écrit dans le dépôt de documentation, pas directement sur le site publié. Les pages publiées ne sont mises à jour qu'après que les modifications du dépôt soient examinées, fusionnées et synchronisées.
+
+## Configuration requise
+
+Avant d'utiliser l'automatisation de traduction :
+
+1. Choisissez la langue source par défaut.
+2. Ajoutez les langues cibles dans `navigation.languages`.
+3. Créez des répertoires avec préfixe de localisation tels que `fr/`, `es/` ou `de/`.
+4. Maintenez les chemins des pages traduites alignés avec les chemins en langue source.
+5. Connectez un fournisseur Git avec un accès en écriture au dépôt.
+6. Commencez en mode **Requiert une revue**.
+
+Voyez [Languages](/fr/configuration/languages) et [Internationalization](/fr/configuration/internationalization) pour la configuration du site.
+
+## Langues cibles
+
+Les langues cibles proviennent de la configuration du site publié.
+
+```json dubstack.json
+{
+  "navigation": {
+    "languages": [
+      {
+        "code": "en",
+        "label": "English",
+        "href": "/"
+      },
+      {
+        "code": "fr",
+        "label": "French",
+        "href": "/fr"
+      },
+      {
+        "code": "es",
+        "label": "Spanish",
+        "href": "/es"
+      }
+    ]
+  }
+}
+```
+
+La langue source ne doit pas être sélectionnée comme langue cible.
+
+## Déclencheurs et mode de mise à jour
+
+| Paramètre | Comportement |
+| --- | --- |
+| Déclencheur | Mise à jour du contenu ou calendrier personnalisé |
+| Mode recommandé en premier | Exiger une revue |
+| Mode automatique | Utiliser uniquement après des exécutions réussies et validées |
+| Écrire la cible | Dépôt de documents connecté |
+| Pages cibles | Fichiers traduits avec préfixe de locale |
+
+Les déclencheurs de mise à jour du contenu sont utiles lorsque les pages sources changent fréquemment. Les exécutions planifiées sont plus sûres lorsque vous souhaitez que le travail de traduction se produise en lots de revue prévisibles.
+
+## Utilisation des crédits
+
+Les exécutions de traduction sont des exécutions d'automatisation et comptent dans l'utilisation des crédits de flux de travail lorsqu'un exécuteur de traduction met en file d'attente le travail.
+
+L'estimation actuelle est de **913 crédits par exécution**. L'utilisation réelle peut varier en fonction de :
+
+- nombre de pages sources modifiées
+- nombre de langues cibles
+- quantité de contexte lue à partir des pages traduites existantes
+- nombre de fichiers modifiés
+- routage du modèle et profil du flux de travail
+
+Voir [Crédits IA et utilisation](/fr/ai/credits-usage) pour le modèle d'allocation partagée.
+
+## Liste de vérification de revue
+
+Revoyez les traductions générées avant de publier, notamment pour :
+
+- noms de produits et terminologie
+- langue juridique, de facturation, de sécurité ou de support
+- commentaires de code et étiquettes d'interface utilisateur en ligne
+- liens vers des pages localisées
+- captures d'écran ou exemples spécifiques à la région
+- formats de date, heure, nombre et devise
+
+## Quand conserver la traduction manuelle
+
+Conservez les traductions manuelles ou utilisez votre propre processus de traduction lorsque :
+
+- les documents traduits nécessitent une revue juridique avant la publication
+- la langue cible a des exigences de terminologie régionale
+- seulement un petit nombre de pages sont traduites
+- votre dépôt de documents a une protection de branche nécessitant l'approbation d'un réviseur
+- le flux de travail de traduction n'est pas encore activé pour le déploiement
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/configuration/languages">Langues</a>
+  <a href="/fr/configuration/internationalization">Internationalisation</a>
+  <a href="/fr/guides/internationalization">Plan de documentation multilingue</a>
+  <a href="/fr/workflows/reference#translate-content">Référence du flux de travail</a>
+  <a href="/fr/ai/credits-usage">Crédits et utilisation de l'IA</a>
+</RelatedTopics>

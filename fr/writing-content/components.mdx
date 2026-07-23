@@ -1,0 +1,236 @@
+---
+title: Composants
+description: "Utilisez des composants MDX structurés pour les cartes, les rappels, les onglets, les onglets déroulants, les étapes et plus encore."
+icon: puzzle-piece
+---
+
+Les composants rendent la documentation plus facile à parcourir et plus facile à interpréter par les outils d'IA.
+
+Utilisez des composants lorsque la structure est importante. Utilisez le Markdown simple lorsqu'un paragraphe ou une liste suffit.
+
+## Catalogue de composants
+
+Utilisez les pages de composants ciblées lorsque vous avez besoin de props exactes et d'exemples.
+
+| Objectif | Composants | Guide |
+| --- | --- | --- |
+| Structurer le contenu | `Tabs`, `Steps`, `Columns`, `CodeGroup` | [Onglets et étapes](/fr/writing-content/tabs-and-steps), [Groupes de code](/fr/writing-content/code-groups) |
+| Mettre en évidence les détails importants | `Callout`, `Badge`, `Frame` | [Rappels](/fr/writing-content/callouts), [Badges](/fr/writing-content/badges), [Cadres](/fr/writing-content/frames) |
+| Lier à des pages connexes | `Card`, `CardGroup`, `Tile`, `RelatedTopics` | [Cartes](/fr/writing-content/cards), [Tuiles](/fr/writing-content/tiles), [Sujets connexes](/fr/writing-content/related-topics) |
+| Cacher les détails optionnels | `Accordion`, `AccordionGroup`, `Expandable`, `View`, `Visibility` | [Onglets déroulants](/fr/writing-content/accordions), [Champs et éléments extensibles](/fr/writing-content/fields-expandables), [Vues](/fr/writing-content/views), [Visibilité](/fr/writing-content/visibility) |
+| Documenter les API | `ParamField`, `ResponseField`, `RequestExample`, `ResponseExample` | [Champs et éléments extensibles](/fr/writing-content/fields-expandables), [Exemples de requêtes et de réponses](/fr/writing-content/request-response-examples) |
+| Ajouter un contexte visuel | `Icon`, `Tooltip`, `Color`, `FileTree`, composants multimédias | [Icônes](/fr/writing-content/icons), [Infos-bulles](/fr/writing-content/tooltips), [Couleurs](/fr/writing-content/colors), [Arbres de fichiers](/fr/writing-content/file-trees), [Médias, intégrations et diagrammes](/fr/writing-content/media-embeds) |
+| Partager du contenu réutilisable | `Snippet` | [Extraits réutilisables](/fr/writing-content/reusable-snippets) |
+| Partager des prompts d'IA | `Prompt` | [Prompts](/fr/writing-content/prompts) |
+
+Si vous n'êtes pas sûr quel composant utiliser, commencez par le plus simple qui communique clairement la structure.
+
+## Rappels
+
+Les rappels mettent en évidence des informations importantes :
+
+<Callout type="info">
+  Utilisez la mise à jour manuelle lorsque l'URL d'une spécification OpenAPI hébergée change sans commit Git.
+</Callout>
+
+```mdx
+<Callout type="info">
+  Use manual update when a hosted OpenAPI spec URL changes without a Git commit.
+</Callout>
+```
+
+Les types courants incluent `info`, `check`, `note`, `tip`, `warning` et `danger`.
+
+## Cartes
+
+Les cartes connectent les lecteurs à des pages ou workflows liés :
+
+<CardGroup cols={2}>
+  <Card title="Connecter Git" icon="git-branch" href="/fr/getting-started/connect-git">
+    Connectez un dépôt existant.
+  </Card>
+  <Card title="Dépôt hébergé" icon="cloud" href="/fr/getting-started/skip-git-hosted-repo">
+    Commencez sans installer d'application de fournisseur Git immédiatement.
+  </Card>
+</CardGroup>
+
+```mdx
+<CardGroup cols={2}>
+  <Card title="Connect Git" icon="git-branch" href="/getting-started/connect-git">
+    Connect an existing repository.
+  </Card>
+  <Card title="Hosted repository" icon="cloud" href="/getting-started/skip-git-hosted-repo">
+    Start without installing a Git provider app immediately.
+  </Card>
+</CardGroup>
+```
+
+Utilisez des titres de carte courts et une seule phrase axée.
+
+## Accordéons
+
+Les accordéons sont utiles pour les détails optionnels :
+
+<Accordion title="Quand dois-je utiliser la mise à jour manuelle ?">
+  Utilisez la mise à jour manuelle lorsque la source a changé mais qu'un webhook n'a pas déclenché une publication.
+</Accordion>
+
+```mdx
+<Accordion title="When should I use manual update?">
+  Use manual update when the source changed but a webhook did not trigger a publish.
+</Accordion>
+```
+
+Ne cachez pas les étapes critiques de la première utilisation à l'intérieur des accordéons.
+
+## Onglets
+
+Les onglets sont utiles pour les variantes de langage, de fournisseur ou de plateforme :
+
+<Tabs>
+  <Tab title="GitHub">
+    Installez l'application GitHub et sélectionnez le dépôt.
+  </Tab>
+  <Tab title="GitLab">
+    Autorisez l'accès à GitLab et sélectionnez le projet.
+  </Tab>
+</Tabs>
+
+```mdx
+<Tabs>
+  <Tab title="GitHub">
+    Install the GitHub app and select the repository.
+  </Tab>
+  <Tab title="GitLab">
+    Authorize GitLab access and select the project.
+  </Tab>
+</Tabs>
+```
+
+Gardez chaque onglet équivalent afin que les lecteurs puissent comparer les choix.
+
+## Étapes
+
+Utilisez des étapes pour les procédures ordonnées :
+
+<Steps>
+  <Step title="Créez le site">
+    Choisissez une option de source lors de l'installation.
+  </Step>
+  <Step title="Publier">
+    Exécutez la première synchronisation et ouvrez l'URL en direct.
+  </Step>
+</Steps>
+
+```mdx
+<Steps>
+  <Step title="Create the site">
+    Choose a source option from onboarding.
+  </Step>
+  <Step title="Publish">
+    Run the first sync and open the live URL.
+  </Step>
+</Steps>
+```
+
+## Champs API
+
+Utilisez les champs de paramètre et de réponse pour les concepts API :
+
+<ParamField path="siteId" type="string" required>
+  L'identifiant du site provenant de l'URL du tableau de bord ou de la réponse API.
+</ParamField>
+
+```mdx
+<ParamField path="siteId" type="string" required>
+  The site identifier from the dashboard URL or API response.
+</ParamField>
+```
+
+<ResponseField name="status" type="string">
+  Statut de déploiement actuel.
+</ResponseField>
+
+```mdx
+<ResponseField name="status" type="string">
+  Current deployment status.
+</ResponseField>
+```
+
+Voyez [Champs et éléments extensibles](/fr/writing-content/fields-expandables) pour des exemples d'objets imbriqués.
+
+## Badges
+
+Les badges ajoutent des étiquettes de statut compactes dans le texte.
+
+Cette fonctionnalité est <Badge color="green" size="sm" shape="pill">disponible</Badge> pour les documents publiés.
+
+```mdx
+This feature is <Badge color="green" size="sm" shape="pill">available</Badge> for published docs.
+```
+
+Voyez [Badges](/fr/writing-content/badges) pour les couleurs, les tailles, les icônes et les états désactivés.
+
+## Icônes et infobulles
+
+Utilisez des icônes pour des repères visuels compacts et des infobulles pour des définitions courtes.
+
+Les documents publiés <Icon icon="check" color="#15803D" /> peuvent inclure une <Tooltip tip="Court texte contextuel affiché au survol ou lors de la prise de focus.">aide en ligne</Tooltip> dans le texte.
+
+```mdx
+Published docs <Icon icon="check" color="#15803D" /> can include <Tooltip tip="Short contextual text shown on hover or focus.">inline help</Tooltip> inside prose.
+```
+
+Voyez [Icônes](/fr/writing-content/icons) et [Infobulles](/fr/writing-content/tooltips) pour les props pris en charge et les instructions d'utilisation.
+
+## Aides visuelles
+
+Utilisez des couleurs, des tuiles, des panneaux et des vues pour une structure de page avancée.
+
+<Color variant="compact">
+  <Color.Item name="primary" value="#15803D" />
+  <Color.Item name="accent" value="#07C983" />
+</Color>
+
+<Columns cols={2}>
+  <Tile href="/fr/writing-content/tiles" title="Tuiles" description="Créez des cartes de prévisualisation visuelles.">
+    <img src="/logo/light.svg" alt="Prévisualisation de tuile" />
+  </Tile>
+  <Tile href="/fr/writing-content/views" title="Vues" description="Créez des sections de page modulables.">
+    <img src="/logo/dark.svg" alt="Prévisualisation de vue" />
+  </Tile>
+</Columns>
+
+Voyez [Couleurs](/fr/writing-content/colors), [Tuiles](/fr/writing-content/tiles), [Panneaux](/fr/writing-content/panels) et [Vues](/fr/writing-content/views) pour des exemples ciblés.
+
+## Exemples de demandes et de réponses
+
+Utilisez des exemples de demandes et de réponses lorsque les guides axés sur l'API nécessitent des exemples de code dans la barre latérale droite.
+
+````mdx
+<RequestExample>
+```bash cURL
+curl https://api.example.com/v1/sites \
+  -H "Authorization: Bearer <credential>"
+```
+</RequestExample>
+````
+
+Voyez [Exemples de demandes et de réponses](/fr/writing-content/request-response-examples) pour le comportement de la barre latérale droite et des exemples multilingues.
+
+## Médias et diagrammes
+
+Utilisez les ressources du dépôt, les galeries et les diagrammes pour expliquer les flux d'interface utilisateur, l'architecture et le comportement du déploiement.
+
+```mdx
+<Image src="/logo/light.svg" darkSrc="/logo/dark.svg" alt="dubstack logo" framed />
+```
+
+Voyez [Médias, intégrations et diagrammes](/fr/writing-content/media-embeds) pour les images, les galeries, les vidéos, les intégrations et les diagrammes Mermaid.
+
+## Checklist des composants
+
+- Maintenez le contenu des composants court.
+- Ne faites pas de nesting de composants complexes sauf si nécessaire.
+- Préférez un seul concept par carte, appel d'attention, onglet ou onglet déroulant.
+- Prévisualisez avant de publier pour détecter les MDX invalides.

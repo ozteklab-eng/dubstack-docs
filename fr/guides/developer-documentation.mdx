@@ -1,0 +1,93 @@
+---
+title: Documentation pour développeurs
+description: "Planifiez un site de documentation pour développeurs comprenant des API, des SDK, des guides et des notes de version."
+icon: code
+---
+
+Utilisez ce guide lorsque vos documents doivent aider les développeurs à comprendre, intégrer et maintenir un produit.
+
+La documentation pour développeurs combine généralement des guides conceptuels, une référence d'API, des exemples, des journaux des modifications et du contenu de dépannage. Dans DubStack, ces pages sont hébergées dans le même dépôt Git, permettant aux documents d'être révisés, prévisualisés et publiés avec les workflows d'ingénierie habituels.
+
+## Structure recommandée
+
+Commencez par une structure simple :
+
+| Zone | Objectif |
+| --- | --- |
+| Aperçu | Expliquez ce que fait le produit et à qui il s'adresse. |
+| Démarrage rapide | Fournissez aux lecteurs le chemin le plus court pour réussir. |
+| Guides | Expliquez les tâches courantes et les modèles de production. |
+| Référence d'API | Documentez les points de terminaison OpenAPI et les exemples de requêtes/réponses. |
+| Journal des modifications | Enregistrez les changements liés au produit, à l'API ou à la documentation. |
+| Dépannage | Capturez les échecs connus et leurs solutions. |
+
+Maintenez la première version limitée. Ajoutez des sections plus approfondies une fois que les utilisateurs le demandent ou que les analyses montrent une confusion répétée.
+
+## Utilisez Git comme source de vérité
+
+Connectez un dépôt de documentation avant le lancement si possible.
+
+Les documents hébergés sur Git offrent à votre équipe :
+
+- changements révisables
+- déploiements de prévisualisation
+- collaboration basée sur les branches
+- historique pour les annulations et les audits
+- un transfert clair entre les responsables produit, ingénierie et documentation
+
+Si vous ne souhaitez pas connecter un dépôt dès le premier jour, utilisez d'abord le dépôt de démarrage hébergé, puis passez à un fournisseur connecté lorsque le workflow est prêt.
+
+## Ajoutez une référence d'API
+
+Placez votre spécification OpenAPI dans le dépôt et faites référence à celle-ci depuis `dubstack.json`.
+
+Pour une seule API, utilisez :
+
+```text
+api-reference/openapi.json
+```
+
+Pour plusieurs API, conservez les spécifications nommées sous :
+
+```text
+api-reference/openapi/admin.json
+api-reference/openapi/public.json
+```
+
+Ajoutez ensuite les pages de référence API à la navigation afin que les lecteurs puissent parcourir les groupes d'endpoints et ouvrir des exemples de demandes en direct lorsqu'ils sont activés.
+
+## Rendez les documents lisibles par l'IA
+
+Les documents de développement sont souvent lus par des agents de codage ainsi que par des humains.
+
+Avant la publication, validez :
+
+- `/llms.txt`
+- `/llms-full.txt`
+- exports page-level `.md`
+- découverte publique MCP lorsqu'elle est activée
+- chemins de téléchargement OpenAPI
+- sitemap et sortie robots
+
+Voyez [liste de vérification de préparation de l'agent](/fr/ai/agent-readiness-checklist).
+
+## Utilisez les workflows avec soin
+
+Utilisez les workflows pour la maintenance répétitive :
+
+- réparer les liens cassés
+- audit des métadonnées SEO
+- corriger les fautes de grammaire et d'orthographe
+- rédiger des entrées de journal des modifications
+- rédiger des mises à jour à partir des changements de code
+
+Commencez par des exécutions nécessitant une revue. Passez aux mises à jour directes uniquement après que le workflow ait produit des changements corrects dans la même zone de documentation plusieurs fois.
+
+## Sujets connexes
+
+- [Démarrage rapide](/fr/quickstart)
+- [Configuration OpenAPI](/fr/api-reference/openapi-setup)
+- [Rédaction de documents à partir des changements de code](/fr/guides/draft-docs-from-code)
+- [Déploiements de prévisualisation](/fr/deployment/preview-deployments)
+- [Workflows](/fr/workflows)
+

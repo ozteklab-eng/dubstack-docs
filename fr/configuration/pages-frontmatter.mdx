@@ -1,0 +1,116 @@
+---
+title: Métadonnées de la page
+description: "Configurez les titres, les descriptions, les icônes, l'ordre et la visibilité à partir des métadonnées MDX."
+icon: file-cog
+---
+
+Le frontmatter est le bloc de métadonnées situé en haut d'un fichier `.mdx` ou `.md`.
+
+dubstack lit les métadonnées lors de la synchronisation et stocke les métadonnées des pages dans l'index des pages publiées. Le rendu public, la navigation, la recherche, les workflows et le MCP public utilisent ces métadonnées lorsqu'elles sont pertinentes.
+
+## Métadonnées de base
+
+```mdx
+---
+title: Authentication
+description: Learn how to authenticate API requests.
+icon: key
+order: 2
+---
+```
+
+## Champs pris en charge
+
+<ResponseField name="title" type="string">
+  Titre de la page utilisé dans la navigation, les en-têtes de page, les titres du navigateur, les résultats de recherche et les réponses du MCP public. Si omis, dubstack déduit un titre à partir du chemin du fichier.
+</ResponseField>
+
+<ResponseField name="description" type="string">
+  Brève description de la page utilisée sous le titre de la page et dans les surfaces de métadonnées.
+</ResponseField>
+
+<ResponseField name="icon" type="string">
+  Nom de l'icône utilisé pour les entrées de navigation lorsqu'une page est listée dans la navigation.
+</ResponseField>
+
+<ResponseField name="order" type="number">
+  Indice d'ordre numérique utilisé par les index générés et les chemins de navigation automatiques.
+</ResponseField>
+
+<ResponseField name="hidden" type="boolean | string">
+  Définissez sur `true` ou `"true"` pour exclure une page de la navigation générée et des analyses de workflows qui ignorent les pages masquées. Une page masquée est exclue de la recherche, de la sortie de la carte du site, du MCP public, des index lus par l'IA et de la récupération par l'assistant, sauf si l'indexation des pages masquées est activée avec `seo.indexing: "all"`.
+</ResponseField>
+
+<ResponseField name="searchable" type="boolean | string">
+  Définissez sur `false` ou `"false"` pour rendre une page publiée accessible et navigable tout en l'excluant de la recherche interne, de la recherche du MCP public, du système de fichiers du MCP public et des index de récupération par l'assistant.
+</ResponseField>
+
+<ResponseField name="boost" type="number | string">
+  Multiplicateur de pertinence positif pour la recherche et la récupération par l'assistant. Utilisez-le modérément pour les pages d'aperçu, de démarrage rapide et de migration qui devraient figurer plus haut que les pages plus spécifiques pour les requêtes générales.
+</ResponseField>
+
+<ResponseField name="noindex" type="boolean | string">
+  Définissez sur `true` ou `"true"` pour exclure une page des surfaces d'indexation publique telles que la sortie de la carte du site et les index lus par l'IA. Utilisez cela lorsque la page ne doit pas être découverte par les robots ou les outils d'IA publics.
+</ResponseField>
+
+## Métadonnées de réglage de la recherche
+
+Utilisez `searchable: false` lorsqu'une page doit rester visible par URL directe ou navigation, sans apparaître dans la recherche ni dans la récupération du MCP public.
+
+```mdx
+---
+title: Legal terms
+description: Terms that readers can open from the footer.
+searchable: false
+---
+```
+
+Utilisez `boost` lorsqu'une page est la meilleure réponse aux requêtes générales.
+
+```mdx
+---
+title: Quickstart
+description: Create and publish your first docs site.
+boost: 2
+---
+```
+
+Maintenez les augmentations modérées. De fortes augmentations peuvent faire dépasser une page d'autres pages plus spécifiques.
+
+Utilisez le groupe de navigation `boost` dans `dubstack.json` lorsque toute une section nécessite un multiplicateur de classement partagé. Les métadonnées de page `boost` remplacent toute augmentation héritée de la navigation.
+
+Utilisez un groupe de navigation masqué avec `searchable: true` lorsque les pages descendantes doivent rester hors de la navigation mais restent tout de même découvrables.
+
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Migration helpers",
+            "hidden": true,
+            "searchable": true,
+            "pages": ["migration/legacy-api"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+## Règles de rédaction
+
+- Maintenez les métadonnées au tout début du fichier.
+- Utilisez des valeurs scalaires simples pour les champs lus par le worker de synchronisation.
+- Privilégiez `title` et `description` pour chaque page publique.
+- Utilisez `hidden: true` uniquement lorsque la page ne doit pas apparaître dans la navigation générée.
+- Utilisez `searchable: false` pour les pages d'utilité publique qui ne doivent pas apparaître dans la recherche.
+- Utilisez `noindex: true` lorsque la page doit être exclue des surfaces d'indexation publique des moteurs de recherche et des outils d'IA.
+- Utilisez `seo.indexing: "all"` uniquement lorsque les pages cachées sont du contenu directement accessible qui doit rester trouvable.
+
+<Callout type="warning">
+  Le frontmatter est du contenu contrôlé par le code source. Ne placez pas les clés API, les mots de passe, les jetons privés ou les secrets internes dans le frontmatter de la page.
+</Callout>

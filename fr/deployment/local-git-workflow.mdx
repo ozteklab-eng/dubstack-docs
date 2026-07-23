@@ -1,0 +1,149 @@
+---
+title: Flux de travail Git local
+description: "Modifiez les documents localement, poussez vers le dépôt connecté, et laissez dubstack publier à partir de la branche de déploiement."
+icon: terminal
+---
+
+Les développeurs peuvent continuer à utiliser leur flux de travail Git normal avec dubstack.
+
+Utilisez l'éditeur du tableau de bord lorsque vous souhaitez éditer dans le navigateur. Utilisez Git local lorsque votre équipe préfère un IDE, la ligne de commande, des pull requests, des vérifications CI ou une revue native du dépôt.
+
+Les deux chemins mettent à jour la même source de documents active.
+
+```text
+Dashboard editor
+  -> Git repository -> sync worker -> live docs site
+Local Git push
+  -> Git repository -> sync worker -> live docs site
+```
+
+## Avant de commencer
+
+Vérifiez que le site dispose d'un dépôt source de déploiement actif.
+
+1. Ouvrez le tableau de bord.
+2. Allez dans **Paramètres > Déploiement > Paramètres Git**.
+3. Vérifiez le fournisseur, le dépôt, la branche et la racine des documents.
+4. Vérifiez que le dépôt contient `dubstack.json`.
+
+Pour GitHub, l'application dubstack GitHub doit avoir accès au dépôt. Si GitLab est la source de déploiement active, le projet GitLab, le jeton et les paramètres de source active doivent être valides pour l'espace de travail.
+
+## Cloner le dépôt
+
+Cloner le même dépôt affiché dans les paramètres Git.
+
+```bash
+git clone https://github.com/your-org/your-docs-repo.git
+cd your-docs-repo
+```
+
+Si vos documents se trouvent dans un sous-répertoire, déplacez-vous dans ce répertoire avant d'éditer.
+
+```bash
+cd docs
+```
+
+## Apporter un changement aux documents
+
+Modifiez les fichiers avec votre éditeur normal.
+
+Les fichiers courants incluent :
+
+- `dubstack.json` pour la navigation, le thème, la référence API, les redirections, les widgets et le comportement du site
+- Fichiers `*.mdx` pour les pages de documentation
+- `api-reference/openapi.json` ou un autre chemin de spécification OpenAPI configuré
+- images, extraits et autres ressources référencées par les pages
+
+Maintenez la branche de déploiement reproductible. Ne stockez pas les clés API, les mots de passe, les identifiants clients ou les jetons privés dans le dépôt.
+
+## Pousser directement vers la branche de déploiement
+
+Utilisez cela pour de petites modifications lorsque la politique de votre dépôt permet la publication directe.
+
+```bash
+git checkout main
+git pull
+git add .
+git commit -m "docs: update quickstart"
+git push
+```
+
+Lorsque la poussée atteint la branche de déploiement configurée, dubstack synchronise la source et met à jour le site en ligne après la fin de la tâche de publication.
+
+## Utiliser une branche et une pull request
+
+Utilisez cela pour des changements plus importants, des branches protégées, des mises à jour de la référence API, des changements de navigation et tout ce qui nécessite une revue.
+
+```bash
+git checkout -b docs/update-quickstart
+git add .
+git commit -m "docs: update quickstart"
+git push -u origin docs/update-quickstart
+```
+
+Ouvrez une pull request ou une demande de fusion sur votre fournisseur Git.
+
+Après la revue, fusionnez dans la branche de déploiement. La fusion déclenche le chemin de synchronisation normal.
+
+## Ce qui est synchronisé vers le tableau de bord
+
+Les poussées externes et les pull requests fusionnées mettent à jour la même source de documents active que lit l'éditeur du tableau de bord.
+
+Après une synchronisation réussie :
+
+- mise à jour des pages publiées sur le site en direct
+- la navigation suit la dernière `dubstack.json`
+- les fichiers de recherche, d'assistant, du MCP public et d'IA utilisent les derniers artefacts publiés
+- l'éditeur du tableau de bord doit afficher le contenu le plus récent du dépôt pour la branche active
+
+Si l'éditeur semble obsolète, lancez une mise à jour manuelle et rechargez l'éditeur.
+
+## Mise à jour manuelle
+
+Utilisez **Mise à jour manuelle** lorsque le webhook d'un fournisseur est en retard, manqué ou désactivé.
+
+La mise à jour manuelle ne remplace pas Git. Elle relance le travail de synchronisation à partir du dépôt et de la branche configurés.
+
+1. Ouvrez le tableau de bord.
+2. Accédez à l'aperçu du site ou à l'historique des déploiements.
+3. Cliquez sur **Mise à jour manuelle**.
+4. Attendez que l'élément d'activité soit terminé.
+5. Ouvrez la page en direct et vérifiez le changement.
+
+## Vérifications recommandées avant de pousser
+
+Avant de pousser un changement de documentation, vérifiez :
+
+- `dubstack.json` est un JSON valide
+- le frontmatter des pages modifiées est valide
+- les nouvelles pages sont liées à la navigation lorsqu'elles doivent apparaître dans la barre latérale
+- les pages renommées disposent de redirections
+- les chemins des images et extraits de code résolvent à partir de la racine des documents
+- les spécifications OpenAPI sont valides lorsqu'il y a eu des changements sur les pages de référence API
+- aucune information sensible n'a été commise
+
+## Dépannage
+
+### La poussée a réussi mais le site en direct n'a pas été mis à jour
+
+Vérifiez que vous avez poussé sur la branche configurée dans les paramètres Git. Si la branche est correcte, lancez une mise à jour manuelle et vérifiez l'historique des déploiements.
+
+### L'éditeur du tableau de bord affiche un contenu obsolète
+
+Lancez une mise à jour manuelle, puis rechargez l'éditeur. Si cela ne résout pas le problème, vérifiez que le tableau de bord affiche la même branche que celle vers laquelle vous avez poussé.
+
+### Une page existe dans Git mais manque dans la barre latérale
+
+Ajoutez le slug de la page à la navigation `dubstack.json`, puis poussez à nouveau.
+
+### Une prévisualisation de pull request diffère de la production
+
+Les déploiements de prévisualisation affichent la branche en cours de révision. La production affiche la branche de déploiement après fusion et synchronisation.
+
+## Liens
+
+- [Essentiels de Git](/fr/editor/git-essentials)
+- [Branchements et publication](/fr/editor/publishing)
+- [GitHub](/fr/deployment/github)
+- [GitLab](/fr/deployment/gitlab)
+- [Mises à jour manuelles et historique](/fr/deployment/manual-updates-history)

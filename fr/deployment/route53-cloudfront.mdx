@@ -1,0 +1,137 @@
+---
+title: Route 53 et CloudFront
+description: Hébergez les documents dubstack via le DNS AWS et CloudFront.
+icon: cloud-cog
+---
+
+Utilisez Route 53 et CloudFront lorsque votre site web de production est déjà routé via AWS et que vous souhaitez des documents sur un sous-domaine personnalisé ou un sous-chemin `/docs`.
+
+## Choisissez un mode de routage
+
+| Mode | URL publique | Configuration AWS |
+| --- | --- | --- |
+| Sous-domaine personnalisé | `docs.example.com` | Enregistrement DNS de Route 53 vers la cible dubstack affichée dans le tableau de bord |
+| `/docs` sous-chemin | `example.com/docs` | Comportements CloudFront qui redirigent `/docs` et `/docs/*` vers l'origine dubstack |
+
+Utilisez le mode sous-domaine sauf si les documents doivent partager le domaine racine exact.
+
+## Sous-domaine personnalisé avec Route 53
+
+1. Ouvrez votre site dans le tableau de bord dubstack.
+2. Allez dans **Paramètres → Déploiement → Domaine personnalisé**.
+3. Ajoutez un domaine basé sur l'hôte tel que `docs.example.com`.
+4. Copiez la cible DNS affichée dans le tableau de bord.
+5. Dans Route 53, créez l'enregistrement demandé.
+6. Retournez dans le tableau de bord et vérifiez le domaine après la propagation du DNS.
+
+Forme d'enregistrement typique :
+
+```text
+Type:  CNAME
+Name:  docs
+Value: cname.dubstack.live
+```
+
+Utilisez exactement l'enregistrement affiché dans le tableau de bord si celui-ci diffère de cet exemple.
+
+## Sous-chemin `/docs` avec CloudFront
+
+Pour un montage sous-chemin, le domaine racine reste sur votre distribution CloudFront existante et uniquement les chemins des documents sont redirigés vers dubstack.
+
+1. Activez **Hôte à `/docs`** dans **Paramètres → Déploiement → Domaine personnalisé**.
+2. Copiez le nom d'hôte d'origine généré, par exemple `<site>--origin.dubstack.live`.
+3. Ajoutez cet hôte en tant qu'origine CloudFront.
+4. Ajoutez des comportements pour `/docs` et `/docs/*` qui pointent vers l'origine dubstack.
+5. Préservez le contexte d'hôte public via les en-têtes transmis ou injectés.
+6. Gardez les routes de documents dynamiques non mises en cache jusqu'à ce que la validation soit terminée.
+
+## Comportements recommandés
+
+| Modèle de chemin | Origine | Politique de cache |
+| --- | --- | --- |
+| `/docs` | `<site>--origin.dubstack.live` | Désactivé pendant la validation |
+| `/docs/*` | `<site>--origin.dubstack.live` | Désactivé pendant la validation |
+| `/.well-known/acme-challenge/*` | Origine du site existant | Désactivé |
+| `/.well-known/vercel/*` | Origine du site existant, si utilisée | Désactivé |
+| `Default (*)` | Origine du site existant | Votre politique de site normal |
+
+Après validation, vous pouvez activer le cache pour les chemins d'assets statiques tels que `/docs/_next/static/*`. Gardez `/docs/api/*`, `/docs/mcp`, les requêtes de l'assistant et les fichiers de découverte IA non mis en cache ou à courte durée de vie.
+
+## Politique de demande d'origine
+
+Le comportement CloudFront pour les docs doit éviter d'envoyer l'en-tête public `Host` comme hôte TLS pour l'origine dubstack. Utilisez une politique de demande d'origine qui exclut l'en-tête `Host` de l'observateur ou configurez l'origine de manière à ce que TLS utilise `<site>--origin.dubstack.live`.
+
+Transmettre ou injecter les en-têtes de contexte public pour l'origine des docs :
+
+| En-tête | Valeur |
+| --- | --- |
+| `X-Forwarded-Host` | `example.com` |
+| `X-Public-Host` | `example.com` |
+| `X-Forwarded-Proto` | `https` |
+| `X-Docs-Base-Path` | `/docs` |
+| `X-Public-Mcp-Url` | `https://example.com/docs/mcp` |
+
+Si votre configuration CloudFront ne peut pas injecter ces en-têtes directement, utilisez une CloudFront Function, Lambda@Edge ou un proxy de bord amont qui peut les ajouter.
+
+## Fichiers AI au niveau racine (optionnel)
+
+Par défaut, les fichiers AI se trouvent sous le chemin des docs :
+
+```text
+example.com/docs/llms.txt
+example.com/docs/llms-full.txt
+example.com/docs/skill.md
+example.com/docs/mcp
+```
+
+Si vous souhaitez une découverte au niveau racine, ajoutez des comportements explicites pour les chemins sélectionnés et faites-les pointer vers l'origine des docs avec le chemin mappé sous `/docs`.
+
+```text
+/llms.txt      -> /docs/llms.txt
+/llms-full.txt -> /docs/llms-full.txt
+/skill.md      -> /docs/skill.md
+```
+
+Ajoutez uniquement la découverte au niveau racine si elle ne contredit pas votre site principal.
+
+## Valider la configuration
+
+Ouvrez ces URLs après le déploiement de la distribution CloudFront :
+
+```text
+https://example.com/docs
+https://example.com/docs/quickstart
+https://example.com/docs/api/theme
+https://example.com/docs/llms.txt
+https://example.com/docs/feedback
+https://example.com/docs/mcp
+https://example.com/docs/.well-known/mcp
+https://example.com/docs/.well-known/mcp/server-card.json
+```
+
+Vérifiez ensuite :
+
+- Les pages de docs imbriquées fonctionnent lors d'un rafraîchissement direct.
+- Les assets chargent depuis `/docs/_next/...`.
+- Les liens publics restent sur `example.com/docs`.
+- Le nom d'hôte `--origin.dubstack.live` n'est pas exposé aux visiteurs.
+- La découverte MCP et les métadonnées de carte serveur pointent vers `https://example.com/docs/mcp`.
+- Les requêtes de recherche, d'assistant, de feedback et de playground API ne sont pas servies depuis le cache CDN périmé.
+
+## Dépannage
+
+### CloudFront renvoie une erreur TLS ou 502
+
+Vérifiez que le domaine d'origine est le nom d'hôte généré `--origin.dubstack.live` et que l'en-tête `Host` de l'observateur n'est pas utilisé comme hôte TLS en amont.
+
+### Le site web principal tombe en panne après l'ajout des documents
+
+Vérifiez l'ordre des comportements. CloudFront doit correspondre à `/docs` et `/docs/*` avant le comportement par défaut, tandis que tout le trafic non documentaire continue vers l'origine du site principal.
+
+### Les chemins de vérification échouent
+
+Autorisez les chemins de vérification des certificats et des fournisseurs, tels que `/.well-known/acme-challenge/*`, jusqu'au service propriétaire du domaine racine.
+
+### Les documents s'affichent, mais les liens quittent le domaine public
+
+Transmettez ou injectez `X-Forwarded-Host`, `X-Public-Host` et `X-Forwarded-Proto` pour les comportements d'origine des documents.

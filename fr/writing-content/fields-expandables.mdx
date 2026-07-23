@@ -1,0 +1,118 @@
+---
+title: Champs et sections déroulantes
+description: "Paramètres de la demande, propriétés de réponse et champs d'objets imbriqués."
+icon: list-tree
+---
+
+Les composants de champ décrivent des données structurées telles que les paramètres d'API, les propriétés de réponse, les clés de configuration et les attributs d'objet.
+
+Utilisez `ParamField` pour les valeurs envoyées par l'utilisateur. Utilisez `ResponseField` pour les valeurs renvoyées par une API ou produites par un fichier de configuration.
+
+## Champs de paramètres
+
+<ParamField path="siteId" type="string" required>
+  Identifiant du site provenant de l'URL du tableau de bord ou de la réponse API.
+</ParamField>
+
+```mdx
+<ParamField path="siteId" type="string" required>
+  The site identifier from the dashboard URL or API response.
+</ParamField>
+```
+
+## Champs de réponse
+
+<ResponseField name="status" type="string">
+  Statut de déploiement actuel, tel que `queued`, `syncing`, `synced` ou `failed`.
+</ResponseField>
+
+```mdx
+<ResponseField name="status" type="string">
+  Current deployment status, such as `queued`, `syncing`, `synced`, or `failed`.
+</ResponseField>
+```
+
+## Champs requis
+
+Définissez `required` pour les valeurs obligatoires.
+
+<ParamField path="branch" type="string" required>
+  Branche Git utilisée comme source pour le déploiement.
+</ParamField>
+
+```mdx
+<ParamField path="branch" type="string" required>
+  Git branch used as the source for a deployment.
+</ParamField>
+```
+
+## Objets imbriqués
+
+Utilisez `Expandable` à l'intérieur d'un champ pour conserver les propriétés imbriquées sans surcharger la page.
+
+<ResponseField name="site" type="object" required>
+  Métadonnées du site utilisées pour la marque et les métadonnées générées.
+
+  <Expandable title="Propriétés">
+    <ResponseField name="name" type="string" required>
+      Nom du site public.
+    </ResponseField>
+
+    <ResponseField name="logo" type="object">
+      Actifs de logo clair et sombre.
+    </ResponseField>
+
+    <ResponseField name="favicon" type="string">
+      Chemin vers l'actif favicon.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+```mdx
+<ResponseField name="site" type="object" required>
+  Site metadata used for branding and generated metadata.
+
+  <Expandable title="properties">
+    <ResponseField name="name" type="string" required>
+      Public site name.
+    </ResponseField>
+
+    <ResponseField name="logo" type="object">
+      Light and dark logo assets.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+```
+
+## Propriétés
+
+<ResponseField name="name" type="string">
+  Nom du champ affiché pour `ResponseField`.
+</ResponseField>
+
+<ResponseField name="path" type="string">
+  Chemin du champ affiché pour `ParamField`.
+</ResponseField>
+
+<ResponseField name="type" type="string">
+  Étiquette de type affichée à côté du nom du champ.
+</ResponseField>
+
+<ResponseField name="required" type="boolean" default="false">
+  Ajoute une étiquette obligatoire.
+</ResponseField>
+
+<ResponseField name="title" type="string">
+  Titre affiché par `Expandable`. Par défaut, `properties`.
+</ResponseField>
+
+<ResponseField name="defaultOpen" type="boolean" default="false">
+  Ouvre par défaut une `Expandable`.
+</ResponseField>
+
+## Consignes
+
+- Utilisez les champs pour les schémas et les pages de référence de configuration.
+- Privilégiez les sections déroulantes imbriquées pour les champs d'objet avec plusieurs enfants.
+- Gardez chaque description de champ axée sur le comportement, pas sur l'histoire de l'implémentation.
+- Ne masquez pas les étapes de configuration initiale obligatoires à l'intérieur des sections déroulantes.

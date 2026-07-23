@@ -1,0 +1,134 @@
+---
+title: Gérer les flux de travail
+description: "Activez, désactivez, exécutez et inspectez les flux de travail depuis le tableau de bord, puis configurez leurs notifications."
+icon: toggle-right
+---
+
+Gérez les flux de travail depuis **Automate > Workflows** dans le tableau de bord.
+
+Utilisez cette page pour activer ou désactiver les flux de travail intégrés, exécuter un flux de travail configuré une seule fois, inspecter l'historique des exécutions récentes et envoyer des notifications Slack pour les exécutions terminées ou échouées.
+
+## Activer un flux de travail
+
+1. Ouvrez le tableau de bord.
+2. Sélectionnez l'organisation et le déploiement.
+3. Accédez à **Automate > Workflows**.
+4. Choisissez une carte de flux de travail.
+5. Remplissez toute configuration requise.
+6. Sélectionnez un mode de mise à jour.
+7. Cliquez sur **Activer le flux de travail**.
+
+Si le flux de travail peut s'exécuter avec les paramètres par défaut, le commutateur peut l'activer directement. Si la configuration est incomplète, le panneau de configuration affiche le critère bloquant.
+
+Pour les flux de travail qui doivent mettre à jour GitHub automatiquement au lieu d'ouvrir une demande de révision, vérifiez que les règles du dépôt autorisent ce mode. Voir [Configurer l'automerge](/fr/deployment/configure-automerge).
+
+## Vérifications de préparation
+
+Le tableau de bord vérifie chaque flux de travail avant qu'il ne puisse s'exécuter.
+
+| Vérification | Ce qu'il protège |
+| --- | --- |
+| Dépôt de documentation | Assure qu'il existe un dépôt de documentation connecté à mettre à jour. |
+| Accès en écriture au dépôt | Assure que l'agent peut créer une demande de révision native du fournisseur ou un commit. |
+| Modèle de rédaction | Assure que le profil de rédaction du flux de travail peut s'exécuter. |
+| Support de l'exécuteur | Assure que l'environnement actuel peut exécuter le type de flux de travail. |
+| Exigence de configuration | Assure que les champs spécifiques au flux de travail sont présents, tels que les dépôts sources, les langues cibles ou les instructions du guide de style. |
+| RBAC | Assure que l'utilisateur connecté peut visualiser, configurer ou exécuter le flux de travail pour le déploiement sélectionné. |
+
+Un flux de travail peut afficher **Configuré** lorsqu'il a enregistré ses paramètres mais que le lanceur n'est pas activé. Il affiche **Activé** lorsqu'il est prêt pour des exécutions planifiées, basées sur des événements ou manuelles.
+
+## Exécuter une fois
+
+Utilisez **Exécuter une fois** pour ajouter immédiatement un flux de travail activé à la file d'attente.
+
+Les exécutions manuelles utilisent la configuration actuelle du flux de travail, les dépôts de contexte sélectionnés, les intégrations activées, les paramètres de notification et le mode de mise à jour. Elles apparaissent dans l'historique d'exécution avec la source de déclenchement `manual`.
+
+Les exécutions manuelles appliquent toujours les vérifications de préparation et la limite quotidienne d'exécution.
+
+## Déclencher depuis l'API Admin
+
+Utilisez une clé d'API Admin lorsqu'un système backend externe doit déclencher un flux de travail.
+
+Les exécutions déclenchées par l'API apparaissent dans le même historique d'exécution avec la source de déclenchement `api`. Elles utilisent la configuration sauvegardée du flux de travail et appliquent les mêmes vérifications de préparation que les exécutions manuelles.
+
+Seuls les flux de travail configurés avec le déclencheur **Planification personnalisée** peuvent être déclenchés par l'API. Consultez [Clés API](/fr/dashboard/api-keys) pour la configuration et des exemples de requêtes.
+
+## Historique d'exécution
+
+Ouvrez la vue d'historique d'exécution pour inspecter les exécutions récentes du flux de travail.
+
+Chaque exécution enregistre :
+
+- nom du flux de travail
+- source de déclenchement
+- type de déclenchement
+- mode de mise à jour
+- dépôts de contexte sélectionnés
+- intégrations activées
+- horodatages de mise en file, de démarrage et de fin
+- crédits facturés ou estimés lorsqu'une entrée de registre d'utilisation existe
+- progrès actuel pour les exécutions de copie de dépôt en cours, incluant le fournisseur cible et le point de contrôle du nombre de fichiers
+- lien de résultat, tel qu'une demande de révision native du fournisseur ou un commit
+- message d'erreur en cas d'échec de l'exécution
+- statut de livraison des notifications Slack lors de l'activation des notifications
+
+Cliquez sur une exécution pour inspecter sa sortie, son utilisation et ouvrir la branche générée dans l'éditeur lorsqu'un lien de révision d'éditeur est disponible.
+
+Les exécutions de copie de dépôt mettent à jour leur ligne et leur panneau de détails pendant leur exécution. Cela est utile pour les grands dépôts et les cibles autohébergées où les écritures de fournisseur peuvent prendre plusieurs minutes.
+
+La médaille de crédit sur une ligne d'exécution affiche les crédits facturés ou enregistrés lorsqu'une entrée de registre d'utilisation existe. Si une exécution n'a qu'une estimation, la médaille indique une utilisation estimée et le panneau de détails affiche si `credits_charged` est `0`. Le mode de registre passif maintient l'estimation visible afin que les équipes puissent anticiper l'utilisation de l'automatisation avant l'activation de l'enforcement.
+
+## Examiner les modifications générées dans l'éditeur
+
+Lorsqu'un flux de travail ouvre une pull request ou une demande de fusion, les détails de l'exécution incluent un lien de révision d'éditeur lorsque dubstack peut résoudre la branche générée.
+
+Utilisez ce lien pour continuer la révision depuis le tableau de bord de l'éditeur :
+
+1. Ouvrez **Automate > Workflows**.
+2. Ouvrez l'historique d'exécution.
+3. Sélectionnez l'exécution du flux de travail terminée.
+4. Cliquez sur **Ouvrir dans l'éditeur**.
+5. Examinez la branche générée, les fichiers modifiés et la différence source.
+6. Fusionnez, demandez des modifications ou continuez à éditer selon la politique de votre dépôt.
+
+Si les notifications Slack sont activées, les notifications de flux de travail peuvent inclure également un lien **Voir les modifications**. Ce lien ouvre la même branche générée dans l'éditeur lorsqu'un lien de revue de l'éditeur est disponible.
+
+Le lien de l'éditeur est disponible pour les exécutions de création de contenu qui créent une branche, une pull request, une demande de fusion ou une mise à jour directe. Les exécutions de copie de dépôt ne permettent pas d'ouvrir des liens de revue de l'éditeur car elles copient le contenu du dépôt dans les cibles configurées au lieu de rédiger des modifications de documents.
+
+## Notifications Slack
+
+Lorsque Slack est connecté, les flux de travail peuvent publier les mises à jour des exécutions sur un ou plusieurs canaux sélectionnés.
+
+Ouvrez **Paramètres > Espace de travail > Notifications** pour consulter la préparation de Slack, les canaux de notification de flux de travail configurés et le statut de livraison récent.
+
+Modes de notification :
+
+| Mode | Comportement |
+| --- | --- |
+| Tous les résultats | Notifier lorsqu'une exécution réussit ou échoue. |
+| Seulement les échecs | Notifier uniquement lorsqu'une exécution échoue. |
+
+Les flux de travail de pull request peuvent également envoyer des notifications de cycle de vie lorsqu'une pull request générée a attendu une revue et lorsqu'elle est fusionnée.
+
+Invitez l'application dans chaque canal Slack cible avant de la sélectionner dans le panneau de flux de travail.
+
+## Désactiver un flux de travail
+
+Utilisez le commutateur de flux de travail ou l'en-tête du panneau pour désactiver un flux de travail.
+
+La désactivation arrête les futures exécutions planifiées et basées sur des événements. Elle ne supprime ni l'historique des exécutions précédentes ni les définitions des flux de travail personnalisés.
+
+## Supprimer un flux de travail personnalisé
+
+Seuls les flux de travail personnalisés peuvent être supprimés.
+
+La suppression d'un flux de travail personnalisé supprime la configuration du tableau de bord. Les enregistrements d'exécution existants restent disponibles pour l'audit et la revue.
+
+## Sujets connexes
+
+- [Flux de travail](/fr/workflows)
+- [Configurer les exécutions de flux de travail](/fr/workflows/configuration)
+- [Référence des flux de travail](/fr/workflows/reference)
+- [Créer des flux de travail](/fr/workflows/create)
+- [Notifications](/fr/dashboard/notifications)
+- [Configurer l'automerge](/fr/deployment/configure-automerge)

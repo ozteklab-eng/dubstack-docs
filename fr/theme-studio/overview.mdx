@@ -1,0 +1,67 @@
+---
+title: Theme Studio
+description: Personnalisez visuellement les sites de documentation Enterprise sans compromettre le contenu géré dans Git.
+icon: paintbrush
+---
+
+Theme Studio est la surface de personnalisation visuelle pour les sites de documentation Enterprise.
+
+Utilisez-le lorsque votre site nécessite une identité visuelle, des composants personnalisés ou une page d'accueil plus élaborée que le shell de documentation standard.
+
+## Quand utiliser Theme Studio
+
+Theme Studio est idéal pour les équipes qui ont besoin de :
+
+- Une page d'accueil de documentation conforme à leur identité visuelle.
+- Des styles personnalisés pour le hero, le pied de page ou la navigation.
+- Un contrôle de la mise en page au niveau des composants.
+- Des modifications de thème visuel sans éditer chaque page manuellement.
+- Un workflow de conception prévisualisable avant de publier les modifications.
+
+La configuration standard des documents reste dans Git. Les modifications de Theme Studio sont enregistrées en tant que configuration du site et publiées via le chemin normal de mise à jour des documents.
+
+## Ce que Theme Studio contrôle
+
+| Zone | Ce que vous pouvez personnaliser |
+| --- | --- |
+| Mise en page | Zones de la page, emplacement des composants, espacement et structure du canevas. |
+| Identité visuelle | Logos, couleurs, typographie et traitements de surface. |
+| Composants | En-têtes, pieds de page, cartes, sections principales et blocs de contenu personnalisés futurs. |
+| Style de l'assistant | Cadre de l'assistant, zone de saisie et tokens visuels lorsqu'ils sont activés. |
+| Interface de navigation | Mise en page de la barre latérale et de l'en-tête pour les sites qui choisissent un runtime personnalisé. |
+
+## Ce qui reste dans Git
+
+Theme Studio ne remplace pas votre source de documentation.
+
+Gardez ces éléments dans Git :
+
+- Pages MDX.
+- Spécifications OpenAPI.
+- Structure de navigation.
+- Redirections.
+- Extraits réutilisables.
+- Configuration `dubstack.json`.
+
+Cela préserve la révision, le retour en arrière et la portabilité.
+
+## Disponibilité
+
+Theme Studio est une fonctionnalité Enterprise. Les sites non Enterprise peuvent toujours utiliser le thème standard via `dubstack.json`, mais ils ne peuvent pas publier les maquettes de Theme Studio.
+
+<Callout type="info">
+  Les contrôles d'accès Enterprise sont appliqués par le tableau de bord et le runtime publié. Le masquage d'éléments dans l'interface utilisateur ne suffit pas à faire respecter les limites d'accès.
+</Callout>
+
+## Workflow recommandé
+
+1. Créez ou connectez le dépôt source des documents.
+2. Publiez d'abord un shell de documentation standard.
+3. Confirmez que la navigation, les pages et les références API sont correctes.
+4. Ouvrez Theme Studio et ajustez la mise en page ou l'identité visuelle.
+5. Prévisualisez les modifications sur un déploiement non de production.
+6. Publiez une fois que le site rendu correspond au design approuvé.
+
+## Éviter la dérive
+
+Utilisez Theme Studio pour la présentation, pas pour dupliquer le contenu de la documentation. Si un bloc contient des instructions sur le produit, conservez le contenu canonique en MDX et créez un lien vers celui-ci depuis la mise en page visuelle.

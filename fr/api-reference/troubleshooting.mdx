@@ -1,0 +1,119 @@
+---
+title: Référence API - Dépannage
+description: "Résolvez les problèmes courants liés à OpenAPI, aux points de terminaison générés et à l'API Playground."
+icon: wrench
+---
+
+Utilisez ce guide lorsque les pages API générées ou les requêtes de l'API Playground ne se comportent pas comme prévu.
+
+<AccordionGroup>
+  <Accordion title="Aucune page de point de terminaison n'a été générée">
+    Vérifiez que votre fichier OpenAPI est un JSON valide et utilise OpenAPI 3.x.
+
+    ```json
+    {
+      "openapi": "3.1.0",
+      "info": {
+        "title": "Example API",
+        "version": "1.0.0"
+      },
+      "paths": {}
+    }
+    ```
+
+    Ensuite, vérifiez que `dubstack.json` fait référence à la spécification depuis un groupe de navigation ou un onglet :
+
+    ```json
+    {
+      "group": "API reference",
+      "openapi": "api-reference/openapi.json"
+    }
+    ```
+  </Accordion>
+
+  <Accordion title="Une page de point de terminaison générée est vide">
+    Vérifiez que le frontmatter de la page pointe vers une opération existante dans la spécification.
+
+    ```mdx
+    ---
+    title: Get project
+    openapi: "GET /v1/projects/{projectId}"
+    ---
+    ```
+
+    La méthode doit être en majuscules et le chemin doit correspondre au chemin OpenAPI, y compris les paramètres de chemin.
+  </Accordion>
+
+  <Accordion title="Un point de terminaison manque dans la navigation">
+    Vérifiez si l'opération est exclue, masquée ou non listée dans `dubstack.json`.
+
+    - `x-excluded: true` exclut l'opération des artefacts de documentation générés.
+    - `x-hidden: true` marque l'opération comme masquée dans l'état du point de terminaison géré.
+    - Un tableau `pages` sous un groupe OpenAPI publie uniquement les opérations listées.
+
+    Voir [Visibilité des points de terminaison](/fr/api-reference/endpoint-visibility).
+  </Accordion>
+
+  <Accordion title="Le bouton « Essayer » n'est pas disponible">
+    Le générateur de requêtes a besoin des métadonnées de l'opération provenant d'OpenAPI.
+
+    Vérifiez que :
+
+    - la page a un frontmatter `openapi` valide
+    - l'opération existe dans la spécification configurée
+    - la page ne définit pas `playground: none`
+    - la spécification inclut suffisamment de métadonnées de requête pour créer des entrées utiles
+  </Accordion>
+
+  <Accordion title="Les requêtes de l'API Playground échouent avant d'atteindre mon API">
+    Confirmez que la spécification a une URL `servers` valide et que l'origine est accessible publiquement.
+
+    Le proxy de l'API Playground rejette les cibles des réseaux privés, locaux et internes. Les documents publics ne devraient se connecter qu'aux origines d'API publiques que vous exposez intentionnellement aux lecteurs.
+  </Accordion>
+
+  <Accordion title="Les requêtes de l'API Playground atteignent mon API mais sont rejetées">
+    Vérifiez d'abord la réponse côté API. Les causes courantes sont :
+
+    - clé API manquante ou invalide
+    - jeton Bearer expiré
+    - le corps de la requête ne correspond pas au schéma
+    - paramètre de chemin ou de requête requis manquant
+    - l'environnement API n'autorise pas le trafic de test public
+
+    Si le point de terminaison nécessite une authentification, documentez le schéma d'authentification attendu dans OpenAPI et expliquez où les lecteurs obtiennent leurs identifiants.
+  </Accordion>
+
+  <Accordion title="La charge utile générée n'est pas utile">
+    Ajoutez des exemples au corps de la requête ou aux champs du schéma.
+
+    ```yaml
+    requestBody:
+      content:
+        application/json:
+          examples:
+            default:
+              value:
+                name: Example project
+    ```
+
+    Voir [Exemples de réponses](/fr/api-reference/response-examples).
+  </Accordion>
+</AccordionGroup>
+
+## Liste de vérification
+
+Avant de publier un changement de spécification d'API :
+
+- Validez le document OpenAPI.
+- Confirmez que `servers` pointe vers l'environnement API souhaité.
+- Confirmez que les schémas de sécurité correspondent à l'API.
+- Confirmez que les exemples ne contiennent pas de secrets réels.
+- Confirmez que les opérations masquées ou exclues se comportent comme prévu.
+- Exécutez une mise à jour manuelle depuis le tableau de bord après avoir modifié une URL de spécification hébergée qui ne génère pas de commit Git.
+
+## Sujets connexes
+
+- [Configuration OpenAPI](/fr/api-reference/openapi-setup)
+- [Aperçu de l'API Playground](/fr/api-reference/playground-overview)
+- [Visibilité des points de terminaison](/fr/api-reference/endpoint-visibility)
+- [Exemples de réponses](/fr/api-reference/response-examples)

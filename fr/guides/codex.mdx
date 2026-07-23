@@ -1,0 +1,126 @@
+---
+title: Rédiger de la documentation avec Codex
+description: "Configurez Codex avec les instructions d'AGENTS.md et le serveur MCP public pour travailler sur une documentation gérée dans la source."
+icon: bot
+---
+
+Codex peut fonctionner dans votre dépôt de documentation depuis le terminal, l'IDE, l'application de bureau ou d'autres surfaces prises en charge par Codex.
+
+Utilisez-le avec dubstack de deux manières différentes :
+
+| Surface | Objectif |
+| --- | --- |
+| `AGENTS.md` | Instructions durables pour le style d'écriture, l'utilisation des composants, les commandes et les attentes de revue. |
+| MCP public | Lisez et recherchez le site de documentation publié depuis Codex via le point de terminaison `/mcp`. |
+
+Pour les modifications de contenu authentifiées, continuez à utiliser le tableau de bord, le fournisseur Git connecté, l'agent Slack ou les workflows configurés jusqu'à ce qu'une surface d'écriture MCP fiable soit disponible pour votre espace de travail.
+
+## Exigences
+
+Avant de commencer, vérifiez :
+
+- Codex est installé et authentifié
+- votre dépôt de documentation est fiable dans votre environnement Codex
+- votre site de documentation a du contenu publié
+- le MCP public est activé si vous souhaitez que Codex recherche le site de documentation en direct
+
+## Ajoutez les instructions du dépôt
+
+Créez un fichier `AGENTS.md` à la racine de votre dépôt de documentation.
+
+```text
+docs/
+  AGENTS.md
+  dubstack.json
+  index.mdx
+  api-reference/
+```
+
+Utilisez ce fichier pour définir le contrat de documentation pour le dépôt.
+
+```md title="AGENTS.md"
+# Documentation project
+
+## Source of truth
+
+- Docs are MDX files in this repository.
+- Navigation and site settings are configured in `dubstack.json`.
+- Published docs are served by dubstack after the connected branch syncs.
+
+## Writing standards
+
+- Use second person for instructions.
+- Use sentence case for headings.
+- Add frontmatter with `title` and `description` to every page.
+- Prefer relative links for internal docs pages.
+- Use callouts, cards, tabs, accordions, and code groups only when they improve scannability.
+
+## Safety rules
+
+- Never add secrets, tokens, private customer data, or magic links to docs.
+- Do not invent dashboard settings, API endpoints, limits, or billing behavior.
+- Check existing pages before creating new content.
+
+## Review workflow
+
+- Keep changes small.
+- Update `dubstack.json` when navigation changes.
+- Run the local validation commands documented by this repository before opening a pull request.
+```
+
+Codex lit les fichiers `AGENTS.md` depuis la racine du dépôt jusqu'au répertoire de travail actuel. Ajoutez des fichiers imbriqués uniquement lorsque un dossier a besoin de règles plus spécifiques.
+
+## Connecter le MCP public
+
+Codex prend en charge les serveurs MCP HTTP streamables à partir de sa configuration partagée.
+
+Ajoutez le serveur de documentation à `~/.codex/config.toml` ou à un fichier `.codex/config.toml` dans un projet de confiance :
+
+```toml
+[mcp_servers.my-docs]
+url = "https://your-docs-domain.com/mcp"
+```
+
+Pour un site de documentation monté sous un chemin, utilisez l'URL complète :
+
+```toml
+[mcp_servers.my-docs]
+url = "https://your-domain.com/docs/mcp"
+```
+
+Redémarrez Codex s'il est déjà en cours d'exécution, puis utilisez `/mcp` dans l'interface TUI pour confirmer que le serveur est connecté.
+
+## Prompts utiles
+
+```text
+Use the docs MCP to search for API playground authentication, then inspect the local docs page and propose the smallest update.
+```
+
+```text
+Review my uncommitted MDX changes for broken relative links and missing frontmatter.
+```
+
+```text
+Check whether this new guide needs a navigation entry in dubstack.json and make the minimal change.
+```
+
+## Continuez à rédiger des contenus révisables
+
+Le point de terminaison MCP public ne permet pas d'écrire du contenu. Si Codex modifie des fichiers locaux, publiez via le workflow source connecté :
+
+1. Examinez le diff.
+2. Validez les modifications de documentation.
+3. Poussez vers la branche connectée ou ouvrez une pull request.
+4. Attendez que le travail de synchronisation mette à jour le site de documentation publique.
+5. Relancez la recherche MCP ou `tree / -L 2` pour confirmer le résultat publié.
+
+## Sujets connexes
+
+<CardGroup cols={2}>
+  <Card title="MCP public" icon="plug" href="/fr/ai/mcp">
+    Connectez les clients IA au serveur de documentation publié.
+  </Card>
+  <Card title="Fichiers de compétences personnalisés" icon="file-cog" href="/fr/ai/custom-skill-files">
+    Publiez les instructions de l'agent avec votre site de documentation.
+  </Card>
+</CardGroup>

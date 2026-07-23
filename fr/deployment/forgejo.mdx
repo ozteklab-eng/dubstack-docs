@@ -1,0 +1,138 @@
+---
+title: Forgejo
+description: "Connectez un dépôt Forgejo auto-hébergé en tant que source de documentation, cible de copie ou dépôt source de workflow."
+icon: git-branch
+---
+
+Le support Forgejo s'adresse aux équipes qui conservent la documentation ou le code produit dans un service Git auto-hébergé.
+
+Utilisez Forgejo lorsque vous souhaitez que dubstack lise un dépôt auto-hébergé accessible, copie les documents dans un dépôt de sauvegarde ou inspecte un dépôt de code en tant que contexte de workflow.
+
+<Callout type="info">
+  Les dépôts Forgejo peuvent avoir des rôles différents. Vérifiez si le dépôt est la source active de documentation, une cible de copie ou un dépôt source de workflow avant de déboguer le comportement de synchronisation ou de workflow.
+</Callout>
+
+## Ce que Forgejo peut faire
+
+| Capacité | Statut |
+| --- | --- |
+| Utiliser un dépôt Forgejo en tant que dépôt source de workflow | Pris en charge là où l'instance est accessible par dubstack |
+| Copier les documents depuis la source de déploiement active vers Forgejo | Pris en charge lorsque l'accès en écriture au dépôt est configuré |
+| Utiliser Forgejo comme cible de sauvegarde ou de test de migration | Pris en charge |
+| Enfiler des workflows de modification de code à partir d'événements de revue Forgejo | Pris en charge lorsque le webhook source est actif |
+| Utiliser Forgejo en tant que source de déploiement de documentation active | Disponible lorsque activé pour l'espace de travail |
+| Créer des branches de revue ou des pull requests à partir de workflows d'auteur | Exige un accès en écriture du fournisseur et un support d'auteur pour l'espace de travail |
+
+La disponibilité du fournisseur dépend de votre abonnement, des paramètres de l'espace de travail et de l'état du déploiement.
+
+## Rôles des dépôts
+
+Maintenez ces rôles séparés :
+
+| Rôle | Ce qu'il fait |
+| --- | --- |
+| Dépôt de documentation actif | Publie le site de documentation en direct et reçoit les modifications de documentation générées. |
+| Cible de copie | Reçoit une copie explicite manuelle ou planifiée depuis la source de documentation active. |
+| Dépôt source de workflow | Fournit le code, l'API, le SDK ou le contexte produit pour les workflows. |
+
+Un dépôt source Forgejo ne publie pas de docs par lui-même. Il donne à l'agent ou au workflow un contexte délimité, puis les modifications de documentation générées ciblent toujours le dépôt de documentation actif.
+
+## Exigences
+
+Avant de connecter Forgejo, vérifiez :
+
+- l'instance Forgejo est accessible par dubstack via HTTPS
+- le dépôt et la branche existent
+- le jeton peut lire le dépôt sélectionné
+- les dépôts de copie ont un accès en écriture à la branche cible
+- les dépôts sources ont la livraison des webhooks activée si vous souhaitez des exécutions de workflows déclenchées par des événements
+- la protection de branche autorise le mode de mise à jour que vous avez choisi
+
+Si votre instance Forgejo n'est pas accessible publiquement, utilisez uniquement des exécutions de workflow planifiées ou manuelles après avoir exposé les chemins API du fournisseur requis et les webhooks à travers votre frontière réseau.
+
+## Ajouter Forgejo dans les paramètres Git
+
+1. Ouvrez le tableau de bord.
+2. Sélectionnez le site.
+3. Allez dans **Paramètres > Déploiement > Paramètres Git**.
+4. Ouvrez la configuration du dépôt source Forgejo ou du dépôt cible de copie.
+5. Entrez l'URL de l'instance.
+6. Entrez le propriétaire et le nom du dépôt.
+7. Choisissez la branche.
+8. Ajoutez un jeton de dépôt avec les accès minimums requis pour le rôle.
+9. Enregistrez et vérifiez que la carte affiche une connexion valide.
+
+Pour les dépôts sources de workflows, sélectionnez le dépôt Forgejo dans la configuration du workflow après l'avoir enregistré dans les paramètres Git.
+
+## Utiliser Forgejo pour la publication de docs
+
+Utilisez Forgejo en tant que source de déploiement active uniquement lorsque le mode est activé dans l'espace de travail.
+
+Avant de basculer un site en direct :
+
+- copiez la source des docs actuelle dans le dépôt Forgejo
+- vérifiez que `dubstack.json` est présent à la racine des docs configurée
+- exécutez avec succès une mise à jour manuelle
+- vérifiez que la carte source active pointe vers le dépôt et la branche Forgejo
+- vérifiez que votre équipe comprend que Forgejo est désormais la source de vérité pour les docs de production
+
+Si la première copie ou la mise à jour manuelle échoue, conservez le fournisseur actif précédent jusqu'à ce que le dépôt Forgejo soit validé.
+
+## Utiliser Forgejo en tant que cible de copie
+
+Utilisez une cible de copie Forgejo pour :
+
+- des copies de sauvegarde
+- répétition de migration
+- test des fournisseurs
+- garder une copie auto-hébergée de la source des documents
+
+Les copies de dépôt sont explicites. Un point de copie n'est pas un miroir continu. Si vous configurez un workflow de copie de dépôt planifié, dubstack exécute des copies récurrentes selon ce planning, mais cela ne crée toujours pas de basculement de fournisseur, de réplication de webhook ou de miroir continu.
+
+Voir [Synchronisation Git et copies de dépôt](/fr/deployment/git-sync) pour le comportement neutre par rapport au fournisseur.
+
+## Utiliser Forgejo comme contexte de dépôt source
+
+Utiliser un dépôt source Forgejo lorsque le code produit se trouve en dehors du dépôt de documentation.
+
+Exemples d'utilisation :
+
+- inspecter `services/api` après un changement d'API fusionné
+- inspecter `apps/marketing` après un changement de page produit
+- inspecter les packages SDK avant de rédiger les mises à jour du guide SDK
+
+Pour un déploiement le plus sûr :
+
+1. Ajouter le dépôt de code Forgejo en tant que dépôt source dans les paramètres Git.
+2. Sélectionner une portée de chemin étroite dans la configuration du workflow.
+3. Activer **Mise à jour à partir des modifications de code**.
+4. Garder **Requérir une revue** activé.
+5. Valider une petite pull request fusionnée avant d'élargir la portée.
+
+Si le webhook Forgejo n'est pas disponible, exécuter le workflow manuellement ou selon un planning après la fusion de la modification source.
+
+## Dépannage
+
+### Le dépôt Forgejo ne peut pas être lu
+
+Vérifier l'URL de l'instance, le propriétaire/le nom du dépôt, la branche, les autorisations du jeton et l'accessibilité réseau depuis dubstack.
+
+### Échec de la cible de copie
+
+Vérifier les autorisations d'écriture sur la branche cible, la protection de branche, les limites de taille de fichier et si la source de documentation active est valide.
+
+### Le workflow ne s'exécute pas suite aux modifications de code
+
+Confirmer que le webhook du dépôt source est actif, que le workflow est activé, que les fichiers modifiés correspondent à la portée de chemin et que le workflow prend en charge le déclencheur des modifications de code.
+
+### Les modifications des documents générés ciblent le mauvais dépôt
+
+Vérifier la source de déploiement active. Les dépôts sources fournissent uniquement un contexte ; ils ne devraient pas recevoir les modifications des documents générés, sauf s'ils sont également le dépôt de documentation actif.
+
+## Liens connexes
+
+- [Fournisseurs Git](/fr/deployment/forgejo-github-gitlab)
+- [Paramètres Git](/fr/deployment/git-settings)
+- [Synchronisation Git et copies de dépôt](/fr/deployment/git-sync)
+- [Documents brouillons à partir des modifications de code](/fr/guides/draft-docs-from-code)
+- [Intégrations de workflow](/fr/workflows/integrations)

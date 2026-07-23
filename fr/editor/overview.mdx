@@ -1,0 +1,71 @@
+---
+title: Éditeur
+description: "Modifiez les pages, la navigation et la configuration depuis le tableau de bord de dubstack."
+icon: pencil
+---
+
+L'éditeur permet à votre équipe de maintenir les documents sans quitter le tableau de bord.
+
+Il utilise les mêmes fichiers source qui alimentent le site publié.
+
+<Card title="Vous découvrez l'éditeur ? Commencez par le tutoriel." icon="graduation-cap" horizontal href="/fr/editor/tutorial">
+  Faites une petite modification, prévisualisez-la, publiez-la via le flux basé sur la source, et vérifiez le site en direct.
+</Card>
+
+<Card title="Utilisez l'agent pendant l'édition." icon="sparkles" horizontal href="/fr/editor/ask-agent">
+  Ouvrez l'agent de la barre d'outils de l'éditeur pour poser des questions ciblées sur le site de documentation actuel sans quitter la page.
+</Card>
+
+<Card title="Configurer les paramètres de l'éditeur." icon="settings" horizontal href="/fr/editor/settings">
+  Ajustez les préférences d'affichage de l'éditeur et comprenez où les contrôles de publication et d'IA sont configurés.
+</Card>
+
+<Card title="Examinez les branches et la publication." icon="git-pull-request" horizontal href="/fr/editor/branching-and-publishing">
+  Comprenez les branches de fonctionnalité, les pull requests, les déploiements de prévisualisation et la vérification en direct.
+</Card>
+
+<Card title="Comprenez les brouillons." icon="file-clock" horizontal href="/fr/editor/drafts">
+  Apprenez quels changements non enregistrés de l'éditeur sont préservés, quand ils sont effacés, et quand utiliser une branche à la place.
+</Card>
+
+<Card title="Gérez les médias et les actifs." icon="image" horizontal href="/fr/editor/media">
+  Téléchargez des images et des vidéos, sélectionnez des actifs existants du dépôt, et assurez-vous que les modifications des médias sont alignées avec la publication.
+</Card>
+
+## Panneaux de l'éditeur
+
+| Panneau | Objectif |
+| --- | --- |
+| Navigation | Parcourez la structure des documents publiés et ouvrez les pages. |
+| Explorateur de fichiers | Ouvrez directement les fichiers source lorsque vous connaissez le chemin. |
+| Actifs | Téléchargez et gérez des images ou d'autres actifs de documentation. |
+| Configuration du site | Modifiez les paramètres visuels du site pris en charge par `dubstack.json`. |
+
+## Modifier une page
+
+1. Ouvrez le tableau de bord.
+2. Accédez à **Éditeur**.
+3. Choisissez une page dans **Navigation** ou **Explorateur de fichiers**.
+4. Modifiez le contenu MDX.
+5. Prévisualisez le résultat rendu.
+6. Enregistrez la modification via le flux de publication basé sur la source.
+
+## Prise en charge MDX
+
+L'éditeur prend en charge le Markdown standard ainsi que les composants MDX utilisés par le moteur de rendu de la documentation, notamment les cartes, les encadrés, les onglets, les accordéons, les étapes et les exemples de code.
+
+Utilisez les commandes slash pour insérer des blocs pris en charge sans mémoriser la forme de chaque composant.
+
+## Édition de configuration
+
+La configuration du site est accessible depuis l'éditeur afin que les rédacteurs de documentation puissent mettre à jour la navigation, l'identité visuelle, les paramètres du thème, les références OpenAPI et les actions contextuelles dans le même flux de travail que le contenu des pages.
+
+Les modifications de configuration doivent toujours être revues comme des modifications de code, car elles affectent le site public.
+
+## Bonnes pratiques d'édition
+
+- Gardez chaque modification ciblée.
+- Prévisualisez les pages avant publication.
+- Évitez de mélanger les réécritures de contenu avec les refontes de navigation dans une seule modification.
+- Gardez des extraits réutilisables pour le texte répétitif.
+- Validez les actifs avec les pages qui les référencent.

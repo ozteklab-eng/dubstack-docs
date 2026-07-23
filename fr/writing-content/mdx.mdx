@@ -1,0 +1,132 @@
+---
+title: MDX
+description: "Rédigez du contenu avec Markdown, le frontmatter et les composants MDX."
+icon: file-code
+---
+
+MDX est le format de page pour les docs de dubstack.
+
+Utilisez Markdown pour la rédaction normale et les composants MDX pour les blocs structurés tels que les cartes, les rappels, les onglets, les onglets déroulants, les champs de paramètres et les exemples de code.
+
+## Frontmatter de la page
+
+Chaque page doit commencer par un frontmatter :
+
+```mdx
+---
+title: Authentication
+description: Learn how to authenticate requests to the Acme API.
+icon: key
+---
+```
+
+Champs courants :
+
+| Champ | Objectif |
+| --- | --- |
+| `title` | Titre de la page dans le navigateur, la recherche, la navigation et le contexte de l'assistant. |
+| `description` | Résumé court de la page pour la recherche et les aperçus. |
+| `icon` | Icône facultative pour la navigation et le chrome de la page. |
+| `openapi` | Liaison d'opération facultative pour les pages de référence API. |
+| `hidden` | Masquer une page de la navigation normale lorsqu'elle est prise en charge par la configuration du site actuelle. |
+
+## Bases de Markdown
+
+```mdx
+# Main heading
+
+Use short paragraphs and descriptive headings.
+
+## Steps
+
+1. Create a token.
+2. Store it securely.
+3. Send it with each request.
+
+## Notes
+
+- Keep examples current.
+- Link to related pages.
+- Avoid duplicating long explanations across many pages.
+```
+
+## Guides de rédaction axés
+
+Utilisez ces guides lorsque vous avez besoin d'un comportement plus approfondi :
+
+| Guide | Utilisez-le pour |
+| --- | --- |
+| [Pages et fichiers](/fr/writing-content/pages-files) | Fichiers sources, chemins d'accès URL, visibilité de la navigation, pages masquées et redirections. |
+| [Formatage du texte](/fr/writing-content/text-formatting) | Paragraphes, emphase, liens, listes, encadrements de code, citations et tableaux. |
+| [Titres et ancres](/fr/writing-content/headings-anchors) | Structure de la page, entrées de la table des matières et liens profonds stables. |
+| [Mises à jour du journal des modifications](/fr/writing-content/changelog-updates) | `Update` composants, balises, liens directs et flux RSS. |
+| [Badges](/fr/writing-content/badges) | Étiquettes compactes de statut, de plan et de métadonnées. |
+| [Icônes](/fr/writing-content/icons) | Icônes en ligne, sélection de la bibliothèque d'icônes, taille et couleur. |
+| [Infos bulle](/fr/writing-content/tooltips) | Définitions courtes, texte d'aide et liens d'information. |
+| [Couleurs](/fr/writing-content/colors) | Palettes de marque, jetons sémantiques et échantillons du système de conception. |
+| [Tuiles](/fr/writing-content/tiles) | Cartes de prévisualisation visuelle et galeries de modèles. |
+| [Panneaux](/fr/writing-content/panels) | Contenu personnalisé de la barre latérale droite pour les détails et exemples complémentaires. |
+| [Vues](/fr/writing-content/views) | Contenu spécifique à la langue, au framework ou à l'environnement. |
+| [Sujets connexes](/fr/writing-content/related-topics) | Liens manuels et générés vers des pages adjacentes ou conceptuellement liées. |
+| [Champs et éléments déroulants](/fr/writing-content/fields-expandables) | Paramètres, champs de réponse, clés de configuration et propriétés d'objets imbriqués. |
+| [Exemples de requête et de réponse](/fr/writing-content/request-response-examples) | Exemples de requête et de réponse de la barre latérale droite pour les pages axées sur l'API. |
+| [Médias, intégrations et diagrammes](/fr/writing-content/media-embeds) | Images, galeries, vidéos, intégrations iframe et diagrammes Mermaid. |
+
+## Liens
+
+Utilisez des liens relatifs à la racine pour les pages du même site de documentation :
+
+```mdx
+Read the [quickstart](/quickstart) before configuring authentication.
+```
+
+Utilisez des URL complètes pour les sites externes :
+
+```mdx
+Open the [status page](https://status.example.com).
+```
+
+## Images
+
+Référez-vous aux ressources stockées dans le dépôt avec des chemins relatifs ou relatifs à la racine :
+
+```mdx
+![dubstack light logo](/logo/light.svg)
+```
+
+Utilisez un texte alternatif descriptif pour que les lecteurs et les outils d'IA comprennent le contexte de l'image.
+
+## Composants
+
+Utilisez des composants pour le contenu structuré :
+
+```mdx
+<Callout type="info">
+  Store production credentials in your secret manager, not in docs.
+</Callout>
+```
+
+```mdx
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="zap" href="/quickstart">
+    Build your first docs site.
+  </Card>
+  <Card title="Configuration" icon="settings" href="/configuration/dubstack-json">
+    Configure navigation, theme, and behavior.
+  </Card>
+</CardGroup>
+```
+
+## Rédaction pour les outils d'IA
+
+Les documents publiés sont utilisés par la recherche, l'assistant et les outils publics MCP. Rendez les pages plus faciles à retrouver en :
+
+- utiliser des titres spécifiques
+- définir les termes du produit avant de les utiliser
+- garder les étapes de configuration ordonnées
+- ajouter des exemples près de l'explication pertinente
+- lier les pages connexes au lieu de compter sur du texte dupliqué
+
+<Callout type="info">
+  Les fichiers MDX sont du contenu source. Validez-les dans le dépôt connecté et publiez-les avant d'attendre des modifications sur le site en direct.
+</Callout>

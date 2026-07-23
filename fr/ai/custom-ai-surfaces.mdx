@@ -1,0 +1,97 @@
+---
+title: Surfaces IA personnalisées
+description: "Utilisez le contexte des documents publiés dans les applications personnalisées sans franchir les limites de l'assistant ou de la rédaction."
+icon: panels-top-left
+---
+
+Les surfaces IA personnalisées permettent d'utiliser le contexte de la documentation en dehors de l'interface du site hébergé, par exemple dans un outil de support interne, un portail d'intégration ou un tableau de bord produit.
+
+Utilisez la surface d'intégration qui correspond à la limite de confiance de l'application que vous créez.
+
+## Options prises en charge
+
+| Option | Idéal pour | Accès |
+| --- | --- | --- |
+| Assistant hébergé | Questions orientées lecteur sur le site des documents publiés | S'ouvre à partir de l'en-tête des documents et des actions contextuelles |
+| MCP public | Outils IA et agents personnalisés qui doivent rechercher et lire la documentation publiée | `https://your-docs-domain.com/mcp` |
+| Export Markdown | Indexation personnalisée, outils d'assistance et réutilisation ponctuelle de pages | `.md`, `/llms.txt`, et `/llms-full.txt` |
+| Agent du tableau de bord et workflows | Flux de rédaction fiables pouvant rédiger des modifications de documentation | Tableau de bord, fournisseur Git et intégrations configurées |
+
+## Utilisez l'assistant hébergé
+
+L'assistant hébergé est l'expérience de chat orientée lecteur prise en charge.
+
+Il est activé depuis le tableau de bord, rendu à l'intérieur du site de documentation et répond à partir de l'index des documents publiés. Il peut citer les pages sources, utiliser la page actuelle comme contexte et enregistrer l'utilisation dans le registre d'utilisation de l'IA lorsqu'une facturation est activée.
+
+Utilisez-le lorsque vous souhaitez que les lecteurs posent des questions directement depuis le site de documentation.
+
+## Utilisez le MCP public pour les clients personnalisés
+
+Utilisez le MCP public lorsqu'un client IA personnalisé nécessite un accès structuré à la documentation publiée.
+
+```text
+https://your-docs-domain.com/mcp
+```
+
+Les clients MCP peuvent rechercher la documentation, lire les pages publiées et envoyer des retours lorsqu'une fonctionnalité de feedback est activée. Le serveur MCP public ne donne pas accès au tableau de bord et ne peut pas modifier la documentation.
+
+Pour les sites montés sous un chemin, conservez le préfixe monté dans l'URL du MCP :
+
+```text
+https://example.com/docs/mcp
+```
+
+Consultez [MCP](/fr/ai/mcp) pour connaître les chemins de découverte, le comportement des outils et les exigences du proxy inverse.
+
+## Utilisez l'export Markdown et les index LLM
+
+Utilisez l'export Markdown lorsque votre application gère l'orchestration IA et n'a besoin que du contenu nettoyé de la documentation.
+
+Exemples :
+
+```text
+https://docs.example.com/getting-started.md
+https://docs.example.com/llms.txt
+https://docs.example.com/llms-full.txt
+```
+
+L'export Markdown suit les mêmes règles d'accès des lecteurs que la page rendue. Il ne révèle pas les modifications non publiées, les paramètres du tableau de bord, les secrets du dépôt ou les données privées d'équipe.
+
+Voir [export Markdown](/fr/ai/markdown-export) et [fichiers d'index de l'IA](/fr/ai/llms-indexes).
+
+## Réserver la rédaction aux surfaces de confiance
+
+N'utilisez pas les surfaces publiques de documentation pour rédiger du contenu.
+
+Les mises à jour de documentation doivent passer par des chemins fiables :
+
+- agent du tableau de bord
+- workflows configurés
+- intégrations Slack ou Jira lorsqu'elles sont activées
+- rédaction via les fournisseurs Git et les pull requests
+
+Ces chemins peuvent imposer des rôles d'espace de travail, des autorisations de dépôt, des politiques de revue et l'utilisation des crédits d'IA.
+
+## Statut de l'API
+
+dubstack ne propose actuellement pas d'API de message d'assistant public, destinée aux clients, pour intégrer l'assistant hébergé dans des applications arbitraires.
+
+Si vous avez besoin d'un assistant personnalisé dans votre application aujourd'hui, utilisez uniquement le MCP public ou l'export Markdown comme couche de récupération et exécutez votre propre orchestration de discussion dans votre application. Utilisez l'assistant hébergé pour les discussions sur le site de documentation jusqu'à ce qu'une API d'assistant publique soit disponible.
+
+## Liste de vérification de sécurité
+
+Avant de connecter une surface d'IA personnalisée :
+
+- Utilisez uniquement le MCP public pour le contenu qui doit être lisible par le client.
+- Utilisez uniquement l'export Markdown pour les pages publiées auxquelles le lecteur peut déjà accéder.
+- Ne transmettez pas de secrets, de cookies, de jetons de session ou de contenu de dépôt privé vers des outils d'IA externes.
+- Maintenez les actions de rédaction dans les limites du tableau de bord, des workflows, de Slack, de Jira ou des revues de code.
+- Vérifiez l'utilisation et les crédits avant d'exécuter des tâches de récupération ou de workflows personnalisés à grande échelle.
+
+## Liens connexes
+
+- [Surfaces d'IA](/fr/ai/ai-surfaces)
+- [Assistant](/fr/ai/assistant)
+- [MCP](/fr/ai/mcp)
+- [Export Markdown](/fr/ai/markdown-export)
+- [Crédits et utilisation de l'IA](/fr/ai/credits-usage)

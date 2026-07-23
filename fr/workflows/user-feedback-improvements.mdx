@@ -1,0 +1,106 @@
+---
+title: "Flux de travail d'amélioration des retours utilisateurs"
+description: Mise à jour des documents en brouillon à partir des retours récurrents sur les pages et des commentaires des lecteurs.
+icon: thumbs-up
+---
+
+Le flux de travail d'amélioration des retours utilisateurs examine les retours sur les pages et rédige des mises à jour de documentation là où les lecteurs signalent répétitivement des problèmes.
+
+Utilisez-le après avoir activé la collecte des retours et une fois qu'il y a suffisamment de notes ou de commentaires écrits pour identifier des tendances.
+
+<Info>
+  La collecte des retours doit être activée avant que ce flux de travail ne puisse s'exécuter.
+</Info>
+
+## Ce qu'il fait
+
+Lorsqu'il est activé pour un déploiement, le flux de travail est conçu pour :
+
+- lire les retours limités sur les pages pour le déploiement sélectionné
+- identifier les notes négatives récurrentes, les commentaires et les modèles de confusion
+- associer les thèmes de feedback à des pages de documentation spécifiques
+- rédiger des mises à jour de documentation ciblées dans le dépôt de documentation connecté
+- ouvrir une demande de révision propre au fournisseur à moins que les mises à jour automatiques ne soient activées explicitement
+- enregistrer l'état de l'exécution, les thèmes, les fichiers modifiés et l'utilisation de crédits dans l'historique du flux de travail
+
+Le flux de travail doit privilégier les signaux de retour répétés par rapport aux commentaires isolés.
+
+## Signaux de feedback
+
+| Signal | Comment cela aide |
+| --- | --- |
+| Notes négatives | Met en évidence les pages qui pourraient être confuses, obsolètes ou incomplètes. |
+| Commentaires écrits | Explique ce que le lecteur attendait mais n'a pas trouvé. |
+| Contexte de la page | Maintient les mises à jour ciblées sur la page où le feedback a été soumis. |
+| Tendances de feedback | Réduit les changements isolés bruyants et se concentre sur les problèmes récurrents. |
+
+## Configuration requise
+
+Avant d'activer l'automatisation des retours utilisateurs :
+
+1. Activez la collecte des retours depuis **Paramètres > Déploiement > Compléments**.
+2. Confirmez que les événements de feedback sont visibles dans les analyses de feedback.
+3. Connectez un dépôt de documentation basé sur Git avec accès en écriture.
+4. Confirmez que le profil du modèle d'auteur est disponible.
+5. Commencez en mode **Exiger une revue**.
+
+## Déclencheurs et mode de mise à jour
+
+| Paramètre | Comportement |
+| --- | --- |
+| Déclencheur par défaut | Calendrier personnalisé, hebdomadaire |
+| Déclencheur facultatif | Exécution manuelle ou flux de travail planifié déclenché par l'API |
+| Mode recommandé en premier | Exiger une revue |
+| Mode automatique | Utiliser uniquement après des exécutions nettoyées et revues répétées |
+| Cible d'écriture | Dépôt de documents connectés |
+| Dépôts de contexte | Non pris en charge |
+| Configuration requise | Collecte de feedback |
+
+Une exécution planifiée doit créer sa propre demande de revue pour les thèmes de feedback trouvés lors de cette exécution.
+
+## Frontière de confidentialité
+
+Les commentaires de feedback peuvent contenir un contexte utilisateur privé.
+
+Le flux de travail doit :
+
+- résumer les problèmes répétés au lieu de copier textuellement les commentaires privés
+- censurer les secrets, les jetons, les cookies et les identifiants privés
+- éviter d'exposer les adresses e-mail ou les détails spécifiques au compte dans les documents générés
+- garder les analyses de feedback limitées au déploiement actuel
+- lier le feedback source uniquement aux utilisateurs autorisés du tableau de bord
+
+## Utilisation des crédits
+
+Les exécutions de feedback utilisateur sont des exécutions de flux de travail auto-mises à jour et comptent dans l'utilisation des crédits de flux de travail.
+
+L'estimation actuelle de planification est de **285 crédits par exécution**. L'utilisation réelle peut varier selon :
+
+- nombre d'événements de feedback inspectés
+- nombre de pages affectées
+- nombre de thèmes identifiés
+- quantité de contexte de documents récupérée
+- nombre de mises à jour générées
+- routage du modèle et profil du flux de travail
+
+Voyez [Crédits et utilisation de l'IA](/fr/ai/credits-usage) pour le modèle d'allocation partagée.
+
+## Liste de vérification
+
+Avant de fusionner les mises à jour générées, confirmez :
+
+- le changement traite des retours répétés, et non d'un seul cas limite
+- les détails sensibles des lecteurs n'ont pas été copiés dans les documents
+- la page affectée a toujours un objectif clair
+- la mise à jour ne contredit pas la politique produit ou d'assistance
+- les analyses de feedback devraient s'améliorer après la publication du changement
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/workflows/reference#improve-docs-from-user-feedback">Référence du flux de travail</a>
+  <a href="/fr/optimize/feedback">Retours</a>
+  <a href="/fr/dashboard/feedback-analytics">Analyse des retours</a>
+  <a href="/fr/settings/deployment/addons">Compléments</a>
+  <a href="/fr/ai/credits-usage">Crédits et utilisation de l'IA</a>
+</RelatedTopics>

@@ -1,0 +1,165 @@
+---
+title: dubstack.json
+description: Configurez un site de documentation dubstack à partir du fichier de configuration canonique.
+icon: braces
+---
+
+`dubstack.json` est le fichier de configuration du site dans votre dépôt de documentation.
+
+Utilisez-le pour contrôler la navigation, les paramètres du thème, les références OpenAPI, les redirections, les actions contextuelles et d'autres comportements du site publié.
+
+## Fichier minimal
+
+```json
+{
+  "site": {
+    "name": "Acme Docs",
+    "logo": {
+      "light": "/logo/light.svg",
+      "dark": "/logo/dark.svg"
+    },
+    "favicon": "/assets/favicon.svg"
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "default": true,
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": ["index", "quickstart"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+## Champs principaux
+
+| Champ | Objectif |
+| --- | --- |
+| `site` | Nom d'affichage, slogan, logo, favicon et autres éléments de marque du site. |
+| `navigation` | Onglets, groupes, pages, ancres, langues et pages générées par OpenAPI. |
+| `theme` | Préréglage de l'interface de thème utilisé pour les dimensions, la navigation et la mise en page. |
+| `palette` | Préréglage des jetons de couleur superposé à l'interface de thème sélectionnée. |
+| `colors` | Couleurs principales et accentuelles utilisées dans les états actifs, les liens et les surlignages. |
+| `styling` | Remplacements visuels tels que le comportement des blocs de code. |
+| `redirects` | Redirections source-destination pour les pages renommées ou déplacées. |
+| `contextual` | Actions sur les pages telles que copier le Markdown, afficher le Markdown, l'assistant et les actions MCP. |
+| `api` | Référence de spécification OpenAPI par défaut et mode d'affichage de l'aire de jeu. |
+| `errors.404` | Texte personnalisé de la page non trouvée et redirection de secours facultative. |
+
+## Marque du site
+
+Placez la marque publique du site sous `site`.
+
+```json
+{
+  "site": {
+    "name": "Acme Docs",
+    "tagline": "Developer documentation for Acme.",
+    "logo": {
+      "light": "/logo/light.svg",
+      "dark": "/logo/dark.svg"
+    },
+    "favicon": "/assets/favicon.svg"
+  }
+}
+```
+
+Maintenez les chemins d'accès des images relatifs au dépôt ou relatifs à la racine afin que le pipeline de publication puisse les copier dans le magasin d'actifs publié.
+
+## Source de vérité
+
+Conservez `dubstack.json` dans le même historique Git que votre documentation. Lorsqu'elles le permettent, les pages de configuration du tableau de bord répercutent les modifications dans ce fichier source.
+
+Une publication utilise la configuration du commit synchronisé, et non l'état local non sauvegardé.
+
+## Références de navigation
+
+Utilisez les slugs de page sans l'extension `.mdx` :
+
+```json
+{
+  "group": "Guides",
+  "pages": [
+    "index",
+    "quickstart",
+    "guides/authentication"
+  ]
+}
+```
+
+Pour un fichier situé à `guides/authentication.mdx`, le slug est `guides/authentication`.
+
+## Références OpenAPI
+
+Référencez une spécification depuis un groupe de navigation pour générer les pages de point de terminaison :
+
+```json
+{
+  "group": "API reference",
+  "openapi": "api-reference/openapi.json"
+}
+```
+
+Listez les opérations dans `pages` lorsque vous ne souhaitez afficher que certains points de terminaison :
+
+```json
+{
+  "group": "API reference",
+  "openapi": "api-reference/openapi.json",
+  "pages": ["GET /v1/projects", "POST /v1/projects"]
+}
+```
+
+## Configuration des modules complémentaires
+
+Les modules complémentaires du tableau de bord sont stockés sous la clé `addons` lorsqu'un déploiement prend en charge l'écriture de ces paramètres en arrière dans la source.
+
+```json
+{
+  "addons": {
+    "feedback": {
+      "thumbs_rating": true,
+      "edit_suggestions": false,
+      "raise_issues": false,
+      "contextual_feedback": false,
+      "code_snippet_feedback": false,
+      "agent_feedback": false
+    },
+    "related_topics": {
+      "enabled": false
+    },
+    "ci_checks": {
+      "broken_links": "disabled",
+      "grammar_linter": "disabled"
+    },
+    "previews": {
+      "preview_deployments": true,
+      "preview_deployment_authentication": false
+    },
+    "visibility": {
+      "noindex": false
+    }
+  }
+}
+```
+
+Les valeurs de vérification CI peuvent être `disabled`, `advisory` ou `required`. Les compléments non pris en charge sont réinitialisés à un état désactivé sécurisé par l'API du tableau de bord.
+
+## Valider les modifications
+
+Avant de publier les modifications de configuration :
+
+- Confirmez que chaque slug de page correspond à un fichier.
+- Confirmez que les chemins et méthodes OpenAPI existent dans la spécification.
+- Confirmez que les redirections pointent vers les pages actuelles.
+- Validez le changement avant qu'il ne soit visible sur le site public.
+
+<Callout type="warning">
+  Ne stockez pas les clés API, les mots de passe ou les jetons privés dans `dubstack.json`. Utilisez les secrets gérés par le tableau de bord et les paramètres d'intégration pour les identifiants.
+</Callout>

@@ -1,0 +1,105 @@
+---
+title: Badges
+description: "Ajoutez des étiquettes de statut compactes, des étiquettes de plan et des métadonnées en ligne aux pages de documentation."
+icon: badge
+---
+
+Les badges mettent en évidence des étiquettes de statut, de plan ou de format courtes à l'intérieur de la documentation.
+
+Utilisez les badges avec modération. Ils fonctionnent le mieux pour de petites pièces de métadonnées, et non pour des explications complètes.
+
+## Badge basique
+
+<Badge>Bêta</Badge>
+
+```mdx
+<Badge>Beta</Badge>
+```
+
+## Couleurs
+
+Utilisez la couleur pour indiquer le sens, mais gardez l'étiquette explicite afin que la page reste claire sans la couleur seule.
+
+<Badge color="green">Disponible</Badge> <Badge color="orange">Aperçu</Badge> <Badge color="red">Obsolète</Badge>
+
+```mdx
+<Badge color="green">Available</Badge>
+<Badge color="orange">Preview</Badge>
+<Badge color="red">Deprecated</Badge>
+```
+
+Les valeurs de couleur courantes incluent `gray`, `blue`, `green`, `yellow`, `orange`, `red`, `purple`, `white`, et `surface`.
+
+## Tailles et formes
+
+<Badge size="xs">XS</Badge> <Badge size="sm">Petit</Badge> <Badge size="md">Par défaut</Badge> <Badge size="lg">Grand</Badge>
+
+```mdx
+<Badge size="xs">XS</Badge>
+<Badge size="sm">Small</Badge>
+<Badge size="md">Default</Badge>
+<Badge size="lg">Large</Badge>
+```
+
+Utilisez `shape="pill"` pour les étiquettes qui se situent dans le texte.
+
+Cet endpoint est <Badge color="green" size="sm" shape="pill">stable</Badge> et retourne du JSON.
+
+```mdx
+This endpoint is <Badge color="green" size="sm" shape="pill">stable</Badge> and returns JSON.
+```
+
+## Icônes
+
+Les badges peuvent inclure des icônes de l'ensemble d'icônes des documents.
+
+<Badge icon="check" color="green">Vérifié</Badge> <Badge icon="clock" color="orange">En attente</Badge>
+
+```mdx
+<Badge icon="check" color="green">Verified</Badge>
+<Badge icon="clock" color="orange">Pending</Badge>
+```
+
+## États de trait et désactivé
+
+Utilisez `stroke` lorsque le badge doit avoir un aspect plus discret qu'un badge rempli.
+
+<Badge stroke color="blue">Optionnel</Badge> <Badge disabled icon="lock" color="gray">Verrouillé</Badge>
+
+```mdx
+<Badge stroke color="blue">Optional</Badge>
+<Badge disabled icon="lock" color="gray">Locked</Badge>
+```
+
+## Propriétés
+
+<ResponseField name="color" type="string" default="gray">
+  Jeton de couleur visuel pour le badge.
+</ResponseField>
+
+<ResponseField name="size" type="string" default="md">
+  L'un des `xs`, `sm`, `md` ou `lg`.
+</ResponseField>
+
+<ResponseField name="shape" type="string" default="rounded">
+  Utilisez `rounded` ou `pill`.
+</ResponseField>
+
+<ResponseField name="icon" type="string">
+  Nom de l'icône facultatif ou URL de l'actif.
+</ResponseField>
+
+<ResponseField name="stroke" type="boolean" default="false">
+  Affiche le badge en style contour.
+</ResponseField>
+
+<ResponseField name="disabled" type="boolean" default="false">
+  Réduit l'opacité pour les états non disponibles ou inactifs.
+</ResponseField>
+
+## Directives
+
+- Maintenez le texte du badge court.
+- N'utilisez pas les badges comme des boutons.
+- Associez la couleur au texte, pas uniquement la couleur.
+- Évitez d'empiler trop de badges dans un paragraphe.

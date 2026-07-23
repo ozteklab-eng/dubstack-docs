@@ -1,0 +1,64 @@
+---
+title: Images et ressources
+description: "Utilisez des images, médias et variantes d'actifs stockés dans un dépôt."
+icon: image
+---
+
+Les images et ressources devraient être stockées avec la source des documents autant que possible.
+
+Cela permet de maintenir les aperçus, les pull requests et les documents publiés reproductibles.
+
+## Structure recommandée
+
+```text
+assets/
+  logo-light.svg
+  logo-dark.svg
+  favicon.svg
+```
+
+Référencer des images depuis MDX :
+
+```mdx
+![dubstack light logo](/logo/light.svg)
+```
+
+## Texte alternatif
+
+Écrivez un texte alternatif qui explique le contenu de l'image :
+
+```mdx
+![dubstack logo mark with the wordmark](/logo/dark.svg)
+```
+
+Évitez les textes alternatifs comme `screenshot` ou `image` car cela n'aide pas les lecteurs ou les outils d'IA.
+
+## Cadres
+
+Utilisez un cadre lorsque l'image bénéficie d'une limite visuelle :
+
+```mdx
+<Frame>
+  <img src="/logo/light.svg" alt="dubstack light logo" />
+</Frame>
+```
+
+## Mises à jour des ressources
+
+Lorsqu'on remplace une image :
+
+1. Gardez le nom du fichier stable si le sens est le même.
+2. Utilisez un nouveau nom de fichier si l'image montre une zone de produit différente.
+3. Validez l'image avec la page qui la référence.
+4. Publiez et vérifiez la page en direct.
+
+## Médias volumineux
+
+Pour les vidéos ou fichiers volumineux, privilégiez un hébergeur externe de médias et intégrez la vidéo ou liez le fichier. Gardez le dépôt de documentation axé sur les fichiers nécessaires pour afficher les pages de manière fiable.
+
+## Liste de vérification
+
+- Utilisez des noms de fichiers descriptifs.
+- Utilisez des ressources compressées lorsque c'est possible.
+- Ajoutez un texte alternatif pour chaque image.
+- Évitez les captures d'écran qui révèlent des secrets, des données clients privées, des URL internes ou des identifiants de compte.

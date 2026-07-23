@@ -1,0 +1,47 @@
+---
+title: Import de configuration rédigée
+description: Transformez la configuration de documentation rédigée existante en configuration de documentation DubStack.
+icon: file-json
+---
+
+L'import de configuration rédigée est destiné aux dépôts qui ont déjà une structure de documentation.
+
+L'import lit la configuration de documentation existante et la mappe vers `dubstack.json` lorsque possible.
+
+## Candidats adaptés
+
+Utilisez l'import de configuration rédigée lorsque le dépôt source a :
+
+- Pages de documentation MDX ou Markdown
+- un fichier de navigation/config
+- un répertoire d'actifs prévisible
+- spécifications OpenAPI ou métadonnées de référence API
+- une structure de routes existante que vous souhaitez conserver
+
+## Ce qui est mappé
+
+| Concept source | cible DubStack |
+| --- | --- |
+| Nom du site | `name` |
+| Groupes de navigation | `navigation.tabs` et `navigation.groups` |
+| Routes de page | slugs de page et chemins de fichiers MDX |
+| Spécifications API | références `openapi` |
+| Bases du thème | paramètres `theme` lorsqu'ils sont compatibles |
+| Redirections | entrées `redirects` lorsqu'elles sont disponibles |
+
+Tout paramètre source n'a pas d'équivalent un-à-un. Vérifiez la configuration importée avant de publier.
+
+## Liste de vérification
+
+Après l'import :
+
+- confirmez que chaque élément de navigation ouvre une page
+- confirmez que les routes renommées ont des redirections
+- confirmez que les opérations OpenAPI s'affichent correctement
+- confirmez que les images et les liens relatifs sont résolus
+- supprimer les paramètres non pris en charge spécifiques à la source
+- validez la conversion `dubstack.json`
+
+## Quand ne pas l'utiliser
+
+Ne pas utiliser l'import de configuration rédigée pour les dépôts qui ne contiennent que du code d'application et aucune configuration de documentation. Utilisez plutôt la reconstruction générée pour ces dépôts.

@@ -1,0 +1,136 @@
+---
+title: Mises à jour du journal des modifications
+description: "Créer des pages de journal des modifications avec des composants de mise à jour, des balises, des liens directs et des flux RSS."
+icon: history
+---
+
+Utiliser les pages de journal des modifications pour publier des mises à jour de produit, des notes de version, des changements de documentation et des annonces de migration.
+
+## Créer une page de journal des modifications
+
+Créer `changelog.mdx` ou une autre page dédiée aux mises à jour.
+
+```mdx
+---
+title: Changelog
+description: Product updates and announcements.
+rss: true
+---
+```
+
+Ajouter la page à la navigation `dubstack.json` pour que les lecteurs puissent la trouver dans l'en-tête ou la barre latérale.
+
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Changelog",
+        "groups": [
+          {
+            "group": "Changelog",
+            "pages": ["changelog"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+## Ajouter des mises à jour
+
+Utiliser le composant `Update` pour chaque entrée.
+
+```mdx
+<Update label="2026-07-05" description="Configuration references" tags={["docs", "configuration"]}>
+  Added field-by-field configuration reference pages for appearance, structure, API settings, and SEO/search.
+</Update>
+```
+
+| Propriété | Type | Objectif |
+| --- | --- | --- |
+| `label` | chaîne | Date, version ou étiquette de version. Crée également l'ancre de mise à jour. |
+| `description` | chaîne | Résumé court affiché à côté de l'étiquette. |
+| `tags` | tableau de chaînes | Filtres optionnels pour regrouper les mises à jour. |
+| `rss` | objet | Remplacement optionnel du titre et de la description du flux RSS. |
+
+## Liens directs
+
+Chaque étiquette de mise à jour crée une ancre. Une étiquette de `2026-07-05` crée ce lien :
+
+```text
+/changelog#2026-07-05
+```
+
+Utiliser des étiquettes uniques. Si deux mises à jour ont la même étiquette, le rendeur doit les rendre distinctes, ce qui rend les liens publics plus difficiles à prédire.
+
+## Balises
+
+Les balises aident les lecteurs à filtrer les mises à jour par domaine.
+
+```mdx
+<Update label="2026-07-05" description="API docs" tags={["api", "docs"]}>
+  Improved API operation descriptions and generated endpoint examples.
+</Update>
+```
+
+Style de balise recommandé :
+
+- minuscules
+- noms communs courts
+- étiquettes cohérentes entre les mises à jour
+
+Exemples : `api`, `docs`, `editor`, `assistant`, `deployment`, `configuration`.
+
+## Flux RSS
+
+Définir `rss: true` dans le frontmatter de la page pour publier un flux RSS pour la page du journal des modifications.
+
+```mdx
+---
+title: Changelog
+rss: true
+---
+```
+
+Le flux est disponible en ajoutant `/rss.xml` à l'URL de la page :
+
+```text
+/changelog/rss.xml
+```
+
+Les entrées RSS utilisent par défaut l'étiquette et la description `Update`. Si une mise à jour contient des images, des composants ou du contenu formaté long, fournissez un résumé spécifique à RSS.
+
+```mdx
+<Update
+  label="2026-07-05"
+  description="Configuration references"
+  rss={{
+    title: "Configuration reference pages added",
+    description: "New field-by-field docs explain appearance, structure, API, and SEO/search settings."
+  }}
+>
+  <Card title="Configuration references" href="/configuration/settings-reference">
+    Start from the settings reference.
+  </Card>
+</Update>
+```
+
+## Ce qu'il faut inclure
+
+Les entrées de journal des modifications utiles répondent généralement à trois questions :
+
+1. Qu'est-ce qui a changé ?
+2. Qui est concerné ?
+3. Que devraient faire les lecteurs ensuite ?
+
+Maintenez l'entrée concise et reliez-la à la version complète du guide ou à la page de référence lorsque le changement nécessite une explication supplémentaire.
+
+## Liste de vérification
+
+- L'étiquette est unique et stable.
+- La description est spécifique.
+- Les balises utilisent les noms de balises existants lorsque c'est possible.
+- Les liens pointent vers des pages publiées.
+- Le texte RSS est fourni lorsque la mise à jour visible dépend de composants ou d'images.

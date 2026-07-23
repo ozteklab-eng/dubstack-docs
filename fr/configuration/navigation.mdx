@@ -1,0 +1,112 @@
+---
+title: Navigation
+description: "Organisez les pages, les groupes, les onglets, les ancres, les produits, les versions et les langues."
+icon: map
+---
+
+La navigation contrôle comment les lecteurs se déplacent dans vos documents et comment les outils de recherche et d'IA comprennent la structure du site.
+
+Définissez la navigation dans `dubstack.json`.
+
+## Onglets et groupes
+
+Utilisez des onglets pour les grandes zones de produit et des groupes pour les pages liées :
+
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "default": true,
+        "groups": [
+          {
+            "group": "Getting started",
+            "icon": "rocket",
+            "pages": ["index", "quickstart"]
+          }
+        ]
+      },
+      {
+        "tab": "Reference",
+        "groups": [
+          {
+            "group": "API reference",
+            "icon": "book",
+            "pages": ["api-reference/introduction"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+## Entrées de page
+
+Une page peut être un slug en chaîne ou un objet avec des métadonnées supplémentaires :
+
+```json
+{
+  "slug": "guides/authentication",
+  "icon": "key",
+  "title": "Authentication"
+}
+```
+
+Utilisez des entrées d'objet lorsque vous souhaitez une icône ou une étiquette spécifique dans la barre latérale.
+
+## Groupes imbriqués
+
+Utilisez des groupes imbriqués lorsqu'une section comporte plusieurs pages liées :
+
+```json
+{
+  "group": "SDKs",
+  "pages": [
+    {
+      "group": "JavaScript",
+      "pages": ["sdks/javascript/install", "sdks/javascript/auth"]
+    },
+    {
+      "group": "Python",
+      "pages": ["sdks/python/install", "sdks/python/auth"]
+    }
+  ]
+}
+```
+
+## Liens externes
+
+Utilisez des liens externes pour les journaux de modifications, les pages d'état, les portails de support ou les tableaux de bord qui se trouvent en dehors du site de documentation :
+
+```json
+{
+  "label": "Status",
+  "href": "https://status.example.com",
+  "external": true
+}
+```
+
+## Pages générées par OpenAPI
+
+Attachez une spécification OpenAPI à un groupe pour générer des pages de point de terminaison :
+
+```json
+{
+  "group": "API reference",
+  "openapi": "api-reference/openapi.json"
+}
+```
+
+Quand `pages` est omis, toutes les opérations non masquées sont générées. Quand `pages` est présent, seules les opérations listées sont affichées.
+
+## Liste de vérification de la navigation
+
+- Placez le chemin le plus courant de démarrage rapide en haut.
+- Maintenez les noms de groupe courts.
+- Évitez les structures profondément imbriquées jusqu'à ce que l'ensemble de documentation soit suffisamment grand pour en avoir besoin.
+- Maintenez les pages de référence API dans une section Référence prévisible.
+- Exécutez une publication après avoir modifié la navigation afin que la recherche et le MCP public reflètent la structure actuelle.
+
+Pour les documents traduits, consultez [Internationalisation](/fr/configuration/internationalization) et la référence [Langues](/fr/configuration/languages).

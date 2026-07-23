@@ -1,0 +1,185 @@
+---
+title: Pages et fichiers
+description: "Comprenez comment les fichiers sources deviennent des pages de documentation publiées, des URLs, des entrées de navigation, des enregistrements de recherche et du contenu lisible par l'IA."
+icon: files
+---
+
+Chaque page de documentation publiée commence par un fichier source dans le dépôt de documentation connecté.
+
+dubstack synchronise le dépôt, publie le contenu et utilise `dubstack.json` plus le frontmatter de la page pour décider comment la page s'affiche dans la navigation, la recherche, le contexte de l'assistant et les outils MCP publics.
+
+## Fichiers de page pris en charge
+
+| Type de fichier | Utilisez-le pour |
+| --- | --- |
+| `.mdx` | Format recommandé. Prend en charge le Markdown plus les composants dubstack. |
+| `.md` | Pages Markdown simples, utiles pendant les migrations ou les importations de contenu simples. |
+
+Préférez `.mdx` pour les nouvelles pages afin d'utiliser des cartes, des rappels, des onglets, des onglets déroulants, des groupes de code, des champs API et des mises à jour du journal des modifications.
+
+## Les chemins de fichiers deviennent des URLs
+
+Le chemin du fichier devient l'URL publique sans l'extension.
+
+| Fichier source | Chemin public |
+| --- | --- |
+| `index.mdx` | `/` |
+| `quickstart.mdx` | `/quickstart` |
+| `guides/authentication.mdx` | `/guides/authentication` |
+| `api-reference/openapi-setup.mdx` | `/api-reference/openapi-setup` |
+
+Maintenez les noms de fichiers en minuscules et sécurisés pour les URL. Utilisez des tirets au lieu d'espaces.
+
+## Créer une page
+
+1. Ajoutez un fichier `.mdx` au dépôt.
+2. Ajoutez le frontmatter en haut du fichier.
+3. Ajoutez le slug de la page à la navigation `dubstack.json`.
+4. Validez le changement et publiez.
+
+```mdx
+---
+title: Authentication
+description: Learn how to authenticate API requests.
+icon: key
+---
+
+Use this guide to configure authentication for API requests.
+```
+
+Ajoutez-le à la navigation sans l'extension :
+
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Guides",
+            "pages": ["guides/authentication"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+## Pages d'index
+
+Utilisez `index.mdx` pour la page d'accueil du site.
+
+Pour les dossiers, utilisez des noms de page explicites à moins que vous ne souhaitiez intentionnellement une page d'accueil de dossier.
+
+```text
+index.mdx
+quickstart.mdx
+guides/authentication.mdx
+guides/webhooks.mdx
+```
+
+Si un dossier a besoin d'une page de présentation, utilisez un slug clair tel que `guides/overview.mdx` ou `guides/index.mdx`, puis ajoutez-le à la navigation là où les lecteurs s'y attendent.
+
+## La navigation contrôle la visibilité
+
+Une page peut exister dans le dépôt sans apparaître dans la navigation.
+
+| État | Comment cela se produit | Résultat |
+| --- | --- | --- |
+| Navigable | Le slug de la page est listé dans `dubstack.json`. | Les lecteurs le voient dans la navigation. |
+| Masqué par la source | La page a un frontmatter `hidden: true`. | La page n'est pas affichée dans la navigation normale. |
+| Non listé | La page existe mais n'est pas listée dans la navigation. | La page peut toujours être accessible par un URL direct, selon les paramètres d'indexation. |
+| Ne pas indexer | La page a un frontmatter `noindex: true`. | La page est exclue des surfaces d'indexation. |
+
+Utilisez [Pages masquées](/fr/configuration/hidden-pages) lorsque vous souhaitez intentionnellement rendre une page accessible par un lien direct mais absente de la barre latérale.
+
+## Le frontmatter contrôle les métadonnées
+
+Utilisez le frontmatter pour les métadonnées au niveau de la page.
+
+```mdx
+---
+title: Webhooks
+description: Receive event notifications from dubstack.
+icon: webhook
+noindex: false
+---
+```
+
+Champs courants :
+
+| Champ | Objectif |
+| --- | --- |
+| `title` | Titre de la page, titre de secours pour la navigation, titre de recherche et étiquette de contexte pour l'IA. |
+| `description` | Résumé de la page utilisé par les métadonnées, les extraits de recherche et les surfaces lisibles par l'IA. |
+| `icon` | Icône facultative affichée là où la navigation le supporte. |
+| `hidden` | Supprime la page de la navigation normale. |
+| `noindex` | Exclut la page de la recherche, de la carte du site et des index lisibles par l'IA. |
+| `searchable` | Fixez à `false` pour maintenir une page publique accessible mais l'exclure de la recherche et de la récupération publique MCP. |
+| `boost` | Multiplicateur de pertinence positif pour les pages canoniques importantes. |
+| `rss` | Active un flux RSS pour les pages composées de composants `Update`. |
+| `openapi` | Liez une page MDX rédigée à une opération OpenAPI. |
+
+Voir [Frontmatter de la page](/fr/configuration/pages-frontmatter) pour la référence complète basée sur la source.
+
+## Liens externes dans la navigation
+
+Utilisez un objet de navigation avec `href` lorsque l'élément pointe en dehors de la source de documentation.
+
+```json
+{
+  "title": "Status",
+  "href": "https://status.example.com",
+  "external": true,
+  "icon": "activity"
+}
+```
+
+Utilisez des éléments de navigation externes pour les pages de statut, les liens de la communauté, les portails d'assistance et les surfaces de produits externes.
+
+## Pages générées par l'API
+
+Les pages de point de terminaison OpenAPI sont générées à partir d'une spécification, et non rédigées en tant que fichiers MDX individuels.
+
+```json
+{
+  "group": "API reference",
+  "openapi": "api-reference/openapi.json"
+}
+```
+
+Utilisez des pages MDX rédigées pour les guides API conceptuels et les pages de point de terminaison générées pour les références au niveau de l'opération.
+
+## Déplacer ou renommer des pages
+
+Lorsque vous renommez ou déplacez un fichier, l'URL publique change.
+
+Avant de publier un déplacement :
+
+1. Mettez à jour la navigation `dubstack.json`.
+2. Mettez à jour les liens internes pointant vers l'ancien chemin.
+3. Ajoutez une redirection depuis l'ancienne URL vers la nouvelle URL.
+4. Testez l'ancienne URL et la nouvelle page après publication.
+
+```json
+{
+  "redirects": [
+    {
+      "source": "/guides/auth",
+      "destination": "/guides/authentication"
+    }
+  ]
+}
+```
+
+## Liste de vérification
+
+- Les noms de fichiers sont en minuscules et compatibles avec les URL.
+- Toute page publiée possède les métadonnées `title` et `description`.
+- Nouvelles pages ajoutées à la navigation lorsque les lecteurs doivent les découvrir.
+- Comportement masqué/non indexé est intentionnel.
+- Les liens internes utilisent des chemins relatifs à la racine.
+- Les pages renommées ont des redirections.
+- Les pages de points de terminaison API proviennent des spécifications OpenAPI, pas de copies MDX dupliquées.

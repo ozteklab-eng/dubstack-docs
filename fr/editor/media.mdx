@@ -1,0 +1,117 @@
+---
+title: "Médias dans l'éditeur"
+sidebarTitle: Médias
+description: "Téléchargez, sélectionnez et gérez des images, galeries, vidéos et intégrations liées à un dépôt depuis l'éditeur."
+icon: image
+---
+
+Utilisez les outils de médias de l'éditeur pour ajouter un contexte visuel sans quitter le tableau de bord.
+
+Les fichiers multimédias restent des fichiers source. Les téléchargements, les références d'images, les paramètres de galerie et les images de vignette des vidéos doivent être examinés et publiés avec la page qui les utilise.
+
+## Insérer une image
+
+Utilisez le menu des commandes slash sur une page.
+
+1. Ouvrez une page en **Éditeur**.
+2. Tapez `/image`.
+3. Choisissez une image existante ou téléchargez-en une nouvelle.
+4. Ajoutez un texte alternatif descriptif.
+5. Ajustez le cadrage, l'alignement, la légende, l'image en mode clair ou l'image en mode sombre lorsqu'il est nécessaire.
+
+Les nouveaux téléchargements d'images depuis l'éditeur de page sont stockés sous `images/`.
+
+<Callout type="tip">
+  Utilisez des variantes d'images claires et sombres séparées lorsque les captures d'écran contiennent des surfaces d'interface utilisateur qui doivent correspondre au thème de lecture.
+</Callout>
+
+## Insérer une galerie
+
+Utilisez `/gallery` lorsque plusieurs images appartiennent ensemble, comme une séquence de configuration ou une comparaison avant/après.
+
+Une galerie doit avoir un objectif précis. Si chaque capture d'écran nécessite sa propre explication, utilisez plutôt des blocs d'images séparés.
+
+## Insérer une vidéo
+
+Utilisez `/video` pour sélectionner ou télécharger une vidéo liée à un dépôt.
+
+Téléchargements pris en charge par l'éditeur :
+
+| Type | Remarques |
+| --- | --- |
+| `.mp4` | Pris en charge pour les vidéos téléchargées. |
+| `.webm` | Pris en charge pour les vidéos téléchargées. |
+| Image de vignette | Générée automatiquement si possible, ou choisie manuellement. |
+
+Les vidéos téléchargées depuis l'éditeur de page sont stockées sous `videos/`. Les vidéos téléchargées doivent avoir une taille de 25 Mo ou moins.
+
+Après avoir ajouté une vidéo, utilisez la barre d'outils vidéo pour choisir ou remplacer l'image de vignette. Vous pouvez sélectionner une image existante, télécharger une vignette, ou sélectionner un cadre de la vidéo lorsque le support du navigateur le permet.
+
+## Intégrer des médias hébergés
+
+Utilisez les commandes slash pour les médias hébergés lorsque la source doit rester en dehors du dépôt de documentation.
+
+| Commande | Utilisé pour |
+| --- | --- |
+| `/youtube` | Vidéos YouTube publiques. |
+| `/loom` | Démonstrations de produits et enregistrements. |
+| `/vimeo` | Vidéos hébergées. |
+| `/embed` | Intégrations iframe de confiance. |
+
+<Callout type="warning">
+  N'intégrez que du contenu provenant d'un fournisseur auquel vous faites confiance. Le contenu intégré peut charger des scripts du fournisseur et être indisponible pour les lecteurs soumis à des politiques réseau strictes.
+</Callout>
+
+## Utiliser le panneau Ressources
+
+Le panneau **Ressources** vous aide à parcourir et à téléverser des fichiers statiques sans quitter l'éditeur.
+
+1. Ouvrez les options de la barre d’outils de l’éditeur.
+2. Ouvrez **Ressources**.
+3. Choisissez un dossier d’actif connu tel que `images`, `img` ou `logo`.
+4. Sélectionnez un actif existant, téléchargez un fichier ou créez un dossier.
+5. Publiez le changement d’actif avec la page ou la configuration qui y fait référence.
+
+Le panneau Assets expose également d’autres dossiers du dépôt lorsqu’ils contiennent des fichiers statiques. Gardez les dossiers de médias prévisibles pour que les auteurs trouvent rapidement des captures d’écran et des logos réutilisables.
+
+## Dossiers de téléchargement
+
+L’éditeur utilise des dossiers conventionnels pour les nouveaux médias insérés depuis une page :
+
+| Médias | Dossier par défaut |
+| --- | --- |
+| Images | `images/` |
+| Vidéos | `videos/` |
+| Affiches de vidéos | `videos/` |
+
+Les actifs existants peuvent également se trouver dans des dossiers tels que `assets/`, `media/`, `static/`, `logo/` ou `img/` lorsqu’un dépôt utilise déjà ces noms.
+
+## Comportement de publication
+
+Les modifications des médias font partie du même flux de publication source que les modifications des pages.
+
+Le menu de publication doit afficher les fichiers modifiés pour :
+
+- la page qui référence le média
+- les fichiers d’image ou de vidéo téléchargés
+- les images d’affiche générées ou téléchargées
+- les fichiers de configuration lorsqu’un actif de marque change
+
+Examinez la liste des fichiers modifiés avant de publier. Si un téléchargement était accidentel, annulez le fichier d’actif et la référence de la page avant de créer une pull request ou de publier directement.
+
+## Pratiques de maintenance
+
+- Utilisez des noms de fichiers descriptifs tels que `quickstart-create-site-light.png` au lieu de `screenshot-1.png`.
+- Maintenez les captures d’écran bien coupées à la zone de l’interface utilisateur en question.
+- Remplacez une image au même chemin uniquement lorsqu'elle représente le même concept.
+- Utilisez un nouveau nom de fichier lorsqu'une image montre une zone différente du produit.
+- Ajoutez un texte alternatif à chaque image.
+- Évitez de committer des enregistrements bruts volumineux lorsqu'un hébergeur vidéo externe est plus approprié.
+- Conservez les mises à jour des médias dans la même pull request que la modification de page qui en a besoin.
+
+## Sujets connexes
+
+- [Pages et fichiers](/fr/editor/pages)
+- [Branchement et publication](/fr/editor/branching-and-publishing)
+- [Images et actifs](/fr/writing-content/images-assets)
+- [Médias, intégrations et diagrammes](/fr/writing-content/media-embeds)

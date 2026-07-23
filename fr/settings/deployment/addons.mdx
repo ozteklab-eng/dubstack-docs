@@ -1,0 +1,107 @@
+---
+title: Compléments
+description: "Activez des contrôles facultatifs de feedback, de qualité, d'aperçu et de visibilité pour un déploiement."
+icon: sliders-horizontal
+---
+
+Les compléments contrôlent le comportement facultatif d'un déploiement.
+
+Ouvrez **Paramètres > Déploiement > Compléments** dans le tableau de bord pour les configurer.
+
+<Info>
+  Les modifications des compléments s'appliquent au déploiement sélectionné. Si vous gérez plusieurs déploiements, activez le même complément sur chaque déploiement qui en a besoin.
+</Info>
+
+## Retour d'information
+
+Les compléments de retour d'information vous aident à collecter des signaux des lecteurs et des agents.
+
+| Complément | Comportement |
+| --- | --- |
+| Évaluation par pouce | Affiche des boutons de retour d'information avec le pouce levé ou baissé sur les pages de documentation. |
+| Suggestions de modification | Permet aux lecteurs de suggérer des modifications de page lorsque la fonctionnalité est disponible. |
+| Signaler des problèmes | Permet aux lecteurs de signaler des problèmes de documentation lorsque la fonctionnalité est disponible. |
+| Retour d'information contextuel | Collecte des retours d'information liés à un contexte de page spécifique. |
+| Retour d'information sur les extraits de code | Collecte des retours d'information sur les exemples de code et les extraits. |
+| Retour d'information des agents | Permet aux agents de soumettre un retour d'information structuré sur la qualité, la précision et la complétude du contenu. Lorsqu'il est activé, le serveur MCP public publie l'outil `submit_feedback` et les fichiers de découverte lisibles par l'IA décrivent le chemin du retour d'information. Les fichiers de compétences générés incluent automatiquement les instructions de retour d'information ; les fichiers de compétences personnalisés doivent mentionner la politique de retour d'information si vous souhaitez que les agents l'utilisent. |
+| Collecte d'emails des lecteurs | Ajoute un champ d'email facultatif aux formulaires de retour d'information négatif sur les pages. |
+| Avertissement sur l'email des lecteurs | Affiche un court avertissement en dessous du champ d'email facultatif. |
+
+Le retour d'information est limité au déploiement. Les analyses des retours d'information des lecteurs apparaissent dans **Analyse > Retour d'information**. Consultez [Analyse des retours d'information](/fr/dashboard/feedback-analytics) pour savoir comment consulter les signaux collectés.
+
+Le retour d'information contextuel, le retour d'information sur les extraits de code, les suggestions de modification et la création de problèmes dépendent des capacités de déploiement actuelles. Si le tableau de bord désactive une carte, utilisez la raison de la carte pour voir quel fournisseur, dépôt, plan ou capacité d'exécution manque.
+
+Le retour d'information des agents est volontairement restreint. Il permet aux outils d'IA pris en charge de signaler qu'une page publiée semble incorrecte, obsolète, confuse ou incomplète. Il ne permet pas à ces outils d'éditer du contenu, de lire l'état privé du tableau de bord, d'accéder aux dépôts sources ni d'appeler des points de terminaison d'écriture arbitraires. Désactivez **Retour d'information des agents** si vous souhaitez que le serveur MCP public reste en lecture seule.
+
+## Sujets connexes
+
+Les sujets connexes ajoutent des suggestions de pages automatiques près du bas des pages de documentation.
+
+| Complément | Comportement |
+| --- | --- |
+| Afficher les sujets liés | Affiche des suggestions de pages liées en bas de chaque page lorsqu'une page ne définit pas déjà son propre bloc de sujets liés. |
+
+Utilisez ceci lorsque vous souhaitez que les lecteurs continuent vers des guides adjacents, des pages de configuration ou des pages de référence sans ajouter manuellement un bloc de sujets liés sur chaque page.
+
+## Collecte des adresses e-mail des lecteurs
+
+La collecte des adresses e-mail des lecteurs est facultative et s'applique uniquement aux commentaires de page.
+
+Lorsque **Collecter les adresses e-mail des lecteurs** est activé :
+
+- les lecteurs peuvent laisser le champ d'adresse e-mail vide
+- les adresses e-mail soumises sont validées avant l'acceptation du feedback
+- l'adresse e-mail est stockée avec les métadonnées de l'événement de feedback
+- l'adresse e-mail apparaît dans les entrées récentes de feedback dans **Analytique > Feedback**
+
+Utilisez le champ d'avertissement pour expliquer comment votre équipe peut utiliser l'adresse e-mail.
+
+Exemple d'avertissement :
+
+```text
+We may use your email to follow up about this feedback.
+```
+
+Si **Collecter les adresses e-mail des lecteurs** est désactivé, le formulaire de feedback public ne montre pas le champ d'adresse e-mail et le feedback de page soumis ne stocke pas l'adresse e-mail du lecteur.
+
+## Vérifications CI/CD
+
+Les compléments CI/CD peuvent ajouter des vérifications au pipeline de pull request.
+
+| Complément | Modes |
+| --- | --- |
+| Liens rompus | Désactivé, conseil, requis |
+| Correcteur de grammaire | Désactivé, conseil, requis |
+
+Utilisez le mode conseil pendant l'ajustement d'une vérification. Utilisez le mode requis uniquement lorsque la vérification est suffisamment fiable pour bloquer les fusions.
+
+## Aperçus
+
+Les déploiements d'aperçu sont activés par défaut lorsqu'un déploiement prend en charge les aperçus.
+
+L'authentification d'aperçu est disponible uniquement lorsque le déploiement sélectionné indique la prise en charge de preview-auth. Lorsqu'elle n'est pas disponible, le tableau de bord désactive la carte et affiche la raison de la capacité manquante.
+
+Ne comptez pas sur l'authentification d'aperçu à moins que le complément ne soit activé et que l'URL d'aperçu n'impose l'accès des membres.
+
+## Visibilité
+
+Le paramètre noindex demande aux moteurs de recherche de ne pas indexer le déploiement tout en maintenant les documents accessibles publiquement.
+
+Lorsqu'il est activé, dubstack définit les métadonnées noindex et nofollow et fournit les règles des robots de navigation pour le déploiement.
+
+<Callout type="warning">
+  Si votre dépôt fournit un fichier robots.txt personnalisé, mettez-le à jour séparément. Un fichier robots.txt personnalisé peut remplacer les attentes de visibilité au niveau du déploiement.
+</Callout>
+
+## Conditions de disponibilité
+
+Certains compléments dépendent du plan, du dépôt, du fournisseur ou du support en temps d'exécution.
+
+Si un complément est désactivé dans le tableau de bord, lisez la raison indiquée sur la carte. Cette raison provient de la vérification des capacités du déploiement actuel, et non d'une règle statique exclusivement liée à l'interface utilisateur.
+
+Exemples :
+
+- Les compléments basés sur Git nécessitent un dépôt connecté.
+- Les workflows de création et d'édition peuvent dépendre du fournisseur Git et de la visibilité du dépôt.
+- Le feedback de l'agent exige que les surfaces de découverte publiques MCP et AI restent disponibles.
+- L'authentification de prévisualisation exige que les déploiements de prévisualisation et l'application en temps réel de l'autorisation de prévisualisation soient disponibles pour le déploiement sélectionné.

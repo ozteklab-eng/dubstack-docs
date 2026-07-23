@@ -1,0 +1,106 @@
+---
+title: Exemples de requête et de réponse
+description: "Placez les exemples de code de requête et de réponse à côté du contenu axé sur l'API."
+icon: panel-right
+---
+
+Utilisez des exemples de requête et de réponse lorsqu'un guide nécessite des exemples de code persistants à côté de l'explication principale.
+
+Sur les grands écrans, les exemples apparaissent dans la barre latérale droite. Sur les écrans plus petits, ils s'affichent en ligne afin que les lecteurs puissent les parcourir naturellement.
+
+## Exemple de requête
+
+<RequestExample>
+```bash cURL
+curl https://api.example.com/v1/sites \
+  -H "Authorization: Bearer $API_TOKEN"
+```
+</RequestExample>
+
+Utilisez `RequestExample` pour les commandes, les appels SDK ou les corps de requête.
+
+````mdx
+<RequestExample>
+```bash cURL
+curl https://api.example.com/v1/sites \
+  -H "Authorization: Bearer $API_TOKEN"
+```
+</RequestExample>
+````
+
+## Exemple de réponse
+
+<ResponseExample>
+```json 200 OK
+{
+  "data": [],
+  "next_cursor": null
+}
+```
+</ResponseExample>
+
+Utilisez `ResponseExample` pour les réponses réussies, les réponses d'erreur ou les objets générés.
+
+````mdx
+<ResponseExample>
+```json 200 OK
+{
+  "data": [],
+  "next_cursor": null
+}
+```
+</ResponseExample>
+````
+
+## Plusieurs exemples
+
+Ajoutez plus d'un bloc de code délimité pour créer des onglets.
+
+<RequestExample>
+```bash cURL
+curl https://api.example.com/v1/sites \
+  -H "Authorization: Bearer $API_TOKEN"
+```
+
+```ts TypeScript
+const response = await fetch('https://api.example.com/v1/sites', {
+  headers: { Authorization: `Bearer ${process.env.API_TOKEN}` },
+});
+```
+</RequestExample>
+
+````mdx
+<RequestExample>
+```bash cURL
+curl https://api.example.com/v1/sites \
+  -H "Authorization: Bearer $API_TOKEN"
+```
+
+```ts TypeScript
+const response = await fetch('https://api.example.com/v1/sites', {
+  headers: { Authorization: `Bearer ${process.env.API_TOKEN}` },
+});
+```
+</RequestExample>
+````
+
+Définissez `dropdown` lorsqu'une page a de nombreuses variantes et que les onglets prendraient trop d'espace.
+
+```mdx
+<RequestExample dropdown>
+  ...
+</RequestExample>
+```
+
+## Quand utiliser les pages d'opération API
+
+Utilisez les pages d'opération API générées lorsque la page doit inclure le générateur de requêtes complet, les formulaires de paramètres, les entrées d'authentification et les aperçus de réponse d'une opération OpenAPI.
+
+Utilisez des exemples de requête et de réponse lorsqu'un guide nécessite un exemple de code léger à côté de la prose explicative.
+
+## Directives
+
+- Utilisez des variables d'environnement dans les exemples au lieu de jetons réels.
+- Étiquetez clairement les blocs de code, tels que `cURL`, `TypeScript` ou `200 OK`.
+- Maintenez les exemples de requête et de réponse proches du texte qu'ils soutiennent.
+- Privilégiez les pages d'opération générées pour une couverture complète de la référence API.

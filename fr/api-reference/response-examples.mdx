@@ -1,0 +1,126 @@
+---
+title: Exemples de réponse
+description: "Ajoutez des exemples de requête et de réponse pour rendre les pages de référence d'API plus faciles à tester."
+icon: braces
+---
+
+Les exemples rendent les pages d'API générées plus utiles.
+
+dubstack lit les exemples de requête et de réponse OpenAPI lors de la génération des pages de points de terminaison et des charges utiles de l'API Playground.
+
+## Exemples de corps de requête
+
+Ajoutez des exemples sous le type de média du corps de la requête.
+
+```yaml
+paths:
+  /v1/projects:
+    post:
+      summary: Create project
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectRequest'
+            examples:
+              minimal:
+                summary: Minimal project
+                value:
+                  name: API reference
+              with_slug:
+                summary: Project with slug
+                value:
+                  name: API reference
+                  slug: api-reference
+```
+
+L'API Playground utilise la valeur d'exemple comme charge utile de départ lorsqu'elle est disponible.
+
+## Exemples de réponse
+
+Ajoutez des exemples de réponse sous chaque code d'état et type de contenu.
+
+```yaml
+responses:
+  '200':
+    description: Project created
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/Project'
+        examples:
+          created:
+            summary: Created project
+            value:
+              id: proj_123
+              name: API reference
+              slug: api-reference
+```
+
+Documentez les réponses d'erreur courantes ainsi que les réponses de succès afin que les lecteurs sachent ce à quoi s'attendre.
+
+```yaml
+responses:
+  '400':
+    description: Invalid request
+    content:
+      application/json:
+        examples:
+          missing_name:
+            summary: Missing name
+            value:
+              error: invalid_request
+              message: name is required
+```
+
+## Exemples de schéma
+
+OpenAPI prend également en charge les exemples sur les champs de schéma.
+
+```yaml
+components:
+  schemas:
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+          example: proj_123
+        name:
+          type: string
+          example: API reference
+```
+
+Les exemples de champs aident la page générée à produire des charges utiles plus réalistes lorsqu'un exemple complet de requête ou de réponse n'est pas fourni.
+
+## Plusieurs exemples
+
+Utilisez des exemples nommés lorsqu'un même point de terminaison possède plusieurs formes valides.
+
+| Type d'exemple | Cas d'utilisation |
+| --- | --- |
+| Minimal | Montrez la requête la plus courte valide. |
+| Complet | Montrez tous les champs couramment utilisés. |
+| Erreur | Montrez les charges utiles d'erreur attendues. |
+| Spécifique à l'environnement | Montrez une valeur pour une API de sandbox ou de staging. |
+
+## Gardez les exemples en sécurité
+
+N'incluez pas d'identifiants réels, d'identifiants clients privés ni de charges utiles sensibles dans les spécifications publiques.
+
+Utilisez des espaces réservés au lieu de :
+
+```json
+{
+  "authorization": "Bearer <credential>",
+  "projectId": "proj_123"
+}
+```
+
+## Sujets connexes
+
+- [Authentification de l'API Playground](/fr/api-reference/playground-authentication)
+- [Exemples de code](/fr/api-reference/code-examples)
+- [Aperçu de l'API Playground](/fr/api-reference/playground-overview)
+- [Configuration OpenAPI](/fr/api-reference/openapi-setup)

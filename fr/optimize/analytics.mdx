@@ -1,0 +1,123 @@
+---
+title: Analyses
+description: "Suivez les visiteurs, les vues de page, les recherches, l'activité de l'assistant et les retours pour un déploiement."
+icon: chart-no-axes-combined
+---
+
+Les analyses vous aident à comprendre comment les lecteurs utilisent votre documentation publiée et quels contenus doivent être améliorés.
+
+Ouvrez **Analyses** depuis le tableau de bord après avoir sélectionné un déploiement. Les données sont limitées au déploiement sélectionné : changer de déploiement modifie donc les informations affichées.
+
+<Callout type="info">
+  Les panneaux d'analyse ne se remplissent qu'après réception des événements pertinents. Si une source de données n'est pas configurée ou ne contient encore aucun événement, le tableau de bord affiche un état indisponible ou vide au lieu de données estimées.
+</Callout>
+
+## Source de trafic et plage de dates
+
+Utilisez les contrôles de source et de date en haut de la page Analyses pour affiner la vue.
+
+- **Trafic humain** affiche l'activité des lecteurs provenant du site de documents publics.
+- **Trafic des agents** s'affiche uniquement lorsque le déploiement dispose de données d'analyse sur les agents.
+- **Plage de dates** contrôle la période couverte par les onglets visibles.
+
+Les analyses de l'assistant peuvent utiliser la période glissante prise en charge la plus proche lorsqu'une plage personnalisée exacte n'est pas disponible.
+
+## Visiteurs
+
+L'onglet Visiteurs affiche le nombre de visiteurs quotidiens pour la plage sélectionnée.
+
+Utilisez-le pour examiner :
+
+- les changements de trafic après la publication de mises à jour de documents
+- les pages qui attirent le plus de lecteurs
+- les sources de référencement qui envoient des lecteurs vers vos documents
+
+Si un site n'a pas encore de trafic, l'onglet Visiteurs reste vide jusqu'à la réception des premiers événements d'analyse.
+
+## Vues
+
+L'onglet Vues affiche le volume de vues de page au fil du temps et les pages les plus consultées.
+
+Utilisez les vues pour prioriser la maintenance des documents à haut trafic :
+
+- mettez à jour les pages qui reçoivent le plus de visites
+- vérifiez les pages de lancement ou de version après les annonces
+- comparez le trafic avant et après les changements de navigation ou de contenu
+
+## Recherches
+
+L'onglet Recherches affiche l'activité de recherche provenant de l'interface utilisateur de recherche des documents.
+
+Le tableau de bord peut afficher :
+
+- le volume de recherches quotidien
+- les requêtes de recherche les plus fréquentes
+- le nombre de requêtes
+- les indicateurs de clics
+- la page la plus cliquée pour les requêtes correspondantes
+
+L'analyse des recherches vous aide à identifier des lacunes dans le contenu. Les recherches répétées avec un faible taux de clic signifient souvent qu'un titre de page, une description, un titre ou un libellé de navigation doit être plus clair.
+
+## Assistant
+
+L'onglet assistant affiche l'utilisation publique de l'assistant pour le déploiement sélectionné lorsque les analyses de l'assistant sont disponibles.
+
+Le tableau de bord peut afficher :
+
+- volume des demandes de l'assistant
+- détails des demandes par surface
+- détails des demandes par modèle
+- détails des appelants
+- événements récents de l'assistant
+- estimations d'utilisation et de coûts
+- allocation de la pile pour la fenêtre de facturation
+
+Utilisez les analyses de l'assistant pour décider si les documents nécessitent des étapes de configuration plus claires, plus d'exemples ou de meilleures descriptions d'API. L'activité de l'assistant doit être traitée comme un signal, et non comme une alternative à la vérification du contenu de la page sous-jacente.
+
+## Commentaires
+
+L'onglet commentaires affiche les évaluations et les commentaires soumis depuis les surfaces de documents publics.
+
+Utilisez-le pour examiner :
+
+- volume des commentaires au fil du temps
+- évaluations positives et négatives
+- pages ayant reçu des commentaires
+- source des commentaires
+- entrées de commentaires récents
+- adresses e-mail des lecteurs facultatives lors de l'activation de la collecte
+
+La collecte de commentaires nécessite les modules complémentaires correspondants. Consultez [Commentaires](/fr/optimize/feedback) et [Compléments](/fr/settings/deployment/addons) pour la configuration.
+
+## Exporter les analyses de l'assistant
+
+Lorsque les analyses de l'assistant sont disponibles, utilisez **Exporter en CSV** depuis l'onglet Assistant pour télécharger les données d'utilisation et les examiner hors ligne.
+
+Les exports sont utiles lorsque vous souhaitez :
+
+- regrouper les problèmes répétés de l'assistant
+- examiner l'utilisation par modèle ou appelant
+- estimer les tendances du support et de la documentation
+- conserver un archivage pour les rapports
+
+## Dépannage
+
+Si les analyses sont vides ou non disponibles :
+
+1. Vérifiez que le bon déploiement est sélectionné.
+2. Vérifiez la plage de dates sélectionnée.
+3. Ouvrez le site public et générez une véritable vue de page ou une recherche.
+4. Confirmez que l'extension pertinente est activée pour les données de feedback.
+5. Actualisez les analyses après que les événements ont eu le temps d'être ingérés.
+6. Vérifiez si le panneau indique que la source de données n'est pas configurée pour l'environnement.
+
+Les analyses ne doivent pas bloquer l'expérience de documentation. Les pages publiques continuent de se charger même lorsque l'ingestion des données d'analyse est indisponible.
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/optimize/analytics-integrations">Intégrations d'analyse</a>
+  <a href="/fr/optimize/search">Recherche</a>
+  <a href="/fr/optimize/feedback">Commentaires</a>
+  <a href="/fr/dashboard/feedback-analytics">Analyse des commentaires</a>
+</RelatedTopics>

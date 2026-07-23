@@ -1,0 +1,232 @@
+---
+title: Intégrations de flux de travail
+description: Utilisez les intégrations connectées comme contextes délimités et canaux de notification pour les exécutions de flux de travail.
+icon: plug-zap
+---
+
+Les intégrations de flux de travail permettent à un flux de travail d'utiliser un contexte externe sélectionné pendant la rédaction des mises à jour de documentation.
+
+Utilisez les intégrations lorsque la source de vérité pour une mise à jour de documentation se trouve en dehors du dépôt de documentation, comme un fil Slack, un ticket Jira, une discussion de version ou un transfert de support.
+
+<Callout type="info">
+  Les intégrations fournissent un contexte ou des notifications. Elles ne deviennent pas la source de vérité de la documentation. Les modifications du flux de travail écrivent toujours via le fournisseur Git connecté.
+</Callout>
+
+<Callout type="info">
+  Les intégrations de flux de travail nécessitent un accès Enterprise ou un essai actif incluant les fonctionnalités d'intégration.
+</Callout>
+
+## Exigences
+
+Avant qu'un flux de travail ne puisse utiliser une intégration, vérifiez :
+
+- l'intégration est connectée depuis **Paramètres > Organisation > Intégrations**
+- le déploiement actuel est éligible pour les flux de travail et les fonctionnalités d'intégration
+- le flux de travail prend en charge le contexte d'intégration
+- la configuration du flux de travail sélectionne l'intégration
+- le compte connecté a accès aux données sources
+- l'écriture dans le dépôt est prête pour tout flux de travail qui génère des modifications de documentation
+
+Si une exigence est manquante, le flux de travail doit afficher une raison bloquante au lieu de s'exécuter avec un contexte incomplet.
+
+## Contexte d'intégration pris en charge
+
+| Intégration | Utilisation par le flux de travail | Configuration requise |
+| --- | --- | --- |
+| Slack | Lire le contexte d'un canal ou fil sélectionné et envoyer des notifications de flux de travail. | Connectez Slack, invitez l'application dans les canaux privés si nécessaire, et sélectionnez le canal ou le fil dans les paramètres du flux de travail. |
+| Jira | Lire le contexte d'un ticket délimité à partir d'une requête JQL. | Connectez Jira et configurez une requête JQL ainsi qu'une limite de tickets. |
+| Confluence | Lire le contexte d'une page délimitée à partir d'une requête CQL. | Connectez Confluence et configurez une requête CQL ainsi qu'une limite de pages. |
+
+D'autres fournisseurs peuvent apparaître comme éléments de catalogue avant d'être disponibles. Les fournisseurs uniquement présents dans le catalogue ne peuvent pas être sélectionnés pour une exécution jusqu'à ce que l'autorisation, les autorisations, les collecteurs, les vérifications d'accès et le support de flux de travail soient actifs.
+
+Le JQL de Jira doit être délimité. Utilisez un projet, une clé de ticket, une étiquette, une version corrigée, un statut ou une fenêtre de date de mise à jour. Les requêtes qui ne trient que les résultats, comme `ORDER BY updated DESC`, sont rejetées de manière sécurisée au lieu de scanner l'ensemble de l'espace de travail.
+
+Le CQL de Confluence doit également être délimité. Utilisez un type de contenu, un espace, une étiquette, un titre, un propriétaire, un parent ou une fenêtre de date. Les requêtes qui ne trient que les résultats, comme `ORDER BY lastmodified DESC`, sont rejetées de manière sécurisée au lieu de scanner l'ensemble de l'espace de travail.
+
+Les fournisseurs de commentaires de support sont actuellement bloqués par le catalogue pour les flux de travail. Le flux de travail **Mise à jour à partir de commentaires de support** reste visible, mais ne peut pas s'exécuter jusqu'à ce qu'un connecteur, un collecteur et une vérification de préparation de support soient disponibles pour le déploiement.
+
+## Intégrations partagées et personnelles
+
+Les intégrations de flux de travail peuvent être partagées ou personnelles.
+
+| Portée | Comportement |
+| --- | --- |
+| Partagée | Une connexion au niveau de l'organisation est disponible pour les flux de travail autorisés et les membres de l'espace de travail. Utilisez-la pour les systèmes d'équipe tels que Slack, Jira, gestionnaires d'incidents, bases de connaissances, outils de support et systèmes CRM. |
+| Personnelle | Chaque utilisateur autorise son propre compte. Utilisez-le pour le contexte spécifique à l'utilisateur, tel que les données du calendrier ou du dossier, lorsque ce contexte ne doit pas être partagé à l'ensemble de l'organisation. |
+
+Les intégrations de flux de travail actuellement livrées sont partagées. Les intégrations personnelles sont réservées aux fournisseurs où les données appartiennent naturellement à un seul utilisateur.
+
+## Sélectionnez les intégrations pour un flux de travail
+
+1. Ouvrez **Automate > Workflows**.
+2. Choisissez un flux de travail.
+3. Ouvrez le panneau de configuration.
+4. Trouvez la section du contexte d'intégration.
+5. Sélectionnez les intégrations connectées que le flux de travail doit utiliser.
+6. Remplissez les champs spécifiques au fournisseur, tels que le canal Slack, l'horodatage du fil Slack, le JQL de Jira, le CQL de Confluence ou les limites de contexte.
+7. Enregistrez le flux de travail.
+
+Seules les intégrations connectées et prises en charge par ce flux de travail apparaissent comme options sélectionnables.
+
+## Dépôts sources et déclencheurs de modifications de code
+
+Certains flux de travail peuvent utiliser les dépôts sources comme contexte en lecture seule.
+
+Les dépôts sources sont des dépôts de produit ou de code. Ils ne constituent pas le dépôt de documentation.
+répertoire à moins que vous ne sélectionniez délibérément le même répertoire pour les deux tâches.
+
+| Rôle du répertoire | Ce qu'il fait |
+| --- | --- |
+| Répertoire de documentation | Publie le site de documentation et reçoit les modifications générées par la documentation. |
+| Dépôt source | Fournit le contexte du code, du produit, de l'API ou du journal des modifications à un flux de travail. |
+| Cible de copie | Reçoit une copie explicite du répertoire pour la migration ou les tests de sauvegarde. |
+
+Pour **Mise à jour à partir de modifications de code**, un dépôt source sélectionné a deux rôles :
+
+- les exécutions planifiées peuvent inspecter l'activité récente du répertoire en tant que contexte limité
+- Les exécutions liées aux modifications de code peuvent être mises en file d'attente à partir d'événements validés de pull request ou de demande de fusion.
+
+Le dépôt source ne devient pas le dépôt de documentation. Les modifications générées ciblent toujours la source de documentation connectée et utilisent le mode de mise à jour du flux de travail que vous avez sélectionné.
+
+Si un webhook du fournisseur source est indisponible ou en attente, utilisez une exécution planifiée ou exécutez manuellement le flux de travail après que le changement source ait été fusionné.
+
+Dans les paramètres Git, les cartes de dépôt source affichent la portée sélectionnée, les types d'événements pris en charge, le statut du webhook et l'heure de la dernière configuration. Utilisez ces champs pour confirmer que le dépôt est connecté pour le flux de travail que vous attendez avant de déboguer le runner de flux de travail.
+
+<Callout type="info">
+  Les événements du dépôt source mettent en file d'attente les exécutions de flux de travail éligibles. Ils ne publient pas directement les pages. La mise à jour des documents générés doit toujours être validée dans, ou fusionnée dans, la source de documentation active.
+</Callout>
+
+Les cibles de copie peuvent également être utilisées par le flux de travail **Cibles de copie du dépôt**. Ce flux de travail est planifié ou manuel uniquement ; il ne crée pas de miroir continu. Utilisez-le lorsque vous souhaitez une sauvegarde récurrente ou un test de migration sans changer la source de déploiement active.
+
+### Comportement du fournisseur
+
+Le support du dépôt source suit la connexion du fournisseur qui possède le dépôt.
+
+| Fournisseur | Comportement du dépôt source |
+| --- | --- |
+| GitHub | Utilise l'installation de l'application GitHub pour lire les dépôts sélectionnés et recevoir les événements de pull request. |
+| GitLab | Utilise la connexion du projet GitLab et l'accès OAuth de rédaction lorsqu'un contexte de demande de fusion ou une autorisation de rédaction est requis. |
+| Forgejo | Utilise l'instance Forgejo configurée, le dépôt, la branche et le jeton. Lorsque le webhook source est actif, les événements de revue fusionnés peuvent mettre en file d'attente les exécutions de modifications de code. Si le webhook est en attente, les exécutions planifiées et manuelles peuvent toujours utiliser le dépôt comme contexte. |
+
+Pour les fournisseurs autohébergés, l'instance doit être accessible depuis dubstack via HTTPS pour les lectures d'API et la livraison des webhooks. Si les webhooks entrants sont bloqués par votre réseau, conservez le dépôt sélectionné pour les exécutions planifiées ou manuelles du flux de travail et déclenchez le flux de travail après que le changement source ait été fusionné.
+
+### Ajouter un dépôt de code en tant que contexte
+
+Utilisez ce flux lorsque vos documents vivent dans un dépôt et votre code produit dans un autre.
+
+1. Ouvrez **Paramètres > Déploiement > Paramètres Git**.
+2. Confirmez que la source de déploiement active pointe vers le dépôt de documentation.
+3. Ajoutez ou sélectionnez le dépôt de code en tant que dépôt source du flux de travail.
+4. Choisissez le fournisseur, le dépôt et la branche.
+5. Enregistrez et confirmez que la carte du dépôt source est validée correctement.
+6. Ouvrez **Automate > Workflows**.
+7. Configurez **Mise à jour à partir des modifications de code**.
+8. Sélectionnez le dépôt source dans la section de contexte du flux de travail.
+9. Ajoutez une portée de chemin dans la configuration du flux de travail si le dépôt source est large.
+10. Maintenez **Requérir une revue** activé jusqu'à ce que la sortie du flux de travail soit fiable.
+
+Après la configuration, les événements de revue fusionnés peuvent déclencher des exécutions de modifications de code là où l'intégration du fournisseur est prise en charge. Les exécutions planifiées et manuelles peuvent toujours lire le dépôt sélectionné en tant que contexte délimité.
+
+### Contexte source étroit
+
+Lorsqu'un dépôt source est étendu, ajoutez une portée de chemin dans la configuration du flux de travail.
+
+Utilisez un chemin relatif tel que `apps/web`, `services/api` ou `packages/sdk`. Cela maintient le flux de travail centré sur le service, le package ou l'application qui devrait influencer le brouillon.
+
+La portée de chemin est particulièrement utile pour les monorepos et les dépôts de plateforme où des modifications de code non liées ajouteraient du bruit à l'exécution.
+
+## Maintenez le contexte délimité
+
+Utilisez le contexte le plus étroit pouvant répondre à la tâche du flux de travail.
+
+Bons exemples :
+
+```text
+Use Slack thread 1719400000.000000 from #release-notes and draft a changelog entry.
+```
+
+```text
+Use Jira context with jql: project = DOCS AND fixVersion = "2026.07" ORDER BY updated DESC, limit 5.
+```
+
+```text
+Use Confluence context with cql: type = page AND space = DOC ORDER BY lastmodified DESC, limit 5.
+```
+
+```text
+Use the source repository context under services/api and update the API reference only when public endpoint behavior changed.
+```
+
+Évitez un contexte large :
+
+```text
+Read everything in Slack and update the docs.
+```
+
+Un contexte large augmente les coûts, rend la sortie plus difficile à examiner et peut inclure des éléments source non pertinents.
+
+## Notifications
+
+Slack peut également être utilisé comme destination de notifications.
+
+Lorsque les notifications Slack sont activées pour un flux de travail, choisissez :
+
+| Mode | Comportement |
+| --- | --- |
+| Tous les résultats | Envoyer un message lorsqu'une exécution réussit ou échoue. |
+| Seulement les échecs | Envoyer un message uniquement lorsqu'une exécution échoue. |
+
+Les flux de travail de pull request peuvent également envoyer des rappels de revue et des mises à jour des pull requests fusionnées lorsqu'une notification de cycle de vie est activée.
+
+La configuration des notifications est séparée du contexte Slack. Un flux de travail peut envoyer des notifications à Slack sans lire le contexte Slack, ou lire le contexte Slack sans envoyer des notifications d'exécution.
+
+## Limites de sécurité
+
+L'accès aux intégrations de flux de travail suit ces règles :
+
+- les intégrations sont en lecture seule, sauf si une capacité d'écriture spécifique au fournisseur est explicitement implémentée
+- les mises à jour de documents sont écrites via le fournisseur Git connecté
+- les fournisseurs connectés sont utilisés uniquement lorsqu'un flux de travail demande cette capacité
+- les exécutions de flux de travail doivent enregistrer quels connecteurs ont été utilisés pour l'audit et le rapport d'utilisation
+- la déconnexion d'une intégration arrête l'accès futur du flux de travail à ce fournisseur
+
+## Dépannage
+
+### L'intégration n'apparaît pas dans les paramètres du flux de travail
+
+Vérifiez que l'intégration est connectée, que le flux de travail prend en charge cette famille d'intégration et que le déploiement est éligible aux flux de travail.
+
+### Le dépôt source n'apparaît pas
+
+Vérifiez que le dépôt a été ajouté dans les paramètres Git en tant que dépôt source, et non uniquement en tant que cible de copie. Les cibles de copie sont utilisées pour les vérifications de migration ou de sauvegarde et ne deviennent pas automatiquement un contexte de flux de travail.
+
+Si le dépôt est auto-hébergé, vérifiez que l'URL de l'instance est accessible depuis dubstack et que le jeton enregistré peut lire le dépôt.
+
+### Le déclencheur de modification de code ne s'exécute pas
+
+Vérifiez que la carte du dépôt source affiche le support d'événements attendu, que le webhook est actif lorsque vous vous attendez à des exécutions réactives, et que le changement a été fusionné via une pull request ou une demande de fusion. Les poussées directes peuvent être inspectées par des exécutions planifiées ou manuelles, mais les déclencheurs de flux de travail basés sur des modifications de code sont déclenchés par des événements de révision.
+
+### Le canal Slack est manquant
+
+Invitez l'application dans le canal. Les canaux privés n'apparaissent qu'après l'ajout de l'application.
+
+### La requête Jira ne retourne aucun contexte
+
+Vérifiez que le compte Jira connecté peut voir les problèmes renvoyés par la requête JQL. Maintenez une limite d'éléments faible pendant les tests.
+
+### La requête Confluence ne retourne aucun contexte
+
+Vérifiez que le compte Atlassian connecté peut voir les pages renvoyées par la requête CQL. Maintenez une limite de pages faible pendant les tests.
+
+### Les exécutions de flux de travail se déroulent sans contexte attendu
+
+Ouvrez les détails de l'exécution et vérifiez les intégrations sélectionnées, le nombre de contextes collectés et les messages de préparation. Si l'intégration a été déconnectée ou manque de portées, reconnectez-la depuis **Paramètres > Organisation > Intégrations**.
+
+## Sujets connexes
+
+- [Configurer les exécutions de flux de travail](/fr/workflows/configuration)
+- [Capacités du connecteur](/fr/ai/connector-capabilities)
+- [Autorisations et portées d'intégration](/fr/ai/integration-permissions)
+- [Intégration Slack](/fr/ai/integrations/slack)
+- [Intégration Jira](/fr/ai/integrations/jira)
+- [Intégration Confluence](/fr/ai/integrations/confluence)

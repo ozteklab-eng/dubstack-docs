@@ -1,0 +1,65 @@
+---
+title: Accordéons
+description: Masquer les détails secondaires derrière des sections repliables.
+icon: list-collapse
+---
+
+Utilisez des accordéons lorsqu'une page nécessite un affichage progressif : étapes de dépannage, configuration facultative, longues explications ou groupes de détails liés.
+
+## Accordéon simple
+
+<Accordion title="Quand dois-je utiliser un accordéon ?">
+  Utilisez un accordéon lorsque le lecteur n'a pas besoin du contenu immédiatement, mais doit pouvoir l'ouvrir sans quitter la page.
+
+  Les accordéons peuvent contenir des paragraphes, des listes, des liens, des notes et des blocs de code.
+</Accordion>
+
+````mdx
+<Accordion title="When should I use an accordion?">
+  Use an accordion when the reader does not need the content immediately.
+
+  ```bash
+  curl https://api.example.com/health
+  ```
+</Accordion>
+````
+
+## Groupes d'accordéons
+
+Regroupez des accordéons liés lorsque plusieurs sections appartiennent à la même tâche.
+
+<AccordionGroup>
+  <Accordion title="Aucune page n'est affichée">
+    Vérifiez que la page existe dans le dépôt de documentation et est listée dans la navigation `dubstack.json`.
+  </Accordion>
+
+  <Accordion title="La page existe mais s'affiche comme introuvable">
+    Exécutez une mise à jour manuelle depuis le tableau de bord, puis vérifiez que le site de documentation publique et le système de fichiers MCP voient le même fichier.
+  </Accordion>
+</AccordionGroup>
+
+```mdx
+<AccordionGroup>
+  <Accordion title="No pages are showing">
+    Check that the page exists in the docs repository.
+  </Accordion>
+
+  <Accordion title="The page exists but renders as not found">
+    Run a manual update from the dashboard.
+  </Accordion>
+</AccordionGroup>
+```
+
+## Propriétés prises en charge
+
+<ResponseField name="title" type="string" required>
+  Texte affiché dans l'en-tête de l'accordéon replié.
+</ResponseField>
+
+<ResponseField name="defaultOpen" type="boolean">
+  Ouvre l'accordéon lors du premier chargement de la page.
+</ResponseField>
+
+<ResponseField name="icon" type="string">
+  Nom de l'icône facultatif affiché à côté du titre lorsqu'elle est prise en charge par la bibliothèque d'icônes active.
+</ResponseField>

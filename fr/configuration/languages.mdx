@@ -1,0 +1,153 @@
+---
+title: Langues
+description: Configurez le routage des langues et le sélecteur de langue pour les documents traduits.
+icon: languages
+---
+
+Le routage des langues permet à un site de documentation de servir des pages traduites à partir de chemins avec un préfixe de localisation.
+
+Utilisez-le lorsque vous gérez des fichiers MDX traduits dans le même répertoire de documentation et que vous souhaitez que les lecteurs passent d'une version de langue à une autre depuis l'interface de documentation. Pour le workflow de publication complet, voir [Internationalisation](/fr/configuration/internationalization).
+
+## Structure des fichiers
+
+Maintenez la langue par défaut à la racine du répertoire de documentation. Placez les pages traduites dans des dossiers avec un code de langue.
+
+```text
+index.mdx
+quickstart.mdx
+fr/
+  index.mdx
+  quickstart.mdx
+es/
+  index.mdx
+  quickstart.mdx
+zh/
+  index.mdx
+  quickstart.mdx
+```
+
+dubstack détecte les pages traduites à partir de préfixes de localisation à deux lettres tels que `fr`, `es` et `zh`.
+
+## Configurez le sélecteur
+
+Ajoutez `navigation.languages` à `dubstack.json`.
+
+```json
+{
+  "navigation": {
+    "languages": [
+      {
+        "code": "en",
+        "label": "English",
+        "href": "/"
+      },
+      {
+        "code": "fr",
+        "label": "Français",
+        "href": "/fr"
+      },
+      {
+        "code": "es",
+        "label": "Español",
+        "href": "/es"
+      }
+    ],
+    "tabs": [
+      {
+        "tab": "Guides",
+        "default": true,
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": ["index", "quickstart"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Le sélecteur s'affiche lorsqu'au moins une langue est configurée.
+
+## Correspondance des pages
+
+Lorsqu'un lecteur change de langue, dubstack conserve le même chemin de page lorsque le fichier traduit existe.
+
+Par exemple :
+
+| Page actuelle | Cible en français |
+| --- | --- |
+| `/quickstart` | `/fr/quickstart` |
+| `/configuration/navigation` | `/fr/configuration/navigation` |
+
+Si la page traduite est absente, le lecteur reste sur la page d'accueil de la langue la plus proche ou revient à la page par défaut.
+
+## Bannières spécifiques à la langue
+
+Chaque langue peut définir sa propre bannière.
+
+```json
+{
+  "navigation": {
+    "languages": [
+      {
+        "code": "en",
+        "label": "English",
+        "href": "/",
+        "banner": {
+          "content": "New docs launch: review the migration guide.",
+          "dismissible": true
+        }
+      },
+      {
+        "code": "fr",
+        "label": "Français",
+        "href": "/fr",
+        "banner": {
+          "content": "Nouveaux documents: consultez le guide de migration.",
+          "dismissible": true
+        }
+      }
+    ]
+  }
+}
+```
+
+Si une langue ne définit pas de bannière, la bannière au niveau du site [banner](/fr/configuration/banners) est utilisée lorsqu'elle est configurée.
+
+## Propriétés
+
+<ResponseField name="code" type="string" required>
+  Code de langue utilisé dans les URLs et la correspondance des pages. Utilisez un code à deux lettres tel que `en`, `fr`, `es` ou `zh`.
+</ResponseField>
+
+<ResponseField name="label" type="string">
+  Étiquette lisible par l'utilisateur affichée dans le sélecteur de langue. Si omis, dubstack dérive une étiquette à partir du code de langue.
+</ResponseField>
+
+<ResponseField name="flag" type="string">
+  Étiquette d'indicateur ou d'icône facultative affichée à côté de la langue. Si omis, dubstack utilise l'indicateur par défaut pour les codes de langue connus.
+</ResponseField>
+
+<ResponseField name="href" type="string">
+  Chemin d'accueil de langue facultatif. Si omis, l'anglais utilise `/` et les autres langues utilisent `/{code}`.
+</ResponseField>
+
+<ResponseField name="banner" type="object">
+  Configuration facultative des bannières spécifiques à la langue. Elle utilise la même structure que le champ `banner` au niveau supérieur.
+</ResponseField>
+
+## Limites du workflow de traduction
+
+Le routage des langues ne traduit pas automatiquement le contenu.
+
+Maintenez les fichiers traduits sous contrôle de version et publiez-les comme n'importe quel autre fichier MDX. Les workflows de traduction peuvent aider à rédiger ou à maintenir le contenu traduit lorsqu'ils sont activés pour le déploiement, mais le site publié ne sert que les fichiers existant dans le répertoire de documentation.
+
+## Liste de vérification
+
+- Maintenez les noms de fichiers et la structure des dossiers cohérents entre les langues.
+- Utilisez un code de langue par répertoire traduit.
+- Ajoutez uniquement les langues qui disposent de suffisamment de contenu traduit pour être utiles.
+- Vérifiez les liens des pages traduites pour qu'ils pointent vers des chemins traduits lorsqu'ils sont disponibles.
+- Publiez après avoir modifié `navigation.languages` afin que la recherche et le MCP public reflètent la structure de langue actuelle.

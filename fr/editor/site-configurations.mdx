@@ -1,0 +1,64 @@
+---
+title: Configurations du site
+description: "Modifiez depuis l'éditeur les paramètres du site définis dans dubstack.json."
+icon: sliders-horizontal
+---
+
+Les configurations du site vous permettent de mettre à jour les paramètres de la documentation sans modifier manuellement `dubstack.json`.
+
+L'éditeur visuel écrit dans la même configuration source utilisée par le rendu public, le worker de synchronisation et la prévisualisation du tableau de bord.
+
+## Ouvrir les configurations du site
+
+1. Ouvrez **Éditeur**.
+2. Ouvrez la barre de navigation.
+3. Sélectionnez **Configurations du site** en bas de la barre.
+4. Utilisez le formulaire visuel pour les paramètres courants, ou basculez en mode JSON lorsque vous avez besoin d'un contrôle précis.
+
+## Sections de configuration
+
+La surface de configuration actuelle inclut :
+
+- Général
+- Identité visuelle
+- Style
+- Typographie
+- Barre de navigation
+- Pied de page
+- Bannière
+- Miniature
+- Contenu
+- Blocs de code
+- Menu contextuel
+- Navigation
+- Recherche
+- Référence API
+- Redirections
+- SEO
+- Analytique
+- Page 404
+- Variables
+
+Certaines sections avancées n'apparaissent que lorsque le niveau de déploiement prend en charge la fonctionnalité sous-jacente.
+
+## Mode visuel et mode JSON
+
+| Mode | Utilisez-le pour |
+| --- | --- |
+| Visuel | Paramètres communs avec validation et contrôles guidés. |
+| JSON | Examinez la configuration source ou modifiez les champs plus faciles à exprimer directement. |
+
+Si vous modifiez le JSON directement, assurez-vous que la structure reste valide et prévisualisez avant de publier.
+
+## Source de vérité
+
+`dubstack.json` reste la source de vérité pour la configuration du site.
+
+Les contrôles du tableau de bord doivent écrire dans les chemins de configuration réels que le rendu consomme. Si un champ n'est pas connecté au comportement en temps réel, il ne doit pas être considéré comme un paramètre inclus.
+
+## Sujets connexes
+
+- [Configurez dubstack.json](/fr/configuration/dubstack-json)
+- [Thémisation](/fr/configuration/theming)
+- [Navigation](/fr/configuration/navigation)
+- [Référence API](/fr/api-reference/introduction)

@@ -1,0 +1,162 @@
+---
+title: Fichiers de compétences personnalisés
+description: Ajoutez des fichiers skill.md définis par le dépôt afin que les agents IA obtiennent des instructions spécifiques à votre produit depuis votre site de documentation publié.
+icon: file-cog
+---
+
+Les fichiers de compétences personnalisés vous permettent de contrôler les instructions que les agents IA découvrent à partir de votre site de documentation publié.
+
+dubstack génère un fichier `skill.md` par défaut lorsque vous n'en fournissez pas. Ajoutez des fichiers de compétences personnalisés lorsque votre produit nécessite des instructions plus précises pour les agents, des règles plus strictes pour la source de vérité ou des compétences distinctes pour différentes parties de la documentation.
+
+## Fichier de compétence unique
+
+Ajoutez `skill.md` à la racine de votre dépôt de documentation.
+
+```text
+skill.md
+dubstack.json
+quickstart.mdx
+api-reference/
+```
+
+Le fichier `skill.md` de la racine remplace la compétence générée pour le site.
+
+```md title="skill.md"
+---
+name: Acme docs
+description: Use when answering questions about Acme setup, API reference, deployment, and troubleshooting.
+---
+
+# Acme docs skill
+
+Use this skill when a user asks how to build, configure, or operate Acme.
+
+## Source of truth
+
+- Public docs: https://docs.acme.com
+- Public MCP server: https://docs.acme.com/mcp
+- API reference: https://docs.acme.com/api-reference/introduction
+
+## Rules
+
+- Search the public MCP server before answering broad product questions.
+- Read exact docs pages before giving setup steps.
+- Do not invent dashboard settings, API endpoints, plan limits, or authentication behavior.
+```
+
+## Plusieurs fichiers de compétence
+
+Ajoutez des fichiers de compétence spécifiques à un thème sous le répertoire des compétences compatibles.
+
+Chaque compétence se trouve dans son propre répertoire et doit être nommée `SKILL.md`.
+
+```text
+.dubstack/
+  skills/
+    api-reference/
+      SKILL.md
+    migrations/
+      SKILL.md
+skill.md
+```
+
+Vous pouvez utiliser à la fois un `skill.md` de la racine et plusieurs compétences thématiques. Les index de découverte incluent toutes les compétences disponibles.
+
+Utilisez plusieurs compétences lorsque vous souhaitez que les agents chargent des instructions ciblées pour des tâches spécifiques, comme la configuration de la documentation de référence API, le support de migration ou l'écriture des notes de version.
+
+<Note>
+  dubstack accepte également `.mintlify/skills/<skill-name>/SKILL.md` en tant que chemin de compatibilité pour les dépôts migrés. Privilégiez `.dubstack/skills` pour les nouveaux sites.
+</Note>
+
+## Frontmatter
+
+Chaque fichier de compétence personnalisé doit commencer par un frontmatter YAML.
+
+dubstack utilise ces champs pour la découverte :
+
+| Champ | Requis | Objectif |
+| --- | --- | --- |
+| `name` | Recommandé | Nom de compétence lisible par les humains. dubstack le convertit en un identifiant de compétence compatible avec les URL pour la découverte. |
+| `description` | Recommandé | Brève description de routage qui indique aux agents quand utiliser la compétence. |
+
+Le corps Markdown contient les instructions réelles.
+
+Maintenez des descriptions spécifiques. Les agents utilisent la description pour choisir la bonne compétence avant de lire le fichier complet.
+
+## Points d'entrée publiés
+
+Après publication, dubstack expose les compétences personnalisées via les mêmes points d'entrée d'IA que les compétences générées.
+
+| Chemin | Comportement |
+| --- | --- |
+| `/skill.md` | Renvoie la compétence racine lorsqu'il n'y a qu'une seule compétence. Redirige vers `/.well-known/skills/index.json` lorsqu'il y a plusieurs compétences disponibles. |
+| `/.well-known/agent-skills/index.json` | Manifeste de découverte recommandé avec des hachages `sha256`. |
+| `/.well-known/agent-skills/<skill-id>/skill.md` | URL directe pour une compétence spécifique. |
+| `/.well-known/skills/index.json` | Index des compétences compatibles. |
+| `/.well-known/skills/<skill-id>/skill.md` | URL directe de la compétence compatible. |
+| `/.well-known/agent-card.json` | Carte de l'agent qui liste les compétences publiées. |
+
+Utilisez les URLs renvoyées par les index de découverte au lieu de deviner l'URL finale de la compétence.
+
+## Flux de publication
+
+Les compétences personnalisées sont chargées à partir de la branche publiée.
+
+1. Ajoutez ou modifiez les fichiers de compétence dans votre dépôt de documentation.
+2. Validez et poussez les modifications vers la branche connectée au déploiement.
+3. Exécutez une mise à jour manuelle ou attendez la synchronisation du webhook Git.
+4. Ouvrez `/.well-known/agent-skills/index.json` et vérifiez que les compétences attendues sont listées.
+5. Récupérez chaque `url` listé et vérifiez qu'il retourne le Markdown attendu.
+
+## Frontière de sécurité
+
+Les fichiers de compétence personnalisée sont publics sur les sites de documentation publics.
+
+Ne placez pas ces valeurs dans un fichier de compétence personnalisée :
+
+- Clés API ou jetons d'accès
+- détails clients privés
+- engagements de roadmap non publiés
+- notes d'incident internes
+- liens magiques, mots de passe ou identifiants temporaires
+
+L'authentification des documents protège les fichiers de compétence de la même manière qu'elle protège les pages rendues et autres fichiers lisibles par l'IA. Les agents publics ne peuvent pas utiliser `/skill.md` pour contourner les documents protégés.
+
+## Proxys inversés et sous-chemins
+
+Si votre site est monté sous `/docs`, les chemins des compétences restent sous ce chemin de base :
+
+```text
+https://example.com/docs/skill.md
+https://example.com/docs/.well-known/agent-skills/index.json
+```
+
+Si vous utilisez un proxy inverse, redirigez ces chemins vers dubstack :
+
+- `/skill.md`
+- `/.well-known/agent-skills/*`
+- `/.well-known/skills/*`
+- `/.well-known/agent-card.json`
+
+Pour la configuration du proxy, consultez [Proxy inverse](/fr/deployment/reverse-proxy) et [Sous-chemin de documentation](/fr/deployment/docs-subpath).
+
+## Dépannage
+
+Si une compétence personnalisée est absente de la découverte :
+
+1. Vérifiez que le fichier se trouve sur la branche publiée.
+2. Vérifiez que les fichiers de compétence racine sont nommés exactement `skill.md`.
+3. Vérifiez que les compétences de répertoire utilisent `.dubstack/skills/<skill-name>/SKILL.md`.
+4. Vérifiez que le nom du répertoire de compétence n'utilise que des lettres, des chiffres, des points, des traits de soulignement ou des tirets.
+5. Exécutez une mise à jour manuelle depuis le tableau de bord.
+6. Ouvrez à nouveau `/.well-known/agent-skills/index.json`.
+
+Si `/skill.md` redirige, plusieurs compétences sont disponibles. Ouvrez `/.well-known/skills/index.json` pour lister les identifiants de compétences disponibles.
+
+Si l'index de découverte renvoie toujours la compétence générée, dubstack n'a pas détecté de compétence racine ou de compétence de répertoire personnalisée sur la branche publiée.
+
+## Sujets connexes
+
+- [Fichier de compétence généré](/fr/ai/generated-skill-file)
+- [Fichiers de découverte IA](/fr/ai/ai-discovery-files)
+- [MCP](/fr/ai/mcp)

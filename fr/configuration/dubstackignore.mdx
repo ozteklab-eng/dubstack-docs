@@ -1,0 +1,52 @@
+---
+title: Exclure les fichiers de la publication
+description: Utilisez .dubstackignore pour empêcher certains fichiers d'être synchronisés dans la documentation publiée.
+icon: file-x
+---
+
+Utilisez `.dubstackignore` lorsque les fichiers doivent rester dans le dépôt mais ne jamais être publiés sur le site de documentation publique.
+
+Le worker de synchronisation lit `.dubstackignore` à la racine du dépôt de documentation et ignore les fichiers de documentation correspondants pendant la synchronisation.
+
+## Créez .dubstackignore
+
+Ajoutez un fichier `.dubstackignore` à la racine du dépôt :
+
+```text .dubstackignore
+# Draft documents
+drafts/**
+*.draft.mdx
+
+# Internal notes
+internal/**
+private-notes.md
+```
+
+## Ce que signifie l'exclusion
+
+Fichiers exclus :
+
+- ne sont pas copiés vers le magasin de contenu publié
+- n'apparaissent pas dans la navigation
+- ne sont pas accessibles via les routes de page publiques
+- ne sont pas inclus dans le système de fichiers MCP public
+- ne sont pas utilisés par la recherche publique ou la récupération par l'assistant
+
+## Prise en charge des modèles
+
+Le worker de synchronisation prend en charge les motifs glob simples.
+
+| Modèle | Signification |
+| --- | --- |
+| `drafts/**` | Exclure tout ce qui se trouve sous le répertoire `drafts`. |
+| `*.draft.mdx` | Exclure les fichiers de niveau racine se terminant par `.draft.mdx`. |
+| `internal/**` | Exclure tout ce qui se trouve sous `internal`. |
+| `private-notes.md` | Exclure un seul fichier. |
+
+## Exclusions par défaut
+
+La chaîne de traitement ignore déjà les fichiers cachés, `node_modules` et les fichiers propres au dépôt, tels que `README.md`, dans l'ensemble des pages de documentation.
+
+<Callout type="warning">
+  Utilisez `.dubstackignore` pour les fichiers qui ne doivent pas être publiés. Utilisez `hidden: true` uniquement lorsque le fichier peut être publié mais ne doit pas apparaître dans la navigation générée.
+</Callout>

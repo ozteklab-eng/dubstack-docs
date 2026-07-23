@@ -1,0 +1,142 @@
+---
+title: Configuration OpenAPI
+description: "Ajoutez une spécification OpenAPI et publiez les pages des points de terminaison de l'API générées."
+icon: file-json
+---
+
+La configuration OpenAPI comporte deux parties :
+
+- ajouter le fichier de spécification à votre dépôt de documentation
+- référencer cette spécification dans `dubstack.json`
+
+## Ajouter le fichier de spécification
+
+Placez votre spécification principale à :
+
+```text
+api-reference/openapi.json
+```
+
+Pour plusieurs API, utilisez des spécifications nommées :
+
+```text
+api-reference/openapi/payments.json
+api-reference/openapi/admin.json
+```
+
+dubstack prend en charge les spécifications OpenAPI au format JSON dans des documents gérés par Git. Gardez la spécification associée aux documents afin que les déploiements soient reproductibles.
+
+## URL de spécifications brutes publiques
+
+Après publication, dubstack expose la spécification OpenAPI par défaut aux chemins publics standard pour les agents, les outils API et les robots d'indexation qui recherchent un document de spécification brut :
+
+```text
+https://your-docs-domain.com/openapi.json
+https://your-docs-domain.com/api/openapi.json
+https://your-docs-domain.com/api-reference/openapi.json
+```
+
+Ces points de terminaison renvoient le document OpenAPI brut pour le site publié. Ils ne comprennent pas l'enveloppe de métadonnées de l'API Playground.
+
+L'API Playground du navigateur continue d'utiliser :
+
+```text
+https://your-docs-domain.com/api/playground/spec
+```
+
+Cet point de terminaison renvoie la spécification publiée accompagnée de métadonnées d'affichage, d'une valeur par défaut pour l'URL de base et de la configuration de l'API Playground.
+
+## Générer toutes les pages des points de terminaison
+
+Ajoutez `openapi` à un groupe de navigation et omettez `pages` pour publier chaque opération non masquée du spécimen :
+
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Reference",
+        "groups": [
+          {
+            "group": "API reference",
+            "icon": "book",
+            "openapi": "api-reference/openapi.json"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Lorsque le site est synchronisé, dubstack génère les pages des points de terminaison à partir des opérations du spécimen.
+
+## Publier des points de terminaison sélectionnés
+
+Si vous souhaitez uniquement rendre visibles des opérations sélectionnées, conservez `openapi` dans le groupe et listez les opérations dans `pages` :
+
+```json
+{
+  "group": "API reference",
+  "openapi": "api-reference/openapi.json",
+  "pages": [
+    "GET /v1/projects",
+    "POST /v1/projects",
+    "GET /v1/projects/{projectId}"
+  ]
+}
+```
+
+Utilisez les méthodes HTTP en majuscules et le chemin exact de la spécification OpenAPI.
+
+## Masquer les opérations de la navigation générée
+
+Définissez `x-hidden: true` sur une opération OpenAPI lorsqu'elle doit rester hors de la navigation générée automatiquement :
+
+```json
+{
+  "paths": {
+    "/internal/jobs": {
+      "post": {
+        "summary": "Create internal job",
+        "x-hidden": true,
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Utilisez cela pour les points de terminaison internes, expérimentaux, obsolètes ou dédiés au support.
+
+## Pages des points de terminaison manuelles
+
+Vous pouvez également créer une page MDX et l'associer à une opération via le frontmatter :
+
+```mdx
+---
+title: Create project
+openapi: "POST /v1/projects"
+---
+
+Use this endpoint to create a project.
+```
+
+Les pages manuelles sont utiles lorsqu'un point de terminaison nécessite un contenu d'intégration, des diagrammes ou un contexte de flux de travail au-delà de la référence générée.
+
+## Validez avant la publication
+
+Avant de valider une spécification :
+
+- Vérifiez que la spécification est un JSON OpenAPI 3.x valide.
+- Vérifiez que les chemins et les méthodes des opérations correspondent aux valeurs dans `dubstack.json`.
+- Maintenez les paramètres des serveurs et de l'authentification précis pour l'environnement que vous souhaitez que les utilisateurs testent.
+- Exécutez une mise à jour manuelle depuis le tableau de bord après avoir modifié une URL de spécification hébergée qui ne génère pas de commit Git.
+
+<Callout type="warning">
+  Si la page du point de terminaison générée est vide, vérifiez que la référence `openapi` correspond au chemin de spécification et que l'opération existe dans la spécification.
+</Callout>

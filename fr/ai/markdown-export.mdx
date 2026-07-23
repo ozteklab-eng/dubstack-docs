@@ -1,0 +1,131 @@
+---
+title: Exporter en Markdown
+description: "Copiez ou ouvrez des versions de Markdown propres des pages publiées pour les outils d'IA, les revues et la réutilisation du contenu."
+icon: file-text
+---
+
+L'export en Markdown permet aux lecteurs d'obtenir une version de texte propre de la page actuelle afin qu'ils puissent réutiliser le contenu des documents dans des outils d'IA, des workflows de support et des notes internes sans copier le chrome du site rendu.
+
+dubstack met à disposition le Markdown via les actions contextuelles de page, les URL `.md` au niveau de la page, et la négociation de contenu avec `Accept: text/markdown` ou `Accept: text/plain`. Les index d'IA au niveau du site sont disponibles via [`llms.txt`](/fr/ai/llms-indexes) et [`llms-full.txt`](/fr/ai/llms-indexes).
+
+## Copier une page en Markdown
+
+Lorsque les actions contextuelles sont activées, l'action **Copier la page** copie le contenu de la page actuelle au format Markdown.
+
+Utilisez cette fonction lorsque vous souhaitez coller une page dans :
+
+- une conversation avec un assistant d'IA
+- une demande ou une pull request
+- une réponse de support
+- une note de transfert interne
+
+Le contenu copié provient du contenu de la page publiée. Il ne comprend pas l'état du tableau de bord, les modifications non publiées de l'éditeur, les fichiers de dépôt privés ou les notes réservées aux équipes.
+
+## Afficher en Markdown
+
+L'action **Afficher en Markdown** ouvre le contenu de la page actuelle sous forme de document Markdown dans le navigateur.
+
+Cela est utile lorsque vous souhaitez inspecter la forme du texte brut que reçoit un outil d'IA avant de le copier ou de le partager.
+
+## Ouvrir une page en Markdown
+
+Ajoutez `.md` à n'importe quelle URL de page de documentation publiée pour obtenir la version de Markdown propre de cette page.
+
+```txt
+https://docs.example.com/getting-started.md
+https://docs.example.com/api-reference/endpoint/create-user.md
+```
+
+La réponse utilise `text/markdown; charset=utf-8` et inclut une note d'indexation de documentation qui oriente les agents vers `/llms.txt` avant qu'ils n'explorent les pages individuelles.
+
+Vous pouvez également demander le contenu exporté à partir de l'URL normale de la page avec l'en-tête `Accept`.
+
+```bash
+curl -H "Accept: text/markdown" https://docs.example.com/getting-started
+curl -H "Accept: text/plain" https://docs.example.com/getting-started
+```
+
+`Accept: text/markdown` renvoie `text/markdown; charset=utf-8`. `Accept: text/plain` renvoie le même contenu exporté avec `text/plain; charset=utf-8` pour les clients qui demandent uniquement du texte brut.
+
+Les pages racines sont disponibles à `/.md`.
+
+```txt
+https://docs.example.com/.md
+```
+
+Les pages de points de terminaison d'API incluent une section `OpenAPI` pour l'opération actuelle afin que les outils d'IA puissent lire la méthode, le chemin, les paramètres, le corps de la demande, les réponses et les schémas sans charger le terrain de jeu visuel de l'API.
+
+## Configurer les actions Markdown
+
+Les actions contextuelles sont configurées dans `dubstack.json`.
+
+```json
+{
+  "contextual": {
+    "enabled": true,
+    "options": ["copy", "view", "claude", "chatgpt", "perplexity"],
+    "default": "copy"
+  }
+}
+```
+
+Utilisez `copy` pour l'export vers le presse-papiers et `view` pour une vue Markdown lisible.
+
+## Utiliser avec des outils d'IA externes
+
+Les actions d'IA externes envoient à l'outil un prompt pour le contexte de la page actuelle.
+
+Avant d'activer les actions d'IA externes, vérifiez que le contenu de la page est sécurisé pour être envoyé à cette destination. Les documents publics sont déjà visibles par les lecteurs, mais les outils d'IA externes peuvent avoir des politiques distinctes de conservation, d'espace de travail et de confidentialité.
+
+<Callout type="warning">
+  Ne publiez pas de secrets, de données clients privées, de plans non divulgués ou de procédures internes dans la documentation publique.
+</Callout>
+
+## Fichiers Markdown du site
+
+Pour l'ingestion du site entier, utilisez les fichiers d'index IA générés au lieu de copier les pages une par une.
+
+| Fichier | Utilisez-le pour |
+| --- | --- |
+| `/llms.txt` | Un index compact des pages publiques. |
+| `/llms-full.txt` | Un ensemble complet de pages publiées. |
+| `/skill.md` | Les instructions de l'agent et les directives de découverte MCP. |
+
+Voyez [fichiers d'index AI](/fr/ai/llms-indexes) et [fichier de compétence généré](/fr/ai/generated-skill-file) pour le comportement des fichiers générés.
+
+## Comportement d'authentification
+
+L'export Markdown suit les mêmes règles d'accès que la page rendue.
+
+| Accès au site | Comportement du Markdown |
+| --- | --- |
+| Docs publics | Les URLs `.md` et les requêtes Markdown `Accept` sont publiques. |
+| Docs protégés par mot de passe | Les lecteurs doivent déverrouiller le site avant que le contenu Markdown ne soit renvoyé. |
+| Sous-chemin `/docs` | Les URLs Markdown restent sous le chemin monté, comme `https://example.com/docs/quickstart.md`. |
+
+Pour les docs protégés, les requêtes Markdown non authentifiées renvoient une réponse d'authentification au lieu du contenu de la page. Cela empêche les outils IA, les clients MCP et les robots d'exploration de contourner la connexion du site rendu.
+
+Pour les détails de configuration, consultez [Authentification des docs](/fr/deployment/docs-authentication).
+
+## Dépannage
+
+Si les actions Markdown sont absentes :
+
+1. Vérifiez que `contextual.enabled` est `true`.
+2. Vérifiez que `copy` ou `view` est listé dans `contextual.options`.
+3. Publiez la branche contenant la mise à jour `dubstack.json`.
+4. Rafraîchissez la page publiée après la fin de la mise à jour.
+
+Si le Markdown copié est obsolète, lancez une mise à jour manuelle depuis le tableau de bord et attendez la fin de l'activité de déploiement.
+
+Si une URL `.md` renvoie `404`, vérifiez si :
+
+1. La page existe dans le déploiement publié.
+2. L'indexation publique est activée pour le déploiement.
+3. La page ne définit pas `noindex: true` dans le frontmatter.
+
+## Liens connexes
+
+- [Actions contextuelles](/fr/ai/contextual-actions)
+- [Fichiers d'index IA](/fr/ai/llms-indexes)
+- [Fichier de compétence généré](/fr/ai/generated-skill-file)

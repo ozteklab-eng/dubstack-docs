@@ -1,0 +1,102 @@
+---
+title: Surfaces IA
+sidebarTitle: Surfaces IA
+description: "Choisissez entre l'assistant public, le MCP public, l'agent du tableau de bord, les intégrations et les workflows en fonction de la frontière de confiance et de l'accès en écriture."
+icon: panels-top-left
+---
+
+dubstack propose plusieurs surfaces IA adaptées à différentes frontières de confiance.
+
+Utilisez cette page pour choisir la bonne surface avant de connecter des outils, d'activer les fonctionnalités de l'assistant ou de demander à un agent de modifier la documentation.
+
+## Résumé de la surface
+
+| Surface | Public | Accès | Peut écrire des documents |
+| --- | --- | --- | --- |
+| Assistant public | Lecteurs de documents | Site de documents publiés | Non |
+| MCP public | Outils d'IA externes lisant la documentation publique | Site de documentation publié `/mcp` | Non |
+| Agent du tableau de bord | Membres de confiance de l'espace de travail | Tableau de bord | Oui, via des modifications de dépôt révisables lorsqu'on est prêt à rédiger |
+| Intégrations | Membres de confiance de l'espace de travail et workflows configurés | Fournisseurs autorisés par le tableau de bord | Indirectement, via l'agent du tableau de bord ou les workflows |
+| Workflows | Membres de l'espace de travail ayant accès aux workflows | Tableau de bord et déclencheurs configurés | Oui, lorsque le workflow dispose d'un accès en écriture au dépôt |
+
+## Assistant public
+
+L'assistant public est l'expérience de chat orientée vers le lecteur sur votre site de documents publiés.
+
+Il répond à partir de la documentation publiée, cite les pages sources lorsqu'elles sont pertinentes et respecte l'indexation publique et les contrôles de visibilité.
+
+Utilisez-le pour :
+
+- questions de configuration du lecteur
+- questions d'utilisation de l'API
+- questions spécifiques à une page ouvertes via des actions contextuelles
+- questions de découverte lorsque les utilisateurs ne savent pas quelle page lire
+
+Ne l'utilisez pas pour :
+
+- modifier les documents
+- accéder aux paramètres réservés au tableau de bord
+- lire les branches non publiées
+- données d'incident privé ou de support
+
+## Public MCP
+
+Le serveur MCP public permet aux outils d'IA compatibles de rechercher et de lire votre documentation publiée.
+
+Il est en lecture seule et disponible à l'adresse :
+
+```text
+https://your-docs-domain.com/mcp
+```
+
+Utilisez le MCP public lorsqu'un lecteur souhaite que son outil d'IA local s'appuie sur votre documentation actuelle plutôt que sur des extraits copiés.
+
+Les outils MCP publics peuvent rechercher des documents, lire les pages publiées et soumettre des commentaires sur la documentation lorsqu'ils sont activés.
+
+## Agent du tableau de bord
+
+L'agent du tableau de bord est destiné aux membres de l'équipe de confiance.
+
+Il peut répondre à partir du contexte du déploiement et, lorsque la rédaction dans le dépôt est disponible, proposer des modifications de documentation via votre fournisseur Git.
+
+Les actions de rédaction nécessitent :
+
+- un déploiement sélectionné
+- un dépôt de documentation connecté
+- un workflow de rédaction Git pris en charge
+- le bon rôle d'espace de travail
+- un profil de modèle de rédaction
+
+L'agent doit ouvrir des modifications révisables au lieu d'éditer silencieusement la branche de production.
+
+## Intégrations
+
+Les intégrations ajoutent un contexte ciblé provenant d'outils tels que Slack et Jira.
+
+Les intégrations ne rédigent pas de documents seules. Elles fournissent un contexte que l'agent ou un workflow peut utiliser lorsqu'un utilisateur demande une réponse ou une mise à jour de documentation.
+
+Limitez la portée des intégrations. Connectez uniquement les fournisseurs dont le contexte source peut être utilisé en toute sécurité pour la documentation.
+
+## Workflows
+
+Les workflows respectent la même frontière de rédaction que l'agent du tableau de bord.
+
+Selon leur configuration, ils peuvent être déclenchés manuellement, selon un calendrier, par un événement du dépôt ou par une mise à jour du contenu. Les workflows qui créent des modifications de documentation nécessitent un accès en écriture au dépôt et doivent produire des modifications révisables, sauf configuration explicite contraire.
+
+## Instructions du dépôt
+
+Utilisez les instructions du dépôt lorsque vous souhaitez que l'agent de rédaction et l'assistant suivent les conventions propres au site.
+
+| Fichier | Utilisé par | Notes |
+| --- | --- | --- |
+| `.dubstack/AGENTS.md` | Agent du tableau de bord, rédaction via Slack, workflows | Chemin privé recommandé pour les règles de rédaction. |
+| `.dubstack/Assistant.md` | Assistant public, lorsque les instructions personnalisées Enterprise sont activées | Chemin privé recommandé pour les directives de l'assistant destiné aux lecteurs. |
+
+Maintenez les fichiers d'instructions hors de la navigation publique. Ne placez pas d'identifiants, de clés API ou de détails d'incidents privés dedans.
+
+## Sujets connexes
+
+- [Assistant](/fr/ai/assistant)
+- [Agent](/fr/ai/agent)
+- [MCP](/fr/ai/mcp)
+- [Workflows](/fr/workflows)

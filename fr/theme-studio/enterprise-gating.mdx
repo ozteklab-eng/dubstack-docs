@@ -1,0 +1,58 @@
+---
+title: "Accès Enterprise"
+description: "Contrôlez l'accès aux fonctionnalités de personnalisation visuelle selon le plan et l'état de l'essai."
+icon: shield
+---
+
+L'accès Enterprise détermine qui peut utiliser les fonctionnalités avancées de personnalisation visuelle et d'identité de marque.
+
+L'objectif est simple : les utilisateurs ne devraient voir et publier que les fonctionnalités autorisées par leur plan, et le runtime public doit appliquer la même limite.
+
+## Zones de fonctionnalités protégées
+
+| Zone de fonctionnalité | Disponibilité |
+| --- | --- |
+| Thèmes du Docs Shell standard | Disponibles avec tous les plans. |
+| Couleurs de base et paramètres de navigation | Disponible sur tous les plans. |
+| Domaines personnalisés | Disponible sur les plans payants. |
+| Édition visuelle avec Theme Studio | Enterprise. |
+| Runtime Canvas Layout | Enterprise, avec activation explicite. |
+| Bibliothèque de composants avancés | Enterprise. |
+| Marque personnalisée ou marque blanche | Enterprise. |
+
+Les noms de plans et les limites exactes peuvent changer. Utilisez la page de facturation du tableau de bord comme source de vérité pour votre compte.
+
+## Comportement dans le tableau de bord
+
+Le tableau de bord doit indiquer clairement les droits disponibles :
+
+- Les fonctionnalités disponibles sont éditables.
+- Les fonctionnalités verrouillées indiquent quel plan est requis.
+- Les fonctionnalités accessibles pendant un essai affichent l'état de celui-ci lorsqu'il s'applique.
+- Les actions d'enregistrement et de publication sont bloquées lorsque le compte n'est pas autorisé.
+
+Ne comptez pas uniquement sur les contrôles désactivés. Les vérifications côté serveur doivent appliquer les mêmes règles.
+
+## Comportement du runtime
+
+Le site public lit la configuration publiée et les droits du site. Si un site n'est pas autorisé à utiliser une fonctionnalité de runtime réservée au niveau Enterprise, le frontend doit revenir à un mode sûr au lieu d'afficher une mise en page partielle ou défectueuse.
+
+## Essais
+
+Les essais peuvent débloquer temporairement les fonctionnalités Enterprise à des fins d'évaluation.
+
+Avant de publier des modifications de production à partir d'un essai, vérifiez ce qui se passe lorsque l'essai se termine. Certains paramètres peuvent rester visibles pour examen mais seront verrouillés jusqu'à ce que l'abonnement soit mis à niveau.
+
+## Liste de vérification opérationnelle
+
+Avant d'activer une fonctionnalité Enterprise sur un site :
+
+1. Confirmez le niveau d'abonnement de l'organisation ou l'état de l'essai.
+2. Confirmez que le site est bien le déploiement cible prévu.
+3. Prévisualisez le site public après sauvegarde.
+4. Validez les modes mobile, bureau, clair et sombre.
+5. Confirmez le comportement par défaut si la fonctionnalité est désactivée ultérieurement.
+
+<Callout type="warning">
+  Appliquez les vérifications d'autorisation dans le backend et le runtime. Un bouton masqué ne constitue pas une frontière de contrôle d'accès.
+</Callout>

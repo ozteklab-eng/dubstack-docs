@@ -1,0 +1,80 @@
+---
+title: Lier les pages de documentation
+description: "Créer des liens internes, des liens d'ancrage, des sujets connexes et des redirections pour maintenir la navigabilité de la documentation."
+icon: link
+---
+
+Les liens transforment des pages individuelles en un système de documentation utilisable. Ils aident les lecteurs à avancer dans une tâche, aident les moteurs de recherche à trouver des pages liées et préservent la confiance lorsque le contenu évolue.
+
+## Utiliser des liens internes relatifs à la racine
+
+Les liens relatifs à la racine commencent par `/` et sont résolus à partir de la racine du site de documentation.
+
+```mdx
+[Quickstart](/quickstart)
+[Git settings](/deployment/git-settings)
+[Workflow reference](/workflows/reference)
+```
+
+Privilégier les liens relatifs à la racine pour des liens internes durables, car ils fonctionnent même si la page source est déplacée vers un autre répertoire.
+
+## Lier les titres et les composants
+
+Les titres créent des ancres pouvant être liées directement.
+
+```mdx
+[Troubleshooting](/deployment/custom-domains#troubleshooting)
+```
+
+Pour des liens stables, utiliser des ID de titre personnalisés lorsque le texte du titre peut changer.
+
+```mdx
+## Configure DNS {#dns}
+```
+
+Les onglets, les champs et les sections de référence API peuvent également exposer des ancres directes lorsqu'ils le supportent. Utiliser ces liens lorsqu'on envoie les lecteurs vers un paramètre ou un réglage spécifique.
+
+## Rédiger un texte d'ancrage utile
+
+Le texte d'ancrage doit décrire la destination.
+
+| Meilleur | Éviter |
+| --- | --- |
+| [Configurer les déploiements de prévisualisation](/fr/deployment/preview-deployments) | [Cliquez ici](/fr/deployment/preview-deployments) |
+| [Utilisation des crédits de flux de travail](/fr/ai/credits-usage) | [Plus d'informations](/fr/ai/credits-usage) |
+| [Dépannage du contrôle de version](/fr/deployment/source-control-troubleshooting) | [Cette page](/fr/deployment/source-control-troubleshooting) |
+
+Un bon texte d'ancrage améliore la lisibilité, l'accessibilité et la qualité des résultats de recherche.
+
+## Ajouter des sujets connexes
+
+Utiliser des sujets connexes lorsque les lecteurs ont besoin fréquemment d'une autre page après avoir terminé la tâche actuelle.
+
+```mdx
+<RelatedTopics>
+  <a href="/deployment/git-settings">Git settings</a>
+  <a href="/deployment/source-control-troubleshooting">Source control troubleshooting</a>
+</RelatedTopics>
+```
+
+Les sujets connexes sont particulièrement utiles sur les guides, les pages de dépannage et les pages de configuration API.
+
+## Maintenir les liens lors du déplacement des pages
+
+Lors de la modification ou de la suppression d'une page :
+
+1. Ajouter une redirection de l'ancien chemin vers le nouveau chemin.
+2. Mettre à jour les liens internes pointant vers l'ancien chemin.
+3. Vérifier la page publique et l'exportation Markdown.
+4. Exécuter un flux de travail de vérification des liens rompus ou une vérification locale des liens avant la publication.
+
+Voir [Redirections](/fr/configuration/redirects) et [Corriger les liens rompus](/fr/workflows/reference#fix-broken-links).
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/configuration/redirects">Redirections</a>
+  <a href="/fr/writing-content/headings-anchors">Titres et ancres</a>
+  <a href="/fr/writing-content/related-topics">Sujets connexes</a>
+  <a href="/fr/workflows/reference#fix-broken-links">Flux de travail pour réparer les liens rompus</a>
+</RelatedTopics>

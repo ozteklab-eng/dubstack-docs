@@ -1,0 +1,59 @@
+---
+title: Encadrés
+description: "Mettez en évidence des notes, des avertissements, des astuces, des vérifications et un contexte important."
+icon: badge-alert
+---
+
+Les encadrés aident les lecteurs à repérer le contexte qui ne doit pas être enfoui dans des paragraphes ordinaires.
+
+## Encadrés par intention
+
+<Info>Utilisez des encadrés d'information pour des conseils neutres ou un contexte supplémentaire.</Info>
+
+<Tip>Utilisez des astuces pour des raccourcis utiles ou des étapes suivantes recommandées.</Tip>
+
+<Warning>Utilisez des avertissements pour des actions risquées ou un comportement pouvant surprendre les lecteurs.</Warning>
+
+<Check>Utilisez des vérifications pour une configuration terminée ou des états de succès attendus.</Check>
+
+<Danger>Utilisez des encadrés de danger pour des actions destructrices ou des changements irréversibles.</Danger>
+
+```mdx
+<Info>Use info callouts for neutral guidance or extra context.</Info>
+
+<Tip>Use tips for helpful shortcuts.</Tip>
+
+<Warning>Use warnings for risky actions.</Warning>
+
+<Check>Use checks for expected success states.</Check>
+
+<Danger>Use danger callouts for destructive actions.</Danger>
+```
+
+## Encadré générique
+
+Utilisez `Callout` lorsque le type d'encadré doit provenir des données ou des contrôles de l'éditeur.
+
+<Callout type="info">
+  Cet encadré utilise le composant générique avec une propriété `type`.
+</Callout>
+
+```mdx
+<Callout type="info">
+  This callout uses the generic component with a `type` prop.
+</Callout>
+```
+
+## Propriétés prises en charge
+
+<ResponseField name="type" type="string">
+  Style d'intention pour `Callout`. Les valeurs prises en charge incluent `info`, `note`, `tip`, `warning`, `success`, et `error`.
+</ResponseField>
+
+<ResponseField name="title" type="string">
+  En-tête d'encadré facultatif.
+</ResponseField>
+
+<ResponseField name="children" type="MDX content" required>
+  Corps de l'encadré. Le corps peut inclure des liens, du code en ligne, des listes et des blocs de code délimités.
+</ResponseField>

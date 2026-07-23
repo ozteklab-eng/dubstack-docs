@@ -1,0 +1,33 @@
+---
+title: Aperçu avec la CLI
+description: "Découvrez le workflow d'aperçu local prévu et les options d'aperçu actuellement disponibles."
+---
+
+L'aperçu avec la CLI est prévu, mais n'est pas encore disponible publiquement.
+
+Aujourd'hui, utilisez les chemins d'aperçu pris en charge :
+
+- aperçu en direct du tableau de bord pendant la modification du contenu
+- déploiements d'aperçu pour les revues de branche et de pull request
+- aperçus de wiki publics pour les migrations et les parcours d'acquisition
+
+## Comportement d'aperçu prévu
+
+La commande d'aperçu de la CLI devrait à terme afficher la documentation localement à partir des mêmes fichiers sources qu'en production :
+
+```bash
+# planned shape, not yet generally available
+dubstack preview
+```
+
+Un aperçu local utile doit vérifier plus que le rendu de page. Il doit également mettre en évidence :
+
+- fichiers manquants référencés par la navigation
+- structure `dubstack.json` invalide
+- liens internes non résolus
+- erreurs d'analyse OpenAPI
+- actifs trop volumineux ou manquants dans le dépôt
+
+## Utilisez les déploiements d'aperçu aujourd'hui
+
+Pour les révisions fondées sur la source, utilisez dès aujourd'hui les [déploiements d'aperçu](/fr/deployment/preview-deployments). Ils maintiennent la validation au plus près du rendu de production et permettent aux collègues d'examiner plus facilement les modifications de documentation dans un navigateur.

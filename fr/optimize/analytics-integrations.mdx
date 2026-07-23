@@ -1,0 +1,169 @@
+---
+title: "Intégrations d'analyse"
+description: "Envoyez le trafic des documents publiés vers Google Analytics, Google Tag Manager, Plausible ou PostHog."
+icon: chart-network
+---
+
+Les intégrations d'analyse vous permettent d'envoyer le trafic des documents vers les outils d'analyse que votre équipe utilise déjà.
+
+dubstack enregistre les métriques intégrées de trafic, de recherche, d'assistant et de feedback pour le tableau de bord. Les intégrations tierces ajoutent les balises des fournisseurs au site publié afin d'envoyer également le trafic des pages vers votre espace d'analyse.
+
+<Info>
+  Ajoutez uniquement des identifiants d'analyse publics à `dubstack.json`. Ne publiez pas de clés API privées, de secrets côté serveur ou de jetons d'écriture dans votre dépôt de documents.
+</Info>
+
+## Configurer depuis le tableau de bord
+
+1. Ouvrez votre site depuis le tableau de bord.
+2. Accédez à **Éditeur**.
+3. Ouvrez **Configuration**.
+4. Sélectionnez **Analyse**.
+5. Ajoutez les identifiants des fournisseurs que vous souhaitez utiliser.
+6. Enregistrez et publiez le site.
+
+Le tableau de bord écrit les mêmes valeurs dans la configuration du site que vous pouvez éditer directement dans `dubstack.json`.
+
+## Configurer dans dubstack.json
+
+Ajoutez les fournisseurs pris en charge sous l'objet `integrations` de premier niveau.
+
+```json dubstack.json
+{
+  "integrations": {
+    "ga4": {
+      "measurementId": "G-XXXXXXXXXX"
+    },
+    "gtm": {
+      "tagId": "GTM-XXXXXXX"
+    },
+    "plausible": {
+      "domain": "docs.example.com",
+      "server": "https://plausible.example.com"
+    },
+    "posthog": {
+      "apiKey": "phc_your_public_project_key",
+      "apiHost": "https://us.i.posthog.com",
+      "sessionRecording": false
+    }
+  }
+}
+```
+
+Vous n'avez besoin d'inclure que les fournisseurs que vous utilisez.
+
+## Google Analytics 4
+
+Créez un flux web GA4 pour votre domaine de documentation, puis copiez l'ID de mesure.
+
+```json dubstack.json
+{
+  "integrations": {
+    "ga4": {
+      "measurementId": "G-XXXXXXXXXX"
+    }
+  }
+}
+```
+
+L'ID de mesure doit commencer par `G-`.
+
+## Google Tag Manager
+
+Ajoutez votre ID de conteneur GTM lorsque vous souhaitez que Google Tag Manager gère les balises d'analyse et de marketing pour le site de documentation.
+
+```json dubstack.json
+{
+  "integrations": {
+    "gtm": {
+      "tagId": "GTM-XXXXXXX"
+    }
+  }
+}
+```
+
+L'ID de balise doit commencer par `GTM-`.
+
+<Warning>
+  Vous êtes responsable de la gestion des consentements aux cookies, des mentions de confidentialité et de la conformité régionale pour les balises que vous chargez via Google Tag Manager.
+</Warning>
+
+## Plausible
+
+Utilisez Plausible pour des analyses de page légères axées sur la vie privée.
+
+```json dubstack.json
+{
+  "integrations": {
+    "plausible": {
+      "domain": "docs.example.com"
+    }
+  }
+}
+```
+
+Pour une instance Plausible auto-hébergée, ajoutez `server`.
+
+```json dubstack.json
+{
+  "integrations": {
+    "plausible": {
+      "domain": "docs.example.com",
+      "server": "https://plausible.example.com"
+    }
+  }
+}
+```
+
+Utilisez le nom d'hôte des documents publiés comme `domain`. Incluez `https://` pour `server` lorsque vous fournissez une URL Plausible auto-hébergée.
+
+## PostHog
+
+Ajoutez votre clé de projet PostHog publique pour collecter le trafic des documents dans PostHog.
+
+```json dubstack.json
+{
+  "integrations": {
+    "posthog": {
+      "apiKey": "phc_your_public_project_key",
+      "apiHost": "https://us.i.posthog.com",
+      "sessionRecording": false
+    }
+  }
+}
+```
+
+`apiHost` est facultatif pour PostHog Cloud. dubstack utilise par défaut `https://us.i.posthog.com`. Définissez `apiHost` lorsque vous utilisez une autre région ou une instance PostHog auto-hébergée.
+
+`sessionRecording` utilise par défaut `false`. Définissez-le sur `true` uniquement si votre politique de confidentialité et votre flux de consentement autorisent les enregistrements de session sur les pages de documentation.
+
+## Aperçu et noms de domaine personnalisés
+
+Les balises d'analyse de tiers sont ajoutées aux pages de documentation publiées après que le site ait été synchronisé et rendu avec la configuration la plus récente.
+
+Pour les domaines personnalisés :
+
+- utilisez le nom d'hôte public final dans les tableaux de bord des fournisseurs
+- autorisez les domaines des scripts des fournisseurs dans votre Politique de Sécurité du Contenu (CSP) si vous configurez les en-têtes CSP
+- vérifiez que les montages de documentation basés sur le chemin chargent toujours les scripts des fournisseurs depuis la route publique
+
+Pour les liens de prévisualisation, attendez-vous à ce que le comportement d'analyse dépende du déploiement et des paramètres du fournisseur. Utilisez un déploiement publié pour la vérification finale du fournisseur.
+
+## Dépannage
+
+Si les analyses ne s'affichent pas dans votre fournisseur :
+
+1. Vérifiez que l'ID du fournisseur est dans `dubstack.json` ou enregistré depuis **Configuration > Analytics**.
+2. Publiez le site après avoir modifié les paramètres d'analyse.
+3. Ouvrez le site de documentation public, et non seulement la prévisualisation du tableau de bord.
+4. Vérifiez la vue en temps réel ou le mode débogage du fournisseur.
+5. Vérifiez la console du navigateur et les requêtes réseau pour les blocages de CSP ou de bloqueurs de publicités.
+6. Attendez les délais de traitement côté fournisseur avant d'assumer que l'intégration a échoué.
+
+## Sujets connexes
+
+<RelatedTopics>
+  <a href="/fr/optimize/analytics">Analyse</a>
+  <a href="/fr/deployment/csp-configuration">Configuration CSP</a>
+  <a href="/fr/configuration/dubstack-json">dubstack.json</a>
+  <a href="/fr/optimize/feedback">Commentaires</a>
+</RelatedTopics>

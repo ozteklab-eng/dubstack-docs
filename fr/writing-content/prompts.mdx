@@ -1,0 +1,69 @@
+---
+title: Prompts
+description: "Affichez des prompts d'IA réutilisables que les lecteurs peuvent copier ou ouvrir dans Cursor."
+---
+
+Utilisez `Prompt` pour publier des prompts d'IA réutilisables dans vos documents.
+
+Les blocs de prompts sont utiles lorsqu'une page inclut une instruction recommandée pour un éditeur, un assistant de codage, un workflow de support ou une revue de documentation.
+
+## Prompt de base
+
+```mdx
+<Prompt description="Improve this documentation page.">
+  You are a technical writing assistant.
+
+  Review this page for clarity, missing prerequisites, and confusing steps.
+  Return a short list of improvements.
+</Prompt>
+```
+
+<Prompt description="Améliorez cette page de documentation.">
+  Vous êtes un assistant de rédaction technique.
+
+  Examinez cette page pour sa clarté, les prérequis manquants et les étapes ambiguës.
+  Renvoyez une liste courte des améliorations.
+</Prompt>
+
+## Ajouter Cursor
+
+Définissez `actions` lorsque le prompt doit inclure plus que l'action de copie par défaut.
+
+```mdx
+<Prompt
+  description="Generate **clear**, concise release notes."
+  icon="paperclip"
+  actions={["copy", "cursor"]}
+>
+  Turn the following product changes into release notes.
+
+  Use short headings, group related changes, and flag anything that needs a migration note.
+</Prompt>
+```
+
+<Prompt
+  description="Générez des notes de version **claires** et concises."
+  icon="paperclip"
+  actions={["copy", "cursor"]}
+>
+  Transformez les changements de produit suivants en notes de version.
+
+  Utilisez des titres courts, regroupez les changements liés et indiquez tout ce qui nécessite une note de migration.
+</Prompt>
+
+## Propriétés
+
+| Propriété | Type | Requis | Description |
+| --- | --- | --- | --- |
+| `description` | `string` | Oui | Titre affiché sur la carte de prompt. Prise en charge de la mise en forme Markdown en ligne. |
+| `children` | `string` | Oui | Texte du prompt copié dans le presse-papiers ou ouvert dans Cursor. |
+| `actions` | `array` | Non | Valeur par défaut : `["copy"]`. Les valeurs valides sont `"copy"` et `"cursor"`. |
+| `icon` | `string` | Non | Nom de l'icône affichée à côté de la description du prompt. |
+| `iconType` | `string` | Non | Variante d'icône facultative lorsque prise en charge par la bibliothèque d'icônes active. |
+
+## Notes de rédaction
+
+- Maintenez les prompts assez courts pour être examinés avant de les copier.
+- Utilisez des espaces réservés au lieu de données privées.
+- Utilisez `actions={["copy", "cursor"]}` lorsque les lecteurs doivent ouvrir l'invite directement dans Cursor.
+- Ne placez pas d'identifiants, de liens magiques, de jetons d'accès ou de données clients privées à l'intérieur des invites réutilisables.

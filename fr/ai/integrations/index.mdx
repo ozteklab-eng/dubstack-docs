@@ -1,0 +1,161 @@
+---
+title: Intégrations
+description: "Connectez des outils de collaboration, de suivi des tickets et d'espace de travail pour que les agents et les flux de travail puissent utiliser un contexte d'équipe délimité."
+icon: plug
+---
+
+Les intégrations permettent aux agents et aux flux de travail d'extraire un contexte en direct des outils où le travail produit a déjà lieu.
+
+Utilisez les intégrations lorsque la mise à jour de la documentation dépend d'une conversation, d'un problème, d'un plan de version ou d'un signal de support qui n'est pas encore dans les documents publiés.
+
+<Callout type="info">
+  Les intégrations de flux de travail nécessitent un accès Enterprise ou un essai actif incluant les fonctionnalités d'intégration.
+</Callout>
+
+## À quoi servent les intégrations
+
+Les intégrations peuvent aider l'agent à :
+
+- répondre aux questions du tableau de bord avec un contexte supplémentaire d'espace de travail
+- rédiger des mises à jour de documentation à partir du contexte d'outils connectés
+- enrichir les flux de travail avec un contexte de collaboration ou de suivi de tickets sélectionné
+- alerter les équipes lorsqu'une exécution de flux de travail est terminée
+
+Elles ne modifient pas la source de vérité. Les modifications de documentation s'écrivent toujours via le fournisseur Git connecté.
+
+Les fournisseurs connectés sont utilisés comme outils pour une exécution spécifique d'agent ou de workflow. dubstack ne lit pas activement les applications connectées en arrière-plan, et l'exécution ne doit récupérer le contexte du fournisseur que lorsqu'il est pertinent pour la tâche.
+
+## Familles d'intégrations
+
+Commencez par la famille correspondant au contexte source que vous souhaitez que l'agent ou le workflow utilise.
+
+<CardGroup cols={2}>
+  <Card title="Communication" icon="message-circle" href="/fr/ai/integrations/communication">
+    Slack est actif. Mattermost est uniquement dans le catalogue pour les workflows de chat et de notifications auto-hébergés.
+  </Card>
+  <Card title="Gestion de projets" icon="panels-top-left" href="/fr/ai/integrations/project-management">
+    Jira est actif. Linear et Plane sont des fournisseurs de suivi de problèmes uniquement dans le catalogue.
+  </Card>
+  <Card title="Bases de connaissances et fichiers" icon="file-stack" href="/fr/ai/integrations/knowledge-base-files">
+    Confluence est actif. Notion, Google Drive et Nextcloud sont des fournisseurs de contexte uniquement dans le catalogue.
+  </Card>
+  <Card title="Support et retours" icon="life-buoy" href="/fr/ai/integrations/support">
+    Plain, Intercom et Pylon sont uniquement dans le catalogue jusqu'à l'activation des collecteurs de retours de support.
+  </Card>
+  <Card title="CRM" icon="users" href="/fr/ai/integrations/crm">
+    Salesforce et HubSpot sont des fournisseurs de contexte client uniquement dans le catalogue.
+  </Card>
+  <Card title="Analytique et confidentialité" icon="chart-network" href="/fr/ai/integrations/analytics">
+    Les balises de trafic sont configurées depuis les paramètres du site. Les fournisseurs de confidentialité et de consentement sont documentés séparément.
+  </Card>
+</CardGroup>
+
+## Intégrations disponibles
+
+Le catalogue d'intégrations sépare les fournisseurs prêts pour les exécutions des fournisseurs visibles pour la planification de la roadmap et des capacités.
+
+| Intégration | Statut | Catégorie | Utilisez-le pour | Portée |
+| --- | --- | --- | --- | --- |
+| [Slack](/fr/ai/integrations/slack) | Actif | Communication | Conversations d'agent dans Slack, réponses aux documents, demandes de PR en brouillon et notifications de workflows. | Partagé |
+| [Jira](/fr/ai/integrations/jira) | Actif | Gestion de projet | Contexte des problèmes pour les demandes d'agent de tableau de bord et les workflows. | Partagé |
+| [Confluence](/fr/ai/integrations/confluence) | Actif | Documentation | Contexte de page limité pour les workflows pris en charge. | Partagé |
+| [Mattermost](/fr/ai/integrations/communication) | Catalogue | Communication | Conversations, fils de discussion et notifications dans un espace de travail auto-hébergé. | Partagé |
+| [Notion](/fr/ai/integrations/knowledge-base-files) | Catalogue | Documentation | Contexte des pages, documents et base de connaissances. | Partagé |
+| [Google Drive](/fr/ai/integrations/knowledge-base-files) | Catalogue | Documentation | Contexte des fichiers, dossiers et disque partagé. | Personnel |
+| [Nextcloud](/fr/ai/integrations/knowledge-base-files) | Catalogue | Documentation | Fichiers autohébergés, dossiers partagés et bases de connaissances. | Partagé |
+| Google Calendar | Catalogue | Communication | Contexte d'événement, d'emploi du temps et de réunion. | Personnel |
+| [Linear](/fr/ai/integrations/project-management) | Catalogue | Gestion de projet | Contexte des problèmes, projets et itinéraire. | Partagé |
+| [Plane](/fr/ai/integrations/project-management) | Catalogue | Gestion de projet | Problèmes autohébergés, cycles, modules et contexte de projet. | Partagé |
+| [Plain](/fr/ai/integrations/support) | Catalogue | Support client | Conversations de support et dossiers clients. | Partagé |
+| [Intercom](/fr/ai/integrations/support) | Catalogue | Support client | Conversations, contacts et contexte du centre d'aide. | Partagé |
+| [Pylon](/fr/ai/integrations/support) | Catalogue | Service client | Conversations clients, comptes et contexte de service | Partagé |
+| [Salesforce](/fr/ai/integrations/crm) | Catalogue | CRM | Contexte des comptes, contacts et opportunités | Partagé |
+| [HubSpot](/fr/ai/integrations/crm) | Catalogue | CRM | Contacts, entreprises, offres et tickets | Partagé |
+
+| Statut | Définition |
+| --- | --- |
+| Actif | Le fournisseur peut être connecté et sélectionné par les surfaces d'agent ou de workflow prises en charge lorsque les conditions nécessaires sont remplies |
+| Catalogue | Le fournisseur peut apparaître dans le catalogue, mais il n'est pas transmis aux agents ou aux exécutions de workflow tant que l'autorisation, les portées, les collecteurs et la prise en charge des workflows ne sont pas disponibles |
+| Mise à niveau | Le fournisseur nécessite un plan, un essai ou un accès avant de pouvoir continuer la configuration |
+| Indisponible | Le fournisseur ne peut pas être sélectionné pour le déploiement ou l'environnement actuel |
+
+Seules les intégrations connectées sont disponibles pour l'agent et l'exécuteur de workflow. Les intégrations du catalogue apparaissent dans le tableau de bord afin que les équipes puissent voir le modèle de contexte planifié, mais un fournisseur marqué **Bientôt disponible**, **Mise à niveau** ou **Indisponible** n'est pas transmis aux exécutions
+
+La disponibilité dépend du plan, de l'état de l'essai, de l'accès au dépôt, de l'autorisation de l'espace de travail et de la configuration du fournisseur
+
+Pour les portées, l'éligibilité, les portées manquantes et le comportement de déconnexion, voir [Autorisations et portées des intégrations](/fr/ai/integration-permissions). Pour le modèle de comportement stable derrière chaque fournisseur, voir [Capacités des connecteurs](/fr/ai/connector-capabilities)
+
+## Connecter une intégration
+
+Les administrateurs et les éditeurs peuvent connecter des intégrations partagées au nom de l'organisation. Les lecteurs peuvent utiliser les surfaces en lecture seule activées lorsqu'ils en ont la permission, mais ils ne peuvent pas configurer l'accès au fournisseur
+
+1. Ouvrez le tableau de bord
+2. Sélectionnez le déploiement
+3. Accédez à **Paramètres > Organisation > Intégrations**
+4. Choisissez l'intégration
+5. Complétez le flux d'autorisation du fournisseur.
+6. Retournez au tableau de bord et vérifiez que le statut d'intégration est connecté.
+
+Certaines intégrations apparaissent également dans le flux de configuration de l'**Agent** lorsqu'elles sont nécessaires pour cette surface.
+
+Certains fournisseurs nécessitent une étape de configuration supplémentaire avant la complétion de l'autorisation. Par exemple, les fournisseurs de suivi de problèmes ou de base de connaissances peuvent demander une URL d'espace de travail, un sous-domaine de site, un projet ou une clé API avant que la connexion du fournisseur ne soit enregistrée.
+
+## Connexions partagées et personnelles
+
+Les intégrations se connectent de l'une des deux manières :
+
+- **Intégrations partagées** sont autorisées une fois pour l'organisation et peuvent être utilisées par les surfaces d'agent ou de workflow éligibles.
+- **Intégrations personnelles** sont autorisées par les membres de l'équipe individuels et restent limitées à l'utilisateur qui les a connectées.
+
+Utilisez les intégrations partagées pour les systèmes appartenant à l'équipe tels que Slack, Jira, Linear, Notion, Confluence et les plateformes CRM ou de support. Utilisez les intégrations personnelles pour les systèmes spécifiques à l'utilisateur tels que le calendrier ou le contexte de stockage.
+
+## Utiliser les intégrations dans les flux de travail
+
+Certains flux de travail peuvent inclure des intégrations connectées comme sources de contexte ou destinations de notifications.
+
+Pour activer les intégrations pour un flux de travail :
+
+1. Ouvrez **Automate > Workflows**.
+2. Sélectionnez le flux de travail.
+3. Ouvrez le panneau des paramètres du flux de travail.
+4. Sélectionnez les intégrations connectées dans la section des intégrations disponibles.
+5. Enregistrez le flux de travail.
+
+Seuls les fournisseurs déjà connectés pour l'organisation ou l'utilisateur apparaissent comme intégrations sélectionnables. L'exécution du workflow récupère le contexte en temps réel uniquement lorsqu'il a besoin de ce fournisseur pour la tâche configurée ; elle ne scanne pas les applications connectées en dehors de la portée du workflow sélectionné.
+
+## Portée et sécurité
+
+Les intégrations sont limitées à l'organisation et à la mise en production actuelles.
+
+L'agent ne doit utiliser le contexte d'intégration que lorsqu' :
+
+- l'intégration est connectée
+- l'utilisateur actuel est autorisé à la configurer ou à l'utiliser
+- la requête a besoin de ce contexte externe
+- le workflow ou l'exécution de l'agent la sélectionne explicitement
+
+<Callout type="warning">
+  Ne collez pas les identifiants privés dans les invites ou les documents. Utilisez l'autorisation du fournisseur et les paramètres d'intégration gérés par le tableau de bord au lieu de cela.
+</Callout>
+
+## Reconnecter ou déconnecter
+
+Reconnectez une intégration lorsque le jeton du fournisseur expire, un administrateur révoque l'application ou que les portées requises changent.
+
+1. Allez dans **Paramètres > Organisation > Intégrations**.
+2. Sélectionnez le fournisseur.
+3. Déconnectez ou reconnectez le fournisseur.
+4. Répétez le flux d'autorisation du fournisseur.
+
+La déconnexion d'une intégration partagée la supprime pour tous les membres de l'organisation. La déconnexion d'une intégration personnelle supprime uniquement la connexion de cet utilisateur.
+
+La déconnexion interrompt les lectures en direct futures provenant de ce fournisseur. Les documents existants, les pull requests, les demandes de fusion et les enregistrements d'exécutions historiques restent en place, car ils constituent des artefacts de revue ou d'audit indépendants.
+
+## Sujets connexes
+
+- [Permissions et portées d'intégration](/fr/ai/integration-permissions)
+- [Capacités du connecteur](/fr/ai/connector-capabilities)
+- [Configurer les exécutions de workflow](/fr/workflows/configuration)
+- [Intégration Slack](/fr/ai/integrations/slack)
+- [Intégration Jira](/fr/ai/integrations/jira)
+- [Intégration Confluence](/fr/ai/integrations/confluence)

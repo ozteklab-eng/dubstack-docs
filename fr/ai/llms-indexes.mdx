@@ -1,0 +1,129 @@
+---
+title: "Fichiers d'index IA"
+description: Comprenez les fichiers llms.txt et llms-full.txt générés sur les sites de documentation publiés.
+icon: list-tree
+---
+
+dubstack génère des fichiers d'index lisibles par l'IA pour chaque site de documentation public. Ces fichiers aident les agents à découvrir vos pages sans gratter l'enveloppe visuelle du site.
+
+Les fichiers générés sont mis à jour lorsque vos documents publiés sont mis à jour.
+
+## Fichiers disponibles
+
+| Chemin | Objectif |
+| --- | --- |
+| `/llms.txt` | Index compact des pages publiées, des descriptions et des spécifications OpenAPI déclarées. |
+| `/llms-full.txt` | Paquet de texte complet sans doublons des pages publiées. |
+
+Les deux fichiers utilisent les réponses `text/plain` afin que les agents et les outils en ligne de commande puissent les lire directement.
+
+## `llms.txt`
+
+`llms.txt` est l'index rapide.
+
+```text
+https://your-docs-domain.com/llms.txt
+```
+
+Il inclut :
+
+- le titre du site
+- la description du site
+- un pointeur vers `/llms-full.txt`
+- les liens vers les pages de la navigation publiée
+- les descriptions de page provenant du frontmatter lorsqu'elles sont disponibles
+- les descriptions de points de terminaison API générées à partir des métadonnées d'opération OpenAPI lorsqu'aucune description de page n'est présente
+- les liens vers les spécifications OpenAPI déclarées, tels que `/api-reference/openapi.json`
+
+Si une page apparaît dans plus d'un onglet de navigation, l'index compact ne l'affiche qu'une seule fois. Cela maintient la sélection de page des agents centrée tout en préservant l'ordre de navigation publié.
+
+Utilisez-le lorsque l'agent doit choisir quelle page lire ensuite.
+
+```bash
+curl -L https://your-docs-domain.com/llms.txt
+```
+
+## `llms-full.txt`
+
+`llms-full.txt` combine le contenu des pages publiées en un seul fichier texte.
+
+```text
+https://your-docs-domain.com/llms-full.txt
+```
+
+Il inclut :
+
+- le titre et la description du site
+- les métadonnées de génération
+- le nombre total de pages
+- le titre de chaque page
+- l'URL de chaque page
+- le contenu publié de chaque page
+
+Si une page apparaît dans plus d'un onglet de navigation, l'export complet inclut le corps de la page une seule fois.
+
+Utilisez-le pour les outils qui ingèrent un site de documentation entier en un seul fichier. Pour les agents interactifs, privilégiez [MCP](/fr/ai/mcp) car MCP permet à l'agent de rechercher et de lire uniquement les pages dont il a besoin.
+
+```bash
+curl -L https://your-docs-domain.com/llms-full.txt
+```
+
+## Contrôles d'indexation
+
+Les fichiers d'index IA suivent les contrôles d'indexation publique du site.
+
+Lorsque l'indexation publique est désactivée, les fichiers lisibles par l'IA et la découverte MCP publique renvoient `404`.
+
+Utilisez cela lorsque le site doit rester accessible aux humains mais ne doit pas exposer des fichiers de découverte lisibles par les machines.
+
+## Comportement d'authentification
+
+Les fichiers d'index IA suivent la même politique d'authentification des documents que le site rendu.
+
+| Accès au site | Comportement de l'index |
+| --- | --- |
+| Documents publics | `/llms.txt` et `/llms-full.txt` sont publics. |
+| Documents protégés par mot de passe | Les lecteurs doivent déverrouiller le site avant que le contenu de l'index ne soit renvoyé. |
+| Sous-chemin `/docs` | Les fichiers d'index restent sous le chemin monté, tel que `/docs/llms.txt`. |
+
+Pour les documents protégés, les agents et les robots non authentifiés ne peuvent pas utiliser les fichiers d'index IA pour contourner la page de connexion. Pour les détails de configuration, consultez [Authentification des documents](/fr/deployment/docs-authentication).
+
+## Feedback des agents
+
+Lorsque le feedback des agents est activé, `llms-full.txt` peut inclure des instructions qui indiquent aux agents comment signaler les problèmes de documentation pour la page qu'ils lisent.
+
+Cela vous aide à identifier les pages qui sont confuses, obsolètes ou incomplètes selon le point de vue d'un agent.
+
+## Ce qu'il ne faut pas mettre dans les documents publics
+
+Les index IA sont publics pour les sites publics. Ne publiez pas :
+
+- Clés API ou jetons
+- Données clients privées
+- Détails non divulgués de la feuille de route
+- Notes d'incident internes
+- Identifiants, liens magiques ou secrets temporaires
+
+## Vérifiez les fichiers
+
+Après la publication, ouvrez :
+
+```text
+https://your-docs-domain.com/llms.txt
+https://your-docs-domain.com/llms-full.txt
+```
+
+Puis vérifiez que la liste des pages correspond à votre navigation publiée et que les entrées de navigation répétées ne sont pas dupliquées dans l'export IA.
+
+Si des pages sont manquantes, vérifiez :
+
+1. La page est incluse dans la navigation `dubstack.json`.
+2. Le fichier de la page est publié sur la branche active.
+3. La page n'est pas masquée ou exclue.
+4. Le dernier déploiement s'est terminé avec succès.
+
+## Sujets connexes
+
+- [fichiers de découverte de l'IA](/fr/ai/ai-discovery-files)
+- [export Markdown](/fr/ai/markdown-export)
+- [MCP](/fr/ai/mcp)

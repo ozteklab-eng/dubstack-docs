@@ -1,0 +1,134 @@
+---
+title: Accessibilité
+description: "Rendez vos documents plus faciles à lire, à naviguer, à rechercher et à utiliser avec des technologies d'assistance."
+icon: accessibility
+---
+
+Les documents accessibles aident chaque lecteur à accomplir la même tâche avec moins d'efforts. Traitez l'accessibilité comme une partie du processus de rédaction et de révision, et non comme un dernier passage avant le lancement.
+
+## Commencez par la structure de la page
+
+Utilisez les titres pour décrire la structure de la page.
+
+| Faites | Évitez |
+| --- | --- |
+| Utilisez un titre `#` pour le titre de la page. | Sauter du `##` au `####` car il semble plus petit. |
+| Utilisez les sections `##` pour les étapes principales de la tâche. | Utiliser des titres uniquement pour le style visuel. |
+| Maintenez les titres spécifiques et orientés action. | Répéter des titres génériques tels que "Aperçu" plusieurs fois. |
+| Placez les prérequis avant les instructions. | Cacher les exigences importantes à l'intérieur d'un paragraphe. |
+
+De bons titres rendent la page plus facile à parcourir, améliorent les résultats de recherche et créent des liens d'ancrage utiles.
+
+Voir [Titres et ancres](/fr/writing-content/headings-anchors) pour le comportement des titres.
+
+## Écrire des liens descriptifs
+
+Le texte du lien doit expliquer où le lecteur ira.
+
+| Bon | Faible |
+| --- | --- |
+| [Configurer la navigation](/fr/configuration/navigation) | [Cliquez ici](/fr/configuration/navigation) |
+| [Configuration GitHub](/fr/deployment/github) | En savoir plus |
+| [Dépanner la publication](/fr/deployment/source-control-troubleshooting) | Cette page |
+
+Évitez d'utiliser l'URL complète comme texte du lien visible, sauf si l'URL elle-même est l'information dont le lecteur a besoin.
+
+## Ajouter un texte d'image utile
+
+Les images doivent avoir un texte alternatif qui explique l'objectif de l'image.
+
+```mdx
+![dubstack light logo with wordmark](/logo/light.svg)
+```
+
+Utilisez un texte alternatif vide uniquement pour les images décoratives qui n'ajoutent aucune signification.
+
+```mdx
+![](/logo/dark.svg)
+```
+
+Pour les captures d'écran complexes, expliquez les détails importants dans le texte environnant au lieu de vous fier uniquement à l'image.
+
+Voyez [Images et ressources](/fr/writing-content/images-assets) pour les chemins d'accès aux ressources et la syntaxe des images.
+
+## Maintenez les instructions adaptées au clavier
+
+Lors de la documentation des étapes de l'interface utilisateur :
+
+- Nommez le contrôle que le lecteur doit utiliser.
+- Mentionnez les étiquettes visibles, et non seulement les couleurs ou les positions.
+- Évitez les instructions nécessitant un comportement uniquement au survol.
+- Incluez les raccourcis clavier uniquement s'ils sont optionnels ou clairement pris en charge.
+
+Exemple :
+
+```mdx
+Open **Settings > Deployment > Git settings**, then select the deployment branch.
+```
+
+Cela est meilleur que :
+
+```mdx
+Click the green button on the right.
+```
+
+## Ne comptez pas uniquement sur la couleur
+
+Utilisez la couleur comme renforcement, et non comme seul signal.
+
+| Modèle | Meilleur modèle |
+| --- | --- |
+| "La valeur rouge signifie échec." | "Le statut **Échec** signifie que la synchronisation n'a pas été effectuée." |
+| "Choisissez l'option verte." | "Choisissez **Activer les commentaires**." |
+| "Les avertissements sont jaunes." | Utilisez un appel d'attention pour les avertissements avec un texte clair. |
+
+Utilisez [Appels d'attention](/fr/writing-content/callouts), [Badges](/fr/writing-content/badges) et des étiquettes claires ensemble.
+
+## Rendez les exemples de code lisibles
+
+Les exemples de code doivent être faciles à copier et à comprendre.
+
+- Incluez le nom du fichier ou le contexte avant un bloc de code lorsqu'il est important.
+- Maintenez les exemples suffisamment courts pour être scannés.
+- Utilisez les commentaires uniquement lorsqu'ils expliquent une décision non évidente.
+- Ne placez pas les secrets, les jetons privés ou les données clients réelles dans les exemples.
+- Fournissez le résultat attendu après une commande lorsqu'il aide le lecteur à vérifier le succès.
+
+Voyez [Blocs de code](/fr/writing-content/code-blocks) et [Groupes de code](/fr/writing-content/code-groups).
+
+## Utilisez les tableaux avec soin
+
+Les tableaux sont utiles pour les comparaisons, mais ils sont difficiles à lire sur les petits écrans lorsqu'ils sont trop larges.
+
+Utilisez les tableaux pour :
+
+- comparaisons de fonctionnalités
+- descriptions courtes de champs
+- significations des états
+- valeurs de configuration requises
+
+Évitez les tableaux pour les procédures longues. Utilisez des étapes ou des titres à la place.
+
+Voir [Tableaux](/fr/writing-content/tables).
+
+## Vérifiez l'accessibilité avant la publication
+
+Avant de publier une page, vérifiez :
+
+- Le titre et la description expliquent le résultat de la page.
+- L'ordre des titres est logique.
+- Les liens sont explicites.
+- Les images ont un texte alternatif utile.
+- Les instructions de l'interface utilisateur ne reposent pas uniquement sur la couleur ou la position.
+- Les exemples de code sont copiables et ne contiennent pas de secrets.
+- Les tableaux restent lisibles sur mobile.
+- La page apparaît dans la navigation uniquement lorsqu'elle doit y être trouvée.
+- Les réponses de la recherche et de l'assistant peuvent citer clairement la page.
+
+## Sujets connexes
+
+- [Mise en forme du texte](/fr/writing-content/text-formatting)
+- [Titres et ancres](/fr/writing-content/headings-anchors)
+- [Images et ressources](/fr/writing-content/images-assets)
+- [Appels d'attention](/fr/writing-content/callouts)
+- [Optimisation de la recherche](/fr/optimize/search)
