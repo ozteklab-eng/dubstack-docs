@@ -14,15 +14,15 @@ The dashboard is the source of truth for current plan names, prices, allowances,
 
 Common workspace states include:
 
-| Plan state | Typical use | Current public pricing |
-| --- | --- |
-| Free | Evaluate the docs site, editor, source connection, and baseline publishing flow. | Included. |
-| Pro | Use custom domains, AI assistant, agent workflows, Git-backed publishing, team access, and production docs features. | USD 199/month, or USD 1,908/year when billed yearly. |
-| Enterprise | Add custom commercial terms, SSO, advanced branding, Theme Studio controls, and larger or custom AI allowances. | Custom. |
+| Plan state | Editor seats | AI credits | Current public pricing |
+| --- | --- | --- | --- |
+| Free | 1 | No permanent allowance outside an active trial or entitlement. | Included. |
+| Pro | Unlimited | 10,000 per month. | USD 199/month, or USD 1,908/year when billed yearly. |
+| Enterprise | Unlimited | A committed monthly allowance defined in the agreement. | Custom. |
 
 Pro workspaces can be billed monthly or annually when both options are available for the workspace.
 
-The Pro plan is billed as a flat-rate workspace subscription. It is not seat-based by default. Team access, limits, and AI usage are controlled through workspace entitlements and the monthly AI credit allowance shown in the dashboard.
+Pro and Enterprise are organization subscriptions rather than per-seat subscriptions. Editor seats are not multiplied into the Stripe quantity. Product limits and AI usage are controlled through organization entitlements and the monthly AI credit allowance shown in the dashboard.
 
 <Callout type="info">
   Annual Pro billing is displayed as USD 159/month in the dashboard and is charged as USD 1,908/year.
@@ -44,11 +44,11 @@ The dashboard is the source of truth for your current plan, trial state, and ava
 
 For assistant, agent, Slack, and workflow usage details, see [Usage](/dashboard/usage) and [AI credits and usage](/ai/credits-usage).
 
-## Upgrade or manage a subscription
+## Upgrade to Pro
 
-Workspace admins can open **Settings > Workspace > Billing** to review available plans and start checkout.
+Organization admins can open **Settings > Organization > Billing** to review Pro and start self-service checkout.
 
-The upgrade flow uses a hosted checkout page. After checkout completes, dubstack updates the workspace subscription state and refreshes feature entitlements.
+The Pro upgrade flow uses a hosted Stripe Checkout page. After Stripe confirms checkout, dubstack updates the organization subscription state and refreshes feature entitlements.
 
 Checkout can collect billing details, tax information, and payment method details when required for the workspace and billing country. Do not share card details, tax identifiers, or billing secrets with support unless support explicitly asks you to use a secure channel.
 
@@ -62,8 +62,25 @@ Use the billing portal from the same page to:
 
 If the dashboard still shows the old plan after checkout, refresh the billing page. If the state does not update, contact support with the workspace slug and checkout time.
 
+## Start an Enterprise agreement
+
+Enterprise is sales-assisted and cannot be enabled from customer billing settings.
+
+1. Select **Contact sales** from the Enterprise plan.
+2. Share your organization, rollout requirements, desired billing interval, expected AI usage, security requirements, and support needs.
+3. Agree on the recurring USD amount, committed monthly AI credits, and service terms.
+4. A DubStack operator issues an organization-scoped Stripe Checkout link.
+5. Complete checkout using the billing contact named in the agreement.
+6. Wait for Stripe confirmation. Enterprise features are not enabled from the success-page redirect alone.
+
+The Enterprise checkout contains one organization subscription with quantity `1`. Unlimited editor seats do not create separate Stripe line items. The signed Stripe webhook activates the Enterprise tier and its agreed monthly AI credit entitlement together.
+
+<Callout type="warning">
+  A quote or checkout link does not grant Enterprise access. The organization remains on its existing plan until Stripe confirms the subscription through the billing webhook.
+</Callout>
+
 <Callout type="info">
-  Billing checkout and subscription management are dashboard-only admin actions. They are not part of the public docs runtime API exposed from a published documentation site.
+  Pro checkout and subscription management are dashboard-only admin actions. Enterprise checkout is issued by DubStack Ops after agreement and is not part of the public docs runtime API.
 </Callout>
 
 ## Taxes and invoices

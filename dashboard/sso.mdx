@@ -8,7 +8,7 @@ icon: building-2
 Single sign-on lets Enterprise organizations route dashboard access through their identity provider.
 
 <Callout type="info">
-  SSO is an Enterprise feature. If the SSO controls are not visible in your dashboard, check the current plan and entitlement state in Billing.
+  SSO is an Enterprise feature activated through a sales-assisted agreement. Enterprise access is applied to the organization after its Stripe checkout is confirmed. It is not a self-service plan upgrade.
 </Callout>
 
 ## What SSO controls
@@ -31,15 +31,29 @@ Prepare these values before configuring SSO:
 
 | Value | Purpose |
 | --- | --- |
-| Provider | The identity provider your organization uses. |
-| Organization domain | The email domain expected for members. |
-| Client ID | Public OAuth/OIDC client identifier from the provider. |
+| Connection name | A recognizable name for the workforce identity provider. |
+| Discovery URL | The provider's OIDC discovery document, normally ending in `/.well-known/openid-configuration`. |
+| Client ID | Public OIDC client identifier from the provider. |
 | Client secret | Secret issued by the provider. Store it only in the dashboard field. |
-| Authorization URL | Provider endpoint that starts the login flow. |
-| Token URL | Provider endpoint used to exchange the login code. |
-| User info URL | Provider endpoint used to retrieve identity details when required. |
+| Scopes | OIDC scopes requested during sign-in. The default is `openid profile email`. |
+| Login domain | A company email domain that must be verified before SSO enforcement. |
 
 Exact field availability depends on the enabled provider and workspace entitlement.
+
+## Verify a login domain
+
+Domain verification proves that the organization controls the email domain used to route members into its SSO connection.
+
+1. Add the company domain under **Verified login domains**.
+2. Copy the generated TXT record name and content immediately. The content is shown only once.
+3. In the DNS provider, create a TXT record using the displayed values. Leave TTL on **Auto** or the provider default.
+4. Return to dubstack after DNS propagation and select **Verify**.
+
+<Callout type="warning">
+  Selecting **New value** invalidates the previous verification value. Update the DNS record before trying verification again.
+</Callout>
+
+DNS providers format record names differently. Cloudflare accepts the displayed host name. Other providers may append the domain automatically, so avoid entering the domain twice. Verification can remain pending while TXT changes propagate.
 
 ## SCIM provisioning status
 
@@ -59,7 +73,7 @@ Until SCIM is enabled for your workspace, continue to remove users from both dub
 
 1. Open the dashboard.
 2. Go to **Settings > Authentication**.
-3. Confirm the workspace is on an Enterprise plan or trial with SSO enabled.
+3. Confirm the organization has an active Enterprise agreement with SSO enabled.
 4. Choose the provider type available for your workspace.
 5. Copy the redirect URL shown by dubstack into your identity provider.
 6. Enter the provider client and endpoint details in dubstack.

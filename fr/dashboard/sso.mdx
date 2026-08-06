@@ -8,7 +8,7 @@ icon: building-2
 La connexion unique permet aux organisations Enterprise de rediriger l'accès au tableau de bord vers leur fournisseur d'identité.
 
 <Callout type="info">
-  La connexion unique est une fonctionnalité entreprise. Si les contrôles SSO ne sont pas visibles dans votre tableau de bord, vérifiez le plan actuel et l'état des droits dans la facturation.
+  La connexion unique est une fonctionnalité Enterprise activée dans le cadre d'un accord commercial. L'accès Enterprise est appliqué à l'organisation après confirmation du paiement Stripe. Il ne s'agit pas d'une mise à niveau en libre-service.
 </Callout>
 
 ## Fonctionnement des contrôles SSO
@@ -31,15 +31,29 @@ Préparez ces valeurs avant de configurer la connexion unique :
 
 | Valeur | Objectif |
 | --- | --- |
-| Fournisseur | Le fournisseur d'identité utilisé par votre organisation. |
-| Domaine de l'organisation | Le domaine de courriel attendu pour les membres. |
-| ID client | Identifiant client OAuth/OIDC public fourni par le fournisseur. |
+| Nom de la connexion | Un nom reconnaissable pour le fournisseur d'identité de l'entreprise. |
+| URL de découverte | Le document de découverte OIDC du fournisseur, qui se termine normalement par `/.well-known/openid-configuration`. |
+| ID client | Identifiant client OIDC public fourni par le fournisseur. |
 | Secret client | Secret émis par le fournisseur. Stockez-le uniquement dans le champ du tableau de bord. |
-| URL d'autorisation | Point d'accès du fournisseur qui démarre le flux de connexion. |
-| URL du jeton | Point d'accès du fournisseur utilisé pour échanger le code de connexion. |
-| URL des informations utilisateur | Point d'accès du fournisseur utilisé pour récupérer les détails d'identité lorsqu'ils sont requis. |
+| Portées | Portées OIDC demandées lors de la connexion. La valeur par défaut est `openid profile email`. |
+| Domaine de connexion | Domaine de courriel d'entreprise qui doit être vérifié avant d'imposer le SSO. |
 
 La disponibilité exacte des champs dépend du fournisseur activé et des droits d'accès de l'espace de travail.
+
+## Vérifier un domaine de connexion
+
+La vérification du domaine confirme que l'organisation contrôle le domaine de courriel utilisé pour orienter les membres vers sa connexion SSO.
+
+1. Ajoutez le domaine de l'entreprise sous **Domaines de connexion vérifiés**.
+2. Copiez immédiatement le nom et le contenu de l'enregistrement TXT généré. Le contenu n'est affiché qu'une seule fois.
+3. Chez le fournisseur DNS, créez un enregistrement TXT avec les valeurs affichées. Conservez le TTL sur **Auto** ou sur la valeur par défaut du fournisseur.
+4. Après la propagation DNS, revenez dans dubstack et sélectionnez **Vérifier**.
+
+<Callout type="warning">
+  La sélection de **Nouvelle valeur** invalide la valeur de vérification précédente. Mettez à jour l'enregistrement DNS avant de relancer la vérification.
+</Callout>
+
+Les fournisseurs DNS formatent les noms d'enregistrement différemment. Cloudflare accepte le nom d'hôte affiché. D'autres fournisseurs ajoutent automatiquement le domaine ; évitez donc de saisir le domaine deux fois. La vérification peut rester en attente pendant la propagation des modifications TXT.
 
 ## Statut de provisionnement SCIM
 
@@ -59,7 +73,7 @@ Jusqu'à ce que le SCIM soit activé pour votre espace de travail, continuez à 
 
 1. Ouvrez le tableau de bord.
 2. Allez dans **Paramètres > Authentification**.
-3. Confirmez que l'espace de travail utilise une offre Enterprise ou un essai avec le SSO activé.
+3. Confirmez que l'organisation dispose d'un accord Enterprise actif avec le SSO activé.
 4. Choisissez le type de fournisseur disponible pour votre espace de travail.
 5. Copiez l'URL de redirection affichée par dubstack dans votre fournisseur d'identité.
 6. Entrez les détails du client et du point de terminaison du fournisseur dans dubstack.

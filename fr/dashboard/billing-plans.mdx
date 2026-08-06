@@ -14,15 +14,15 @@ Le tableau de bord est la source de vérité pour les noms de plans actuels, les
 
 Les états d'espace de travail courants incluent :
 
-| État du plan | Utilisation typique | Prix publics actuels |
-| --- | --- |
-| Gratuit | Évaluez le site de documentation, l'éditeur, la connexion source et le flux de publication de base. | Inclus. |
-| Pro | Utilisez des domaines personnalisés, un assistant IA, des workflows d'agents, une publication basée sur Git, un accès d'équipe et les fonctionnalités de documentation de production. | 199 USD/mois, ou 1 908 USD/an lorsqu'il est facturé annuellement. |
-| Entreprise | Ajoutez des termes commerciaux personnalisés, SSO, un branding avancé, les contrôles de Theme Studio et des allocations IA plus importantes ou personnalisées. | Personnalisé. |
+| État du plan | Sièges éditeur | Crédits IA | Prix publics actuels |
+| --- | --- | --- | --- |
+| Gratuit | 1 | Aucune allocation permanente en dehors d'un essai ou d'un droit actif. | Inclus. |
+| Pro | Illimités | 10 000 par mois. | 199 USD/mois, ou 1 908 USD/an lorsqu'il est facturé annuellement. |
+| Enterprise | Illimités | Une allocation mensuelle définie dans l'accord. | Personnalisé. |
 
 Les espaces de travail Pro peuvent être facturés mensuellement ou annuellement lorsque les deux options sont disponibles pour l'espace de travail.
 
-Le plan Pro est facturé à un tarif forfaitaire pour l'abonnement à l'espace de travail. Il n'est pas basé sur le nombre de sièges par défaut. L'accès d'équipe, les limites et l'utilisation de l'IA sont contrôlés via les droits d'accès de l'espace de travail et l'autorisation mensuelle de crédits IA affichée sur le tableau de bord.
+Pro et Enterprise sont des abonnements d'organisation, et non des abonnements par siège. Les sièges éditeur ne multiplient pas la quantité Stripe. Les limites du produit et l'utilisation de l'IA sont contrôlées par les droits de l'organisation et l'allocation mensuelle de crédits IA affichée dans le tableau de bord.
 
 <Callout type="info">
   La facturation annuelle du Pro est affichée à 159 USD/mois sur le tableau de bord et est facturée à 1 908 USD/an.
@@ -44,11 +44,11 @@ Le tableau de bord est la source de vérité pour votre plan actuel, l'état d'e
 
 Pour l'utilisation de l'assistant, de l'agent, de Slack et des flux de travail, consultez [Utilisation](/fr/dashboard/usage) et [Crédits d'IA et utilisation](/fr/ai/credits-usage).
 
-## Mettre à niveau ou gérer un abonnement
+## Passer à Pro
 
-Les administrateurs de l'espace de travail peuvent ouvrir **Paramètres > Espace de travail > Facturation** pour consulter les offres disponibles et commencer le paiement.
+Les administrateurs de l'organisation peuvent ouvrir **Paramètres > Organisation > Facturation** pour consulter Pro et commencer le paiement en libre-service.
 
-Le flux de mise à niveau utilise une page de paiement hébergée. Après le paiement, dubstack met à jour l'état de l'abonnement et les droits d'accès aux fonctionnalités de l'espace de travail.
+Le flux de mise à niveau Pro utilise une page Stripe Checkout hébergée. Après confirmation de Stripe, dubstack met à jour l'abonnement de l'organisation et ses droits d'accès.
 
 La page de paiement peut collecter les coordonnées de facturation, les informations fiscales et le moyen de paiement lorsqu'ils sont requis pour l'espace de travail et le pays de facturation. Ne partagez pas les données de carte, les identifiants fiscaux ou les secrets de facturation avec le support, sauf si celui-ci vous demande explicitement d'utiliser un canal sécurisé.
 
@@ -62,8 +62,25 @@ Utilisez le portail de facturation depuis la même page pour :
 
 Si le tableau de bord affiche toujours l'ancienne offre après le paiement, actualisez la page de facturation. Si l'état ne se met pas à jour, contactez le support avec le slug de l'espace de travail et l'heure du paiement.
 
+## Démarrer un accord Enterprise
+
+Enterprise est assisté par l'équipe commerciale et ne peut pas être activé depuis les paramètres de facturation du client.
+
+1. Sélectionnez **Contacter l'équipe commerciale** depuis l'offre Enterprise.
+2. Partagez votre organisation, vos besoins de déploiement, l'intervalle de facturation souhaité, l'utilisation IA prévue, vos exigences de sécurité et vos besoins de support.
+3. Convenez du montant récurrent en USD, des crédits IA mensuels engagés et des conditions de service.
+4. Un opérateur DubStack émet un lien Stripe Checkout limité à l'organisation.
+5. Finalisez le paiement avec le contact de facturation indiqué dans l'accord.
+6. Attendez la confirmation Stripe. La redirection vers la page de succès ne suffit pas à activer les fonctionnalités Enterprise.
+
+Le paiement Enterprise contient un seul abonnement d'organisation avec la quantité `1`. Les sièges éditeur illimités ne créent pas de lignes Stripe séparées. Le webhook Stripe signé active ensemble le niveau Enterprise et l'allocation mensuelle de crédits IA convenue.
+
+<Callout type="warning">
+  Un devis ou un lien de paiement n'accorde pas l'accès Enterprise. L'organisation conserve son offre actuelle jusqu'à ce que Stripe confirme l'abonnement via le webhook de facturation.
+</Callout>
+
 <Callout type="info">
-  La facturation et la gestion des abonnements sont réservées aux administrateurs du tableau de bord. Elles ne font pas partie de l'API d'exécution des documents publics exposée depuis un site de documentation publié.
+  Le paiement Pro et la gestion de l'abonnement sont réservés aux administrateurs du tableau de bord. Le paiement Enterprise est émis par DubStack Ops après accord et ne fait pas partie de l'API d'exécution des documents publics.
 </Callout>
 
 ## Taxes et factures
