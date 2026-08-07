@@ -1,0 +1,40 @@
+---
+title: Draft Documentation Update from Code Changes
+
+frontmatter:
+  workflow_id: update_from_code_changes
+  trigger: code_change
+  update_mode: pull_request
+  schedule: twice_weekly
+  selected_integrations: none
+  workflow_run_id: 10d1f635-c434-47d7-96d7-520b2083260e
+  repository: forgejo:ozteklab/forgejo-docs-smoke@main
+  published_docs_context: ozteklab-eng/dubstack-docs@product-docs
+  published_pages_sampled: 10 of 456
+  forgejo_pull_request: ozteklab/forgejo-docs-smoke@main; 1 merged pull request follows.
+  pull_request: #41 Authoring lifecycle smoke 20260807014840-2112913 merged 2026-08-07T01:48:48.000Z by jpnaiken. URL: https://git.ozteklab.com/ozteklab/forgejo-docs-smoke/pulls/41
+
+---
+
+
+# Update From Code Changes workflow update
+
+This documentation update reflects changes identified through the `update_from_code_changes` workflow, triggered by a code change event. The workflow is configured to run twice weekly and is set to operate in `pull_request` mode. No integrations are currently selected for this workflow.
+
+The workflow run used the `forgejo_pull_request` event source and processed the `forgejo:ozteklab/forgejo-docs-smoke@main` repository as read-only context. The pull request #41, authored by `jpnaiken`, was merged on 2026-08-07 and is the source of the current documentation update.
+
+The published documentation context is `ozteklab-eng/dubstack-docs@product-docs`. A sample of 10 pages from the total 456 is currently published, including key sections such as the introduction, quickstart, and guides.
+
+This update includes documentation drafts derived from code changes, following the process of connecting a source repository, scoping the context, and using a workflow to generate documentation updates.
+
+---
+
+**Review Checklist:**
+
+- [ ] Confirm that the workflow run ID matches the expected source.
+- [ ] Verify that the repository and branch are correctly specified.
+- [ ] Ensure that the pull request details are accurate and up to date.
+- [ ] Validate that the published documentation context and page samples are correctly referenced.
+- [ ] Confirm that no unsupported or unverified integrations are mentioned.
+
+<!-- workflow_run_id: 10d1f635-c434-47d7-96d7-520b2083260e -->
