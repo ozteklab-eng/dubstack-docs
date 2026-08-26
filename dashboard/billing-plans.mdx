@@ -10,22 +10,22 @@ Use this page to understand how plan state affects product behavior.
 
 ## Plans
 
-The dashboard is the source of truth for current plan names, prices, allowances, and trial state.
+The [pricing page](https://dubstack.ai/pricing) is the source of truth for current public prices and baseline plan allowances. The dashboard is the source of truth for your workspace's trial, subscription, negotiated entitlements, and checkout options.
 
 Common workspace states include:
 
-| Plan state | Editor seats | AI credits | Current public pricing |
+| Plan state | Editor seats | AI credits | Billing path |
 | --- | --- | --- | --- |
 | Free | 1 | No permanent allowance outside an active trial or entitlement. | Included. |
-| Pro | Unlimited | 10,000 per month. | USD 199/month, or USD 1,908/year when billed yearly. |
-| Enterprise | Unlimited | A committed monthly allowance defined in the agreement. | Custom. |
+| Pro | Unlimited | 10,000 per month. | Self-service monthly or annual subscription. |
+| Enterprise | Unlimited | A committed monthly allowance defined in the agreement. | Sales-assisted agreement. |
 
 Pro workspaces can be billed monthly or annually when both options are available for the workspace.
 
 Pro and Enterprise are organization subscriptions rather than per-seat subscriptions. Editor seats are not multiplied into the Stripe quantity. Product limits and AI usage are controlled through organization entitlements and the monthly AI credit allowance shown in the dashboard.
 
 <Callout type="info">
-  Annual Pro billing is displayed as USD 159/month in the dashboard and is charged as USD 1,908/year.
+  Review [current pricing](https://dubstack.ai/pricing) before upgrading. The dashboard shows the exact recurring amount and billing interval before redirecting an administrator to Stripe Checkout.
 </Callout>
 
 ## What billing controls
@@ -128,5 +128,5 @@ Editors and viewers should not need billing access for normal documentation work
   <a href="/ai/credits-usage">AI credits and usage</a>
   <a href="/dashboard/roles">Roles</a>
   <a href="/dashboard/team-members">Team members</a>
-  <a href="/reference/tiers">Tiers</a>
+  <a href="https://dubstack.ai/pricing">Pricing</a>
 </RelatedTopics>

@@ -1493,10 +1493,6 @@
             "icon": "list-checks",
             "pages": [
               {
-                "slug": "reference/tiers",
-                "icon": "layers"
-              },
-              {
                 "slug": "reference/limits",
                 "icon": "gauge"
               },
@@ -2707,10 +2703,6 @@
                 "group": "Référence",
                 "icon": "list-checks",
                 "pages": [
-                  {
-                    "slug": "fr/reference/tiers",
-                    "icon": "layers"
-                  },
                   {
                     "slug": "fr/reference/limits",
                     "icon": "gauge"
