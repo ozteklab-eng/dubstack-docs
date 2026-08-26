@@ -607,12 +607,23 @@
     }
   },
   "search": {
-    "prompt": "Search docs..."
+    "prompt": "Search or ask a question...",
+    "max_results": 6
   },
   "widgets": {
     "search": {
       "enabled": true,
-      "placeholder": "Search docs..."
+      "placeholder": "Search docs...",
+      "modal_placeholder": "Search or ask a question...",
+      "height": 60,
+      "width": 640,
+      "border_radius": 20,
+      "blur_background": false,
+      "blur_amount": 0,
+      "overlay_opacity": 0.4,
+      "animation_style": "fade",
+      "max_results": 6,
+      "result_snippets": false
     },
     "assistant": {
       "title": "Assistant",
