@@ -1,0 +1,50 @@
+---
+title: Update documentation from code changes
+
+frontmatter:
+  workflow_id: update_from_code_changes
+  trigger: code_change
+  update_mode: pull_request
+  schedule: twice_weekly
+  selected_integrations: none
+  resolved_integration_context:
+    workflow_run_source: forgejo_pull_request
+    selected_context_repositories: forgejo:ozteklab/forgejo-docs-smoke@main (https://git.ozteklab.com)
+    forgejo_pull_request_event: ozteklab/forgejo-docs-smoke@main; 1 merged pull request follows
+    pull_request: #80 Add grounded authoring admission fixture merged 2026-08-29T02:49:50.000Z by jpnaiken. URL: https://git.ozteklab.com/ozteklab/forgejo-docs-smoke/pulls/80
+  published_docs_context: ozteklab-eng/dubstack-docs@product-docs
+  published_pages_sampled: 10 of 454
+  published_page_map:
+    - Introduction (/)
+    - What is dubstack? (/what-is-dubstack)
+    - Quickstart (/quickstart)
+    - Guides (/guides)
+    - Understand your documentation audience (/guides/understand-your-audience)
+    - Developer documentation (/guides/developer-documentation)
+    - Internal knowledge base (/guides/internal-knowledge-base)
+    - Help center (/guides/help-center)
+    - Draft docs from code changes (/guides/draft-docs-from-code)
+    - Overview (/getting-started/overview)
+
+---
+
+
+# Update From Code Changes workflow update
+
+This update introduces a new workflow for drafting documentation from code changes, aligning with the existing documentation structure and content. The workflow is triggered by code changes and operates in pull request mode, with a schedule of twice weekly. It uses the `forgejo_pull_request` integration and references the `forgejo:ozteklab/forgejo-docs-smoke@main` repository as a read-only context.
+
+The documentation includes a guide titled "Draft docs from code changes" that outlines the process of connecting a source repository, scoping the context, and using a workflow to draft documentation updates from product code changes. This guide is intended to help users integrate code-based documentation updates into their workflow.
+
+The update does not include any new content beyond the guide, and no changes are made to existing documentation pages. The published documentation remains unchanged, with 10 pages sampled from a total of 454.
+
+---
+
+**Review checklist:**
+
+- [ ] Confirm that the workflow details match the provided context.
+- [ ] Verify that the repository and pull request references are accurate.
+- [ ] Ensure that no new content is added beyond the guide.
+- [ ] Check that the published documentation remains unchanged.
+- [ ] Confirm that the guide aligns with the existing documentation structure.
+
+<!-- workflow_run_id: da3faf83-7734-462d-b3b6-9ff9777418a2 -->
