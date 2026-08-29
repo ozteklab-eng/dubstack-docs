@@ -1,0 +1,51 @@
+---
+title: Draft Documentation Update from Code Changes
+
+frontmatter:
+  workflow_id: update_from_code_changes
+  trigger: code_change
+  update_mode: pull_request
+  schedule: twice_weekly
+  selected_integrations: none
+  resolved_integration_context:
+    workflow_run_source: forgejo_pull_request
+    selected_context_repositories: forgejo:ozteklab/forgejo-docs-smoke@main (https://git.ozteklab.com)
+    forgejo_pull_request_event: ozteklab/forgejo-docs-smoke@main; 1 merged pull request follows
+    pull_request: #76 Add grounded authoring admission fixture merged 2026-08-29T02:37:15.000Z by jpnaiken. URL: https://git.ozteklab.com/ozteklab/forgejo-docs-smoke/pulls/76
+  published_docs_context: ozteklab-eng/dubstack-docs@product-docs
+  published_pages_sampled: 10 of 454
+  published_page_map:
+    - Introduction (/)
+    - What is dubstack? (/what-is-dubstack)
+    - Quickstart (/quickstart)
+    - Guides (/guides)
+    - Understand your documentation audience (/guides/understand-your-audience)
+    - Developer documentation (/guides/developer-documentation)
+    - Internal knowledge base (/guides/internal-knowledge-base)
+    - Help center (/guides/help-center)
+    - Draft docs from code changes (/guides/draft-docs-from-code)
+    - Overview (/getting-started/overview)
+  published_page_excerpts:
+    - Introduction (/): dubstack helps teams publish developer documentation, API references, and AI-ready content from Git-backed sources. Use these docs to create a site, connect source control, configure the docs shell, publish API references, and prepare your docs for production traffic. Create a docs site, connect content, and publish your first version. Use dubstack.json as the source of truth for navigation, theme, and site behavior. Author MDX pages with cards, callouts, code blocks, images, and structured components. Generate endpoint pages and playgrounds from OpenAPI specs. Add reader assistance, contextual actions, and public MCP access for published docs. Bring existing Git-backed docs into dubstack...
+    - What is dubstack? (/what-is-dubstack): dubstack is a documentation platform for technical products. It combines a Git-backed docs source, a dashboard editor, generated API references, production docs hosting, and AI surfaces that can read and act on your documentation workflow. What dubstack helps you ship Use dubstack when you need to publish and maintain: - developer documentation - API references from OpenAPI specs - product guides and changelogs - internal or partner-facing knowledge bases - AI-readable docs through search, markdown export, and public MCP Core surfaces Surface Purpose --- --- Dashboard Manage sites, source control, billing, team access, analytics, and deployment settings. Editor Edit MDX pages, navigation,...
+    - Quickstart (/quickstart): This quickstart takes you from an empty workspace to a published documentation site with real source control, navigation, and a live docs URL. You can connect your own Git repository, or use the hosted repository flow when you want dubstack to create the starter source for you. What you will build By the end, you will have: - a docs site with a dubstack.live URL - a source repository or hosted starter source - a dubstack.json configuration file - at least one edited MDX page - a completed publish activity - a live page you can open and verify Before you start You need: - a dubstack account - a workspace or organization for the site - a GitHub, GitLab, or Forgejo account if you want to con...
+    - Guides (/guides): Use these guides when you know the outcome you want and need the shortest path through the product. Start from a new workspace and publish a working docs site. Attach an existing repository and keep docs source under your Git provider. Let dubstack create a starter source when you do not want to connect Git yet. Add an OpenAPI spec and generate endpoint docs with a request builder. Organize pages, groups, tabs, icons, and hidden pages. Point a domain or docs subdomain at your published docs site. Review branch-specific docs changes before publishing. Allow selected workflow updates to merge automatically when your repository policy permits it. Learn the repository, branch, commit, pull re...
+
+---
+
+# Update From Code Changes workflow update
+
+This document provides an overview of the current state of documentation for the dubstack platform, based on the latest published pages and workflow context. It includes key sections such as an introduction, quickstart guide, and various technical guides that outline the platform's capabilities and usage paths.
+
+All claims about content, features, or integrations are based on the available information and are not assumed or inferred.
+
+---
+
+**Review Checklist:**
+
+- [ ] Verify that no unsupported claims or assumptions are included.
+- [ ] Ensure that the document accurately reflects the current published content.
+- [ ] Check that all technical descriptions align with the published page excerpts.
+- [ ] Confirm that the document is concise, clear, and suitable for human review.
+
+<!-- workflow_run_id: a6689e58-7a23-4f4d-ab09-28224f3c8290 -->
