@@ -1,0 +1,34 @@
+---
+title: Update From Code Changes Workflow Documentation
+
+frontmatter:
+  workflow_id: update_from_code_changes
+  trigger: code_change
+  update_mode: pull_request
+  schedule: twice_weekly
+  selected_integrations: none
+
+This document outlines the current state of the "Update From Code Changes" workflow, which is configured to generate documentation updates based on code changes in a connected repository. The workflow is triggered by code changes and operates in pull_request mode, ensuring that documentation updates are reviewed and merged through a pull request process.
+
+The workflow is currently set to run twice weekly, aligning with the repository's update schedule. No integrations are selected for this workflow, and the code-change context is sourced from the `forgejo_pull_request` event.
+
+The workflow is associated with the `forgejo:ozteklab/forgejo-docs-smoke@main` repository, which is used as a read-only context. Any documentation updates will be created against the `ozteklab-eng/dubstack-docs@product-docs` repository. The workflow is configured to treat only files under the specified path as in scope, if a path scope is set.
+
+A recent pull request, #79, was merged on 2026-08-29, which removed a grounded authoring live fixture. This change is part of the code context used for documentation updates.
+
+The published documentation includes a variety of pages, such as the introduction, quickstart, and guides, which provide an overview of dubstack's capabilities and onboarding process. These pages are sampled from a larger set of 454 total pages.
+
+---
+
+
+# Update From Code Changes workflow update
+
+**Review Checklist:**
+
+- [ ] Confirm that the workflow configuration matches the intended behavior.
+- [ ] Verify that the repository context and scope are correctly defined.
+- [ ] Ensure that the documentation update process aligns with the team's review and merge policies.
+- [ ] Validate that the workflow's schedule and trigger are appropriate for the project's needs.
+- [ ] Review the impact of the recent code change (#79) on documentation accuracy.
+
+<!-- workflow_run_id: 12b3c7ae-ff6b-491a-bb33-85c5638dafb9 -->
