@@ -1,0 +1,32 @@
+---
+title: Update From Code Changes Workflow Documentation
+
+frontmatter:
+  workflow_id: update_from_code_changes
+  trigger: code_change
+  update_mode: pull_request
+  schedule: twice_weekly
+  selected_integrations: none
+
+The `update_from_code_changes` workflow is designed to generate documentation updates based on code changes detected in a connected repository. This workflow is triggered by a `code_change` event and operates in `pull_request` mode, ensuring that documentation updates are reviewed and merged through a pull request process.
+
+The workflow uses the `forgejo_pull_request` event source and is configured to use the `forgejo:ozteklab/forgejo-docs-smoke@main` repository as a read-only context. Any changes to documentation should be made against the `ozteklab-eng/dubstack-docs@product-docs` repository, which is the primary source for published documentation.
+
+This workflow is currently configured with no selected integrations, and it processes only the code-change context explicitly attached to the workflow run. It does not infer or act on unseen repository changes.
+
+A recent pull request, `#75 Remove grounded authoring live fixture`, was merged into the `forgejo-docs-smoke` repository. This change may impact documentation that references or depends on the removed fixture.
+
+---
+
+
+# Update From Code Changes workflow update
+
+**Review Checklist:**
+
+- Confirm that the workflow is correctly configured to use the `forgejo:ozteklab/forgejo-docs-smoke@main` repository as read-only context.
+- Verify that documentation updates are being created against the `ozteklab-eng/dubstack-docs@product-docs` repository.
+- Ensure that the `#75` pull request change is accounted for in any documentation that references the removed fixture.
+- Confirm that no integrations are enabled that could affect the workflow's behavior.
+- Validate that the workflow adheres to the `twice_weekly` schedule and only processes explicitly attached code-change context.
+
+<!-- workflow_run_id: 85ad0f73-4c08-44b8-a80c-354473e7115f -->
