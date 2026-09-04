@@ -1,0 +1,83 @@
+---
+title: Published content API
+description: Search published documentation and retrieve complete page content from trusted backend systems.
+icon: search-code
+---
+
+Use the published content API when a trusted backend service needs deployment-scoped documentation context without operating a browser or reading the source repository.
+
+<Callout type="warning">
+  These operations use Admin API keys. Store keys in a backend secret manager and never expose them in browser code, public repositories, documentation content, screenshots, or support threads.
+</Callout>
+
+## Endpoints
+
+```http
+POST https://api.dubstack.ai/api/v1/admin/search
+POST https://api.dubstack.ai/api/v1/admin/page
+```
+
+The key must include the `content:read` scope.
+
+## Site scope
+
+A site-scoped key automatically reads from its assigned deployment. It cannot override that scope.
+
+```bash
+curl --request POST \
+  --url "https://api.dubstack.ai/api/v1/admin/search" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY" \
+  --header "Content-Type: application/json" \
+  --data '{"query":"configure a custom domain","pageSize":10}'
+```
+
+An organization-scoped key must select exactly one deployment with `site_id`, `site_slug`, or `subdomain`.
+
+```bash
+curl --request POST \
+  --url "https://api.dubstack.ai/api/v1/admin/search?subdomain=docs" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY" \
+  --header "Content-Type: application/json" \
+  --data '{"query":"configure a custom domain"}'
+```
+
+## Search published documentation
+
+Search returns up to 10 ranked results by default. Set `pageSize` from 1 to 50 to change the limit.
+
+Each result contains:
+
+- a bounded content excerpt
+- the public page path
+- the page title and canonical public URL
+- a relative relevance score for ordering results within the response
+
+The score is not normalized to a fixed range. Do not use a fixed score threshold across deployments or index revisions.
+
+## Get page content
+
+Pass a path returned by search to retrieve the full Markdown or MDX page body.
+
+```bash
+curl --request POST \
+  --url "https://api.dubstack.ai/api/v1/admin/page" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY" \
+  --header "Content-Type: application/json" \
+  --data '{"path":"/deployment/custom-domains"}'
+```
+
+The response includes the canonical path, content without frontmatter, title, public URL, and description when one is available.
+
+## Published index policy
+
+Both operations read the deployment's existing published index and artifacts. They do not read a local checkout or contact the Git provider during the request.
+
+Pages marked `noindex` or `searchable: false` are excluded. Hidden pages are readable only when the published index explicitly marks them as indexable.
+
+Page requests reject URLs, query strings, fragments, path traversal, backslashes, and dotfile paths before reading published content.
+
+## Related topics
+
+- [Base URL and authentication](/api-reference/base-url-authentication)
+- [Analytics API exports](/api-reference/analytics-exports)
+- [API reference](/api-reference/introduction)

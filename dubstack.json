@@ -148,15 +148,15 @@
     },
     {
       "source": "/api-reference/endpoint/get-mcp-discovery",
-      "destination": "/api-reference/endpoint/get-mcp-server-card"
+      "destination": "/ai/mcp"
     },
     {
       "source": "/api-reference/endpoint/get-well-known-mcp-discovery",
-      "destination": "/api-reference/endpoint/get-mcp-server-card"
+      "destination": "/ai/mcp"
     },
     {
       "source": "/api-reference/endpoint/get-well-known-mcp-discovery-alias",
-      "destination": "/api-reference/endpoint/get-mcp-server-card"
+      "destination": "/ai/mcp"
     },
     {
       "source": "/api",
@@ -1781,6 +1781,10 @@
               {
                 "slug": "api-reference/analytics-exports",
                 "icon": "chart-no-axes-combined"
+              },
+              {
+                "slug": "api-reference/published-content-api",
+                "icon": "search-code"
               },
               {
                 "slug": "api-reference/base-url-authentication",

@@ -1,10 +1,10 @@
 ---
 title: Analytics API exports
-description: Export usage and feedback analytics from trusted backend systems.
+description: Export usage, feedback, traffic, search, and assistant analytics from trusted backend systems.
 icon: chart-no-axes-combined
 ---
 
-Use analytics exports when a backend job needs to sync dubstack usage or feedback data into a BI warehouse, internal reporting system, or customer health dashboard.
+Use analytics exports when a backend job needs to sync dubstack usage, feedback, or assistant activity into a BI warehouse, internal reporting system, or customer health dashboard.
 
 <Callout type="warning">
   Analytics exports use Admin API keys. Store keys in a backend secret manager and never expose them in client-side code, docs content, screenshots, or support threads.
@@ -15,6 +15,10 @@ Use analytics exports when a backend job needs to sync dubstack usage or feedbac
 ```http
 GET https://api.dubstack.ai/api/v1/admin/analytics/usage
 GET https://api.dubstack.ai/api/v1/admin/analytics/feedback
+GET https://api.dubstack.ai/api/v1/admin/analytics/page-views
+GET https://api.dubstack.ai/api/v1/admin/analytics/visitors
+GET https://api.dubstack.ai/api/v1/admin/analytics/search-queries
+GET https://api.dubstack.ai/api/v1/admin/analytics/assistant-callers
 ```
 
 The key must include the `analytics:read` scope.
@@ -37,7 +41,9 @@ curl --request GET \
   --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY"
 ```
 
-If no deployment scope is provided for an organization-scoped key, the usage endpoint returns organization-wide totals.
+If no deployment scope is provided for an organization-scoped key, the usage, feedback, and assistant caller endpoints return organization-wide totals.
+
+Traffic, visitor, and search analytics are stored per deployment. Organization-scoped keys must select one deployment when calling `page-views`, `visitors`, or `search-queries`.
 
 ## Time windows
 
@@ -84,6 +90,32 @@ The usage export includes retrieval activity and AI usage accounting.
 
 Recent rows are included for debugging and reconciliation. Use the grouped totals for reporting.
 
+## Traffic and search analytics
+
+The traffic endpoints expose aggregate page-view and visitor measurements from the same event store used by the dashboard.
+
+```bash
+curl --request GET \
+  --url "https://api.dubstack.ai/api/v1/admin/analytics/page-views?subdomain=docs&days=30" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY"
+```
+
+Use `page-views` for total views, average duration, top pages, top referrers, and a daily series. Use `visitors` for unique visitors and aggregate device, country, and daily breakdowns.
+
+The `search-queries` endpoint returns totals, zero-result searches, click-through rate, top queries, a daily series, and recent query activity. Traffic and search responses do not expose reader or session identifiers.
+
+## Assistant caller analytics
+
+The assistant caller endpoint reports aggregate assistant activity by interaction channel and status.
+
+```bash
+curl --request GET \
+  --url "https://api.dubstack.ai/api/v1/admin/analytics/assistant-callers?subdomain=docs&days=30" \
+  --header "Authorization: Bearer $DUBSTACK_ADMIN_API_KEY"
+```
+
+`callerType` identifies the interaction channel, such as `public_assistant` or `dashboard_assistant`. It does not identify a person. The response includes aggregate requests, credits, tokens, cost, status, and last-seen timestamps. It never includes prompts, answers, query excerpts, conversation text, session identifiers, users, email addresses, or raw metadata.
+
 ## Feedback export
 
 The feedback export includes feedback totals, grouped dimensions, daily series, and recent feedback events.
@@ -110,6 +142,8 @@ curl --request GET \
 | `401` | The Admin API key is missing, invalid, revoked, expired, or misconfigured. |
 | `403` | The key does not include `analytics:read`, or a site-scoped key was used for another deployment. |
 | `404` | The requested deployment was not found for an organization-scoped key. |
+| `502` | The analytics store could not complete the query. |
+| `503` | Traffic analytics are not configured for the current environment. |
 
 ## Related
 

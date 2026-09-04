@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "dubstack Admin API",
-    "version": "2026-09-04",
-    "description": "Server-side API for triggering documentation deployments and workflows, creating branch previews, and exporting organization analytics. Every operation requires a scoped Admin API key."
+    "version": "2026-09-05",
+    "description": "Server-side API for triggering documentation deployments and workflows, creating branch previews, retrieving published documentation, and exporting organization analytics, including aggregate assistant caller activity. Every operation requires a scoped Admin API key."
   },
   "servers": [
     {
@@ -13,15 +13,27 @@
   ],
   "tags": [
     {
-      "name": "Admin API",
-      "description": "Server-side automation endpoints that require scoped Admin API keys."
+      "name": "Admin",
+      "description": "Deployment update, preview, and status operations."
+    },
+    {
+      "name": "Automations",
+      "description": "Customer-owned workflow execution operations."
+    },
+    {
+      "name": "Analytics",
+      "description": "Tenant-scoped usage, feedback, traffic, visitor, search, and assistant caller reporting."
+    },
+    {
+      "name": "Content",
+      "description": "Deployment-scoped published documentation search and page retrieval."
     }
   ],
   "paths": {
     "/api/project/update/{siteId}": {
       "post": {
         "tags": [
-          "Admin API"
+          "Admin"
         ],
         "summary": "Trigger deployment update",
         "description": "Queue a live deployment update from the configured deployment branch. Requires the deployments:trigger Admin API key scope.",
@@ -105,7 +117,7 @@
     "/api/project/preview/{siteId}": {
       "post": {
         "tags": [
-          "Admin API"
+          "Admin"
         ],
         "summary": "Trigger preview deployment",
         "description": "Create or refresh a preview deployment for a Git branch. Requires the deployments:trigger Admin API key scope.",
@@ -209,7 +221,7 @@
     "/api/project/update-status/{statusId}": {
       "get": {
         "tags": [
-          "Admin API"
+          "Admin"
         ],
         "summary": "Get deployment status",
         "description": "Read deployment status and logs by status ID. Requires either deployments:read or deployments:trigger.",
@@ -283,7 +295,7 @@
     "/api/agent/workflows/{workflowId}/api-trigger": {
       "post": {
         "tags": [
-          "Admin API"
+          "Automations"
         ],
         "summary": "Trigger workflow run",
         "description": "Queue an enabled workflow run from trusted backend automation. Requires the workflows:run Admin API key scope. Only workflows configured with the Custom schedule trigger are API-triggerable.",
@@ -429,7 +441,7 @@
     "/api/v1/admin/analytics/usage": {
       "get": {
         "tags": [
-          "Admin API"
+          "Analytics"
         ],
         "summary": "Export usage analytics",
         "description": "Read retrieval activity and AI usage accounting for a site-scoped or organization-scoped Admin API key. Requires the analytics:read scope.",
@@ -575,7 +587,7 @@
     "/api/v1/admin/analytics/feedback": {
       "get": {
         "tags": [
-          "Admin API"
+          "Analytics"
         ],
         "summary": "Export feedback analytics",
         "description": "Read public assistant and MCP feedback analytics for a site-scoped or organization-scoped Admin API key. Requires the analytics:read scope.",
@@ -727,6 +739,941 @@
           },
           "500": {
             "description": "Feedback analytics could not be exported.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/analytics/page-views": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "summary": "Get page views",
+        "description": "Read aggregate documentation page-view activity for one deployment. Requires the analytics:read scope. Organization-scoped keys must select a site.",
+        "operationId": "getPageViewAnalytics",
+        "servers": [
+          {
+            "url": "https://api.dubstack.ai",
+            "description": "dubstack Admin API"
+          }
+        ],
+        "security": [
+          {
+            "AdminApiBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 366,
+              "default": 30
+            },
+            "description": "Rolling window length in days. Ignored when from and to are supplied."
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "description": "Start calendar date for the export window in YYYY-MM-DD format."
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "description": "End calendar date for the export window in YYYY-MM-DD format."
+          },
+          {
+            "name": "timezoneOffsetMinutes",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": -840,
+              "maximum": 840,
+              "default": 0
+            },
+            "description": "Timezone offset used when calculating local reporting days."
+          },
+          {
+            "name": "site_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Deployment site ID. Required only when the Admin API key is organization-scoped and the export should be limited to one deployment."
+          },
+          {
+            "name": "site_slug",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Deployment slug alternative to site_id for organization-scoped keys."
+          },
+          {
+            "name": "subdomain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Published dubstack.live subdomain alternative to site_id for organization-scoped keys."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Aggregate page-view analytics.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminPageViewAnalyticsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A site selector is required for an organization-scoped key, or a query parameter is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Admin API key is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Admin API key is not allowed to read this deployment.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested deployment was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Traffic analytics storage could not complete the query.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Traffic analytics storage or deployment scope is not configured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/analytics/visitors": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "summary": "Get unique visitors",
+        "description": "Read aggregate documentation visitor activity for one deployment. Requires the analytics:read scope. Reader and session identifiers are not returned.",
+        "operationId": "getVisitorAnalytics",
+        "servers": [
+          {
+            "url": "https://api.dubstack.ai",
+            "description": "dubstack Admin API"
+          }
+        ],
+        "security": [
+          {
+            "AdminApiBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 366,
+              "default": 30
+            },
+            "description": "Rolling window length in days. Ignored when from and to are supplied."
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "description": "Start calendar date for the export window in YYYY-MM-DD format."
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "description": "End calendar date for the export window in YYYY-MM-DD format."
+          },
+          {
+            "name": "timezoneOffsetMinutes",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": -840,
+              "maximum": 840,
+              "default": 0
+            },
+            "description": "Timezone offset used when calculating local reporting days."
+          },
+          {
+            "name": "site_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Deployment site ID. Required only when the Admin API key is organization-scoped and the export should be limited to one deployment."
+          },
+          {
+            "name": "site_slug",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Deployment slug alternative to site_id for organization-scoped keys."
+          },
+          {
+            "name": "subdomain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Published dubstack.live subdomain alternative to site_id for organization-scoped keys."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Aggregate visitor analytics.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminVisitorAnalyticsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A site selector is required for an organization-scoped key, or a query parameter is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Admin API key is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Admin API key is not allowed to read this deployment.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested deployment was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Traffic analytics storage could not complete the query.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Traffic analytics storage or deployment scope is not configured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/analytics/search-queries": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "summary": "Get search queries",
+        "description": "Read aggregate and recent documentation search queries for one deployment. Requires the analytics:read scope. Reader and session identifiers are not returned.",
+        "operationId": "getSearchQueryAnalytics",
+        "servers": [
+          {
+            "url": "https://api.dubstack.ai",
+            "description": "dubstack Admin API"
+          }
+        ],
+        "security": [
+          {
+            "AdminApiBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 366,
+              "default": 30
+            },
+            "description": "Rolling window length in days. Ignored when from and to are supplied."
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "description": "Start calendar date for the export window in YYYY-MM-DD format."
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "description": "End calendar date for the export window in YYYY-MM-DD format."
+          },
+          {
+            "name": "timezoneOffsetMinutes",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": -840,
+              "maximum": 840,
+              "default": 0
+            },
+            "description": "Timezone offset used when calculating local reporting days."
+          },
+          {
+            "name": "site_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Deployment site ID. Required only when the Admin API key is organization-scoped and the export should be limited to one deployment."
+          },
+          {
+            "name": "site_slug",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Deployment slug alternative to site_id for organization-scoped keys."
+          },
+          {
+            "name": "subdomain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Published dubstack.live subdomain alternative to site_id for organization-scoped keys."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Aggregate search-query analytics.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminSearchQueryAnalyticsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A site selector is required for an organization-scoped key, or a query parameter is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Admin API key is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Admin API key is not allowed to read this deployment.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested deployment was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Traffic analytics storage could not complete the query.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Traffic analytics storage or deployment scope is not configured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/analytics/assistant-callers": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "summary": "Get assistant caller stats",
+        "description": "Read aggregate assistant request activity by interaction channel and status. Requires the analytics:read scope. The response never includes conversation content, queries, sessions, users, email addresses, or raw metadata.",
+        "operationId": "getAssistantCallerStats",
+        "servers": [
+          {
+            "url": "https://api.dubstack.ai",
+            "description": "dubstack Admin API"
+          }
+        ],
+        "security": [
+          {
+            "AdminApiBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 366,
+              "default": 30
+            },
+            "description": "Rolling window length in days. Ignored when from and to are supplied."
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "description": "Start calendar date for the export window in YYYY-MM-DD format."
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "description": "End calendar date for the export window in YYYY-MM-DD format."
+          },
+          {
+            "name": "timezoneOffsetMinutes",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": -840,
+              "maximum": 840,
+              "default": 0
+            },
+            "description": "Timezone offset used when calculating local reporting days."
+          },
+          {
+            "name": "site_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Deployment site ID. Required only when the Admin API key is organization-scoped and the export should be limited to one deployment."
+          },
+          {
+            "name": "site_slug",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Deployment slug alternative to site_id for organization-scoped keys."
+          },
+          {
+            "name": "subdomain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Published dubstack.live subdomain alternative to site_id for organization-scoped keys."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Aggregate assistant caller activity.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminAssistantCallerAnalyticsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Admin API key is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Admin API key is not allowed to read this deployment.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested deployment was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Assistant caller analytics could not be read.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/search": {
+      "post": {
+        "tags": [
+          "Content"
+        ],
+        "summary": "Search published documentation",
+        "description": "Search one deployment's published searchable index and return bounded ranked snippets. Requires the content:read Admin API key scope.",
+        "operationId": "searchPublishedDocumentation",
+        "servers": [
+          {
+            "url": "https://api.dubstack.ai",
+            "description": "dubstack Admin API"
+          }
+        ],
+        "security": [
+          {
+            "AdminApiBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "site_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Deployment site ID. Supply exactly one site selector when using an organization-scoped key. Omit for site-scoped keys."
+          },
+          {
+            "name": "site_slug",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Deployment slug. Supply exactly one site selector when using an organization-scoped key. Omit for site-scoped keys."
+          },
+          {
+            "name": "subdomain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Deployment subdomain. Supply exactly one site selector when using an organization-scoped key. Omit for site-scoped keys."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublishedDocsSearchRequest"
+              },
+              "example": {
+                "query": "configure a custom domain",
+                "pageSize": 10
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ranked published documentation results.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublishedDocsSearchResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The query, page size, or organization-level site selector is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Admin API key is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Admin API key does not include content:read or cannot access the selected deployment.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Selected deployment was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The deployment has no published documentation source configured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "The published documentation request failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Published documentation is temporarily unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/page": {
+      "post": {
+        "tags": [
+          "Content"
+        ],
+        "summary": "Get published page content",
+        "description": "Return the full Markdown or MDX body for a page in one deployment's published searchable index. Requires the content:read Admin API key scope.",
+        "operationId": "getPublishedDocumentationPage",
+        "servers": [
+          {
+            "url": "https://api.dubstack.ai",
+            "description": "dubstack Admin API"
+          }
+        ],
+        "security": [
+          {
+            "AdminApiBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "site_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Deployment site ID. Supply exactly one site selector when using an organization-scoped key. Omit for site-scoped keys."
+          },
+          {
+            "name": "site_slug",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Deployment slug. Supply exactly one site selector when using an organization-scoped key. Omit for site-scoped keys."
+          },
+          {
+            "name": "subdomain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Deployment subdomain. Supply exactly one site selector when using an organization-scoped key. Omit for site-scoped keys."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublishedDocsPageRequest"
+              },
+              "example": {
+                "path": "/deployment/custom-domains"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Published page content and public metadata.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublishedDocsPageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The page path or organization-level site selector is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Admin API key is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Admin API key does not include content:read or cannot access the selected deployment.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Selected deployment or indexed page was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The deployment has no published documentation source configured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "The published documentation request failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Published documentation is temporarily unavailable.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1197,6 +2144,727 @@
             "$ref": "#/components/schemas/WorkflowRun"
           }
         }
+      },
+      "AdminPageViewAnalyticsResponse": {
+        "type": "object",
+        "required": [
+          "available",
+          "checkedAt",
+          "from",
+          "to",
+          "periodDays",
+          "scope",
+          "pageViews"
+        ],
+        "properties": {
+          "available": {
+            "type": "boolean"
+          },
+          "checkedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "from": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "to": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "periodDays": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 366
+          },
+          "scope": {
+            "$ref": "#/components/schemas/AdminAnalyticsScope"
+          },
+          "pageViews": {
+            "type": "object",
+            "required": [
+              "totalViews",
+              "averageDurationMs",
+              "topPages",
+              "topReferrers",
+              "dailySeries"
+            ],
+            "properties": {
+              "totalViews": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "averageDurationMs": {
+                "type": "number",
+                "minimum": 0
+              },
+              "topPages": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "path",
+                    "views"
+                  ],
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "views": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "topReferrers": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "source",
+                    "views"
+                  ],
+                  "properties": {
+                    "source": {
+                      "type": "string"
+                    },
+                    "views": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "dailySeries": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "date",
+                    "views"
+                  ],
+                  "properties": {
+                    "date": {
+                      "type": "string"
+                    },
+                    "views": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdminVisitorAnalyticsResponse": {
+        "type": "object",
+        "required": [
+          "available",
+          "checkedAt",
+          "from",
+          "to",
+          "periodDays",
+          "scope",
+          "visitors"
+        ],
+        "properties": {
+          "available": {
+            "type": "boolean"
+          },
+          "checkedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "from": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "to": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "periodDays": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 366
+          },
+          "scope": {
+            "$ref": "#/components/schemas/AdminAnalyticsScope"
+          },
+          "visitors": {
+            "type": "object",
+            "required": [
+              "uniqueVisitors",
+              "topDevices",
+              "topCountries",
+              "dailySeries"
+            ],
+            "properties": {
+              "uniqueVisitors": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "topDevices": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "device",
+                    "visitors"
+                  ],
+                  "properties": {
+                    "device": {
+                      "type": "string"
+                    },
+                    "visitors": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "topCountries": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "country",
+                    "visitors"
+                  ],
+                  "properties": {
+                    "country": {
+                      "type": "string"
+                    },
+                    "visitors": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "dailySeries": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "date",
+                    "visitors"
+                  ],
+                  "properties": {
+                    "date": {
+                      "type": "string"
+                    },
+                    "visitors": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdminSearchQueryAnalyticsResponse": {
+        "type": "object",
+        "required": [
+          "available",
+          "checkedAt",
+          "from",
+          "to",
+          "periodDays",
+          "scope",
+          "searchQueries"
+        ],
+        "properties": {
+          "available": {
+            "type": "boolean"
+          },
+          "checkedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "from": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "to": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "periodDays": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 366
+          },
+          "scope": {
+            "$ref": "#/components/schemas/AdminAnalyticsScope"
+          },
+          "searchQueries": {
+            "type": "object",
+            "required": [
+              "totalSearches",
+              "zeroResultSearches",
+              "averageResults",
+              "clickThroughRate",
+              "topQueries",
+              "dailySeries",
+              "recentQueries"
+            ],
+            "properties": {
+              "totalSearches": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "zeroResultSearches": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "averageResults": {
+                "type": "number",
+                "minimum": 0
+              },
+              "clickThroughRate": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "topQueries": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "query",
+                    "count",
+                    "averageResults"
+                  ],
+                  "properties": {
+                    "query": {
+                      "type": "string"
+                    },
+                    "count": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "averageResults": {
+                      "type": "number",
+                      "minimum": 0
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "dailySeries": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "date",
+                    "searches"
+                  ],
+                  "properties": {
+                    "date": {
+                      "type": "string"
+                    },
+                    "searches": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "recentQueries": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "timestamp",
+                    "query",
+                    "resultsCount",
+                    "clickedResult"
+                  ],
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "query": {
+                      "type": "string"
+                    },
+                    "resultsCount": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "clickedResult": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "PublishedDocsSearchRequest": {
+        "type": "object",
+        "required": [
+          "query"
+        ],
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "description": "Natural-language or keyword query for the selected deployment."
+          },
+          "pageSize": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50,
+            "default": 10,
+            "description": "Maximum number of ranked results to return."
+          }
+        },
+        "additionalProperties": false
+      },
+      "PublishedDocsSearchResponse": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PublishedDocsSearchItem"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "PublishedDocsSearchItem": {
+        "type": "object",
+        "required": [
+          "content",
+          "path",
+          "metadata"
+        ],
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Bounded relevant excerpt from the published page."
+          },
+          "path": {
+            "type": "string",
+            "description": "Public path of the matching documentation page."
+          },
+          "metadata": {
+            "type": "object",
+            "required": [
+              "title",
+              "url",
+              "score"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "score": {
+                "type": "number",
+                "description": "Relative relevance score. Compare scores within this response; the value is not normalized to a fixed range."
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "PublishedDocsPageRequest": {
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000,
+            "description": "Published page path. URLs, query strings, fragments, traversal segments, and dotfile paths are rejected."
+          }
+        },
+        "additionalProperties": false
+      },
+      "PublishedDocsPageResponse": {
+        "type": "object",
+        "required": [
+          "path",
+          "content",
+          "metadata"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Canonical public path of the indexed page."
+          },
+          "content": {
+            "type": "string",
+            "description": "Full Markdown or MDX page body without frontmatter."
+          },
+          "metadata": {
+            "type": "object",
+            "required": [
+              "title",
+              "url",
+              "description"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "description": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdminAssistantCallerStatus": {
+        "type": "object",
+        "required": [
+          "status",
+          "requests",
+          "creditsEstimated",
+          "creditsCharged",
+          "totalTokens",
+          "costMicrousd",
+          "lastSeenAt"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Recorded outcome for the assistant requests in this aggregate."
+          },
+          "requests": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "creditsEstimated": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "creditsCharged": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "totalTokens": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "costMicrousd": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "lastSeenAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdminAssistantCaller": {
+        "type": "object",
+        "required": [
+          "callerType",
+          "requests",
+          "creditsEstimated",
+          "creditsCharged",
+          "totalTokens",
+          "costMicrousd",
+          "lastSeenAt",
+          "byStatus"
+        ],
+        "properties": {
+          "callerType": {
+            "type": "string",
+            "description": "Interaction channel such as public_assistant or dashboard_assistant. This is not a person or user identifier."
+          },
+          "requests": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "creditsEstimated": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "creditsCharged": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "totalTokens": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "costMicrousd": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "lastSeenAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "byStatus": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminAssistantCallerStatus"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdminAssistantCallerTotals": {
+        "type": "object",
+        "required": [
+          "requests",
+          "creditsEstimated",
+          "creditsCharged",
+          "inputTokens",
+          "outputTokens",
+          "totalTokens",
+          "costMicrousd",
+          "lastSeenAt"
+        ],
+        "properties": {
+          "requests": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "creditsEstimated": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "creditsCharged": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "inputTokens": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "outputTokens": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "totalTokens": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "costMicrousd": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "lastSeenAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdminAssistantCallerAnalyticsResponse": {
+        "type": "object",
+        "required": [
+          "available",
+          "checkedAt",
+          "from",
+          "to",
+          "periodDays",
+          "scope",
+          "totals",
+          "byStatus",
+          "callers"
+        ],
+        "properties": {
+          "available": {
+            "type": "boolean"
+          },
+          "checkedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "from": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "to": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "periodDays": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 366
+          },
+          "scope": {
+            "$ref": "#/components/schemas/AdminAnalyticsScope"
+          },
+          "totals": {
+            "$ref": "#/components/schemas/AdminAssistantCallerTotals"
+          },
+          "byStatus": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminAssistantCallerStatus"
+            }
+          },
+          "callers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminAssistantCaller"
+            }
+          }
+        },
+        "additionalProperties": false
       }
     }
   }
