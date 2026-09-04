@@ -1817,7 +1817,7 @@
             ]
           },
           {
-            "group": "Docs runtime API",
+            "group": "dubstack Admin API",
             "icon": "terminal",
             "openapi": "api-reference/openapi.json"
           }

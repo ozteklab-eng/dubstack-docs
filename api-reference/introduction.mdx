@@ -9,7 +9,7 @@ dubstack can render API documentation from OpenAPI specs, manually authored MDX 
 Use this section for two related tasks:
 
 - learning how to document your own product APIs inside a dubstack docs site
-- exploring the public runtime endpoints that every published dubstack docs site exposes for MCP, LLM indexes, assistant chat, and API playground execution
+- integrating trusted automation with the dubstack Admin API
 
 ## Supported API documentation paths
 
@@ -18,7 +18,7 @@ Use this section for two related tasks:
 | OpenAPI-generated pages | You already have an OpenAPI 3.x JSON spec and want dubstack to generate endpoint pages from it. |
 | Manual MDX endpoint pages | You want full control over page copy while still attaching each page to an API operation. |
 | Embedded playgrounds | You want to place a runnable endpoint example inside a guide or tutorial. |
-| Docs runtime API | You want to inspect the public endpoints that power AI access and playground behavior on a published docs site. |
+| dubstack Admin API | You want to trigger deployments, create branch previews, run workflows, or export analytics from trusted server-side automation. |
 
 ## Source of truth
 
@@ -46,8 +46,8 @@ After the repo syncs, dubstack stores the spec with the published docs artifacts
 - [Playground authentication](/api-reference/playground-authentication): configure how users try requests from the docs site.
 - [Workflow API triggers](/api-reference/workflow-triggers): queue enabled workflows from trusted backend automation.
 - [Analytics API exports](/api-reference/analytics-exports): export usage and feedback analytics from trusted backend systems.
-- Docs runtime API: open any generated endpoint under this section to inspect the MCP, assistant, LLM index, or playground endpoint contract.
+- dubstack Admin API: open a generated endpoint under this section to inspect its request, response, scope, and executable code examples.
 
 <Callout type="info">
-  The generated runtime endpoints are public docs-site endpoints. Dashboard management APIs are separate and should only be published after the corresponding token-authenticated API surface is available.
+  Admin API keys are server-side secrets. Keep them out of browser code, public repositories, client logs, and request examples.
 </Callout>

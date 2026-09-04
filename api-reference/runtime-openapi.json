@@ -1,0 +1,1942 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "dubstack docs runtime API",
+    "version": "2026-09-04",
+    "description": "Public runtime endpoints exposed by a published dubstack documentation site for AI discovery, assistant access, feedback, and playground execution."
+  },
+  "servers": [
+    {
+      "url": "https://dubstack.ai/docs",
+      "description": "Published docs site for this deployment"
+    }
+  ],
+  "tags": [
+    {
+      "name": "AI Access",
+      "description": "Read-only endpoints for agents, crawlers, and MCP-capable clients that need structured access to published documentation."
+    },
+    {
+      "name": "Assistant",
+      "description": "Reader-facing assistant endpoint for answering questions from the published documentation corpus."
+    },
+    {
+      "name": "Feedback",
+      "description": "Public feedback endpoints for reader ratings and agent-reported documentation issues."
+    },
+    {
+      "name": "API Playground",
+      "description": "Runtime endpoints used by generated API reference pages and the browser request builder."
+    }
+  ],
+  "paths": {
+    "/mcp": {
+      "post": {
+        "operationId": "callMcpServer",
+        "summary": "Call public MCP transport",
+        "description": "Handles Streamable HTTP JSON-RPC requests for the public docs MCP server. MCP clients use this endpoint to initialize the connection, list tools, and call tools such as documentation search or virtual filesystem reads. The endpoint is stateless, public, and scoped to published docs content for the current site.",
+        "tags": [
+          "AI Access"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonRpcRequest"
+              },
+              "examples": {
+                "toolsList": {
+                  "summary": "List available tools",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/list"
+                  }
+                },
+                "searchDocs": {
+                  "summary": "Search published docs",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 2,
+                    "method": "tools/call",
+                    "params": {
+                      "name": "search",
+                      "arguments": {
+                        "query": "custom domain setup",
+                        "limit": 5
+                      }
+                    }
+                  }
+                },
+                "readFile": {
+                  "summary": "Read a published docs file",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 3,
+                    "method": "tools/call",
+                    "params": {
+                      "name": "query_docs_filesystem",
+                      "arguments": {
+                        "command": "cat /quickstart.mdx"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "description": "Streamable HTTP JSON-RPC request sent by an MCP client. Clients should send Accept: application/json, text/event-stream."
+        },
+        "responses": {
+          "200": {
+            "description": "JSON-RPC response from the public MCP server. Streamable HTTP clients typically receive text/event-stream responses; JSON-capable clients may receive application/json.",
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "type": "string",
+                  "description": "Server-sent event stream containing JSON-RPC response messages."
+                },
+                "examples": {
+                  "tools": {
+                    "summary": "Tool list event",
+                    "value": "event: message\\ndata: {\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"tools\":[{\"name\":\"search\"},{\"name\":\"query_docs_filesystem\"}]}}\\n\\n"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonRpcResponse"
+                },
+                "examples": {
+                  "tools": {
+                    "summary": "Tool list response",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 1,
+                      "result": {
+                        "tools": [
+                          {
+                            "name": "search",
+                            "description": "Search the published docs for relevant pages."
+                          },
+                          {
+                            "name": "query_docs_filesystem",
+                            "description": "Read published docs through a read-only virtual filesystem."
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "The MCP transport endpoint does not serve browser GET discovery. Use /.well-known/mcp or /.well-known/mcp.json for discovery metadata.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonRpcResponse"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "The request did not advertise support for both application/json and text/event-stream.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonRpcResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/.well-known/mcp/server-card.json": {
+      "get": {
+        "operationId": "getMcpServerCard",
+        "summary": "Get MCP server card",
+        "description": "Returns a single server-card document for the current docs site. Discovery clients can use this well-known URL to identify the public MCP endpoint, display name, description, and transport before connecting.",
+        "tags": [
+          "AI Access"
+        ],
+        "responses": {
+          "200": {
+            "description": "Server-card metadata for the public MCP endpoint on this docs site.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/McpServerCard"
+                },
+                "examples": {
+                  "serverCard": {
+                    "summary": "Public docs MCP server card",
+                    "value": {
+                      "name": "dubstack docs MCP",
+                      "description": "MCP access to the published docs site. Retrieval tools are read-only; feedback may be submitted when enabled.",
+                      "url": "https://dubstack.ai/docs/mcp",
+                      "transport": "streamable-http"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/.well-known/mcp/server-cards.json": {
+      "get": {
+        "operationId": "getMcpServerCards",
+        "summary": "List MCP server cards",
+        "description": "Returns the collection of MCP server cards advertised by the current docs site. Most sites expose one public docs MCP server for retrieval and optional feedback, but the collection form lets discovery clients handle multiple advertised servers consistently.",
+        "tags": [
+          "AI Access"
+        ],
+        "responses": {
+          "200": {
+            "description": "Collection of MCP server cards advertised by this docs site.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "servers": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/McpServerCard"
+                      }
+                    }
+                  },
+                  "required": [
+                    "servers"
+                  ]
+                },
+                "examples": {
+                  "serverCards": {
+                    "summary": "Server cards collection",
+                    "value": {
+                      "servers": [
+                        {
+                          "name": "dubstack docs MCP",
+                          "description": "MCP access to the published docs site. Retrieval tools are read-only; feedback may be submitted when enabled.",
+                          "url": "https://dubstack.ai/docs/mcp",
+                          "transport": "streamable-http"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/llms.txt": {
+      "get": {
+        "operationId": "getLlmsIndex",
+        "summary": "Get compact LLM index",
+        "description": "Returns the compact LLM-readable index for the current docs site as plain text. This export gives agents a fast overview of important pages, canonical URLs, and high-value entry points without needing to crawl rendered HTML.",
+        "tags": [
+          "AI Access"
+        ],
+        "responses": {
+          "200": {
+            "description": "Compact plain-text index of the published docs site for LLM and agent consumption.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "description": "Plain-text LLM index. The exact content depends on the published site navigation and page metadata."
+                },
+                "examples": {
+                  "index": {
+                    "summary": "Compact LLM index",
+                    "value": "# dubstack docs\n\n> Product documentation for building, publishing, and operating dubstack docs sites.\n\n## Pages\n- [Quickstart](https://dubstack.ai/docs/quickstart)\n- [MCP](https://dubstack.ai/docs/ai/mcp)\n- [API reference](https://dubstack.ai/docs/api-reference/introduction)"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/llms-full.txt": {
+      "get": {
+        "operationId": "getFullLlmsIndex",
+        "summary": "Get expanded LLM index",
+        "description": "Returns the expanded LLM-readable export for the current docs site as plain text. Use this endpoint when an agent needs deeper page summaries and selected body content than the compact index provides.",
+        "tags": [
+          "AI Access"
+        ],
+        "responses": {
+          "200": {
+            "description": "Expanded plain-text export with page summaries and selected body content.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "description": "Expanded plain-text LLM export generated from the published docs corpus."
+                },
+                "examples": {
+                  "fullIndex": {
+                    "summary": "Expanded LLM index",
+                    "value": "# dubstack docs\n\n## Quickstart\nLaunch a docs site, connect Git, customize content, and publish.\n\n## Public MCP\ndubstack exposes read-only retrieval tools so agents can search and inspect published docs. When enabled, agents can also submit documentation-quality feedback."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/chat": {
+      "post": {
+        "operationId": "askAssistant",
+        "summary": "Ask assistant",
+        "description": "Sends a reader question to the public docs assistant for the current site. The assistant answers from published documentation and returns source links when retrieval finds relevant pages. This endpoint is intended for the public reader widget and should be treated as an AI-generated response surface, not a source of dashboard administration state.",
+        "tags": [
+          "Assistant"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssistantRequest"
+              },
+              "examples": {
+                "question": {
+                  "summary": "Ask a docs question",
+                  "value": {
+                    "message": "How do I connect a custom domain?",
+                    "page": "/deployment/custom-domains"
+                  }
+                }
+              }
+            }
+          },
+          "description": "Reader question and optional current-page context for the public assistant widget."
+        },
+        "responses": {
+          "200": {
+            "description": "Assistant response generated from published documentation, with optional source citations.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssistantResponse"
+                },
+                "examples": {
+                  "answer": {
+                    "summary": "Assistant answer",
+                    "value": {
+                      "answer": "Open Settings, choose Domain setup, enter your domain, then add the DNS records shown in the dashboard. Once DNS propagates, verify the domain and publish your site.",
+                      "sources": [
+                        {
+                          "title": "Custom domains",
+                          "url": "https://dubstack.ai/docs/deployment/custom-domains",
+                          "path": "/deployment/custom-domains"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Assistant backend is unavailable or disabled for the current site."
+          }
+        }
+      }
+    },
+    "/api/playground/spec": {
+      "get": {
+        "operationId": "getPlaygroundSpec",
+        "summary": "Get playground spec",
+        "description": "Loads a published OpenAPI specification for the current docs site. Generated API reference pages and the browser request builder use this endpoint to read the same parsed spec metadata, base URL fallback, and operation definitions that were published during the latest sync.",
+        "tags": [
+          "API Playground"
+        ],
+        "parameters": [
+          {
+            "name": "spec",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "api-reference"
+            },
+            "description": "Spec name configured in dubstack.json. Omit this parameter to load the default API reference spec."
+          },
+          {
+            "name": "branch",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Optional preview branch identifier used when rendering branch preview docs."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Published OpenAPI spec metadata together with the parsed OpenAPI document.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublishedSpec"
+                },
+                "examples": {
+                  "spec": {
+                    "summary": "Loaded API reference spec",
+                    "value": {
+                      "name": "api-reference",
+                      "display_name": "dubstack docs runtime API",
+                      "base_url": "https://dubstack.ai/docs",
+                      "spec_content": {
+                        "openapi": "3.1.0",
+                        "info": {
+                          "title": "dubstack docs runtime API",
+                          "version": "2026-06-25"
+                        },
+                        "paths": {
+                          "/mcp": {
+                            "get": {
+                              "summary": "Get MCP discovery"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No published spec exists for the requested site, spec name, or preview branch."
+          }
+        }
+      }
+    },
+    "/api/playground/proxy": {
+      "post": {
+        "operationId": "proxyPlaygroundRequest",
+        "summary": "Proxy playground request",
+        "description": "Proxies a reader-triggered playground request to a target URL allowed by the published OpenAPI spec. The proxy keeps browser playground calls scoped to documented public origins, blocks private or reserved network targets, and avoids placing tenant credentials in frontend code.",
+        "tags": [
+          "API Playground"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlaygroundProxyRequest"
+              },
+              "examples": {
+                "call": {
+                  "summary": "Proxy a documented endpoint request",
+                  "value": {
+                    "url": "https://dubstack.ai/docs/mcp",
+                    "method": "GET",
+                    "headers": {
+                      "Accept": "application/json"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "description": "Request generated by the browser playground for a documented operation and allowed target URL."
+        },
+        "responses": {
+          "200": {
+            "description": "Captured upstream response returned to the browser playground.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlaygroundProxyResponse"
+                },
+                "examples": {
+                  "proxiedResponse": {
+                    "summary": "Proxied response",
+                    "value": {
+                      "status": 200,
+                      "headers": {
+                        "content-type": "application/json"
+                      },
+                      "body": {
+                        "name": "dubstack docs MCP",
+                        "transport": "streamable-http",
+                        "endpoint": "https://dubstack.ai/docs/mcp"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Target origin or URL is not allowed by the published OpenAPI spec or playground security policy."
+          }
+        }
+      }
+    },
+    "/feedback": {
+      "post": {
+        "operationId": "submitFeedback",
+        "summary": "Submit feedback",
+        "description": "Records feedback for the current published docs site. Use this endpoint for page ratings, assistant answer ratings, and trusted application feedback integrations when the corresponding deployment add-on is enabled. Public MCP clients should call the advertised submit_feedback MCP tool instead of posting to this HTTP endpoint directly. Requests are tenant-scoped by the docs site host and rate-limited per site and client IP.",
+        "tags": [
+          "Feedback"
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Feedback payload submitted by a docs reader, assistant UI, or agent feedback surface.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackRequest"
+              },
+              "examples": {
+                "pageRating": {
+                  "summary": "Positive page rating",
+                  "value": {
+                    "source": "page-feedback",
+                    "rating": "up",
+                    "message": "Positive page rating for OpenAPI setup",
+                    "session_id": "page-feedback-01JZ9K9W8Q2F3S8S7H6N5M4P3A",
+                    "page_path": "/api-reference/openapi-setup",
+                    "page_url": "https://dubstack.ai/docs/api-reference/openapi-setup",
+                    "metadata": {
+                      "feedback_surface": "page",
+                      "page_title": "OpenAPI setup"
+                    }
+                  }
+                },
+                "assistantAnswer": {
+                  "summary": "Assistant answer rating",
+                  "value": {
+                    "source": "assistant-feedback",
+                    "rating": "down",
+                    "message": "The assistant answer linked to a dashboard screen that has moved.",
+                    "session_id": "assistant-feedback-01JZ9K9W8Q2F3S8S7H6N5M4P3B",
+                    "page_path": "/settings/deployment/addons",
+                    "page_url": "https://dubstack.ai/docs/settings/deployment/addons",
+                    "metadata": {
+                      "feedback_surface": "assistant"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Feedback event accepted and stored for the current deployment.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedbackResponse"
+                },
+                "examples": {
+                  "created": {
+                    "summary": "Created feedback event",
+                    "value": {
+                      "ok": true,
+                      "id": "ckz8y7x6w0000abc123def456",
+                      "created_at": "2026-07-05T01:30:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The message, rating, reader email, or JSON body is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "missingMessage": {
+                    "summary": "Missing message",
+                    "value": {
+                      "error": "Message is required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The relevant feedback or assistant add-on is disabled for the current site.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "disabled": {
+                    "summary": "Feedback disabled",
+                    "value": {
+                      "error": "Agent feedback is disabled for this site"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "The feedback message is larger than the accepted payload size.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many feedback requests were submitted for the site and client IP in the current rate-limit window.",
+            "headers": {
+              "Retry-After": {
+                "description": "Number of seconds to wait before retrying.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "X-RateLimit-Limit": {
+                "description": "Maximum feedback requests allowed in the current window.",
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Remaining feedback requests in the current window.",
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp, in seconds, when the current rate-limit window resets.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The feedback event could not be recorded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "bash",
+            "label": "Submit page feedback",
+            "source": "curl --request POST \\\n  --url https://dubstack.ai/docs/feedback \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n    \"source\": \"page-feedback\",\n    \"rating\": \"up\",\n    \"message\": \"This page answered my setup question.\",\n    \"page_path\": \"/api-reference/openapi-setup\",\n    \"page_url\": \"https://dubstack.ai/docs/api-reference/openapi-setup\"\n  }'"
+          },
+          {
+            "lang": "javascript",
+            "label": "Submit assistant feedback",
+            "source": "await fetch(\"https://dubstack.ai/docs/feedback\", {\n  method: \"POST\",\n  headers: { \"Content-Type\": \"application/json\" },\n  body: JSON.stringify({\n    source: \"assistant-feedback\",\n    rating: \"down\",\n    message: \"The answer linked to a dashboard screen that has moved.\",\n    page_path: \"/settings/deployment/addons\",\n    page_url: \"https://dubstack.ai/docs/settings/deployment/addons\",\n    metadata: { feedback_surface: \"assistant\" }\n  })\n});"
+          }
+        ]
+      },
+      "options": {
+        "operationId": "getFeedbackOptions",
+        "summary": "Check feedback methods",
+        "description": "Returns the allowed methods and CORS headers for public feedback submissions. Browser and agent clients can use this preflight route before submitting feedback.",
+        "tags": [
+          "Feedback"
+        ],
+        "responses": {
+          "204": {
+            "description": "Feedback preflight response with allowed methods and headers.",
+            "headers": {
+              "Allow": {
+                "description": "Allowed HTTP methods for the feedback endpoint.",
+                "schema": {
+                  "type": "string",
+                  "example": "POST, OPTIONS"
+                }
+              },
+              "Access-Control-Allow-Origin": {
+                "description": "Allowed cross-origin requester value.",
+                "schema": {
+                  "type": "string",
+                  "example": "*"
+                }
+              },
+              "Access-Control-Allow-Methods": {
+                "description": "Allowed cross-origin methods.",
+                "schema": {
+                  "type": "string",
+                  "example": "POST, OPTIONS"
+                }
+              },
+              "Access-Control-Allow-Headers": {
+                "description": "Allowed cross-origin request headers.",
+                "schema": {
+                  "type": "string",
+                  "example": "Content-Type"
+                }
+              }
+            }
+          }
+        },
+        "x-hidden": true
+      }
+    },
+    "/.well-known/mcp.json": {
+      "get": {
+        "operationId": "getWellKnownMcpJson",
+        "summary": "Get well-known MCP discovery",
+        "description": "Compatibility discovery route that returns the public MCP discovery document for the current docs site. The document advertises the public MCP transport endpoint, such as https://example.com/docs/mcp for path-mounted deployments.",
+        "tags": [
+          "AI Access"
+        ],
+        "responses": {
+          "200": {
+            "description": "Get well-known MCP discovery response for the current docs site.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/McpDiscovery"
+                },
+                "examples": {
+                  "response": {
+                    "summary": "Get well-known MCP discovery",
+                    "value": {
+                      "version": "1.0.0",
+                      "transport": "http",
+                      "url": "https://dubstack.ai/docs/mcp",
+                      "servers": [
+                        {
+                          "name": "public",
+                          "title": "dubstack docs",
+                          "description": "API documentation platform",
+                          "url": "https://dubstack.ai/docs/mcp",
+                          "transport": "http",
+                          "authentication": "none"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Public AI discovery files are disabled for the current site.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-hidden": true
+      }
+    },
+    "/.well-known/mcp": {
+      "get": {
+        "operationId": "getWellKnownMcp",
+        "summary": "Get well-known MCP discovery alias",
+        "description": "Compatibility discovery route that returns the public MCP discovery document for the current docs site. The document advertises the public MCP transport endpoint, such as https://example.com/docs/mcp for path-mounted deployments.",
+        "tags": [
+          "AI Access"
+        ],
+        "responses": {
+          "200": {
+            "description": "Get well-known MCP discovery alias response for the current docs site.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/McpDiscovery"
+                },
+                "examples": {
+                  "response": {
+                    "summary": "Get well-known MCP discovery alias",
+                    "value": {
+                      "version": "1.0.0",
+                      "transport": "http",
+                      "url": "https://dubstack.ai/docs/mcp",
+                      "servers": [
+                        {
+                          "name": "public",
+                          "title": "dubstack docs",
+                          "description": "API documentation platform",
+                          "url": "https://dubstack.ai/docs/mcp",
+                          "transport": "http",
+                          "authentication": "none"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Public AI discovery files are disabled for the current site.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-hidden": true
+      }
+    },
+    "/.well-known/agent-card.json": {
+      "get": {
+        "operationId": "getAgentCard",
+        "summary": "Get agent card",
+        "description": "Returns the public agent-card document for the current docs site. Agent clients use it to discover the generated docs skill and the site-level metadata associated with that skill.",
+        "tags": [
+          "AI Access"
+        ],
+        "responses": {
+          "200": {
+            "description": "Get agent card response for the current docs site.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentCard"
+                },
+                "examples": {
+                  "response": {
+                    "summary": "Get agent card",
+                    "value": {
+                      "name": "dubstack docs",
+                      "description": "API documentation platform",
+                      "url": "https://dubstack.ai/docs/",
+                      "version": "1.0.0",
+                      "protocolVersion": "0.3",
+                      "preferredTransport": "HTTP+JSON",
+                      "skills": [
+                        {
+                          "id": "dubstack-docs",
+                          "name": "dubstack docs",
+                          "description": "Use when answering questions about dubstack docs and working with its published documentation.",
+                          "tags": [],
+                          "url": "https://dubstack.ai/docs/.well-known/agent-skills/dubstack-docs/skill.md"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Public AI discovery files are disabled for the current site.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/.well-known/agent-skills/index.json": {
+      "get": {
+        "operationId": "listAgentSkills",
+        "summary": "List agent skills",
+        "description": "Returns the generated agent-skill discovery index for the current docs site. Each entry points to a skill.md file that tells compatible agents how to use the public docs MCP and feedback surfaces.",
+        "tags": [
+          "AI Access"
+        ],
+        "responses": {
+          "200": {
+            "description": "List agent skills response for the current docs site.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentSkillsIndex"
+                },
+                "examples": {
+                  "response": {
+                    "summary": "List agent skills",
+                    "value": {
+                      "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+                      "skills": [
+                        {
+                          "name": "dubstack-docs",
+                          "type": "skill-md",
+                          "description": "Use when answering questions about dubstack docs and working with its published documentation.",
+                          "url": "https://dubstack.ai/docs/.well-known/agent-skills/dubstack-docs/skill.md",
+                          "digest": "sha256:f28f07eb865d04c11dc7cce4111301c1136dd41894c9c46fcf54981a99f572ce"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Public AI discovery files are disabled for the current site.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/skill.md": {
+      "get": {
+        "operationId": "getSkillMarkdown",
+        "summary": "Get generated skill file",
+        "description": "Returns the generated skill.md file for the current docs site. The skill tells compatible agents to use the public MCP server, cite docs URLs, and submit structured feedback only for substantive documentation-quality issues when feedback is enabled.",
+        "tags": [
+          "AI Access"
+        ],
+        "responses": {
+          "200": {
+            "description": "Generated skill.md content for the current docs site.",
+            "content": {
+              "text/markdown": {
+                "schema": {
+                  "type": "string",
+                  "description": "Markdown skill document containing YAML frontmatter, MCP instructions, feedback instructions when enabled, and starting-page links."
+                },
+                "examples": {
+                  "skill": {
+                    "summary": "Generated skill file",
+                    "value": "---\nname: \"dubstack docs\"\ndescription: \"Use when answering questions about dubstack docs.\"\n---\n\n# dubstack docs skill\n\nUse this skill when answering questions about dubstack docs."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested skill does not exist or public AI discovery files are disabled for the current site.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "bash",
+            "label": "Fetch generated skill.md",
+            "source": "curl --request GET \\\n  --url https://dubstack.ai/docs/skill.md"
+          }
+        ]
+      }
+    },
+    "/.well-known/agent-skills/{skillId}/skill.md": {
+      "get": {
+        "operationId": "getAgentSkillMarkdown",
+        "summary": "Get agent skill file",
+        "description": "Returns a generated skill.md file by skill identifier. Use the skill URL from the agent-card or agent-skills index rather than guessing the identifier.",
+        "tags": [
+          "AI Access"
+        ],
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "required": true,
+            "description": "Skill identifier from the agent-card or agent-skills index.",
+            "schema": {
+              "type": "string",
+              "example": "dubstack-docs"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Generated skill.md content for the current docs site.",
+            "content": {
+              "text/markdown": {
+                "schema": {
+                  "type": "string",
+                  "description": "Markdown skill document containing YAML frontmatter, MCP instructions, feedback instructions when enabled, and starting-page links."
+                },
+                "examples": {
+                  "skill": {
+                    "summary": "Generated skill file",
+                    "value": "---\nname: \"dubstack docs\"\ndescription: \"Use when answering questions about dubstack docs.\"\n---\n\n# dubstack docs skill\n\nUse this skill when answering questions about dubstack docs."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested skill does not exist or public AI discovery files are disabled for the current site.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "bash",
+            "label": "Fetch skill by id",
+            "source": "curl --request GET \\\n  --url https://dubstack.ai/docs/.well-known/agent-skills/dubstack-docs/skill.md"
+          }
+        ]
+      }
+    },
+    "/openapi.json": {
+      "get": {
+        "operationId": "getRootOpenApiSpec",
+        "summary": "Get root OpenAPI spec",
+        "description": "Returns the default published OpenAPI document for the current docs site at a standard root-level discovery path. Use this endpoint for crawlers, agents, and tools that look for /openapi.json.",
+        "tags": [
+          "AI Access"
+        ],
+        "parameters": [
+          {
+            "name": "spec",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "api-reference"
+            },
+            "description": "Spec name configured in dubstack.json. Omit this parameter to return the default API reference spec."
+          },
+          {
+            "name": "branch",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Optional preview branch identifier used when reading branch preview docs."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Raw OpenAPI document for the current docs site and selected spec name.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenApiDocument"
+                },
+                "examples": {
+                  "spec": {
+                    "summary": "Published OpenAPI document",
+                    "value": {
+                      "openapi": "3.1.0",
+                      "info": {
+                        "title": "dubstack docs runtime API",
+                        "version": "2026-07-05"
+                      },
+                      "paths": {
+                        "/mcp": {
+                          "get": {
+                            "summary": "Get MCP discovery"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No published OpenAPI spec exists for the current site, spec name, or preview branch."
+          }
+        }
+      }
+    },
+    "/api/openapi.json": {
+      "get": {
+        "operationId": "getApiOpenApiSpec",
+        "summary": "Get API OpenAPI spec",
+        "description": "Returns the default published OpenAPI document for the current docs site at the /api/openapi.json discovery path. Use this endpoint for tools that scan API-prefixed standard spec locations.",
+        "tags": [
+          "AI Access"
+        ],
+        "parameters": [
+          {
+            "name": "spec",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "api-reference"
+            },
+            "description": "Spec name configured in dubstack.json. Omit this parameter to return the default API reference spec."
+          },
+          {
+            "name": "branch",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Optional preview branch identifier used when reading branch preview docs."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Raw OpenAPI document for the current docs site and selected spec name.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenApiDocument"
+                },
+                "examples": {
+                  "spec": {
+                    "summary": "Published OpenAPI document",
+                    "value": {
+                      "openapi": "3.1.0",
+                      "info": {
+                        "title": "dubstack docs runtime API",
+                        "version": "2026-07-05"
+                      },
+                      "paths": {
+                        "/mcp": {
+                          "get": {
+                            "summary": "Get MCP discovery"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No published OpenAPI spec exists for the current site, spec name, or preview branch."
+          }
+        }
+      }
+    },
+    "/api-reference/openapi.json": {
+      "get": {
+        "operationId": "getApiReferenceOpenApiSpec",
+        "summary": "Get API reference OpenAPI spec",
+        "description": "Returns the default published OpenAPI document for the current docs site from the API reference namespace. Use this endpoint when exposing the same spec next to generated endpoint pages.",
+        "tags": [
+          "AI Access"
+        ],
+        "parameters": [
+          {
+            "name": "spec",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "api-reference"
+            },
+            "description": "Spec name configured in dubstack.json. Omit this parameter to return the default API reference spec."
+          },
+          {
+            "name": "branch",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Optional preview branch identifier used when reading branch preview docs."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Raw OpenAPI document for the current docs site and selected spec name.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenApiDocument"
+                },
+                "examples": {
+                  "spec": {
+                    "summary": "Published OpenAPI document",
+                    "value": {
+                      "openapi": "3.1.0",
+                      "info": {
+                        "title": "dubstack docs runtime API",
+                        "version": "2026-07-05"
+                      },
+                      "paths": {
+                        "/mcp": {
+                          "get": {
+                            "summary": "Get MCP discovery"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No published OpenAPI spec exists for the current site, spec name, or preview branch."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AgentCard": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Docs site name exposed to agent clients.",
+            "example": "dubstack docs"
+          },
+          "description": {
+            "type": "string",
+            "description": "Short docs site description.",
+            "example": "API documentation platform"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Canonical docs site URL.",
+            "example": "https://dubstack.ai/docs/"
+          },
+          "version": {
+            "type": "string",
+            "description": "Agent-card version emitted by the docs site.",
+            "example": "1.0.0"
+          },
+          "protocolVersion": {
+            "type": "string",
+            "description": "Agent protocol version advertised by the card.",
+            "example": "0.3"
+          },
+          "preferredTransport": {
+            "type": "string",
+            "description": "Preferred protocol binding for agent interactions.",
+            "example": "HTTP+JSON"
+          },
+          "skills": {
+            "type": "array",
+            "description": "Skills advertised by the docs site.",
+            "items": {
+              "$ref": "#/components/schemas/AgentCardSkill"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "url",
+          "version",
+          "skills"
+        ],
+        "description": "Public agent-card document describing the docs site and its generated documentation skill."
+      },
+      "AgentCardSkill": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Stable skill identifier for the docs site.",
+            "example": "dubstack-docs"
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable skill name.",
+            "example": "dubstack docs"
+          },
+          "description": {
+            "type": "string",
+            "description": "When an agent should use this skill.",
+            "example": "Use when answering questions about dubstack docs and working with its published documentation."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Optional skill tags.",
+            "example": []
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Absolute URL of the generated skill.md file.",
+            "example": "https://dubstack.ai/docs/.well-known/agent-skills/dubstack-docs/skill.md"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "url"
+        ],
+        "description": "Skill entry advertised inside the public agent-card document."
+      },
+      "AgentSkillIndexEntry": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Stable skill identifier.",
+            "example": "dubstack-docs"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "skill-md"
+            ],
+            "description": "Skill document format.",
+            "example": "skill-md"
+          },
+          "description": {
+            "type": "string",
+            "description": "When an agent should use this skill.",
+            "example": "Use when answering questions about dubstack docs and working with its published documentation."
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Absolute URL of the generated skill.md file.",
+            "example": "https://dubstack.ai/docs/.well-known/agent-skills/dubstack-docs/skill.md"
+          },
+          "digest": {
+            "type": "string",
+            "description": "Digest of the generated skill document.",
+            "example": "sha256:f28f07eb865d04c11dc7cce4111301c1136dd41894c9c46fcf54981a99f572ce"
+          }
+        },
+        "required": [
+          "name",
+          "type",
+          "description",
+          "url",
+          "digest"
+        ],
+        "description": "Single generated skill descriptor in the agent skills index."
+      },
+      "AgentSkillsIndex": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "type": "string",
+            "format": "uri",
+            "description": "Schema URL for the agent skills discovery document.",
+            "example": "https://schemas.agentskills.io/discovery/0.2.0/schema.json"
+          },
+          "skills": {
+            "type": "array",
+            "description": "Generated skills available for the current docs site.",
+            "items": {
+              "$ref": "#/components/schemas/AgentSkillIndexEntry"
+            }
+          }
+        },
+        "required": [
+          "$schema",
+          "skills"
+        ],
+        "description": "Discovery index for generated agent skills exposed by a published docs site."
+      },
+      "AssistantRequest": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Reader question to answer from the published docs. Use either message or question."
+          },
+          "question": {
+            "type": "string",
+            "description": "Alternate reader question field accepted by clients that send question instead of message."
+          },
+          "page": {
+            "type": "string",
+            "description": "Optional current docs page path used as local context for the answer."
+          }
+        },
+        "description": "Question payload sent by the public reader assistant widget.",
+        "example": {
+          "message": "How do I publish a preview deployment?",
+          "page": "/deployment/preview-deployments"
+        }
+      },
+      "AssistantResponse": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "answer": {
+            "type": "string",
+            "description": "Assistant response text generated from published documentation."
+          },
+          "message": {
+            "type": "string",
+            "description": "Alternate response text field returned by compatibility paths."
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Published docs pages used as supporting context for the answer."
+          }
+        },
+        "description": "Answer returned by the public reader assistant widget.",
+        "example": {
+          "answer": "Create a branch preview from the dashboard, review the generated URL, then merge or publish when ready.",
+          "sources": [
+            {
+              "title": "Preview deployments",
+              "url": "https://dubstack.ai/docs/deployment/preview-deployments",
+              "path": "/deployment/preview-deployments"
+            }
+          ]
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Human-readable error message.",
+            "example": "Message is required"
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "description": "Standard error response returned by public docs runtime endpoints."
+      },
+      "FeedbackRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "rating": {
+            "type": "string",
+            "enum": [
+              "up",
+              "down"
+            ],
+            "description": "Feedback rating. Use up for positive feedback and down for negative or corrective feedback.",
+            "example": "down"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000,
+            "description": "Human-readable feedback message. Empty messages are rejected.",
+            "example": "The page references a dashboard screen that has moved."
+          },
+          "source": {
+            "type": "string",
+            "description": "Feedback source. Page ratings use page-feedback. Assistant answer ratings may use assistant-feedback. MCP clients should use the submit_feedback MCP tool instead of setting agent feedback sources directly.",
+            "example": "page-feedback"
+          },
+          "session_id": {
+            "type": "string",
+            "maxLength": 160,
+            "description": "Optional client-generated session identifier used to group feedback from the same reader or agent session.",
+            "example": "mcp-feedback-1780825618877"
+          },
+          "page_path": {
+            "type": "string",
+            "maxLength": 500,
+            "description": "Docs page path related to the feedback.",
+            "example": "/settings/deployment/addons"
+          },
+          "page_url": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 1000,
+            "description": "Absolute docs page URL related to the feedback.",
+            "example": "https://dubstack.ai/docs/settings/deployment/addons"
+          },
+          "reader_email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 320,
+            "description": "Optional reader email. Stored only when reader email collection is enabled for page feedback.",
+            "example": "reader@example.com"
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Optional string metadata. Keys are truncated to 80 characters, values to 400 characters, and only the first 20 string entries are stored.",
+            "example": {
+              "feedback_surface": "assistant"
+            }
+          }
+        },
+        "required": [
+          "rating",
+          "message"
+        ],
+        "description": "Feedback payload accepted by published docs sites."
+      },
+      "FeedbackResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "description": "Whether the feedback event was accepted.",
+            "example": true
+          },
+          "id": {
+            "type": "string",
+            "description": "Feedback event identifier.",
+            "example": "ckz8y7x6w0000abc123def456"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO timestamp when the feedback event was recorded.",
+            "example": "2026-07-05T01:30:00.000Z"
+          }
+        },
+        "required": [
+          "ok",
+          "id",
+          "created_at"
+        ],
+        "description": "Acknowledgement returned after feedback is recorded."
+      },
+      "JsonRpcRequest": {
+        "type": "object",
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "description": "JSON-RPC protocol version. MCP uses 2.0.",
+            "example": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "description": "Client-generated request identifier returned in the matching response.",
+            "example": 1
+          },
+          "method": {
+            "type": "string",
+            "description": "MCP JSON-RPC method to invoke, such as initialize, tools/list, or tools/call.",
+            "example": "tools/list"
+          },
+          "params": {
+            "type": "object",
+            "description": "Method-specific parameters. Tool calls include the tool name and an arguments object.",
+            "additionalProperties": true,
+            "example": {
+              "name": "search",
+              "arguments": {
+                "query": "custom domain setup",
+                "limit": 5
+              }
+            }
+          }
+        },
+        "required": [
+          "jsonrpc",
+          "method"
+        ],
+        "description": "JSON-RPC request envelope used by Streamable HTTP MCP clients."
+      },
+      "JsonRpcResponse": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "description": "JSON-RPC protocol version.",
+            "example": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Identifier from the request, or null for responses that cannot be matched to a request.",
+            "example": 1
+          },
+          "result": {
+            "type": "object",
+            "description": "Successful method result. Shape depends on the MCP method or tool that was called.",
+            "additionalProperties": true
+          },
+          "error": {
+            "type": "object",
+            "description": "JSON-RPC error object returned when a request cannot be completed.",
+            "additionalProperties": true,
+            "properties": {
+              "code": {
+                "type": "number",
+                "description": "JSON-RPC error code.",
+                "example": -32601
+              },
+              "message": {
+                "type": "string",
+                "description": "Human-readable error message.",
+                "example": "Method not found"
+              }
+            }
+          }
+        },
+        "required": [
+          "jsonrpc"
+        ],
+        "description": "JSON-RPC response envelope returned by the public MCP server."
+      },
+      "McpDiscovery": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "version": {
+            "type": "string",
+            "description": "Discovery document version.",
+            "example": "1.0.0"
+          },
+          "transport": {
+            "type": "string",
+            "description": "Transport family advertised by this discovery document.",
+            "enum": [
+              "http"
+            ],
+            "example": "http"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Absolute URL of the primary public MCP endpoint for the current docs site.",
+            "example": "https://dubstack.ai/docs/mcp"
+          },
+          "servers": {
+            "type": "array",
+            "description": "MCP servers advertised by the current docs site.",
+            "items": {
+              "$ref": "#/components/schemas/McpDiscoveryServer"
+            }
+          }
+        },
+        "required": [
+          "version",
+          "transport",
+          "url",
+          "servers"
+        ],
+        "description": "Discovery document describing the public docs MCP endpoint exposed by a published docs site."
+      },
+      "McpDiscoveryServer": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Stable server name.",
+            "example": "public"
+          },
+          "title": {
+            "type": "string",
+            "description": "Human-readable docs site title.",
+            "example": "dubstack docs"
+          },
+          "description": {
+            "type": "string",
+            "description": "Short description of the docs site.",
+            "example": "API documentation platform"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Absolute URL clients should use for MCP requests.",
+            "example": "https://dubstack.ai/docs/mcp"
+          },
+          "transport": {
+            "type": "string",
+            "enum": [
+              "http"
+            ],
+            "description": "Transport protocol used by the MCP endpoint.",
+            "example": "http"
+          },
+          "authentication": {
+            "type": "string",
+            "enum": [
+              "none"
+            ],
+            "description": "Authentication requirement for this public MCP endpoint.",
+            "example": "none"
+          }
+        },
+        "required": [
+          "name",
+          "title",
+          "url",
+          "transport",
+          "authentication"
+        ],
+        "description": "Single public MCP server entry in the discovery document."
+      },
+      "McpServerCard": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Display name for the public docs MCP server.",
+            "example": "dubstack docs MCP"
+          },
+          "description": {
+            "type": "string",
+            "description": "Short explanation of the server purpose.",
+            "example": "MCP access to the published docs site. Retrieval tools are read-only; feedback may be submitted when enabled."
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Absolute MCP endpoint URL.",
+            "example": "https://dubstack.ai/docs/mcp"
+          },
+          "transport": {
+            "type": "string",
+            "description": "Transport protocol used by the MCP endpoint.",
+            "enum": [
+              "http"
+            ],
+            "example": "http"
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "url"
+        ],
+        "description": "Well-known MCP server-card metadata for discovery clients."
+      },
+      "OpenApiDocument": {
+        "type": "object",
+        "description": "Raw published OpenAPI document for the current docs site.",
+        "required": [
+          "openapi",
+          "info",
+          "paths"
+        ],
+        "properties": {
+          "openapi": {
+            "type": "string",
+            "description": "OpenAPI version string."
+          },
+          "info": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "OpenAPI info object."
+          },
+          "servers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Server definitions from the published spec."
+          },
+          "paths": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "OpenAPI paths object."
+          },
+          "components": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Reusable OpenAPI components."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "OpenAPI tag metadata."
+          }
+        },
+        "additionalProperties": true
+      },
+      "PlaygroundProxyRequest": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Fully resolved URL for the documented operation selected in the playground."
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH",
+              "DELETE",
+              "OPTIONS",
+              "HEAD"
+            ],
+            "description": "HTTP method for the documented operation. Defaults to GET when omitted by older clients."
+          },
+          "headers": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Headers supplied by the reader through the playground. Sensitive values should come from user input, not tenant defaults."
+          },
+          "body": {
+            "description": "Request body supplied by the playground for methods that support a body."
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "description": "Browser playground request scoped to a URL allowed by the published OpenAPI spec.",
+        "example": {
+          "url": "https://dubstack.ai/docs/mcp",
+          "method": "GET",
+          "headers": {
+            "Accept": "application/json"
+          }
+        }
+      },
+      "PlaygroundProxyResponse": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "status": {
+            "type": "number",
+            "description": "HTTP status returned by the upstream operation."
+          },
+          "headers": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Response headers returned by the upstream operation after proxy filtering."
+          },
+          "body": {
+            "description": "Parsed response body when JSON, otherwise raw response text."
+          }
+        },
+        "description": "Upstream response captured by the playground proxy and returned to the browser request builder.",
+        "example": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json"
+          },
+          "body": {
+            "name": "dubstack docs MCP",
+            "transport": "streamable-http"
+          }
+        }
+      },
+      "PublishedSpec": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Stable spec identifier configured for the docs site."
+          },
+          "display_name": {
+            "type": "string",
+            "description": "Human-friendly spec title shown in the dashboard and public docs."
+          },
+          "base_url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Preferred base URL used by the playground when the OpenAPI document does not define a server URL."
+          },
+          "spec_content": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Parsed OpenAPI document used to render generated endpoint docs and playground controls."
+          }
+        },
+        "required": [
+          "name",
+          "display_name",
+          "spec_content"
+        ],
+        "description": "Wrapper returned by the playground spec loader, including display metadata, base URL fallback, and parsed OpenAPI content.",
+        "example": {
+          "name": "api-reference",
+          "display_name": "dubstack docs runtime API",
+          "base_url": "https://dubstack.ai/docs",
+          "spec_content": {
+            "openapi": "3.1.0",
+            "info": {
+              "title": "dubstack docs runtime API",
+              "version": "2026-06-25"
+            },
+            "paths": {}
+          }
+        }
+      }
+    }
+  }
+}
