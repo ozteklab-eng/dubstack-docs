@@ -1083,64 +1083,6 @@
         },
         "additionalProperties": false
       },
-      "DeploymentSummary": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "Deployment status ID."
-          },
-          "status": {
-            "type": "string",
-            "description": "Internal deployment status."
-          },
-          "deployment_target": {
-            "type": "string",
-            "enum": [
-              "live",
-              "preview"
-            ]
-          },
-          "triggered_by": {
-            "type": "string"
-          },
-          "branch": {
-            "type": "string"
-          },
-          "commit_sha": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "preview_url": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "uri"
-          },
-          "repo_owner": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "repo_name": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "repo_provider": {
-            "type": [
-              "string",
-              "null"
-            ]
-          }
-        },
-        "additionalProperties": true
-      },
       "DeploymentTriggerResponse": {
         "type": "object",
         "required": [
@@ -1150,16 +1092,6 @@
           "statusId": {
             "type": "string",
             "description": "Deployment status ID for polling."
-          },
-          "deployment": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/DeploymentSummary"
-              },
-              {
-                "type": "null"
-              }
-            ]
           }
         }
       },
@@ -1190,16 +1122,6 @@
             "type": "string",
             "format": "uri",
             "description": "Preview deployment URL."
-          },
-          "deployment": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/DeploymentSummary"
-              },
-              {
-                "type": "null"
-              }
-            ]
           }
         }
       },
