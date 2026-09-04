@@ -1,0 +1,32 @@
+---
+title: Update From Code Changes Workflow Documentation
+
+frontmatter:
+  workflow_id: update_from_code_changes
+  trigger: code_change
+  update_mode: pull_request
+  schedule: twice_weekly
+  selected_integrations: none
+
+This document outlines the configuration and context for the "Update From Code Changes" workflow, which is designed to generate documentation updates based on code changes in a connected repository. The workflow is triggered by code changes and operates in pull request mode, ensuring that documentation updates are reviewed and merged systematically.
+
+The workflow is associated with the `forgejo_pull_request` event, and it uses the `forgejo:ozteklab/forgejo-docs-smoke@main` repository as a read-only context. Documentation updates are always created against the `ozteklab-eng/dubstack-docs@product-docs` repository. Only the code-change context explicitly attached to this workflow run is used, and no additional repository changes are inferred.
+
+The workflow is linked to a single merged pull request: `#42 Clean interrupted authoring lifecycle smoke`, which was merged on 2026-08-07 by `jpnaiken`. The pull request URL is available at [https://git.ozteklab.com/ozteklab/forgejo-docs-smoke/pulls/42](https://git.ozteklab.com/ozteklab/forgejo-docs-smoke/pulls/42).
+
+Published documentation includes pages such as "Introduction," "What is dubstack?," "Quickstart," and "Draft docs from code changes," which provide guidance on using the platform, connecting repositories, and generating documentation from code.
+
+---
+
+
+# Update From Code Changes workflow update
+
+**Review Checklist:**
+
+- [ ] Confirm that the workflow ID and trigger match the intended configuration.
+- [ ] Verify that the repository context is correctly specified and used as read-only.
+- [ ] Ensure that the pull request details and URL are accurate.
+- [ ] Validate that the published documentation pages and excerpts reflect the current state of the product.
+- [ ] Confirm that no external systems or code were inspected beyond the provided context.
+
+<!-- workflow_run_id: ffa997c3-0737-46b8-9fbd-f17478ef4576 -->
