@@ -1,0 +1,34 @@
+---
+title: Update From Code Changes Workflow Documentation
+
+frontmatter:
+  workflow_id: update_from_code_changes
+  trigger: code_change
+  update_mode: pull_request
+  schedule: twice_weekly
+  selected_integrations: none
+
+The `update_from_code_changes` workflow is designed to generate documentation updates based on code changes in a connected repository. This workflow is triggered by a `code_change` event and operates in `pull_request` mode, ensuring that documentation updates are reviewed and merged through a pull request process.
+
+The workflow uses the `forgejo_pull_request` event source and is configured to use the `forgejo:ozteklab/forgejo-docs-smoke@main` repository as a read-only context. Any documentation updates should be created against the `ozteklab-eng/dubstack-docs@product-docs` repository. This ensures that changes are applied to the correct documentation source while maintaining a clear separation between code and documentation workflows.
+
+The workflow is set to run twice weekly, aligning with the project's maintenance schedule. It does not include any selected integrations, meaning it operates independently of external systems or tools.
+
+A recent pull request, `#77 Remove grounded authoring live fixture`, was merged into the `forgejo-docs-smoke` repository on `2026-08-29T02:38:27.000Z` by `jpnaiken`. This change may impact the documentation context, and any related documentation updates should be reviewed accordingly.
+
+This documentation update ensures clarity around the workflow's purpose, configuration, and integration with the current codebase.
+
+---
+
+
+# Update From Code Changes workflow update
+
+**Review Checklist**
+- [ ] Confirm workflow ID and trigger match the intended configuration.
+- [ ] Verify the repository context and update target are correctly specified.
+- [ ] Ensure the workflow schedule aligns with the project's maintenance plan.
+- [ ] Validate that no integrations are incorrectly listed as selected.
+- [ ] Confirm the pull request details and merge date are accurate.
+- [ ] Ensure the documentation remains neutral and free of unsupported claims.
+
+<!-- workflow_run_id: b5bfd1f6-2798-4e10-b342-d9e304cf6154 -->
