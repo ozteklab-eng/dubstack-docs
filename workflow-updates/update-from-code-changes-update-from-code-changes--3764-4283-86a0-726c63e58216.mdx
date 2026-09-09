@@ -1,0 +1,23 @@
+---
+title: Update From Code Changes Workflow Documentation
+
+The `update_from_code_changes` workflow is designed to generate documentation updates based on code changes detected in a connected repository. This workflow is triggered by a `code_change` event and operates in `pull_request` mode, with a schedule of `twice_weekly`.
+
+The workflow uses the `forgejo_pull_request` integration to monitor changes in the `forgejo:ozteklab/forgejo-docs-smoke@main` repository. Only files within the specified path scope are considered for documentation updates. All changes are applied to the connected documentation repository, `ozteklab-eng/dubstack-docs@product-docs`.
+
+A recent pull request, `#83 Remove grounded authoring live fixture`, was merged on `2026-08-29T03:02:44.000Z` by `jpnaiken`. The URL for this pull request is: [https://git.ozteklab.com/ozteklab/forgejo-docs-smoke/pulls/83](https://git.ozteklab.com/ozteklab/forgejo-docs-smoke/pulls/83).
+
+This workflow ensures that documentation remains aligned with code changes, using the connected repository as a read-only source of context. No additional integrations are currently selected.
+
+---
+
+
+# Update From Code Changes workflow update
+
+**Review Checklist**
+- [ ] Confirm that the workflow trigger and mode match the intended behavior.
+- [ ] Verify that the repository and branch references are correct.
+- [ ] Ensure that the workflow does not make assumptions about unmentioned repositories or changes.
+- [ ] Confirm that the documentation update process aligns with the product's current capabilities.
+
+<!-- workflow_run_id: eff43b68-3764-4283-86a0-726c63e58216 -->
