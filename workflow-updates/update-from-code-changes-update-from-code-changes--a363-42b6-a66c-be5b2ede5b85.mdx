@@ -1,0 +1,32 @@
+---
+title: Update From Code Changes Workflow Documentation
+
+frontmatter:
+  workflow_id: update_from_code_changes
+  trigger: code_change
+  update_mode: pull_request
+  schedule: twice_weekly
+  selected_integrations: none
+
+The `update_from_code_changes` workflow is designed to generate documentation updates based on code changes detected in a connected repository. This workflow is triggered by a `code_change` event and operates in `pull_request` mode, ensuring that documentation updates are reviewed and merged through a pull request process.
+
+The workflow uses the `forgejo_pull_request` event source and operates on the `forgejo:ozteklab/forgejo-docs-smoke@main` repository, which is treated as read-only context. Any changes to documentation must be made in the connected documentation repository, `ozteklab-eng/dubstack-docs@product-docs`.
+
+A recent pull request, `#85 Remove grounded authoring live fixture`, was merged into the source repository on 2026-08-29. This change is part of the code context used to generate documentation updates, but no specific documentation changes are explicitly linked to this event in the current workflow run.
+
+The workflow is configured to use only the code-change context explicitly attached to the workflow run, without inferring unseen repository changes. It is intended to support documentation updates that align with code changes, ensuring that documentation remains accurate and up-to-date.
+
+---
+
+
+# Update From Code Changes workflow update
+
+**Review Checklist**
+
+- [ ] Confirm that the workflow is correctly configured to use the specified repositories.
+- [ ] Verify that the workflow trigger and update mode match the intended behavior.
+- [ ] Ensure that the documentation update process aligns with the repository's merge policies.
+- [ ] Confirm that no unsupported or unverified claims are included in the documentation.
+- [ ] Validate that the workflow is safe for human review and does not include unapproved or speculative content.
+
+<!-- workflow_run_id: bf83ee6d-a363-42b6-a66c-be5b2ede5b85 -->
