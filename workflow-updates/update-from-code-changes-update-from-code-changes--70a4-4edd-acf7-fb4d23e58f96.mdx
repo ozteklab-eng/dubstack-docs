@@ -1,0 +1,30 @@
+---
+title: "Update From Code Changes workflow update"
+description: "Draft documentation update requested from a documentation workflow run."
+---
+
+
+# Update From Code Changes workflow update
+
+frontmatter:
+  workflow_id: update_from_code_changes
+  trigger: code_change
+  update_mode: pull_request
+  schedule: twice_weekly
+  selected_integrations: none
+
+This document outlines the current state of the "Update From Code Changes" workflow, which is designed to draft documentation updates based on changes in a connected source repository. The workflow is triggered by code changes and operates on a schedule of twice per week. It is configured to work with the `forgejo_pull_request` integration and uses the `forgejo:ozteklab/forgejo-docs-smoke@main` repository as a read-only source of context.
+
+The workflow is set to open documentation updates against the `ozteklab-eng/dubstack-docs@product-docs` repository. It uses only the code-change context explicitly attached to the workflow run and does not infer unseen repository changes. The most recent pull request processed was #82, which added an "Add grounded authoring admission fixture" and was merged on 2026-08-29T03:00:30.000Z by jpnaiken.
+
+The workflow is currently not using any selected integrations, and the published documentation context includes a range of pages that describe the capabilities and onboarding process for dubstack.
+
+Review Checklist:
+- Confirm that the workflow ID and trigger are correctly documented.
+- Verify that the repository and branch references match the current context.
+- Ensure that the workflow schedule and update mode are accurately described.
+- Check that the pull request details are correctly included.
+- Validate that the published documentation context is accurately represented.
+- Confirm that no unsupported claims or assumptions are made about the workflow's behavior.
+
+<!-- workflow_run_id: b6af2c93-70a4-4edd-acf7-fb4d23e58f96 -->
