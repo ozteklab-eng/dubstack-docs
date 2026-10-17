@@ -1,0 +1,34 @@
+---
+title: "Update From Code Changes workflow update"
+description: "Draft documentation update requested from a documentation workflow run."
+---
+
+
+# Update From Code Changes workflow update
+
+---
+title: Update From Code Changes Documentation Draft
+
+frontmatter:
+  workflow_id: update_from_code_changes
+  trigger: code_change
+  update_mode: pull_request
+  schedule: twice_weekly
+  selected_integrations: none
+
+This documentation update reflects the workflow configuration and context provided. It outlines the process for generating documentation from code changes using the `update_from_code_changes` workflow. The workflow is triggered by code changes and operates in pull request mode, with updates scheduled to run twice weekly. No integrations are currently selected, and the workflow uses the `forgejo_pull_request` source.
+
+The workflow references the `forgejo:ozteklab/forgejo-docs-smoke@main` repository as read-only context, and any documentation updates should be created against the connected documentation repository. The workflow includes a single merged pull request, which was a translation of content to French.
+
+The published documentation context is `ozteklab-eng/dubstack-docs@product-docs`, and the current set of published pages includes an introduction, guides, and quickstart content. These pages describe the capabilities of the documentation platform, including Git-backed sources, dashboard management, and AI-ready content generation.
+
+This draft is intended for review and should be verified for accuracy and completeness before being published.
+
+Review checklist:
+- Confirm workflow configuration details match the intended process.
+- Verify that the repository context is correctly described.
+- Ensure that the published documentation context and pages are accurately represented.
+- Validate that no unsupported claims or assumptions are included.
+- Confirm that the review checklist is complete and actionable.
+
+<!-- workflow_run_id: d1513170-4364-46e7-ac71-0f83cd1fc8ac -->
