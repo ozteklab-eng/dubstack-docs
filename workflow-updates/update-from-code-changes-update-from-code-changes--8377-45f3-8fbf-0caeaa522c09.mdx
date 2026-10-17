@@ -1,0 +1,31 @@
+---
+title: Update From Code Changes Workflow Documentation
+
+frontmatter:
+  workflow_id: update_from_code_changes
+  trigger: code_change
+  update_mode: pull_request
+  schedule: twice_weekly
+  selected_integrations: none
+
+This document outlines the process for updating documentation based on code changes through the `update_from_code_changes` workflow. The workflow is triggered by code changes and operates in pull request mode, running twice weekly. It uses the `forgejo_pull_request` event source and references the `forgejo:ozteklab/forgejo-docs-smoke@main` repository as read-only context. Any changes to documentation should be made against the connected documentation repository.
+
+The workflow is designed to draft documentation updates from code changes, using the provided repository as a source of context. It does not infer changes outside of the explicitly attached code-change context. The workflow is currently associated with a single merged pull request, which was triggered by a code change and completed on 2026-07-13.
+
+Published documentation is maintained in the `ozteklab-eng/dubstack-docs@product-docs` repository. Key pages include an introduction to dubstack, a guide on creating a site, connecting Git, and deploying documentation. The documentation covers the platform's capabilities, including Git-backed content, API reference generation, and AI-ready surfaces.
+
+---
+
+
+# Update From Code Changes workflow update
+
+**Review Checklist:**
+
+- Confirm that the workflow trigger and update mode align with current documentation practices.
+- Verify that the referenced repositories are correctly identified and used as read-only context.
+- Ensure that the workflow does not make assumptions beyond the explicitly provided code-change context.
+- Review the published documentation pages for accuracy and completeness.
+- Confirm that the workflow is associated with the correct pull request and event source.
+- Validate that the documentation content reflects the platform's capabilities and user workflows.
+
+<!-- workflow_run_id: 009162f7-8377-45f3-8fbf-0caeaa522c09 -->
