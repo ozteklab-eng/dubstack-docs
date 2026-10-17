@@ -1,0 +1,33 @@
+---
+title: Update From Code Changes Documentation
+
+frontmatter:
+  workflow_id: update_from_code_changes
+  trigger: code_change
+  update_mode: pull_request
+  schedule: twice_weekly
+  selected_integrations: none
+
+This documentation update reflects the workflow configuration and context provided for the "Update From Code Changes" process. The workflow is designed to generate documentation updates based on code changes, using a pull request mechanism and a scheduled frequency of twice per week. No integrations are currently selected, and the workflow is triggered by code changes.
+
+The workflow uses the `forgejo_pull_request` event source, with the repository `forgejo:ozteklab/forgejo-docs-smoke@main` as the read-only context. Any changes to files within the specified path scope will be used to generate documentation updates. The updates are always opened against the connected documentation repository.
+
+The workflow run includes a merged pull request, which was a draft to translate content to French. This change is now part of the repository's history and may influence future documentation updates.
+
+The published documentation context is `ozteklab-eng/dubstack-docs@product-docs`, with a sample of 10 pages from a total of 232. These pages include an introduction, guides, and specific documentation topics such as developer documentation, internal knowledge bases, and help centers.
+
+This documentation draft is intended to provide clarity on the workflow's configuration and behavior, ensuring that it remains reviewable and safe for human verification.
+
+---
+
+
+# Update From Code Changes workflow update
+
+**Review Checklist:**
+- [ ] Confirm workflow configuration matches intended behavior.
+- [ ] Verify repository and path scope details are accurate.
+- [ ] Ensure no unsupported claims or assumptions are included.
+- [ ] Validate that all references to external systems are accurate and contextual.
+- [ ] Confirm that the documentation remains neutral and factual.
+
+<!-- workflow_run_id: 9950ed5f-2f6e-4ea0-8a24-3643e70f1eb9 -->
