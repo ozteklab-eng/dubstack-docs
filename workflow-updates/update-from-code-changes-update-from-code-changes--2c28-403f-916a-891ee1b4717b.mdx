@@ -1,0 +1,33 @@
+---
+title: Update From Code Changes Workflow Documentation
+
+frontmatter:
+  workflow_id: update_from_code_changes
+  trigger: code_change
+  update_mode: pull_request
+  schedule: twice_weekly
+  selected_integrations: none
+
+This document outlines the current state of the "Update From Code Changes" workflow, which is designed to draft documentation updates based on changes in a connected source repository. The workflow is triggered by code changes and operates on a schedule of twice weekly. It is configured to work with the `forgejo_pull_request` event and uses the `forgejo:ozteklab/forgejo-docs-smoke@main` repository as a read-only context.
+
+The workflow is set to use only the code-change context explicitly attached to the workflow run, without inferring unseen repository changes. The most recent pull request processed was `#21`, which involved translating content to French and was merged on 2026-07-23.
+
+The documentation for the product is published under the `ozteklab-eng/dubstack-docs@product-docs` repository. A sample of the published pages includes key sections such as the introduction, what dubstack is, quickstart guides, and specific documentation on how to draft docs from code changes.
+
+This update ensures that documentation remains aligned with the latest code changes and provides a structured approach for maintaining and publishing technical documentation.
+
+---
+
+
+# Update From Code Changes workflow update
+
+**Review Checklist:**
+
+- [ ] Confirm that the workflow ID and trigger are correctly documented.
+- [ ] Verify that the repository and branch information is accurate.
+- [ ] Ensure that the workflow's behavior is clearly described, including read-only context usage.
+- [ ] Check that the most recent pull request details are included.
+- [ ] Validate that the published documentation context and sample pages are correctly referenced.
+- [ ] Confirm that the purpose and scope of the workflow are clearly explained.
+
+<!-- workflow_run_id: c9c07967-2c28-403f-916a-891ee1b4717b -->
