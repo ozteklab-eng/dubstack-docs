@@ -39,7 +39,7 @@ Incluez uniquement les domaines utilisés par votre site.
 | Source | Objectif | Directive | Requis |
 | --- | --- | --- | --- |
 | `'self'` | Pages de documentation, actifs, recherche, assistant, feedback, routes API, MCP et fichiers LLM sur l'hôte public de documentation. | La plupart des directives | Requis |
-| `*.dubstack.live` | Domaines d'hébergement par défaut et origines générées `/docs`. | `connect-src`, `frame-src`, `img-src` | Requis lors de l'utilisation d'origines hébergées par DubStack |
+| `*.dubstack.live` | Domaines d'hébergement par défaut et origines générées `/docs`. | `connect-src`, `frame-src`, `img-src` | Requis lors de l'utilisation d'origines hébergées par dubstack |
 | `api.dubstack.ai` | Demandes d'API de la plateforme lorsqu'un déploiement utilise directement des points de terminaison d'API hébergés par la plateforme. | `connect-src` | Facultatif |
 | `fonts.googleapis.com` | Feuilles de style Google Fonts si sélectionnées par le thème du site. | `style-src` | Facultatif |
 | `fonts.gstatic.com` | Fichiers de polices Google Fonts si sélectionnés par le thème du site. | `font-src` | Facultatif |
